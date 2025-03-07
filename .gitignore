@@ -11,6 +11,15 @@
 npm-debug.log
 yarn-error.log
 
+# Yarn
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
 # IDEs and editors
 .idea/
 .project
@@ -36,7 +45,21 @@ yarn-error.log
 /libpeerconnection.log
 testem.log
 /typings
+package-lock.json
+.nx
 
 # System files
 .DS_Store
 Thumbs.db
+
+#  Testing
+cypress/videos
+cypress/screenshots
+cypress/downloads
+cypress/results
+functional-output
+smoke-output
+runner-results
+cypress/parallel/weights
+multi-reporter-config.json
+multi-reporter-config.json

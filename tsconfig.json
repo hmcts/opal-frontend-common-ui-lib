@@ -15,6 +15,18 @@
     "sourceMap": true,
     "declaration": false,
     "experimentalDecorators": true,
+    "paths": {
+      "opal-frontend-common": [
+        "./dist/opal-frontend-common"
+      ],
+      "@guards/*": ["./projects/opal-frontend-common/src/lib/guards/*.ts"],
+      "@stores/*": ["./projects/opal-frontend-common/src/lib/stores/*.ts"],
+      "@services/*": ["./projects/opal-frontend-common/src/lib/services/*.ts"],
+      "@interfaces/*": ["./projects/opal-frontend-common/src/lib/interfaces/*.ts"],
+      "@interceptors/*": ["./projects/opal-frontend-common/src/lib/interceptors/*.ts"],
+      "@resolvers/*": ["./projects/opal-frontend-common/src/lib/resolvers/*.ts"],
+      "@validators/*": ["./projects/opal-frontend-common/src/lib/validators/*.ts"]
+    },
     "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
