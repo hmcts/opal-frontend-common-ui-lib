@@ -1,10 +1,11 @@
-# OPAL Frontend Common UI Library 
+# OPAL Frontend Common UI Library
 
-This is an [Angular Library](https://angular.dev/tools/libraries). 
+This is an [Angular Library](https://angular.dev/tools/libraries).
 
 ## Getting Started
 
 ### Prerequisites
+
 Running the application requires the following tools to be installed in your environment:
 
 - [Node.js](https://nodejs.org/) v23.7.0 or later
@@ -12,6 +13,7 @@ Running the application requires the following tools to be installed in your env
 - [yarn](https://yarnpkg.com/) v4
 
 ### Install Dependencies
+
 Install dependencies by executing the following command:
 
 ```bash
