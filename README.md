@@ -1,4 +1,4 @@
-# OPAL Frontend Common UI Library
+# OPAL Frontend Common UI Library 
 
 This is an [Angular Library](https://angular.dev/tools/libraries). 
 
