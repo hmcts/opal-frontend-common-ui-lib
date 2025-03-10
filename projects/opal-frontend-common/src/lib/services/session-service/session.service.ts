@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, retry, shareReplay, tap, timer } from 'rxjs';
-import { SESSION_ENDPOINTS } from '@services/session-service/constants/session-endpoints.constant';
-import { ISessionTokenExpiry } from '@services/session-service/interfaces/session-token-expiry.interface';
-import { ISessionUserState } from '@services/session-service/interfaces/session-user-state.interface';
-import { GlobalStore } from '@stores/global/global.store';
+import { GlobalStore } from '../../stores';
+import { SESSION_ENDPOINTS } from './constants';
+import { ISessionUserState, ISessionTokenExpiry } from './interfaces';
 
 @Injectable({
   providedIn: 'root',

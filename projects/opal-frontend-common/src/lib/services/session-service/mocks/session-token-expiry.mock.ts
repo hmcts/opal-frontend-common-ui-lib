@@ -1,4 +1,4 @@
-import { ISessionTokenExpiry } from '@services/session-service/interfaces/session-token-expiry.interface';
+import { ISessionTokenExpiry } from "../interfaces";
 
 export const SESSION_TOKEN_EXPIRY_MOCK: ISessionTokenExpiry = {
   expiry: 'test',

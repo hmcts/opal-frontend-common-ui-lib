@@ -7,8 +7,7 @@ import {
 } from '@angular/common/http';
 import { httpErrorInterceptor } from './http-error.interceptor';
 import { of, throwError } from 'rxjs';
-import { GlobalStoreType } from '@stores/global/types/global-store.type';
-import { GlobalStore } from '@stores/global/global.store';
+import { GlobalStore, GlobalStoreType } from '../../stores';
 
 describe('httpErrorInterceptor', () => {
   let globalStore: GlobalStoreType;

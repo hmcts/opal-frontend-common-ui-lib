@@ -1,9 +1,9 @@
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { LDFlagSet } from 'launchdarkly-js-client-sdk';
 import { IErrorState } from './interfaces/error-state.interface';
-import { ITransferStateLaunchDarklyConfig } from '@services/transfer-state-service/interfaces/transfer-state-launch-darkly-config.interface';
-import { ISessionUserState } from '@services/session-service/interfaces/session-user-state.interface';
-import { ISessionTokenExpiry } from '@services/session-service/interfaces/session-token-expiry.interface';
+import { ISessionUserState } from '../../services/session-service/interfaces/session-user-state.interface';
+import { ITransferStateLaunchDarklyConfig } from '../../services/transfer-state-service/interfaces/transfer-state-launch-darkly-config.interface';
+import { ISessionTokenExpiry } from '../../services/session-service/interfaces/session-token-expiry.interface';
 
 export const GlobalStore = signalStore(
   { providedIn: 'root' },
@@ -38,5 +38,5 @@ export const GlobalStore = signalStore(
     setTokenExpiry: (tokenExpiry: ISessionTokenExpiry) => {
       patchState(store, { tokenExpiry });
     },
-  })),
+  }))
 );

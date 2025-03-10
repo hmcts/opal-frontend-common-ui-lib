@@ -1,9 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { AppInsightsService } from '@services/app-insights/app-insights.service';
-import { TransferStateService } from '@services/transfer-state-service/transfer-state.service';
-import { TRANSFER_STATE_MOCK } from '@services/transfer-state-service/mocks/transfer-state.mock';
 import { ITelemetryItem } from '@microsoft/applicationinsights-web';
+import {
+  TRANSFER_STATE_MOCK,
+  TransferStateService,
+} from '../transfer-state-service';
+import { AppInsightsService } from './app-insights.service';
 
 describe('AppInsightsService', () => {
   let service: AppInsightsService;
@@ -15,12 +17,19 @@ describe('AppInsightsService', () => {
     TestBed.overrideProvider(PLATFORM_ID, { useValue: 'browser' });
 
     // Mock `TransferStateService`
-    transferStateServiceMock = jasmine.createSpyObj<TransferStateService>('TransferStateService', [], {
-      serverTransferState: TRANSFER_STATE_MOCK,
-    });
+    transferStateServiceMock = jasmine.createSpyObj<TransferStateService>(
+      'TransferStateService',
+      [],
+      {
+        serverTransferState: TRANSFER_STATE_MOCK,
+      }
+    );
 
     TestBed.configureTestingModule({
-      providers: [AppInsightsService, { provide: TransferStateService, useValue: transferStateServiceMock }],
+      providers: [
+        AppInsightsService,
+        { provide: TransferStateService, useValue: transferStateServiceMock },
+      ],
     });
 
     service = TestBed.inject(AppInsightsService);
@@ -57,7 +66,10 @@ describe('AppInsightsService', () => {
   });
 
   it('should correctly set telemetry initializer - tag undefined', () => {
-    const mockEnvelope: ITelemetryItem = { name: 'Test Event', tags: undefined };
+    const mockEnvelope: ITelemetryItem = {
+      name: 'Test Event',
+      tags: undefined,
+    };
 
     service['telemetryInitializer'](mockEnvelope);
 
@@ -71,7 +83,10 @@ describe('AppInsightsService', () => {
     service.logPageView(pageName, pageUrl);
 
     expect(trackPageViewSpy).toHaveBeenCalledTimes(1);
-    expect(trackPageViewSpy).toHaveBeenCalledWith({ name: pageName, uri: pageUrl });
+    expect(trackPageViewSpy).toHaveBeenCalledWith({
+      name: pageName,
+      uri: pageUrl,
+    });
   });
 
   it('should track an exception', () => {
@@ -81,7 +96,10 @@ describe('AppInsightsService', () => {
     service.logException(error, severityLevel);
 
     expect(trackExceptionSpy).toHaveBeenCalledTimes(1);
-    expect(trackExceptionSpy).toHaveBeenCalledWith({ exception: error, severityLevel });
+    expect(trackExceptionSpy).toHaveBeenCalledWith({
+      exception: error,
+      severityLevel,
+    });
   });
 
   it('should not track a page view if appInsightsConfig.enabled is false', () => {
@@ -89,13 +107,20 @@ describe('AppInsightsService', () => {
     const transferStateMock = structuredClone(TRANSFER_STATE_MOCK);
     transferStateMock.appInsightsConfig.enabled = false;
 
-    transferStateServiceMock = jasmine.createSpyObj<TransferStateService>('TransferStateService', [], {
-      serverTransferState: transferStateMock,
-    });
+    transferStateServiceMock = jasmine.createSpyObj<TransferStateService>(
+      'TransferStateService',
+      [],
+      {
+        serverTransferState: transferStateMock,
+      }
+    );
 
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({
-      providers: [AppInsightsService, { provide: TransferStateService, useValue: transferStateServiceMock }],
+      providers: [
+        AppInsightsService,
+        { provide: TransferStateService, useValue: transferStateServiceMock },
+      ],
     });
 
     service = TestBed.inject(AppInsightsService);
@@ -110,13 +135,20 @@ describe('AppInsightsService', () => {
     const transferStateMock = structuredClone(TRANSFER_STATE_MOCK);
     transferStateMock.appInsightsConfig.enabled = false;
 
-    transferStateServiceMock = jasmine.createSpyObj<TransferStateService>('TransferStateService', [], {
-      serverTransferState: transferStateMock,
-    });
+    transferStateServiceMock = jasmine.createSpyObj<TransferStateService>(
+      'TransferStateService',
+      [],
+      {
+        serverTransferState: transferStateMock,
+      }
+    );
 
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({
-      providers: [AppInsightsService, { provide: TransferStateService, useValue: transferStateServiceMock }],
+      providers: [
+        AppInsightsService,
+        { provide: TransferStateService, useValue: transferStateServiceMock },
+      ],
     });
 
     service = TestBed.inject(AppInsightsService);

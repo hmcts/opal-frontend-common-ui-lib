@@ -4,6 +4,8 @@ export * from './lib/opal-frontend-common.module';
 export * from './lib/components';
 export * from './lib/guards';
 export * from './lib/interceptors';
+export * from './lib/resolvers';
+export * from './lib/routing';
 export * from './lib/services';
 export * from './lib/stores';
 export * from './lib/validators';

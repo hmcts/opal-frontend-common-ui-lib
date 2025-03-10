@@ -1,13 +1,15 @@
-import { SESSION_USER_STATE_MOCK } from '@services/session-service/mocks/session-user-state.mock';
-import { LAUNCH_DARKLY_CHANGE_FLAGS_MOCK } from '@services/launch-darkly/mocks/launch-darkly-change-flags.mock';
-import { SESSION_TOKEN_EXPIRY_MOCK } from '@services/session-service/mocks/session-token-expiry.mock';
 import { TestBed } from '@angular/core/testing';
-import { ISessionUserState } from '@services/session-service/interfaces/session-user-state.interface';
-import { ITransferStateLaunchDarklyConfig } from '@services/transfer-state-service/interfaces/transfer-state-launch-darkly-config.interface';
-import { ISessionTokenExpiry } from '@services/session-service/interfaces/session-token-expiry.interface';
-import { TRANSFER_STATE_LAUNCH_DARKLY_CONFIG_MOCK } from '@services/transfer-state-service/mocks/transfer-state-launch-darkly-config.mock';
 import { GlobalStoreType } from './types/global-store.type';
 import { GlobalStore } from './global.store';
+import {
+  ISessionTokenExpiry,
+  ISessionUserState,
+  ITransferStateLaunchDarklyConfig,
+  LAUNCH_DARKLY_CHANGE_FLAGS_MOCK,
+  SESSION_TOKEN_EXPIRY_MOCK,
+  SESSION_USER_STATE_MOCK,
+  TRANSFER_STATE_LAUNCH_DARKLY_CONFIG_MOCK,
+} from '../../services';
 
 describe('GlobalStore', () => {
   let store: GlobalStoreType;
@@ -22,7 +24,9 @@ describe('GlobalStore', () => {
     expect(store.featureFlags()).toEqual({});
     expect(store.userState()).toEqual({} as ISessionUserState);
     expect(store.ssoEnabled()).toBeFalse();
-    expect(store.launchDarklyConfig()).toEqual({} as ITransferStateLaunchDarklyConfig);
+    expect(store.launchDarklyConfig()).toEqual(
+      {} as ITransferStateLaunchDarklyConfig
+    );
     expect(store.tokenExpiry()).toEqual({} as ISessionTokenExpiry);
   });
 

@@ -3,8 +3,8 @@ import { TransferStateService } from './transfer-state.service';
 import { TRANSFER_STATE_MOCK } from './mocks/transfer-state.mock';
 import { PLATFORM_ID, makeStateKey } from '@angular/core';
 import { ITransferStateServerState } from './interfaces/transfer-state-server-state.interface';
-import { GlobalStoreType } from '@stores/global/types/global-store.type';
-import { GlobalStore } from '@stores/global/global.store';
+import { GlobalStoreType } from '../../stores/global/types/global-store.type';
+import { GlobalStore } from '../../stores/global/global.store';
 
 describe('TransferStateService', () => {
   let service: TransferStateService;

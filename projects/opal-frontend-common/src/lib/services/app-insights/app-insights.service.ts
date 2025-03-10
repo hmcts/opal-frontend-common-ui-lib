@@ -1,20 +1,26 @@
 import { isPlatformBrowser } from '@angular/common';
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { ApplicationInsights, ITelemetryItem } from '@microsoft/applicationinsights-web';
-import { ITransferStateAppInsightsConfig } from '@services/transfer-state-service/interfaces/transfer-state-app-insights-config.interface';
-import { TransferStateService } from '@services/transfer-state-service/transfer-state.service';
+import {
+  ApplicationInsights,
+  ITelemetryItem,
+} from '@microsoft/applicationinsights-web';
+import { ITransferStateAppInsightsConfig } from '../transfer-state-service/interfaces/transfer-state-app-insights-config.interface';
+import { TransferStateService } from '../transfer-state-service/transfer-state.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AppInsightsService {
   private readonly appInsights!: ApplicationInsights;
-  private readonly appInsightsConfig!: ITransferStateAppInsightsConfig | undefined;
+  private readonly appInsightsConfig!:
+    | ITransferStateAppInsightsConfig
+    | undefined;
   private readonly platformId = inject(PLATFORM_ID);
   private readonly transferStateService = inject(TransferStateService);
 
   constructor() {
-    this.appInsightsConfig = this.transferStateService.serverTransferState?.appInsightsConfig;
+    this.appInsightsConfig =
+      this.transferStateService.serverTransferState?.appInsightsConfig;
 
     if (isPlatformBrowser(this.platformId) && this.appInsightsConfig) {
       if (this.appInsightsConfig.enabled) {
@@ -25,7 +31,9 @@ export class AppInsightsService {
           },
         });
 
-        this.appInsights.addTelemetryInitializer(this.telemetryInitializer.bind(this));
+        this.appInsights.addTelemetryInitializer(
+          this.telemetryInitializer.bind(this)
+        );
         this.appInsights.loadAppInsights();
       }
     }

@@ -9,7 +9,7 @@ import {
   makeStateKey,
 } from '@angular/core';
 import { ITransferStateServerState } from './interfaces/transfer-state-server-state.interface';
-import { GlobalStore } from '@stores/global/global.store';
+import { GlobalStore } from '../../stores/global/global.store';
 
 @Injectable({
   providedIn: 'root',

@@ -2,7 +2,7 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, tap, throwError } from 'rxjs';
 import { AppInsightsService } from '../../services/app-insights/app-insights.service';
-import { GlobalStore } from '@stores/global/global.store';
+import { GlobalStore } from '../../stores';
 
 export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
   const globalStore = inject(GlobalStore);

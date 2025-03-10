@@ -3,18 +3,16 @@ import {
   HttpTestingController,
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
-import { SessionService } from '@services/session-service/session.service';
-import { SESSION_TOKEN_EXPIRY_MOCK } from '@services/session-service/mocks/session-token-expiry.mock';
-import { SESSION_USER_STATE_MOCK } from '@services/session-service/mocks/session-user-state.mock';
-import { ISessionTokenExpiry } from '@services/session-service/interfaces/session-token-expiry.interface';
-import { ISessionUserState } from '@services/session-service/interfaces/session-user-state.interface';
 import {
   provideHttpClient,
   withInterceptorsFromDi,
 } from '@angular/common/http';
-import { GlobalStoreType } from '@stores/global/types/global-store.type';
-import { SESSION_ENDPOINTS } from '@services/session-service/constants/session-endpoints.constant';
-import { GlobalStore } from '@stores/global/global.store';
+import { ISessionTokenExpiry, ISessionUserState } from './interfaces';
+import { SESSION_TOKEN_EXPIRY_MOCK, SESSION_USER_STATE_MOCK } from './mocks';
+import { SessionService } from './session.service';
+import { GlobalStoreType } from '../../stores/global/types/global-store.type';
+import { GlobalStore } from '../../stores/global/global.store';
+import { SESSION_ENDPOINTS } from './constants';
 
 const mockTokenExpiry: ISessionTokenExpiry = SESSION_TOKEN_EXPIRY_MOCK;
 
