@@ -1,9 +1,8 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, tap, throwError } from 'rxjs';
-import { GlobalStore } from '../../stores';
 import { AppInsightsService } from '../../services/app-insights/app-insights.service';
-
+import { GlobalStore } from '@stores/global/global.store';
 
 export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
   const globalStore = inject(GlobalStore);
@@ -17,9 +16,14 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error) => {
       // Ensure ErrorEvent is handled only in browser environments
       const isBrowser = typeof window !== 'undefined';
-      const isErrorEvent = isBrowser && typeof ErrorEvent !== 'undefined' && error.error instanceof ErrorEvent;
+      const isErrorEvent =
+        isBrowser &&
+        typeof ErrorEvent !== 'undefined' &&
+        error.error instanceof ErrorEvent;
 
-      const errorMessage = isErrorEvent ? `Error: ${error.error.message}` : `Error: ${error.message}`;
+      const errorMessage = isErrorEvent
+        ? `Error: ${error.error.message}`
+        : `Error: ${error.message}`;
 
       globalStore.setError({
         error: true,
@@ -29,6 +33,6 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
       appInsightsService.logException(error);
 
       return throwError(() => error);
-    }),
+    })
   );
 };

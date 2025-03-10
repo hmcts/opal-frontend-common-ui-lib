@@ -1,9 +1,14 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpErrorResponse, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
+import {
+  HttpErrorResponse,
+  HttpHandlerFn,
+  HttpInterceptorFn,
+  HttpRequest,
+} from '@angular/common/http';
 import { httpErrorInterceptor } from './http-error.interceptor';
 import { of, throwError } from 'rxjs';
 import { GlobalStoreType } from '@stores/global/types/global-store.type';
-import { GlobalStore } from '@stores/index';
+import { GlobalStore } from '@stores/global/global.store';
 
 describe('httpErrorInterceptor', () => {
   let globalStore: GlobalStoreType;

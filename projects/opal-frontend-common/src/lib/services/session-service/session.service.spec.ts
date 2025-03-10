@@ -1,14 +1,20 @@
 import { fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from '@angular/common/http/testing';
 import { SessionService } from '@services/session-service/session.service';
 import { SESSION_TOKEN_EXPIRY_MOCK } from '@services/session-service/mocks/session-token-expiry.mock';
 import { SESSION_USER_STATE_MOCK } from '@services/session-service/mocks/session-user-state.mock';
 import { ISessionTokenExpiry } from '@services/session-service/interfaces/session-token-expiry.interface';
 import { ISessionUserState } from '@services/session-service/interfaces/session-user-state.interface';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { GlobalStoreType } from '@stores/global/types/global-store.type';
 import { SESSION_ENDPOINTS } from '@services/session-service/constants/session-endpoints.constant';
-import { GlobalStore } from '@stores/index';
+import { GlobalStore } from '@stores/global/global.store';
 
 const mockTokenExpiry: ISessionTokenExpiry = SESSION_TOKEN_EXPIRY_MOCK;
 
@@ -20,7 +26,10 @@ describe('SessionService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+      providers: [
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ],
     });
     service = TestBed.inject(SessionService);
     httpMock = TestBed.inject(HttpTestingController);
@@ -157,7 +166,10 @@ describe('SessionService', () => {
   it('should retry the request exactly MAX_RETRIES times before success', fakeAsync(() => {
     service['tokenExpiryCache$'] = null; // Reset cache to force a fresh request
 
-    const mockResponse: ISessionTokenExpiry = { expiry: '3600', warningThresholdInMilliseconds: 5 };
+    const mockResponse: ISessionTokenExpiry = {
+      expiry: '3600',
+      warningThresholdInMilliseconds: 5,
+    };
     const MAX_RETRIES = service['MAX_RETRIES']; // Read from service
     const RETRY_DELAY_MS = service['RETRY_DELAY_MS'];
 

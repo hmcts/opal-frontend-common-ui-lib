@@ -4,7 +4,7 @@ import { LDFlagChangeset, LDFlagSet } from 'launchdarkly-js-client-sdk';
 import { LAUNCH_DARKLY_CHANGE_FLAGS_MOCK } from '@services/launch-darkly/mocks/launch-darkly-change-flags.mock';
 import { LAUNCH_DARKLY_FLAGS_MOCK } from '@services/launch-darkly/mocks/launch-darkly-flags.mock';
 import { GlobalStoreType } from '@stores/global/types/global-store.type';
-import { GlobalStore } from '@stores/index';
+import { GlobalStore } from '@stores/global/global.store';
 
 describe('LaunchDarklyService', () => {
   let service: LaunchDarklyService;
@@ -32,7 +32,9 @@ describe('LaunchDarklyService', () => {
     service['setLaunchDarklyFlags']();
 
     expect(service['ldClient'].allFlags).toHaveBeenCalled();
-    expect(service['globalStore'].setFeatureFlags).toHaveBeenCalledWith(mockFlags);
+    expect(service['globalStore'].setFeatureFlags).toHaveBeenCalledWith(
+      mockFlags
+    );
   });
 
   it('should format the flag changeset correctly', () => {
@@ -129,7 +131,9 @@ describe('LaunchDarklyService', () => {
 
     service.initializeLaunchDarklyClient();
 
-    spyOn(service['ldClient'], 'waitForInitialization').and.returnValue(Promise.resolve());
+    spyOn(service['ldClient'], 'waitForInitialization').and.returnValue(
+      Promise.resolve()
+    );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     spyOn<any>(service, 'setLaunchDarklyFlags');
 
@@ -149,9 +153,13 @@ describe('LaunchDarklyService', () => {
     service.initializeLaunchDarklyClient();
 
     const error = new Error('Initialization failed');
-    spyOn(service['ldClient'], 'waitForInitialization').and.returnValue(Promise.reject(error));
+    spyOn(service['ldClient'], 'waitForInitialization').and.returnValue(
+      Promise.reject(error)
+    );
 
-    await expectAsync(service.initializeLaunchDarklyFlags()).toBeRejectedWith(error);
+    await expectAsync(service.initializeLaunchDarklyFlags()).toBeRejectedWith(
+      error
+    );
   });
 
   it('should initialize LaunchDarkly change listener when ldClient is defined', () => {
@@ -166,7 +174,10 @@ describe('LaunchDarklyService', () => {
 
     service.initializeLaunchDarklyChangeListener();
 
-    expect(service['ldClient'].on).toHaveBeenCalledWith('change', jasmine.any(Function));
+    expect(service['ldClient'].on).toHaveBeenCalledWith(
+      'change',
+      jasmine.any(Function)
+    );
   });
 
   it('should not initialize LaunchDarkly change listener when stream is false', () => {
@@ -181,7 +192,10 @@ describe('LaunchDarklyService', () => {
 
     service.initializeLaunchDarklyChangeListener();
 
-    expect(service['ldClient'].on).not.toHaveBeenCalledWith('change', jasmine.any(Function));
+    expect(service['ldClient'].on).not.toHaveBeenCalledWith(
+      'change',
+      jasmine.any(Function)
+    );
   });
 
   it('should update feature flags when ldClient emits change event', () => {
@@ -196,16 +210,20 @@ describe('LaunchDarklyService', () => {
     const mockFlags: LDFlagChangeset = LAUNCH_DARKLY_CHANGE_FLAGS_MOCK;
     const expectedUpdatedFlags = LAUNCH_DARKLY_FLAGS_MOCK;
 
-    spyOn(service['ldClient'], 'on').and.callFake((event: string, callback: (flags: LDFlagChangeset) => void) => {
-      if (event === 'change') {
-        callback(mockFlags);
+    spyOn(service['ldClient'], 'on').and.callFake(
+      (event: string, callback: (flags: LDFlagChangeset) => void) => {
+        if (event === 'change') {
+          callback(mockFlags);
+        }
       }
-    });
+    );
 
     spyOn(service['globalStore'], 'setFeatureFlags');
 
     service.initializeLaunchDarklyChangeListener();
 
-    expect(service['globalStore'].setFeatureFlags).toHaveBeenCalledWith(expectedUpdatedFlags);
+    expect(service['globalStore'].setFeatureFlags).toHaveBeenCalledWith(
+      expectedUpdatedFlags
+    );
   });
 });

@@ -4,7 +4,7 @@ import { Observable, retry, shareReplay, tap, timer } from 'rxjs';
 import { SESSION_ENDPOINTS } from '@services/session-service/constants/session-endpoints.constant';
 import { ISessionTokenExpiry } from '@services/session-service/interfaces/session-token-expiry.interface';
 import { ISessionUserState } from '@services/session-service/interfaces/session-user-state.interface';
-import { GlobalStore } from '@stores/index';
+import { GlobalStore } from '@stores/global/global.store';
 
 @Injectable({
   providedIn: 'root',
@@ -38,7 +38,7 @@ export class SessionService {
         .pipe(
           tap((userState) => {
             this.globalStore.setUserState(userState);
-          }),
+          })
         );
     }
 
@@ -55,16 +55,18 @@ export class SessionService {
    */
   public getTokenExpiry(): Observable<ISessionTokenExpiry> {
     if (!this.tokenExpiryCache$) {
-      this.tokenExpiryCache$ = this.http.get<ISessionTokenExpiry>(SESSION_ENDPOINTS.expiry).pipe(
-        retry({
-          count: this.MAX_RETRIES,
-          delay: () => timer(this.RETRY_DELAY_MS),
-        }),
-        tap((expiry) => {
-          this.globalStore.setTokenExpiry(expiry);
-        }),
-        shareReplay(1),
-      );
+      this.tokenExpiryCache$ = this.http
+        .get<ISessionTokenExpiry>(SESSION_ENDPOINTS.expiry)
+        .pipe(
+          retry({
+            count: this.MAX_RETRIES,
+            delay: () => timer(this.RETRY_DELAY_MS),
+          }),
+          tap((expiry) => {
+            this.globalStore.setTokenExpiry(expiry);
+          }),
+          shareReplay(1)
+        );
     }
     return this.tokenExpiryCache$;
   }

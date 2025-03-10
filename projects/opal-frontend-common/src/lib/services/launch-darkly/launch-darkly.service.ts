@@ -1,6 +1,11 @@
 import { inject, Injectable, OnDestroy } from '@angular/core';
-import { GlobalStore } from '@stores/index';
-import { initialize, LDClient, LDFlagChangeset, LDFlagSet } from 'launchdarkly-js-client-sdk';
+import { GlobalStore } from '@stores/global/global.store';
+import {
+  initialize,
+  LDClient,
+  LDFlagChangeset,
+  LDFlagSet,
+} from 'launchdarkly-js-client-sdk';
 
 @Injectable({
   providedIn: 'root',
@@ -47,7 +52,10 @@ export class LaunchDarklyService implements OnDestroy {
   public initializeLaunchDarklyChangeListener() {
     if (this.ldClient && this.globalStore.launchDarklyConfig().stream) {
       this.ldClient.on('change', (flags: LDFlagChangeset) => {
-        const updatedFlags = { ...this.globalStore.featureFlags(), ...this.formatChangeFlags(flags) };
+        const updatedFlags = {
+          ...this.globalStore.featureFlags(),
+          ...this.formatChangeFlags(flags),
+        };
         this.globalStore.setFeatureFlags(updatedFlags);
       });
     }

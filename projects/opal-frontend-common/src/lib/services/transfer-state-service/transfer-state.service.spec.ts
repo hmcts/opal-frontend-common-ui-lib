@@ -4,7 +4,7 @@ import { TRANSFER_STATE_MOCK } from './mocks/transfer-state.mock';
 import { PLATFORM_ID, makeStateKey } from '@angular/core';
 import { ITransferStateServerState } from './interfaces/transfer-state-server-state.interface';
 import { GlobalStoreType } from '@stores/global/types/global-store.type';
-import { GlobalStore } from '@stores/index';
+import { GlobalStore } from '@stores/global/global.store';
 
 describe('TransferStateService', () => {
   let service: TransferStateService;
@@ -32,20 +32,29 @@ describe('TransferStateService', () => {
   });
 
   it('should get the transfer state from the server', () => {
-    const storeKeyTransferState = makeStateKey<ITransferStateServerState>('serverTransferState');
-    const serverTransferState = service['transferState'].get(storeKeyTransferState, undefined);
+    const storeKeyTransferState = makeStateKey<ITransferStateServerState>(
+      'serverTransferState'
+    );
+    const serverTransferState = service['transferState'].get(
+      storeKeyTransferState,
+      undefined
+    );
     expect(serverTransferState).toEqual(TRANSFER_STATE_MOCK);
   });
 
   it('should initialize SSO enabled', () => {
     service.initializeSsoEnabled();
 
-    expect(globalStore.ssoEnabled()).toEqual(service['storedServerTransferState'].ssoEnabled);
+    expect(globalStore.ssoEnabled()).toEqual(
+      service['storedServerTransferState'].ssoEnabled
+    );
   });
 
   it('should initialize launch darkly', () => {
     service.initializeLaunchDarklyConfig();
 
-    expect(globalStore.launchDarklyConfig()).toEqual(service['storedServerTransferState'].launchDarklyConfig);
+    expect(globalStore.launchDarklyConfig()).toEqual(
+      service['storedServerTransferState'].launchDarklyConfig
+    );
   });
 });

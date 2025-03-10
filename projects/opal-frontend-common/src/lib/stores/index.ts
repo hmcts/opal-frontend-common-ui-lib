@@ -1,3 +1,3 @@
-import { GlobalStore } from "./global/global.store";
+import { GlobalStore } from './global/global.store';
 
-export { GlobalStore }; 
+export { GlobalStore };
