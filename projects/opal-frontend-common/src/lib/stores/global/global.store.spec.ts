@@ -24,9 +24,7 @@ describe('GlobalStore', () => {
     expect(store.featureFlags()).toEqual({});
     expect(store.userState()).toEqual({} as ISessionUserState);
     expect(store.ssoEnabled()).toBeFalse();
-    expect(store.launchDarklyConfig()).toEqual(
-      {} as ITransferStateLaunchDarklyConfig
-    );
+    expect(store.launchDarklyConfig()).toEqual({} as ITransferStateLaunchDarklyConfig);
     expect(store.tokenExpiry()).toEqual({} as ISessionTokenExpiry);
   });
 

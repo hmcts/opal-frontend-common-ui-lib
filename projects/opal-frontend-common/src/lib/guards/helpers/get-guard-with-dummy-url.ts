@@ -1,9 +1,4 @@
-import {
-  ActivatedRouteSnapshot,
-  UrlSegment,
-  RouterStateSnapshot,
-  CanActivateFn,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, UrlSegment, RouterStateSnapshot, CanActivateFn } from '@angular/router';
 import { Observable } from 'rxjs';
 import { GuardReturnType } from '../types';
 
@@ -17,11 +12,8 @@ import { GuardReturnType } from '../types';
  */
 export function getGuardWithDummyUrl(
   guard: CanActivateFn,
-  urlPath: string
-): () =>
-  | GuardReturnType
-  | Promise<GuardReturnType>
-  | Observable<GuardReturnType> {
+  urlPath: string,
+): () => GuardReturnType | Promise<GuardReturnType> | Observable<GuardReturnType> {
   const dummyRoute = new ActivatedRouteSnapshot();
   dummyRoute.url = [new UrlSegment(urlPath, {})];
   const dummyState: RouterStateSnapshot = {

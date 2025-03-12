@@ -5,5 +5,7 @@ export * from './date-service';
 export * from './launch-darkly';
 export * from './permissions-service';
 export * from './session-service';
+export * from './sort-service';
 export * from './transfer-state-service';
+export * from './transformation-service';
 export * from './utils';

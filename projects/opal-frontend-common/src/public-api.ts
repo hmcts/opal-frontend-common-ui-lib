@@ -1,9 +1,7 @@
-export * from './lib/opal-frontend-common.module';
-
-// Add this line to expose all components in the library
-export * from './lib/components';
+export * from './lib/components/govuk';
 export * from './lib/guards';
 export * from './lib/interceptors';
+export * from './lib/pages';
 export * from './lib/resolvers';
 export * from './lib/routing';
 export * from './lib/services';

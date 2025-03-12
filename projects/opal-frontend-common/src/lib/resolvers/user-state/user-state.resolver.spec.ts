@@ -1,25 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  ActivatedRouteSnapshot,
-  ResolveFn,
-  RouterStateSnapshot,
-  UrlSegment,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot, UrlSegment } from '@angular/router';
 import { userStateResolver } from './user-state.resolver';
 import { of } from 'rxjs';
-import {
-  ISessionUserState,
-  SESSION_USER_STATE_MOCK,
-  SessionService,
-} from '../../services';
+import { ISessionUserState, SESSION_USER_STATE_MOCK, SessionService } from '../../services';
 
 describe('userStateResolver', () => {
-  const executeResolver: ResolveFn<ISessionUserState> = (
-    ...resolverParameters
-  ) =>
-    TestBed.runInInjectionContext(() =>
-      userStateResolver(...resolverParameters)
-    );
+  const executeResolver: ResolveFn<ISessionUserState> = (...resolverParameters) =>
+    TestBed.runInInjectionContext(() => userStateResolver(...resolverParameters));
   let mockSessionService: jasmine.SpyObj<SessionService>;
   beforeEach(() => {
     mockSessionService = jasmine.createSpyObj(SessionService, ['getUserState']);

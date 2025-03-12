@@ -1,4 +1,11 @@
-import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, ParamMap, convertToParamMap } from '@angular/router';
+import {
+  Router,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  UrlTree,
+  ParamMap,
+  convertToParamMap,
+} from '@angular/router';
 import { TestBed } from '@angular/core/testing';
 import { hasFlowStateGuard } from './has-flow-state.guard';
 
@@ -24,7 +31,10 @@ describe('hasFlowStateGuard', () => {
     (router.createUrlTree as jasmine.Spy).and.returnValue(mockUrlTree);
   });
 
-  function mockActivatedRouteSnapshot(queryParams?: Record<string, string> | undefined, fragment?: string | null): ActivatedRouteSnapshot {
+  function mockActivatedRouteSnapshot(
+    queryParams?: Record<string, string> | undefined,
+    fragment?: string | null,
+  ): ActivatedRouteSnapshot {
     return {
       queryParams: queryParams,
       fragment: fragment,
@@ -51,9 +61,9 @@ describe('hasFlowStateGuard', () => {
     const getNavigationPath = jasmine.createSpy('getNavigationPath').and.returnValue('/redirect');
 
     const guard = hasFlowStateGuard(getState, checkCondition, getNavigationPath);
-    
-    const result = TestBed.runInInjectionContext(() => 
-      guard(mockActivatedRouteSnapshot({ test: '1' }, 'section'), {} as RouterStateSnapshot)
+
+    const result = TestBed.runInInjectionContext(() =>
+      guard(mockActivatedRouteSnapshot({ test: '1' }, 'section'), {} as RouterStateSnapshot),
     );
 
     expect(result).toBe(true);
@@ -68,9 +78,9 @@ describe('hasFlowStateGuard', () => {
     const getNavigationPath = jasmine.createSpy('getNavigationPath').and.returnValue('/redirect');
 
     const guard = hasFlowStateGuard(getState, checkCondition, getNavigationPath);
-    
-    const result = TestBed.runInInjectionContext(() => 
-      guard(mockActivatedRouteSnapshot({ test: '1' }, 'section'), {} as RouterStateSnapshot)
+
+    const result = TestBed.runInInjectionContext(() =>
+      guard(mockActivatedRouteSnapshot({ test: '1' }, 'section'), {} as RouterStateSnapshot),
     );
 
     expect(result).toBe(mockUrlTree);
@@ -89,10 +99,8 @@ describe('hasFlowStateGuard', () => {
     const getNavigationPath = jasmine.createSpy('getNavigationPath').and.returnValue('/redirect');
 
     const guard = hasFlowStateGuard(getState, checkCondition, getNavigationPath);
-    
-    const result = TestBed.runInInjectionContext(() => 
-      guard(mockActivatedRouteSnapshot(), {} as RouterStateSnapshot)
-    );
+
+    const result = TestBed.runInInjectionContext(() => guard(mockActivatedRouteSnapshot(), {} as RouterStateSnapshot));
 
     expect(result).toBe(mockUrlTree);
     expect(getState).toHaveBeenCalled();

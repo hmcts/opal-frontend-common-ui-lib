@@ -23,13 +23,13 @@ export class AuthService {
       .pipe(
         tap((resp) => {
           this.globalStore.setAuthenticated(resp);
-        })
+        }),
       )
       .pipe(
         catchError((error) => {
           this.globalStore.setAuthenticated(false);
           return throwError(() => error);
-        })
+        }),
       );
   }
 }

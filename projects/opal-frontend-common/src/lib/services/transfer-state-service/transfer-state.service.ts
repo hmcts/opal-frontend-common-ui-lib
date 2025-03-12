@@ -1,13 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import {
-  Inject,
-  Injectable,
-  Optional,
-  PLATFORM_ID,
-  TransferState,
-  inject,
-  makeStateKey,
-} from '@angular/core';
+import { Inject, Injectable, Optional, PLATFORM_ID, TransferState, inject, makeStateKey } from '@angular/core';
 import { ITransferStateServerState } from './interfaces/transfer-state-server-state.interface';
 import { GlobalStore } from '../../stores/global/global.store';
 
@@ -23,18 +15,13 @@ export class TransferStateService {
     @Optional()
     @Inject('serverTransferState')
     public readonly serverTransferState: ITransferStateServerState | null,
-    private readonly transferState: TransferState
+    private readonly transferState: TransferState,
   ) {
-    const storeKeyTransferState = makeStateKey<ITransferStateServerState>(
-      'serverTransferState'
-    );
+    const storeKeyTransferState = makeStateKey<ITransferStateServerState>('serverTransferState');
 
     if (isPlatformBrowser(this.platformId)) {
       // get user state from transfer state if browser side
-      this.serverTransferState = this.transferState.get(
-        storeKeyTransferState,
-        null
-      );
+      this.serverTransferState = this.transferState.get(storeKeyTransferState, null);
 
       if (this.serverTransferState) {
         this.storedServerTransferState = this.serverTransferState;
@@ -58,8 +45,6 @@ export class TransferStateService {
    * launchDarklyConfig value to the globalStore's launchDarklyConfig property.
    */
   public initializeLaunchDarklyConfig(): void {
-    this.globalStore.setLaunchDarklyConfig(
-      this.storedServerTransferState?.launchDarklyConfig
-    );
+    this.globalStore.setLaunchDarklyConfig(this.storedServerTransferState?.launchDarklyConfig);
   }
 }

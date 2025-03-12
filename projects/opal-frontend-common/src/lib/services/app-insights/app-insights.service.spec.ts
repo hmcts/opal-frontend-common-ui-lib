@@ -1,10 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { ITelemetryItem } from '@microsoft/applicationinsights-web';
-import {
-  TRANSFER_STATE_MOCK,
-  TransferStateService,
-} from '../transfer-state-service';
+import { TRANSFER_STATE_MOCK, TransferStateService } from '../transfer-state-service';
 import { AppInsightsService } from './app-insights.service';
 
 describe('AppInsightsService', () => {
@@ -17,19 +14,12 @@ describe('AppInsightsService', () => {
     TestBed.overrideProvider(PLATFORM_ID, { useValue: 'browser' });
 
     // Mock `TransferStateService`
-    transferStateServiceMock = jasmine.createSpyObj<TransferStateService>(
-      'TransferStateService',
-      [],
-      {
-        serverTransferState: TRANSFER_STATE_MOCK,
-      }
-    );
+    transferStateServiceMock = jasmine.createSpyObj<TransferStateService>('TransferStateService', [], {
+      serverTransferState: TRANSFER_STATE_MOCK,
+    });
 
     TestBed.configureTestingModule({
-      providers: [
-        AppInsightsService,
-        { provide: TransferStateService, useValue: transferStateServiceMock },
-      ],
+      providers: [AppInsightsService, { provide: TransferStateService, useValue: transferStateServiceMock }],
     });
 
     service = TestBed.inject(AppInsightsService);
@@ -107,20 +97,13 @@ describe('AppInsightsService', () => {
     const transferStateMock = structuredClone(TRANSFER_STATE_MOCK);
     transferStateMock.appInsightsConfig.enabled = false;
 
-    transferStateServiceMock = jasmine.createSpyObj<TransferStateService>(
-      'TransferStateService',
-      [],
-      {
-        serverTransferState: transferStateMock,
-      }
-    );
+    transferStateServiceMock = jasmine.createSpyObj<TransferStateService>('TransferStateService', [], {
+      serverTransferState: transferStateMock,
+    });
 
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({
-      providers: [
-        AppInsightsService,
-        { provide: TransferStateService, useValue: transferStateServiceMock },
-      ],
+      providers: [AppInsightsService, { provide: TransferStateService, useValue: transferStateServiceMock }],
     });
 
     service = TestBed.inject(AppInsightsService);
@@ -135,20 +118,13 @@ describe('AppInsightsService', () => {
     const transferStateMock = structuredClone(TRANSFER_STATE_MOCK);
     transferStateMock.appInsightsConfig.enabled = false;
 
-    transferStateServiceMock = jasmine.createSpyObj<TransferStateService>(
-      'TransferStateService',
-      [],
-      {
-        serverTransferState: transferStateMock,
-      }
-    );
+    transferStateServiceMock = jasmine.createSpyObj<TransferStateService>('TransferStateService', [], {
+      serverTransferState: transferStateMock,
+    });
 
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({
-      providers: [
-        AppInsightsService,
-        { provide: TransferStateService, useValue: transferStateServiceMock },
-      ],
+      providers: [AppInsightsService, { provide: TransferStateService, useValue: transferStateServiceMock }],
     });
 
     service = TestBed.inject(AppInsightsService);

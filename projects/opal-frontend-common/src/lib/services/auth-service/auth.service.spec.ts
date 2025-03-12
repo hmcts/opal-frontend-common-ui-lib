@@ -1,13 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { AuthService } from './auth.service';
-import {
-  HttpTestingController,
-  provideHttpClientTesting,
-} from '@angular/common/http/testing';
-import {
-  provideHttpClient,
-  withInterceptorsFromDi,
-} from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { GlobalStore, GlobalStoreType } from '../../stores';
 import { SSO_ENDPOINTS } from '../../routing/constants/sso-endpoints.constant';
 
@@ -19,10 +13,7 @@ describe('AuthService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting(),
-      ],
+      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
     });
     globalStore = TestBed.inject(GlobalStore);
     service = TestBed.inject(AuthService);
@@ -62,7 +53,7 @@ describe('AuthService', () => {
       () => {},
       () => {
         expect(globalStore.authenticated()).toEqual(false);
-      }
+      },
     );
 
     const req = httpMock.expectOne(`${SSO_ENDPOINTS.authenticated}`);

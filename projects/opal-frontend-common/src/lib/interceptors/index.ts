@@ -1,3 +1,3 @@
-import { httpErrorInterceptor } from "./http-error/http-error.interceptor";
+import { httpErrorInterceptor } from './http-error/http-error.interceptor';
 
-export {httpErrorInterceptor};
+export { httpErrorInterceptor };

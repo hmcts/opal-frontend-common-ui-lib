@@ -1,0 +1,5 @@
+@defer (when !ssoEnabled) {
+  <lib-sign-in-stub (signInFormSubmit)="handleStubSignInFormSubmit($event)"></lib-sign-in-stub>
+} @placeholder {
+  <lib-sign-in-sso (signInButtonClick)="handleSsoSignInButtonClick()"></lib-sign-in-sso>
+}

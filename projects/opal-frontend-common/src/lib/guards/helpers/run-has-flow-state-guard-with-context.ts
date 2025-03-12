@@ -4,15 +4,9 @@ import { handleObservableResult } from './handle-observable-result';
 import { GuardReturnType } from '../types';
 
 export async function runHasFlowStateGuardWithContext(
-  hasFlowStateGuard: () =>
-    | GuardReturnType
-    | Promise<GuardReturnType>
-    | Observable<GuardReturnType>
+  hasFlowStateGuard: () => GuardReturnType | Promise<GuardReturnType> | Observable<GuardReturnType>,
 ): Promise<GuardReturnType> {
   const result = TestBed.runInInjectionContext(hasFlowStateGuard);
-  const emptyFlow =
-    result instanceof Observable
-      ? await handleObservableResult(result)
-      : result;
+  const emptyFlow = result instanceof Observable ? await handleObservableResult(result) : result;
   return emptyFlow;
 }

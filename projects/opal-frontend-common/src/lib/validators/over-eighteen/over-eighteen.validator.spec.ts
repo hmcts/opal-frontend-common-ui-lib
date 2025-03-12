@@ -9,9 +9,7 @@ describe('overEighteenValidator', () => {
   let dateService: jasmine.SpyObj<DateService>;
 
   beforeEach(() => {
-    const dateServiceSpy = jasmine.createSpyObj('DateService', [
-      'getFromFormat',
-    ]);
+    const dateServiceSpy = jasmine.createSpyObj('DateService', ['getFromFormat']);
 
     TestBed.configureTestingModule({
       providers: [{ provide: DateService, useValue: dateServiceSpy }],
@@ -21,21 +19,13 @@ describe('overEighteenValidator', () => {
 
     formGroup = new FormGroup(
       {
-        dayOfMonth: new FormControl(null, [
-          Validators.required,
-          Validators.maxLength(2),
-        ]),
+        dayOfMonth: new FormControl(null, [Validators.required, Validators.maxLength(2)]),
         monthOfYear: new FormControl(null, [Validators.required]),
         year: new FormControl(null, [Validators.required]),
       },
       {
-        validators: overEighteenValidator(
-          'dayOfMonth',
-          'monthOfYear',
-          'year',
-          dateServiceSpy
-        ),
-      }
+        validators: overEighteenValidator('dayOfMonth', 'monthOfYear', 'year', dateServiceSpy),
+      },
     );
   });
 
@@ -64,9 +54,7 @@ describe('overEighteenValidator', () => {
   });
 
   it('should return { underEighteen: true } if the date is less than 18 years ago', () => {
-    dateService.getFromFormat.and.returnValue(
-      DateTime.now().minus({ years: 17 })
-    );
+    dateService.getFromFormat.and.returnValue(DateTime.now().minus({ years: 17 }));
 
     formGroup.setValue({
       dayOfMonth: '01',
@@ -82,9 +70,7 @@ describe('overEighteenValidator', () => {
   });
 
   it('should return null if the date is 18 years ago or more', () => {
-    dateService.getFromFormat.and.returnValue(
-      DateTime.now().minus({ years: 18 })
-    );
+    dateService.getFromFormat.and.returnValue(DateTime.now().minus({ years: 18 }));
 
     formGroup.setValue({
       dayOfMonth: '01',
@@ -99,9 +85,7 @@ describe('overEighteenValidator', () => {
   });
 
   it('should return null if the date is 18 years ago or more (singular numbers)', () => {
-    dateService.getFromFormat.and.returnValue(
-      DateTime.now().minus({ years: 18 })
-    );
+    dateService.getFromFormat.and.returnValue(DateTime.now().minus({ years: 18 }));
 
     formGroup.setValue({
       dayOfMonth: '1',

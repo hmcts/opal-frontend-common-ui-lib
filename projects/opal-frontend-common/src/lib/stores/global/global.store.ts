@@ -38,5 +38,5 @@ export const GlobalStore = signalStore(
     setTokenExpiry: (tokenExpiry: ISessionTokenExpiry) => {
       patchState(store, { tokenExpiry });
     },
-  }))
+  })),
 );

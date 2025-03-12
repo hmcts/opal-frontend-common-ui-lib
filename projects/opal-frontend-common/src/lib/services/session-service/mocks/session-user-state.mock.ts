@@ -1,4 +1,4 @@
-import { ISessionUserState } from "../interfaces";
+import { ISessionUserState } from '../interfaces';
 
 export const SESSION_USER_STATE_MOCK: ISessionUserState = {
   user_id: 'gl.timTest',

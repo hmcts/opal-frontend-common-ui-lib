@@ -1,8 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { AbstractControl, FormControl } from '@angular/forms';
+import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
+  standalone: true,
   selector: 'lib-govuk-text-input',
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './govuk-text-input.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

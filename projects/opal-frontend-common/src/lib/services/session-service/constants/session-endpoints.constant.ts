@@ -1,4 +1,4 @@
-import { ISessionEndpoints } from "../interfaces";
+import { ISessionEndpoints } from '../interfaces';
 
 export const SESSION_ENDPOINTS: ISessionEndpoints = {
   userState: '/session/user-state',

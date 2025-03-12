@@ -10,15 +10,9 @@ import { GuardReturnType } from '../types/guard-return.type';
  * @returns A promise that resolves to a boolean or UrlTree indicating whether the user is authenticated.
  */
 export async function runAuthGuardWithContext(
-  authGuard: () =>
-    | GuardReturnType
-    | Promise<GuardReturnType>
-    | Observable<GuardReturnType>
+  authGuard: () => GuardReturnType | Promise<GuardReturnType> | Observable<GuardReturnType>,
 ): Promise<GuardReturnType> {
   const result = TestBed.runInInjectionContext(authGuard);
-  const authenticated =
-    result instanceof Observable
-      ? await handleObservableResult(result)
-      : result;
+  const authenticated = result instanceof Observable ? await handleObservableResult(result) : result;
   return authenticated;
 }

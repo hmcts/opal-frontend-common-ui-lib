@@ -32,29 +32,20 @@ describe('TransferStateService', () => {
   });
 
   it('should get the transfer state from the server', () => {
-    const storeKeyTransferState = makeStateKey<ITransferStateServerState>(
-      'serverTransferState'
-    );
-    const serverTransferState = service['transferState'].get(
-      storeKeyTransferState,
-      undefined
-    );
+    const storeKeyTransferState = makeStateKey<ITransferStateServerState>('serverTransferState');
+    const serverTransferState = service['transferState'].get(storeKeyTransferState, undefined);
     expect(serverTransferState).toEqual(TRANSFER_STATE_MOCK);
   });
 
   it('should initialize SSO enabled', () => {
     service.initializeSsoEnabled();
 
-    expect(globalStore.ssoEnabled()).toEqual(
-      service['storedServerTransferState'].ssoEnabled
-    );
+    expect(globalStore.ssoEnabled()).toEqual(service['storedServerTransferState'].ssoEnabled);
   });
 
   it('should initialize launch darkly', () => {
     service.initializeLaunchDarklyConfig();
 
-    expect(globalStore.launchDarklyConfig()).toEqual(
-      service['storedServerTransferState'].launchDarklyConfig
-    );
+    expect(globalStore.launchDarklyConfig()).toEqual(service['storedServerTransferState'].launchDarklyConfig);
   });
 });

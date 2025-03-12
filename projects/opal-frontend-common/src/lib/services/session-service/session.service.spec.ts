@@ -1,12 +1,6 @@
 import { fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
-import {
-  HttpTestingController,
-  provideHttpClientTesting,
-} from '@angular/common/http/testing';
-import {
-  provideHttpClient,
-  withInterceptorsFromDi,
-} from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ISessionTokenExpiry, ISessionUserState } from './interfaces';
 import { SESSION_TOKEN_EXPIRY_MOCK, SESSION_USER_STATE_MOCK } from './mocks';
 import { SessionService } from './session.service';
@@ -24,10 +18,7 @@ describe('SessionService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting(),
-      ],
+      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
     });
     service = TestBed.inject(SessionService);
     httpMock = TestBed.inject(HttpTestingController);

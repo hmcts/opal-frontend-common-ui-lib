@@ -9,6 +9,7 @@
     "test": "ng test --watch=false",
     "test:coverage": "ng test --no-watch --code-coverage",
     "lint": "yarn prettier && yarn lint:ng",
+    "lint:ng": "ng lint",
     "prettier": "prettier --check \"./**/*.{ts,js,html,scss}\"",
     "prettier:fix": "prettier --write \"./**/*.{ts,js,html,scss}\""
   },
@@ -25,8 +26,10 @@
     "@microsoft/applicationinsights-web": "^3.3.6",
     "@ngrx/signals": "^19.0.1",
     "@types/luxon": "^3.4.2",
+    "fast-sort": "^3.4.1",
     "launchdarkly-js-client-sdk": "^3.5.0",
     "luxon": "^3.5.0",
+    "prettier": "^3.5.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"

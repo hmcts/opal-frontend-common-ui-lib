@@ -1,10 +1,5 @@
 import { inject, Injectable, OnDestroy } from '@angular/core';
-import {
-  initialize,
-  LDClient,
-  LDFlagChangeset,
-  LDFlagSet,
-} from 'launchdarkly-js-client-sdk';
+import { initialize, LDClient, LDFlagChangeset, LDFlagSet } from 'launchdarkly-js-client-sdk';
 import { GlobalStore } from '../../stores';
 
 @Injectable({

@@ -11,8 +11,7 @@ describe('GovukTextInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [GovukTextInputComponent], 
-      imports: [ReactiveFormsModule]
+      imports: [GovukTextInputComponent, ReactiveFormsModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(GovukTextInputComponent);
