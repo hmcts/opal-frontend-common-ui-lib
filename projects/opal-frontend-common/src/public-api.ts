@@ -1,3 +1,4 @@
+export * from './lib/opal-frontend-common.module';
 export * from './lib/components/govuk';
 export * from './lib/guards';
 export * from './lib/interceptors';

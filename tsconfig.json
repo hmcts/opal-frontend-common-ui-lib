@@ -18,7 +18,7 @@
     "paths": {
       "opal-frontend-common": [
         "./dist/opal-frontend-common"
-      ],
+      ]
     },
     "moduleResolution": "bundler",
     "importHelpers": true,
@@ -27,14 +27,16 @@
     "lib": [
       "ES2022",
       "dom"
-    ]
+    ],
+     "rootDir": "./projects/opal-frontend-common/src"
   },
+  "include": [
+    "./projects/opal-frontend-common/src/**/*.ts"
+  ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  },
-  "include": ["projects"],
-  "exclude": ["**/*.mock.ts", "**/helpers/*.ts"]
+  }
 }
