@@ -1,0 +1,7 @@
+{
+    "editor.formatOnSave": true,
+    "sonarlint.connectedMode.project": {
+        "connectionId": "HMCTS",
+        "projectKey": "opal-frontend-common-ui-lib"
+    }
+}
