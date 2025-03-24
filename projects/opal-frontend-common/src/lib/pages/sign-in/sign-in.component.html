@@ -1,0 +1,5 @@
+@defer (when !ssoEnabled) {
+  <opal-lib-sign-in-stub (signInFormSubmit)="handleStubSignInFormSubmit($event)"></opal-lib-sign-in-stub>
+} @placeholder {
+  <opal-lib-sign-in-sso (signInButtonClick)="handleSsoSignInButtonClick()"></opal-lib-sign-in-sso>
+}

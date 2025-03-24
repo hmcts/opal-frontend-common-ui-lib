@@ -1,0 +1,51 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "opal-frontend-common": {
+      "projectType": "library",
+      "root": "projects/opal-frontend-common",
+      "sourceRoot": "projects/opal-frontend-common/src",
+      "prefix": "opal-lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/opal-frontend-common/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/opal-frontend-common/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/opal-frontend-common/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "tsConfig": "projects/opal-frontend-common/tsconfig.spec.json",
+            "karmaConfig": "karma.conf.js",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["projects/**/*.ts", "projects/**/*.html"]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "schematicCollections": ["@angular-eslint/schematics"],
+    "analytics": false
+  }
+}
