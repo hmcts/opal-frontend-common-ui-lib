@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   standalone: true,
-  selector: 'lib-govuk-button',
+  selector: 'opal-lib-govuk-button',
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './govuk-button.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

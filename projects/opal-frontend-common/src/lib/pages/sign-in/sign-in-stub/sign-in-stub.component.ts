@@ -6,7 +6,7 @@ import { GovukButtonComponent } from '../../../components/govuk/govuk-button/gov
 
 @Component({
   standalone: true,
-  selector: 'lib-sign-in-stub',
+  selector: 'opal-lib-sign-in-stub',
   imports: [FormsModule, ReactiveFormsModule, GovukTextInputComponent, GovukButtonComponent],
   templateUrl: './sign-in-stub.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

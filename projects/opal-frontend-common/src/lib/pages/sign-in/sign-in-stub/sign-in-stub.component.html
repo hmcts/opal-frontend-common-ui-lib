@@ -6,18 +6,18 @@
       </legend>
 
       <div [formGroup]="signInForm">
-        <lib-govuk-text-input
+        <opal-lib-govuk-text-input
           labelText="Email"
           inputId="email"
           inputName="email"
           inputClasses="govuk-!-width-one-half"
           [control]="signInForm.controls['email']"
-        ></lib-govuk-text-input>
+        ></opal-lib-govuk-text-input>
       </div>
     </fieldset>
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-third">
-        <lib-govuk-button buttonId="submitForm" type="submit"> Sign in</lib-govuk-button>
+        <opal-lib-govuk-button buttonId="submitForm" type="submit"> Sign in</opal-lib-govuk-button>
       </div>
     </div>
   </div>

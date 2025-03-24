@@ -23,7 +23,7 @@ import { GovukButtonComponent } from "opal-frontend-common/lib/components/govuk/
 You can use the button component in your template as follows:
 
 ```html
-<lib-govuk-button [buttonId]="myButtonId" [type]="'submit'" [buttonClasses]="'extra-class'" (click)="onButtonClick()"> Click Me </lib-govuk-button>
+<opal-lib-govuk-button [buttonId]="myButtonId" [type]="'submit'" [buttonClasses]="'extra-class'" (click)="onButtonClick()"> Click Me </opal-lib-govuk-button>
 ```
 
 ## Inputs

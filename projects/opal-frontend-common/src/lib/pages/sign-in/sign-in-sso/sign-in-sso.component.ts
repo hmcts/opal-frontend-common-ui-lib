@@ -4,7 +4,7 @@ import { GovukButtonComponent } from '../../../components/govuk/govuk-button/gov
 
 @Component({
   standalone: true,
-  selector: 'lib-sign-in-sso',
+  selector: 'opal-lib-sign-in-sso',
   imports: [CommonModule, GovukButtonComponent],
   templateUrl: './sign-in-sso.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

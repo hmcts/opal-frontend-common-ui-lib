@@ -4,7 +4,7 @@ import { GovukButtonComponent } from '../../components/govuk';
 
 @Component({
   standalone: true,
-  selector: 'lib-access-denied',
+  selector: 'opal-lib-access-denied',
   imports: [GovukButtonComponent],
   templateUrl: './access-denied.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

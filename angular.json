@@ -7,7 +7,7 @@
       "projectType": "library",
       "root": "projects/opal-frontend-common",
       "sourceRoot": "projects/opal-frontend-common/src",
-      "prefix": "lib",
+      "prefix": "opal-lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",

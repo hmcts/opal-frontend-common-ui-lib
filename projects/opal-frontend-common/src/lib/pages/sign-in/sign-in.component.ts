@@ -8,7 +8,7 @@ import { SSO_ENDPOINTS } from '../../routing/constants/sso-endpoints.constant';
 
 @Component({
   standalone: true,
-  selector: 'lib-sign-in',
+  selector: 'opal-lib-sign-in',
   imports: [CommonModule, SignInSsoComponent, SignInStubComponent],
   templateUrl: './sign-in.component.html',
 

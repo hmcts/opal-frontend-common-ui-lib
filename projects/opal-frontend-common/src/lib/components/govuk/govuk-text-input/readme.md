@@ -1,5 +1,3 @@
----
-
 # GOV.UK Text Input Component
 
 This Angular component provides a GOV.UK-styled single-line text input, following GOV.UK design and accessibility standards.
@@ -25,12 +23,12 @@ import { GovukTextInputComponent } from 'opal-frontend-common/lib/components/gov
 You can use the text input component in your template as follows:
 
 ```html
-<lib-govuk-text-input
+<opal-lib-govuk-text-input
   [inputId]="'name'"
   [labelText]="'Full name'"
   [hintText]="'Enter your full name.'"
   [inputType]="'text'"
-></lib-govuk-text-input>
+></opal-lib-govuk-text-input>
 ```
 
 ### Example in HTML:
