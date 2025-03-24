@@ -13,7 +13,6 @@
     "prettier": "prettier --check \"./**/*.{ts,js,html,scss}\"",
     "prettier:fix": "prettier --write \"./**/*.{ts,js,html,scss}\""
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "^18.2.0",
     "@angular/common": "^18.2.0",
