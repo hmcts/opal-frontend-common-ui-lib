@@ -6,7 +6,7 @@
     "opal-frontend-common": {
       "projectType": "library",
       "root": "projects/opal-frontend-common",
-      "sourceRoot": "projects/opal-frontend-common/src",
+      "sourceRoot": "projects/opal-frontend-common",
       "prefix": "opal-lib",
       "architect": {
         "build": {

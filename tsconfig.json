@@ -3,6 +3,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": ".",
     "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitOverride": true,
@@ -16,8 +17,47 @@
     "declaration": false,
     "experimentalDecorators": true,
     "paths": {
-      "opal-frontend-common": [
-        "./dist/opal-frontend-common"
+      "@hmcts/opal-frontend-common": [
+        "./projects/opal-frontend-common/src/public-api"
+      ],
+      "@hmcts/opal-frontend-common/*": [
+        "./projects/opal-frontend-common/src/lib/*"
+      ],
+      "@hmcts/opal-frontend-common/core/components/govuk": [
+        "./projects/opal-frontend-common/core/components/govuk"
+      ],
+      "@hmcts/opal-frontend-common/core/constants": [
+        "./projects/opal-frontend-common/core/constants"
+      ],
+      "@hmcts/opal-frontend-common/core/guards": [
+        "./projects/opal-frontend-common/core/guards"
+      ],
+      "@hmcts/opal-frontend-common/core/interceptors": [
+        "./projects/opal-frontend-common/core/interceptors"
+      ],
+      "@hmcts/opal-frontend-common/core/interfaces": [
+        "./projects/opal-frontend-common/core/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/core/mocks": [
+        "./projects/opal-frontend-common/core/mocks"
+      ],
+      "@hmcts/opal-frontend-common/core/pages": [
+        "./projects/opal-frontend-common/core/pages"
+      ],
+      "@hmcts/opal-frontend-common/core/routing": [
+        "./projects/opal-frontend-common/core/routing"
+      ],
+      "@hmcts/opal-frontend-common/core/services": [
+        "./projects/opal-frontend-common/core/services"
+      ],
+      "@hmcts/opal-frontend-common/core/stores": [
+        "./projects/opal-frontend-common/core/stores"
+      ],
+      "@hmcts/opal-frontend-common/core/types": [
+        "./projects/opal-frontend-common/core/types"
+      ],
+      "@hmcts/opal-frontend-common/core/validators": [
+        "./projects/opal-frontend-common/core/validators"
       ]
     },
     "moduleResolution": "bundler",
@@ -28,10 +68,10 @@
       "ES2022",
       "dom"
     ],
-     "rootDir": "./projects/opal-frontend-common/src"
+     "rootDir": "./projects/opal-frontend-common"
   },
   "include": [
-    "./projects/opal-frontend-common/src/**/*.ts"
+    "./projects/opal-frontend-common/**/*.ts"
   ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
