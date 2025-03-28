@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "peerDependencies": {
     "@angular/common": "^18.2.0",
     "@angular/core": "^18.2.0"
@@ -10,41 +10,44 @@
   },
   "sideEffects": false,
   "exports": {
+    ".": {
+      "import": "./fesm2022/hmcts-opal-frontend-common.mjs"
+    },
     "./core/components/govuk": {
-      "import": "./core/components/govuk/public-api.ts"
+      "import": "./fesm2022/hmcts-opal-frontend-common-core-components-govuk.mjs"
     },
     "./core/constants": {
-      "import": "./core/constants/public-api.ts"
-    },
-    "./core/guards": {
-      "import": "./core/guards/public-api.ts"
-    },
-    "./core/interfaces": {
-      "import": "./core/interfaces/public-api.ts"
-    },
-    "./core/interceptors": {
-      "import": "./core/interceptors/public-api.ts"
-    },
-    "./core/mocks": {
-      "import": "./core/mocks/public-api.ts"
-    },
-    "./core/pages": {
-      "import": "./core/pages/public-api.ts"
-    },
-    "./core/resolvers": {
-      "import": "./core/resolvers/public-api.ts"
+      "import": "./fesm2022/hmcts-opal-frontend-common-core-constants.mjs"
     },
     "./core/services": {
-      "import": "./core/services/public-api.ts"
+      "import": "./fesm2022/hmcts-opal-frontend-common-core-services.mjs"
     },
     "./core/stores": {
-      "import": "./core/stores/public-api.ts"
+      "import": "./fesm2022/hmcts-opal-frontend-common-core-stores.mjs"
     },
-    "./core/types": {
-      "import": "./core/types/public-api.ts"
+    "./core/interceptors": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-core-interceptors.mjs"
+    },
+    "./core/pages": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-core-pages.mjs"
+    },
+    "./core/guards": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-core-guards.mjs"
+    },
+    "./core/resolvers": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-core-resolvers.mjs"
     },
     "./core/validators": {
-      "import": "./core/validators/public-api.ts"
+      "import": "./fesm2022/hmcts-opal-frontend-common-core-validators.mjs"
+    },
+    "./core/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-core-interfaces.mjs"
+    },
+    "./core/mocks": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-core-mocks.mjs"
+    },
+    "./core/types": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-core-types.mjs"
     }
   } 
 }
