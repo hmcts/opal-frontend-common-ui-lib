@@ -3,7 +3,7 @@ import { LaunchDarklyService } from './launch-darkly.service';
 import { LDFlagChangeset, LDFlagSet } from 'launchdarkly-js-client-sdk';
 import { GlobalStore } from '@hmcts/opal-frontend-common/core/stores';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/core/types';
-import { LAUNCH_DARKLY_CHANGE_FLAGS_MOCK, LAUNCH_DARKLY_FLAGS_MOCK } from './mocks';
+import { LAUNCH_DARKLY_CHANGE_FLAGS_MOCK, LAUNCH_DARKLY_FLAGS_MOCK } from '@hmcts/opal-frontend-common/core/mocks';
 
 describe('LaunchDarklyService', () => {
   let service: LaunchDarklyService;

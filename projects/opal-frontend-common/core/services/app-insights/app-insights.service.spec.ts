@@ -1,8 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { ITelemetryItem } from '@microsoft/applicationinsights-web';
-import { TRANSFER_STATE_MOCK, TransferStateService } from '../transfer-state-service';
+import { TransferStateService } from '../transfer-state-service/transfer-state.service';
 import { AppInsightsService } from './app-insights.service';
+import { TRANSFER_STATE_MOCK } from '@hmcts/opal-frontend-common/core/mocks';
 
 describe('AppInsightsService', () => {
   let service: AppInsightsService;

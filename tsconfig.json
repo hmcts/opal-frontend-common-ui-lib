@@ -20,9 +20,6 @@
       "@hmcts/opal-frontend-common": [
         "./projects/opal-frontend-common/src/public-api"
       ],
-      "@hmcts/opal-frontend-common/*": [
-        "./projects/opal-frontend-common/src/lib/*"
-      ],
       "@hmcts/opal-frontend-common/core/components/govuk": [
         "./projects/opal-frontend-common/core/components/govuk"
       ],
@@ -44,8 +41,8 @@
       "@hmcts/opal-frontend-common/core/pages": [
         "./projects/opal-frontend-common/core/pages"
       ],
-      "@hmcts/opal-frontend-common/core/routing": [
-        "./projects/opal-frontend-common/core/routing"
+      "@hmcts/opal-frontend-common/core/resolvers": [
+        "./projects/opal-frontend-common/core/resolvers"
       ],
       "@hmcts/opal-frontend-common/core/services": [
         "./projects/opal-frontend-common/core/services"

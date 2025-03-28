@@ -2,11 +2,11 @@ import { fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ISessionTokenExpiry, ISessionUserState } from '@hmcts/opal-frontend-common/core/interfaces';
-import { SESSION_TOKEN_EXPIRY_MOCK, SESSION_USER_STATE_MOCK } from './mocks';
+import { SESSION_TOKEN_EXPIRY_MOCK, SESSION_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/core/mocks';
 import { SessionService } from './session.service';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/core/types';
 import { GlobalStore } from '@hmcts/opal-frontend-common/core/stores';
-import { SESSION_ENDPOINTS } from './constants';
+import { SESSION_ENDPOINTS } from '@hmcts/opal-frontend-common/core/constants';
 
 const mockTokenExpiry: ISessionTokenExpiry = SESSION_TOKEN_EXPIRY_MOCK;
 

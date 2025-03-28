@@ -13,9 +13,8 @@ import { Observable, of, throwError } from 'rxjs';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { handleObservableResult } from '../helpers/handle-observable-result';
 import { PermissionsService, SessionService } from '@hmcts/opal-frontend-common/core/services';
-import { SESSION_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/core/mocks';
 import { PAGES_ROUTING_PATHS } from '@hmcts/opal-frontend-common/core/constants';
-import { ROUTE_PERMISSIONS_MOCK } from './mocks/route-permissions.mock';
+import { ROUTE_PERMISSIONS_MOCK, SESSION_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/core/mocks';
 
 async function runRoutePermissionGuard(
   guard: typeof routePermissionsGuard,

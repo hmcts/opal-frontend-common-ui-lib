@@ -1,4 +1,3 @@
-// SERVICES
 export * from './app-initializer-service/app-initializer.service';
 export * from './app-insights/app-insights.service';
 export * from './auth-service/auth.service';

@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { ITransformItem } from './interfaces/transform-item.interface';
+import { ITransformItem } from '@hmcts/opal-frontend-common/core/interfaces';
 import { DateService } from '../date-service/date.service';
 
 @Injectable({

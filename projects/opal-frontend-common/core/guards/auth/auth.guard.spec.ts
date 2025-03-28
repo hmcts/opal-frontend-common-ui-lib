@@ -4,7 +4,7 @@ import { authGuard } from './auth.guard';
 import { of, throwError } from 'rxjs';
 import { AuthService } from '@hmcts/opal-frontend-common/core/services';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/core/types';
-import { GlobalStore } from '../../stores/global/global.store';
+import { GlobalStore } from '@hmcts/opal-frontend-common/core/stores';
 import { runAuthGuardWithContext } from '../helpers/run-auth-guard-with-context';
 import { getGuardWithDummyUrl } from '../helpers/get-guard-with-dummy-url';
 

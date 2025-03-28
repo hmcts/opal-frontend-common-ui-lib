@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { TransferStateService } from './transfer-state.service';
-import { TRANSFER_STATE_MOCK } from './mocks/transfer-state.mock';
+import { TRANSFER_STATE_MOCK } from '@hmcts/opal-frontend-common/core/mocks';
 import { PLATFORM_ID, makeStateKey } from '@angular/core';
 import { ITransferStateServerState } from '@hmcts/opal-frontend-common/core/interfaces';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/core/types';

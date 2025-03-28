@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { ICanDeactivateCanComponentDeactivate } from './interfaces';
+import { ICanDeactivateCanComponentDeactivate } from './interfaces/can-deactivate-can-component-deactivate.interface';
 import { canDeactivateGuard } from './can-deactivate.guard';
 
 describe('canDeactivateGuard', () => {

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { TransformationService } from './transformation.service';
-import { ITransformItem } from './interfaces/transform-item.interface';
+import { ITransformItem } from '@hmcts/opal-frontend-common/core/interfaces';
 
 describe('TransformationService', () => {
   let service: TransformationService;

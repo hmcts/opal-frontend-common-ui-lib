@@ -1,6 +1,6 @@
 import { UrlTree } from '@angular/router';
 import { of } from 'rxjs';
-import { runAuthGuardWithContext } from './helpers';
+import { runAuthGuardWithContext } from './helpers/run-auth-guard-with-context';
 
 describe('helper - runAuthGuardWithContext', () => {
   it('should handle direct boolean return from authGuard', async () => {
