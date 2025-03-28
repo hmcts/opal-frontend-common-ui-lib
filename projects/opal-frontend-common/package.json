@@ -14,40 +14,40 @@
       "import": "./fesm2022/hmcts-opal-frontend-common.mjs"
     },
     "./core/components/govuk": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-core-components-govuk.mjs"
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk.mjs"
     },
     "./core/constants": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-core-constants.mjs"
-    },
-    "./core/services": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-core-services.mjs"
-    },
-    "./core/stores": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-core-stores.mjs"
-    },
-    "./core/interceptors": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-core-interceptors.mjs"
-    },
-    "./core/pages": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-core-pages.mjs"
+      "import": "./fesm2022/hmcts-opal-frontend-common-constants.mjs"
     },
     "./core/guards": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-core-guards.mjs"
+      "import": "./fesm2022/hmcts-opal-frontend-common-guards.mjs"
     },
-    "./core/resolvers": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-core-resolvers.mjs"
-    },
-    "./core/validators": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-core-validators.mjs"
+    "./core/interceptors": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-interceptors.mjs"
     },
     "./core/interfaces": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-core-interfaces.mjs"
+      "import": "./fesm2022/hmcts-opal-frontend-common-interfaces.mjs"
     },
     "./core/mocks": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-core-mocks.mjs"
+      "import": "./fesm2022/hmcts-opal-frontend-common-mocks.mjs"
+    },
+    "./core/pages": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-pages.mjs"
+    },
+    "./core/resolvers": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-resolvers.mjs"
+    },
+    "./services": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services.mjs"
+    },
+    "./core/stores": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-stores.mjs"
     },
     "./core/types": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-core-types.mjs"
+      "import": "./fesm2022/hmcts-opal-frontend-common-types.mjs"
+    },
+    "./core/validators": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-validators.mjs"
     }
   } 
 }

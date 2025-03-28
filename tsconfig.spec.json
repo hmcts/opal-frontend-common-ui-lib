@@ -9,7 +9,7 @@
     },
     "include": [
     "projects/opal-frontend-common/**/*.ts",
-    "src/**/*.d.ts"
+    "**/*.d.ts"
   ],
     "exclude": [
       "projects/**/*.routing.ts"
