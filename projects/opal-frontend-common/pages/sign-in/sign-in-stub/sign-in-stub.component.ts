@@ -4,10 +4,10 @@ import { ISignInStubForm } from '../interfaces';
 import { GovukTextInputComponent, GovukButtonComponent } from '@hmcts/opal-frontend-common/components/govuk';
 
 @Component({
-    selector: 'opal-lib-sign-in-stub',
-    imports: [FormsModule, ReactiveFormsModule, GovukTextInputComponent, GovukButtonComponent],
-    templateUrl: './sign-in-stub.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'opal-lib-sign-in-stub',
+  imports: [FormsModule, ReactiveFormsModule, GovukTextInputComponent, GovukButtonComponent],
+  templateUrl: './sign-in-stub.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignInStubComponent implements OnInit {
   public signInForm!: FormGroup;

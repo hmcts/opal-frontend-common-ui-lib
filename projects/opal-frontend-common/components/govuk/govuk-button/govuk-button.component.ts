@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-    selector: 'opal-lib-govuk-button',
-    imports: [CommonModule, ReactiveFormsModule],
-    templateUrl: './govuk-button.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'opal-lib-govuk-button',
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './govuk-button.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GovukButtonComponent {
   @Input({ required: true }) buttonId!: string;
