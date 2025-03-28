@@ -3,11 +3,10 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angul
 import { GovukButtonComponent } from '@hmcts/opal-frontend-common/core/components/govuk';
 
 @Component({
-  standalone: true,
-  selector: 'opal-lib-sign-in-sso',
-  imports: [CommonModule, GovukButtonComponent],
-  templateUrl: './sign-in-sso.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'opal-lib-sign-in-sso',
+    imports: [CommonModule, GovukButtonComponent],
+    templateUrl: './sign-in-sso.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SignInSsoComponent {
   @Output() private readonly signInButtonClick = new EventEmitter();
