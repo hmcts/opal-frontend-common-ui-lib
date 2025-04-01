@@ -37,6 +37,8 @@ jobs:
 
       - name: Run SonarCloud analysis
         uses: SonarSource/sonarcloud-github-action@v1
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Build library
         run: yarn build
