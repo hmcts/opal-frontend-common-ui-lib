@@ -7,12 +7,10 @@ import { GlobalStore } from '../../stores/global/global.store';
 import { SSO_ENDPOINTS } from '../../routing/constants/sso-endpoints.constant';
 
 @Component({
-  standalone: true,
-  selector: 'opal-lib-sign-in',
-  imports: [CommonModule, SignInSsoComponent, SignInStubComponent],
-  templateUrl: './sign-in.component.html',
-
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'opal-lib-sign-in',
+    imports: [CommonModule, SignInSsoComponent, SignInStubComponent],
+    templateUrl: './sign-in.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SignInComponent implements OnInit {
   public readonly globalStore = inject(GlobalStore);
