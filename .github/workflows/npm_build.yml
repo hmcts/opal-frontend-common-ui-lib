@@ -1,14 +1,52 @@
-name: Node.js Package
+name: Angular Library CI Pipeline
 
 on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
   release:
     types: [created]
-    
+
 jobs:
-  release:
+  ci:
+    name: Build, Test, and Analyse
+    if: github.event_name != 'release'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Lint code
+        run: yarn lint
+
+      - name: Run unit tests
+        run: yarn test --watch=false --code-coverage
+
+      - name: Audit vulnerabilities
+        run: yarn audit --production
+
+      - name: Run SonarCloud analysis
+        uses: SonarSource/sonarcloud-github-action@v1
+
+      - name: Build library
+        run: yarn build
+
+  release:
+    name: Release and Publish
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository (Release)
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.release.target_commitish }}
@@ -17,17 +55,17 @@ jobs:
         id: release
         uses: manovotny/github-releases-for-automated-package-publishing-action@v2.0.1
 
-      - name: Set node version and build
+      - name: Setup Node.js (Release)
         uses: actions/setup-node@v4
         with:
-          always-auth: true
           node-version: '22.x'
           registry-url: 'https://registry.npmjs.org'
+          always-auth: true
 
-      - name: Install dependencies
+      - name: Install dependencies (Release)
         run: yarn install --frozen-lockfile
-        
-      - name: Build library
+
+      - name: Build library (Release)
         run: yarn build
 
       - name: Publish version
