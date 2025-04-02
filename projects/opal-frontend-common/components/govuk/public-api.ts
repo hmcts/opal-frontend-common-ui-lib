@@ -33,7 +33,7 @@ export * from './govuk-table/govuk-table-body-row/govuk-table-body-row-data/govu
 export * from './govuk-table/govuk-table-body-row/govuk-table-body-row.component';
 export * from './govuk-table/govuk-table-heading/govuk-table-heading.component';
 export * from './govuk-table/govuk-table.component';
-export * from './govuk-tabs/govuk-tab-list-item/govuk-tab-list-item.component'
+export * from './govuk-tabs/govuk-tab-list-item/govuk-tab-list-item.component';
 export * from './govuk-tabs/govuk-tab-panel/govuk-tab-panel.component';
 export * from './govuk-tabs/govuk-tabs.component';
 export * from './govuk-tag/govuk-tag.component';
