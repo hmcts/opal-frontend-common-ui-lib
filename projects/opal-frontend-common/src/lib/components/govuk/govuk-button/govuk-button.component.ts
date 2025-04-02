@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  standalone: true,
   selector: 'opal-lib-govuk-button',
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './govuk-button.component.html',

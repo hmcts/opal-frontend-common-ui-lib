@@ -3,7 +3,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  standalone: true,
   selector: 'opal-lib-govuk-text-input',
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './govuk-text-input.component.html',

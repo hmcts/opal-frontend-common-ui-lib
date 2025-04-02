@@ -3,7 +3,6 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angul
 import { GovukButtonComponent } from '../../../components/govuk/govuk-button/govuk-button.component';
 
 @Component({
-  standalone: true,
   selector: 'opal-lib-sign-in-sso',
   imports: [CommonModule, GovukButtonComponent],
   templateUrl: './sign-in-sso.component.html',

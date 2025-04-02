@@ -35,8 +35,11 @@ jobs:
       - name: Audit vulnerabilities
         run: yarn audit --production
 
-      - name: Run SonarCloud analysis
-        uses: SonarSource/sonarcloud-github-action@v1
+      - name: Analyze with SonarCloud
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Build library
         run: yarn build
