@@ -5,8 +5,6 @@ export * from './src/routing-paths.interface';
 export * from './src/session-endpoints.interface';
 export * from './src/session-token-expiry.interface';
 export * from './src/session-user-state.interface';
-export * from './src/sort-service-values.interface';
-export * from './src/sort-service.interface';
 export * from './src/sso-endpoints.interface';
 export * from './src/transfer-state-app-insights-config.interface';
 export * from './src/transfer-state-launch-darkly-config.interface';

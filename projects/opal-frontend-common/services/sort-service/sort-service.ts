@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import { sort } from 'fast-sort';
-import {
-  ISortServiceValues,
-  ISortServiceArrayValues,
-  ISortServiceConfig,
-} from '@hmcts/opal-frontend-common/interfaces';
+import { ISortServiceValues, ISortServiceArrayValues } from './interfaces/sort-service-values.interface';
+import { ISortServiceConfig } from './interfaces/sort-service.interface';
 import { SortableValues } from '@hmcts/opal-frontend-common/types';
 
 @Injectable({

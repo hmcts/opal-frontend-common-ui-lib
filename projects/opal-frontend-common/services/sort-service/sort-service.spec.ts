@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { SortService } from './sort-service';
-import { SORT_OBJECT_INPUT_MOCK } from '@hmcts/opal-frontend-common/mocks';
-import { ISortServiceValues } from '@hmcts/opal-frontend-common/interfaces';
+import { SORT_OBJECT_INPUT_MOCK } from './mocks/sort-service-object-input-mock';
+import { ISortServiceValues } from './interfaces/sort-service-values.interface';
 import { SortableValues } from '@hmcts/opal-frontend-common/types';
 
 describe('SortService', () => {
