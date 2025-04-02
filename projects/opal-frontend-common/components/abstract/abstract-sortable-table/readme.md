@@ -49,10 +49,10 @@ export class SortableTableComponent extends AbstractSortableTableComponent {
 ```
 
 ```html
-<lib-opal-moj-sortable-table>
+<opal-lib-moj-sortable-table>
   <ng-container head>
     <th
-      lib-opal-moj-sortable-table-header
+      opal-lib-moj-sortable-table-header
       columnKey="name"
       [sortDirection]="sortStateSignal()['name']"
       (sortChange)="onSortChange($event)"
@@ -60,7 +60,7 @@ export class SortableTableComponent extends AbstractSortableTableComponent {
       Name
     </th>
     <th
-      lib-opal-moj-sortable-table-header
+      opal-lib-moj-sortable-table-header
       columnKey="age"
       [sortDirection]="sortStateSignal()['age']"
       (sortChange)="onSortChange($event)"
@@ -70,13 +70,13 @@ export class SortableTableComponent extends AbstractSortableTableComponent {
   </ng-container>
   <ng-container row>
     @for (row of abstractTableDataSignal(); track row.name) {
-    <tr lib-opal-moj-sortable-table-row>
-      <td lib-opal-moj-sortable-table-row-data id="name">{{ row.name }}</td>
-      <td lib-opal-moj-sortable-table-row-data id="defendant">{{ row.age }}</a>
+    <tr opal-lib-moj-sortable-table-row>
+      <td opal-lib-moj-sortable-table-row-data id="name">{{ row.name }}</td>
+      <td opal-lib-moj-sortable-table-row-data id="defendant">{{ row.age }}</a>
     </tr>
     }
   </ng-container>
-</lib-opal-moj-sortable-table>
+</opal-lib-moj-sortable-table>
 ```
 
 ## Inputs

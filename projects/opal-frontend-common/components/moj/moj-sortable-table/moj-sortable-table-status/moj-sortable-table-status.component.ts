@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'lib-opal-moj-sortable-table-status',
+  selector: 'opal-lib-moj-sortable-table-status',
   standalone: true,
   templateUrl: './moj-sortable-table-status.component.html',
 })

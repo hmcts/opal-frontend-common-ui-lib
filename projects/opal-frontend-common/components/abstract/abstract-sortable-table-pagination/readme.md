@@ -94,10 +94,10 @@ export class SortableTablePaginationComponent extends AbstractSortableTablePagin
 ```
 
 ```html
-<lib-opal-moj-sortable-table>
+<opal-lib-moj-sortable-table>
   <ng-container head>
     <th
-      lib-opal-moj-sortable-table-header
+      opal-lib-moj-sortable-table-header
       columnKey="name"
       [sortDirection]="sortStateSignal()['name']"
       (sortChange)="onSortChange($event)"
@@ -105,7 +105,7 @@ export class SortableTablePaginationComponent extends AbstractSortableTablePagin
       Name
     </th>
     <th
-      lib-opal-moj-sortable-table-header
+      opal-lib-moj-sortable-table-header
       columnKey="age"
       [sortDirection]="sortStateSignal()['age']"
       (sortChange)="onSortChange($event)"
@@ -115,20 +115,20 @@ export class SortableTablePaginationComponent extends AbstractSortableTablePagin
   </ng-container>
   <ng-container row>
     @for (row of paginatedTableDataComputed(); track row.name) {
-    <tr lib-opal-moj-sortable-table-row>
-      <td lib-opal-moj-sortable-table-row-data id="name">{{ row.name }}</td>
-      <td lib-opal-moj-sortable-table-row-data id="defendant">{{ row.age }}</a>
+    <tr opal-lib-moj-sortable-table-row>
+      <td opal-lib-moj-sortable-table-row-data id="name">{{ row.name }}</td>
+      <td opal-lib-moj-sortable-table-row-data id="defendant">{{ row.age }}</a>
     </tr>
     }
   </ng-container>
-</lib-opal-moj-sortable-table>
+</opal-lib-moj-sortable-table>
 @if (abstractTableDataSignal()!.length > this.paginatedTableDataComputed().length) {
-<lib-opal-govuk-pagination
+<opal-lib-govuk-pagination
   [currentPage]="currentPageSignal()"
   [limit]="itemsPerPageSignal()"
   [total]="abstractTableDataSignal().length"
   (changePage)="onPageChange($event)"
-></lib-opal-govuk-pagination>
+></opal-lib-govuk-pagination>
 }
 ```
 
