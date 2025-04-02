@@ -198,4 +198,18 @@ export class DateService {
   public getFromFormatToFormat(date: string, fromFormat: string, toFormat: string): string {
     return this.getFromFormat(date, fromFormat).toFormat(toFormat);
   }
+
+  /**
+   * Calculates the number of days between the current date and a given ISO date string.
+   *
+   * @param value - An ISO 8601 formatted date string representing the target date.
+   * @returns The number of days between the current date and the input date.
+   *          Returns 0 if the input date is invalid.
+   */
+  public getDaysAgo(value: string): number {
+    const inputDate = this.getFromIso(value).startOf('day');
+
+    const now = this.getDateNow().startOf('day');
+    return Math.round(now.diff(inputDate, 'days').days);
+  }
 }

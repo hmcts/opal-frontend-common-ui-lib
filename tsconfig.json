@@ -50,6 +50,9 @@
       "@hmcts/opal-frontend-common/pages": [
         "projects/opal-frontend-common/pages"
       ],
+      "@hmcts/opal-frontend-common/pipes": [
+        "projects/opal-frontend-common/pipes"
+      ],
       "@hmcts/opal-frontend-common/resolvers": [
         "projects/opal-frontend-common/resolvers"
       ],

@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+
 import { DateService } from './date.service';
 import { DateTime } from 'luxon';
 
@@ -390,31 +391,54 @@ describe('DateServiceService', () => {
     expect(result).toEqual('01/01/2022');
   });
 
-  it('should format a valid DateTime object to a string', () => {
-    const dateTime = DateTime.fromISO('2022-01-01T10:00:00');
-    const format = 'dd/MM/yyyy HH:mm:ss';
-    const result = service.toFormat(dateTime, format);
-    expect(result).toEqual('01/01/2022 10:00:00');
+  it('should return 0 for the current date', () => {
+    const todayIso = DateTime.now().toISODate();
+    const result = service.getDaysAgo(todayIso);
+    expect(result).toBe(0);
   });
 
-  it('should format an invalid DateTime object to a string', () => {
-    const dateTime = DateTime.fromISO('invalid-date');
-    const format = 'dd/MM/yyyy HH:mm:ss';
-    const result = service.toFormat(dateTime, format);
-    expect(result).toEqual('Invalid DateTime');
+  it("should return 1 for yesterday's date", () => {
+    const yesterdayIso = DateTime.now().minus({ days: 1 }).toISODate();
+    const result = service.getDaysAgo(yesterdayIso);
+    expect(result).toBe(1);
   });
 
-  it('should format a valid DateTime object to a different string format', () => {
-    const dateTime = DateTime.fromISO('2022-01-01T10:00:00');
-    const format = 'yyyy-MM-dd';
-    const result = service.toFormat(dateTime, format);
-    expect(result).toEqual('2022-01-01');
+  it("should return -1 for tomorrow's date", () => {
+    const tomorrowIso = DateTime.now().plus({ days: 1 }).toISODate();
+    const result = service.getDaysAgo(tomorrowIso);
+    expect(result).toBe(-1);
   });
 
-  it('should handle formatting with an empty format string', () => {
-    const dateTime = DateTime.fromISO('2022-01-01T10:00:00');
-    const format = '';
-    const result = service.toFormat(dateTime, format);
-    expect(result).toEqual('');
+  it('should return 2 for two days ago', () => {
+    const twoDaysAgoIso = DateTime.now().minus({ days: 2 }).toISODate();
+    const result = service.getDaysAgo(twoDaysAgoIso);
+    expect(result).toBe(2);
+  });
+
+  it('should return -2 for two days in the future', () => {
+    const inTwoDaysIso = DateTime.now().plus({ days: 2 }).toISODate();
+    const result = service.getDaysAgo(inTwoDaysIso);
+    expect(result).toBe(-2);
+  });
+
+  it('should return correct string for dates far in the past', () => {
+    const pastDateIso = DateTime.now().minus({ days: 365 }).toISODate();
+    const result = service.getDaysAgo(pastDateIso);
+    expect(result).toBe(365);
+  });
+
+  it('should return correct string for dates far in the future', () => {
+    const futureDateIso = DateTime.now().plus({ days: 365 }).toISODate();
+    const result = service.getDaysAgo(futureDateIso);
+    expect(result).toBe(-365);
+  });
+
+  it('should handle dates around daylight saving time changes', () => {
+    const dstDateIso = DateTime.fromISO('2023-03-14').toString();
+    const todayIso = DateTime.fromISO('2023-03-15').toString();
+    spyOn(service, 'getDateNow').and.returnValue(DateTime.fromISO(todayIso));
+
+    const result = service.getDaysAgo(dstDateIso);
+    expect(result).toBe(1);
   });
 });

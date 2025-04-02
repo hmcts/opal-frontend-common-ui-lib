@@ -34,6 +34,9 @@
     "./core/pages": {
       "import": "./fesm2022/hmcts-opal-frontend-common-pages.mjs"
     },
+    "./core/pipes": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-pipes.mjs"
+    },
     "./core/resolvers": {
       "import": "./fesm2022/hmcts-opal-frontend-common-resolvers.mjs"
     },
