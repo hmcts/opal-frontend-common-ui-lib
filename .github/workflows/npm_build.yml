@@ -29,19 +29,19 @@ jobs:
       - name: Lint code
         run: yarn lint
 
-      - name: Run unit tests
-        run: yarn test --watch=false --code-coverage
-
       - name: Audit vulnerabilities
         run: yarn audit --production
+
+      - name: Build library
+        run: yarn build
+
+      - name: Run unit tests
+        run: yarn test --watch=false --code-coverage
 
       - name: Analyze with SonarCloud
         uses: SonarSource/sonarqube-scan-action@v5.1.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      - name: Build library
-        run: yarn build
 
   release:
     name: Release and Publish
