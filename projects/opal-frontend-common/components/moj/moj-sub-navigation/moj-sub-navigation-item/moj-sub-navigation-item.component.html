@@ -6,6 +6,12 @@
     (keyup.enter)="handleItemClick($event, subNavItemFragment)"
     role="link"
     tabindex="0"
-    >{{ subNavItemText }}</a
   >
+    @if (count) {
+      {{ subNavItemText }}
+      <opal-lib-moj-notification-badge [badgeId]="subNavItemId">{{ count }}</opal-lib-moj-notification-badge>
+    } @else {
+      {{ subNavItemText }}
+    }
+  </a>
 </li>
