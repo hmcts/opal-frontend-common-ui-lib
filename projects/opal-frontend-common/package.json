@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "peerDependencies": {
     "@angular/common": "^18.2.0 || ^19.0.0",
     "@angular/core": "^18.2.0 || ^19.0.0"
@@ -10,6 +10,47 @@
   },
   "sideEffects": false,
   "exports": {
-  "./services": { "default": "./services/public-api" }
-}
+    ".": {
+      "import": "./fesm2022/hmcts-opal-frontend-common.mjs"
+    },
+    "./core/components/govuk": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk.mjs"
+    },
+    "./core/constants": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-constants.mjs"
+    },
+    "./core/guards": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-guards.mjs"
+    },
+    "./core/interceptors": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-interceptors.mjs"
+    },
+    "./core/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-interfaces.mjs"
+    },
+    "./core/mocks": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-mocks.mjs"
+    },
+    "./core/pages": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-pages.mjs"
+    },
+    "./core/pipes": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-pipes.mjs"
+    },
+    "./core/resolvers": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-resolvers.mjs"
+    },
+    "./services": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services.mjs"
+    },
+    "./core/stores": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-stores.mjs"
+    },
+    "./core/types": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-types.mjs"
+    },
+    "./core/validators": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-validators.mjs"
+    }
+  } 
 }

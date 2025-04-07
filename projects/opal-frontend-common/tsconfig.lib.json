@@ -7,8 +7,13 @@
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
-    "types": []
+    "types": [
+      "./type.d.ts"
+    ]
   },
+  "include": [
+    "*.d.ts"
+  ],
   "exclude": [
     "**/*.spec.ts"
   ]
