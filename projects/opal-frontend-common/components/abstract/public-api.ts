@@ -21,3 +21,4 @@ export * from './interfaces/abstract-form-array-control.interface';
 export * from './interfaces/abstract-form-array-controls.interface';
 export * from './interfaces/abstract-form-base-form-error-summary-message.interface';
 export * from './interfaces/abstract-form-control-error-message.interface';
+export * from './abstract-sortable-table/interfaces/abstract-sortable-table-interfaces';
