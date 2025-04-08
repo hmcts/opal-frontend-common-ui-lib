@@ -1,6 +1,6 @@
 import { IGovukFooterLinks } from '../interfaces/govuk-footer-links.interface';
 
-export const GOVUK_FOOTER_LINKS: IGovukFooterLinks = {
+export const GOVUK_FOOTER_LINKS_MOCK: IGovukFooterLinks = {
   licenseLink: 'https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/',
   licenseVersion: '3.0',
   copyrightLink:

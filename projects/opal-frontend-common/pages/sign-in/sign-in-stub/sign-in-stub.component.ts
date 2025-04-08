@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ISignInStubForm } from '../interfaces';
-import { GovukTextInputComponent, GovukButtonComponent } from '@hmcts/opal-frontend-common/components/govuk';
+import { GovukTextInputComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-text-input';
+import { GovukButtonComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-button';
 
 @Component({
   selector: 'opal-lib-sign-in-stub',

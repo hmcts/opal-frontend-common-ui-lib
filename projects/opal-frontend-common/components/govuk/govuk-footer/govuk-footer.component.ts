@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GOVUK_FOOTER_LINKS } from './constants/govuk-footer-links.constant';
+import { IGovukFooterLinks } from './interfaces/govuk-footer-links.interface';
 
 @Component({
   selector: 'opal-lib-govuk-footer',
@@ -9,5 +9,5 @@ import { GOVUK_FOOTER_LINKS } from './constants/govuk-footer-links.constant';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GovukFooterComponent {
-  public readonly footer = GOVUK_FOOTER_LINKS;
+  @Input() public footerLinks!: IGovukFooterLinks;
 }

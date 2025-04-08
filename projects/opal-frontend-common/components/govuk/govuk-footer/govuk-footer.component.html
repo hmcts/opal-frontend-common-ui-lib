@@ -18,13 +18,15 @@
         </svg>
         <span class="govuk-footer__licence-description">
           All content is available under the
-          <a class="govuk-footer__link" [href]="footer.licenseLink" rel="license"
-            >Open Government Licence v{{ footer.licenseVersion }}</a
+          <a class="govuk-footer__link" [href]="footerLinks.licenseLink" rel="license"
+            >Open Government Licence v{{ footerLinks.licenseVersion }}</a
           >, except where otherwise stated
         </span>
       </div>
       <div class="govuk-footer__meta-item">
-        <a class="govuk-footer__link govuk-footer__copyright-logo" [href]="footer.copyrightLink">© Crown copyright</a>
+        <a class="govuk-footer__link govuk-footer__copyright-logo" [href]="footerLinks.copyrightLink"
+          >© Crown copyright</a
+        >
       </div>
     </div>
   </div>

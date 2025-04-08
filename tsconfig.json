@@ -18,97 +18,190 @@
     "experimentalDecorators": true,
     "paths": {
       "@hmcts/opal-frontend-common": [
-        "./projects/opal-frontend-common/public-api"
+        "./dist/opal-frontend-common/public-api"
       ],
       "@hmcts/opal-frontend-common/components/abstract": [
-        "projects/opal-frontend-common/components/abstract"
+        "./dist/opal-frontend-common/components/abstract"
       ],
       "@hmcts/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete": [
-        "projects/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete"
+        "./dist/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete"
       ],
       "@hmcts/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete/interfaces": [
-        "projects/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete/interfaces"
+        "./dist/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete/interfaces"
       ],
-      "@hmcts/opal-frontend-common/components/govuk": [
-        "projects/opal-frontend-common/components/govuk"
+      "@hmcts/opal-frontend-common/components/govuk/govuk-accordion": [
+        "./dist/opal-frontend-common/components/govuk/govuk-accordion"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-back-link": [
+        "./dist/opal-frontend-common/components/govuk/govuk-back-link"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-button": [
+        "./dist/opal-frontend-common/components/govuk/govuk-button"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-cancel-link": [
+        "./dist/opal-frontend-common/components/govuk/govuk-cancel-link"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-checkboxes": [
+        "./dist/opal-frontend-common/components/govuk/govuk-checkboxes"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-checkboxes/interfaces": [
+        "./dist/opal-frontend-common/components/govuk/govuk-checkboxes/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-date-input": [
+        "./dist/opal-frontend-common/components/govuk/govuk-date-input"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-date-input/interfaces": [
+        "./dist/opal-frontend-common/components/govuk/govuk-date-input/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-details": [
+        "./dist/opal-frontend-common/components/govuk/govuk-details"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-error-summary": [
+        "./dist/opal-frontend-common/components/govuk/govuk-error-summary"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-footer": [
+        "./dist/opal-frontend-common/components/govuk/govuk-footer"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-footer/interfaces": [
+        "./dist/opal-frontend-common/components/govuk/govuk-footer/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-header": [
+        "./dist/opal-frontend-common/components/govuk/govuk-header"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-header/interfaces": [
+        "./dist/opal-frontend-common/components/govuk/govuk-header/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-heading-with-caption": [
+        "./dist/opal-frontend-common/components/govuk/govuk-heading-with-caption"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-inset-text": [
+        "./dist/opal-frontend-common/components/govuk/govuk-inset-text"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-notification-banner": [
+        "./dist/opal-frontend-common/components/govuk/govuk-notification-banner"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-pagination": [
+        "./dist/opal-frontend-common/components/govuk/govuk-pagination"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-panel": [
+        "./dist/opal-frontend-common/components/govuk/govuk-panel"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-radio": [
+        "./dist/opal-frontend-common/components/govuk/govuk-radio"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-radio/interfaces": [
+        "./dist/opal-frontend-common/components/govuk/govuk-radio/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-select": [
+        "./dist/opal-frontend-common/components/govuk/govuk-select"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-select/interfaces": [
+        "./dist/opal-frontend-common/components/govuk/govuk-select/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-summary-card-list": [
+        "./dist/opal-frontend-common/components/govuk/govuk-summary-card-list"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-summary-list": [
+        "./dist/opal-frontend-common/components/govuk/govuk-summary-list"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-table": [
+        "./dist/opal-frontend-common/components/govuk/govuk-table"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-tabs": [
+        "./dist/opal-frontend-common/components/govuk/govuk-tabs"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-tag": [
+        "./dist/opal-frontend-common/components/govuk/govuk-tag"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-task-list": [
+        "./dist/opal-frontend-common/components/govuk/govuk-task-list"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-text-area": [
+        "./dist/opal-frontend-common/components/govuk/govuk-text-area"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-text-input": [
+        "./dist/opal-frontend-common/components/govuk/govuk-text-input"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-text-input-prefix-suffix": [
+        "./dist/opal-frontend-common/components/govuk/govuk-text-input-prefix-suffix"
       ],
       "@hmcts/opal-frontend-common/components/moj/moj-badge": [
-        "projects/opal-frontend-common/components/moj/moj-badge"
+        "./dist/opal-frontend-common/components/moj/moj-badge"
       ],
       "@hmcts/opal-frontend-common/components/moj/moj-banner": [
-        "projects/opal-frontend-common/components/moj/moj-banner"
+        "./dist/opal-frontend-common/components/moj/moj-banner"
       ],
       "@hmcts/opal-frontend-common/components/moj/moj-button-menu": [
-        "projects/opal-frontend-common/components/moj/moj-button-menu"
+        "./dist/opal-frontend-common/components/moj/moj-button-menu"
       ],
       "@hmcts/opal-frontend-common/components/moj/moj-date-picker": [
-        "projects/opal-frontend-common/components/moj/moj-date-picker"
+        "./dist/opal-frontend-common/components/moj/moj-date-picker"
       ],
       "@hmcts/opal-frontend-common/components/moj/moj-header": [
-        "projects/opal-frontend-common/components/moj/moj-header"
+        "./dist/opal-frontend-common/components/moj/moj-header"
       ],
       "@hmcts/opal-frontend-common/components/moj/moj-header/interfaces": [
-        "projects/opal-frontend-common/components/moj/moj-header/interfaces"
+        "./dist/opal-frontend-common/components/moj/moj-header/interfaces"
       ],
       "@hmcts/opal-frontend-common/components/moj/moj-notification-badge": [
-        "projects/opal-frontend-common/components/moj/moj-notification-badge"
+        "./dist/opal-frontend-common/components/moj/moj-notification-badge"
       ],
       "@hmcts/opal-frontend-common/components/moj/moj-page-header": [
-        "projects/opal-frontend-common/components/moj/moj-page-header"
+        "./dist/opal-frontend-common/components/moj/moj-page-header"
       ],
       "@hmcts/opal-frontend-common/components/moj/moj-pagination": [
-        "projects/opal-frontend-common/components/moj/moj-pagination"
+        "./dist/opal-frontend-common/components/moj/moj-pagination"
       ],
       "@hmcts/opal-frontend-common/components/moj/moj-primary-navigation": [
-        "projects/opal-frontend-common/components/moj/moj-primary-navigation"
+        "./dist/opal-frontend-common/components/moj/moj-primary-navigation"
       ],
       "@hmcts/opal-frontend-common/components/moj/moj-sortable-table": [
-        "projects/opal-frontend-common/components/moj/moj-sortable-table"
+        "./dist/opal-frontend-common/components/moj/moj-sortable-table"
       ],
       "@hmcts/opal-frontend-common/components/moj/moj-sub-navigation": [
-        "projects/opal-frontend-common/components/moj/moj-sub-navigation"
+        "./dist/opal-frontend-common/components/moj/moj-sub-navigation"
       ],
       "@hmcts/opal-frontend-common/components/moj/moj-ticket-panel": [
-        "projects/opal-frontend-common/components/moj/moj-ticket-panel"
+        "./dist/opal-frontend-common/components/moj/moj-ticket-panel"
       ],
       "@hmcts/opal-frontend-common/components/moj/moj-timeline": [
-        "projects/opal-frontend-common/components/moj/moj-timeline"
+        "./dist/opal-frontend-common/components/moj/moj-timeline"
       ],
       "@hmcts/opal-frontend-common/constants": [
-        "projects/opal-frontend-common/constants"
+        "./dist/opal-frontend-common/constants"
       ],
       "@hmcts/opal-frontend-common/guards": [
-        "projects/opal-frontend-common/guards"
+        "./dist/opal-frontend-common/guards"
       ],
       "@hmcts/opal-frontend-common/interceptors": [
-        "projects/opal-frontend-common/interceptors"
+        "./dist/opal-frontend-common/interceptors"
       ],
       "@hmcts/opal-frontend-common/interfaces": [
-        "projects/opal-frontend-common/interfaces"
+        "./dist/opal-frontend-common/interfaces"
       ],
       "@hmcts/opal-frontend-common/mocks": [
-        "projects/opal-frontend-common/mocks"
+        "./dist/opal-frontend-common/mocks"
       ],
       "@hmcts/opal-frontend-common/pages": [
-        "projects/opal-frontend-common/pages"
+        "./dist/opal-frontend-common/pages"
       ],
       "@hmcts/opal-frontend-common/pipes": [
-        "projects/opal-frontend-common/pipes"
+        "./dist/opal-frontend-common/pipes"
       ],
       "@hmcts/opal-frontend-common/resolvers": [
-        "projects/opal-frontend-common/resolvers"
+        "./dist/opal-frontend-common/resolvers"
       ],
       "@hmcts/opal-frontend-common/services": [
-        "./projects/opal-frontend-common/services"
+        "./dist/opal-frontend-common/services"
       ],
       "@hmcts/opal-frontend-common/stores": [
-        "projects/opal-frontend-common/stores"
+        "./dist/opal-frontend-common/stores"
       ],
       "@hmcts/opal-frontend-common/types": [
-        "projects/opal-frontend-common/types"
+        "./dist/opal-frontend-common/types"
       ],
       "@hmcts/opal-frontend-common/validators": [
-        "projects/opal-frontend-common/validators"
+        "./dist/opal-frontend-common/validators"
       ]
     },
     "moduleResolution": "bundler",

@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { GOVUK_HEADER_LINKS } from './constants/govuk-header-links.constant';
+import { IGovukHeaderLinks } from './interfaces/govuk-header-links.interface';
 @Component({
   selector: 'opal-lib-govuk-header',
   imports: [CommonModule, RouterLink],
@@ -9,5 +9,5 @@ import { GOVUK_HEADER_LINKS } from './constants/govuk-header-links.constant';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GovukHeaderComponent {
-  public readonly headerLinks = GOVUK_HEADER_LINKS;
+  @Input() public headerLinks!: IGovukHeaderLinks;
 }

@@ -1,0 +1,6 @@
+{
+    "sideEffects": false,
+    "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-task-list.mjs",
+    "typings": "../../../../dist/opal-frontend-common/components/govuk/govuk-task-list/index.d.ts"
+  }
+  
