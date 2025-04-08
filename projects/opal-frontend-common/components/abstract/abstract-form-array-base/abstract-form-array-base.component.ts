@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractFormBaseComponent } from '../abstract-form-base/abstract-form-base.component';
-import { IAbstractFormArrayControls } from '../interfaces/abstract-form-array-controls.interface';
-import { IAbstractFormArrayControlValidation } from '../interfaces/abstract-form-array-control-validation.interface';
+import { AbstractFormBaseComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-base';
+import { IAbstractFormArrayControls } from '@hmcts/opal-frontend-common/components/abstract/interfaces';
+import { IAbstractFormArrayControlValidation } from '@hmcts/opal-frontend-common/components/abstract/interfaces';
 import { AbstractControl, FormArray, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
-import { IAbstractFormArrayControl } from '../interfaces/abstract-form-array-control.interface';
+import { IAbstractFormArrayControl } from '@hmcts/opal-frontend-common/components/abstract/interfaces';
 
 @Component({
   template: '',

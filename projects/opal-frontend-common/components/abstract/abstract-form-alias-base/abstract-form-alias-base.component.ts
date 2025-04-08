@@ -1,11 +1,13 @@
-import { AbstractFormBaseComponent } from '../abstract-form-base/abstract-form-base.component';
+import { FormArray, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { takeUntil } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IAbstractFormAliasBaseAliasControls } from './interfaces/abstract-form-alias-base-alias-controls.interface';
-import { IAbstractFormArrayControlValidation } from '../interfaces/abstract-form-array-control-validation.interface';
-import { IAbstractFormArrayControls } from '../interfaces/abstract-form-array-controls.interface';
-import { FormArray, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
-import { IAbstractFormArrayControl } from '../interfaces/abstract-form-array-control.interface';
+import { IAbstractFormAliasBaseAliasControls } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-alias-base/interfaces';
+import { AbstractFormBaseComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-base';
+import {
+  IAbstractFormArrayControlValidation,
+  IAbstractFormArrayControls,
+  IAbstractFormArrayControl,
+} from '@hmcts/opal-frontend-common/components/abstract/interfaces';
 
 @Component({
   template: '',

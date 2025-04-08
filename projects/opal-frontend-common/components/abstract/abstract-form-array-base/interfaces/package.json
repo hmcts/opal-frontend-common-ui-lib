@@ -1,0 +1,6 @@
+{
+    "sideEffects": false,
+    "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-form-array-base-interfaces.mjs",
+    "typings": "../../../../dist/opal-frontend-common/components/abstract/abstract-form-array-base/interfaces/index.d.ts"
+  }
+  

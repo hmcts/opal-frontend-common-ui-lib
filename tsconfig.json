@@ -20,8 +20,47 @@
       "@hmcts/opal-frontend-common": [
         "./dist/opal-frontend-common/public-api"
       ],
-      "@hmcts/opal-frontend-common/components/abstract": [
-        "./dist/opal-frontend-common/components/abstract"
+      "@hmcts/opal-frontend-common/components/abstract/abstract-form-alias-base": [
+        "./dist/opal-frontend-common/components/abstract/abstract-form-alias-base"
+      ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-form-alias-base/interfaces": [
+        "./dist/opal-frontend-common/components/abstract/abstract-form-alias-base/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-form-array-base": [
+        "./dist/opal-frontend-common/components/abstract/abstract-form-array-base"
+      ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-form-array-base/interfaces": [
+        "./dist/opal-frontend-common/components/abstract/abstract-form-array-base/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-form-array-parent-base": [
+        "./dist/opal-frontend-common/components/abstract/abstract-form-array-parent-base"
+      ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-form-array-removal-base": [
+        "./dist/opal-frontend-common/components/abstract/abstract-form-array-removal-base"
+      ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-form-array-removal-base/interfaces": [
+        "./dist/opal-frontend-common/components/abstract/abstract-form-array-removal-base/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-form-base": [
+        "./dist/opal-frontend-common/components/abstract/abstract-form-base"
+      ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-form-base/interfaces": [
+        "./dist/opal-frontend-common/components/abstract/abstract-form-base/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-form-parent-base": [
+        "./dist/opal-frontend-common/components/abstract/abstract-form-parent-base"
+      ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table": [
+        "./dist/opal-frontend-common/components/abstract/abstract-sortable-table"
+      ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/interfaces": [
+        "./dist/opal-frontend-common/components/abstract/abstract-sortable-table/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table-pagination": [
+        "./dist/opal-frontend-common/components/abstract/abstract-sortable-table-pagination"
+      ],
+      "@hmcts/opal-frontend-common/components/abstract/interfaces": [
+        "./dist/opal-frontend-common/components/abstract/interfaces"
       ],
       "@hmcts/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete": [
         "./dist/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete"

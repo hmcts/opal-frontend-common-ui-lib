@@ -13,181 +13,223 @@
     ".": {
       "import": "./fesm2022/hmcts-opal-frontend-common.mjs"
     },
-    "./core/components/alphagov/alphagov-accessible-autocomplete": {
+    "./components/abstract/abstract-form-alias-base": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-form-alias-base.mjs"
+    },
+    "./components/abstract/abstract-form-alias-base/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-form-alias-base-interfaces.mjs"
+    },
+    "./components/abstract/abstract-form-array-base": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-form-array-base.mjs"
+    },
+    "./components/abstract/abstract-form-array-base/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-form-array-base-interfaces.mjs"
+    },
+    "./components/abstract/abstract-form-array-parent-base": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-form-array-parent-base.mjs"
+    },
+    "./components/abstract/abstract-form-array-removal-base": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-form-array-removal-base.mjs"
+    },
+    "./components/abstract/abstract-form-array-removal-base/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-form-array-removal-base-interfaces.mjs"
+    },
+    "./components/abstract/abstract-form-base": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-form-base.mjs"
+    },
+    "./components/abstract/abstract-form-base/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-form-base-interfaces.mjs"
+    },
+    "./components/abstract/abstract-form-parent-base": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-form-parent-base.mjs"
+    },
+    "./components/abstract/abstract-sortable-table": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-sortable-table.mjs"
+    },
+    "./components/abstract/abstract-sortable-table/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-sortable-table-interfaces.mjs"
+    },
+    "./components/abstract/abstract-sortable-table-pagination": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-sortable-table-pagination.mjs"
+    },
+    "./components/abstract/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-interfaces.mjs"
+    },
+    "./components/alphagov/alphagov-accessible-autocomplete": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-alphagov-alphagov-accessible-autocomplete.mjs"
     },
-    "./core/components/alphagov/alphagov-accessible-autocomplete/interfaces": {
+    "./components/alphagov/alphagov-accessible-autocomplete/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-alphagov-alphagov-accessible-autocomplete-interfaces.mjs"
     },
-    "./core/components/govuk/govuk-accordion": {
+    "./components/govuk/govuk-accordion": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-accordion.mjs"
     },
-    "./core/components/govuk/govuk-back-link": {
+    "./components/govuk/govuk-back-link": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-back-link.mjs"
     },
-    "./core/components/govuk/govuk-button": {
+    "./components/govuk/govuk-button": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-button.mjs"
     },
-    "./core/components/govuk/govuk-cancel-link": {
+    "./components/govuk/govuk-cancel-link": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-cancel-link.mjs"
     },
-    "./core/components/govuk/govuk-checkboxes": {
+    "./components/govuk/govuk-checkboxes": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-checkboxes.mjs"
     },
-    "./core/components/govuk/govuk-checkboxes/interfaces": {
+    "./components/govuk/govuk-checkboxes/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-checkboxes-interfaces.mjs"
     },
-    "./core/components/govuk/govuk-date-input": {
+    "./components/govuk/govuk-date-input": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-date-input.mjs"
     },
-    "./core/components/govuk/govuk-date-input/interfaces": {
+    "./components/govuk/govuk-date-input/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-date-input-interfaces.mjs"
     },
-    "./core/components/govuk/govuk-details": {
+    "./components/govuk/govuk-details": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-details.mjs"
     },
-    "./core/components/govuk/govuk-error-summary": {
+    "./components/govuk/govuk-error-summary": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-error-summary.mjs"
     },
-    "./core/components/govuk/govuk-footer": {
+    "./components/govuk/govuk-footer": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-footer.mjs"
     },
-    "./core/components/govuk/govuk-footer/interfaces": {
+    "./components/govuk/govuk-footer/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-footer-interfaces.mjs"
     },
-    "./core/components/govuk/govuk-header": {
+    "./components/govuk/govuk-header": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-header.mjs"
     },
-    "./core/components/govuk/govuk-header/interfaces": {
+    "./components/govuk/govuk-header/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-header-interfaces.mjs"
     },
-    "./core/components/govuk/govuk-heading-with-caption": {
+    "./components/govuk/govuk-heading-with-caption": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-heading-with-caption.mjs"
     },
-    "./core/components/govuk/govuk-inset-text": {
+    "./components/govuk/govuk-inset-text": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-inset-text.mjs"
     },
-    "./core/components/govuk/govuk-notification-banner": {
+    "./components/govuk/govuk-notification-banner": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-notification-banner.mjs"
     },
-    "./core/components/govuk/govuk-pagination": {
+    "./components/govuk/govuk-pagination": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-pagination.mjs"
     },
-    "./core/components/govuk/govuk-panel": {
+    "./components/govuk/govuk-panel": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-panel.mjs"
     },
-    "./core/components/govuk/govuk-radio": {
+    "./components/govuk/govuk-radio": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-radio.mjs"
     },
-    "./core/components/govuk/govuk-radio/interfaces": {
+    "./components/govuk/govuk-radio/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-radio-interfaces.mjs"
     },
-    "./core/components/govuk/govuk-select": {
+    "./components/govuk/govuk-select": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-select.mjs"
     },
-    "./core/components/govuk/govuk-select/interfaces": {
+    "./components/govuk/govuk-select/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-select-interfaces.mjs"
     },
-    "./core/components/govuk/govuk-summary-card-list": {
+    "./components/govuk/govuk-summary-card-list": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-summary-card-list.mjs"
     },
-    "./core/components/govuk/govuk-summary-list": {
+    "./components/govuk/govuk-summary-list": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-summary-list.mjs"
     },
-    "./core/components/govuk/govuk-table": {
+    "./components/govuk/govuk-table": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-table.mjs"
     },
-    "./core/components/govuk/govuk-tabs": {
+    "./components/govuk/govuk-tabs": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-tabs.mjs"
     },
-    "./core/components/govuk/govuk-tags": {
+    "./components/govuk/govuk-tags": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-tags.mjs"
     },
-    "./core/components/govuk/govuk-task-list": {
+    "./components/govuk/govuk-task-list": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-task-list.mjs"
     },
-    "./core/components/govuk/govuk-text-area": {
+    "./components/govuk/govuk-text-area": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-text-area.mjs"
     },
-    "./core/components/govuk/govuk-text-input": {
+    "./components/govuk/govuk-text-input": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-text-input.mjs"
     },
-    "./core/components/govuk/govuk-text-input-prefix-suffix": {
+    "./components/govuk/govuk-text-input-prefix-suffix": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-text-input-prefix-suffix.mjs"
     },
-    "./core/components/moj/moj-badge": {
+    "./components/moj/moj-badge": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-badge.mjs"
     },
-    "./core/components/moj/moj-banner": {
+    "./components/moj/moj-banner": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-banner.mjs"
     },
-    "./core/components/moj/moj-button-menu": {
+    "./components/moj/moj-button-menu": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-button-menu.mjs"
     },
-    "./core/components/moj/moj-date-picker": {
+    "./components/moj/moj-date-picker": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-date-picker.mjs"
     },
-    "./core/components/moj/moj-header": {
+    "./components/moj/moj-header": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-header.mjs"
     },
-    "./core/components/moj/moj-header/interfaces": {
+    "./components/moj/moj-header/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-header-interfaces.mjs"
     },
-    "./core/components/moj/moj-notification-badge": {
+    "./components/moj/moj-notification-badge": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-notification-badge.mjs"
     },
-    "./core/components/moj/moj-page-header": {
+    "./components/moj/moj-page-header": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-page-header.mjs"
     },
-    "./core/components/moj/moj-pagination": {
+    "./components/moj/moj-pagination": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-pagination.mjs"
     },
-    "./core/components/moj/moj-primary-navigation": {
+    "./components/moj/moj-primary-navigation": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-primary-navigation.mjs"
     },
-    "./core/components/moj/moj-sortable-table": {
+    "./components/moj/moj-sortable-table": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-sortable-table.mjs"
     },
-    "./core/components/moj/moj-ticket-panel": {
+    "./components/moj/moj-ticket-panel": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-ticket-panel.mjs"
     },
-    "./core/components/moj/moj-timeline": {
+    "./components/moj/moj-timeline": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-timeline.mjs"
     },
-    "./core/constants": {
+    "./constants": {
       "import": "./fesm2022/hmcts-opal-frontend-common-constants.mjs"
     },
-    "./core/guards": {
+    "./guards": {
       "import": "./fesm2022/hmcts-opal-frontend-common-guards.mjs"
     },
-    "./core/interceptors": {
+    "./interceptors": {
       "import": "./fesm2022/hmcts-opal-frontend-common-interceptors.mjs"
     },
-    "./core/interfaces": {
+    "./interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-interfaces.mjs"
     },
-    "./core/mocks": {
+    "./mocks": {
       "import": "./fesm2022/hmcts-opal-frontend-common-mocks.mjs"
     },
-    "./core/pages": {
+    "./pages": {
       "import": "./fesm2022/hmcts-opal-frontend-common-pages.mjs"
     },
-    "./core/pipes": {
+    "./pipes": {
       "import": "./fesm2022/hmcts-opal-frontend-common-pipes.mjs"
     },
-    "./core/resolvers": {
+    "./resolvers": {
       "import": "./fesm2022/hmcts-opal-frontend-common-resolvers.mjs"
     },
     "./services": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services.mjs"
     },
-    "./core/stores": {
+    "./stores": {
       "import": "./fesm2022/hmcts-opal-frontend-common-stores.mjs"
     },
-    "./core/types": {
+    "./types": {
       "import": "./fesm2022/hmcts-opal-frontend-common-types.mjs"
     },
-    "./core/validators": {
+    "./validators": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators.mjs"
     }
   } 

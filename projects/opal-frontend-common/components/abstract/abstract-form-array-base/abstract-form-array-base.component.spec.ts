@@ -1,5 +1,5 @@
 import { FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { AbstractFormArrayBaseComponent } from './abstract-form-array-base';
+import { AbstractFormArrayBaseComponent } from './abstract-form-array-base.component';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { IAbstractFormArrayControls } from '../interfaces/abstract-form-array-controls.interface';

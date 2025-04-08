@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AbstractFormAliasBaseComponent } from './abstract-form-alias-base';
+import { AbstractFormAliasBaseComponent } from './abstract-form-alias-base.component';
 import { FormGroup, FormArray, FormControl, Validators, ValidatorFn } from '@angular/forms';
 import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
