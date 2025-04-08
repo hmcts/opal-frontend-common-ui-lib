@@ -29,8 +29,47 @@
       "@hmcts/opal-frontend-common/components/govuk": [
         "projects/opal-frontend-common/components/govuk"
       ],
-      "@hmcts/opal-frontend-common/components/moj": [
-        "projects/opal-frontend-common/components/moj"
+      "@hmcts/opal-frontend-common/components/moj/moj-badge": [
+        "projects/opal-frontend-common/components/moj/moj-badge"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-banner": [
+        "projects/opal-frontend-common/components/moj/moj-banner"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-button-menu": [
+        "projects/opal-frontend-common/components/moj/moj-button-menu"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-date-picker": [
+        "projects/opal-frontend-common/components/moj/moj-date-picker"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-header": [
+        "projects/opal-frontend-common/components/moj/moj-header"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-header/interfaces": [
+        "projects/opal-frontend-common/components/moj/moj-header/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-notification-badge": [
+        "projects/opal-frontend-common/components/moj/moj-notification-badge"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-page-header": [
+        "projects/opal-frontend-common/components/moj/moj-page-header"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-pagination": [
+        "projects/opal-frontend-common/components/moj/moj-pagination"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-primary-navigation": [
+        "projects/opal-frontend-common/components/moj/moj-primary-navigation"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-sortable-table": [
+        "projects/opal-frontend-common/components/moj/moj-sortable-table"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-sub-navigation": [
+        "projects/opal-frontend-common/components/moj/moj-sub-navigation"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-ticket-panel": [
+        "projects/opal-frontend-common/components/moj/moj-ticket-panel"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-timeline": [
+        "projects/opal-frontend-common/components/moj/moj-timeline"
       ],
       "@hmcts/opal-frontend-common/constants": [
         "projects/opal-frontend-common/constants"

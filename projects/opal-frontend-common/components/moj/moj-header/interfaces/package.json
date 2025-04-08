@@ -1,0 +1,6 @@
+{
+    "sideEffects": false,
+    "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-moj-moj-header-interfaces.mjs",
+    "typings": "../../../../dist/opal-frontend-common/components/moj/moj-header/interfaces/index.d.ts"
+  }
+  

@@ -3,9 +3,10 @@ import { MojHeaderComponent } from './moj-header.component';
 import { Component } from '@angular/core';
 import { MojHeaderNavigationItemComponent } from './moj-header-navigation-item/moj-header-navigation-item.component';
 import { provideRouter } from '@angular/router';
+import { MOJ_HEADER_LINKS_MOCK } from './mocks/moj-header-links.mock';
 
 @Component({
-  template: `<opal-lib-moj-header>
+  template: `<opal-lib-moj-header [headerLinks]="MOJ_HEADER_LINKS_MOCK">
     <ng-container organisationName>Test Organisation</ng-container>
     <ng-container serviceName>Test Service</ng-container>
     <opal-lib-moj-header-navigation-item>

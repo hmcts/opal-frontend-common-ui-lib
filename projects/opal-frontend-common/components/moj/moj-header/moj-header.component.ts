@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MOJ_HEADER_LINKS } from './constants/moj-header-links.constant';
+import { IMojHeaderLinks } from './interfaces/moj-header-links.interface';
 
 @Component({
   selector: 'opal-lib-moj-header',
@@ -9,5 +9,5 @@ import { MOJ_HEADER_LINKS } from './constants/moj-header-links.constant';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MojHeaderComponent {
-  public readonly headerLinks = MOJ_HEADER_LINKS;
+  @Input() public headerLinks!: IMojHeaderLinks;
 }
