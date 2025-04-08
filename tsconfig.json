@@ -23,8 +23,11 @@
       "@hmcts/opal-frontend-common/components/abstract": [
         "projects/opal-frontend-common/components/abstract"
       ],
-      "@hmcts/opal-frontend-common/components/alphagov": [
-        "projects/opal-frontend-common/components/alphagov"
+      "@hmcts/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete": [
+        "projects/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete"
+      ],
+      "@hmcts/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete/interfaces": [
+        "projects/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete/interfaces"
       ],
       "@hmcts/opal-frontend-common/components/govuk": [
         "projects/opal-frontend-common/components/govuk"

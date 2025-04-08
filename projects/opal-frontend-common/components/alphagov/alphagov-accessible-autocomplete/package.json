@@ -1,0 +1,6 @@
+{
+    "sideEffects": false,
+    "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-alphagov-alphagov-accessible-autocomplete.mjs",
+    "typings": "../../../../dist/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete/index.d.ts"
+  }
+  

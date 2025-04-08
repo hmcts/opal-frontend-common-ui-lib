@@ -6,7 +6,7 @@ import { provideRouter } from '@angular/router';
 import { MOJ_HEADER_LINKS_MOCK } from './mocks/moj-header-links.mock';
 
 @Component({
-  template: `<opal-lib-moj-header [headerLinks]="MOJ_HEADER_LINKS_MOCK">
+  template: `<opal-lib-moj-header [headerLinks]="headerLinks">
     <ng-container organisationName>Test Organisation</ng-container>
     <ng-container serviceName>Test Service</ng-container>
     <opal-lib-moj-header-navigation-item>
@@ -15,7 +15,9 @@ import { MOJ_HEADER_LINKS_MOCK } from './mocks/moj-header-links.mock';
   </opal-lib-moj-header>`,
   imports: [MojHeaderComponent, MojHeaderNavigationItemComponent],
 })
-class TestHostComponent {}
+class TestHostComponent {
+  public headerLinks = MOJ_HEADER_LINKS_MOCK;
+}
 
 describe('MojHeaderComponent', () => {
   let component: TestHostComponent;
