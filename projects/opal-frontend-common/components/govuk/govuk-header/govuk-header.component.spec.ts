@@ -3,9 +3,10 @@ import { GovukHeaderComponent } from './govuk-header.component';
 import { Component } from '@angular/core';
 import { GovukHeaderNavigationItemComponent } from './govuk-header-navigation-item/govuk-header-navigation-item.component';
 import { provideRouter } from '@angular/router';
+import { GOVUK_HEADER_LINKS_MOCK } from './mocks/govuk-header-links.mock';
 
 @Component({
-  template: `<opal-lib-govuk-header>
+  template: `<opal-lib-govuk-header [headerLinks]="headerLinks">
     <ng-container organisationName>Test Organisation</ng-container>
     <ng-container serviceName>Test Service</ng-container>
     <opal-lib-govuk-header-navigation-item>
@@ -14,7 +15,9 @@ import { provideRouter } from '@angular/router';
   </opal-lib-govuk-header>`,
   imports: [GovukHeaderComponent, GovukHeaderNavigationItemComponent],
 })
-class TestHostComponent {}
+class TestHostComponent {
+  public headerLinks = GOVUK_HEADER_LINKS_MOCK;
+}
 
 describe('GovukHeaderComponent', () => {
   let component: TestHostComponent | null;

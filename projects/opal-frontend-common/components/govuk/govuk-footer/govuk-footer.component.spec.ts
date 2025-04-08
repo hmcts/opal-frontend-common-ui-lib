@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { GovukFooterComponent } from './govuk-footer.component';
+import { GOVUK_FOOTER_LINKS_MOCK } from './mocks/govuk-footer-links.mock';
 
 describe('GovukFooterComponent', () => {
   let component: GovukFooterComponent | null;
@@ -13,6 +13,9 @@ describe('GovukFooterComponent', () => {
 
     fixture = TestBed.createComponent(GovukFooterComponent);
     component = fixture.componentInstance;
+
+    component.footerLinks = GOVUK_FOOTER_LINKS_MOCK;
+
     fixture.detectChanges();
   });
 

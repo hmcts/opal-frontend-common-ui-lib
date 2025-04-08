@@ -1,5 +1,5 @@
 import { Component, computed, signal } from '@angular/core';
-import { AbstractSortableTableComponent } from '../abstract-sortable-table/abstract-sortable-table.component';
+import { AbstractSortableTableComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table';
 
 @Component({
   template: '',

@@ -7,11 +7,7 @@
     role="link"
     tabindex="0"
   >
-    @if (count) {
-      {{ subNavItemText }}
-      <opal-lib-moj-notification-badge [badgeId]="subNavItemId">{{ count }}</opal-lib-moj-notification-badge>
-    } @else {
-      {{ subNavItemText }}
-    }
+    {{ subNavItemText }}
+    <ng-content select="[badge]"></ng-content>
   </a>
 </li>

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { GovukButtonComponent } from '@hmcts/opal-frontend-common/components/govuk';
+import { GovukButtonComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-button';
 
 @Component({
   selector: 'opal-lib-access-denied',

@@ -5,11 +5,13 @@ import { Subject, takeUntil } from 'rxjs';
 import { IAbstractFormBaseFieldError } from './interfaces/abstract-form-base-field-error.interface';
 import { IAbstractFormBaseFieldErrors } from './interfaces/abstract-form-base-field-errors.interface';
 import { IAbstractFormBaseFormError } from './interfaces/abstract-form-base-form-error.interface';
-import { IAbstractFormBaseFormErrorSummaryMessage } from '../interfaces/abstract-form-base-form-error-summary-message.interface';
+import {
+  IAbstractFormBaseFormErrorSummaryMessage,
+  IAbstractFormControlErrorMessage,
+  IAbstractFormArrayControlValidation,
+} from '@hmcts/opal-frontend-common/components/abstract/interfaces';
 import { IAbstractFormBaseHighPriorityFormError } from './interfaces/abstract-form-base-high-priority-form-error.interface';
 import { IAbstractFormBaseForm } from './interfaces/abstract-form-base-form.interface';
-import { IAbstractFormControlErrorMessage } from '../interfaces/abstract-form-control-error-message.interface';
-import { IAbstractFormArrayControlValidation } from '../interfaces/abstract-form-array-control-validation.interface';
 import { UtilsService } from '@hmcts/opal-frontend-common/services';
 
 @Component({

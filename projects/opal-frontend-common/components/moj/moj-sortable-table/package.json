@@ -1,0 +1,6 @@
+{
+    "sideEffects": false,
+    "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-moj-moj-sortable-table.mjs",
+    "typings": "../../../../dist/opal-frontend-common/components/moj/moj-sortable-table/index.d.ts"
+  }
+  

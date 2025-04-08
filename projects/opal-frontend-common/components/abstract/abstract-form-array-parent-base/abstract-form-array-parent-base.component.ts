@@ -1,4 +1,4 @@
-import { AbstractFormParentBaseComponent } from '../abstract-form-parent-base/abstract-form-parent-base.component';
+import { AbstractFormParentBaseComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-parent-base';
 
 export abstract class AbstractFormArrayParentBaseComponent extends AbstractFormParentBaseComponent {
   /**

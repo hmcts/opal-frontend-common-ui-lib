@@ -8,7 +8,7 @@ import { ABSTRACT_FORM_BASE_FORM_CONTROL_ERROR_MOCK } from './mocks/abstract-for
 import { ABSTRACT_FORM_BASE_FORM_DATE_ERROR_SUMMARY_MOCK } from './mocks/abstract-form-base-form-date-error-summary.mock';
 import { ABSTRACT_FORM_BASE_FORM_ERROR_SUMMARY_MOCK } from './mocks/abstract-form-base-form-error-summary.mock';
 import { ABSTRACT_FORM_BASE_FORM_STATE_MOCK } from './mocks/abstract-form-base-form-state.mock';
-import { ABSTRACT_FORM_BASE_FIELD_ERRORS } from './constants/abstract-form-base-field-errors';
+import { ABSTRACT_FORM_BASE_FIELD_ERRORS } from './mocks/abstract-form-base-field-error.mock';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { IAbstractFormArrayControlValidation } from '../interfaces/abstract-form-array-control-validation.interface';

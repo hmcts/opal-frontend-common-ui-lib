@@ -1,0 +1,6 @@
+{
+    "sideEffects": false,
+    "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-date-input-interfaces.mjs",
+    "typings": "../../../../dist/opal-frontend-common/components/govuk/govuk-date-input/interfaces/index.d.ts"
+  }
+  
