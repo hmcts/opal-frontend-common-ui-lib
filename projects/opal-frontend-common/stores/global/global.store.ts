@@ -5,6 +5,7 @@ import {
   ISessionTokenExpiry,
   ISessionUserState,
   IErrorState,
+  ITransferStateAppInsightsConfig,
 } from '@hmcts/opal-frontend-common/interfaces';
 
 export const GlobalStore = signalStore(
@@ -16,6 +17,7 @@ export const GlobalStore = signalStore(
     userState: {} as ISessionUserState,
     ssoEnabled: false,
     launchDarklyConfig: {} as ITransferStateLaunchDarklyConfig,
+    appInsightsConfig: {} as ITransferStateAppInsightsConfig,
     tokenExpiry: {} as ISessionTokenExpiry,
   })),
   withMethods((store) => ({
@@ -36,6 +38,9 @@ export const GlobalStore = signalStore(
     },
     setLaunchDarklyConfig: (config: ITransferStateLaunchDarklyConfig) => {
       patchState(store, { launchDarklyConfig: config });
+    },
+    setAppInsightsConfig: (config: ITransferStateAppInsightsConfig) => {
+      patchState(store, { appInsightsConfig: config });
     },
     setTokenExpiry: (tokenExpiry: ISessionTokenExpiry) => {
       patchState(store, { tokenExpiry });

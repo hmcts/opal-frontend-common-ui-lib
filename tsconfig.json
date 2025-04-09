@@ -233,6 +233,15 @@
       "@hmcts/opal-frontend-common/services": [
         "./dist/opal-frontend-common/services"
       ],
+      "@hmcts/opal-frontend-common/services/app-insights-service": [
+        "./dist/opal-frontend-common/services/app-insights-service"
+      ],
+      "@hmcts/opal-frontend-common/services/app-initializer-service": [
+        "./dist/opal-frontend-common/services/app-initializer-service"
+      ],
+      "@hmcts/opal-frontend-common/services/transfer-state-service": [
+        "./dist/opal-frontend-common/services/transfer-state-service"
+      ],
       "@hmcts/opal-frontend-common/stores": [
         "./dist/opal-frontend-common/stores"
       ],

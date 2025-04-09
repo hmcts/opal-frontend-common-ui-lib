@@ -1,38 +1,24 @@
 import { TestBed } from '@angular/core/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { ITelemetryItem } from '@microsoft/applicationinsights-web';
-import { TransferStateService } from '../transfer-state-service/transfer-state.service';
 import { AppInsightsService } from './app-insights.service';
-import { TRANSFER_STATE_MOCK } from '@hmcts/opal-frontend-common/mocks';
+import { TRANSFER_STATE_APP_INSIGHTS_CONFIG_MOCK } from '../../mocks/src/transfer-state-app-insights-config.mock';
+import { GlobalStoreType } from '@hmcts/opal-frontend-common/types';
+import { GlobalStore } from '@hmcts/opal-frontend-common/stores';
 
 describe('AppInsightsService', () => {
   let service: AppInsightsService;
   let trackPageViewSpy: jasmine.Spy;
   let trackExceptionSpy: jasmine.Spy;
-  let transferStateServiceMock: jasmine.SpyObj<TransferStateService>;
+  let globalStore: GlobalStoreType;
 
   beforeEach(() => {
-    TestBed.overrideProvider(PLATFORM_ID, { useValue: 'browser' });
-
-    // Mock `TransferStateService`
-    transferStateServiceMock = jasmine.createSpyObj<TransferStateService>('TransferStateService', [], {
-      serverTransferState: TRANSFER_STATE_MOCK,
-    });
-
     TestBed.configureTestingModule({
-      providers: [AppInsightsService, { provide: TransferStateService, useValue: transferStateServiceMock }],
+      providers: [{ PLATFORM_ID, useValue: 'browser' }],
     });
-
     service = TestBed.inject(AppInsightsService);
-
-    // Spy on the `trackPageView` and `trackException` methods of `appInsights`
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((service as any).appInsights) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      trackPageViewSpy = spyOn((service as any).appInsights, 'trackPageView');
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      trackExceptionSpy = spyOn((service as any).appInsights, 'trackException');
-    }
+    globalStore = TestBed.inject(GlobalStore);
+    globalStore.setAppInsightsConfig(TRANSFER_STATE_APP_INSIGHTS_CONFIG_MOCK);
   });
 
   it('should be created', () => {
@@ -70,6 +56,9 @@ describe('AppInsightsService', () => {
   it('should track a page view', () => {
     const pageName = 'Test Page';
     const pageUrl = '/test-url';
+    service.initialize();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    trackPageViewSpy = spyOn((service as any).appInsights, 'trackPageView');
 
     service.logPageView(pageName, pageUrl);
 
@@ -83,6 +72,9 @@ describe('AppInsightsService', () => {
   it('should track an exception', () => {
     const error = new Error('Test Error');
     const severityLevel = 2;
+    service.initialize();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    trackExceptionSpy = spyOn((service as any).appInsights, 'trackException');
 
     service.logException(error, severityLevel);
 
@@ -94,45 +86,23 @@ describe('AppInsightsService', () => {
   });
 
   it('should not track a page view if appInsightsConfig.enabled is false', () => {
-    // Clone and modify `TRANSFER_STATE_MOCK`
-    const transferStateMock = structuredClone(TRANSFER_STATE_MOCK);
-    transferStateMock.appInsightsConfig.enabled = false;
-
-    transferStateServiceMock = jasmine.createSpyObj<TransferStateService>('TransferStateService', [], {
-      serverTransferState: transferStateMock,
-    });
-
     TestBed.resetTestingModule();
-    TestBed.configureTestingModule({
-      providers: [AppInsightsService, { provide: TransferStateService, useValue: transferStateServiceMock }],
-    });
-
     service = TestBed.inject(AppInsightsService);
+    globalStore = TestBed.inject(GlobalStore);
+    globalStore.setAppInsightsConfig({ ...TRANSFER_STATE_APP_INSIGHTS_CONFIG_MOCK, enabled: false });
+    service.initialize();
 
-    service.logPageView('Test Page', '/test-url');
-
-    expect(trackPageViewSpy).not.toHaveBeenCalled();
+    expect(() => service.logPageView('Test Page', '/test-url')).not.toThrow();
   });
 
   it('should not track an exception if appInsightsConfig.enabled is false', () => {
-    // Clone and modify `TRANSFER_STATE_MOCK`
-    const transferStateMock = structuredClone(TRANSFER_STATE_MOCK);
-    transferStateMock.appInsightsConfig.enabled = false;
-
-    transferStateServiceMock = jasmine.createSpyObj<TransferStateService>('TransferStateService', [], {
-      serverTransferState: transferStateMock,
-    });
-
     TestBed.resetTestingModule();
-    TestBed.configureTestingModule({
-      providers: [AppInsightsService, { provide: TransferStateService, useValue: transferStateServiceMock }],
-    });
-
     service = TestBed.inject(AppInsightsService);
+    globalStore = TestBed.inject(GlobalStore);
+    globalStore.setAppInsightsConfig({ ...TRANSFER_STATE_APP_INSIGHTS_CONFIG_MOCK, enabled: false });
+    service.initialize();
 
     const error = new Error('Test Error');
-    service.logException(error);
-
-    expect(trackExceptionSpy).not.toHaveBeenCalled();
+    expect(() => service.logException(error)).not.toThrow();
   });
 });

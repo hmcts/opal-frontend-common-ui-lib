@@ -1,5 +1,5 @@
 export interface ITransferStateAppInsightsConfig {
-  enabled: boolean | null;
-  connectionString: string | null;
-  cloudRoleName: string | null;
+  enabled: boolean;
+  connectionString: string;
+  cloudRoleName: string;
 }

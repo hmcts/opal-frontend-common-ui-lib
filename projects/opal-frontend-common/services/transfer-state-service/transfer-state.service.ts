@@ -47,4 +47,12 @@ export class TransferStateService {
   public initializeLaunchDarklyConfig(): void {
     this.globalStore.setLaunchDarklyConfig(this.storedServerTransferState?.launchDarklyConfig);
   }
+
+  /**
+   * Initializes the Application Insights configuration by assigning the stored server transfer state's
+   * appInsightsConfig value to the globalStore's appInsightsConfig property.
+   */
+  public initializeAppInsightsConfig(): void {
+    this.globalStore.setAppInsightsConfig(this.storedServerTransferState?.appInsightsConfig);
+  }
 }

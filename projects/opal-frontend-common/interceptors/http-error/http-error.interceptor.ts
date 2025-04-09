@@ -1,7 +1,7 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, tap, throwError } from 'rxjs';
-import { AppInsightsService } from '@hmcts/opal-frontend-common/services';
+import { AppInsightsService } from '@hmcts/opal-frontend-common/services/app-insights-service';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores';
 
 export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
