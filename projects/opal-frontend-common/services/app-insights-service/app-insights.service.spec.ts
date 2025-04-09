@@ -53,10 +53,10 @@ describe('AppInsightsService', () => {
     expect(mockEnvelope.tags).toEqual({ 'ai.cloud.role': 'opal-frontend' });
   });
 
-  it('should track a page view', () => {
+  it('should track a page view', async () => {
     const pageName = 'Test Page';
     const pageUrl = '/test-url';
-    service.initialize();
+    await service.initialize();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     trackPageViewSpy = spyOn((service as any).appInsights, 'trackPageView');
 
@@ -69,10 +69,10 @@ describe('AppInsightsService', () => {
     });
   });
 
-  it('should track an exception', () => {
+  it('should track an exception', async () => {
     const error = new Error('Test Error');
     const severityLevel = 2;
-    service.initialize();
+    await service.initialize();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     trackExceptionSpy = spyOn((service as any).appInsights, 'trackException');
 
