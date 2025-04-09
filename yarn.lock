@@ -3535,9 +3535,9 @@ caniuse-lite@^1.0.30001646:
   integrity sha512-NgL3vUTnDrPCZ3zTahp4fsugQ4dc7EKTSzwQDPEel6DMoMnfH2jhry9n2Zm8onbSR+f/QtKHFOA+iAQu4kbtWA==
 
 caniuse-lite@^1.0.30001688:
-  version "1.0.30001710"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001710.tgz#2cda0c6071ddd43c01151c7f704a0e510a86612f"
-  integrity sha512-B5C0I0UmaGqHgo5FuqJ7hBd4L57A4dDD+Xi+XX1nXOoxGeDdY4Ko38qJYOyqznBVJEqON5p8P1x5zRR3+rsnxA==
+  version "1.0.30001712"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001712.tgz#41ee150f12de11b5f57c5889d4f30deb451deedf"
+  integrity sha512-MBqPpGYYdQ7/hfKiet9SCI+nmN5/hp4ZzveOJubl5DTAMa5oggjAuoi0Z4onBpKPFI2ePGnQuQIzF3VxDjDJig==
 
 chalk@^4.0.0, chalk@^4.1.0:
   version "4.1.2"
@@ -4028,9 +4028,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 electron-to-chromium@^1.5.73:
-  version "1.5.131"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.131.tgz#c28993f0624d283ef2e7debb567264730f3f4416"
-  integrity sha512-fJFRYXVEJgDCiqFOgRGJm8XR97hZ13tw7FXI9k2yC5hgY+nyzC2tMO8baq1cQR7Ur58iCkASx2zrkZPZUnfzPg==
+  version "1.5.134"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.134.tgz#d90008c4f8a506c1a6d1b329f922d83e18904101"
+  integrity sha512-zSwzrLg3jNP3bwsLqWHmS5z2nIOQ5ngMnfMZOWWtXnqqQkPVyOipxK98w+1beLw1TB+EImPNcG8wVP/cLVs2Og==
 
 emoji-regex@^10.3.0:
   version "10.4.0"
@@ -5461,10 +5461,27 @@ less-loader@12.2.0:
   resolved "https://registry.yarnpkg.com/less-loader/-/less-loader-12.2.0.tgz#e1e94522f6abe9e064ef396c29a3151bc6c1b6cc"
   integrity sha512-MYUxjSQSBUQmowc0l5nPieOYwMzGPUaTzB6inNW/bdPEG9zOL3eAAD1Qw5ZxSPk7we5dMojHwNODYMV1hq4EVg==
 
-less@4.2.2, less@^4.2.0:
+less@4.2.2:
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/less/-/less-4.2.2.tgz#4b59ede113933b58ab152190edf9180fc36846d8"
   integrity sha512-tkuLHQlvWUTeQ3doAqnHbNn8T6WX1KA8yvbKG9x4VtKtIjHsVKQZCH11zRgAfbDAXC2UNIg/K9BYAAcEzUIrNg==
+  dependencies:
+    copy-anything "^2.0.1"
+    parse-node-version "^1.0.1"
+    tslib "^2.3.0"
+  optionalDependencies:
+    errno "^0.1.1"
+    graceful-fs "^4.1.2"
+    image-size "~0.5.0"
+    make-dir "^2.1.0"
+    mime "^1.4.1"
+    needle "^3.1.0"
+    source-map "~0.6.0"
+
+less@^4.2.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/less/-/less-4.3.0.tgz#ef0cfc260a9ca8079ed8d0e3512bda8a12c82f2a"
+  integrity sha512-X9RyH9fvemArzfdP8Pi3irr7lor2Ok4rOttDXBhlwDg+wKQsXOXgHWduAJE1EsF7JJx0w0bcO6BC6tCKKYnXKA==
   dependencies:
     copy-anything "^2.0.1"
     parse-node-version "^1.0.1"
@@ -5974,9 +5991,9 @@ neo-async@^2.6.2:
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
 ng-packagr@^19.2.0:
-  version "19.2.1"
-  resolved "https://registry.yarnpkg.com/ng-packagr/-/ng-packagr-19.2.1.tgz#8afc84955b302a95ef645121d8112475bf55aeed"
-  integrity sha512-IVyI0a1BV8Ct4Q3bCtlMRyYxNt22RBVJ0P4dnmhLXV6mxwoNwQaYGR48DxkTc/ZMcMGri8O6ZwytbTQni1vcPA==
+  version "19.2.2"
+  resolved "https://registry.yarnpkg.com/ng-packagr/-/ng-packagr-19.2.2.tgz#4c7403fff3cd2f0c7ae4089c2dbceabec363ce4a"
+  integrity sha512-dFuwFsDJMBSd1YtmLLcX5bNNUCQUlRqgf34aXA+79PmkOP+0eF8GP2949wq3+jMjmFTNm80Oo8IUYiSLwklKCQ==
   dependencies:
     "@rollup/plugin-json" "^6.1.0"
     "@rollup/wasm-node" "^4.24.0"
