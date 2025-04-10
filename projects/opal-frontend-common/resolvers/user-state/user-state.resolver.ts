@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { ISessionUserState } from '@hmcts/opal-frontend-common/interfaces';
-import { SessionService } from '@hmcts/opal-frontend-common/services';
+import { SessionService } from '@hmcts/opal-frontend-common/services/session-service';
 
 /**
  * Resolver function for retrieving the user state.

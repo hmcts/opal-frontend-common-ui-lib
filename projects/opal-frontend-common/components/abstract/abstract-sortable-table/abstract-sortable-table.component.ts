@@ -3,7 +3,7 @@ import {
   IAbstractSortState,
   IAbstractTableData,
 } from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/interfaces';
-import { SortService } from '@hmcts/opal-frontend-common/services';
+import { SortService } from '@hmcts/opal-frontend-common/services/sort-service';
 import { SortableValues, SortDirectionType } from '@hmcts/opal-frontend-common/types';
 
 @Component({

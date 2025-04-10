@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot, UrlSegment } from '@angular/router';
 import { userStateResolver } from './user-state.resolver';
 import { of } from 'rxjs';
-import { SessionService } from '@hmcts/opal-frontend-common/services';
+import { SessionService } from '@hmcts/opal-frontend-common/services/session-service';
 import { ISessionUserState } from '@hmcts/opal-frontend-common/interfaces';
 import { SESSION_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/mocks';
 

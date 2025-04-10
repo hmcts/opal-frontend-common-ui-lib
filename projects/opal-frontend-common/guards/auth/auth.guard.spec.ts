@@ -2,7 +2,7 @@ import { TestBed, fakeAsync } from '@angular/core/testing';
 import { CanActivateFn, Router, UrlSegment, UrlSegmentGroup, UrlTree } from '@angular/router';
 import { authGuard } from './auth.guard';
 import { of, throwError } from 'rxjs';
-import { AuthService } from '@hmcts/opal-frontend-common/services';
+import { AuthService } from '@hmcts/opal-frontend-common/services/auth-service';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/types';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores';
 import { runAuthGuardWithContext } from '../helpers/run-auth-guard-with-context';

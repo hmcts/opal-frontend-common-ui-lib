@@ -235,6 +235,27 @@
     "./services/launch-darkly-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-launch-darkly-service.mjs"
     },
+    "./services/auth-service": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-auth-service.mjs"
+    },
+    "./services/date-service": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-date-service.mjs"
+    },
+    "./services/permissions-service": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-permissions-service.mjs"
+    },
+    "./services/session-service": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-session-service.mjs"
+    },
+    "./services/sort-service": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-sort-service.mjs"
+    },
+    "./services/transformation-service": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-transformation-service.mjs"
+    },
+    "./services/utils-service": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-utils-service.mjs"
+    },
     "./stores": {
       "import": "./fesm2022/hmcts-opal-frontend-common-stores.mjs"
     },

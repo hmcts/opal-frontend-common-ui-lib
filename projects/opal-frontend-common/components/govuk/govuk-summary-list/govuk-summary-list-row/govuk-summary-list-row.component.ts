@@ -8,7 +8,7 @@ import {
   Output,
   inject,
 } from '@angular/core';
-import { UtilsService } from '@hmcts/opal-frontend-common/services';
+import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service';
 
 @Component({
   selector: 'opal-lib-govuk-summary-list-row, [opal-lib-govuk-summary-list-row]',

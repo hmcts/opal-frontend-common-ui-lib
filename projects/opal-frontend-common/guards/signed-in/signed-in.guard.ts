@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { map, catchError, of } from 'rxjs';
-import { AuthService } from '@hmcts/opal-frontend-common/services';
+import { AuthService } from '@hmcts/opal-frontend-common/services/auth-service';
 
 /**
  * A guard that checks if the user is signed in.

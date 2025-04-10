@@ -230,9 +230,6 @@
       "@hmcts/opal-frontend-common/resolvers": [
         "./dist/opal-frontend-common/resolvers"
       ],
-      "@hmcts/opal-frontend-common/services": [
-        "./dist/opal-frontend-common/services"
-      ],
       "@hmcts/opal-frontend-common/services/app-insights-service": [
         "./dist/opal-frontend-common/services/app-insights-service"
       ],
@@ -241,6 +238,27 @@
       ],
       "@hmcts/opal-frontend-common/services/transfer-state-service": [
         "./dist/opal-frontend-common/services/transfer-state-service"
+      ],
+      "@hmcts/opal-frontend-common/services/auth-service": [
+        "./dist/opal-frontend-common/services/auth-service"
+      ],
+      "@hmcts/opal-frontend-common/services/date-service": [
+        "./dist/opal-frontend-common/services/date-service"
+      ],
+      "@hmcts/opal-frontend-common/services/permissions-service": [
+        "./dist/opal-frontend-common/services/permissions-service"
+      ],
+      "@hmcts/opal-frontend-common/services/session-service": [
+        "./dist/opal-frontend-common/services/session-service"
+      ],
+      "@hmcts/opal-frontend-common/services/sort-service": [
+        "./dist/opal-frontend-common/services/sort-service"
+      ],
+      "@hmcts/opal-frontend-common/services/transformation-service": [
+        "./dist/opal-frontend-common/services/transformation-service"
+      ],
+      "@hmcts/opal-frontend-common/services/utils-service": [
+        "./dist/opal-frontend-common/services/utils-service"
       ],
       "@hmcts/opal-frontend-common/services/launch-darkly-service": [
         "./dist/opal-frontend-common/services/launch-darkly-service"

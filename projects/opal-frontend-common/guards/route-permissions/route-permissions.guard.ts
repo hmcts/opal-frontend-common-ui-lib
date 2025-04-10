@@ -1,7 +1,8 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 import { catchError, map, of } from 'rxjs';
-import { PermissionsService, SessionService } from '@hmcts/opal-frontend-common/services';
+import { PermissionsService } from '@hmcts/opal-frontend-common/services/permissions-service';
+import { SessionService } from '@hmcts/opal-frontend-common/services/session-service';
 import { PAGES_ROUTING_PATHS } from '@hmcts/opal-frontend-common/constants';
 
 export const routePermissionsGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
