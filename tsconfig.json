@@ -242,6 +242,9 @@
       "@hmcts/opal-frontend-common/services/transfer-state-service": [
         "./dist/opal-frontend-common/services/transfer-state-service"
       ],
+      "@hmcts/opal-frontend-common/services/launch-darkly-service": [
+        "./dist/opal-frontend-common/services/launch-darkly-service"
+      ],
       "@hmcts/opal-frontend-common/stores": [
         "./dist/opal-frontend-common/stores"
       ],

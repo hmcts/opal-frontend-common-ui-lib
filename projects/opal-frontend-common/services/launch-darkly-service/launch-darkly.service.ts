@@ -1,6 +1,6 @@
 import { inject, Injectable, OnDestroy } from '@angular/core';
-import { initialize, LDClient, LDFlagChangeset, LDFlagSet } from 'launchdarkly-js-client-sdk';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores';
+import { initialize, LDClient, LDFlagChangeset, LDFlagSet } from 'launchdarkly-js-client-sdk';
 
 @Injectable({
   providedIn: 'root',
@@ -47,10 +47,7 @@ export class LaunchDarklyService implements OnDestroy {
   public initializeLaunchDarklyChangeListener() {
     if (this.ldClient && this.globalStore.launchDarklyConfig().stream) {
       this.ldClient.on('change', (flags: LDFlagChangeset) => {
-        const updatedFlags = {
-          ...this.globalStore.featureFlags(),
-          ...this.formatChangeFlags(flags),
-        };
+        const updatedFlags = { ...this.globalStore.featureFlags(), ...this.formatChangeFlags(flags) };
         this.globalStore.setFeatureFlags(updatedFlags);
       });
     }
@@ -65,7 +62,7 @@ export class LaunchDarklyService implements OnDestroy {
   public async initializeLaunchDarklyFlags(): Promise<void> {
     if (this.ldClient) {
       return this.ldClient
-        .waitForInitialization()
+        .waitForInitialization(5)
         .then(() => this.setLaunchDarklyFlags())
         .catch((err) => {
           throw err;

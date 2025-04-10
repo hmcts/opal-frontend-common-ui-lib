@@ -232,6 +232,9 @@
     "./services/transfer-state-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-transfer-state-service.mjs"
     },
+    "./services/launch-darkly-service": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-launch-darkly-service.mjs"
+    },
     "./stores": {
       "import": "./fesm2022/hmcts-opal-frontend-common-stores.mjs"
     },

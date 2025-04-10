@@ -32,7 +32,7 @@ describe('AppInitializerService', () => {
     expect(service['transferStateService'].initializeSsoEnabled).toHaveBeenCalled();
   });
 
-  it('should initialize the SSO enabled, LaunchDarkly, and session timeout', async () => {
+  it('should initialize the SSO enabled and LaunchDarkly', async () => {
     spyOn(service['transferStateService'], 'initializeLaunchDarklyConfig');
     spyOn(service['transferStateService'], 'initializeSsoEnabled');
     spyOn(service['appInsightsService'], 'initialize');

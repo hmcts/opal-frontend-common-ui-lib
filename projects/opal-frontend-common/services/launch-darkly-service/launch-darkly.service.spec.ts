@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { LaunchDarklyService } from './launch-darkly.service';
 import { LDFlagChangeset, LDFlagSet } from 'launchdarkly-js-client-sdk';
+import { LAUNCH_DARKLY_CHANGE_FLAGS_MOCK, LAUNCH_DARKLY_FLAGS_MOCK } from '@hmcts/opal-frontend-common/mocks';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/types';
-import { LAUNCH_DARKLY_CHANGE_FLAGS_MOCK, LAUNCH_DARKLY_FLAGS_MOCK } from '@hmcts/opal-frontend-common/mocks';
 
 describe('LaunchDarklyService', () => {
   let service: LaunchDarklyService;
