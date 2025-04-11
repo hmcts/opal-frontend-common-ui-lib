@@ -1,8 +1,8 @@
 import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { map, catchError, of } from 'rxjs';
-import { PAGES_ROUTING_PATHS } from '@hmcts/opal-frontend-common/constants';
-import { AuthService } from '@hmcts/opal-frontend-common/services';
+import { PAGES_ROUTING_PATHS } from '@hmcts/opal-frontend-common/pages/routing/constants';
+import { AuthService } from '@hmcts/opal-frontend-common/services/auth-service';
 
 /**
  * A guard that checks if the user is authenticated before allowing access to a route.

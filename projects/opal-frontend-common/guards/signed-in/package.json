@@ -1,0 +1,6 @@
+{
+    "sideEffects": false,
+    "module": "../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-guards-signed-in.mjs",
+    "typings": "../../../dist/opal-frontend-common/guards/signed-in/index.d.ts"
+  }
+  

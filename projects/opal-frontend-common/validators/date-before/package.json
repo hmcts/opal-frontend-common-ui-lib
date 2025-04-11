@@ -1,0 +1,6 @@
+{
+    "sideEffects": false,
+    "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-validators-date-before.mjs",
+    "typings": "../../../../dist/opal-frontend-common/validators/date-before/index.d.ts"
+  }
+  

@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CanDeactivateTypes } from '@hmcts/opal-frontend-common/types';
+import { CanDeactivateTypes } from '@hmcts/opal-frontend-common/guards/can-deactivate/types';
 
 export abstract class AbstractFormParentBaseComponent {
   private readonly router = inject(Router);

@@ -1,11 +1,13 @@
 import { Injectable, inject } from '@angular/core';
-import { TransferStateService } from '../transfer-state-service/transfer-state.service';
+import { TransferStateService } from '@hmcts/opal-frontend-common/services/transfer-state-service';
+import { AppInsightsService } from '@hmcts/opal-frontend-common/services/app-insights-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AppInitializerService {
   private readonly transferStateService = inject(TransferStateService);
+  private readonly appInsightsService = inject(AppInsightsService);
 
   /**
    * Initializes the SSO (Single Sign-On) enabled state.
@@ -23,11 +25,20 @@ export class AppInitializerService {
   }
 
   /**
+   * Initializes the Application Insights configuration.
+   */
+  private initializeAppInsights(): void {
+    this.transferStateService.initializeAppInsightsConfig();
+  }
+
+  /**
    * Initializes the application.
    * This method calls the necessary initialization functions.
    */
-  public initializeApp(): void {
+  public async initializeApp(): Promise<void> {
     this.initializeSsoEnabled();
     this.initializeLaunchDarkly();
+    this.initializeAppInsights();
+    await this.appInsightsService.initialize();
   }
 }

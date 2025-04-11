@@ -1,6 +1,0 @@
-{
-    "sideEffects": false,
-    "module": "../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-types.mjs",
-    "typings": "../../../dist/opal-frontend-common/types/index.d.ts"
-  }
-  

@@ -1,6 +1,6 @@
 import { ActivatedRouteSnapshot, UrlSegment, RouterStateSnapshot, CanActivateFn } from '@angular/router';
 import { Observable } from 'rxjs';
-import { GuardReturnType } from '../types/guard-return.type';
+import { GuardReturnType } from '@hmcts/opal-frontend-common/guards/types';
 
 /**
  * Returns a function that invokes the specified guard with a dummy route and state.

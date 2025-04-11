@@ -1,12 +1,16 @@
 import { fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { ISessionTokenExpiry, ISessionUserState } from '@hmcts/opal-frontend-common/interfaces';
-import { SESSION_TOKEN_EXPIRY_MOCK, SESSION_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/mocks';
+import {
+  ISessionTokenExpiry,
+  ISessionUserState,
+} from '@hmcts/opal-frontend-common/services/session-service/interfaces';
+import { SESSION_TOKEN_EXPIRY_MOCK } from './mocks/session-token-expiry.mock';
+import { SESSION_USER_STATE_MOCK } from './mocks/session-user-state.mock';
 import { SessionService } from './session.service';
-import { GlobalStoreType } from '@hmcts/opal-frontend-common/types';
-import { GlobalStore } from '@hmcts/opal-frontend-common/stores';
-import { SESSION_ENDPOINTS } from '@hmcts/opal-frontend-common/constants';
+import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
+import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
+import { SESSION_ENDPOINTS } from '@hmcts/opal-frontend-common/services/session-service/constants';
 
 const mockTokenExpiry: ISessionTokenExpiry = SESSION_TOKEN_EXPIRY_MOCK;
 

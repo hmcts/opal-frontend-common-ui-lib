@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { HttpErrorResponse, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { httpErrorInterceptor } from './http-error.interceptor';
 import { of, throwError } from 'rxjs';
-import { GlobalStore } from '@hmcts/opal-frontend-common/stores';
-import { GlobalStoreType } from '@hmcts/opal-frontend-common/types';
+import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
+import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
 
 describe('httpErrorInterceptor', () => {
   let globalStore: GlobalStoreType;

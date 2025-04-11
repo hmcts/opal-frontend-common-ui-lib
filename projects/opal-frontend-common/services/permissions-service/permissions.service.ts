@@ -3,7 +3,7 @@ import {
   ISessionUserState,
   ISessionUserStatePermission,
   ISessionUserStateRole,
-} from '@hmcts/opal-frontend-common/interfaces';
+} from '@hmcts/opal-frontend-common/services/session-service/interfaces';
 
 @Injectable({
   providedIn: 'root',

@@ -1,0 +1,6 @@
+{
+    "sideEffects": false,
+    "module": "../../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-pages-routing-interfaces.mjs",
+    "typings": "../../../../../dist/opal-frontend-common/pages/routing/interfaces/index.d.ts"
+  }
+  

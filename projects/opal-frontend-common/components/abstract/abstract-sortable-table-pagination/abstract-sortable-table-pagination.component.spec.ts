@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { AbstractSortableTablePaginationComponent } from './abstract-sortable-table-pagination.component';
-import { MOCK_ABSTRACT_TABLE_DATA } from '../abstract-sortable-table/mocks/abstract-sortable-table-data-mock';
+import { MOCK_ABSTRACT_TABLE_DATA } from '../abstract-sortable-table/mocks/abstract-sortable-table-data.mock';
 
 @Component({
   template: '', // Minimal template for the test component
