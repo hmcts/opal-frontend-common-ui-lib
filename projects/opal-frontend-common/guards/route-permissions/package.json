@@ -1,0 +1,6 @@
+{
+    "sideEffects": false,
+    "module": "../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-guards-route-permissions.mjs",
+    "typings": "../../../dist/opal-frontend-common/guards/route-permissions/index.d.ts"
+  }
+  

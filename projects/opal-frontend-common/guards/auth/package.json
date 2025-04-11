@@ -1,0 +1,6 @@
+{
+    "sideEffects": false,
+    "module": "../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-guards-auth.mjs",
+    "typings": "../../../dist/opal-frontend-common/guards/auth/index.d.ts"
+  }
+  

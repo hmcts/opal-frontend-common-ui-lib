@@ -209,8 +209,32 @@
       "@hmcts/opal-frontend-common/constants": [
         "./dist/opal-frontend-common/constants"
       ],
-      "@hmcts/opal-frontend-common/guards": [
-        "./dist/opal-frontend-common/guards"
+      "@hmcts/opal-frontend-common/guards/auth": [
+        "./dist/opal-frontend-common/guards/auth"
+      ],
+      "@hmcts/opal-frontend-common/guards/can-deactivate": [
+        "./dist/opal-frontend-common/guards/can-deactivate"
+      ],
+      "@hmcts/opal-frontend-common/guards/can-deactivate/interfaces": [
+        "./dist/opal-frontend-common/guards/can-deactivate/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/guards/can-deactivate/types": [
+        "./dist/opal-frontend-common/guards/can-deactivate/types"
+      ],
+      "@hmcts/opal-frontend-common/guards/has-flow-state": [
+        "./dist/opal-frontend-common/guards/has-flow-state"
+      ],
+      "@hmcts/opal-frontend-common/guards/helpers": [
+        "./dist/opal-frontend-common/guards/helpers"
+      ],
+      "@hmcts/opal-frontend-common/guards/route-permissions": [
+        "./dist/opal-frontend-common/guards/route-permissions"
+      ],
+      "@hmcts/opal-frontend-common/guards/signed-in": [
+        "./dist/opal-frontend-common/guards/signed-in"
+      ],
+      "@hmcts/opal-frontend-common/guards/types": [
+        "./dist/opal-frontend-common/guards/types"
       ],
       "@hmcts/opal-frontend-common/interceptors": [
         "./dist/opal-frontend-common/interceptors"

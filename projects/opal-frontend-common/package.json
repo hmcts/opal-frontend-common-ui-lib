@@ -199,8 +199,32 @@
     "./constants": {
       "import": "./fesm2022/hmcts-opal-frontend-common-constants.mjs"
     },
-    "./guards": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-guards.mjs"
+    "./guards/auth": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-guards-auth.mjs"
+    },
+    "./guards/can-deactivate": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-guards-can-deactivate.mjs"
+    },
+    "./guards/can-deactivate/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-guards-can-deactivate-interfaces.mjs"
+    },
+    "./guards/can-deactivate/types": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-guards-can-deactivate-types.mjs"
+    },
+    "./guards/has-flow-state": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-guards-has-flow-state.mjs"
+    },
+    "./guards/helpers": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-guards-helpers.mjs"
+    },
+    "./guards/route-permissions": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-guards-route-permissions.mjs"
+    },
+    "./guards/signed-in": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-guards-signed-in.mjs"
+    },
+    "./guards/types": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-guards-types.mjs"
     },
     "./interceptors": {
       "import": "./fesm2022/hmcts-opal-frontend-common-interceptors.mjs"

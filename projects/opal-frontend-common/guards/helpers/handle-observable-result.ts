@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { GuardReturnType } from '../types/guard-return.type';
+import { GuardReturnType } from '@hmcts/opal-frontend-common/guards/types';
 
 /**
  * Converts an Observable result to a Promise.

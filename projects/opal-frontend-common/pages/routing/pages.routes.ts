@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { PAGES_ROUTING_TITLES, PAGES_ROUTING_PATHS } from '@hmcts/opal-frontend-common/constants';
-import { authGuard, signedInGuard } from '@hmcts/opal-frontend-common/guards';
+import { authGuard } from '@hmcts/opal-frontend-common/guards/auth';
+import { signedInGuard } from '@hmcts/opal-frontend-common/guards/signed-in';
 import { TitleResolver, userStateResolver } from '@hmcts/opal-frontend-common/resolvers';
 
 export const routing: Routes = [
