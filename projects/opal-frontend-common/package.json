@@ -235,8 +235,14 @@
     "./mocks": {
       "import": "./fesm2022/hmcts-opal-frontend-common-mocks.mjs"
     },
-    "./pages": {
+    "./pages/routing": {
       "import": "./fesm2022/hmcts-opal-frontend-common-pages.mjs"
+    },
+    "./pages/routing/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-pages-routing-interfaces.mjs"
+    },
+    "./pages/routing/constants": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-pages-routing-constants.mjs"
     },
     "./pipes": {
       "import": "./fesm2022/hmcts-opal-frontend-common-pipes.mjs"

@@ -245,8 +245,14 @@
       "@hmcts/opal-frontend-common/mocks": [
         "./dist/opal-frontend-common/mocks"
       ],
-      "@hmcts/opal-frontend-common/pages": [
+      "@hmcts/opal-frontend-common/pages/routing": [
         "./dist/opal-frontend-common/pages"
+      ],
+      "@hmcts/opal-frontend-common/pages/routing/interfaces": [
+        "./dist/opal-frontend-common/pages/routing/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/pages/routing/constants": [
+        "./dist/opal-frontend-common/pages/routing/constants"
       ],
       "@hmcts/opal-frontend-common/pipes": [
         "./dist/opal-frontend-common/pipes"

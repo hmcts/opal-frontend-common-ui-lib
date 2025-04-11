@@ -14,7 +14,7 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { handleObservableResult } from '../helpers/handle-observable-result';
 import { PermissionsService } from '@hmcts/opal-frontend-common/services/permissions-service';
 import { SessionService } from '@hmcts/opal-frontend-common/services/session-service';
-import { PAGES_ROUTING_PATHS } from '@hmcts/opal-frontend-common/constants';
+import { PAGES_ROUTING_PATHS } from '@hmcts/opal-frontend-common/pages/routing/constants';
 import { ROUTE_PERMISSIONS_MOCK, SESSION_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/mocks';
 
 async function runRoutePermissionGuard(
