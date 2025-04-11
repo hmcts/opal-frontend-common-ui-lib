@@ -1,7 +1,7 @@
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ITelemetryItem } from '@microsoft/applicationinsights-web';
 import { isPlatformBrowser } from '@angular/common';
-import { GlobalStore } from '@hmcts/opal-frontend-common/stores';
+import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 
 @Injectable({
   providedIn: 'root',

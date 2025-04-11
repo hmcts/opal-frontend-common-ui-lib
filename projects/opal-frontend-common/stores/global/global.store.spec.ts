@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { GlobalStoreType } from '../../types/public-api';
+import { GlobalStoreType } from './types/global-store.type';
 import { GlobalStore } from './global.store';
 import { ISessionTokenExpiry, ISessionUserState, ITransferStateLaunchDarklyConfig } from '../../interfaces/public-api';
 import {

@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, Optional, PLATFORM_ID, TransferState, inject, makeStateKey } from '@angular/core';
 import { ITransferStateServerState } from '@hmcts/opal-frontend-common/interfaces';
-import { GlobalStore } from '@hmcts/opal-frontend-common/stores';
+import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 
 @Injectable({
   providedIn: 'root',

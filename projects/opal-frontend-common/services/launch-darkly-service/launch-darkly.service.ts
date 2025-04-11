@@ -1,5 +1,5 @@
 import { inject, Injectable, OnDestroy } from '@angular/core';
-import { GlobalStore } from '@hmcts/opal-frontend-common/stores';
+import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { initialize, LDClient, LDFlagChangeset, LDFlagSet } from 'launchdarkly-js-client-sdk';
 
 @Injectable({

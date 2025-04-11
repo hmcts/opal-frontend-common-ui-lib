@@ -3,8 +3,8 @@ import { PLATFORM_ID } from '@angular/core';
 import { ITelemetryItem } from '@microsoft/applicationinsights-web';
 import { AppInsightsService } from './app-insights.service';
 import { TRANSFER_STATE_APP_INSIGHTS_CONFIG_MOCK } from '../../mocks/src/transfer-state-app-insights-config.mock';
-import { GlobalStoreType } from '@hmcts/opal-frontend-common/types';
-import { GlobalStore } from '@hmcts/opal-frontend-common/stores';
+import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
+import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
 
 describe('AppInsightsService', () => {
   let service: AppInsightsService;

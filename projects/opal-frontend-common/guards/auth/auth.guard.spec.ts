@@ -3,8 +3,8 @@ import { CanActivateFn, Router, UrlSegment, UrlSegmentGroup, UrlTree } from '@an
 import { authGuard } from './auth.guard';
 import { of, throwError } from 'rxjs';
 import { AuthService } from '@hmcts/opal-frontend-common/services/auth-service';
-import { GlobalStoreType } from '@hmcts/opal-frontend-common/types';
-import { GlobalStore } from '@hmcts/opal-frontend-common/stores';
+import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
+import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { runAuthGuardWithContext } from '../helpers/run-auth-guard-with-context';
 import { getGuardWithDummyUrl } from '../helpers/get-guard-with-dummy-url';
 

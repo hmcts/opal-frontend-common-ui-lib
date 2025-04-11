@@ -2,8 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SignInComponent } from './sign-in.component';
 import { ISignInStubForm } from './interfaces';
 import { ChangeDetectorRef } from '@angular/core';
-import { GlobalStoreType } from '@hmcts/opal-frontend-common/types';
-import { GlobalStore } from '@hmcts/opal-frontend-common/stores';
+import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
+import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
 import { SSO_ENDPOINTS } from '@hmcts/opal-frontend-common/constants';
 
 describe('SignInComponent', () => {

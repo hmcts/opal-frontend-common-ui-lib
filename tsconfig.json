@@ -299,8 +299,11 @@
       "@hmcts/opal-frontend-common/services/launch-darkly-service": [
         "./dist/opal-frontend-common/services/launch-darkly-service"
       ],
-      "@hmcts/opal-frontend-common/stores": [
-        "./dist/opal-frontend-common/stores"
+      "@hmcts/opal-frontend-common/stores/global": [
+        "./dist/opal-frontend-common/stores/global"
+      ],
+      "@hmcts/opal-frontend-common/stores/global/types": [
+        "./dist/opal-frontend-common/stores/global/types"
       ],
       "@hmcts/opal-frontend-common/types": [
         "./dist/opal-frontend-common/types"

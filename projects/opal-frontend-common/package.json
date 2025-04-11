@@ -292,8 +292,11 @@
     "./services/utils-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-utils-service.mjs"
     },
-    "./stores": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-stores.mjs"
+    "./stores/global": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-stores-global.mjs"
+    },
+    "./stores/global/types": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-stores-global-types.mjs"
     },
     "./types": {
       "import": "./fesm2022/hmcts-opal-frontend-common-types.mjs"
