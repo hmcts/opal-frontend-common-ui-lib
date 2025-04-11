@@ -4,7 +4,10 @@ import {
   IAbstractTableData,
 } from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/interfaces';
 import { SortService } from '@hmcts/opal-frontend-common/services/sort-service';
-import { SortableValuesType, SortDirectionType } from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/types';
+import {
+  SortableValuesType,
+  SortDirectionType,
+} from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/types';
 
 @Component({
   template: '',
