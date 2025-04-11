@@ -4,7 +4,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
-import { SSO_ENDPOINTS } from '@hmcts/opal-frontend-common/constants';
+import { SSO_ENDPOINTS } from '@hmcts/opal-frontend-common/services/auth-service/constants';
 
 describe('AuthService', () => {
   let service: AuthService;

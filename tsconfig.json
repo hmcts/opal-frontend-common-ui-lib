@@ -242,12 +242,6 @@
       "@hmcts/opal-frontend-common/interceptors/http-error": [
         "./dist/opal-frontend-common/interceptors/http-error"
       ],
-      "@hmcts/opal-frontend-common/interfaces": [
-        "./dist/opal-frontend-common/interfaces"
-      ],
-      "@hmcts/opal-frontend-common/mocks": [
-        "./dist/opal-frontend-common/mocks"
-      ],
       "@hmcts/opal-frontend-common/pages/routing": [
         "./dist/opal-frontend-common/pages"
       ],
@@ -275,14 +269,23 @@
       "@hmcts/opal-frontend-common/services/app-initializer-service": [
         "./dist/opal-frontend-common/services/app-initializer-service"
       ],
-      "@hmcts/opal-frontend-common/services/transfer-state-service": [
-        "./dist/opal-frontend-common/services/transfer-state-service"
-      ],
       "@hmcts/opal-frontend-common/services/auth-service": [
         "./dist/opal-frontend-common/services/auth-service"
       ],
+      "@hmcts/opal-frontend-common/services/auth-service/interfaces": [
+        "./dist/opal-frontend-common/services/auth-service/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/services/auth-service/constants": [
+        "./dist/opal-frontend-common/services/auth-service/constants"
+      ],
       "@hmcts/opal-frontend-common/services/date-service": [
         "./dist/opal-frontend-common/services/date-service"
+      ],
+      "@hmcts/opal-frontend-common/services/launch-darkly-service": [
+        "./dist/opal-frontend-common/services/launch-darkly-service"
+      ],
+      "@hmcts/opal-frontend-common/services/launch-darkly-service/mocks": [
+        "./dist/opal-frontend-common/services/launch-darkly-service/mocks"
       ],
       "@hmcts/opal-frontend-common/services/permissions-service": [
         "./dist/opal-frontend-common/services/permissions-service"
@@ -290,23 +293,44 @@
       "@hmcts/opal-frontend-common/services/session-service": [
         "./dist/opal-frontend-common/services/session-service"
       ],
+      "@hmcts/opal-frontend-common/services/session-service/interfaces": [
+        "./dist/opal-frontend-common/services/session-service/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/services/session-service/constants": [
+        "./dist/opal-frontend-common/services/session-service/constants"
+      ],
+      "@hmcts/opal-frontend-common/services/session-service/mocks": [
+        "./dist/opal-frontend-common/services/session-service/mocks"
+      ],
       "@hmcts/opal-frontend-common/services/sort-service": [
         "./dist/opal-frontend-common/services/sort-service"
       ],
       "@hmcts/opal-frontend-common/services/sort-service/interfaces": [
         "./dist/opal-frontend-common/services/sort-service/interfaces"
       ],
+      "@hmcts/opal-frontend-common/services/transfer-state-service": [
+        "./dist/opal-frontend-common/services/transfer-state-service"
+      ],
+      "@hmcts/opal-frontend-common/services/transfer-state-service/interfaces": [
+        "./dist/opal-frontend-common/services/transfer-state-service/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/services/transfer-state-service/mocks": [
+        "./dist/opal-frontend-common/services/transfer-state-service/mocks"
+      ],
       "@hmcts/opal-frontend-common/services/transformation-service": [
         "./dist/opal-frontend-common/services/transformation-service"
+      ],
+      "@hmcts/opal-frontend-common/services/transformation-service/interfaces": [
+        "./dist/opal-frontend-common/services/transformation-service/interfaces"
       ],
       "@hmcts/opal-frontend-common/services/utils-service": [
         "./dist/opal-frontend-common/services/utils-service"
       ],
-      "@hmcts/opal-frontend-common/services/launch-darkly-service": [
-        "./dist/opal-frontend-common/services/launch-darkly-service"
-      ],
       "@hmcts/opal-frontend-common/stores/global": [
         "./dist/opal-frontend-common/stores/global"
+      ],
+      "@hmcts/opal-frontend-common/stores/global/interfaces": [
+        "./dist/opal-frontend-common/stores/global/interfaces"
       ],
       "@hmcts/opal-frontend-common/stores/global/types": [
         "./dist/opal-frontend-common/stores/global/types"

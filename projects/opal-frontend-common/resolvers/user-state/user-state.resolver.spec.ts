@@ -3,8 +3,8 @@ import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot, UrlSegment } fr
 import { userStateResolver } from './user-state.resolver';
 import { of } from 'rxjs';
 import { SessionService } from '@hmcts/opal-frontend-common/services/session-service';
-import { ISessionUserState } from '@hmcts/opal-frontend-common/interfaces';
-import { SESSION_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/mocks';
+import { ISessionUserState } from '@hmcts/opal-frontend-common/services/session-service/interfaces';
+import { SESSION_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/services/session-service/mocks';
 
 describe('userStateResolver', () => {
   const executeResolver: ResolveFn<ISessionUserState> = (...resolverParameters) =>

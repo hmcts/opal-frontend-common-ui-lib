@@ -1,4 +1,4 @@
-import { ITransferStateServerState } from '@hmcts/opal-frontend-common/interfaces';
+import { ITransferStateServerState } from '@hmcts/opal-frontend-common/services/transfer-state-service/interfaces';
 import { TRANSFER_STATE_LAUNCH_DARKLY_CONFIG_MOCK } from './transfer-state-launch-darkly-config.mock';
 import { TRANSFER_STATE_APP_INSIGHTS_CONFIG_MOCK } from './transfer-state-app-insights-config.mock';
 

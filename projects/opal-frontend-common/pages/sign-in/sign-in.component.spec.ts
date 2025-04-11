@@ -4,7 +4,7 @@ import { ISignInStubForm } from './interfaces';
 import { ChangeDetectorRef } from '@angular/core';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
-import { SSO_ENDPOINTS } from '@hmcts/opal-frontend-common/constants';
+import { SSO_ENDPOINTS } from '@hmcts/opal-frontend-common/services/auth-service/constants';
 
 describe('SignInComponent', () => {
   let component: SignInComponent;

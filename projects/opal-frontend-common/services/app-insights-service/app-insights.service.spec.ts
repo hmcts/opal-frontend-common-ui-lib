@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { ITelemetryItem } from '@microsoft/applicationinsights-web';
 import { AppInsightsService } from './app-insights.service';
-import { TRANSFER_STATE_APP_INSIGHTS_CONFIG_MOCK } from '../../mocks/src/transfer-state-app-insights-config.mock';
+import { TRANSFER_STATE_APP_INSIGHTS_CONFIG_MOCK } from '@hmcts/opal-frontend-common/services/transfer-state-service/mocks';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
 

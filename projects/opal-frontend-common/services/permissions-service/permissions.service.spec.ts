@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { PermissionsService } from './permissions.service';
-import { SESSION_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/mocks';
+import { SESSION_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/services/session-service/mocks';
 
 describe('PermissionsService', () => {
   let service: PermissionsService;

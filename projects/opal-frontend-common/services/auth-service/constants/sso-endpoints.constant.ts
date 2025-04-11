@@ -1,4 +1,4 @@
-import { ISsoEndpoints } from '@hmcts/opal-frontend-common/interfaces';
+import { ISsoEndpoints } from '@hmcts/opal-frontend-common/services/auth-service/interfaces';
 
 export const SSO_ENDPOINTS: ISsoEndpoints = {
   login: '/sso/login',

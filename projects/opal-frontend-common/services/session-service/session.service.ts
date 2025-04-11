@@ -2,8 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, retry, shareReplay, tap, timer } from 'rxjs';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
-import { SESSION_ENDPOINTS } from '@hmcts/opal-frontend-common/constants';
-import { ISessionUserState, ISessionTokenExpiry } from '@hmcts/opal-frontend-common/interfaces';
+import { SESSION_ENDPOINTS } from '@hmcts/opal-frontend-common/services/session-service/constants';
+import {
+  ISessionUserState,
+  ISessionTokenExpiry,
+} from '@hmcts/opal-frontend-common/services/session-service/interfaces';
 
 @Injectable({
   providedIn: 'root',

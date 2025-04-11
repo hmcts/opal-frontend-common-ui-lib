@@ -2,11 +2,13 @@ import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { LDFlagSet } from 'launchdarkly-js-client-sdk';
 import {
   ITransferStateLaunchDarklyConfig,
+  ITransferStateAppInsightsConfig,
+} from '@hmcts/opal-frontend-common/services/transfer-state-service/interfaces';
+import {
   ISessionTokenExpiry,
   ISessionUserState,
-  IErrorState,
-  ITransferStateAppInsightsConfig,
-} from '@hmcts/opal-frontend-common/interfaces';
+} from '@hmcts/opal-frontend-common/services/session-service/interfaces';
+import { IErrorState } from '@hmcts/opal-frontend-common/stores/global/interfaces';
 
 export const GlobalStore = signalStore(
   { providedIn: 'root' },

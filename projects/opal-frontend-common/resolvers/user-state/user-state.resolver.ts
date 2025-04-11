@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { ISessionUserState } from '@hmcts/opal-frontend-common/interfaces';
+import { ISessionUserState } from '@hmcts/opal-frontend-common/services/session-service/interfaces';
 import { SessionService } from '@hmcts/opal-frontend-common/services/session-service';
 
 /**

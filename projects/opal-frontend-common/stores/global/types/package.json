@@ -1,6 +1,6 @@
 {
     "sideEffects": false,
-    "module": "../../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-stores.mjs",
-    "typings": "../../../../../dist/opal-frontend-common/stores/index.d.ts"
+    "module": "../../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-stores-global-types.mjs",
+    "typings": "../../../../../dist/opal-frontend-common/stores/global/types/index.d.ts"
   }
   

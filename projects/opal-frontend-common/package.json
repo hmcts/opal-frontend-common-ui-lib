@@ -232,12 +232,6 @@
     "./interceptors/http-error": {
       "import": "./fesm2022/hmcts-opal-frontend-common-interceptors-http-error.mjs"
     },
-    "./interfaces": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-interfaces.mjs"
-    },
-    "./mocks": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-mocks.mjs"
-    },
     "./pages/routing": {
       "import": "./fesm2022/hmcts-opal-frontend-common-pages.mjs"
     },
@@ -274,8 +268,17 @@
     "./services/launch-darkly-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-launch-darkly-service.mjs"
     },
+    "./services/launch-darkly-service/mocks": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-launch-darkly-service-mocks.mjs"
+    },
     "./services/auth-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-auth-service.mjs"
+    },
+    "./services/auth-service/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-auth-service-interfaces.mjs"
+    },
+    "./services/auth-service/constants": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-auth-service-constants.mjs"
     },
     "./services/date-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-date-service.mjs"
@@ -286,6 +289,15 @@
     "./services/session-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-session-service.mjs"
     },
+    "./services/session-service/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-session-service-interfaces.mjs"
+    },
+    "./services/session-service/constants": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-session-service-constants.mjs"
+    },
+    "./services/session-service/mocks": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-session-service-mocks.mjs"
+    },
     "./services/sort-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-sort-service.mjs"
     },
@@ -295,11 +307,20 @@
     "./services/transformation-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-transformation-service.mjs"
     },
+    "./services/transformation-service/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-transformation-service-interfaces.mjs"
+    },
+    "./services/transformation-service/mocks": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-transformation-service-mocks.mjs"
+    },
     "./services/utils-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-utils-service.mjs"
     },
     "./stores/global": {
       "import": "./fesm2022/hmcts-opal-frontend-common-stores-global.mjs"
+    },
+    "./stores/global/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-stores-global-interfaces.mjs"
     },
     "./stores/global/types": {
       "import": "./fesm2022/hmcts-opal-frontend-common-stores-global-types.mjs"

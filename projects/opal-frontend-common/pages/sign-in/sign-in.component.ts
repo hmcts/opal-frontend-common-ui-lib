@@ -4,7 +4,7 @@ import { SignInSsoComponent } from './sign-in-sso/sign-in-sso.component';
 import { SignInStubComponent } from './sign-in-stub/sign-in-stub.component';
 import { ISignInStubForm } from './interfaces';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
-import { SSO_ENDPOINTS } from '@hmcts/opal-frontend-common/constants';
+import { SSO_ENDPOINTS } from '@hmcts/opal-frontend-common/services/auth-service/constants';
 
 @Component({
   selector: 'opal-lib-sign-in',
