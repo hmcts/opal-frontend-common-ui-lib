@@ -244,8 +244,11 @@
     "./pages/routing/constants": {
       "import": "./fesm2022/hmcts-opal-frontend-common-pages-routing-constants.mjs"
     },
-    "./pipes": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-pipes.mjs"
+    "./pipes/date-format": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-pipes-date-format.mjs"
+    },
+    "./pipes/days-ago": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-pipes-days-ago.mjs"
     },
     "./resolvers": {
       "import": "./fesm2022/hmcts-opal-frontend-common-resolvers.mjs"

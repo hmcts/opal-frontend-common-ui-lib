@@ -254,8 +254,11 @@
       "@hmcts/opal-frontend-common/pages/routing/constants": [
         "./dist/opal-frontend-common/pages/routing/constants"
       ],
-      "@hmcts/opal-frontend-common/pipes": [
-        "./dist/opal-frontend-common/pipes"
+      "@hmcts/opal-frontend-common/pipes/date-format": [
+        "./dist/opal-frontend-common/pipes/date-format"
+      ],
+      "@hmcts/opal-frontend-common/pipes/days-ago": [
+        "./dist/opal-frontend-common/pipes/days-ago"
       ],
       "@hmcts/opal-frontend-common/resolvers": [
         "./dist/opal-frontend-common/resolvers"
