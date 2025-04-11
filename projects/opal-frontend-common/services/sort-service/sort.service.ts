@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { sort } from 'fast-sort';
-import { ISortServiceValues, ISortServiceArrayValues } from './interfaces/sort-service-values.interface';
-import { ISortServiceConfig } from './interfaces/sort-service.interface';
-import { SortableValues } from '@hmcts/opal-frontend-common/types';
+import {
+  ISortServiceConfig,
+  ISortServiceValues,
+  ISortServiceArrayValues,
+} from '@hmcts/opal-frontend-common/services/sort-service/interfaces';
+import { SortableValuesType } from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/types';
 
 @Injectable({
   providedIn: 'root',
@@ -55,9 +58,9 @@ export class SortService {
    * ```
    */
   private sortObjectArray(
-    array: ISortServiceValues<SortableValues>[] | null,
+    array: ISortServiceValues<SortableValuesType>[] | null,
     config: ISortServiceConfig,
-  ): ISortServiceValues<SortableValues>[] | null {
+  ): ISortServiceValues<SortableValuesType>[] | null {
     if (!Array.isArray(array) || !config.key) {
       return array;
     }
@@ -79,9 +82,9 @@ export class SortService {
    * @returns The sorted array of objects.
    */
   public sortObjectArrayAsc(
-    array: ISortServiceValues<SortableValues>[] | null,
+    array: ISortServiceValues<SortableValuesType>[] | null,
     key: string,
-  ): ISortServiceValues<SortableValues>[] | null {
+  ): ISortServiceValues<SortableValuesType>[] | null {
     return this.sortObjectArray(array, { key, sortType: 'ascending' });
   }
 
@@ -93,9 +96,9 @@ export class SortService {
    * @returns The sorted array of objects in descending order.
    */
   public sortObjectArrayDesc(
-    array: ISortServiceValues<SortableValues>[] | null,
+    array: ISortServiceValues<SortableValuesType>[] | null,
     key: string,
-  ): ISortServiceValues<SortableValues>[] | null {
+  ): ISortServiceValues<SortableValuesType>[] | null {
     return this.sortObjectArray(array, { key, sortType: 'descending' });
   }
 }

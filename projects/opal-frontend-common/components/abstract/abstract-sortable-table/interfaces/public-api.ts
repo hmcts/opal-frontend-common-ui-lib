@@ -1,1 +1,1 @@
-export * from './abstract-sortable-table-interfaces';
+export * from './abstract-sortable-table.interfaces';

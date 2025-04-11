@@ -1,6 +1,6 @@
 {
     "sideEffects": false,
-    "module": "../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-services-sort-service-interfaces.mjs",
-    "typings": "../../../dist/opal-frontend-common/services/sort-service/interfaces/index.d.ts"
+    "module": "../../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-services-sort-service-interfaces.mjs",
+    "typings": "../../../../../dist/opal-frontend-common/services/sort-service/interfaces/index.d.ts"
   }
   

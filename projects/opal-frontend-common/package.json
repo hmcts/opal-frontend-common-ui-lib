@@ -49,6 +49,9 @@
     "./components/abstract/abstract-sortable-table/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-sortable-table-interfaces.mjs"
     },
+    "./components/abstract/abstract-sortable-table/types": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-sortable-table-types.mjs"
+    },
     "./components/abstract/abstract-sortable-table-pagination": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-sortable-table-pagination.mjs"
     },
@@ -286,6 +289,9 @@
     "./services/sort-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-sort-service.mjs"
     },
+    "./services/sort-service/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-sort-service-interfaces.mjs"
+    },
     "./services/transformation-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-transformation-service.mjs"
     },
@@ -297,9 +303,6 @@
     },
     "./stores/global/types": {
       "import": "./fesm2022/hmcts-opal-frontend-common-stores-global-types.mjs"
-    },
-    "./types": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-types.mjs"
     },
     "./validators": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators.mjs"

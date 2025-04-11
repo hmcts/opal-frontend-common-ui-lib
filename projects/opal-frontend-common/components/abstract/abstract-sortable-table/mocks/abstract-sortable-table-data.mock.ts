@@ -1,7 +1,7 @@
-import { SortableValues } from '@hmcts/opal-frontend-common/types';
-import { IAbstractTableData } from '../interfaces/abstract-sortable-table-interfaces';
+import { SortableValuesType } from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/types';
+import { IAbstractTableData } from '../interfaces/abstract-sortable-table.interfaces';
 
-export const MOCK_ABSTRACT_TABLE_DATA: IAbstractTableData<SortableValues>[] = [
+export const MOCK_ABSTRACT_TABLE_DATA: IAbstractTableData<SortableValuesType>[] = [
   {
     imposition: 'Imposition 1',
     creditor: 'major',

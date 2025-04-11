@@ -4,7 +4,8 @@ import {
   IAbstractTableData,
 } from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/interfaces';
 import { SortService } from '@hmcts/opal-frontend-common/services/sort-service';
-import { SortableValues, SortDirectionType } from '@hmcts/opal-frontend-common/types';
+import { SortableValuesType } from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/types';
+import { SortDirectionType } from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/types';
 
 @Component({
   template: '',
@@ -12,7 +13,7 @@ import { SortableValues, SortDirectionType } from '@hmcts/opal-frontend-common/t
 export abstract class AbstractSortableTableComponent implements OnInit {
   private readonly sortService = inject(SortService);
 
-  public abstractTableDataSignal = signal<IAbstractTableData<SortableValues>[]>([]);
+  public abstractTableDataSignal = signal<IAbstractTableData<SortableValuesType>[]>([]);
   public abstractExistingSortState: IAbstractSortState | null = null;
   public sortStateSignal = signal<IAbstractSortState>({});
   public sortedColumnTitleSignal = signal<string>('');
@@ -26,7 +27,7 @@ export abstract class AbstractSortableTableComponent implements OnInit {
    * @param tableData - Array of table data objects representing table rows.
    * @returns Initial sort state object with column names as keys and 'none' as values.
    */
-  private createSortState(tableData: IAbstractTableData<SortableValues>[] | null): IAbstractSortState {
+  private createSortState(tableData: IAbstractTableData<SortableValuesType>[] | null): IAbstractSortState {
     return tableData?.length
       ? Object.keys(tableData[0]).reduce<IAbstractSortState>((state, key) => {
           state[key] = 'none';
@@ -85,16 +86,19 @@ export abstract class AbstractSortableTableComponent implements OnInit {
    * @param sortType - The type of sorting to apply, either 'ascending' or 'descending'.
    * @returns An array of sorted table data objects.
    */
-  private getSortedTableData(key: string, sortType: 'ascending' | 'descending'): IAbstractTableData<SortableValues>[] {
+  private getSortedTableData(
+    key: string,
+    sortType: 'ascending' | 'descending',
+  ): IAbstractTableData<SortableValuesType>[] {
     return sortType === 'ascending'
       ? (this.sortService.sortObjectArrayAsc(
           this.abstractTableDataSignal(),
           key,
-        ) as IAbstractTableData<SortableValues>[])
+        ) as IAbstractTableData<SortableValuesType>[])
       : (this.sortService.sortObjectArrayDesc(
           this.abstractTableDataSignal(),
           key,
-        ) as IAbstractTableData<SortableValues>[]);
+        ) as IAbstractTableData<SortableValuesType>[]);
   }
 
   /**

@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { SortService } from './sort.service';
 import { SORT_OBJECT_INPUT_MOCK } from './mocks/sort-service-object-input-mock';
-import { ISortServiceValues } from './interfaces/sort-service-values.interface';
-import { SortableValues } from '@hmcts/opal-frontend-common/types';
+import { ISortServiceValues } from '@hmcts/opal-frontend-common/services/sort-service/interfaces';
+import { SortableValuesType } from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/types';
 
 describe('SortService', () => {
   let service: SortService;
@@ -111,7 +111,7 @@ describe('SortService', () => {
 
   it('should return the array if it is not an array', () => {
     const input = null;
-    const result = service['sortObjectArray'](input as ISortServiceValues<SortableValues>[] | null, {
+    const result = service['sortObjectArray'](input as ISortServiceValues<SortableValuesType>[] | null, {
       key: 'id',
       sortType: 'ascending',
     });

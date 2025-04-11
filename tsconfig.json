@@ -56,6 +56,9 @@
       "@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/interfaces": [
         "./dist/opal-frontend-common/components/abstract/abstract-sortable-table/interfaces"
       ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/types": [
+        "./dist/opal-frontend-common/components/abstract/abstract-sortable-table/types"
+      ],
       "@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table-pagination": [
         "./dist/opal-frontend-common/components/abstract/abstract-sortable-table-pagination"
       ],
@@ -290,6 +293,9 @@
       "@hmcts/opal-frontend-common/services/sort-service": [
         "./dist/opal-frontend-common/services/sort-service"
       ],
+      "@hmcts/opal-frontend-common/services/sort-service/interfaces": [
+        "./dist/opal-frontend-common/services/sort-service/interfaces"
+      ],
       "@hmcts/opal-frontend-common/services/transformation-service": [
         "./dist/opal-frontend-common/services/transformation-service"
       ],
@@ -304,9 +310,6 @@
       ],
       "@hmcts/opal-frontend-common/stores/global/types": [
         "./dist/opal-frontend-common/stores/global/types"
-      ],
-      "@hmcts/opal-frontend-common/types": [
-        "./dist/opal-frontend-common/types"
       ],
       "@hmcts/opal-frontend-common/validators": [
         "./dist/opal-frontend-common/validators"
