@@ -226,8 +226,8 @@
     "./guards/types": {
       "import": "./fesm2022/hmcts-opal-frontend-common-guards-types.mjs"
     },
-    "./interceptors": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-interceptors.mjs"
+    "./interceptors/http-error": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-interceptors-http-error.mjs"
     },
     "./interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-interfaces.mjs"

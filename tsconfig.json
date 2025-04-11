@@ -236,8 +236,8 @@
       "@hmcts/opal-frontend-common/guards/types": [
         "./dist/opal-frontend-common/guards/types"
       ],
-      "@hmcts/opal-frontend-common/interceptors": [
-        "./dist/opal-frontend-common/interceptors"
+      "@hmcts/opal-frontend-common/interceptors/http-error": [
+        "./dist/opal-frontend-common/interceptors/http-error"
       ],
       "@hmcts/opal-frontend-common/interfaces": [
         "./dist/opal-frontend-common/interfaces"
