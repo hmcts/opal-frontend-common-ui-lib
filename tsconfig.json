@@ -260,8 +260,11 @@
       "@hmcts/opal-frontend-common/pipes/days-ago": [
         "./dist/opal-frontend-common/pipes/days-ago"
       ],
-      "@hmcts/opal-frontend-common/resolvers": [
-        "./dist/opal-frontend-common/resolvers"
+      "@hmcts/opal-frontend-common/resolvers/title": [
+        "./dist/opal-frontend-common/resolvers/title"
+      ],
+      "@hmcts/opal-frontend-common/resolvers/user-state": [
+        "./dist/opal-frontend-common/resolvers/user-state"
       ],
       "@hmcts/opal-frontend-common/services/app-insights-service": [
         "./dist/opal-frontend-common/services/app-insights-service"

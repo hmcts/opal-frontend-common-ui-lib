@@ -250,8 +250,11 @@
     "./pipes/days-ago": {
       "import": "./fesm2022/hmcts-opal-frontend-common-pipes-days-ago.mjs"
     },
-    "./resolvers": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-resolvers.mjs"
+    "./resolvers/title": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-resolvers-title.mjs"
+    },
+    "./resolvers/user-state": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-resolvers-user-state.mjs"
     },
     "./services": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services.mjs"
