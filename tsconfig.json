@@ -311,8 +311,59 @@
       "@hmcts/opal-frontend-common/stores/global/types": [
         "./dist/opal-frontend-common/stores/global/types"
       ],
-      "@hmcts/opal-frontend-common/validators": [
-        "./dist/opal-frontend-common/validators"
+      "@hmcts/opal-frontend-common/validators/alphabetical-text": [
+        "./dist/opal-frontend-common/validators/alphabetical-text"
+      ],
+      "@hmcts/opal-frontend-common/validators/amount": [
+        "./dist/opal-frontend-common/validators/amount"
+      ],
+      "@hmcts/opal-frontend-common/validators/date-after-year": [
+        "./dist/opal-frontend-common/validators/date-after-year"
+      ],
+      "@hmcts/opal-frontend-common/validators/date-before": [
+        "./dist/opal-frontend-common/validators/date-before"
+      ],
+      "@hmcts/opal-frontend-common/validators/date-of-birth": [
+        "./dist/opal-frontend-common/validators/date-of-birth"
+      ],
+      "@hmcts/opal-frontend-common/validators/future-date": [
+        "./dist/opal-frontend-common/validators/future-date"
+      ],
+      "@hmcts/opal-frontend-common/validators/invalid-value": [
+        "./dist/opal-frontend-common/validators/invalid-value"
+      ],
+      "@hmcts/opal-frontend-common/validators/national-insurance-number": [
+        "./dist/opal-frontend-common/validators/national-insurance-number"
+      ],
+      "@hmcts/opal-frontend-common/validators/numerical-only": [
+        "./dist/opal-frontend-common/validators/numerical-only"
+      ],
+      "@hmcts/opal-frontend-common/validators/optional-max-length": [
+        "./dist/opal-frontend-common/validators/optional-max-length"
+      ],
+      "@hmcts/opal-frontend-common/validators/optional-valid-date": [
+        "./dist/opal-frontend-common/validators/optional-valid-date"
+      ],
+      "@hmcts/opal-frontend-common/validators/optional-valid-email-address": [
+        "./dist/opal-frontend-common/validators/optional-valid-email-address"
+      ],
+      "@hmcts/opal-frontend-common/validators/optional-valid-telephone": [
+        "./dist/opal-frontend-common/validators/optional-valid-telephone"
+      ],
+      "@hmcts/opal-frontend-common/validators/over-eighteen": [
+        "./dist/opal-frontend-common/validators/over-eighteen"
+      ],
+      "@hmcts/opal-frontend-common/validators/past-date": [
+        "./dist/opal-frontend-common/validators/past-date"
+      ],
+      "@hmcts/opal-frontend-common/validators/special-characters": [
+        "./dist/opal-frontend-common/validators/special-characters"
+      ],
+      "@hmcts/opal-frontend-common/validators/two-decimal-places": [
+        "./dist/opal-frontend-common/validators/two-decimal-places"
+      ],
+      "@hmcts/opal-frontend-common/validators/valid-value": [
+        "./dist/opal-frontend-common/validators/valid-value"
       ]
     },
     "moduleResolution": "bundler",
