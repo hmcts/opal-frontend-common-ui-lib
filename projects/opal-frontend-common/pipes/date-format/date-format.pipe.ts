@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DateService } from '@hmcts/opal-frontend-common/services';
+import { DateService } from '@hmcts/opal-frontend-common/services/date-service';
 
 @Pipe({
   name: 'dateFormat',

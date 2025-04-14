@@ -1,5 +1,5 @@
 import { DateFormatPipe } from './date-format.pipe';
-import { DateService } from '@hmcts/opal-frontend-common/services';
+import { DateService } from '@hmcts/opal-frontend-common/services/date-service';
 
 describe('DateFormatPipe', () => {
   let pipe: DateFormatPipe;

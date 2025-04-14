@@ -1,13 +1,17 @@
 import { TestBed } from '@angular/core/testing';
-import { GlobalStoreType } from '../../types/public-api';
+import { GlobalStoreType } from './types/global-store.type';
 import { GlobalStore } from './global.store';
-import { ISessionTokenExpiry, ISessionUserState, ITransferStateLaunchDarklyConfig } from '../../interfaces/public-api';
 import {
-  LAUNCH_DARKLY_CHANGE_FLAGS_MOCK,
+  ISessionTokenExpiry,
+  ISessionUserState,
+} from '@hmcts/opal-frontend-common/services/session-service/interfaces';
+import { ITransferStateLaunchDarklyConfig } from '@hmcts/opal-frontend-common/services/transfer-state-service/interfaces';
+import {
   SESSION_TOKEN_EXPIRY_MOCK,
   SESSION_USER_STATE_MOCK,
-  TRANSFER_STATE_LAUNCH_DARKLY_CONFIG_MOCK,
-} from '../../mocks/public-api';
+} from '@hmcts/opal-frontend-common/services/session-service/mocks';
+import { TRANSFER_STATE_LAUNCH_DARKLY_CONFIG_MOCK } from '@hmcts/opal-frontend-common/services/transfer-state-service/mocks';
+import { LAUNCH_DARKLY_CHANGE_FLAGS_MOCK } from '@hmcts/opal-frontend-common/services/launch-darkly-service/mocks';
 
 describe('GlobalStore', () => {
   let store: GlobalStoreType;

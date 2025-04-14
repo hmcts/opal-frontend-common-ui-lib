@@ -56,6 +56,9 @@
       "@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/interfaces": [
         "./dist/opal-frontend-common/components/abstract/abstract-sortable-table/interfaces"
       ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/types": [
+        "./dist/opal-frontend-common/components/abstract/abstract-sortable-table/types"
+      ],
       "@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table-pagination": [
         "./dist/opal-frontend-common/components/abstract/abstract-sortable-table-pagination"
       ],
@@ -209,38 +212,182 @@
       "@hmcts/opal-frontend-common/constants": [
         "./dist/opal-frontend-common/constants"
       ],
-      "@hmcts/opal-frontend-common/guards": [
-        "./dist/opal-frontend-common/guards"
+      "@hmcts/opal-frontend-common/guards/auth": [
+        "./dist/opal-frontend-common/guards/auth"
       ],
-      "@hmcts/opal-frontend-common/interceptors": [
-        "./dist/opal-frontend-common/interceptors"
+      "@hmcts/opal-frontend-common/guards/can-deactivate": [
+        "./dist/opal-frontend-common/guards/can-deactivate"
       ],
-      "@hmcts/opal-frontend-common/interfaces": [
-        "./dist/opal-frontend-common/interfaces"
+      "@hmcts/opal-frontend-common/guards/can-deactivate/interfaces": [
+        "./dist/opal-frontend-common/guards/can-deactivate/interfaces"
       ],
-      "@hmcts/opal-frontend-common/mocks": [
-        "./dist/opal-frontend-common/mocks"
+      "@hmcts/opal-frontend-common/guards/can-deactivate/types": [
+        "./dist/opal-frontend-common/guards/can-deactivate/types"
       ],
-      "@hmcts/opal-frontend-common/pages": [
+      "@hmcts/opal-frontend-common/guards/has-flow-state": [
+        "./dist/opal-frontend-common/guards/has-flow-state"
+      ],
+      "@hmcts/opal-frontend-common/guards/helpers": [
+        "./dist/opal-frontend-common/guards/helpers"
+      ],
+      "@hmcts/opal-frontend-common/guards/route-permissions": [
+        "./dist/opal-frontend-common/guards/route-permissions"
+      ],
+      "@hmcts/opal-frontend-common/guards/signed-in": [
+        "./dist/opal-frontend-common/guards/signed-in"
+      ],
+      "@hmcts/opal-frontend-common/guards/types": [
+        "./dist/opal-frontend-common/guards/types"
+      ],
+      "@hmcts/opal-frontend-common/interceptors/http-error": [
+        "./dist/opal-frontend-common/interceptors/http-error"
+      ],
+      "@hmcts/opal-frontend-common/pages/routing": [
         "./dist/opal-frontend-common/pages"
       ],
-      "@hmcts/opal-frontend-common/pipes": [
-        "./dist/opal-frontend-common/pipes"
+      "@hmcts/opal-frontend-common/pages/routing/interfaces": [
+        "./dist/opal-frontend-common/pages/routing/interfaces"
       ],
-      "@hmcts/opal-frontend-common/resolvers": [
-        "./dist/opal-frontend-common/resolvers"
+      "@hmcts/opal-frontend-common/pages/routing/constants": [
+        "./dist/opal-frontend-common/pages/routing/constants"
       ],
-      "@hmcts/opal-frontend-common/services": [
-        "./dist/opal-frontend-common/services"
+      "@hmcts/opal-frontend-common/pipes/date-format": [
+        "./dist/opal-frontend-common/pipes/date-format"
       ],
-      "@hmcts/opal-frontend-common/stores": [
-        "./dist/opal-frontend-common/stores"
+      "@hmcts/opal-frontend-common/pipes/days-ago": [
+        "./dist/opal-frontend-common/pipes/days-ago"
       ],
-      "@hmcts/opal-frontend-common/types": [
-        "./dist/opal-frontend-common/types"
+      "@hmcts/opal-frontend-common/resolvers/title": [
+        "./dist/opal-frontend-common/resolvers/title"
       ],
-      "@hmcts/opal-frontend-common/validators": [
-        "./dist/opal-frontend-common/validators"
+      "@hmcts/opal-frontend-common/resolvers/user-state": [
+        "./dist/opal-frontend-common/resolvers/user-state"
+      ],
+      "@hmcts/opal-frontend-common/services/app-insights-service": [
+        "./dist/opal-frontend-common/services/app-insights-service"
+      ],
+      "@hmcts/opal-frontend-common/services/app-initializer-service": [
+        "./dist/opal-frontend-common/services/app-initializer-service"
+      ],
+      "@hmcts/opal-frontend-common/services/auth-service": [
+        "./dist/opal-frontend-common/services/auth-service"
+      ],
+      "@hmcts/opal-frontend-common/services/auth-service/interfaces": [
+        "./dist/opal-frontend-common/services/auth-service/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/services/auth-service/constants": [
+        "./dist/opal-frontend-common/services/auth-service/constants"
+      ],
+      "@hmcts/opal-frontend-common/services/date-service": [
+        "./dist/opal-frontend-common/services/date-service"
+      ],
+      "@hmcts/opal-frontend-common/services/launch-darkly-service": [
+        "./dist/opal-frontend-common/services/launch-darkly-service"
+      ],
+      "@hmcts/opal-frontend-common/services/launch-darkly-service/mocks": [
+        "./dist/opal-frontend-common/services/launch-darkly-service/mocks"
+      ],
+      "@hmcts/opal-frontend-common/services/permissions-service": [
+        "./dist/opal-frontend-common/services/permissions-service"
+      ],
+      "@hmcts/opal-frontend-common/services/session-service": [
+        "./dist/opal-frontend-common/services/session-service"
+      ],
+      "@hmcts/opal-frontend-common/services/session-service/interfaces": [
+        "./dist/opal-frontend-common/services/session-service/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/services/session-service/constants": [
+        "./dist/opal-frontend-common/services/session-service/constants"
+      ],
+      "@hmcts/opal-frontend-common/services/session-service/mocks": [
+        "./dist/opal-frontend-common/services/session-service/mocks"
+      ],
+      "@hmcts/opal-frontend-common/services/sort-service": [
+        "./dist/opal-frontend-common/services/sort-service"
+      ],
+      "@hmcts/opal-frontend-common/services/sort-service/interfaces": [
+        "./dist/opal-frontend-common/services/sort-service/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/services/transfer-state-service": [
+        "./dist/opal-frontend-common/services/transfer-state-service"
+      ],
+      "@hmcts/opal-frontend-common/services/transfer-state-service/interfaces": [
+        "./dist/opal-frontend-common/services/transfer-state-service/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/services/transfer-state-service/mocks": [
+        "./dist/opal-frontend-common/services/transfer-state-service/mocks"
+      ],
+      "@hmcts/opal-frontend-common/services/transformation-service": [
+        "./dist/opal-frontend-common/services/transformation-service"
+      ],
+      "@hmcts/opal-frontend-common/services/transformation-service/interfaces": [
+        "./dist/opal-frontend-common/services/transformation-service/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/services/utils-service": [
+        "./dist/opal-frontend-common/services/utils-service"
+      ],
+      "@hmcts/opal-frontend-common/stores/global": [
+        "./dist/opal-frontend-common/stores/global"
+      ],
+      "@hmcts/opal-frontend-common/stores/global/interfaces": [
+        "./dist/opal-frontend-common/stores/global/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/stores/global/types": [
+        "./dist/opal-frontend-common/stores/global/types"
+      ],
+      "@hmcts/opal-frontend-common/validators/alphabetical-text": [
+        "./dist/opal-frontend-common/validators/alphabetical-text"
+      ],
+      "@hmcts/opal-frontend-common/validators/amount": [
+        "./dist/opal-frontend-common/validators/amount"
+      ],
+      "@hmcts/opal-frontend-common/validators/date-after-year": [
+        "./dist/opal-frontend-common/validators/date-after-year"
+      ],
+      "@hmcts/opal-frontend-common/validators/date-before": [
+        "./dist/opal-frontend-common/validators/date-before"
+      ],
+      "@hmcts/opal-frontend-common/validators/date-of-birth": [
+        "./dist/opal-frontend-common/validators/date-of-birth"
+      ],
+      "@hmcts/opal-frontend-common/validators/future-date": [
+        "./dist/opal-frontend-common/validators/future-date"
+      ],
+      "@hmcts/opal-frontend-common/validators/invalid-value": [
+        "./dist/opal-frontend-common/validators/invalid-value"
+      ],
+      "@hmcts/opal-frontend-common/validators/national-insurance-number": [
+        "./dist/opal-frontend-common/validators/national-insurance-number"
+      ],
+      "@hmcts/opal-frontend-common/validators/numerical-only": [
+        "./dist/opal-frontend-common/validators/numerical-only"
+      ],
+      "@hmcts/opal-frontend-common/validators/optional-max-length": [
+        "./dist/opal-frontend-common/validators/optional-max-length"
+      ],
+      "@hmcts/opal-frontend-common/validators/optional-valid-date": [
+        "./dist/opal-frontend-common/validators/optional-valid-date"
+      ],
+      "@hmcts/opal-frontend-common/validators/optional-valid-email-address": [
+        "./dist/opal-frontend-common/validators/optional-valid-email-address"
+      ],
+      "@hmcts/opal-frontend-common/validators/optional-valid-telephone": [
+        "./dist/opal-frontend-common/validators/optional-valid-telephone"
+      ],
+      "@hmcts/opal-frontend-common/validators/over-eighteen": [
+        "./dist/opal-frontend-common/validators/over-eighteen"
+      ],
+      "@hmcts/opal-frontend-common/validators/past-date": [
+        "./dist/opal-frontend-common/validators/past-date"
+      ],
+      "@hmcts/opal-frontend-common/validators/special-characters": [
+        "./dist/opal-frontend-common/validators/special-characters"
+      ],
+      "@hmcts/opal-frontend-common/validators/two-decimal-places": [
+        "./dist/opal-frontend-common/validators/two-decimal-places"
+      ],
+      "@hmcts/opal-frontend-common/validators/valid-value": [
+        "./dist/opal-frontend-common/validators/valid-value"
       ]
     },
     "moduleResolution": "bundler",

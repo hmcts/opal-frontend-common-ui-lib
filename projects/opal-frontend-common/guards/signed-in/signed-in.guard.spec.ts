@@ -4,7 +4,7 @@ import { signedInGuard } from './signed-in.guard';
 import { throwError, of } from 'rxjs';
 import { getGuardWithDummyUrl } from '../helpers/get-guard-with-dummy-url';
 import { runAuthGuardWithContext } from '../helpers/run-auth-guard-with-context';
-import { AuthService } from '@hmcts/opal-frontend-common/services';
+import { AuthService } from '@hmcts/opal-frontend-common/services/auth-service';
 
 describe('signedInGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) =>

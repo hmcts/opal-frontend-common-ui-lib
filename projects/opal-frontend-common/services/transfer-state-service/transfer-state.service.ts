@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, Optional, PLATFORM_ID, TransferState, inject, makeStateKey } from '@angular/core';
-import { ITransferStateServerState } from '@hmcts/opal-frontend-common/interfaces';
-import { GlobalStore } from '@hmcts/opal-frontend-common/stores';
+import { ITransferStateServerState } from '@hmcts/opal-frontend-common/services/transfer-state-service/interfaces';
+import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 
 @Injectable({
   providedIn: 'root',
@@ -46,5 +46,13 @@ export class TransferStateService {
    */
   public initializeLaunchDarklyConfig(): void {
     this.globalStore.setLaunchDarklyConfig(this.storedServerTransferState?.launchDarklyConfig);
+  }
+
+  /**
+   * Initializes the Application Insights configuration by assigning the stored server transfer state's
+   * appInsightsConfig value to the globalStore's appInsightsConfig property.
+   */
+  public initializeAppInsightsConfig(): void {
+    this.globalStore.setAppInsightsConfig(this.storedServerTransferState?.appInsightsConfig);
   }
 }

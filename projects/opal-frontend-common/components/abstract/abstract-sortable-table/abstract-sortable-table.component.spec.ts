@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AbstractSortableTableComponent } from './abstract-sortable-table.component';
-import { SortService } from '@hmcts/opal-frontend-common/services';
-import { IAbstractSortState, IAbstractTableData } from './interfaces/abstract-sortable-table-interfaces';
-import { ABSTRACT_EXISTING_SORT_STATE_MOCK } from './mocks/abstract-sortable-table-existing-sort-state-mock';
-import { MOCK_ABSTRACT_TABLE_DATA } from './mocks/abstract-sortable-table-data-mock';
-import { SortableValues } from '@hmcts/opal-frontend-common/types';
+import { SortService } from '@hmcts/opal-frontend-common/services/sort-service';
+import { IAbstractSortState, IAbstractTableData } from './interfaces/abstract-sortable-table.interfaces';
+import { ABSTRACT_EXISTING_SORT_STATE_MOCK } from './mocks/abstract-sortable-table-existing-sort-state.mock';
+import { MOCK_ABSTRACT_TABLE_DATA } from './mocks/abstract-sortable-table-data.mock';
+import { SortableValuesType } from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/types';
 import { signal } from '@angular/core';
 
 class TestComponent extends AbstractSortableTableComponent {
@@ -132,7 +132,7 @@ describe('AbstractSortableTableComponent', () => {
     const sortedData = service.sortObjectArrayAsc(
       MOCK_ABSTRACT_TABLE_DATA,
       'amountPaid',
-    ) as IAbstractTableData<SortableValues>[];
+    ) as IAbstractTableData<SortableValuesType>[];
     const newSortState = signal({
       ...ABSTRACT_EXISTING_SORT_STATE_MOCK,
       imposition: 'none',
@@ -157,7 +157,7 @@ describe('AbstractSortableTableComponent', () => {
     const sortedData = service.sortObjectArrayDesc(
       MOCK_ABSTRACT_TABLE_DATA,
       'amountPaid',
-    ) as IAbstractTableData<SortableValues>[];
+    ) as IAbstractTableData<SortableValuesType>[];
     const newSortState = signal({
       ...ABSTRACT_EXISTING_SORT_STATE_MOCK,
       imposition: 'none',
