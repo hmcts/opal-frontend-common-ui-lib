@@ -15,7 +15,7 @@ export class SignInComponent {
   public readonly globalStore = inject(GlobalStore);
   public ssoEnabled: boolean | null = true;
   private readonly document = inject(DOCUMENT);
-  
+
   /**
    * Handles the submission of the stub sign-in form.
    * Redirects the user to the SSO login page with the provided email.
