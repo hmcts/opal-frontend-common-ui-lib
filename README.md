@@ -1,6 +1,22 @@
 # OPAL Frontend Common UI Library
 
+[![npm version](https://img.shields.io/npm/v/@hmcts/opal-frontend-common)](https://www.npmjs.com/package/@hmcts/opal-frontend-common)
+[![License](https://img.shields.io/npm/l/@hmcts/opal-frontend-common)](https://github.com/hmcts/opal-frontend-common-ui-lib/blob/main/LICENSE)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=hmcts_opal-frontend-common-ui-lib&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=hmcts_opal-frontend-common-ui-lib)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=hmcts_opal-frontend-common-ui-lib&metric=coverage)](https://sonarcloud.io/summary/new_code?id=hmcts_opal-frontend-common-ui-lib)
+
 This is an [Angular Library](https://angular.dev/tools/libraries).
+
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Development server](#development-server)
+- [Build](#build)
+- [Running unit tests](#running-unit-tests)
+- [Angular code scaffolding](#angular-code-scaffolding)
+- [Commonly Used Commands](#commonly-used-commands)
+- [Using This Library](#using-this-library-in-an-angular-application-eg-opal-frontend)
+- [Publishing the Library](#publishing-the-library)
 
 ## Getting Started
 
@@ -57,6 +73,20 @@ This library uses multiple entry points, which allows you to organize and expose
 
 Alias paths need to be set in both the `/projects/opal-frontend-common/package.json` and the library's `tsconfig.json`. These aliases help the consuming application import from each entry point using the correct path. By properly defining these aliases, developers can import modules from your library entry points without resorting to complex relative paths.
 
+#### Example Usage of Entry Points
+
+To import a module from a specific entry point in your application:
+
+```ts
+// Example: Importing various items from the library
+import { GovukTextInputComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-text-input';
+import { DateService } from '@hmcts/opal-frontend-common/services/date-service';
+import { dateOfBirthValidator } from '@hmcts/opal-frontend-common/validators/date-of-birth';
+import { hasFlowStateGuard } from '@hmcts/opal-frontend-common/guards/has-flow-state';
+import { userStateResolver } from '@hmcts/opal-frontend-common/resolvers/user-state';
+import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
+```
+
 ## Commonly Used Commands
 
 ### Lint
@@ -69,7 +99,7 @@ Run `yarn prettier:fix` to automatically format your code according to the Prett
 
 ### Test Coverage
 
-Run `yarn test:coverage` to execute unit tests with code coverage. The coverage report will then be available in the coverage folder.
+Run `yarn test:coverage` to execute unit tests with code coverage. Code coverage can then be found in the `coverage/` folder of the repository locally (e.g. `coverage/index.html`).
 
 ## Using This Library in an Angular Application (e.g. opal-frontend)
 
@@ -90,7 +120,7 @@ Once any changes have been approved and merged into the main branch, you'll need
 
 1. Increment the version number in both the library's root `package.json` and in `/projects/opal-frontend-common/package.json`.
 2. Commit and push those changes to the main branch.
-3. On GitHub, create a new release and use the updated version number as a tag.
+3. On GitHub, create a new [release](https://github.com/hmcts/opal-frontend-common-ui-lib/releases) and use the updated version number as a tag.
 4. When the release workflow completes, the library will be published.
 
 After this new version of the library is published, any consuming application should remove the local or outdated version of the library and then install the published version by running:
