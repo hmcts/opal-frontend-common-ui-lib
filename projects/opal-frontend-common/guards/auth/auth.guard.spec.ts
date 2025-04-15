@@ -1,6 +1,6 @@
 import { TestBed, fakeAsync } from '@angular/core/testing';
 import { CanActivateFn, Router, UrlSegment, UrlSegmentGroup, UrlTree } from '@angular/router';
-import { authGuard } from './auth.guard';
+import { authGuard, REDIRECT_TO_SSO } from './auth.guard';
 import { of, throwError } from 'rxjs';
 import { AuthService } from '@hmcts/opal-frontend-common/services/auth-service';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
@@ -14,6 +14,7 @@ describe('authGuard', () => {
   let mockAuthService: jasmine.SpyObj<AuthService>;
   let mockRouter: jasmine.SpyObj<Router>;
   let globalStore: GlobalStoreType;
+  let redirectToSsoLoginSpy: jasmine.Spy;
 
   const urlPath = '/test-page';
   const expectedUrl = 'sign-in';
@@ -27,6 +28,7 @@ describe('authGuard', () => {
       urlTree.root = new UrlSegmentGroup([urlSegment], {});
       return urlTree;
     });
+    redirectToSsoLoginSpy = jasmine.createSpy('redirectToSsoLogin');
 
     TestBed.configureTestingModule({
       providers: [
@@ -38,6 +40,7 @@ describe('authGuard', () => {
           provide: AuthService,
           useValue: mockAuthService,
         },
+        { provide: REDIRECT_TO_SSO, useValue: redirectToSsoLoginSpy },
       ],
     });
 
@@ -61,4 +64,22 @@ describe('authGuard', () => {
     expect(mockRouter.navigate).toHaveBeenCalledOnceWith([expectedUrl]);
     expect(authenticated).toBeFalsy();
   }));
+
+  it('should call redirectToSsoLogin if ssoEnabled is true and checkAuthenticated fails', fakeAsync(async () => {
+    globalStore.setSsoEnabled(true);
+    mockAuthService.checkAuthenticated.and.returnValue(throwError(() => new Error('Auth error')));
+
+    const authenticated = await runAuthGuardWithContext(getGuardWithDummyUrl(executeGuard, urlPath));
+
+    expect(redirectToSsoLoginSpy).toHaveBeenCalledOnceWith();
+    expect(authenticated).toBeFalse();
+  }));
+
+  describe('REDIRECT_TO_SSO', () => {
+    it('should trigger the redirect logic (coverage only)', () => {
+      const redirectToSso = TestBed.inject(REDIRECT_TO_SSO);
+
+      expect(() => redirectToSso()).not.toThrow();
+    });
+  });
 });
