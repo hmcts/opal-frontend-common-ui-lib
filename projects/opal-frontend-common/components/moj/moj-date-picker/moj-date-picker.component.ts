@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { FormControl, AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { DateService } from '@hmcts/opal-frontend-common/services/date-service';
+import { addGdsBodyClass } from '@hmcts/opal-frontend-common/components/govuk/helpers';
 
 @Component({
   selector: 'opal-lib-moj-date-picker',
@@ -80,6 +81,7 @@ export class MojDatePickerComponent implements OnInit {
    */
   public configureDatePicker(): void {
     import('@ministryofjustice/frontend/moj/all').then((datePicker) => {
+      addGdsBodyClass();
       datePicker.initAll();
     });
   }

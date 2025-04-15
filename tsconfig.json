@@ -167,6 +167,9 @@
       "@hmcts/opal-frontend-common/components/govuk/govuk-text-input-prefix-suffix": [
         "./dist/opal-frontend-common/components/govuk/govuk-text-input-prefix-suffix"
       ],
+      "@hmcts/opal-frontend-common/components/govuk/helpers": [
+        "./dist/opal-frontend-common/components/govuk/helpers"
+      ],
       "@hmcts/opal-frontend-common/components/moj/moj-badge": [
         "./dist/opal-frontend-common/components/moj/moj-badge"
       ],
