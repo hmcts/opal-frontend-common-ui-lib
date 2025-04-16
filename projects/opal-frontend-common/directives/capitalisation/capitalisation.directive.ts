@@ -2,7 +2,7 @@ import { Directive, ElementRef, Renderer2, inject, AfterViewInit, OnDestroy } fr
 import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service';
 
 @Directive({
-  selector: '[capitaliseAllCharacters]',
+  selector: '[opalLibCapitaliseAllCharacters]',
 })
 export class CapitalisationDirective implements AfterViewInit, OnDestroy {
   private inputElement!: HTMLInputElement | null;

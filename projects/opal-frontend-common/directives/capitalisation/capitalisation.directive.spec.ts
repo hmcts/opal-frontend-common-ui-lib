@@ -5,7 +5,7 @@ import { CapitalisationDirective } from './capitalisation.directive';
 import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service';
 
 @Component({
-  template: `<div capitaliseAllCharacters><input type="text" /></div>`,
+  template: `<div opalLibCapitaliseAllCharacters><input type="text" /></div>`,
   imports: [CapitalisationDirective],
 })
 class TestComponent {}
