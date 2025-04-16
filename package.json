@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "yarn clean && ng build",
+    "build": "yarn clean && ng build && cp README.md dist/opal-frontend-common",
     "clean": "rm -rf dist",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --watch=false",
