@@ -1,10 +1,10 @@
-import { Directive, ElementRef, Renderer2, inject, AfterViewInit, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, Renderer2, inject } from '@angular/core';
 import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service';
 
 @Directive({
   selector: '[opalLibCapitaliseAllCharacters]',
 })
-export class CapitalisationDirective implements AfterViewInit, OnDestroy {
+export class CapitalisationDirective {
   private inputElement!: HTMLInputElement | null;
   private readonly el = inject(ElementRef);
   private readonly renderer = inject(Renderer2);
