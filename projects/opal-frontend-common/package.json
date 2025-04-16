@@ -202,6 +202,9 @@
     "./components/moj/moj-timeline": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-timeline.mjs"
     },
+    "./directives/capitalisation": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-directives-capitalisation.mjs"
+    },
     "./constants": {
       "import": "./fesm2022/hmcts-opal-frontend-common-constants.mjs"
     },
@@ -382,5 +385,5 @@
     "./validators/valid-value": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-valid-value.mjs"
     }
-  } 
+  }
 }
