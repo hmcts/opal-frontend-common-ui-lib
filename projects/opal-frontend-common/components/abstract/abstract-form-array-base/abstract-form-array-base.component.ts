@@ -173,7 +173,7 @@ export abstract class AbstractFormArrayBaseComponent extends AbstractFormBaseCom
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected getControlValueOrDefault(control: AbstractControl | null, defaultValue: any): any {
-    return control?.value || defaultValue;
+    return control?.value ?? defaultValue;
   }
 
   /**
