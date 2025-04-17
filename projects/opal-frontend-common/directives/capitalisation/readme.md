@@ -62,6 +62,7 @@ You can apply the directive to any component or element that contains an <input>
 
 ````md
 For example, if a user types `ab12cd`, the input will be transformed to `AB12CD` in real time.
+````
 
 ## Inputs
 
@@ -82,7 +83,6 @@ Unit tests for this directive are located in the capitalisation.directive.spec.t
 ```bash
 yarn test
 ```
-````
 
 ## Contributing
 
