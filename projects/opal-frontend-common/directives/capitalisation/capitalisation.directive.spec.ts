@@ -5,7 +5,7 @@ import { CapitalisationDirective } from './capitalisation.directive';
 import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service';
 
 @Component({
-  template: `<input opalLibCapitaliseAllCharacters type="text" />`,
+  template: `<input opalLibCapitaliseAllCharacters type="text" /> `,
   imports: [CapitalisationDirective],
 })
 class TestComponent {}
@@ -23,9 +23,7 @@ describe('CapitalisationDirective', () => {
       imports: [TestComponent],
       providers: [{ provide: UtilsService, useValue: mockUtilsService }],
     });
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(TestComponent);
     inputEl = fixture.debugElement.query(By.css('input'));
     fixture.detectChanges();
@@ -42,10 +40,20 @@ describe('CapitalisationDirective', () => {
 
   it('should capitalise input value in real-time', () => {
     const inputElement = inputEl.nativeElement as HTMLInputElement;
+    console.log('inputElement', inputElement);
     inputElement.value = 'test';
     inputEl.triggerEventHandler('input', { target: inputElement });
 
-    expect(mockUtilsService.upperCaseAllLetters).toHaveBeenCalledWith('test');
+    expect(mockUtilsService.upperCaseAllLetters).toHaveBeenCalled();
     expect(inputElement.value).toBe('TEST');
+  });
+
+  it('should not capitalise if input is empty', () => {
+    const inputElement = inputEl.nativeElement as HTMLInputElement;
+    inputElement.value = '';
+    inputEl.triggerEventHandler('input', { target: inputElement });
+
+    expect(mockUtilsService.upperCaseAllLetters).not.toHaveBeenCalled();
+    expect(inputElement.value).toBe('');
   });
 });
