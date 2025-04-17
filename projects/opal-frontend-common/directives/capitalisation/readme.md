@@ -1,5 +1,3 @@
-Perfect! Here’s a README.md for your CapitalisationDirective that follows the exact same format as your govuk-back-link component:
-
 ⸻
 
 Capitalisation Directive

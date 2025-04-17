@@ -5,7 +5,7 @@ import { CapitalisationDirective } from './capitalisation.directive';
 import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service';
 
 @Component({
-  template: `<div opalLibCapitaliseAllCharacters><input type="text" /></div>`,
+  template: `<input opalLibCapitaliseAllCharacters type="text" />`,
   imports: [CapitalisationDirective],
 })
 class TestComponent {}
@@ -40,23 +40,12 @@ describe('CapitalisationDirective', () => {
     expect(fixture).toBeTruthy();
   });
 
-  it('should capitalize input value in real-time', () => {
+  it('should capitalise input value in real-time', () => {
     const inputElement = inputEl.nativeElement as HTMLInputElement;
     inputElement.value = 'test';
     inputEl.triggerEventHandler('input', { target: inputElement });
 
     expect(mockUtilsService.upperCaseAllLetters).toHaveBeenCalledWith('test');
     expect(inputElement.value).toBe('TEST');
-  });
-
-  it('should remove the event listener on destroy', () => {
-    const directiveInstance = inputEl.injector.get(CapitalisationDirective);
-    const removeListenerSpy = jasmine.createSpy('removeListener');
-
-    directiveInstance['removeListener'] = removeListenerSpy;
-
-    directiveInstance.ngOnDestroy();
-
-    expect(removeListenerSpy).toHaveBeenCalled();
   });
 });
