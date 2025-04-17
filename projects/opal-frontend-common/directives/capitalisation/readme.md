@@ -15,13 +15,13 @@ This Angular directive automatically capitalises all characters in an input fiel
 
 ## Installation
 
-```typescript
+```md
 Import { CapitalisationDirective } from '@hmcts/opal-frontend-common/directives/capitalisation';
 ```
 
 Ensure the directive is declared or imported in your component/module:
 
-```typescript
+```md
 @Component({
   imports: [CapitalisationDirective],
 })
@@ -32,7 +32,7 @@ export class SharedModule {}
 
 Use this attribute selector on an <input> element or a custom component that emits the native input event. The directive listens for input events and capitalises the input value in real time.
 
-```typescript
+```md
 [opalLibCapitaliseAllCharacters];
 ```
 
@@ -60,9 +60,7 @@ You can apply the directive to any component or element that contains an <input>
 
 ### Expected Behaviour
 
-````md
 For example, if a user types `ab12cd`, the input will be transformed to `AB12CD` in real time.
-````
 
 ## Inputs
 
