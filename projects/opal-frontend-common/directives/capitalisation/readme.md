@@ -32,8 +32,8 @@ export class SharedModule {}
 
 Use this attribute selector on an `<input>` element or a custom component that emits the native input event. The directive listens for input events and capitalises the input value in real time.
 
-```typescript
-[opalLibCapitaliseAllCharacters];
+```md
+[opalLibCapitaliseAllCharacters]
 ```
 
 ## Usage
@@ -60,7 +60,6 @@ You can apply the directive to any component or element that is an `<input>` ele
 
 ### Expected Behaviour
 
-````md
 For example, if a user types `ab12cd`, the input will be transformed to `AB12CD` in real time.
 
 ## Inputs
@@ -82,7 +81,6 @@ Unit tests for this directive are located in the capitalisation.directive.spec.t
 ```bash
 yarn test
 ```
-````
 
 ## Contributing
 
