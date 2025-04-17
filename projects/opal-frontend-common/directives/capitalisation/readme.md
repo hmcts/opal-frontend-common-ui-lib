@@ -32,9 +32,6 @@ export class SharedModule {}
 
 Use this attribute selector on an `<input>` element or a custom component that emits the native input event. The directive listens for input events and capitalises the input value in real time.
 
-```md
-[opalLibCapitaliseAllCharacters]
-```
 
 ## Usage
 
