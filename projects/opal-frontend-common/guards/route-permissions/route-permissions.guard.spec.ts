@@ -118,4 +118,21 @@ describe('routePermissionsGuard', () => {
     const guard = await runRoutePermissionGuard(routePermissionsGuard, ROUTE_PERMISSIONS_MOCK['test-route'], urlPath);
     expect(guard).toBeFalsy();
   }));
+
+  it('should allow access when routePermissionId is undefined and fallback to empty array', fakeAsync(async () => {
+    mockPermissionsService.getUniquePermissions.and.returnValue([123]);
+
+    const dummyRoute = new ActivatedRouteSnapshot();
+    dummyRoute.url = [new UrlSegment(urlPath, {})];
+    dummyRoute.data = {}; // No routePermissionId defined
+
+    const dummyState: RouterStateSnapshot = {
+      url: urlPath,
+      root: new ActivatedRouteSnapshot(),
+    };
+
+    const result = TestBed.runInInjectionContext(() => routePermissionsGuard(dummyRoute, dummyState));
+    const authenticated = result instanceof Observable ? await handleObservableResult(result) : result;
+    expect(authenticated).toBeTrue();
+  }));
 });

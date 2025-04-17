@@ -24,11 +24,11 @@ export abstract class AbstractFormArrayParentBaseComponent extends AbstractFormP
 
           currentIndex = idx; // Set the current index based on the last indexed key
 
-          result[idx] = result[idx] || {};
+          result[idx] = result[idx] ?? {};
           result[idx][baseKey] = indexedObject[key];
         } else {
           // For non-indexed keys, use the currentIndex if available
-          result[currentIndex] = result[currentIndex] || {};
+          result[currentIndex] = result[currentIndex] ?? {};
           result[currentIndex][key] = indexedObject[key];
         }
       });

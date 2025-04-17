@@ -157,8 +157,6 @@ describe('SessionService', () => {
   });
 
   it('should retry the request exactly MAX_RETRIES times before success', fakeAsync(() => {
-    service['tokenExpiryCache$'] = null; // Reset cache to force a fresh request
-
     const mockResponse: ISessionTokenExpiry = {
       expiry: '3600',
       warningThresholdInMilliseconds: 5,

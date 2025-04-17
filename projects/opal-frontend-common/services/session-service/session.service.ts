@@ -15,7 +15,7 @@ export class SessionService {
   private readonly http = inject(HttpClient);
   private readonly globalStore = inject(GlobalStore);
   private userStateCache$!: Observable<ISessionUserState>;
-  private tokenExpiryCache$!: Observable<ISessionTokenExpiry> | null;
+  private tokenExpiryCache$!: Observable<ISessionTokenExpiry>;
 
   private readonly MAX_RETRIES = 5;
   private readonly RETRY_DELAY_MS = 1000;
@@ -56,18 +56,16 @@ export class SessionService {
    * @returns {Observable<ISessionTokenExpiry>} An observable that emits the token expiry information.
    */
   public getTokenExpiry(): Observable<ISessionTokenExpiry> {
-    if (!this.tokenExpiryCache$) {
-      this.tokenExpiryCache$ = this.http.get<ISessionTokenExpiry>(SESSION_ENDPOINTS.expiry).pipe(
-        retry({
-          count: this.MAX_RETRIES,
-          delay: () => timer(this.RETRY_DELAY_MS),
-        }),
-        tap((expiry) => {
-          this.globalStore.setTokenExpiry(expiry);
-        }),
-        shareReplay(1),
-      );
-    }
+    this.tokenExpiryCache$ ??= this.http.get<ISessionTokenExpiry>(SESSION_ENDPOINTS.expiry).pipe(
+      retry({
+        count: this.MAX_RETRIES,
+        delay: () => timer(this.RETRY_DELAY_MS),
+      }),
+      tap((expiry) => {
+        this.globalStore.setTokenExpiry(expiry);
+      }),
+      shareReplay(1),
+    );
     return this.tokenExpiryCache$;
   }
 }
