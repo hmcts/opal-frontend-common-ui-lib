@@ -1,5 +1,4 @@
 ⸻
-
 Capitalisation Directive
 
 This Angular directive automatically capitalises all characters in an input field in real-time as the user types. It is used to ensure consistent formatting in fields like reference numbers or codes.
@@ -32,16 +31,13 @@ Usage
 
 You can apply the directive to any component or element that contains an <input> element inside it. The directive listens to the input event and transforms the value to uppercase.
 
-Example Usage with Native Input:
-
-<div capitaliseAllCharacters>
-  <input type="text" />
-</div>
+Selector
+[opalLibCapitaliseAllCharacters]
 
 Example Usage with Custom Component:
 
 <opal-lib-govuk-text-input
-capitaliseAllCharacters
+opalLibCapitaliseAllCharacters
 inputId="exampleInput"
 inputName="exampleInput"
 labelText="Reference Number"

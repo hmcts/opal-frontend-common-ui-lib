@@ -29,18 +29,12 @@ describe('CapitalisationDirective', () => {
     fixture.detectChanges();
   });
 
-  afterAll(() => {
-    fixture = null;
-    TestBed.resetTestingModule();
-  });
-
   it('should create', () => {
     expect(fixture).toBeTruthy();
   });
 
   it('should capitalise input value in real-time', () => {
     const inputElement = inputEl.nativeElement as HTMLInputElement;
-    console.log('inputElement', inputElement);
     inputElement.value = 'test';
     inputEl.triggerEventHandler('input', { target: inputElement });
 
