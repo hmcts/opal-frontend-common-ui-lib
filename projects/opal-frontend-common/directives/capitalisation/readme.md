@@ -15,13 +15,13 @@ This Angular directive automatically capitalises all characters in an input fiel
 
 ## Installation
 
-```md
+```typescript
 Import { CapitalisationDirective } from '@hmcts/opal-frontend-common/directives/capitalisation';
 ```
 
 Ensure the directive is declared or imported in your component/module:
 
-```md
+```typescript
 @Component({
   imports: [CapitalisationDirective],
 })
