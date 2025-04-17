@@ -16,7 +16,7 @@ This Angular directive automatically capitalises all characters in an input fiel
 ## Installation
 
 ```typescript
-Import { CapitalisationDirective } from '@hmcts/opal-frontend-common/directives/capitalisation';
+import { CapitalisationDirective } from '@hmcts/opal-frontend-common/directives/capitalisation';
 ```
 
 Ensure the directive is declared or imported in your component/module:
@@ -30,7 +30,7 @@ export class SharedModule {}
 
 ## Selector
 
-Use this attribute selector on an <input> element or a custom component that emits the native input event. The directive listens for input events and capitalises the input value in real time.
+Use this attribute selector on an `<input>` element or a custom component that emits the native input event. The directive listens for input events and capitalises the input value in real time.
 
 ```typescript
 [opalLibCapitaliseAllCharacters];
@@ -38,7 +38,7 @@ Use this attribute selector on an <input> element or a custom component that emi
 
 ## Usage
 
-You can apply the directive to any component or element that contains an <input> element inside it. The directive listens to input events and converts the value to uppercase.
+You can apply the directive to any component or element that is an `<input>` element inside it. The directive listens to input eve
 
 ### Native Input Example
 
