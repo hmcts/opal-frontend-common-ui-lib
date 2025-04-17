@@ -38,7 +38,7 @@ Use this attribute selector on an `<input>` element or a custom component that e
 
 ## Usage
 
-You can apply the directive to any component or element that is an `<input>` element inside it. The directive listens to input eve
+You can apply the directive to any component or element that is an `<input>` element inside it. The directive listens to input events and converts the value to uppercase.
 
 ### Native Input Example
 
