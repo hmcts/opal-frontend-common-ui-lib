@@ -212,6 +212,9 @@
       "@hmcts/opal-frontend-common/components/moj/moj-timeline": [
         "./dist/opal-frontend-common/components/moj/moj-timeline"
       ],
+      "@hmcts/opal-fronted-common/directives/capitalisation": [
+        "./dist/opal-frontend-common/directives/capitalisation"
+      ],
       "@hmcts/opal-frontend-common/constants": [
         "./dist/opal-frontend-common/constants"
       ],
