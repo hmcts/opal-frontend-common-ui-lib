@@ -12,6 +12,7 @@ This is an [Angular Library](https://angular.dev/tools/libraries).
 - [Getting Started](#getting-started)
 - [Development server](#development-server)
 - [Build](#build)
+- [Switching Between Local and Published Versions](#switching-between-local-and-published-versions)
 - [Running unit tests](#running-unit-tests)
 - [Angular code scaffolding](#angular-code-scaffolding)
 - [Commonly Used Commands](#commonly-used-commands)
@@ -38,20 +39,74 @@ yarn
 
 ```
 
-## Development server
-
-Run `yarn ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
-
 ## Build
 
 Run `yarn ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+
+## Switching Between Local and Published Versions
+
+See [opal-frontend](https://github.com/hmcts/opal-frontend) for how this library is consumed in practice.
+
+Use the `yarn import:local:common-ui-lib` and `yarn import:published:common-ui-lib` scripts in your consuming project (`opal-frontend`) to switch between local development and the published npm version of the library.
+
+To use a published version of this library during development in another project:
+
+1. In the consuming project, run:
+   ```bash
+   yarn import:published:common-ui-lib
+   ```
+
+To use a local version of this library during development in another project:
+
+1. Build this library:
+
+   ```bash
+   yarn build
+   ```
+
+2. In your consuming project (e.g. `opal-frontend`), ensure you have set an environment variable pointing to the local build:
+
+   ```bash
+   # In your shell config file (.zshrc, .bash_profile, or .bashrc)
+   export COMMON_UI_LIB_PATH="[INSERT PATH TO COMMON UI LIB FOLDER]"
+   ```
+
+3. In the consuming project (e.g. `opal-frontend`), run:
+
+   ```bash
+   yarn import:local:common-ui-lib
+   ```
+
+   This will remove the published version and install the local build using the path provided.
+
+4. To switch back to the published version:
+   ```bash
+   yarn import:published:common-ui-lib
+   ```
+
+This setup makes it easy to switch between development and production versions of the shared library.
+
+## Publishing the Library
+
+Once any changes have been approved and merged into the main branch, you'll need to publish a new version of the library so that it can be consumed by other projects. To do this:
+
+1. Increment the version number in both the library's root `package.json` and in `/projects/opal-frontend-common/package.json`.
+2. Commit and push those changes to the main branch.
+3. On GitHub, create a new [release](https://github.com/hmcts/opal-frontend-common-ui-lib/releases) and use the updated version number as a tag.
+4. When the release workflow completes, the library will be published.
+
+After this new version of the library is published, any consuming application should remove the local or outdated version of the library and then install the published version by running:
+
+    ```bash
+    yarn import:published:common-ui-lib
+    ```
 
 ## Running unit tests
 
 Run `yarn test` to execute the unit tests via [karma](https://karma-runner.github.io/latest/index.html).
 
 To check code coverage, run `yarn test:coverage` to execute the unit tests via [karma](https://karma-runner.github.io/latest/index.html) but with code coverage.
-Code coverage can then be found in the coverage folder of the repository locally.
+The coverage report will be available in the coverage/ directory (e.g. coverage/index.html).
 
 ## Angular code scaffolding
 
@@ -89,44 +144,22 @@ import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 
 ## Commonly Used Commands
 
-### Lint
+The following commands are available in the `package.json`:
 
-Run `yarn lint` to check your codebase for linting errors.
+- `yarn build`  
+  Builds the Angular library and outputs to the `dist/` folder.
 
-### Prettier Fix
+- `yarn test`  
+  Executes unit tests via [karma](https://karma-runner.github.io/latest/index.html).
 
-Run `yarn prettier:fix` to automatically format your code according to the Prettier rules.
+- `yarn test:coverage`  
+  Runs unit tests with code coverage reporting enabled. The coverage report can be found in the `coverage/` directory.
 
-### Test Coverage
+- `yarn lint`  
+  Runs linting using ESLint.
 
-Run `yarn test:coverage` to execute unit tests with code coverage. Code coverage can then be found in the `coverage/` folder of the repository locally (e.g. `coverage/index.html`).
+- `yarn prettier`  
+  Checks that all files conform to the Prettier formatting rules.
 
-## Using This Library in an Angular Application (e.g. opal-frontend)
-
-Here are some common commands you might use when integrating this library into another Angular project:
-
-- `yarn remove @hmcts/opal-frontend-common`
-  Removes the existing library package.
-
-- `rm -rf .angular/cache`
-  Clears the Angular build cache, which can help avoid issues caused by stale builds.
-
-- `yarn add @hmcts/opal-frontend-common@file:[insert location from library terminal after building]`
-  Installs the library from a local file path (the build output). Replace `[insert location from library terminal after building]` with the actual path to the generated package.
-
-## Publishing the Library
-
-Once any changes have been approved and merged into the main branch, you'll need to publish a new version of the library so that it can be consumed by other projects. To do this:
-
-1. Increment the version number in both the library's root `package.json` and in `/projects/opal-frontend-common/package.json`.
-2. Commit and push those changes to the main branch.
-3. On GitHub, create a new [release](https://github.com/hmcts/opal-frontend-common-ui-lib/releases) and use the updated version number as a tag.
-4. When the release workflow completes, the library will be published.
-
-After this new version of the library is published, any consuming application should remove the local or outdated version of the library and then install the published version by running:
-
-```bash
-yarn remove @hmcts/opal-frontend-common
-rm -rf .angular/cache
-yarn add @hmcts/opal-frontend-common
-```
+- `yarn prettier:fix`  
+  Automatically formats files using Prettier.
