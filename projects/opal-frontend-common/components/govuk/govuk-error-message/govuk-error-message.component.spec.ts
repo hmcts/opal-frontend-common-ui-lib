@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { GovUkErrorMessageComponent } from './govuk-error-message.component';
+import { GovukErrorMessageComponent } from './govuk-error-message.component';
 import { By } from '@angular/platform-browser';
 
 describe('GovUkErrorMessageComponent', () => {
-  let component: GovUkErrorMessageComponent;
-  let fixture: ComponentFixture<GovUkErrorMessageComponent>;
+  let component: GovukErrorMessageComponent;
+  let fixture: ComponentFixture<GovukErrorMessageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GovUkErrorMessageComponent],
+      imports: [GovukErrorMessageComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(GovUkErrorMessageComponent);
+    fixture = TestBed.createComponent(GovukErrorMessageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

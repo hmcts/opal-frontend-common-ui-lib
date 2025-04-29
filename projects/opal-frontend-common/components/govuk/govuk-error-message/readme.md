@@ -16,7 +16,7 @@ This Angular component implements the GOV.UK-styled error messages, providing a 
 ## Installation
 
 ```typescript
-import { GovUkErrorMessageComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-error-message';
+import { GovukErrorMessageComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-error-message';
 ```
 
 ## Usage
@@ -24,13 +24,13 @@ import { GovUkErrorMessageComponent } from '@hmcts/opal-frontend-common/componen
 You can use the error summary component in your template as follows:
 
 ```html
-<opal-lib-gov-uk-error-message [error]= "minorCreditorMissing" errorMessage = "Add minor creditor details" elementId="error-message"> </opal-lib-gov-uk-error-message>
+<opal-lib-govuk-error-message [error]= "minorCreditorMissing" errorMessage = "Add minor creditor details" elementId="error-message"> </opal-lib-govuk-error-message>
 ```
 
 ### Example in HTML:
 
 ```html
-<opal-lib-gov-uk-error-message  
+<opal-lib-govuk-error-message  
   [error]="minorCreditorMissing"  
   errorMessage="Add minor creditor details"  
   elementId="error-message"  
@@ -43,7 +43,7 @@ You can use the error summary component in your template as follows:
   >  
     Add minor creditor details  
   </a>  
-</opal-lib-gov-uk-error-message> 
+</opal-lib-govuk-error-message> 
 ```
 
 ## Inputs
