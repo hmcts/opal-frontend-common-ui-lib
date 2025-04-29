@@ -24,7 +24,7 @@ import { GovUkErrorMessageComponent } from '@hmcts/opal-frontend-common/componen
 You can use the error summary component in your template as follows:
 
 ```html
-<opal-lib-gov-uk-error-message error="Add minor creditor details" elementId="error-message"> </opal-lib-gov-uk-error-message>
+<opal-lib-gov-uk-error-message [error]= "minorCreditorMissing" errorMessage = "Add minor creditor details" elementId="error-message"> </opal-lib-gov-uk-error-message>
 ```
 
 ### Example in HTML:
@@ -48,11 +48,11 @@ You can use the error summary component in your template as follows:
 
 ## Inputs
 
-| Input          | Type     | Description                                                            |
-| -------------- | -------- | ---------------------------------------------------------------------- |
-| `error`        | `boolean`| A boolean value thats used to check if there is an error.              |
-| `errorMessage` | `string` | Input for the error message to be displayed                            |
-| `elementId`    | `string` | The id of the host element that the error message will be attached to. |
+| Input          | Type     |Description                                                             |
+| -------------- | -------- |----------------------------------------------------------------------  |
+| `error`        | `boolean`| A boolean value that’s used to determine if an error is present.       |
+| `errorMessage` | `string` | The error message to display when an error is present.                 |
+| `elementId`    | `string` | The ID to associate with the error message element for accessibility   |
 
 
 ## Outputs
@@ -65,7 +65,7 @@ There are no methods for this component.
 
 ## Testing
 
-Unit tests for this component can be found in the `govuk-error-summary.component.spec.ts` file. To run the tests, use:
+Unit tests for this component can be found in the `govuk-error-message.component.spec.ts` file. To run the tests, use:
 
 ```bash
 yarn test

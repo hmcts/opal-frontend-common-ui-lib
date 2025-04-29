@@ -28,7 +28,7 @@ describe('GovUkErrorMessageComponent', () => {
 
     const errorElement = fixture.debugElement.query(By.css('.govuk-error-message'));
     expect(errorElement).toBeTruthy();
-    expect(errorElement.nativeElement.textContent.trim()).toContain('This is an error message');
+    expect(errorElement.nativeElement.textContent).toContain('This is an error message');
   });
 
   it('should not display the error message when error is false', () => {
