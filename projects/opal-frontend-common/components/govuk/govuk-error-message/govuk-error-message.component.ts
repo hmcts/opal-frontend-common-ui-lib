@@ -6,6 +6,7 @@ import { Component, Input } from '@angular/core';
   templateUrl: './govuk-error-message.component.html',
 })
 export class GovUkErrorMessageComponent {
-  @Input({ required: true }) error: string | null = null;
+  @Input({ required: true }) error!: boolean;
+  @Input({ required: true }) errorMessage!: string;
   @Input({ required: true }) elementId!: string;
 }
