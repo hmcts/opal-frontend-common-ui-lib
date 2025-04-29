@@ -1,0 +1,4 @@
+<div class="govuk-form-group" [class.govuk-form-group--error]="!!error">
+  <ng-content></ng-content>
+  <p id="{{ elementId }}" class="govuk-error-message"><span class="govuk-visually-hidden">Error: </span> {{ error }}</p>
+</div>

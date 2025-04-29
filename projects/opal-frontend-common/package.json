@@ -92,6 +92,9 @@
     "./components/govuk/govuk-details": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-details.mjs"
     },
+    "./components/govuk/govuk-error-message": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-error-message.mjs"
+    },
     "./components/govuk/govuk-error-summary": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-error-summary.mjs"
     },
