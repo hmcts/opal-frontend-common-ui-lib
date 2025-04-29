@@ -19,8 +19,11 @@ export class CapitalisationDirective {
     const target = event.target as HTMLInputElement;
     const value = target.value;
 
+    if (!value) {
+      return;
+    }
+
     const capitalisedValue = this.utilsService.upperCaseAllLetters(value);
-    this.renderer.setProperty(target, 'value', capitalisedValue);
 
     if (value !== capitalisedValue) {
       this.renderer.setProperty(target, 'value', capitalisedValue);
