@@ -14,15 +14,11 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
       globalStore.setError({ error: false, message: '' });
     }),
     catchError((error) => {
-      // Ensure ErrorEvent is handled only in browser environments
       const isBrowser = typeof window !== 'undefined';
       const isErrorEvent = isBrowser && typeof ErrorEvent !== 'undefined' && error.error instanceof ErrorEvent;
 
-      const errorMessage = error?.error?.detail
-        ? error.error.detail
-        : isErrorEvent
-          ? `Error: ${error.error.message}`
-          : `Error: ${error.message}`;
+      const errorMessage =
+        error?.error?.detail || (isErrorEvent ? `Error: ${error.error.message}` : `Error: ${error.message}`);
 
       globalStore.setError({
         error: true,
