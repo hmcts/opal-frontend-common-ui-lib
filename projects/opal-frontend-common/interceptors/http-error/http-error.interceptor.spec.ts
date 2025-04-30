@@ -70,4 +70,25 @@ describe('httpErrorInterceptor', () => {
 
     expect(globalStore.error()).toEqual({ error: false, message: '' });
   });
+
+  it('should set the error message from error.detail when available', () => {
+    const errorResponse = new HttpErrorResponse({
+      status: 400,
+      error: {
+        detail: 'This is a problem detail error message',
+      },
+    });
+    const request = new HttpRequest('GET', '/test');
+    const next: HttpHandlerFn = () => throwError(() => errorResponse);
+
+    expect(globalStore.error().error).toBeFalsy();
+
+    interceptor(request, next).subscribe({
+      error: () => {
+        const errorSignal = globalStore.error();
+        expect(errorSignal.error).toBeTrue();
+        expect(errorSignal.message).toBe('This is a problem detail error message');
+      },
+    });
+  });
 });
