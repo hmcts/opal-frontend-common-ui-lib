@@ -1,31 +1,42 @@
-import { Component, DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed, fakeAsync, flush } from '@angular/core/testing';
 import { CapitalisationDirective } from './capitalisation.directive';
 import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { GovukTextInputComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-text-input';
 
 @Component({
-  template: `<input opalLibCapitaliseAllCharacters type="text" /> `,
-  imports: [CapitalisationDirective],
+  template: `
+    <opal-lib-govuk-text-input
+      [control]="control"
+      [opalLibCapitaliseAllCharacters]="control"
+      inputId="test-id"
+      inputName="test-name"
+    ></opal-lib-govuk-text-input>
+  `,
+  standalone: true,
+  imports: [GovukTextInputComponent, CapitalisationDirective, ReactiveFormsModule],
 })
-class TestComponent {}
+class WrappedTestComponent {
+  control = new FormControl('');
+}
 
 describe('CapitalisationDirective', () => {
-  let inputEl: DebugElement;
   let mockUtilsService: jasmine.SpyObj<UtilsService>;
-  let fixture: ComponentFixture<TestComponent> | null;
+  let fixture: ComponentFixture<WrappedTestComponent> | null;
+  let testComponent: WrappedTestComponent;
 
   beforeEach(async () => {
     mockUtilsService = jasmine.createSpyObj('UtilsService', ['upperCaseAllLetters']);
     mockUtilsService.upperCaseAllLetters.and.callFake((value: string) => value.toUpperCase());
 
-    TestBed.configureTestingModule({
-      imports: [TestComponent],
+    await TestBed.configureTestingModule({
+      imports: [WrappedTestComponent, ReactiveFormsModule],
       providers: [{ provide: UtilsService, useValue: mockUtilsService }],
-    });
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(TestComponent);
-    inputEl = fixture.debugElement.query(By.css('input'));
+    fixture = TestBed.createComponent(WrappedTestComponent);
+    testComponent = fixture.componentInstance;
     fixture.detectChanges();
   });
 
@@ -33,21 +44,45 @@ describe('CapitalisationDirective', () => {
     expect(fixture).toBeTruthy();
   });
 
-  it('should capitalise input value in real-time', () => {
-    const inputElement = inputEl.nativeElement as HTMLInputElement;
-    inputElement.value = 'test';
-    inputEl.triggerEventHandler('input', { target: inputElement });
-
+  it('should capitalise control value in real-time', fakeAsync(() => {
+    testComponent.control.setValue('test');
+    flush();
     expect(mockUtilsService.upperCaseAllLetters).toHaveBeenCalled();
-    expect(inputElement.value).toBe('TEST');
+    expect(testComponent.control.value).toBe('TEST');
+  }));
+
+  it('should not capitalise if control value is empty', fakeAsync(() => {
+    testComponent.control.setValue('');
+    flush();
+    expect(mockUtilsService.upperCaseAllLetters).not.toHaveBeenCalled();
+    expect(testComponent.control.value).toBe('');
+  }));
+});
+
+describe('CapitalisationDirective when used without form control binding', () => {
+  let mockUtilsService: jasmine.SpyObj<UtilsService>;
+
+  @Component({
+    template: `<input type="text" opalLibCapitaliseAllCharacters />`,
+    standalone: true,
+    imports: [CapitalisationDirective],
+  })
+  class MissingControlComponent {}
+
+  beforeEach(async () => {
+    mockUtilsService = jasmine.createSpyObj('UtilsService', ['upperCaseAllLetters']);
+    mockUtilsService.upperCaseAllLetters.and.callFake((value: string) => value.toUpperCase());
+
+    await TestBed.configureTestingModule({
+      imports: [MissingControlComponent],
+      providers: [{ provide: UtilsService, useValue: mockUtilsService }],
+    }).compileComponents();
   });
 
-  it('should not capitalise if input is empty', () => {
-    const inputElement = inputEl.nativeElement as HTMLInputElement;
-    inputElement.value = '';
-    inputEl.triggerEventHandler('input', { target: inputElement });
+  it('should not throw or subscribe if control is missing', () => {
+    const missingFixture = TestBed.createComponent(MissingControlComponent);
+    missingFixture.detectChanges();
 
     expect(mockUtilsService.upperCaseAllLetters).not.toHaveBeenCalled();
-    expect(inputElement.value).toBe('');
   });
 });
