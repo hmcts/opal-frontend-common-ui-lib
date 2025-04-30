@@ -1,27 +1,33 @@
-import { Directive, HostListener, Renderer2, inject } from '@angular/core';
+import { Directive, Input, OnInit, OnDestroy } from '@angular/core';
+import { AbstractControl } from '@angular/forms';
+import { Subject, takeUntil } from 'rxjs';
 import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service';
 
 @Directive({
   selector: '[opalLibCapitaliseAllCharacters]',
 })
-export class CapitalisationDirective {
-  private readonly renderer = inject(Renderer2);
-  private readonly utilsService = inject(UtilsService);
+export class CapitalisationDirective implements OnInit, OnDestroy {
+  @Input('opalLibCapitaliseAllCharacters') control!: AbstractControl;
 
-  /**
-   * Handles the input event on the associated HTML element.
-   * Captures the input value, applies capitalisation, and updates the element's value.
-   *
-   * @param event - The input event triggered by the user.
-   */
-  @HostListener('input', ['$event'])
-  onInput(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    const value = target.value;
+  private destroy$ = new Subject<void>();
 
-    if (value) {
-      const capitalisedValue = this.utilsService.upperCaseAllLetters(value);
-      this.renderer.setProperty(target, 'value', capitalisedValue);
-    }
+  constructor(private utilsService: UtilsService) {}
+
+  ngOnInit(): void {
+    if (!this.control) return;
+
+    this.control.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (typeof value === 'string' && value.length > 0) {
+        const upper = this.utilsService.upperCaseAllLetters(value);
+        if (value !== upper) {
+          this.control.setValue(upper, { emitEvent: false });
+        }
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -30,25 +30,25 @@ export class SharedModule {}
 
 ## Selector
 
-Use this attribute selector on an `<input>` element or a custom component that emits the native input event. The directive listens for input events and capitalises the input value in real time.
+Use this attribute selector on any component or element by passing in an Angular form control via the directive input. The directive listens for value changes and capitalises the content of the provided control.
 
 [opalLibCapitaliseAllCharacters]
 
 ## Usage
 
-You can apply the directive to any component or element that is an `<input>` element inside it. The directive listens to input events and converts the value to uppercase.
+You can apply the directive to any component or element by binding it to an Angular form control. The directive listens to the control's value changes and converts the value to uppercase.
 
 ### Native Input Example
 
 ```html
-<input type="text" opalLibCapitaliseAllCharacters />
+<input type="text" [formControl]="formControl" [opalLibCapitaliseAllCharacters]="formControl" />
 ```
 
 ### Custom Component Example
 
 ```html
 <opal-lib-govuk-text-input
-  opalLibCapitaliseAllCharacters
+  [opalLibCapitaliseAllCharacters]="form.controls['exampleInput']"
   inputId="exampleInput"
   inputName="exampleInput"
   labelText="Reference Number"
@@ -58,11 +58,11 @@ You can apply the directive to any component or element that is an `<input>` ele
 
 ### Expected Behaviour
 
-For example, if a user types `ab12cd`, the input will be transformed to `AB12CD` in real time.
+For example, if a user types `ab12cd`, the form control's value will be transformed to `AB12CD` in real time via the control's value changes.
 
 ## Inputs
 
-There are no configurable inputs for this directive.
+- `opalLibCapitaliseAllCharacters` – Accepts an `AbstractControl` (such as `FormControl`). The directive subscribes to its value changes and updates it to uppercase.
 
 ## Outputs
 
