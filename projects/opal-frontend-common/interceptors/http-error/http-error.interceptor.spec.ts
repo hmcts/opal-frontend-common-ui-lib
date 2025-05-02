@@ -4,6 +4,7 @@ import { httpErrorInterceptor } from './http-error.interceptor';
 import { of, throwError } from 'rxjs';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
+import { GENERIC_HTTP_ERROR_MESSAGE } from './constants/http-error-message.constant';
 
 describe('httpErrorInterceptor', () => {
   let globalStore: GlobalStoreType;
@@ -31,8 +32,9 @@ describe('httpErrorInterceptor', () => {
 
     interceptor(request, next).subscribe({
       error: () => {
-        const errorState = globalStore.error().error;
-        expect(errorState).toBeTruthy();
+        const errorSignal = globalStore.error();
+        expect(errorSignal.error).toBeTrue();
+        expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
       },
     });
   });
@@ -54,8 +56,9 @@ describe('httpErrorInterceptor', () => {
 
     interceptor(request, next).subscribe({
       error: () => {
-        const errorState = globalStore.error().error;
-        expect(errorState).toBeTruthy();
+        const errorSignal = globalStore.error();
+        expect(errorSignal.error).toBeTrue();
+        expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
       },
     });
   });
@@ -87,7 +90,7 @@ describe('httpErrorInterceptor', () => {
       error: () => {
         const errorSignal = globalStore.error();
         expect(errorSignal.error).toBeTrue();
-        expect(errorSignal.message).toBe('This is a problem detail error message');
+        expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
       },
     });
   });
