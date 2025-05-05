@@ -162,4 +162,22 @@ describe('UtilsService', () => {
     const form = { key1: undefined };
     expect(service.checkFormValues(form)).toBeFalse();
   });
+
+  it('should copy the provided value to the clipboard', async () => {
+    const value = 'Test clipboard value';
+    const writeTextSpy = spyOn(navigator.clipboard, 'writeText').and.returnValue(Promise.resolve());
+    await service.copyToClipboard(value);
+    expect(writeTextSpy).toHaveBeenCalledWith(value);
+  });
+
+  it('should handle clipboard API errors gracefully', async () => {
+    const value = 'Test clipboard value';
+    const writeTextSpy = spyOn(navigator.clipboard, 'writeText').and.returnValue(Promise.reject('Clipboard error'));
+    try {
+      await service.copyToClipboard(value);
+    } catch (error) {
+      expect(writeTextSpy).toHaveBeenCalledWith(value);
+      expect(error).toEqual('Clipboard error');
+    }
+  });
 });
