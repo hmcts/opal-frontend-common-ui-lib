@@ -3,6 +3,7 @@ import { inject } from '@angular/core';
 import { catchError, tap, throwError } from 'rxjs';
 import { AppInsightsService } from '@hmcts/opal-frontend-common/services/app-insights-service';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
+import { GENERIC_HTTP_ERROR_MESSAGE } from './constants/http-error-message.constant';
 
 export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
   const globalStore = inject(GlobalStore);
@@ -14,16 +15,14 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
       globalStore.setError({ error: false, message: '' });
     }),
     catchError((error) => {
-      // Ensure ErrorEvent is handled only in browser environments
       const isBrowser = typeof window !== 'undefined';
-      const isErrorEvent = isBrowser && typeof ErrorEvent !== 'undefined' && error.error instanceof ErrorEvent;
 
-      const errorMessage = isErrorEvent ? `Error: ${error.error.message}` : `Error: ${error.message}`;
-
-      globalStore.setError({
-        error: true,
-        message: errorMessage,
-      });
+      if (isBrowser) {
+        globalStore.setError({
+          error: true,
+          message: GENERIC_HTTP_ERROR_MESSAGE,
+        });
+      }
 
       appInsightsService.logException(error);
 

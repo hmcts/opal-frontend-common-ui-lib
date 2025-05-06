@@ -4,6 +4,7 @@ import { httpErrorInterceptor } from './http-error.interceptor';
 import { of, throwError } from 'rxjs';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
+import { GENERIC_HTTP_ERROR_MESSAGE } from './constants/http-error-message.constant';
 
 describe('httpErrorInterceptor', () => {
   let globalStore: GlobalStoreType;
@@ -31,8 +32,9 @@ describe('httpErrorInterceptor', () => {
 
     interceptor(request, next).subscribe({
       error: () => {
-        const errorState = globalStore.error().error;
-        expect(errorState).toBeTruthy();
+        const errorSignal = globalStore.error();
+        expect(errorSignal.error).toBeTrue();
+        expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
       },
     });
   });
@@ -54,8 +56,9 @@ describe('httpErrorInterceptor', () => {
 
     interceptor(request, next).subscribe({
       error: () => {
-        const errorState = globalStore.error().error;
-        expect(errorState).toBeTruthy();
+        const errorSignal = globalStore.error();
+        expect(errorSignal.error).toBeTrue();
+        expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
       },
     });
   });
@@ -69,5 +72,26 @@ describe('httpErrorInterceptor', () => {
     });
 
     expect(globalStore.error()).toEqual({ error: false, message: '' });
+  });
+
+  it('should set the error message from error.detail when available', () => {
+    const errorResponse = new HttpErrorResponse({
+      status: 400,
+      error: {
+        detail: 'This is a problem detail error message',
+      },
+    });
+    const request = new HttpRequest('GET', '/test');
+    const next: HttpHandlerFn = () => throwError(() => errorResponse);
+
+    expect(globalStore.error().error).toBeFalsy();
+
+    interceptor(request, next).subscribe({
+      error: () => {
+        const errorSignal = globalStore.error();
+        expect(errorSignal.error).toBeTrue();
+        expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
+      },
+    });
   });
 });
