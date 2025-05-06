@@ -90,4 +90,17 @@ export class UtilsService {
   ): string {
     return forms.every((form) => this.checkFormValues(form)) ? providedMessage : notProvidedMessage;
   }
+
+  /**
+   * Copies the provided string value to the clipboard.
+   *
+   * @param value - The string value to be copied to the clipboard.
+   *
+   * @remarks
+   * This method uses the `navigator.clipboard.writeText` API to copy text to the clipboard.
+   * Ensure that the browser supports the Clipboard API before using this method.
+   */
+  public copyToClipboard(value: string): Promise<void> {
+    return navigator.clipboard.writeText(value);
+  }
 }
