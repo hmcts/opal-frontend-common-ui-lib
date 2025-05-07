@@ -24,20 +24,26 @@ export abstract class AbstractFormParentBaseComponent {
   }
 
   /**
-   * Navigates to the specified route using the Angular router.
+   * Navigates to a specified route using the Angular Router.
    *
-   * @param route - The route to navigate to.
+   * @param route - The target route to navigate to.
+   * @param nonRelative - A boolean indicating whether the navigation should be absolute (true)
+   *                      or relative to the current route (false). Defaults to false.
+   * @param event - (Optional) The event object, typically from a click event, to prevent its default behavior.
+   * @param routeData - (Optional) Additional data to pass to the target route's state.
    */
-  protected routerNavigate(route: string, nonRelative: boolean = false, event?: Event): void {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  protected routerNavigate(route: string, nonRelative: boolean = false, event?: Event, routeData?: any): void {
     if (event) {
       event.preventDefault();
     }
 
-    if (nonRelative) {
-      this.router.navigate([route]);
-    } else {
-      this.router.navigate([route], { relativeTo: this.activatedRoute.parent });
-    }
+    const navigationExtras = {
+      ...(nonRelative ? {} : { relativeTo: this.activatedRoute.parent }),
+      ...(routeData !== undefined ? { state: routeData } : {}),
+    };
+
+    this.router.navigate([route], navigationExtras);
   }
 
   /**
