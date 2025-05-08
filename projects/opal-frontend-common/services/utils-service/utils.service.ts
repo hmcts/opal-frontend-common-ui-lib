@@ -103,4 +103,22 @@ export class UtilsService {
   public copyToClipboard(value: string): Promise<void> {
     return navigator.clipboard.writeText(value);
   }
+
+  /**
+   * Filters out properties from an object where the value is either `null` or `undefined`.
+   *
+   * @param obj - The object to filter. It should be a record with string keys and values of any type.
+   * @returns A new object containing only the properties with non-null and non-undefined values.
+   *
+   * @example
+   * ```typescript
+   * const input = { a: 1, b: null, c: undefined, d: 'hello' };
+   * const result = filterNullOrUndefined(input);
+   * console.log(result); // Output: { a: 1, d: 'hello' }
+   * ```
+   */
+  public filterNullOrUndefined(obj: Record<string, unknown>): Record<string, unknown> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    return Object.fromEntries(Object.entries(obj).filter(([_, value]) => value !== null && value !== undefined));
+  }
 }
