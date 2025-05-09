@@ -105,20 +105,35 @@ export class UtilsService {
   }
 
   /**
-   * Filters out properties from an object where the value is either `null` or `undefined`.
+   * Recursively filters out properties from an object where the value is `null` or `undefined`.
    *
-   * @param obj - The object to filter. It should be a record with string keys and values of any type.
-   * @returns A new object containing only the properties with non-null and non-undefined values.
+   * @param obj - The object to filter. Can include nested objects.
+   * @returns A new object with only non-null and non-undefined values.
    *
    * @example
-   * ```typescript
-   * const input = { a: 1, b: null, c: undefined, d: 'hello' };
+   * ```ts
+   * const input = {
+   *   a: 1,
+   *   b: null,
+   *   c: undefined,
+   *   d: 'hello',
+   *   e: { x: null, y: 2 },
+   *   f: { z: undefined },
+   * };
    * const result = filterNullOrUndefined(input);
-   * console.log(result); // Output: { a: 1, d: 'hello' }
+   * console.log(result); // Output: { a: 1, d: 'hello', e: { y: 2 } }
    * ```
    */
   public filterNullOrUndefined(obj: Record<string, unknown>): Record<string, unknown> {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    return Object.fromEntries(Object.entries(obj).filter(([_, value]) => value !== null && value !== undefined));
+    return Object.fromEntries(
+      Object.entries(obj)
+        .filter(([_, value]) => value !== null && value !== undefined)
+        .map(([key, value]) => {
+          if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
+            return [key, this.filterNullOrUndefined(value as Record<string, unknown>)];
+          }
+          return [key, value];
+        }),
+    );
   }
 }
