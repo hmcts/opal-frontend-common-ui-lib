@@ -80,7 +80,7 @@ describe('AbstractFormParentBaseComponent', () => {
 
     const routerSpy = spyOn(component['router'], 'navigate');
     component['routerNavigate']('test', true);
-    expect(routerSpy).toHaveBeenCalledWith(['test']);
+    expect(routerSpy).toHaveBeenCalledWith(['test'], {});
   });
 
   it('should test routerNavigate with event', () => {
@@ -94,6 +94,24 @@ describe('AbstractFormParentBaseComponent', () => {
 
     component['routerNavigate']('test', false, event);
     expect(routerSpy).toHaveBeenCalledWith(['test'], { relativeTo: component['activatedRoute'].parent });
+    expect(event.preventDefault).toHaveBeenCalled();
+  });
+
+  it('should test routerNavigate with routeData', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const routerSpy = spyOn(component['router'], 'navigate');
+    const event = jasmine.createSpyObj('event', ['preventDefault']);
+    const routeData = { someData: 'test' };
+
+    component['routerNavigate']('test', false, event, routeData);
+    expect(routerSpy).toHaveBeenCalledWith(['test'], {
+      relativeTo: component['activatedRoute'].parent,
+      state: routeData,
+    });
     expect(event.preventDefault).toHaveBeenCalled();
   });
 

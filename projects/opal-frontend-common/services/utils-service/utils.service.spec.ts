@@ -180,4 +180,44 @@ describe('UtilsService', () => {
       expect(error).toEqual('Clipboard error');
     }
   });
+
+  it('should recursively filter out null and undefined values from an object', () => {
+    const input = {
+      a: 'value',
+      b: null,
+      c: undefined,
+      d: 0,
+      e: '',
+      f: false,
+      g: {
+        g1: null,
+        g2: 'nested',
+        g3: {
+          g3a: undefined,
+          g3b: 'deep',
+        },
+      },
+      h: {},
+      i: {
+        i1: null,
+      },
+    };
+
+    const result = service.filterNullOrUndefined(input);
+
+    expect(result).toEqual({
+      a: 'value',
+      d: 0,
+      e: '',
+      f: false,
+      g: {
+        g2: 'nested',
+        g3: {
+          g3b: 'deep',
+        },
+      },
+      h: {},
+      i: {},
+    });
+  });
 });

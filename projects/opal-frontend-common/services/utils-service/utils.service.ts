@@ -103,4 +103,38 @@ export class UtilsService {
   public copyToClipboard(value: string): Promise<void> {
     return navigator.clipboard.writeText(value);
   }
+
+  /**
+   * Recursively filters out properties from an object where the value is `null` or `undefined`.
+   *
+   * @param obj - The object to filter. Can include nested objects.
+   * @returns A new object with only non-null and non-undefined values.
+   *
+   * @example
+   * ```ts
+   * const input = {
+   *   a: 1,
+   *   b: null,
+   *   c: undefined,
+   *   d: 'hello',
+   *   e: { x: null, y: 2 },
+   *   f: { z: undefined },
+   * };
+   * const result = filterNullOrUndefined(input);
+   * console.log(result); // Output: { a: 1, d: 'hello', e: { y: 2 } }
+   * ```
+   */
+  public filterNullOrUndefined(obj: Record<string, unknown>): Record<string, unknown> {
+    return Object.fromEntries(
+      Object.entries(obj)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .filter(([_, value]) => value !== null && value !== undefined)
+        .map(([key, value]) => {
+          if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
+            return [key, this.filterNullOrUndefined(value as Record<string, unknown>)];
+          }
+          return [key, value];
+        }),
+    );
+  }
 }
