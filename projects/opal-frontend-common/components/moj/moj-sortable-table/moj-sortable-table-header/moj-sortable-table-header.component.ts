@@ -1,10 +1,11 @@
 import { Component, HostBinding, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
+import { MojSortableTableHeaderSortIconDirective } from './directive/moj-sortable-table-header-sort-icon.directive';
 
 @Component({
   selector: 'opal-lib-moj-sortable-table-header, [opal-lib-moj-sortable-table-header]',
-  imports: [],
   templateUrl: './moj-sortable-table-header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [MojSortableTableHeaderSortIconDirective],
 })
 export class MojSortableTableHeaderComponent {
   @Input() columnKey!: string;

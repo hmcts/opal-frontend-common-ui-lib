@@ -1,3 +1,12 @@
-<button [attr.data-index]="dataIndex" (click)="toggleSort()" type="button">
+<button type="button" (click)="toggleSort()" [attr.aria-sort]="sortDirection" [attr.data-index]="dataIndex">
   <ng-content></ng-content>
+  <svg
+    [opalLibMojSortableTableHeaderSortIcon]="sortDirection"
+    width="22"
+    height="22"
+    focusable="false"
+    aria-hidden="true"
+    role="img"
+    vviewBox="0 0 22 22"
+  ></svg>
 </button>
