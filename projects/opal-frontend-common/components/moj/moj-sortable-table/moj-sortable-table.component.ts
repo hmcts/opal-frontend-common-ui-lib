@@ -1,5 +1,4 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { addGdsBodyClass } from '@hmcts/opal-frontend-common/components/govuk/helpers';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'opal-lib-moj-sortable-table',
@@ -9,21 +8,4 @@ import { addGdsBodyClass } from '@hmcts/opal-frontend-common/components/govuk/he
 })
 export class MojSortableTableComponent {
   @Input({ required: false }) public tableClasses!: string;
-
-  constructor() {
-    afterNextRender(() => {
-      // Only trigger the render of the component in the browser
-      this.configureSortableTable();
-    });
-  }
-
-  /**
-   * Configures the sortable functionality using the moj library.
-   */
-  public configureSortableTable(): void {
-    import('@ministryofjustice/frontend/moj/all').then((sortableTable) => {
-      addGdsBodyClass();
-      sortableTable.initAll();
-    });
-  }
 }
