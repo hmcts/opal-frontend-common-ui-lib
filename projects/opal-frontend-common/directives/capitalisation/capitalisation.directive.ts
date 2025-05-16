@@ -9,9 +9,9 @@ import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service
 export class CapitalisationDirective implements OnInit, OnDestroy {
   @Input('opalLibCapitaliseAllCharacters') control!: AbstractControl;
 
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
-  constructor(private utilsService: UtilsService) {}
+  constructor(private readonly utilsService: UtilsService) {}
 
   ngOnInit(): void {
     if (!this.control) return;

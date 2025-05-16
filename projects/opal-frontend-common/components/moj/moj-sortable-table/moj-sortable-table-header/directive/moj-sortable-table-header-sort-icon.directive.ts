@@ -9,8 +9,8 @@ export class MojSortableTableHeaderSortIconDirective implements OnChanges {
   @Input('opalLibMojSortableTableHeaderSortIcon') sortDirection: 'ascending' | 'descending' | 'none' = 'none';
 
   constructor(
-    private el: ElementRef<SVGSVGElement>,
-    private renderer: Renderer2,
+    private readonly el: ElementRef<SVGSVGElement>,
+    private readonly renderer: Renderer2,
   ) {}
 
   /**
