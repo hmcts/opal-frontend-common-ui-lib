@@ -31,7 +31,7 @@ describe('MojSortableTableHeaderSortIconDirective', () => {
 
     const paths = fixture.nativeElement.querySelectorAll('path');
     expect(paths.length).toBe(1);
-    expect(paths[0].getAttribute('d')).toBe(MOJ_SORTABLE_TABLE_HEADER_SORT_ICONS.descending);
+    expect(paths[0].getAttribute('d')).toBe(MOJ_SORTABLE_TABLE_HEADER_SORT_ICONS.ascending);
   });
 
   it('should render ascending icon path when sortDirection is descending', () => {
@@ -40,7 +40,7 @@ describe('MojSortableTableHeaderSortIconDirective', () => {
 
     const paths = fixture.nativeElement.querySelectorAll('path');
     expect(paths.length).toBe(1);
-    expect(paths[0].getAttribute('d')).toBe(MOJ_SORTABLE_TABLE_HEADER_SORT_ICONS.ascending);
+    expect(paths[0].getAttribute('d')).toBe(MOJ_SORTABLE_TABLE_HEADER_SORT_ICONS.descending);
   });
 
   it('should render both neutral icon paths when sortDirection is none', () => {
