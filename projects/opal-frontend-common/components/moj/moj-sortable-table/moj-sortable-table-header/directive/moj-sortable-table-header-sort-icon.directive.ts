@@ -23,9 +23,9 @@ export class MojSortableTableHeaderSortIconDirective implements OnChanges {
     const icons = MOJ_SORTABLE_TABLE_HEADER_SORT_ICONS;
     switch (dir) {
       case 'ascending':
-        return [icons.descending];
-      case 'descending':
         return [icons.ascending];
+      case 'descending':
+        return [icons.descending];
       default:
         return icons.none;
     }
