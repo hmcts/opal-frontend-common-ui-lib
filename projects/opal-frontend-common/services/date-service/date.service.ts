@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DateTime, Duration, DurationLikeObject } from 'luxon';
+import { IDateRange } from './interfaces/date.service.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -211,5 +212,26 @@ export class DateService {
 
     const now = this.getDateNow().startOf('day');
     return Math.round(now.diff(inputDate, 'days').days);
+  }
+
+  /**
+   * Returns a date range object with 'from' and 'to' properties.
+   * @param pastDays - The number of days in the past from today.
+   * @param futureDays - The number of days in the future from today.
+   * @param format - The format for the date strings (default: 'yyyy-MM-dd').
+   * @returns An object containing 'from' and 'to' date strings in the specified format.
+   */
+  public getDateRange(pastDays: number = 0, futureDays: number = 0, format: string = 'yyyy-MM-dd'): IDateRange {
+    const dateTo = this.getDateNow().plus({ days: futureDays }).toISODate();
+    const dateFrom = this.getDateNow().minus({ days: pastDays }).toISODate();
+
+    if (!dateTo || !dateFrom) {
+      throw new Error('Invalid date range');
+    }
+
+    return {
+      from: this.toFormat(this.getFromIso(dateFrom), format),
+      to: this.toFormat(this.getFromIso(dateTo), format),
+    };
   }
 }
