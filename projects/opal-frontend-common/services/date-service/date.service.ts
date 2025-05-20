@@ -234,5 +234,4 @@ export class DateService {
       to: this.toFormat(this.getFromIso(dateTo), format),
     };
   }
-
 }

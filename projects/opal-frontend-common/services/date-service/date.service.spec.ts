@@ -456,7 +456,7 @@ describe('DateServiceService', () => {
     expect(result.to).toBe('2024-05-23');
   });
 
-    it('should return correct formatted date range for given past and future days when inputs are missing', () => {
+  it('should return correct formatted date range for given past and future days when inputs are missing', () => {
     // Mock getDateNow to return a fixed date
     spyOn(service, 'getDateNow').and.returnValue(DateTime.fromISO('2024-05-20'));
 
@@ -474,5 +474,4 @@ describe('DateServiceService', () => {
       service.getDateRange(1, 1, 'yyyy-MM-dd');
     }).toThrowError('Invalid date range');
   });
-
 });
