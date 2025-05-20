@@ -441,4 +441,19 @@ describe('DateServiceService', () => {
     const result = service.getDaysAgo(dstDateIso);
     expect(result).toBe(1);
   });
+
+  it('should return correct formatted date range for given past and future days', () => {
+    // Mock getDateNow to return a fixed date
+    spyOn(service, 'getDateNow').and.returnValue(DateTime.fromISO('2024-05-20'));
+
+    const pastDays = 5;
+    const futureDays = 3;
+    const format = 'yyyy-MM-dd';
+
+    const result = service.getDateRange(pastDays, futureDays, format);
+
+    expect(result.from).toBe('2024-05-15');
+    expect(result.to).toBe('2024-05-23');
+  });
+
 });
