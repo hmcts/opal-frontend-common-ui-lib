@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "license": "MIT",
   "peerDependencies": {
     "@angular/common": "^18.2.0 || ^19.0.0",
@@ -55,6 +55,9 @@
     },
     "./components/abstract/abstract-sortable-table-pagination": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-sortable-table-pagination.mjs"
+    },
+    "./components/abstract/abstract-tab-data": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-tab-data.mjs"
     },
     "./components/abstract/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-interfaces.mjs"
