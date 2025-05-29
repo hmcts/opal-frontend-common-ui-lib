@@ -30,10 +30,13 @@ export class MyTabComponent extends AbstractTabData {
   tabData$: Observable<MyViewModel[]>;
 
   ngOnInit(): void {
+    const fragment$ = this.clearCacheOnTabChange(
+      this.getFragmentStream('default-tab', this.destroy$),
+      () => this.myService.clearMyCache()
+    );
+
     this.tabData$ = this.createTabDataStream(
-      this.initialData,
-      'default-tab',
-      this.activatedRoute.fragment,
+      fragment$,
       (tab) => this.buildParamsForTab(tab),
       (params) => this.myService.getData(params),
       (res) => this.transformData(res)
@@ -54,8 +57,6 @@ Creates an observable data stream that emits transformed data based on the activ
 
 ```ts
 createTabDataStream<T, R>(
-  initialData: T,
-  initialTab: string,
   fragment$: Observable<string>,
   getParams: (tab?: string) => any,
   fetchData: (params: any) => Observable<T>,
@@ -63,20 +64,14 @@ createTabDataStream<T, R>(
 ): Observable<R>
 ```
 
-If the current tab matches `initialTab`, the transformed `initialData` is emitted. Otherwise, new data is fetched and transformed.
-
----
-
 ### `createCountStream`
 
 Emits a formatted count string based on the current tab and fragment.
 
 ```ts
 createCountStream<T>(
-  initialTab: string,
-  initialCount: number,
   fragment$: Observable<string>,
-  getParams: () => any,
+  getParams: (tab?: string) => any,
   fetchCount: (params: any) => Observable<T>,
   extractCount: (data: T) => number,
   formatFn?: (count: number) => string
@@ -84,8 +79,23 @@ createCountStream<T>(
 ```
 
 Defaults to using the format function `(c) => \`\${c}\``. Useful for badge counts and tab indicators.
+### `getFragmentStream`
+
+Returns a stream of the current route fragment, starting with the current snapshot or a fallback.
+
+```ts
+getFragmentStream(defaultTab: string, destroy$: Observable<void>): Observable<string>
+```
 
 ---
+
+### `clearCacheOnTabChange`
+
+Wraps a fragment stream and executes a side-effect when the tab changes.
+
+```ts
+clearCacheOnTabChange(fragment$: Observable<string>, clearFn: () => void): Observable<string>
+```
 
 ### `handleTabSwitch`
 
