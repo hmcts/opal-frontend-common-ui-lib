@@ -10,7 +10,10 @@ import {
   SESSION_TOKEN_EXPIRY_MOCK,
   SESSION_USER_STATE_MOCK,
 } from '@hmcts/opal-frontend-common/services/session-service/mocks';
-import { TRANSFER_STATE_LAUNCH_DARKLY_CONFIG_MOCK } from '@hmcts/opal-frontend-common/services/transfer-state-service/mocks';
+import {
+  TRANSFER_STATE_APP_INSIGHTS_CONFIG_MOCK,
+  TRANSFER_STATE_LAUNCH_DARKLY_CONFIG_MOCK,
+} from '@hmcts/opal-frontend-common/services/transfer-state-service/mocks';
 import { LAUNCH_DARKLY_CHANGE_FLAGS_MOCK } from '@hmcts/opal-frontend-common/services/launch-darkly-service/mocks';
 
 describe('GlobalStore', () => {
@@ -62,6 +65,12 @@ describe('GlobalStore', () => {
     const config = TRANSFER_STATE_LAUNCH_DARKLY_CONFIG_MOCK;
     store.setLaunchDarklyConfig(config);
     expect(store.launchDarklyConfig()).toEqual(config);
+  });
+
+  it('should update App Insights config', () => {
+    const config = TRANSFER_STATE_APP_INSIGHTS_CONFIG_MOCK;
+    store.setAppInsightsConfig(config);
+    expect(store.appInsightsConfig()).toEqual(config);
   });
 
   it('should update token expiry', () => {

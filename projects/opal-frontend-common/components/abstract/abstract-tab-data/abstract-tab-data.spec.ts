@@ -14,6 +14,8 @@ describe('AbstractTabData', () => {
     router = jasmine.createSpyObj('Router', ['navigate']);
     activatedRoute = jasmine.createSpyObj('ActivatedRoute', [], {
       parent: {},
+      fragment: of('example-tab'),
+      snapshot: { fragment: 'example-tab' },
     });
 
     TestBed.configureTestingModule({
@@ -41,63 +43,23 @@ describe('AbstractTabData', () => {
     });
   });
 
-  it('should return transformed data from createTabDataStream when tab === initialTab', (done) => {
-    const initialData = { value: 1 };
-    const initialTab = 'tab1';
-    const fragment$ = of(initialTab);
-    const result = service.createTabDataStream(
-      initialData,
-      initialTab,
-      fragment$,
-      () => ({}),
-      () => of({ value: 2 }),
-      (data) => data.value.toString(),
-    );
-    result.subscribe((res) => {
-      expect(res).toBe('1');
-      done();
-    });
-  });
-
-  it('should fetch and transform data from createTabDataStream when tab !== initialTab', (done) => {
-    const initialData = { value: 1 };
-    const initialTab = 'tab1';
+  it('should return transformed fetched data from createTabDataStream', (done) => {
     const fragment$ = of('tab2');
     const result = service.createTabDataStream(
-      initialData,
-      initialTab,
       fragment$,
       () => ({}),
-      () => of({ value: 2 }),
+      () => of({ value: 42 }),
       (data) => data.value.toString(),
     );
     result.subscribe((res) => {
-      expect(res).toBe('2');
+      expect(res).toBe('42');
       done();
     });
   });
 
-  it('should return formatted count from createCountStream when tab === initialTab', (done) => {
+  it('should return formatted count from createCountStream', (done) => {
     const result = service.createCountStream(
-      'tab1',
-      5,
       of('tab1'),
-      () => ({}),
-      () => of({ count: 99 }),
-      (data) => data.count,
-      (count) => `${count}+`,
-    );
-    result.subscribe((res) => {
-      expect(res).toBe('5+');
-      done();
-    });
-  });
-
-  it('should fetch and format count from createCountStream when tab !== initialTab', (done) => {
-    const result = service.createCountStream(
-      'tab1',
-      5,
-      of('tab2'),
       () => ({}),
       () => of({ count: 150 }),
       (data) => data.count,
@@ -109,22 +71,66 @@ describe('AbstractTabData', () => {
     });
   });
 
-  it('should use the default formatFn when none is provided', (done) => {
-    const fragment$ = of('tab1');
-    const initialTab = 'tab1';
-    const initialCount = 7;
-
+  it('should return default formatted count from createCountStream when formatFn is omitted', (done) => {
     const result = service.createCountStream(
-      initialTab,
-      initialCount,
-      fragment$,
+      of('tab1'),
       () => ({}),
-      () => of({ count: 123 }),
+      () => of({ count: 77 }),
       (data) => data.count,
     );
-
     result.subscribe((res) => {
-      expect(res).toBe('7');
+      expect(res).toBe('77');
+      done();
+    });
+  });
+
+  it('should return fragment stream from getFragmentStream()', (done) => {
+    const fragment$ = service['getFragmentStream']('default-tab', of());
+    fragment$.subscribe((tab) => {
+      expect(tab).toBe('example-tab');
+      done();
+    });
+  });
+
+  it('should execute clearFn when clearCacheOnTabChange is called', (done) => {
+    const clearFn = jasmine.createSpy();
+    const fragment$ = of('tab-change');
+    service['clearCacheOnTabChange'](fragment$, clearFn).subscribe((tab) => {
+      expect(tab).toBe('tab-change');
+      expect(clearFn).toHaveBeenCalled();
+      done();
+    });
+  });
+});
+
+describe('with null snapshot.fragment', () => {
+  let localService: TestTabData;
+  let router: jasmine.SpyObj<Router>;
+
+  beforeEach(() => {
+    router = jasmine.createSpyObj('Router', ['navigate']);
+    const localActivatedRoute = jasmine.createSpyObj('ActivatedRoute', [], {
+      parent: {},
+      fragment: of(null),
+      snapshot: { fragment: null },
+    });
+
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: Router, useValue: router },
+        { provide: ActivatedRoute, useValue: localActivatedRoute },
+        TestTabData,
+      ],
+    });
+
+    localService = TestBed.inject(TestTabData);
+  });
+
+  it('should fall back to defaultTab if snapshot.fragment is null', (done) => {
+    const fragment$ = localService['getFragmentStream']('fallback-tab', of());
+    fragment$.subscribe((tab) => {
+      expect(tab).toBe('fallback-tab');
       done();
     });
   });
