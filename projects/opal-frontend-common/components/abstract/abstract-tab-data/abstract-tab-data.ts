@@ -47,7 +47,7 @@ export abstract class AbstractTabData {
     return this.activatedRoute.fragment.pipe(
       startWith(this.activatedRoute.snapshot.fragment ?? defaultTab),
       filter((frag): frag is string => !!frag),
-      map((tab) => tab!),
+      map((tab) => tab),
       distinctUntilChanged(),
       takeUntil(destroy$),
     );
