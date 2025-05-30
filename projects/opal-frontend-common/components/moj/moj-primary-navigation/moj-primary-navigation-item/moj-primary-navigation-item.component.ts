@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, Input, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -17,6 +17,10 @@ export class MojPrimaryNavigationItemComponent {
   @Input({ required: true }) public primaryNavigationItemText!: string;
   @Input({ required: true }) public activeItemFragment!: string;
   @Input({ required: false }) public isLastItem: boolean = false;
+
+  @HostBinding('class') hostClass = 'moj-primary-navigation__item';
+  @HostBinding('id') hostId = `${this.primaryNavigationItemId}`;
+  @HostBinding('class.last-item') hostLastItem = this.isLastItem;
 
   /**
    * Handles the click event of a sub-navigation item.

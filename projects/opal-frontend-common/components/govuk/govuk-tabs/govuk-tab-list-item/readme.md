@@ -25,22 +25,37 @@ import { GovukTabListItemComponent } from '@components/govuk/govuk-tab-list-item
 You can use the tab list item component in your template as follows:
 
 ```html
-<opal-lib-govuk-tab-list-item [tabTitle]="'Tab 1'"></opal-lib-govuk-tab-list-item>
+<li
+  opal-lib-govuk-tab-list-item
+  tabsId="example-tabs"
+  tabsListItemId="first"
+  tabListItemHref="#first-tab"
+  tabListItemName="First tab">
+</li>
 ```
 
 ### Example in HTML:
 
 ```html
-<li class="govuk-tabs__list-item">
-  <a class="govuk-tabs__tab" href="#tab-1">{{ tabTitle }}</a>
-</li>
+<ul class="govuk-tabs__list">
+  <li
+    opal-lib-govuk-tab-list-item
+    tabsId="example-tabs"
+    tabsListItemId="first"
+    tabListItemHref="#first-tab"
+    tabListItemName="First tab">
+  </li>
+</ul>
 ```
 
 ## Inputs
 
-| Input      | Type     | Description                                     |
-| ---------- | -------- | ----------------------------------------------- |
-| `tabTitle` | `string` | The title of the tab displayed in the tab list. |
+| Input               | Type     | Description                                                                |
+|--------------------|----------|----------------------------------------------------------------------------|
+| `tabsId`           | `string` | The unique ID for the tab set; used to generate the list item `id`.        |
+| `tabsListItemId`   | `string` | The ID of the tab item (automatically capitalised for ID generation).      |
+| `tabListItemHref`  | `string` | The `href` for the tab link.                                               |
+| `tabListItemName`  | `string` | The visible text label of the tab link.                                    |
 
 ## Outputs
 
