@@ -37,9 +37,7 @@ describe('MojPrimaryNavigationItemComponent', () => {
   });
 
   it('should be an active link', () => {
-    const element = fixture.nativeElement
-      .querySelector('.moj-primary-navigation__link')
-      .getAttribute('aria-current');
+    const element = fixture.nativeElement.querySelector('.moj-primary-navigation__link').getAttribute('aria-current');
 
     expect(element).toBe('page');
   });
