@@ -25,23 +25,38 @@ import { MojPrimaryNavigationItemComponent } from '@components/moj/moj-primary-n
 You can use the primary navigation item component in your template as follows:
 
 ```html
-<opal-lib-moj-primary-navigation-item [label]="'Home'" [link]="'/home'"></opal-lib-moj-primary-navigation-item>
+<li
+  opal-lib-moj-primary-navigation-item
+  primaryNavigationItemId="home-link"
+  primaryNavigationItemFragment="home"
+  [activeItemFragment]="activeFragment"
+  primaryNavigationItemText="Home">
+</li>
 ```
 
 ### Example in HTML:
 
 ```html
-<li class="moj-primary-navigation__item">
-  <a class="moj-primary-navigation__link" href="{{ link }}">{{ label }}</a>
-</li>
+<ul class="moj-primary-navigation">
+  <li
+    opal-lib-moj-primary-navigation-item
+    primaryNavigationItemId="home-link"
+    primaryNavigationItemFragment="home"
+    [activeItemFragment]="activeFragment"
+    primaryNavigationItemText="Home">
+  </li>
+</ul>
 ```
 
 ## Inputs
 
-| Input   | Type     | Description                                       |
-| ------- | -------- | ------------------------------------------------- |
-| `label` | `string` | The label text displayed for the navigation item. |
-| `link`  | `string` | The URL or route the navigation item links to.    |
+| Input                      | Type      | Description                                                                 |
+|----------------------------|-----------|-----------------------------------------------------------------------------|
+| `primaryNavigationItemId` | `string`  | The ID applied to the `<li>` element for accessibility or testing purposes.|
+| `primaryNavigationItemFragment` | `string`  | The fragment identifier this item navigates to.                           |
+| `primaryNavigationItemText` | `string` | The text displayed for the navigation link.                                |
+| `activeItemFragment`      | `string`  | The current active fragment to compare against for aria-current.           |
+| `isLastItem`              | `boolean` | Whether this is the last item in the list (adds `last-item` class).        |
 
 ## Outputs
 

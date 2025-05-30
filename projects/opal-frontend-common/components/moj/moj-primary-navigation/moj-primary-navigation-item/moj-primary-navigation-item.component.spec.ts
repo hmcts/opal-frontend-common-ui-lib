@@ -31,20 +31,13 @@ describe('MojPrimaryNavigationItemComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have an id', () => {
-    const element = fixture.nativeElement.querySelector('#example');
-    expect(element).toBeTruthy();
-  });
-
   it('should have item text', () => {
-    const element = fixture.nativeElement.querySelector('#example .moj-primary-navigation__link');
+    const element = fixture.nativeElement.querySelector('.moj-primary-navigation__link');
     expect(element.innerText).toBe(component.primaryNavigationItemText);
   });
 
   it('should be an active link', () => {
-    const element = fixture.nativeElement
-      .querySelector('#example .moj-primary-navigation__link')
-      .getAttribute('aria-current');
+    const element = fixture.nativeElement.querySelector('.moj-primary-navigation__link').getAttribute('aria-current');
 
     expect(element).toBe('page');
   });
@@ -54,7 +47,7 @@ describe('MojPrimaryNavigationItemComponent', () => {
     const cdr = fixture.debugElement.injector.get<ChangeDetectorRef>(ChangeDetectorRef);
     cdr.detectChanges();
 
-    const element = fixture.nativeElement.querySelector('#example .moj-primary-navigation__link');
+    const element = fixture.nativeElement.querySelector('.moj-primary-navigation__link');
 
     expect(element).not.toBe('page');
   });

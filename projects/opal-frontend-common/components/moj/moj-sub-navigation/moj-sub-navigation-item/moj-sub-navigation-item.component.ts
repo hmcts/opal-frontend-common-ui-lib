@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, Input, inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'opal-lib-moj-sub-navigation-item',
+  selector: 'opal-lib-moj-sub-navigation-item, [opal-lib-moj-sub-navigation-item]',
   imports: [],
   templateUrl: './moj-sub-navigation-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -15,6 +15,9 @@ export class MojSubNavigationItemComponent {
   @Input({ required: true }) public subNavItemFragment!: string;
   @Input({ required: true }) public subNavItemText!: string;
   @Input({ required: true }) public activeSubNavItemFragment!: string;
+
+  @HostBinding('class') hostClass = 'moj-sub-navigation__item';
+  @HostBinding('id') hostId = this.subNavItemId;
 
   /**
    * Handles the click event of a sub-navigation item.

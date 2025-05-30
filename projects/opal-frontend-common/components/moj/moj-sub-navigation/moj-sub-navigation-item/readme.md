@@ -25,23 +25,30 @@ import { MojSubNavigationItemComponent } from '@components/moj/moj-sub-navigatio
 You can use the sub-navigation item component in your template as follows:
 
 ```html
-<opal-lib-moj-sub-navigation-item [label]="'Settings'" [link]="'/settings'"></opal-lib-moj-sub-navigation-item>
+<li opal-lib-moj-sub-navigation-item subNavItemText="Settings" [subNavItemFragment]="'settings'" [activeSubNavItemFragment]="activeTab"></li>
 ```
 
 ### Example in HTML:
 
 ```html
-<li class="moj-sub-navigation__item">
-  <a class="moj-sub-navigation__link" href="{{ link }}">{{ label }}</a>
-</li>
+<ul class="moj-sub-navigation">
+  <li opal-lib-moj-sub-navigation-item
+      subNavItemId="settings-tab"
+      [subNavItemFragment]="'settings'"
+      [activeSubNavItemFragment]="activeTab"
+      subNavItemText="Settings">
+  </li>
+</ul>
 ```
 
 ## Inputs
 
-| Input   | Type     | Description                                 |
-| ------- | -------- | ------------------------------------------- |
-| `label` | `string` | The text displayed for the navigation item. |
-| `link`  | `string` | The URL or route the item links to.         |
+| Input                      | Type     | Description                                                                 |
+|----------------------------|----------|-----------------------------------------------------------------------------|
+| `subNavItemText`           | `string` | The text displayed for the navigation link.                                |
+| `subNavItemFragment`       | `string` | The fragment identifier used to match active tab state.                    |
+| `activeSubNavItemFragment` | `string` | The currently active tab's fragment to compare against.                    |
+| `subNavItemId`             | `string` | The ID applied to the `<li>` element for accessibility or testing purposes.|
 
 ## Outputs
 
