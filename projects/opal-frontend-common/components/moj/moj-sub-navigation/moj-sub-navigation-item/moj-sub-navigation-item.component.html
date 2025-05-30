@@ -1,13 +1,11 @@
-<li class="moj-sub-navigation__item" [id]="subNavItemId">
-  <a
-    class="moj-sub-navigation__link cursor-pointer"
-    [attr.aria-current]="subNavItemFragment === activeSubNavItemFragment ? 'page' : ''"
-    (click)="handleItemClick($event, subNavItemFragment)"
-    (keyup.enter)="handleItemClick($event, subNavItemFragment)"
-    role="link"
-    tabindex="0"
-  >
-    {{ subNavItemText }}
-    <ng-content select="[badge]"></ng-content>
-  </a>
-</li>
+<a
+  class="moj-sub-navigation__link cursor-pointer"
+  [attr.aria-current]="subNavItemFragment === activeSubNavItemFragment ? 'page' : ''"
+  (click)="handleItemClick($event, subNavItemFragment)"
+  (keyup.enter)="handleItemClick($event, subNavItemFragment)"
+  role="link"
+  tabindex="0"
+>
+  {{ subNavItemText }}
+  <ng-content select="[badge]"></ng-content>
+</a>
