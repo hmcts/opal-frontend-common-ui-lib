@@ -8,9 +8,8 @@ describe('MojAlertIconComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MojAlertIconComponent]
-    })
-    .compileComponents();
+      imports: [MojAlertIconComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MojAlertIconComponent);
     component = fixture.componentInstance;
