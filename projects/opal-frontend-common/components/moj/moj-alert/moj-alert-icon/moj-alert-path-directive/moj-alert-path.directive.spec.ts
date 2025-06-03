@@ -30,7 +30,7 @@ describe('MoJAlertPathDirective', () => {
     expect(fixture).toBeTruthy();
   });
 
-  it('should render descending icon path when sortDirection is ascending', () => {
+  it('should render success icon path when type is success', () => {
     component.type = 'success';
     fixture.detectChanges();
 
@@ -39,7 +39,7 @@ describe('MoJAlertPathDirective', () => {
     expect(paths[0].getAttribute('d')).toBe(MOJ_ALERT_ICON_PATHS.success);
   });
 
-  it('should render ascending icon path when sortDirection is descending', () => {
+  it('should render information icon path when type is information', () => {
     component.type = 'information';
     fixture.detectChanges();
 
@@ -48,7 +48,7 @@ describe('MoJAlertPathDirective', () => {
     expect(paths[0].getAttribute('d')).toBe(MOJ_ALERT_ICON_PATHS.information);
   });
 
-  it('should render ascending icon path when sortDirection is descending', () => {
+  it('should render warning icon path when type is warning', () => {
     component.type = 'warning';
     fixture.detectChanges();
 
@@ -57,7 +57,7 @@ describe('MoJAlertPathDirective', () => {
     expect(paths[0].getAttribute('d')).toBe(MOJ_ALERT_ICON_PATHS.warning);
   });
 
-  it('should render ascending icon path when sortDirection is descending', () => {
+  it('should render error icon path when type is error', () => {
     component.type = 'error';
     fixture.detectChanges();
 
@@ -66,7 +66,7 @@ describe('MoJAlertPathDirective', () => {
     expect(paths[0].getAttribute('d')).toBe(MOJ_ALERT_ICON_PATHS.error);
   });
 
-  it('should clear previous paths when sortDirection changes', () => {
+  it('should clear previous paths when type changes', () => {
     component.type = 'information';
     fixture.detectChanges();
 
