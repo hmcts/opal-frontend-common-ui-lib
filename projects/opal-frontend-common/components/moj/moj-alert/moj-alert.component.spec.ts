@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MojAlertComponent } from './moj-alert.component';
+import { ElementRef } from '@angular/core';
 
 describe('MojAlertComponent', () => {
   let component: MojAlertComponent;
@@ -20,43 +21,34 @@ describe('MojAlertComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should render with default values', () => {
-    expect(component.text).toBe('');
-    expect(component.type).toBe('information');
-    expect(component.icon).toBeTrue();
-    expect(component.dismissible).toBeFalse();
-    expect(component.heading).toBe('');
-    expect(component.isVisible).toBeTrue();
+  it('should call renderer.removeChild when host element has a parent', () => {
+    // Arrange: Create a fake parent element and attach host element to it.
+    const hostElem = component['elref'].nativeElement;
+    const fakeParent = document.createElement('div');
+    fakeParent.appendChild(hostElem);
+
+    // Spy on the renderer's removeChild method.
+    const removeChildSpy = spyOn(component['renderer'], 'removeChild');
+
+    // Act: Dismiss the alert.
+    component.dismiss();
+
+    // Assert: Ensure renderer.removeChild was called with the fake parent and host element.
+    expect(removeChildSpy).toHaveBeenCalledWith(fakeParent, hostElem);
   });
 
-  it('should be visible by default', () => {
-    expect(component.isVisible).toBeTrue();
-  });
+  it('should not call renderer.removeChild when host element has no parent', () => {
+    // Arrange: Override the native element with a fake element whose parentNode is null.
+    const fakeHostElem = { parentNode: null } as HTMLElement;
+    (component as any).elref = { nativeElement: fakeHostElem } as ElementRef<HTMLElement>;
 
-  it('should hide alert when handleDismiss is called', () => {
-    component.handleDismiss();
-    expect(component.isVisible).toBeFalse();
-  });
+    // Spy on the renderer's removeChild method.
+    const removeChildSpy = spyOn(component['renderer'], 'removeChild');
 
-  it('should accept and render @Input properties', () => {
-    component.text = 'Test alert';
-    component.type = 'success';
-    component.icon = false;
-    component.dismissible = true;
-    component.heading = 'Test Heading';
-    fixture.detectChanges();
+    // Act: Dismiss the alert.
+    component.dismiss();
 
-    expect(component.text).toBe('Test alert');
-    expect(component.type).toBe('success');
-    expect(component.icon).toBeFalse();
-    expect(component.dismissible).toBeTrue();
-    expect(component.heading).toBe('Test Heading');
-  });
-
-  it('should render heading if provided', () => {
-    component.heading = 'Alert Heading';
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.textContent).toContain('Alert Heading');
+    // Assert: Ensure renderer.removeChild was not called.
+    expect(removeChildSpy).not.toHaveBeenCalled();
   });
 });
