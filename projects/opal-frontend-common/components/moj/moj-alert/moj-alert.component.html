@@ -11,7 +11,7 @@
     {{ text }}
   </div>
 
-  <div class="moj-alert__action" (click)="dismiss()">
+  <div tabindex="0" class="moj-alert__action" (click)="dismiss()" (keydown)="dismiss()">
     <ng-content select="[dismiss]"></ng-content>
   </div>
 </div>

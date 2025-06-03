@@ -40,7 +40,7 @@ describe('MojAlertComponent', () => {
   it('should not call renderer.removeChild when host element has no parent', () => {
     // Arrange: Override the native element with a fake element whose parentNode is null.
     const fakeHostElem = { parentNode: null } as HTMLElement;
-    (component as any).elref = { nativeElement: fakeHostElem } as ElementRef<HTMLElement>;
+    component['elref'] = { nativeElement: fakeHostElem } as ElementRef<HTMLElement>;
 
     // Spy on the renderer's removeChild method.
     const removeChildSpy = spyOn(component['renderer'], 'removeChild');

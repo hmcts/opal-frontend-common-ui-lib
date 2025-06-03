@@ -11,7 +11,7 @@ export class MojAlertComponent {
   @Input({ required: true }) text: string = '';
   @Input({ required: true }) type: MojAlertType = 'information';
 
-  private readonly elref = inject(ElementRef<HTMLElement>);
+  private elref = inject(ElementRef<HTMLElement>);
   private readonly renderer = inject(Renderer2);
 
   /**
