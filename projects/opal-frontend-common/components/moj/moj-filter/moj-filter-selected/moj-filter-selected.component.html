@@ -1,0 +1,20 @@
+<div class="moj-filter__content">
+  <div class="moj-filter__selected">
+    <div class="moj-filter__selected-heading">
+      <div class="moj-filter__heading-title">
+        <h2 class="govuk-heading-m">Selected filters</h2>
+      </div>
+      <div class="moj-filter__heading-action">
+        <p>
+          <a
+            class="govuk-link govuk-link--no-visited-state"
+            href="#"
+            (click)="clearFilters.emit(); $event.preventDefault()"
+            >Clear filters</a
+          >
+        </p>
+      </div>
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

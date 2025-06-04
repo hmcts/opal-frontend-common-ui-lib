@@ -1,0 +1,13 @@
+<div class="moj-filter__options">
+  <button
+    type="submit"
+    class="govuk-button"
+    data-module="govuk-button"
+    data-test-id="submit-button"
+    (click)="onApplyFilters()"
+  >
+    Apply filters
+  </button>
+  <ng-content select="[keyword]"></ng-content>
+  <ng-content select="[items]"></ng-content>
+</div>
