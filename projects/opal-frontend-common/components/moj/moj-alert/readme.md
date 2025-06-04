@@ -22,8 +22,9 @@ import { MojAlertComponent } from '@hmcts/opal-frontend-common/components/moj/mo
 
 For the optional attachments you can import:
 ```typescript
-import { MojAlertDismissComponent } from '@hmcts/opal-frontend-common/components/moj/moj-alert';
+import { MojAlertContentComponent } from '@hmcts/opal-frontend-common/components/moj/moj-alert';
 import { MojAlertHeadingComponent } from '@hmcts/opal-frontend-common/components/moj/moj-alert';
+import { MojAlertTextComponent } from '@hmcts/opal-frontend-common/components/moj/moj-alert';
 import { MojAlertIconComponent } from '@hmcts/opal-frontend-common/components/moj/moj-alert';
 ```
 
@@ -33,16 +34,18 @@ import { MojAlertIconComponent } from '@hmcts/opal-frontend-common/components/mo
 You can use the alert component in your template as follows:
 
 ```html
-  <opal-lib-moj-alert type="success" [dismissible]="true" text="hello"></opal-lib-moj-alert>
+  <opal-lib-moj-alert type="success" text="hello" [showDismiss]="true"></opal-lib-moj-alert>
 ```
 
 You can add optional attachments in your template as follows:
 ```html
-  <opal-lib-moj-alert type="success" heading="hello" text="hello">
-    <opal-lib-moj-alert-icon icon type="success"></opal-lib-moj-alert-icon>
-    <opal-lib-moj-alert-heading heading heading="hello"></opal-lib-moj-alert-heading>
-    <opal-lib-moj-alert-dismiss dismiss></opal-lib-moj-alert-dismiss>
-  </opal-lib-moj-alert>
+  <opal-lib-moj-alert type="success" text="hello" [showDismiss]="true">
+  <opal-lib-moj-alert-icon icon type="success"></opal-lib-moj-alert-icon>
+  <opal-lib-moj-alert-content content>
+    <opal-lib-moj-alert-content-heading>hello</opal-lib-moj-alert-content-heading>
+    <opal-lib-moj-alert-content-text> This is a success alert with a dismiss button. </opal-lib-moj-alert-content-text>
+  </opal-lib-moj-alert-content>
+</opal-lib-moj-alert>
 ```
 
 
@@ -53,6 +56,7 @@ For the base component these are the input fields:
 | ------------  | -------- | ---------------------------------------------------------   |
 | `type`        | `string` | Type of alert (e.g. success, information, error, warning)   |
 | `text`        | `string` | Content text to be displayed in the body of the alert       |
+| `showDismiss` | 'boolean`| Optional boolean if set to True will show a dismiss button |
 
 For the Icon component these are the input fields:
 
@@ -60,19 +64,14 @@ For the Icon component these are the input fields:
 | ------------  | -------- | ---------------------------------------------------------   |
 | `type`        | `string` | Type of alert (e.g. success, information, error, warning)   |
 
-For the Heading component these are the input fields:
 
-| Input         | Type     | Description                                                 |
-| ------------  | -------- | ---------------------------------------------------------   |
-| `heading`     | `string` | displays heading at the top of the alert in bold characters |
 
 You additionally have to specify the select tag for each content projected component:
 
 | component                      | select tag name          |
 | ------------------------------ | ------------------------ | 
-| `MojAlertHeadingComponent`     | 'heading'                | 
 | `MojAlertIconComponent`        | 'icon'                   | 
-| `MojAlertDismissComponent`     | 'dismiss'                | 
+| 'MojAlertContentComponent'     | 'content'                | 
 
 
 

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojAlertPathDirective } from './moj-alert-path.directive';
-import { MOJ_ALERT_ICON_PATHS } from '../../constants/alert-icon-path.constant';
+import { MOJ_ALERT_ICON_PATHS } from './constants/alert-icon-path.constant';
 import { MojAlertType } from '../../constants/alert-types.constant';
 
 @Component({

@@ -1,17 +1,8 @@
-<div
-  role="region"
-  class="moj-alert moj-alert--{{ type }}"
-  [attr.aria-label]="type + ' : ' + text"
-  data-module="moj-alert"
->
+<section class="moj-alert moj-alert--{{ type }}" [attr.aria-label]="type + ' : ' + text" data-module="moj-alert">
   <ng-content select="[icon]"></ng-content>
+  <ng-content select="[content]"></ng-content>
 
-  <div class="moj-alert__content">
-    <ng-content select="[heading]"></ng-content>
-    {{ text }}
-  </div>
-
-  <div tabindex="0" class="moj-alert__action" (click)="dismiss()" (keydown)="dismiss()">
-    <ng-content select="[dismiss]"></ng-content>
-  </div>
-</div>
+  @if (showDismiss) {
+    <opal-lib-moj-alert-dismiss (dismiss)="dismiss()"></opal-lib-moj-alert-dismiss>
+  }
+</section>

@@ -1,6 +1,6 @@
 import { Directive, OnChanges, Input, ElementRef, Renderer2 } from '@angular/core';
 import { MojAlertType } from '../../constants/alert-types.constant';
-import { MOJ_ALERT_ICON_PATHS } from '../../constants/alert-icon-path.constant';
+import { MOJ_ALERT_ICON_PATHS } from './constants/alert-icon-path.constant';
 
 @Directive({
   selector: '[opalLibMojAlertSortIcon]',

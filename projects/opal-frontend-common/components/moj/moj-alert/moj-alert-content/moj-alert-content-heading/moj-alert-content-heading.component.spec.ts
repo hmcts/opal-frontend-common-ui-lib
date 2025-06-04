@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MojAlertHeadingComponent } from './moj-alert-heading.component';
+import { MojAlertHeadingComponent } from './moj-alert-content-heading.component';
 
 describe('MojAlertHeadingComponent', () => {
   let component: MojAlertHeadingComponent;
