@@ -1,8 +1,8 @@
-<section class="moj-alert moj-alert--{{ type }}" [attr.aria-label]="type + ' : ' + text" data-module="moj-alert">
+@if (isVisible) {
   <ng-content select="[icon]"></ng-content>
   <ng-content select="[content]"></ng-content>
 
   @if (showDismiss) {
     <opal-lib-moj-alert-dismiss (dismiss)="dismiss()"></opal-lib-moj-alert-dismiss>
   }
-</section>
+}

@@ -39,7 +39,7 @@ You can use the alert component in your template as follows:
 
 You can add optional attachments in your template as follows:
 ```html
-  <opal-lib-moj-alert type="success" text="hello" [showDismiss]="true">
+  <opal-lib-moj-alert type="success" ariaLabel="hello" [showDismiss]="true">
   <opal-lib-moj-alert-icon icon type="success"></opal-lib-moj-alert-icon>
   <opal-lib-moj-alert-content content>
     <opal-lib-moj-alert-content-heading>hello</opal-lib-moj-alert-content-heading>
@@ -55,8 +55,8 @@ For the base component these are the input fields:
 | Input         | Type     | Description                                                 |
 | ------------  | -------- | ---------------------------------------------------------   |
 | `type`        | `string` | Type of alert (e.g. success, information, error, warning)   |
-| `text`        | `string` | Content text to be displayed in the body of the alert       |
-| `showDismiss` | 'boolean`| Optional boolean if set to True will show a dismiss button |
+| `ariaLabel`   | `string` | This helps to add accessibility for screen readers.         |
+| `showDismiss` | 'boolean`| Optional boolean if set to True will show a dismiss button  |
 
 For the Icon component these are the input fields:
 

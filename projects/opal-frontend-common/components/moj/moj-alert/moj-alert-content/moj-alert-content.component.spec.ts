@@ -8,9 +8,8 @@ describe('MojAlertContentComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MojAlertContentComponent]
-    })
-    .compileComponents();
+      imports: [MojAlertContentComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MojAlertContentComponent);
     component = fixture.componentInstance;
@@ -19,5 +18,10 @@ describe('MojAlertContentComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have the correct host class applied', () => {
+    const element: HTMLElement = fixture.nativeElement;
+    expect(element.classList).toContain('moj-alert__content');
   });
 });

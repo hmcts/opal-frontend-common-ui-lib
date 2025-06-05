@@ -19,4 +19,9 @@ describe('MojAlertHeadingComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have the correct host class applied', () => {
+    const element: HTMLElement = fixture.nativeElement;
+    expect(element.classList).toContain('moj-alert__heading');
+  });
 });

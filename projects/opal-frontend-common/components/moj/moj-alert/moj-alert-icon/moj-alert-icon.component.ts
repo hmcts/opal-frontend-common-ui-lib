@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MojAlertPathDirective } from './moj-alert-path-directive/moj-alert-path.directive';
 import { MojAlertType } from '../constants/alert-types.constant';
 @Component({

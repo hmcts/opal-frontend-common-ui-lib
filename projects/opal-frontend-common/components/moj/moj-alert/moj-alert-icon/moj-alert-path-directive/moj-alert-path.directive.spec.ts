@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojAlertPathDirective } from './moj-alert-path.directive';
-import { MOJ_ALERT_ICON_PATHS } from './constants/alert-icon-path.constant';
 import { MojAlertType } from '../../constants/alert-types.constant';
-
+import { MOJ_ALERT_ICON_PATHS } from '../moj-alert-path-directive/constants/alert-icon-path.constant';
 @Component({
   template: ` <svg [opalLibMojAlertSortIcon]="type"></svg> `,
   standalone: true,
@@ -66,14 +65,21 @@ describe('MoJAlertPathDirective', () => {
     expect(paths[0].getAttribute('d')).toBe(MOJ_ALERT_ICON_PATHS.error);
   });
 
+  it('should render fallback information icon path when type is invalid', () => {
+    component.type = 'invalid' as MojAlertType;
+    fixture.detectChanges();
+
+    const paths = fixture.nativeElement.querySelectorAll('path');
+    expect(paths.length).toBe(1);
+    expect(paths[0].getAttribute('d')).toBe(MOJ_ALERT_ICON_PATHS.information);
+  });
+
   it('should clear previous paths when type changes', () => {
     component.type = 'information';
     fixture.detectChanges();
 
-    // At this point, one path (descending icon) is rendered
     expect(fixture.nativeElement.querySelectorAll('path').length).toBe(1);
 
-    // Change direction to 'none', which should render two paths
     component.type = 'success';
     fixture.detectChanges();
 

@@ -6,5 +6,5 @@ import { Component, HostBinding } from '@angular/core';
   templateUrl: './moj-alert-content-heading.component.html',
 })
 export class MojAlertHeadingComponent {
-  @HostBinding('class') class = 'moj-alert__heading';
+  @HostBinding('class') hostClass = 'moj-alert__heading';
 }
