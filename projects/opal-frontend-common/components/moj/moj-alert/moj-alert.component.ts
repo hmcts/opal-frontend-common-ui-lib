@@ -9,9 +9,11 @@ import { MojAlertDismissComponent } from './moj-alert-dismiss/moj-alert-dismiss.
   templateUrl: './moj-alert.component.html',
 })
 export class MojAlertComponent {
-  @Input({ required: true }) ariaLabel: string = '';
+  @Input({ required: true }) ariaLabel!: string;
   @Input({ required: true }) type: MojAlertType = 'information';
-  @Input({ required: false }) showDismiss: boolean = false;
+  @Input({ required: false }) showDismiss!: boolean;
+
+  public isVisible: boolean = true;
 
   @HostBinding('class')
   get hostClass(): string {
@@ -21,11 +23,15 @@ export class MojAlertComponent {
   get computedAriaLabel(): string {
     return `${this.type} : ${this.ariaLabel}`;
   }
-  @HostBinding('data-module') dataModule = 'moj-alert';
+  @HostBinding('attr.data-module') dataModule = 'moj-alert';
 
-  public isVisible = true;
-
-  dismiss(): void {
+  /**
+   * Dismisses the alert component.
+   *
+   * This method sets the component's visibility state to false,
+   * effectively hiding the alert from view.
+   */
+  public dismiss(): void {
     this.isVisible = false;
   }
 }

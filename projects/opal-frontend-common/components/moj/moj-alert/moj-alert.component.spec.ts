@@ -18,4 +18,45 @@ describe('MojAlertComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have the correct host class applied when visible and type is information', () => {
+    component.isVisible = true;
+    component.type = 'information';
+    fixture.detectChanges();
+    const element: HTMLElement = fixture.nativeElement;
+    expect(element.className).toContain(`moj-alert`);
+    expect(element.className).toContain(`moj-alert--information`);
+  });
+
+  it('should update host class when type changes', () => {
+    component.isVisible = true;
+    component.type = 'error';
+    fixture.detectChanges();
+    const element: HTMLElement = fixture.nativeElement;
+    expect(element.className).toContain(`moj-alert`);
+    expect(element.className).toContain(`moj-alert--error`);
+  });
+
+  it('should have an empty class when component is not visible', () => {
+    component.isVisible = false;
+    // Even if type is set, visibility takes precedence
+    component.type = 'warning';
+    fixture.detectChanges();
+    const element: HTMLElement = fixture.nativeElement;
+    expect(element.className.trim()).toBe('');
+  });
+
+  it('should compute the correct aria-label attribute', () => {
+    component.ariaLabel = 'Close Alert';
+    component.type = 'warning';
+    fixture.detectChanges();
+    const element: HTMLElement = fixture.nativeElement;
+    expect(element.getAttribute('aria-label')).toBe('warning : Close Alert');
+  });
+
+  it('should set the data-module attribute to "moj-alert"', () => {
+    fixture.detectChanges();
+    const element: HTMLElement | null = fixture.nativeElement;
+    expect(element?.getAttribute('data-module')).toBe('moj-alert');
+  });
 });

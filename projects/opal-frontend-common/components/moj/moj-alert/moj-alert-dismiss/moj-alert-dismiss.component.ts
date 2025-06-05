@@ -16,10 +16,9 @@ export class MojAlertDismissComponent {
    *
    * @param event Optional mouse event from the click.
    */
-  public dismissAlert(event?: MouseEvent): void {
+  public dismissAlert(event?: Event): void {
     if (event) {
       event.preventDefault();
-      event.stopPropagation();
     }
     this.dismiss.emit();
   }

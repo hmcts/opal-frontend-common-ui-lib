@@ -45,7 +45,6 @@ describe('MojAlertDismissComponent', () => {
   it('should prevent default and stop propagation when dismissAlert is called with an event', () => {
     const fakeEvent = {
       preventDefault: jasmine.createSpy('preventDefault'),
-      stopPropagation: jasmine.createSpy('stopPropagation'),
     } as unknown as MouseEvent;
 
     let wasEmitted = false;
@@ -54,7 +53,6 @@ describe('MojAlertDismissComponent', () => {
     });
     component.dismissAlert(fakeEvent);
     expect(fakeEvent.preventDefault).toHaveBeenCalled();
-    expect(fakeEvent.stopPropagation).toHaveBeenCalled();
     expect(wasEmitted).toBe(true);
   });
 });
