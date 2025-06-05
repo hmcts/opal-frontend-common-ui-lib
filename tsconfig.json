@@ -170,11 +170,11 @@
       "@hmcts/opal-frontend-common/components/govuk/helpers": [
         "./dist/opal-frontend-common/components/govuk/helpers"
       ],
+      "@hmcts/opal-frontend-common/components/moj/moj-alert": [
+        "./dist/opal-frontend-common/components/moj/moj-alert"
+      ],
       "@hmcts/opal-frontend-common/components/moj/moj-badge": [
         "./dist/opal-frontend-common/components/moj/moj-badge"
-      ],
-      "@hmcts/opal-frontend-common/components/moj/moj-banner": [
-        "./dist/opal-frontend-common/components/moj/moj-banner"
       ],
       "@hmcts/opal-frontend-common/components/moj/moj-button-menu": [
         "./dist/opal-frontend-common/components/moj/moj-button-menu"

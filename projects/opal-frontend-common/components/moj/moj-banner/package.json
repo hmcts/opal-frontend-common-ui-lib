@@ -1,6 +1,0 @@
-{
-    "sideEffects": false,
-    "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-moj-moj-banner.mjs",
-    "typings": "../../../../dist/opal-frontend-common/components/moj/moj-banner/index.d.ts"
-  }
-  
