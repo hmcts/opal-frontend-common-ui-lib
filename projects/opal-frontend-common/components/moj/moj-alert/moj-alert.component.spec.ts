@@ -59,4 +59,17 @@ describe('MojAlertComponent', () => {
     const element: HTMLElement | null = fixture.nativeElement;
     expect(element?.getAttribute('data-module')).toBe('moj-alert');
   });
+
+  it('should dismiss the alert when dismiss is called', () => {
+    component.isVisible = true;
+    component.type = 'information';
+    fixture.detectChanges();
+
+    component.dismiss();
+    fixture.detectChanges();
+
+    expect(component.isVisible).toBeFalse();
+    const element: HTMLElement = fixture.nativeElement;
+    expect(element.className.trim()).toBe('');
+  });
 });
