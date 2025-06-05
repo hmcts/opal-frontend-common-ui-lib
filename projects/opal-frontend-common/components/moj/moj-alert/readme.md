@@ -42,13 +42,13 @@ You can add optional attachments in your template as follows:
    <div opal-lib-moj-alert ariaLabel="Your session will expire" type="warning">
         <opal-lib-moj-alert-icon icon type="warning"></opal-lib-moj-alert-icon>
         <opal-lib-moj-alert-content content>
-          <opal-lib-moj-alert-content-heading>Warning</opal-lib-moj-alert-content-heading>
+          <h2 opal-lib-moj-alert-content-heading>Warning</h2>
           <opal-lib-moj-alert-content-text>
              Your session will expire in {{ minutes }} {{ minutesText }}. Please save your work and
               log out, then log back in to continue."
-            </opal-lib-moj-alert-content-text>
-        </opal-lib-moj-alert-content-heading>
-    </div>
+          </opal-lib-moj-alert-content-text>
+        </opal-lib-moj-alert-content>
+   </div>
 ```
 
 
