@@ -9,12 +9,13 @@ export class MojAlertDismissComponent {
   @HostBinding('class') hostClass = 'moj-alert__action';
   @Output() public dismiss = new EventEmitter<void>();
 
+  
   /**
    * Dismisses the alert.
-   * If a click event is provided, it will prevent the default behavior
-   * and stop propagation for additional control.
    *
-   * @param event Optional mouse event from the click.
+   * If an event is provided, its default behavior is prevented before emitting the dismiss event.
+   *
+   * @param event An optional DOM event that triggered the dismissal.
    */
   public dismissAlert(event?: Event): void {
     if (event) {

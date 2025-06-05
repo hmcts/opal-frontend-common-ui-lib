@@ -34,18 +34,21 @@ import { MojAlertIconComponent } from '@hmcts/opal-frontend-common/components/mo
 You can use the alert component in your template as follows:
 
 ```html
-  <opal-lib-moj-alert type="success" text="hello" [showDismiss]="true"></opal-lib-moj-alert>
+  <opal-lib-moj-alert type="success" ariaLabel="hello" [showDismiss]="true"></opal-lib-moj-alert>
 ```
 
 You can add optional attachments in your template as follows:
 ```html
-  <opal-lib-moj-alert type="success" ariaLabel="hello" [showDismiss]="true">
-  <opal-lib-moj-alert-icon icon type="success"></opal-lib-moj-alert-icon>
-  <opal-lib-moj-alert-content content>
-    <opal-lib-moj-alert-content-heading>hello</opal-lib-moj-alert-content-heading>
-    <opal-lib-moj-alert-content-text> This is a success alert with a dismiss button. </opal-lib-moj-alert-content-text>
-  </opal-lib-moj-alert-content>
-</opal-lib-moj-alert>
+   <div opal-lib-moj-alert ariaLabel="Your session will expire" type="warning">
+        <opal-lib-moj-alert-icon icon type="warning"></opal-lib-moj-alert-icon>
+        <opal-lib-moj-alert-content content>
+          <opal-lib-moj-alert-content-heading>Warning</opal-lib-moj-alert-content-heading>
+          <opal-lib-moj-alert-content-text>
+             Your session will expire in {{ minutes }} {{ minutesText }}. Please save your work and
+              log out, then log back in to continue."
+            </opal-lib-moj-alert-content-text>
+        </opal-lib-moj-alert-content-heading>
+    </div>
 ```
 
 
