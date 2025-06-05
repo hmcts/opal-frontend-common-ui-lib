@@ -9,7 +9,6 @@ export class MojAlertDismissComponent {
   @HostBinding('class') hostClass = 'moj-alert__action';
   @Output() public dismiss = new EventEmitter<void>();
 
-  
   /**
    * Dismisses the alert.
    *
