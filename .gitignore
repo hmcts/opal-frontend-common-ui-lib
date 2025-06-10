@@ -63,3 +63,8 @@ runner-results
 cypress/parallel/weights
 multi-reporter-config.json
 multi-reporter-config.json
+
+# Yarn audit working files
+yarn-audit-current
+current-ids.json
+known-ids.json
