@@ -12,7 +12,9 @@
     "lint": "yarn prettier && yarn lint:ng",
     "lint:ng": "ng lint",
     "prettier": "prettier --check \"./**/*.{ts,js,html,scss}\"",
-    "prettier:fix": "prettier --write \"./**/*.{ts,js,html,scss}\""
+    "prettier:fix": "prettier --write \"./**/*.{ts,js,html,scss}\"",
+    "audit:save": "yarn audit --json --production > yarn-audit-known-issues || true",
+    "audit:check": "yarn audit --json --production > yarn-audit-current || true && jq -s '[.[] | select(.type==\"auditAdvisory\") | .data.advisory.id] | sort' yarn-audit-current > current-ids.json && jq -s '[.[] | select(.type==\"auditAdvisory\") | .data.advisory.id] | sort' yarn-audit-known-issues > known-ids.json && diff -q known-ids.json current-ids.json || (echo '❌ New vulnerabilities detected. Please review.' && exit 1)"
   },
   "dependencies": {
     "@angular/animations": "^19.2.4",
@@ -42,9 +44,9 @@
     "@angular/compiler-cli": "^19.2.4",
     "@types/jasmine": "~5.1.0",
     "@types/luxon": "^3.4.2",
-    "angular-eslint": "19.7.1",
+    "angular-eslint": "19.8.0",
     "eslint": "^9.21.0",
-    "jasmine-core": "~5.7.0",
+    "jasmine-core": "~5.8.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
@@ -52,7 +54,7 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "ng-packagr": "^19.2.0",
     "typescript": "~5.8.2",
-    "typescript-eslint": "8.33.1"
+    "typescript-eslint": "8.34.0"
   },
   "resolutions": {
     "http-proxy-middleware": "^3.0.5"

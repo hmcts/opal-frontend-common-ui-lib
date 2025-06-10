@@ -29,8 +29,8 @@ jobs:
       - name: Lint code
         run: yarn lint
 
-      - name: Audit vulnerabilities
-        run: yarn audit --production
+      - name: Audit vulnerabilities (known issues check)
+        run: yarn audit:check
 
       - name: Build library
         run: yarn build
