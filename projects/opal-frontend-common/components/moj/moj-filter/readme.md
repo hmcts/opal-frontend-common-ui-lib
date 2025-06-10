@@ -2,7 +2,7 @@
 
 # MOJ Filter Component
 
-This Angular component provides a Ministry of Justice (MOJ)-styled Sortable table.
+This Angular component provides a Ministry of Justice (MOJ)-styled filter.
 
 ## Table of Contents
 
