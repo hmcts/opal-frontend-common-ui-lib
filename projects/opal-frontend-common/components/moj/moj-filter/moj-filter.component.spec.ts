@@ -8,9 +8,8 @@ describe('MojFilterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MojFilterComponent]
-    })
-    .compileComponents();
+      imports: [MojFilterComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MojFilterComponent);
     component = fixture.componentInstance;

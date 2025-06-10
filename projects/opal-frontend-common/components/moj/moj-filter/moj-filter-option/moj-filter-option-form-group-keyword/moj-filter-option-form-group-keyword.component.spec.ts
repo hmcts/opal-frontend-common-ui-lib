@@ -8,9 +8,8 @@ describe('MojFilterOptionFormGroupKeywordComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MojFilterOptionFormGroupKeywordComponent]
-    })
-    .compileComponents();
+      imports: [MojFilterOptionFormGroupKeywordComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MojFilterOptionFormGroupKeywordComponent);
     component = fixture.componentInstance;
@@ -19,5 +18,27 @@ describe('MojFilterOptionFormGroupKeywordComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should emit an empty string when no event is provided', () => {
+    spyOn(component.keywordChange, 'emit');
+
+    component.onKeywordChange();
+
+    expect(component.keywordChange.emit).toHaveBeenCalledWith('');
+  });
+
+  it('should call preventDefault and emit the correct keyword from event', () => {
+    const fakeEvent = {
+      preventDefault: jasmine.createSpy('preventDefault'),
+      target: { value: 'test keyword' },
+    } as unknown as Event;
+
+    spyOn(component.keywordChange, 'emit');
+
+    component.onKeywordChange(fakeEvent);
+
+    expect(fakeEvent.preventDefault).toHaveBeenCalled();
+    expect(component.keywordChange.emit).toHaveBeenCalledWith('test keyword');
   });
 });

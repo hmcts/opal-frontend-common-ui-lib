@@ -1,117 +1,155 @@
-import { OnInit, Component, signal } from '@angular/core';
-import {
-  IFilterCategory,
-  IFilterOption,
-} from 'projects/opal-frontend-common/components/moj/moj-filter/interfaces/filter-interfaces';
+import { OnInit, Component, signal, Output, EventEmitter } from '@angular/core';
+import { IFilterCategory, IFilterOption } from './interfaces/filter-interfaces';
+import { IFilterTableData } from './interfaces/table-data-interface';
 
 @Component({
   template: '',
 })
 export abstract class AbstractFilterComponent implements OnInit {
-  tagsCategory = {
-    categoryName: 'Tags',
-    options: [
-      { label: 'Tag A', value: 'tagA', selected: false },
-      { label: 'Tag B', value: 'tagB', selected: false },
-      // ...
-    ] as IFilterOption[],
-  };
+  public abstractTags = signal<IFilterCategory[]>([]);
+  public abstractKeyword = signal<string>('');
+  public abstractData = signal<IFilterTableData[]>([]);
+  public abstractSelectedTags = signal<Array<{ categoryName: string; options: IFilterOption[] }>>([]);
 
-  coloursCategory = {
-    categoryName: 'Colours',
-    options: [
-      { label: 'Red', value: 'red', selected: false },
-      { label: 'Blue', value: 'blue', selected: false },
-      // ...
-    ] as IFilterOption[],
-  };
-
-  tags: IFilterCategory[] = [this.tagsCategory, this.coloursCategory]; // Array of categories to show in the checkboxes
-
-  // 2) The array of selected filters that we display in <app-moj-filter-selected-tag>
-  selectedTags: Array<{ categoryName: string; options: IFilterOption[] }> = [];
-  keyword: string = ''; // Store the entered keyword
-
-  // Possibly the original data set that you want to filter:
-  originalData = [
-    { id: 1, name: 'Item 1', color: 'red', tag: 'tagA' },
-    { id: 2, name: 'Item 2', color: 'blue', tag: 'tagA' },
-    { id: 3, name: 'Item 3', color: 'red', tag: 'tagB' },
-    { id: 4, name: 'Item 4', color: 'blue', tag: 'tagC' },
-    { id: 5, name: 'Item 5', color: 'green', tag: 'tagC' },
-    { id: 6, name: 'Item 6', color: 'red', tag: 'tagA' },
-    { id: 7, name: 'Item 7', color: 'green', tag: 'tagB' },
-    { id: 8, name: 'Item 8', color: 'blue', tag: 'tagB' },
-    { id: 9, name: 'Item 9', color: 'green', tag: 'tagA' },
-    { id: 10, name: 'Item 10', color: 'red', tag: 'tagC' },
-  ];
-  filteredData = [{}];
+  @Output() abstractFilteredData = new EventEmitter<IFilterTableData[]>();
 
   ngOnInit(): void {
     this.updateSelectedTags();
   }
 
-  updateSelectedTags(): void {
-    this.selectedTags = this.tags
-      .map((category) => ({
-        categoryName: category.categoryName,
-        options: category.options.filter((o: IFilterOption) => o.selected),
-      }))
-      .filter((category) => category.options.length > 0);
-
-    this.onApplyFilters();
-  }
-
-  onApplyFilters(): void {
-    const selectedTags = this.tagsCategory.options.filter((o) => o.selected).map((o) => o.value);
-    const selectedColours = this.coloursCategory.options.filter((o) => o.selected).map((o) => o.value);
-
-    this.filteredData = this.originalData.filter((item) => {
-      const matchesTags = selectedTags.length ? selectedTags.includes(item.tag) : true;
-      const matchesColours = selectedColours.length ? selectedColours.includes(item.color) : true;
-      const matchesKeyword = this.keyword ? item.name.toLowerCase().includes(this.keyword.toLowerCase()) : true;
-
-      return matchesTags && matchesColours && matchesKeyword;
-    });
-
-    console.log('Filtered Data:', this.filteredData);
-  }
-
-  removeTag(labelToRemove: string) {
-    this.tagsCategory.options.forEach((o) => {
-      if (o.label === labelToRemove) {
-        o.selected = false;
-      }
-    });
-    this.coloursCategory.options.forEach((o) => {
-      if (o.label === labelToRemove) {
-        o.selected = false;
-      }
-    });
-
-    this.updateSelectedTags();
-  }
-
-  clearAllFilters(): void {
-    this.tagsCategory.options.forEach((o) => (o.selected = false));
-    this.coloursCategory.options.forEach((o) => (o.selected = false));
-
-    this.updateSelectedTags();
-  }
-  onCategoryCheckboxChange(item: IFilterOption): void {
-    const category = [this.tagsCategory, this.coloursCategory].find((cat) =>
-      cat.options.some((o) => o.value === item.value),
+  /**
+   * Updates the tag selection by filtering and mapping the current filter options.
+   *
+   * This method iterates through each filter category, retaining only those options that are
+   * currently selected. It then excludes any categories that do not have at least one selected option,
+   * updating the selectedTags state accordingly.
+   */
+  public updateSelectedTags(): void {
+    this.abstractSelectedTags.set(
+      this.abstractTags()
+        .map((category) => ({
+          categoryName: category.categoryName,
+          options: category.options.filter((o: IFilterOption) => o.selected),
+        }))
+        .filter(
+          (category): category is { categoryName: string; options: IFilterOption[] } =>
+            !!category && category.options.length > 0,
+        ),
     );
+  }
 
-    if (category) {
+  /**
+   * Applies selected filters to the dataset.
+   *
+   * This method performs filtering in two main steps:
+   * 1. It aggregates the selected filters across different categories by mapping each category to an object that contains the category name and its array of selected values.
+   * 2. It filters the data from abstractData() by ensuring that each item:
+   *    - Matches all selected filters for each category. If no option is selected for a category, the filter is ignored.
+   *    - Optionally matches a keyword filter based on the item's name property.
+   *
+   * Finally, the filtered list is updated via the filteredData setter.
+   */
+  public onApplyFilters(): void {
+    const selectedFilters = this.abstractTags().map((category) => ({
+      categoryName: category.categoryName,
+      selectedValues: category.options.filter((o) => o.selected).map((o) => o.value),
+    }));
+
+    const newFilteredData = this.abstractData().filter((item) => {
+      const matchesAllCategories = selectedFilters.every((filterCategory) => {
+        if (filterCategory.selectedValues.length === 0) return true;
+        const itemValue = (item as IFilterTableData)[filterCategory.categoryName.toLowerCase()];
+        return filterCategory.selectedValues.includes(itemValue as string | number);
+      });
+
+      const keyword = this.abstractKeyword();
+      const matchesKeyword = keyword
+        ? Object.values(item).some(
+            (value) => typeof value === 'string' && value.toLowerCase().includes(keyword.toLowerCase()),
+          )
+        : true;
+
+      return matchesAllCategories && matchesKeyword;
+    });
+
+    this.emitFilteredData(newFilteredData);
+  }
+
+  /**
+   * Deselects the tag option whose label matches the provided string and updates the list of selected tags.
+   *
+   * This method iterates over each category and its options. If an option's label matches the
+   * given labelToRemove, it is marked as not selected, and then the overall selected tags are updated.
+   *
+   * @param labelToRemove - The label of the tag to deselect.
+   */
+  public removeTag(labelToRemove: string): void {
+    this.abstractTags().forEach((category) => {
+      category.options.forEach((o) => {
+        if (o.label === labelToRemove) {
+          o.selected = false;
+        }
+      });
+    });
+
+    this.updateSelectedTags();
+  }
+
+  /**
+   * Clears all filter selections.
+   *
+   * This method iterates over each filter category and resets every option's selection state to false.
+   * Once all selections are cleared, it calls updateSelectedTags to reflect the changes.
+   */
+  public clearAllFilters(): void {
+    this.abstractTags().forEach((category) => {
+      category.options.forEach((o) => (o.selected = false));
+    });
+
+    this.updateSelectedTags();
+  }
+
+  /**
+   * Handles a change event for a category checkbox by updating the selected state of the corresponding filter option.
+   *
+   * This method iterates over each category returned by the abstractTags() method and searches for a matching option based on the value of the provided item.
+   * If a match is found, the option's selected property is updated to reflect the current state of item.selected.
+   * After processing all categories, it calls updateSelectedTags() to refresh the overall tag selection state.
+   *
+   * @param item - The filter option object containing the updated selection state and option value.
+   */
+  public onCategoryCheckboxChange(item: IFilterOption): void {
+    this.abstractTags().forEach((category) => {
       const option = category.options.find((o) => o.value === item.value);
       if (option) {
         option.selected = item.selected;
       }
-    }
+    });
+
     this.updateSelectedTags();
   }
-  onKeywordChange(keyword: string): void {
-    this.keyword = keyword;
+
+  /**
+   * Updates the current keyword.
+   *
+   * This method is invoked when the keyword changes and updates the keyword state accordingly.
+   *
+   * @param keyword - The new keyword for filtering.
+   */
+  public onKeywordChange(keyword: string): void {
+    this.abstractKeyword.set(keyword);
+  }
+
+  /**
+   * Emits the provided filtered data array and optionally prevents the default behavior of the specified event.
+   *
+   * @param data - An array containing the filtered data to be emitted.
+   * @param event - (Optional) An event whose default behavior will be prevented if provided.
+   */
+  emitFilteredData(data: IFilterTableData[], event?: Event): void {
+    if (event) {
+      event.preventDefault();
+    }
+    this.abstractFilteredData.emit(data);
   }
 }

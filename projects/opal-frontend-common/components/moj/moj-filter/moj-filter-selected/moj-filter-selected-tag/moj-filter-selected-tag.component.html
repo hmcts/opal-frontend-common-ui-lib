@@ -1,9 +1,9 @@
-@for (data of FilterData; track data) {
+@for (data of FilterData; track data.categoryName) {
   <h3 class="govuk-heading-s govuk-!-margin-bottom-0">{{ data.categoryName }}</h3>
   <ul class="moj-filter-tags">
-    @for (tag of data.options; track tag) {
+    @for (tag of data.options; track tag.value) {
       <li>
-        <a class="moj-filter__tag" href="#" (click)="removeTag(tag.label); $event.preventDefault()">
+        <a class="moj-filter__tag" href="#" (click)="removeTag(tag.label, $event)">
           <span class="govuk-visually-hidden">Remove this filter</span> {{ tag.label }}
         </a>
       </li>

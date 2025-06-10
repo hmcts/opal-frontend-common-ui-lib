@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-moj-filter',
+  selector: 'opal-lib-moj-filter',
   imports: [],
   templateUrl: './moj-filter.component.html',
 })

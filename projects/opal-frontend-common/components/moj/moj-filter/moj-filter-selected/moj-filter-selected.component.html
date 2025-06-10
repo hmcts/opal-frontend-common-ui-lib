@@ -6,12 +6,7 @@
       </div>
       <div class="moj-filter__heading-action">
         <p>
-          <a
-            class="govuk-link govuk-link--no-visited-state"
-            href="#"
-            (click)="clearFilters.emit(); $event.preventDefault()"
-            >Clear filters</a
-          >
+          <a class="govuk-link govuk-link--no-visited-state" href="#" (click)="clearTag($event)">Clear filters</a>
         </p>
       </div>
       <ng-content></ng-content>

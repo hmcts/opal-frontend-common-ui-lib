@@ -8,9 +8,8 @@ describe('MojFilterOptionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MojFilterOptionComponent]
-    })
-    .compileComponents();
+      imports: [MojFilterOptionComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(MojFilterOptionComponent);
     component = fixture.componentInstance;
@@ -19,5 +18,21 @@ describe('MojFilterOptionComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should emit applyFilters event when no event is provided', () => {
+    spyOn(component.applyFilters, 'emit');
+    component.onApplyFilters();
+    expect(component.applyFilters.emit).toHaveBeenCalled();
+  });
+
+  it('should call event.preventDefault if event is provided', () => {
+    spyOn(component.applyFilters, 'emit');
+    const event = { preventDefault: jasmine.createSpy('preventDefault') } as unknown as Event;
+
+    component.onApplyFilters(event);
+
+    expect(event.preventDefault).toHaveBeenCalled();
+    expect(component.applyFilters.emit).toHaveBeenCalledWith();
   });
 });
