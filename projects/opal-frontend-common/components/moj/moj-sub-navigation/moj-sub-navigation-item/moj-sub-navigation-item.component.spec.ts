@@ -63,4 +63,9 @@ describe('MojSubNavigationItemComponent', () => {
       fragment: component.subNavItemFragment,
     });
   });
+
+  it('should include href attribute', () => {
+    const element = fixture.nativeElement.querySelector('.moj-sub-navigation__link');
+    expect(element.getAttribute('href')).toBe('#');
+  });
 });

@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "license": "MIT",
   "peerDependencies": {
     "@angular/common": "^18.2.0 || ^19.0.0",
@@ -170,11 +170,11 @@
     "./components/govuk/helpers": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-helpers.mjs"
     },
+    "./components/moj/moj-alert": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-alert.mjs"
+    },
     "./components/moj/moj-badge": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-badge.mjs"
-    },
-    "./components/moj/moj-banner": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-banner.mjs"
     },
     "./components/moj/moj-button-menu": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-button-menu.mjs"

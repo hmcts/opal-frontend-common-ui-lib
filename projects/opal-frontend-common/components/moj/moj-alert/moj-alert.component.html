@@ -1,0 +1,8 @@
+@if (isVisible) {
+  <ng-content select="[icon]"></ng-content>
+  <ng-content select="[content]"></ng-content>
+
+  @if (showDismiss) {
+    <opal-lib-moj-alert-dismiss (dismiss)="dismiss()"></opal-lib-moj-alert-dismiss>
+  }
+}
