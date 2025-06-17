@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, Input, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'opal-lib-moj-filter-option',
@@ -6,6 +6,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
   templateUrl: './moj-filter-option.component.html',
 })
 export class MojFilterOptionComponent {
+  @Input({ required: false }) buttonText = 'Apply filters';
   @Output() applyFilters = new EventEmitter<void>();
 
   /**

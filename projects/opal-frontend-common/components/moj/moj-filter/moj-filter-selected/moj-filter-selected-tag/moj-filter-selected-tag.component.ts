@@ -1,17 +1,13 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { IFilterOption } from '../../interfaces/filter-interfaces';
-
+import { IFilterSelectedTagGroup } from '@hmcts/opal-frontend-common/components/abstract/abstract-filter';
 @Component({
   selector: 'opal-lib-moj-filter-selected-tag',
   imports: [],
   templateUrl: './moj-filter-selected-tag.component.html',
 })
 export class MojFilterSelectedTagComponent {
-  @Input() FilterData: Array<{
-    categoryName: string;
-    options: IFilterOption[];
-  }> = [];
-
+  @Input() filterData: IFilterSelectedTagGroup[] = [];
+  @Input({ required: false }) ariaLabelPrefix = 'Remove this filter';
   @Output() removeTagClicked = new EventEmitter<string>();
 
   /**

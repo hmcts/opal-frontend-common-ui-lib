@@ -3,18 +3,18 @@
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">{{ options.categoryName }}</legend>
 
     <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
-      @for (item of options.options; track item.value) {
+      @for (item of options.options; track item) {
         <div class="govuk-checkboxes__item">
           <input
             class="govuk-checkboxes__input"
-            id="{{ item.label }}"
-            name="{{ item.label }}"
+            id="{{ item.value }}"
+            name="{{ item.value }}"
             type="checkbox"
             [value]="item.value"
             [checked]="item.selected"
-            (change)="onCheckboxChange(item, $event)"
+            (change)="onCheckboxChange($event, item)"
           />
-          <label class="govuk-label govuk-checkboxes__label" for="{{ item.label }}"> {{ item.label }} </label>
+          <label class="govuk-label govuk-checkboxes__label" for="{{ item.value }}"> {{ item.label }} </label>
         </div>
       }
     </div>

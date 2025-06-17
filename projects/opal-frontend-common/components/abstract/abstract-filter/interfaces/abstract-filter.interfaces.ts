@@ -5,7 +5,7 @@ export interface IFilterOption {
   selected: boolean;
 }
 
-export interface IFilterCategory {
+export interface IFilterSelectedTagGroup {
   categoryName: string;
   options: IFilterOption[];
 }

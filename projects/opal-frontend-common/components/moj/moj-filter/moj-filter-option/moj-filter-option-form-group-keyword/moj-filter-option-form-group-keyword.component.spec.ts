@@ -22,23 +22,17 @@ describe('MojFilterOptionFormGroupKeywordComponent', () => {
 
   it('should emit an empty string when no event is provided', () => {
     spyOn(component.keywordChange, 'emit');
-
     component.onKeywordChange();
-
     expect(component.keywordChange.emit).toHaveBeenCalledWith('');
   });
 
-  it('should call preventDefault and emit the correct keyword from event', () => {
-    const fakeEvent = {
-      preventDefault: jasmine.createSpy('preventDefault'),
-      target: { value: 'test keyword' },
-    } as unknown as Event;
-
+  it('should emit the correct keyword when an event with a valid input value is provided', () => {
     spyOn(component.keywordChange, 'emit');
 
-    component.onKeywordChange(fakeEvent);
+    const inputValue = 'test keyword';
+    const fakeEvent = { target: { value: inputValue } } as unknown as Event;
 
-    expect(fakeEvent.preventDefault).toHaveBeenCalled();
-    expect(component.keywordChange.emit).toHaveBeenCalledWith('test keyword');
+    component.onKeywordChange(fakeEvent);
+    expect(component.keywordChange.emit).toHaveBeenCalledWith(inputValue);
   });
 });

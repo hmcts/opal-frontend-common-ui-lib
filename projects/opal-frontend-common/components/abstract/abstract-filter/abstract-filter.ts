@@ -1,42 +1,45 @@
-import { OnInit, Component, signal, Output, EventEmitter } from '@angular/core';
-import { IFilterCategory, IFilterOption } from './interfaces/filter-interfaces';
+import { OnInit, Component, signal, Output, EventEmitter, computed } from '@angular/core';
+import { IFilterOption, IFilterSelectedTagGroup } from './interfaces/abstract-filter.interfaces';
 import { IFilterTableData } from './interfaces/table-data-interface';
 
 @Component({
   template: '',
 })
 export abstract class AbstractFilterComponent implements OnInit {
-  public abstractTags = signal<IFilterCategory[]>([]);
+  public abstractTags = signal<IFilterSelectedTagGroup[]>([]);
   public abstractKeyword = signal<string>('');
   public abstractData = signal<IFilterTableData[]>([]);
-  public abstractSelectedTags = signal<Array<{ categoryName: string; options: IFilterOption[] }>>([]);
 
   @Output() abstractFilteredData = new EventEmitter<IFilterTableData[]>();
 
-  ngOnInit(): void {
-    this.updateSelectedTags();
-  }
+  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
+  public ngOnInit(): void {}
 
   /**
-   * Updates the tag selection by filtering and mapping the current filter options.
+   * Computes and returns an array of categories that have at least one selected filter option.
    *
-   * This method iterates through each filter category, retaining only those options that are
-   * currently selected. It then excludes any categories that do not have at least one selected option,
-   * updating the selectedTags state accordingly.
+   * Each object in the returned array includes:
+   * - `categoryName`: the name of the category.
+   * - `options`: an array of filter options that have been marked as selected.
+   *
+   * The process involves:
+   * 1. Mapping over the list of abstract tags.
+   * 2. Filtering each category's options to retain only the selected ones.
+   * 3. Excluding any category that ends up with an empty `options` array.
+   *
+   * @returns An array of objects, each with a `categoryName` and an array of selected `IFilterOption` items.
    */
-  public updateSelectedTags(): void {
-    this.abstractSelectedTags.set(
-      this.abstractTags()
-        .map((category) => ({
-          categoryName: category.categoryName,
-          options: category.options.filter((o: IFilterOption) => o.selected),
-        }))
-        .filter(
-          (category): category is { categoryName: string; options: IFilterOption[] } =>
-            !!category && category.options.length > 0,
-        ),
-    );
-  }
+  public abstractSelectedTags = computed(() =>
+    this.abstractTags()
+      .map((category) => ({
+        categoryName: category.categoryName,
+        options: category.options.filter((o: IFilterOption) => o.selected),
+      }))
+      .filter(
+        (category): category is { categoryName: string; options: IFilterOption[] } =>
+          !!category && category.options.length > 0,
+      ),
+  );
 
   /**
    * Applies selected filters to the dataset.
@@ -62,17 +65,31 @@ export abstract class AbstractFilterComponent implements OnInit {
         return filterCategory.selectedValues.includes(itemValue as string | number);
       });
 
-      const keyword = this.abstractKeyword();
-      const matchesKeyword = keyword
-        ? Object.values(item).some(
-            (value) => typeof value === 'string' && value.toLowerCase().includes(keyword.toLowerCase()),
-          )
-        : true;
+      const keyword = this.matchesKeyword(item, this.abstractKeyword());
 
-      return matchesAllCategories && matchesKeyword;
+      return matchesAllCategories && keyword;
     });
 
     this.emitFilteredData(newFilteredData);
+  }
+
+  /**
+   * Checks whether the provided keyword is contained within any string property of the given item.
+   *
+   * If the keyword is not provided or is an empty string, the function returns true by default.
+   * Otherwise, the method converts both the keyword and the item's string properties to lowercase
+   * and checks if the keyword is present within any property.
+   *
+   * @param item - The data item whose properties are checked.
+   * @param keyword - The string keyword to search for within the item's properties.
+   * @returns True if the keyword is found in at least one string property, or if the keyword is empty; otherwise, false.
+   */
+  private matchesKeyword(item: IFilterTableData, keyword: string): boolean {
+    return keyword
+      ? Object.values(item).some(
+          (value) => typeof value === 'string' && value.toLowerCase().includes(keyword.toLowerCase()),
+        )
+      : true;
   }
 
   /**
@@ -84,15 +101,11 @@ export abstract class AbstractFilterComponent implements OnInit {
    * @param labelToRemove - The label of the tag to deselect.
    */
   public removeTag(labelToRemove: string): void {
-    this.abstractTags().forEach((category) => {
-      category.options.forEach((o) => {
-        if (o.label === labelToRemove) {
-          o.selected = false;
-        }
-      });
-    });
-
-    this.updateSelectedTags();
+    const updated = this.abstractTags().map((category) => ({
+      ...category,
+      options: category.options.map((o) => (o.label === labelToRemove ? { ...o, selected: false } : o)),
+    }));
+    this.abstractTags.set(updated);
   }
 
   /**
@@ -102,11 +115,11 @@ export abstract class AbstractFilterComponent implements OnInit {
    * Once all selections are cleared, it calls updateSelectedTags to reflect the changes.
    */
   public clearAllFilters(): void {
-    this.abstractTags().forEach((category) => {
-      category.options.forEach((o) => (o.selected = false));
-    });
-
-    this.updateSelectedTags();
+    const cleared = this.abstractTags().map((category) => ({
+      ...category,
+      options: category.options.map((o) => ({ ...o, selected: false })),
+    }));
+    this.abstractTags.set(cleared);
   }
 
   /**
@@ -119,14 +132,11 @@ export abstract class AbstractFilterComponent implements OnInit {
    * @param item - The filter option object containing the updated selection state and option value.
    */
   public onCategoryCheckboxChange(item: IFilterOption): void {
-    this.abstractTags().forEach((category) => {
-      const option = category.options.find((o) => o.value === item.value);
-      if (option) {
-        option.selected = item.selected;
-      }
-    });
-
-    this.updateSelectedTags();
+    const updated = this.abstractTags().map((category) => ({
+      ...category,
+      options: category.options.map((o) => (o.value === item.value ? { ...o, selected: item.selected } : o)),
+    }));
+    this.abstractTags.set(updated);
   }
 
   /**
@@ -141,15 +151,10 @@ export abstract class AbstractFilterComponent implements OnInit {
   }
 
   /**
-   * Emits the provided filtered data array and optionally prevents the default behavior of the specified event.
-   *
+   * Emits the provided filtered data array
    * @param data - An array containing the filtered data to be emitted.
-   * @param event - (Optional) An event whose default behavior will be prevented if provided.
    */
-  emitFilteredData(data: IFilterTableData[], event?: Event): void {
-    if (event) {
-      event.preventDefault();
-    }
+  emitFilteredData(data: IFilterTableData[]): void {
     this.abstractFilteredData.emit(data);
   }
 }

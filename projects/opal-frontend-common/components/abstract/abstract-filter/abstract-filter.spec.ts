@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { AbstractFilterComponent } from './abstract-filter';
+import { IFilterOption, IFilterSelectedTagGroup } from './interfaces/abstract-filter.interfaces';
+import { IFilterTableData } from './interfaces/table-data-interface';
 
 @Component({ template: '' })
 class TestFilterComponent extends AbstractFilterComponent {}
@@ -11,194 +13,188 @@ describe('AbstractFilterComponent', () => {
     component = new TestFilterComponent();
   });
 
-  it('should initialize signals with default values', () => {
-    expect(component.abstractTags()).toEqual([]);
-    expect(component.abstractKeyword()).toBe('');
-    expect(component.abstractData()).toEqual([]);
-    expect(component.abstractSelectedTags()).toEqual([]);
+  it('should initialize without errors (ngOnInit)', () => {
+    expect(() => component.ngOnInit()).not.toThrow();
   });
 
-  it('should update selected tags correctly', () => {
-    component.abstractTags.set([
-      {
-        categoryName: 'Tags',
-        options: [
-          { label: 'Urgent', value: 'urgent', selected: true, count: 4 },
-          { label: 'Normal', value: 'normal', selected: false, count: 2 },
-        ],
-      },
-    ]);
-    component.updateSelectedTags();
-    expect(component.abstractSelectedTags()).toEqual([
-      {
-        categoryName: 'Tags',
-        options: [{ label: 'Urgent', value: 'urgent', selected: true, count: 4 }],
-      },
-    ]);
-  });
-
-  it('should apply filters correctly with keyword', () => {
-    component.abstractTags.set([
-      {
-        categoryName: 'Tags',
-        options: [{ label: 'Urgent', value: 'urgent', selected: true, count: 4 }],
-      },
-    ]);
-    component.abstractData.set([
-      { name: 'Fix login bug', tags: 'urgent' },
-      { name: 'Review PR', tags: 'normal' },
-    ]);
-    component.abstractKeyword.set('login');
-
-    const emitSpy = spyOn(component.abstractFilteredData, 'emit');
-    component.onApplyFilters();
-
-    expect(emitSpy).toHaveBeenCalledWith([{ name: 'Fix login bug', tags: 'urgent' }]);
-  });
-
-  it('should apply filters correctly without keyword', () => {
-    component.abstractTags.set([
+  it('should compute selected tags correctly', () => {
+    const mockTags: IFilterSelectedTagGroup[] = [
       {
         categoryName: 'Status',
-        options: [{ label: 'Open', value: 'open', selected: true, count: 10 }],
-      },
-    ]);
-    component.abstractData.set([
-      { name: 'Issue 1', status: 'open' },
-      { name: 'Issue 2', status: 'closed' },
-    ]);
-    component.abstractKeyword.set('');
-
-    const emitSpy = spyOn(component.abstractFilteredData, 'emit');
-    component.onApplyFilters();
-
-    expect(emitSpy).toHaveBeenCalledWith([{ name: 'Issue 1', status: 'open' }]);
-  });
-
-  it('should remove a selected tag by label', () => {
-    component.abstractTags.set([
-      {
-        categoryName: 'Tags',
         options: [
-          { label: 'Urgent', value: 'urgent', selected: true, count: 4 },
-          { label: 'Optional', value: 'optional', selected: true, count: 1 },
+          { label: 'Active', value: 'active', count: 0, selected: true },
+          { label: 'Inactive', value: 'inactive', count: 0, selected: false },
         ],
       },
-    ]);
-    component.removeTag('Urgent');
-    const options = component.abstractTags()[0].options;
-    expect(options.find((o) => o.label === 'Urgent')?.selected).toBeFalse();
-  });
-
-  it('should clear all selected filters', () => {
-    component.abstractTags.set([
       {
-        categoryName: 'Tags',
+        categoryName: 'Type',
         options: [
-          { label: 'Urgent', value: 'urgent', selected: true, count: 4 },
-          { label: 'Optional', value: 'optional', selected: true, count: 1 },
+          { label: 'Admin', value: 'admin', count: 0, selected: false },
+          { label: 'User', value: 'user', count: 0, selected: true },
         ],
       },
-    ]);
+    ];
+    component.abstractTags.set(mockTags);
+
+    const selectedTags = component.abstractSelectedTags();
+    expect(selectedTags.length).toBe(2);
+    expect(selectedTags[0].options.length).toBe(1);
+    expect(selectedTags[0].options[0].label).toBe('Active');
+    expect(selectedTags[1].options.length).toBe(1);
+    expect(selectedTags[1].options[0].label).toBe('User');
+  });
+
+  it('should remove a tag by label correctly', () => {
+    const mockTags: IFilterSelectedTagGroup[] = [
+      {
+        categoryName: 'Status',
+        options: [
+          { label: 'Active', value: 'active', count: 0, selected: true },
+          { label: 'Inactive', value: 'inactive', count: 0, selected: true },
+        ],
+      },
+    ];
+    component.abstractTags.set(mockTags);
+    component.removeTag('Active');
+    const updatedTags = component.abstractTags();
+    const activeOption = updatedTags[0].options.find((o) => o.label === 'Active');
+    const inactiveOption = updatedTags[0].options.find((o) => o.label === 'Inactive');
+    expect(activeOption?.selected).toBeFalse();
+    expect(inactiveOption?.selected).toBeTrue();
+  });
+
+  it('should clear all filter selections', () => {
+    const mockTags: IFilterSelectedTagGroup[] = [
+      {
+        categoryName: 'Status',
+        options: [
+          { label: 'Active', value: 'active', count: 0, selected: true },
+          { label: 'Inactive', value: 'inactive', count: 0, selected: true },
+        ],
+      },
+    ];
+    component.abstractTags.set(mockTags);
     component.clearAllFilters();
-    const allDeselected = component.abstractTags()[0].options.every((o) => !o.selected);
-    expect(allDeselected).toBeTrue();
+    const clearedTags = component.abstractTags();
+    clearedTags[0].options.forEach((option) => {
+      expect(option.selected).toBeFalse();
+    });
   });
 
-  it('should update category checkbox selection state', () => {
-    component.abstractTags.set([
+  it('should update the category checkbox selection correctly', () => {
+    const mockTags: IFilterSelectedTagGroup[] = [
       {
-        categoryName: 'Tags',
-        options: [{ label: 'Urgent', value: 'urgent', selected: false, count: 4 }],
-      },
-    ]);
-    component.onCategoryCheckboxChange({ label: 'Urgent', value: 'urgent', selected: true, count: 4 });
-    const updated = component.abstractTags()[0].options.find((o) => o.value === 'urgent');
-    expect(updated?.selected).toBeTrue();
-  });
-
-  it('should update the keyword', () => {
-    component.onKeywordChange('search term');
-    expect(component.abstractKeyword()).toBe('search term');
-  });
-
-  it('should emit filtered data and call preventDefault if event is provided', () => {
-    const testEvent = { preventDefault: jasmine.createSpy('preventDefault') } as unknown as Event;
-    const emitSpy = spyOn(component.abstractFilteredData, 'emit');
-    component.emitFilteredData([{ sample: 123 }], testEvent);
-    expect(testEvent.preventDefault).toHaveBeenCalled();
-    expect(emitSpy).toHaveBeenCalledWith([{ sample: 123 }]);
-  });
-
-  it('should call updateSelectedTags on initialization', () => {
-    const updateSpy = spyOn(component, 'updateSelectedTags').and.callThrough();
-    component.ngOnInit();
-    expect(updateSpy).toHaveBeenCalled();
-  });
-
-  it('should initialize abstractSelectedTags to an empty array on initialization', () => {
-    component.abstractTags.set([]); // ensure no tags exist
-    component.ngOnInit();
-    expect(component.abstractSelectedTags()).toEqual([]);
-  });
-  it('should filter data matching all selected category filters across multiple categories', () => {
-    component.abstractTags.set([
-      {
-        categoryName: 'Tags',
+        categoryName: 'Role',
         options: [
-          { label: 'Urgent', value: 'urgent', selected: true, count: 4 },
-          { label: 'Normal', value: 'normal', selected: false, count: 2 },
+          { label: 'Admin', value: 'admin', count: 0, selected: false },
+          { label: 'User', value: 'user', count: 0, selected: false },
         ],
       },
+    ];
+    component.abstractTags.set(mockTags);
+    const updatedOption: IFilterOption = { label: 'User', value: 'user', count: 0, selected: true };
+    component.onCategoryCheckboxChange(updatedOption);
+
+    const updatedTags = component.abstractTags();
+    const adminOption = updatedTags[0].options.find((o) => o.label === 'Admin');
+    const userOption = updatedTags[0].options.find((o) => o.label === 'User');
+    expect(adminOption?.selected).toBeFalse();
+    expect(userOption?.selected).toBeTrue();
+  });
+
+  it('should update the keyword correctly', () => {
+    component.onKeywordChange('test keyword');
+    expect(component.abstractKeyword()).toBe('test keyword');
+  });
+
+  it('should filter data and emit filtered results based on selected tags and keyword', () => {
+    // Setup filter: only "Active" is selected in the Status category.
+    const mockTags: IFilterSelectedTagGroup[] = [
       {
         categoryName: 'Status',
         options: [
-          { label: 'Open', value: 'open', selected: true, count: 10 },
-          { label: 'Closed', value: 'closed', selected: false, count: 3 },
+          { label: 'Active', value: 'active', count: 0, selected: true },
+          { label: 'Inactive', value: 'inactive', count: 0, selected: false },
         ],
       },
-    ]);
-    component.abstractData.set([
-      { name: 'Task 1', tags: 'urgent', status: 'open' },
-      { name: 'Task 2', tags: 'urgent', status: 'closed' },
-      { name: 'Task 3', tags: 'normal', status: 'open' },
-      { name: 'Task 4', tags: 'normal', status: 'closed' },
-    ]);
-    component.abstractKeyword.set('');
-    const emitSpy = spyOn(component.abstractFilteredData, 'emit');
+    ];
+    component.abstractTags.set(mockTags);
+    // Setup table data with a "status" field.
+    const data: IFilterTableData[] = [
+      { status: 'active', name: 'Item 1' },
+      { status: 'inactive', name: 'Item 2' },
+    ];
+    component.abstractData.set(data);
+    component.onKeywordChange('Item');
+
+    let emittedData: IFilterTableData[] | undefined;
+    component.abstractFilteredData.subscribe((result: IFilterTableData[]) => {
+      emittedData = result;
+    });
+
     component.onApplyFilters();
-    expect(emitSpy).toHaveBeenCalledWith([{ name: 'Task 1', tags: 'urgent', status: 'open' }]);
+    expect(emittedData).toBeDefined();
+    // Only the first item should pass the "active" filter.
+    expect(emittedData!.length).toBe(1);
+    expect(emittedData![0]['status']).toBe('active');
   });
 
-  it('should return items when a category has no selected filters (ignoring that category)', () => {
-    component.abstractTags.set([
-      {
-        categoryName: 'Tags',
-        options: [
-          { label: 'Urgent', value: 'urgent', selected: false, count: 4 },
-          { label: 'Normal', value: 'normal', selected: false, count: 2 },
-        ],
-      },
+  it('should emit all items when no filter is selected', () => {
+    // No tag selection, so all items should pass.
+    const mockTags: IFilterSelectedTagGroup[] = [
       {
         categoryName: 'Status',
         options: [
-          { label: 'Open', value: 'open', selected: true, count: 10 },
-          { label: 'Closed', value: 'closed', selected: false, count: 3 },
+          { label: 'Active', value: 'active', count: 0, selected: false },
+          { label: 'Inactive', value: 'inactive', count: 0, selected: false },
         ],
       },
-    ]);
-    component.abstractData.set([
-      { name: 'Task 1', tags: 'urgent', status: 'open' },
-      { name: 'Task 2', tags: 'normal', status: 'open' },
-      { name: 'Task 3', tags: 'urgent', status: 'closed' },
-      { name: 'Task 4', tags: 'normal', status: 'closed' },
-    ]);
-    component.abstractKeyword.set('');
-    const emitSpy = spyOn(component.abstractFilteredData, 'emit');
+    ];
+    component.abstractTags.set(mockTags);
+    const data: IFilterTableData[] = [
+      { status: 'active', name: 'Item 1' },
+      { status: 'inactive', name: 'Item 2' },
+    ];
+    component.abstractData.set(data);
+    component.onKeywordChange(''); // no keyword filter
+
+    let emittedData: IFilterTableData[] | undefined;
+    component.abstractFilteredData.subscribe((result: IFilterTableData[]) => {
+      emittedData = result;
+    });
+
     component.onApplyFilters();
-    expect(emitSpy).toHaveBeenCalledWith([
-      { name: 'Task 1', tags: 'urgent', status: 'open' },
-      { name: 'Task 2', tags: 'normal', status: 'open' },
-    ]);
+    expect(emittedData!.length).toBe(2);
+  });
+
+  it('should filter data by keyword when no tag filtering is applied', () => {
+    // Setup filter categories with no selection.
+    const mockTags: IFilterSelectedTagGroup[] = [
+      {
+        categoryName: 'Category',
+        options: [
+          { label: 'Option1', value: 'value1', count: 0, selected: false },
+          { label: 'Option2', value: 'value2', count: 0, selected: false },
+        ],
+      },
+    ];
+    component.abstractTags.set(mockTags);
+    // Setup table data with a "name" field to match keyword.
+    const data: IFilterTableData[] = [
+      { category: 'value1', name: 'Alpha' },
+      { category: 'value2', name: 'Beta' },
+      { category: 'value1', name: 'Gamma' },
+    ];
+    component.abstractData.set(data);
+    component.onKeywordChange('be'); // should match "Beta"
+
+    let emittedData: IFilterTableData[] | undefined;
+    component.abstractFilteredData.subscribe((result: IFilterTableData[]) => {
+      emittedData = result;
+    });
+
+    component.onApplyFilters();
+    expect(emittedData!.length).toBe(1);
+    expect(emittedData![0]['name']).toBe('Beta');
   });
 });

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MojFilterOptionsFormGroupItemComponent } from './moj-filter-options-form-group-item.component';
-import { IFilterOption } from '../../interfaces/filter-interfaces';
+import { IFilterOption } from '@hmcts/opal-frontend-common/components/abstract/abstract-filter';
 
 describe('MojFilterOptionsFormGroupComponent', () => {
   let component: MojFilterOptionsFormGroupItemComponent;
@@ -22,34 +22,32 @@ describe('MojFilterOptionsFormGroupComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should update the selected property and emit the updated filter option when an event is provided', () => {
+  it('should emit updated filter option with selected true when checkbox is checked', () => {
     const item: IFilterOption = { label: 'Urgent', value: 'urgent', selected: false, count: 3 };
     const fakeEvent = {
-      preventDefault: jasmine.createSpy('preventDefault'),
       target: { checked: true },
     } as unknown as Event;
 
     spyOn(component.changed, 'emit');
+    component.onCheckboxChange(fakeEvent, item);
 
-    component.onCheckboxChange(item, fakeEvent);
-
-    expect(fakeEvent.preventDefault).toHaveBeenCalled();
-    expect(item.selected).toBeTrue();
-    expect(component.changed.emit).toHaveBeenCalledWith(item);
+    // Expect the emitted value to be a copy of item with selected: true.
+    expect(component.changed.emit).toHaveBeenCalledWith({ ...item, selected: true });
   });
 
-  it('should emit the filter option without modifying selected when no event is provided', () => {
-    const item: IFilterOption = { label: 'Urgent', value: 'urgent', selected: false, count: 3 };
+  it('should emit updated filter option with selected false when checkbox is unchecked', () => {
+    const item: IFilterOption = { label: 'Urgent', value: 'urgent', selected: true, count: 3 };
+    const fakeEvent = {
+      target: { checked: false },
+    } as unknown as Event;
 
     spyOn(component.changed, 'emit');
+    component.onCheckboxChange(fakeEvent, item);
 
-    component.onCheckboxChange(item);
-
-    expect(item.selected).toBeFalse();
-    expect(component.changed.emit).toHaveBeenCalledWith(item);
+    expect(component.changed.emit).toHaveBeenCalledWith({ ...item, selected: false });
   });
 });

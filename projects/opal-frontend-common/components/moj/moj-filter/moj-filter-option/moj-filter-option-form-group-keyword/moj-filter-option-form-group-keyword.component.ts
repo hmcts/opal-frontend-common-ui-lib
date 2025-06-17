@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, Input, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'opal-lib-moj-filter-option-form-group-keyword',
@@ -6,6 +6,9 @@ import { Component, Output, EventEmitter } from '@angular/core';
   templateUrl: './moj-filter-option-form-group-keyword.component.html',
 })
 export class MojFilterOptionFormGroupKeywordComponent {
+  @Input({ required: false }) inputId = 'keywords';
+  @Input({ required: false }) inputName = 'keywords';
+  @Input({ required: false }) labelValue = 'Keywords';
   @Output() keywordChange = new EventEmitter<string>();
 
   /**
@@ -19,7 +22,6 @@ export class MojFilterOptionFormGroupKeywordComponent {
   onKeywordChange(event?: Event): void {
     let keyword = '';
     if (event) {
-      event.preventDefault();
       keyword = (event.target as HTMLInputElement).value;
     }
 

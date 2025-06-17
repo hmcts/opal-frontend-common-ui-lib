@@ -17,56 +17,55 @@ First you have to create a new component as the wrapper for your filter componen
 
 
 ```typescript
-    import { Component, Output, Input } from '@angular/core';
+    import { Component, Input } from '@angular/core';
     import { AbstractFilterComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-filter';
     import { MojFilterComponent } from '@hmcts/opal-frontend-common/components/moj/moj-filter';
     import { MojFilterHeaderComponent } from '@hmcts/opal-frontend-common/components/moj/moj-filter';
     import { MojFilterOptionComponent } from '@hmcts/opal-frontend-common/components/moj/moj-filter';
     import { MojFilterOptionFormGroupKeywordComponent } from '@hmcts/opal-frontend-common/components/moj/moj-filter';
-    import { MojFilterOptionsFormGroupComponent } from '@hmcts/opal-frontend-common/components/moj/moj-filter';
+    import { MojFilterOptionsFormGroupItemComponent } from '@hmcts/opal-frontend-common/components/moj/moj-filter';
     import { MojFilterSelectedComponent } from '@hmcts/opal-frontend-common/components/moj/moj-filter';
     import { MojFilterSelectedTagComponent } from '@hmcts/opal-frontend-common/components/moj/moj-filter';
-    import { IFilterOption } from '@hmcts/opal-frontend-common/components/moj/moj-filter/interfaces/filter-interfaces';
+    import { IFilterOption } from '@hmcts/opal-frontend-common/components/abstract/abstract-filter';
     @Component({
-        selector: 'app-filter-wrapper',
-        imports: [
-            MojFilterComponent,
-            MojFilterHeaderComponent,
-            MojFilterOptionComponent,
-            MojFilterOptionFormGroupKeywordComponent,
-            MojFilterOptionsFormGroupComponent,
-            MojFilterSelectedComponent,
-            MojFilterSelectedTagComponent,
-        ],
-        templateUrl: './filter-wrapper.component.html',
+      selector: 'app-filter-wrapper',
+      imports: [
+        MojFilterComponent,
+        MojFilterHeaderComponent,
+        MojFilterOptionComponent,
+        MojFilterOptionFormGroupKeywordComponent,
+        MojFilterOptionsFormGroupItemComponent,
+        MojFilterSelectedComponent,
+        MojFilterSelectedTagComponent,
+      ],
+      templateUrl: './filter-wrapper.component.html',
     })
     export class FilterWrapperComponent extends AbstractFilterComponent {
-        @Input({ required: true }) filterData!: [];
-        @Output() processedData = this.filteredData();
+      @Input({ required: true }) filterData!: any[];
 
-        tagsCategory = {
-            categoryName: 'Tags',
-            options: [
-            { label: 'Tag A', value: 'tagA', selected: false },
-            { label: 'Tag B', value: 'tagB', selected: false },
-            // ...
-            ] as IFilterOption[],
-        };
+      tagsCategory = {
+        categoryName: 'Tags',
+        options: [
+          { label: 'Tag A', value: 'tagA', selected: false },
+          { label: 'Tag B', value: 'tagB', selected: false },
+          // ...
+        ] as IFilterOption[],
+      };
 
-        coloursCategory = {
-            categoryName: 'Colours',
-            options: [
-            { label: 'Red', value: 'red', selected: false },
-            { label: 'Blue', value: 'blue', selected: false },
-            // ...
-            ] as IFilterOption[],
-        };
+      coloursCategory = {
+        categoryName: 'Colours',
+        options: [
+          { label: 'Red', value: 'red', selected: false },
+          { label: 'Blue', value: 'blue', selected: false },
+          // ...
+        ] as IFilterOption[],
+      };
 
-        override ngOnInit(): void {
-            this.abstractData.set(this.filterData);
-            this.tags.set([this.tagsCategory, this.coloursCategory]); // Ensure it's set first
-            super.ngOnInit();
-        }
+      override ngOnInit(): void {
+        this.abstractData.set(this.filterData);
+        this.abstractTags.set([this.tagsCategory, this.coloursCategory]); // Ensure it's set first
+        super.ngOnInit();
+      }
     }
 
 
@@ -76,35 +75,33 @@ Then In the wrapper HTML element,  you have to create the filter page like this:
 
 ```html
 <opal-lib-moj-filter>
-  <ng-container header> <opal-lib-moj-filter-header title="Filter"></opal-lib-moj-filter-header></ng-container>
-  <ng-container selected>
+  <ng-container mojFilterHeader> <opal-lib-moj-filter-header title="Filter"></opal-lib-moj-filter-header></ng-container>
+  <ng-container mojFilterSelected>
     <opal-lib-moj-filter-selected (clearFilters)="clearAllFilters()">
       <opal-lib-moj-filter-selected-tag
-        [FilterData]="selectedTags()"
+        [filterData]="abstractSelectedTags()"
         (removeTagClicked)="removeTag($event)"
-      ></opal-lib-moj-filter-selected-tag>
-     </opal-lib-moj-filter-selected
+      ></opal-lib-moj-filter-selected-tag> </opal-lib-moj-filter-selected
   ></ng-container>
-  <ng-container option>
+  <ng-container mojFilterOption>
     <opal-lib-moj-filter-option (applyFilters)="onApplyFilters()">
-      <ng-container keyword>
+      <ng-container mojFilterKeyword>
         <opal-lib-moj-filter-option-form-group-keyword
           (keywordChange)="onKeywordChange($event)"
         ></opal-lib-moj-filter-option-form-group-keyword>
       </ng-container>
-      <ng-container items>
-        <opal-lib-moj-filter-options-form-group-item
-          [options]="tagsCategory"
-          (changed)="onCategoryCheckboxChange($event)"
-        ></opal-lib-moj-filter-options-form-group-item>
-        <opal-lib-moj-filter-options-form-group-item
-          [options]="coloursCategory"
-          (changed)="onCategoryCheckboxChange($event)"
-        ></opal-lib-moj-filter-options-form-group-item>
+      <ng-container mojFilterItems>
+        @for (item of abstractTags(); track item.categoryName) {
+          <opal-lib-moj-filter-options-form-group-item
+            [options]="item"
+            (changed)="onCategoryCheckboxChange($event)"
+          ></opal-lib-moj-filter-options-form-group-item>
+        }
       </ng-container>
     </opal-lib-moj-filter-option>
   </ng-container>
 </opal-lib-moj-filter>
+
 
 
 In your parent component you need to have the data you will be passing in aswell as a method to capture the filtered data event emitter.

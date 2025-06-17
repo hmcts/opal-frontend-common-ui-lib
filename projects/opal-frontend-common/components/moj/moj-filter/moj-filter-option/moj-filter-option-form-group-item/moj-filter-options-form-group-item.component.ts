@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { IFilterOption } from '../../interfaces/filter-interfaces';
+import { IFilterOption } from '@hmcts/opal-frontend-common/components/abstract/abstract-filter';
 
 @Component({
   selector: 'opal-lib-moj-filter-options-form-group-item',
@@ -23,13 +23,9 @@ export class MojFilterOptionsFormGroupItemComponent {
    * @param event - The event object triggered by the checkbox change.
    * @param item - The filter option item whose selected state needs to be updated.
    */
-  onCheckboxChange(item: IFilterOption, event?: Event): void {
-    if (event) {
-      event.preventDefault();
-      const input = event.target as HTMLInputElement;
-      item.selected = input.checked;
-    }
-
-    this.changed.emit(item);
+  onCheckboxChange(event: Event, item: IFilterOption): void {
+    const input = event.target as HTMLInputElement;
+    const updatedItem = { ...item, selected: input.checked };
+    this.changed.emit(updatedItem);
   }
 }

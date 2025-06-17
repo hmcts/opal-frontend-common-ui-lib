@@ -6,8 +6,8 @@
     data-test-id="submit-button"
     (click)="onApplyFilters()"
   >
-    Apply filters
+    {{ buttonText }}
   </button>
-  <ng-content select="[keyword]"></ng-content>
-  <ng-content select="[items]"></ng-content>
+  <ng-content select="[mojFilterKeyword]"></ng-content>
+  <ng-content select="[mojFilterItems]"></ng-content>
 </div>
