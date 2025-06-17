@@ -13,10 +13,6 @@ describe('AbstractFilterComponent', () => {
     component = new TestFilterComponent();
   });
 
-  it('should initialize without errors (ngOnInit)', () => {
-    expect(() => component.ngOnInit()).not.toThrow();
-  });
-
   it('should compute selected tags correctly', () => {
     const mockTags: IFilterSelectedTagGroup[] = [
       {

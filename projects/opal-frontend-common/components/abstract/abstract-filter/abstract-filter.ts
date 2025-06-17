@@ -1,19 +1,16 @@
-import { OnInit, Component, signal, Output, EventEmitter, computed } from '@angular/core';
+import { Component, signal, Output, EventEmitter, computed } from '@angular/core';
 import { IFilterOption, IFilterSelectedTagGroup } from './interfaces/abstract-filter.interfaces';
 import { IFilterTableData } from './interfaces/table-data-interface';
 
 @Component({
   template: '',
 })
-export abstract class AbstractFilterComponent implements OnInit {
+export abstract class AbstractFilterComponent {
   public abstractTags = signal<IFilterSelectedTagGroup[]>([]);
   public abstractKeyword = signal<string>('');
   public abstractData = signal<IFilterTableData[]>([]);
 
   @Output() abstractFilteredData = new EventEmitter<IFilterTableData[]>();
-
-  // eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
-  public ngOnInit(): void {}
 
   /**
    * Computes and returns an array of categories that have at least one selected filter option.
@@ -61,7 +58,7 @@ export abstract class AbstractFilterComponent implements OnInit {
     const newFilteredData = this.abstractData().filter((item) => {
       const matchesAllCategories = selectedFilters.every((filterCategory) => {
         if (filterCategory.selectedValues.length === 0) return true;
-        const itemValue = (item as IFilterTableData)[filterCategory.categoryName.toLowerCase()];
+        const itemValue = item[filterCategory.categoryName.toLowerCase()];
         return filterCategory.selectedValues.includes(itemValue as string | number);
       });
 
