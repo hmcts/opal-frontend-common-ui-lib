@@ -3,7 +3,7 @@
     <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">{{ options.categoryName }}</legend>
 
     <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
-      @for (item of options.options; track item) {
+      @for (item of options.options; track item.value) {
         <div class="govuk-checkboxes__item">
           <input
             class="govuk-checkboxes__input"
