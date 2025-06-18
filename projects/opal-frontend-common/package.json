@@ -68,6 +68,9 @@
     "./components/alphagov/alphagov-accessible-autocomplete/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-alphagov-alphagov-accessible-autocomplete-interfaces.mjs"
     },
+    "./components/custom/custom-account-information": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-account-information.mjs"
+    },
     "./components/govuk/govuk-accordion": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-accordion.mjs"
     },
