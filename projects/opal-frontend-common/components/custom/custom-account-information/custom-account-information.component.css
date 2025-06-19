@@ -1,4 +1,4 @@
-.custom-wrapper {
+:host {
   display: flex;
   flex-wrap: wrap;
   max-width: 100%;
