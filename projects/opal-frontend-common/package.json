@@ -14,6 +14,9 @@
     ".": {
       "import": "./fesm2022/hmcts-opal-frontend-common.mjs"
     },
+    "./components/abstract/abstract-filter": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-filter.mjs"
+    },
     "./components/abstract/abstract-form-alias-base": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-form-alias-base.mjs"
     },
@@ -178,6 +181,9 @@
     },
     "./components/moj/moj-date-picker": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-date-picker.mjs"
+    },
+    "./components/moj/moj-filter": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-filter.mjs"
     },
     "./components/moj/moj-header": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-header.mjs"
