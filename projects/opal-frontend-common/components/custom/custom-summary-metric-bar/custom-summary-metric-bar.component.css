@@ -1,0 +1,7 @@
+.custom-summary-metric-bar {
+  display: flex;
+  width: 1280px;
+  align-items: flex-start;
+  padding: 10px;
+  gap: 20px;
+}
