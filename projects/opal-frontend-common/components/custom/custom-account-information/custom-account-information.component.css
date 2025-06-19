@@ -1,7 +1,6 @@
 .custom-wrapper {
   display: flex;
   flex-wrap: wrap;
-  padding: 10px;
   max-width: 100%;
   gap: 20px;
   align-items: center;
