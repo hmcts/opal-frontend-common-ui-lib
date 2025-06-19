@@ -1,0 +1,6 @@
+:host {
+  display: flex;
+  width: 1280px;
+  align-items: flex-start;
+  gap: 20px;
+}
