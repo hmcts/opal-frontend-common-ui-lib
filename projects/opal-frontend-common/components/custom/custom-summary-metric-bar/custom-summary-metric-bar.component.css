@@ -1,4 +1,4 @@
-.custom-summary-metric-bar {
+:host {
   display: flex;
   width: 1280px;
   align-items: flex-start;
