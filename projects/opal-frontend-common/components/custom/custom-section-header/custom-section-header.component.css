@@ -1,0 +1,21 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 393px;
+  gap: 15px;
+}
+
+.custom-section-heading {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 30px;
+  align-self: stretch;
+  margin: 0;
+}
+
+.custom-section-header-divider {
+  width: 393px;
+  height: 4px;
+  background: #1d70b8;
+  margin: 0;
+}
