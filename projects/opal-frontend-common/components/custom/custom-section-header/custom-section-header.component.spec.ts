@@ -8,9 +8,8 @@ describe('CustomSectionHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CustomSectionHeaderComponent]
-    })
-    .compileComponents();
+      imports: [CustomSectionHeaderComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CustomSectionHeaderComponent);
     component = fixture.componentInstance;
