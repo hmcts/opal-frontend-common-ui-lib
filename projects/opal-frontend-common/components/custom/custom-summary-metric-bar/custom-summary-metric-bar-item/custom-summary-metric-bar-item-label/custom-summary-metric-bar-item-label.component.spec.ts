@@ -8,9 +8,8 @@ describe('CustomSummaryMetricBarItemLabelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CustomSummaryMetricBarItemLabelComponent]
-    })
-    .compileComponents();
+      imports: [CustomSummaryMetricBarItemLabelComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CustomSummaryMetricBarItemLabelComponent);
     component = fixture.componentInstance;

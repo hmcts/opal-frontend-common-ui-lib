@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'opal-lib-custom-summary-metric-bar-item-value',
   imports: [],
   templateUrl: './custom-summary-metric-bar-item-value.component.html',
-  styleUrl: './custom-summary-metric-bar-item-value.component.css'
+  styleUrl: './custom-summary-metric-bar-item-value.component.css',
 })
-export class CustomSummaryMetricBarItemValueComponent {
-
-}
+export class CustomSummaryMetricBarItemValueComponent {}
