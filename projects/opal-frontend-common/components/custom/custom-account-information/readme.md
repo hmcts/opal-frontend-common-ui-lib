@@ -30,16 +30,20 @@ This Angular component provides a custom account information component, which wi
 You can use the alert component in your template as follows:
 
 ```html
-  <opal-lib-custom-account-information>
-  <opal-lib-custom-account-information-item>
-    <opal-lib-custom-account-information-item-label>Account Name:</opal-lib-custom-account-information-item-label>
-    <opal-lib-custom-account-information-item-value>Dave Smith</opal-lib-custom-account-information-item-value>
-  </opal-lib-custom-account-information-item>
-  <opal-lib-custom-account-information-item>
-    <opal-lib-custom-account-information-item-label>Account Name:</opal-lib-custom-account-information-item-label>
-    <opal-lib-custom-account-information-item-value>John Doe</opal-lib-custom-account-information-item-value>
-  </opal-lib-custom-account-information-item>
-</opal-lib-custom-account-information>
+  <div opal-lib-custom-account-information>
+    <opal-lib-custom-account-information-item>
+      <div opal-lib-custom-account-information-item-label>Account Name:</div>
+      <div opal-lib-custom-account-information-item-value>Dave Smith</div>
+    </opal-lib-custom-account-information-item>
+    <opal-lib-custom-account-information-item>
+      <div opal-lib-custom-account-information-item-label>Account Name:</div>
+      <div opal-lib-custom-account-information-item-value>John Doe</div>
+    </opal-lib-custom-account-information-item>
+    <opal-lib-custom-account-information-item>
+      <div opal-lib-custom-account-information-item-label>Account Name:</div>
+      <div opal-lib-custom-account-information-item-value>John Doe</div>
+    </opal-lib-custom-account-information-item>
+  </div>
 ```
 
 
