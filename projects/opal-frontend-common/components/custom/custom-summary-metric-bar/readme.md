@@ -30,28 +30,28 @@ import {
 You can use the alert component in your template as follows:
 
 ```html
-  <opal-lib-custom-summary-metric-bar>
-    <opal-lib-custom-summary-metric-bar-item>
-      <opal-lib-custom-summary-metric-bar-item-label>Metric 1:</opal-lib-custom-summary-metric-bar-item-label>
-      <opal-lib-custom-summary-metric-bar-item-value>Value 1</opal-lib-custom-summary-metric-bar-item-value>
-    </opal-lib-custom-summary-metric-bar-item>
-    <opal-lib-custom-summary-metric-bar-item colour="light-blue">
-      <opal-lib-custom-summary-metric-bar-item-label>Metric 2:</opal-lib-custom-summary-metric-bar-item-label>
-      <opal-lib-custom-summary-metric-bar-item-value>Value 2</opal-lib-custom-summary-metric-bar-item-value>
-    </opal-lib-custom-summary-metric-bar-item>
-    <opal-lib-custom-summary-metric-bar-item colour="light-blue">
-      <opal-lib-custom-summary-metric-bar-item-label>Metric 2:</opal-lib-custom-summary-metric-bar-item-label>
-      <opal-lib-custom-summary-metric-bar-item-value>Value 2</opal-lib-custom-summary-metric-bar-item-value>
-    </opal-lib-custom-summary-metric-bar-item>
-    <opal-lib-custom-summary-metric-bar-item colour="light-blue">
-      <opal-lib-custom-summary-metric-bar-item-label>Metric 2:</opal-lib-custom-summary-metric-bar-item-label>
-      <opal-lib-custom-summary-metric-bar-item-value>Value 2</opal-lib-custom-summary-metric-bar-item-value>
-    </opal-lib-custom-summary-metric-bar-item>
-    <opal-lib-custom-summary-metric-bar-item colour="blue">
-      <opal-lib-custom-summary-metric-bar-item-label>Metric 2:</opal-lib-custom-summary-metric-bar-item-label>
-      <opal-lib-custom-summary-metric-bar-item-value>Value 2</opal-lib-custom-summary-metric-bar-item-value>
-    </opal-lib-custom-summary-metric-bar-item>
-  </opal-lib-custom-summary-metric-bar>
+  <div opal-lib-custom-summary-metric-bar>
+  <opal-lib-custom-summary-metric-bar-item>
+    <div opal-lib-custom-summary-metric-bar-item-label>Metric 1:</div>
+    <div opal-lib-custom-summary-metric-bar-item-value>Value 1</div>
+  </opal-lib-custom-summary-metric-bar-item>
+  <opal-lib-custom-summary-metric-bar-item colour="light-blue">
+    <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
+    <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
+  </opal-lib-custom-summary-metric-bar-item>
+  <opal-lib-custom-summary-metric-bar-item colour="light-blue">
+    <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
+    <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
+  </opal-lib-custom-summary-metric-bar-item>
+  <opal-lib-custom-summary-metric-bar-item colour="light-blue">
+    <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
+    <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
+  </opal-lib-custom-summary-metric-bar-item>
+  <opal-lib-custom-summary-metric-bar-item colour="blue">
+    <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
+    <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
+  </opal-lib-custom-summary-metric-bar-item>
+</div>
 ```
 
 
