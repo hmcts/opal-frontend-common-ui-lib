@@ -1,4 +1,4 @@
-.custom-item-label {
+:host {
   font-weight: 700;
   color: #0b0c0c;
   width: 187px;
