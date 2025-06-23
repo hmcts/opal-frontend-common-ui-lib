@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DateTime, Duration, DurationLikeObject } from 'luxon';
 import { IDateRange } from './interfaces/date.service.interface';
+import { IAgeObject } from './interfaces/date.service.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -70,6 +71,22 @@ export class DateService {
    */
   public getFromFormat(value: string, format: string): DateTime<true> | DateTime<false> {
     return DateTime.fromFormat(value, format);
+  }
+
+  /**
+   * Returns an object containing the age and age group based on the date of birth.
+   * @param dateOfBirth - The date of birth to calculate the age from.
+   * @returns An object containing the age value and group ('Adult' or 'Youth') if the date is valid, or null if the date is invalid.
+   */
+  public getAgeObject(dateOfBirth: string): IAgeObject | null {
+    if (this.isValidDate(dateOfBirth)) {
+      const age = this.calculateAge(dateOfBirth);
+      return {
+        value: age,
+        group: age >= 18 ? 'Adult' : 'Youth',
+      };
+    }
+    return null;
   }
 
   /**

@@ -474,4 +474,32 @@ describe('DateServiceService', () => {
       service.getDateRange(1, 1, 'yyyy-MM-dd');
     }).toThrowError('Invalid date range');
   });
+
+  it('should return null if the date is invalid from getAgeObject', () => {    
+    const invalidDate = 'invalid-date';
+    const result = service.getAgeObject(invalidDate);
+    expect(result).toBeNull();
+  });
+
+  it('should return a date object with the correct age properties for an adult', () => {
+    spyOn(service, 'getDateNow').and.returnValue(DateTime.fromISO('2024-05-20'));
+    const dateOfBirth = '19/08/1990';
+    const result = service.getAgeObject(dateOfBirth);
+    expect(result).toEqual({
+      value: 34,
+      group: 'Adult'
+    });
+  });
+
+    it('should return a date object with the correct age properties for an youth', () => {
+    spyOn(service, 'getDateNow').and.returnValue(DateTime.fromISO('2024-05-20'));
+    const dateOfBirth = '19/08/2009';
+    const result = service.getAgeObject(dateOfBirth);
+    expect(result).toEqual({
+      value: 15,
+      group: 'Youth'
+    });
+  });
+
+
 });
