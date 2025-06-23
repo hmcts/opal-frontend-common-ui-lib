@@ -110,4 +110,15 @@ describe('AbstractSortableTablePaginationComponent', () => {
     expect(paginated.length).toBe(2);
     expect(paginated).toEqual(MOCK_ABSTRACT_TABLE_DATA.slice(0, 2));
   });
+
+  it('should reset current page to 1 on filter application', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    component.currentPageSignal.set(3); // simulate being on page 3
+    component.onApplyFilters(); // apply filters
+    expect(component.currentPageSignal()).toBe(1); // should reset to page 1
+  });
 });

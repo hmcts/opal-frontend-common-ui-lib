@@ -38,11 +38,18 @@ export abstract class AbstractTableFilterComponent {
    * @returns True if any value in the item contains the keyword; otherwise false.
    */
   protected matchItemWithKeyword(item: IAbstractTableData<SortableValuesType>, keyword: string): boolean {
-    return Object.values(item).some(
-      (value) => value !== null && value !== undefined && value.toString().toLowerCase().includes(keyword),
-    );
+    return Object.values(item).some((value) => value?.toString().toLowerCase().includes(keyword));
   }
 
+  /**
+   * Extracts and returns categories from the provided tags that have at least one selected option.
+   *
+   * For each category in the input array, this method filters its options to include only those marked as selected.
+   * Only categories with at least one selected option are included in the returned array.
+   *
+   * @param tags - An array of category objects, each containing a list of options.
+   * @returns An array of category objects, each with only the selected options, and only categories with at least one selected option.
+   */
   protected getSelectedOptionsFromTags(tags: IAbstractTableFilterCategory[]): IAbstractTableFilterCategory[] {
     return tags
       .map((group) => ({

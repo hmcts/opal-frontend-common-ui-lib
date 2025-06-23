@@ -194,7 +194,15 @@ export abstract class AbstractSortableTableComponent extends AbstractTableFilter
   public ngOnInit(): void {
     this.initialiseSortState();
   }
-
+  /**
+   * Applies the current filters to the table data and updates the sorted data accordingly.
+   *
+   * This method overrides the parent implementation to additionally handle sorting.
+   * If there is an active sort key, it applies the corresponding sort to the filtered data.
+   * If no sort key is active, it simply updates the sorted data to match the filtered data.
+   *
+   * @override
+   */
   public override onApplyFilters(): void {
     super.onApplyFilters();
 
@@ -210,6 +218,13 @@ export abstract class AbstractSortableTableComponent extends AbstractTableFilter
     }
   }
 
+  /**
+   * Clears all filters applied to the table and restores the data to its unfiltered state.
+   * If a sort is currently active, re-applies the sort after clearing filters.
+   * Otherwise, resets the sorted table data to match the filtered data.
+   *
+   * @override
+   */
   public override clearAllFilters(): void {
     super.clearAllFilters();
 
