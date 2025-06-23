@@ -13,7 +13,7 @@ describe('drivingLicenceNumberValidator', () => {
     const control = new FormControl('12345ABCDE6789');
     const result = validator(control);
     expect(result).toEqual({
-      invalidDrivingLicenceNumber: { value: '12345ABCDE6789' }
+      invalidDrivingLicenceNumber: { value: '12345ABCDE6789' },
     });
   });
 
@@ -26,7 +26,7 @@ describe('drivingLicenceNumberValidator', () => {
     const control = new FormControl('ABC12');
     const result = validator(control);
     expect(result).toEqual({
-      invalidDrivingLicenceNumber: { value: 'ABC12' }
+      invalidDrivingLicenceNumber: { value: 'ABC12' },
     });
   });
 
@@ -34,7 +34,7 @@ describe('drivingLicenceNumberValidator', () => {
     const control = new FormControl('ABCDE123456FGH1234');
     const result = validator(control);
     expect(result).toEqual({
-      invalidDrivingLicenceNumber: { value: 'ABCDE123456FGH1234' }
+      invalidDrivingLicenceNumber: { value: 'ABCDE123456FGH1234' },
     });
   });
 
@@ -42,7 +42,7 @@ describe('drivingLicenceNumberValidator', () => {
     const control = new FormControl('ABCDE123456FGH!@#');
     const result = validator(control);
     expect(result).toEqual({
-      invalidDrivingLicenceNumber: { value: 'ABCDE123456FGH!@#' }
+      invalidDrivingLicenceNumber: { value: 'ABCDE123456FGH!@#' },
     });
   });
 });

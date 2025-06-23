@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DateTime, Duration, DurationLikeObject } from 'luxon';
-import { IDateRange } from './interfaces/date.service.interface';
-import { IAgeObject } from './interfaces/date.service.interface';
+import { IDateRange, IAgeObject } from './interfaces/date.service.interface';
 
 @Injectable({
   providedIn: 'root',
