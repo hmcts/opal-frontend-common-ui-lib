@@ -388,9 +388,6 @@
     },
     "./validators/valid-value": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-valid-value.mjs"
-    },
-    "./validators/time-format": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-validators-time-format.mjs"
     }
   }
 }
