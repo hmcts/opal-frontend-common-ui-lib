@@ -394,6 +394,12 @@
       ],
       "@hmcts/opal-frontend-common/validators/valid-value": [
         "./dist/opal-frontend-common/validators/valid-value"
+      ],
+      "@hmcts/opal-frontend-common/validators/time-format": [
+        "./dist/opal-frontend-common/validators/time-format"
+      ],
+      "@hmcts/opal-frontend-common/validators/driving-licence-number": [
+        "./dist/opal-frontend-common/validators/driving-licence-number"
       ]
     },
     "moduleResolution": "bundler",
