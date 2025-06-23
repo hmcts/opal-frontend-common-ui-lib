@@ -1,154 +1,81 @@
----
+# MojFilterComponent
 
-# MOJ Filter Component
+The `MojFilterComponent` provides the structural and behavioural layout wrapper for the Ministry of Justice filter pattern. It combines the `.moj-filter-layout` structure with toggleable sidebar behaviour for showing and hiding filter controls responsively.
 
-This Angular component provides a Ministry of Justice (MOJ)-styled filter.
+This component should wrap both the filter panel and the table or content area using named `ng-content` slots, and is intended to be used in conjunction with the `MojFilterPanelComponent`, `MojFilterPanelHeaderComponent`, and `MojFilterPanelOptionComponent`.
 
-## Table of Contents
+## Features
 
-- [Usage](#usage)
-- [Inputs](#inputs)
-- [Testing](#testing)
-- [Contributing](#contributing)
+- Renders the `.moj-filter-layout` wrapper
+- Projects filter and content areas using `[mojFilterPanel]` and `[mojFilterContent]` slots
+- Provides a toggle button to show/hide the filter panel with ARIA support
+- Defaults to `showFilter = false`, but can be overridden
 
 ## Usage
 
-First you have to create a new component as the wrapper for your filter component.This should be seperate from your parent component. It should be something like this:
+### Import
 
-
-```typescript
-    import { Component, Input } from '@angular/core';
-    import { AbstractFilterComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-filter';
-    import { MojFilterComponent } from '@hmcts/opal-frontend-common/components/moj/moj-filter';
-    import { MojFilterHeaderComponent } from '@hmcts/opal-frontend-common/components/moj/moj-filter';
-    import { MojFilterOptionComponent } from '@hmcts/opal-frontend-common/components/moj/moj-filter';
-    import { MojFilterOptionFormGroupKeywordComponent } from '@hmcts/opal-frontend-common/components/moj/moj-filter';
-    import { MojFilterOptionsFormGroupItemComponent } from '@hmcts/opal-frontend-common/components/moj/moj-filter';
-    import { MojFilterSelectedComponent } from '@hmcts/opal-frontend-common/components/moj/moj-filter';
-    import { MojFilterSelectedTagComponent } from '@hmcts/opal-frontend-common/components/moj/moj-filter';
-    import { IFilterOption } from '@hmcts/opal-frontend-common/components/abstract/abstract-filter';
-    @Component({
-      selector: 'app-filter-wrapper',
-      imports: [
-        MojFilterComponent,
-        MojFilterHeaderComponent,
-        MojFilterOptionComponent,
-        MojFilterOptionFormGroupKeywordComponent,
-        MojFilterOptionsFormGroupItemComponent,
-        MojFilterSelectedComponent,
-        MojFilterSelectedTagComponent,
-      ],
-      templateUrl: './filter-wrapper.component.html',
-    })
-    export class FilterWrapperComponent extends AbstractFilterComponent {
-      @Input({ required: true }) filterData!: any[];
-
-      tagsCategory = {
-        categoryName: 'Tags',
-        options: [
-          { label: 'Tag A', value: 'tagA', selected: false },
-          { label: 'Tag B', value: 'tagB', selected: false },
-          // ...
-        ] as IFilterOption[],
-      };
-
-      coloursCategory = {
-        categoryName: 'Colours',
-        options: [
-          { label: 'Red', value: 'red', selected: false },
-          { label: 'Blue', value: 'blue', selected: false },
-          // ...
-        ] as IFilterOption[],
-      };
-
-      override ngOnInit(): void {
-        this.abstractData.set(this.filterData);
-        this.abstractTags.set([this.tagsCategory, this.coloursCategory]); // Ensure it's set first
-        super.ngOnInit();
-      }
-    }
-
-
-
+```ts
+import { MojFilterComponent } from '@hmcts/opal-frontend-common/components/moj/moj-filter';
 ```
-Then In the wrapper HTML element,  you have to create the filter page like this: 
+
+### In Template
 
 ```html
 <opal-lib-moj-filter>
-  <ng-container mojFilterHeader> <opal-lib-moj-filter-header title="Filter"></opal-lib-moj-filter-header></ng-container>
-  <ng-container mojFilterSelected>
-    <opal-lib-moj-filter-selected (clearFilters)="clearAllFilters()">
-      <opal-lib-moj-filter-selected-tag
-        [filterData]="abstractSelectedTags()"
-        (removeTagClicked)="removeTag($event)"
-      ></opal-lib-moj-filter-selected-tag> </opal-lib-moj-filter-selected
-  ></ng-container>
-  <ng-container mojFilterOption>
-    <opal-lib-moj-filter-option (applyFilters)="onApplyFilters()">
-      <ng-container mojFilterKeyword>
-        <opal-lib-moj-filter-option-form-group-keyword
-          (keywordChange)="onKeywordChange($event)"
-        ></opal-lib-moj-filter-option-form-group-keyword>
+  <ng-container mojFilterPanel>
+    <opal-lib-moj-filter-panel>
+      <ng-container mojFilterPanelHeader>
+        <opal-lib-moj-filter-panel-header title="Filter"></opal-lib-moj-filter-panel-header>
       </ng-container>
-      <ng-container mojFilterItems>
-        @for (item of abstractTags(); track item.categoryName) {
-          <opal-lib-moj-filter-options-form-group-item
-            [options]="item"
-            (changed)="onCategoryCheckboxChange($event)"
-          ></opal-lib-moj-filter-options-form-group-item>
-        }
+      <ng-container mojFilterPanelSelected>
+        <opal-lib-moj-filter-panel-selected (clearFilters)="clearAllFilters()">
+          <opal-lib-moj-filter-panel-selected-tag
+            [filterData]="abstractSelectedTags()"
+            (removeTagClicked)="removeTag($event.categoryName, $event.optionValue)"
+          />
+        </opal-lib-moj-filter-panel-selected>
       </ng-container>
-    </opal-lib-moj-filter-option>
+      <ng-container mojFilterPanelOption>
+        <opal-lib-moj-filter-panel-option (applyFilters)="onApplyFilters()">
+          <ng-container mojFilterPanelKeyword>
+            <opal-lib-moj-filter-panel-option-form-group-keyword (keywordChange)="onKeywordChange($event)" />
+          </ng-container>
+          <ng-container mojFilterPanelItems>
+            @for (item of filterTags(); track item.categoryName) {
+            <div
+              opal-lib-moj-filter-panel-options-form-group-item
+              [options]="item"
+              (changed)="onCategoryCheckboxChange(item.categoryName, $event.item.value, $event.item.selected)"
+            ></div>
+            }
+          </ng-container>
+        </opal-lib-moj-filter-panel-option>
+      </ng-container>
+    </opal-lib-moj-filter-panel>
+  </ng-container>
+
+  <ng-container mojFilterContent>
+    <!-- Your table or filtered content goes here -->
   </ng-container>
 </opal-lib-moj-filter>
-
-
-
-In your parent component you need to have the data you will be passing in aswell as a method to capture the filtered data event emitter.
-
-
-```typescript
-    import { FilterWrapperComponent } from './filter-wrapper/filter-wrapper.component';
-    .......
-    Component config
-    .......
-
-    public Data = [
-    { id: 1, name: 'Task A', tags: 'tagA', colours: 'red' },
-    { id: 2, name: 'Task B', tags: 'tagA', colours: 'blue' },
-    { id: 3, name: 'Task C', tags: 'tagB', colours: 'red' },
-    { id: 4, name: 'Task D', tags: 'tagB', colours: 'red' },
-    { id: 5, name: 'Task E', tags: 'tagB', colours: 'blue' },
-    { id: 6, name: 'Task F', tags: 'tagB', colours: 'green' },
-
-     appendFilterData(filteredData: any[]): void {
-        console.log('Filtered Data:', filteredData);
-    }
-
-```
-
-Then you need to forge them all together with the table wrapping component in the parent html.
-
-```html
-    <app-filter-wrapper [filterData]="Data" (abstractFilteredData)="appendFilterData($event)"></app-filter-wrapper>
-
 ```
 
 ## Inputs
 
-| Input             | Type    | Description                                                    |
-| ----------------- | ------- | -------------------------------------------------------------- |
-| `filterData`      | `obj`   | the data to be filtered                                        |
+| Input        | Type      | Default | Description                                    |
+| ------------ | --------- | ------- | ---------------------------------------------- |
+| `showFilter` | `boolean` | `false` | Whether the filter panel is visible by default |
 
+## Accessibility
+
+- The toggle button is associated with `aria-controls="filter"` and dynamically updates `aria-expanded`.
+- The filter panel uses `[hidden]` for screen reader compatibility.
 
 ## Testing
 
-```bash
-yarn test
-```
+Unit tests should verify:
 
-## Contributing
-
-Feel free to submit issues or pull requests to improve this component.
-
----
+- Default and toggled state of `showFilter`
+- Toggle button updates both visibility and ARIA attributes
+- `mojFilterPanel` and `mojFilterContent` content is projected correctly

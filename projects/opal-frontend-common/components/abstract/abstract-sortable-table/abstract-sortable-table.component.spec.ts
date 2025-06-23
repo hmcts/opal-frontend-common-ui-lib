@@ -10,7 +10,7 @@ import { signal } from '@angular/core';
 class TestComponent extends AbstractSortableTableComponent {
   constructor() {
     super();
-    this.abstractTableDataSignal.set(MOCK_ABSTRACT_TABLE_DATA);
+    this.setTableData(MOCK_ABSTRACT_TABLE_DATA);
     this.abstractExistingSortState = null;
   }
 }
@@ -143,7 +143,7 @@ describe('AbstractSortableTableComponent', () => {
     component['onSortChange'](event);
 
     expect(component.sortStateSignal()).toEqual(newSortState());
-    expect(component.abstractTableDataSignal()).toEqual(sortedData);
+    expect(component.sortedTableDataSignal()).toEqual(sortedData);
     expect(component.abstractSortState.emit).toHaveBeenCalledWith(component.sortStateSignal());
   });
 
@@ -168,7 +168,7 @@ describe('AbstractSortableTableComponent', () => {
     component['onSortChange'](event);
 
     expect(component.sortStateSignal()).toEqual(newSortState());
-    expect(component.abstractTableDataSignal()).toEqual(sortedData);
+    expect(component.sortedTableDataSignal()).toEqual(sortedData);
     expect(component.abstractSortState.emit).toHaveBeenCalledWith(component.sortStateSignal());
   });
 
@@ -198,5 +198,90 @@ describe('AbstractSortableTableComponent', () => {
 
     expect(component.sortedColumnTitleSignal()).toBe('');
     expect(component.sortedColumnDirectionSignal()).toBe('none');
+  });
+
+  it('should set sortedTableDataSignal to filteredTableDataSignal when no sort key is active', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    const filteredData = MOCK_ABSTRACT_TABLE_DATA.slice(0, 1);
+    component.filteredTableDataSignal.set(filteredData);
+    component.sortStateSignal.set({});
+
+    fixture.detectChanges();
+
+    expect(component.sortedTableDataSignal()).toEqual(filteredData);
+  });
+
+  it('should return undefined from getActiveSortKey() when no sort is active', () => {
+    if (!component) {
+      fail('component was null');
+      return;
+    }
+    component.sortStateSignal.set({});
+    const result = component['getActiveSortKey']();
+    expect(result).toBeUndefined();
+  });
+
+  it('should return active sort key from getActiveSortKey()', () => {
+    if (!component) {
+      fail('component was null');
+      return;
+    }
+    component.sortStateSignal.set({ creditor: 'ascending' });
+    const result = component['getActiveSortKey']();
+    expect(result).toEqual(['creditor', 'ascending']);
+  });
+
+  it('should apply filters and sort data using onApplyFilters()', () => {
+    if (!component || !fixture) {
+      fail('component or fixture was null');
+      return;
+    }
+
+    component.sortStateSignal.set({ amountPaid: 'descending' });
+    component.onApplyFilters();
+
+    const expected = fixture.componentRef.injector
+      .get(SortService)
+      .sortObjectArrayDesc(MOCK_ABSTRACT_TABLE_DATA, 'amountPaid');
+    expect(component.sortedTableDataSignal()).toEqual(expected as IAbstractTableData<SortableValuesType>[]);
+  });
+
+  it('should clear all filters and reapply sort', () => {
+    if (!component || !fixture) {
+      fail('component or fixture was null');
+      return;
+    }
+
+    component.sortStateSignal.set({ creditor: 'ascending' });
+    component.clearAllFilters();
+
+    const expected = fixture.componentRef.injector
+      .get(SortService)
+      .sortObjectArrayAsc(MOCK_ABSTRACT_TABLE_DATA, 'creditor');
+    expect(component.sortedTableDataSignal()).toEqual(expected as IAbstractTableData<SortableValuesType>[]);
+  });
+
+  it('should set sortedTableDataSignal to filteredTableDataSignal when onApplyFilters called without sort', () => {
+    if (!component) return fail();
+
+    component.filteredTableDataSignal.set(MOCK_ABSTRACT_TABLE_DATA);
+    component.sortStateSignal.set({});
+    component.onApplyFilters();
+
+    expect(component.sortedTableDataSignal()).toEqual(MOCK_ABSTRACT_TABLE_DATA);
+  });
+
+  it('should set sortedTableDataSignal to filteredTableDataSignal when clearAllFilters called without sort', () => {
+    if (!component) return fail();
+
+    component.filteredTableDataSignal.set(MOCK_ABSTRACT_TABLE_DATA);
+    component.sortStateSignal.set({});
+    component.clearAllFilters();
+
+    expect(component.sortedTableDataSignal()).toEqual(MOCK_ABSTRACT_TABLE_DATA);
   });
 });

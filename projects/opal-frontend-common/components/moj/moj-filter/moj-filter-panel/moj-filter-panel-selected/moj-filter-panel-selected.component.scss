@@ -1,0 +1,15 @@
+.moj-filter__selected-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.moj-filter__heading-title {
+  margin: 0;
+}
+
+.moj-filter__heading-action {
+  margin: 0;
+}
