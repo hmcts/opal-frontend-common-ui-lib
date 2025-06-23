@@ -1,6 +1,5 @@
 {
-    "sideEffects": false,
-    "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-validators-driving-licence-number.mjs",
-    "typings": "../../../../dist/opal-frontend-common/validators/driving-licence-number/index.d.ts"
-  }
-  
+  "sideEffects": false,
+  "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-validators-driving-licence-number.mjs",
+  "typings": "../../../../dist/opal-frontend-common/validators/driving-licence-number/index.d.ts"
+}
