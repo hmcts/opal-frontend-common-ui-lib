@@ -16,7 +16,6 @@ This Angular component provides a custom section header component, which will be
 
 ```typescript
 import { CustomSectionHeaderComponent } from '@hmcts/opal-frontend-common/components/custom/custom-section-header';
-import { CustomSectionHeaderDividerComponent } from '@hmcts/opal-frontend-common/components/custom/custom-section-header/custom-section-header-divider';
 ```
 
 ## Usage
@@ -25,14 +24,16 @@ You can use the custom section header component in your template as follows:
 
 ```html
 <div opal-lib-custom-section-header>
-  <h2 customSectionHeaderTitle>Payment Terms</h2>
-  <opal-lib-custom-section-header-divider customSectionHeaderDivider></opal-lib-custom-section-header-divider>
+  <h2 customSectionHeaderTitle>Payment terms</h2>
 </div>
 ```
 
 ## Inputs
 
-There are no custom inputs for this component
+| Input           | Type      | Default    | Description                                              |
+| --------------- | --------- | ---------- | -------------------------------------------------------- |
+| `dividerColour` | `string`  | #1d70b8  | Colour code to set the background colour of the divider. |
+| `showDivider`   | `boolean` | true       | Boolean value to hide/show the divider.                  |
 
 ## Outputs
 
