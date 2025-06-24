@@ -1,4 +1,4 @@
-# Custom Account Information Component
+# Custom Account Information Item Label Component
 
 This Angular component provides a custom-account-information-item-label component, which will be content projected into the custom-account-information-item component and will form the label for the item.
 
@@ -20,7 +20,7 @@ import { CustomAccountInformationItemLabelComponent } from '@hmcts/opal-frontend
 
 ## Usage
 
-You can use the alert component in your template as follows:
+You can use the custom account information item label component in your template as follows:
 
 ```html
 <div opal-lib-custom-account-information-item-label>Account Name:</div>

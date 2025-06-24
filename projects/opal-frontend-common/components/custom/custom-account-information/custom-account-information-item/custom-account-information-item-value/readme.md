@@ -1,4 +1,4 @@
-# Custom Account Information Component
+# Custom Account Information Item Value Component
 
 This Angular component provides a custom-account-information-item-value component, which will be content projected into the custom-account-information-item component and will form the value for the item.
 
@@ -20,7 +20,7 @@ import { CustomAccountInformationItemValueComponent } from '@hmcts/opal-frontend
 
 ## Usage
 
-You can use the alert component in your template as follows:
+You can use the custom account information item value component in your template as follows:
 
 ```html
 <div opal-lib-custom-account-information-item-value>Dave Smith</div>

@@ -1,6 +1,6 @@
 # Custom Account Information item Component
 
-This Angular component provides a custom-account-information-item component, which will be content projected into the custom-account-information component to be used as a wrapper for label and values for the item.
+This Angular component acts as a layout wrapper for a single label–value pair within the `<opal-lib-custom-account-information>` block. It should only be used in combination with `<opal-lib-custom-account-information-item-label>` and `<opal-lib-custom-account-information-item-value>` to enforce consistent styling and alignment across metadata summaries.  
 
 ## Table of Contents
 
@@ -23,10 +23,14 @@ import { CustomAccountInformationItemValueComponent } from '@hmcts/opal-frontend
 
 ## Usage
 
-You can use the alert component in your template as follows:
+You can use the custom account information item component in your template as follows:
 
 ```html
-<opal-lib-custom-account-information-item> </opal-lib-custom-account-information-item>
+<opal-lib-custom-account-information-item>  
+  <opal-lib-custom-account-information-item-label>Account name:</opal-lib-custom-account-information-item-label>  
+  <opal-lib-custom-account-information-item-value>Dave Smith</opal-lib-custom-account-information-item-value>  
+</opal-lib-custom-account-information-item>  
+
 ```
 
 ## Inputs
