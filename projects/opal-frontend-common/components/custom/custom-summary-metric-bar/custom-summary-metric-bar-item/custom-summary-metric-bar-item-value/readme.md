@@ -1,6 +1,6 @@
 # Custom Summary Metric Bar Item Value Component
 
-This Angular component provides a Custom-Summary-Metric-Bar-Item-Value component which will be content projected into the Custom-Summary-Metric-Bar-Item component alongside the Custom-Summary-Metric-Bar-Item-Label to form the complete layout and consistent stylings of each item in the metric bar.
+This Angular component provides a CustomSummaryMetricBarItemValue component which will be content projected into the CustomSummaryMetricBarItem component alongside the CustomSummaryMetricBarItemLabel to form the complete layout and consistent stylings of each item in the metric bar.
 
 ## Table of Contents
 
@@ -23,10 +23,7 @@ import { CustomSummaryMetricBarItemValueComponent } from '@hmcts/opal-frontend-c
 You can use the Custom Summary Metric Bar Item Value component in your template as follows:
 
 ```html
-<opal-lib-custom-summary-metric-bar-item>
-  <div opal-lib-custom-summary-metric-bar-item-label>Metric 1:</div>
-  <div opal-lib-custom-summary-metric-bar-item-value>Value 1</div>
-</opal-lib-custom-summary-metric-bar-item>
+<div opal-lib-custom-summary-metric-bar-item-value>Value 1</div>
 ```
 
 ## Inputs

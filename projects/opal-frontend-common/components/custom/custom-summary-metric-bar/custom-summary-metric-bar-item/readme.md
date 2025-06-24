@@ -33,10 +33,10 @@ You can use the Custom Summary Metric Bar Item component in your template as fol
 
 ## Inputs
 
-| Input             | Type     | Description                                                                         |
-| ----------------- | -------- | ----------------------------------------------------------------------------------- |
-| `backgroundColor` | `string` | The colour code for the background colour of the individual item in the metric bar. |
-| `textColor`       | `string` | The colour code for the text colour of the individual item in the metric bar.       |
+| Input             | Type     | Default   | Description                                                                         |
+| ----------------- | -------- | --------- | ----------------------------------------------------------------------------------- |
+| `backgroundColor` | `string` | #EEEFEF | The colour code for the background colour of the individual item in the metric bar. |
+| `textColor`       | `string` | #383F43 | The colour code for the text colour of the individual item in the metric bar.       |
 
 ## Outputs
 
