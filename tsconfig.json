@@ -72,6 +72,15 @@
       "@hmcts/opal-frontend-common/components/custom/custom-account-information": [
         "./dist/opal-frontend-common/components/custom/custom-account-information"
       ],
+      "@hmcts/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item": [
+        "./dist/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item/custom-account-information-item-label": [
+        "./dist/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item/custom-account-information-item-label"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item/custom-account-information-item-value": [
+        "./dist/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item/custom-account-information-item-value"
+      ],
       "@hmcts/opal-frontend-common/components/govuk/govuk-accordion": [
         "./dist/opal-frontend-common/components/govuk/govuk-accordion"
       ],
@@ -323,12 +332,8 @@
       "@hmcts/opal-frontend-common/validators/two-decimal-places": [
         "./dist/opal-frontend-common/validators/two-decimal-places"
       ],
-      "@hmcts/opal-frontend-common/validators/valid-value": [
-        "./dist/opal-frontend-common/validators/valid-value"
-      ],
-      "@hmcts/opal-frontend-common/validators/time-format": [
-        "./dist/opal-frontend-common/validators/time-format"
-      ],
+      "@hmcts/opal-frontend-common/validators/valid-value": ["./dist/opal-frontend-common/validators/valid-value"],
+      "@hmcts/opal-frontend-common/validators/time-format": ["./dist/opal-frontend-common/validators/time-format"],
       "@hmcts/opal-frontend-common/validators/driving-licence-number": [
         "./dist/opal-frontend-common/validators/driving-licence-number"
       ]

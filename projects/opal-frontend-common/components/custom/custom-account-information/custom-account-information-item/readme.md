@@ -1,6 +1,6 @@
-# Custom Account Information Component
+# Custom Account Information item Component
 
-This Angular component provides a custom account information component, which will be used for the account enquiry flow and other flows throughout the program.
+This Angular component provides a custom-account-information-item component, which will be content projected into the custom-account-information component to be used as a wrapper for label and values for the item.
 
 ## Table of Contents
 
@@ -26,20 +26,7 @@ import { CustomAccountInformationItemValueComponent } from '@hmcts/opal-frontend
 You can use the alert component in your template as follows:
 
 ```html
-<div opal-lib-custom-account-information>
-  <opal-lib-custom-account-information-item>
-    <div opal-lib-custom-account-information-item-label>Account Name:</div>
-    <div opal-lib-custom-account-information-item-value>Dave Smith</div>
-  </opal-lib-custom-account-information-item>
-  <opal-lib-custom-account-information-item>
-    <div opal-lib-custom-account-information-item-label>Account Name:</div>
-    <div opal-lib-custom-account-information-item-value>John Doe</div>
-  </opal-lib-custom-account-information-item>
-  <opal-lib-custom-account-information-item>
-    <div opal-lib-custom-account-information-item-label>Account Name:</div>
-    <div opal-lib-custom-account-information-item-value>John Doe</div>
-  </opal-lib-custom-account-information-item>
-</div>
+<opal-lib-custom-account-information-item> </opal-lib-custom-account-information-item>
 ```
 
 ## Inputs
@@ -56,7 +43,7 @@ There are no custom methods for this component.
 
 ## Testing
 
-Unit tests for this component can be found in the `custom-account-information.component.spec.ts` file. To run the tests, use:
+Unit tests for this component can be found in the `custom-account-information-item.component.spec.ts` file. To run the tests, use:
 
 ```bash
 yarn test
