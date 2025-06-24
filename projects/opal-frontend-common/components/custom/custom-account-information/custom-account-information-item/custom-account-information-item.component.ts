@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'opal-lib-custom-account-information-item',
-  imports: [],
   templateUrl: './custom-account-information-item.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomAccountInformationItemComponent {}

@@ -1,6 +1,6 @@
-# Custom Account Information Component
+# Custom Account Information item Component
 
-This Angular component provides a custom account information component, which will be used for the account enquiry flow and other flows throughout the program.
+This Angular component acts as a layout wrapper for a single label–value pair within the `<opal-lib-custom-account-information>` block. It should only be used in combination with `<opal-lib-custom-account-information-item-label>` and `<opal-lib-custom-account-information-item-value>` to enforce consistent styling and alignment across metadata summaries.  
 
 ## Table of Contents
 
@@ -23,23 +23,14 @@ import { CustomAccountInformationItemValueComponent } from '@hmcts/opal-frontend
 
 ## Usage
 
-You can use the custom account information component in your template as follows:
+You can use the custom account information item component in your template as follows:
 
 ```html
-<div opal-lib-custom-account-information>
-  <opal-lib-custom-account-information-item>
-    <div opal-lib-custom-account-information-item-label>Account Name:</div>
-    <div opal-lib-custom-account-information-item-value>Dave Smith</div>
-  </opal-lib-custom-account-information-item>
-  <opal-lib-custom-account-information-item>
-    <div opal-lib-custom-account-information-item-label>Account Name:</div>
-    <div opal-lib-custom-account-information-item-value>John Doe</div>
-  </opal-lib-custom-account-information-item>
-  <opal-lib-custom-account-information-item>
-    <div opal-lib-custom-account-information-item-label>Account Name:</div>
-    <div opal-lib-custom-account-information-item-value>John Doe</div>
-  </opal-lib-custom-account-information-item>
-</div>
+<opal-lib-custom-account-information-item>  
+  <opal-lib-custom-account-information-item-label>Account name:</opal-lib-custom-account-information-item-label>  
+  <opal-lib-custom-account-information-item-value>Dave Smith</opal-lib-custom-account-information-item-value>  
+</opal-lib-custom-account-information-item>  
+
 ```
 
 ## Inputs
@@ -56,7 +47,7 @@ There are no custom methods for this component.
 
 ## Testing
 
-Unit tests for this component can be found in the `custom-account-information.component.spec.ts` file. To run the tests, use:
+Unit tests for this component can be found in the `custom-account-information-item.component.spec.ts` file. To run the tests, use:
 
 ```bash
 yarn test
