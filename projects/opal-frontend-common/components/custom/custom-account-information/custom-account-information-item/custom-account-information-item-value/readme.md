@@ -1,6 +1,6 @@
 # Custom Account Information Item Value Component
 
-This Angular component provides a custom-account-information-item-value component, which will be content projected into the custom-account-information-item component and will form the value for the item.
+This Angular component provides a custom account information item value component, which will be content projected into the custom account information item component and will form the value for the item.
 
 ## Table of Contents
 

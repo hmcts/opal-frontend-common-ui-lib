@@ -1,6 +1,6 @@
 # Custom Account Information Item Label Component
 
-This Angular component provides a custom-account-information-item-label component, which will be content projected into the custom-account-information-item component and will form the label for the item.
+This Angular component provides a custom account information item label component, which will be content projected into the custom account information item component and will form the label for the item.
 
 ## Table of Contents
 
