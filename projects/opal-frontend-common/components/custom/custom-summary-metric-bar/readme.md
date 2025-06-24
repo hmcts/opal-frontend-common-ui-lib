@@ -1,8 +1,7 @@
----
-
 # Custom Summary Metric Bar Component
 
-This Angular component provides a custom summary metric bar component, which will be used for the account enquiry flow and other flows throughout the program.
+This Angular component implements a custom summary metric bar designed to display key financial and informational metrics to users. It will be used in the account enquiry flow as well as other areas of the program where clear metric presentation is required.
+
 ## Table of Contents
 
 - [Installation](#installation)
@@ -16,51 +15,44 @@ This Angular component provides a custom summary metric bar component, which wil
 ## Installation
 
 ```typescript
-import {
-  CustomSummaryMetricBarComponent,
-  CustomSummaryMetricBarItemComponent,
-  CustomSummaryMetricBarItemLabelComponent,
-  CustomSummaryMetricBarItemValueComponent,
-} from '@hmcts/opal-frontend-common/components/custom/custom-summary-metric-bar';
+import { CustomSummaryMetricBarItemComponent } from '@hmcts/opal-frontend-common/components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item';
+import { CustomSummaryMetricBarItemLabelComponent } from '@hmcts/opal-frontend-common/components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item/custom-summary-metric-bar-item-label';
+import { CustomSummaryMetricBarItemValueComponent } from '@hmcts/opal-frontend-common/components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item/custom-summary-metric-bar-item-value';
+import { CustomSummaryMetricBarComponent } from '@hmcts/opal-frontend-common/components/custom/custom-summary-metric-bar';
 ```
-
 
 ## Usage
 
-You can use the alert component in your template as follows:
+You can use the Custom Metric Bar Component in your template as follows:
 
 ```html
-  <div opal-lib-custom-summary-metric-bar>
-  <opal-lib-custom-summary-metric-bar-item>
+<div opal-lib-custom-summary-metric-bar>
+  <opal-lib-custom-summary-metric-bar-item backgroundColour="#EEEFEF" textColour="#383F43">
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 1:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 1</div>
   </opal-lib-custom-summary-metric-bar-item>
-  <opal-lib-custom-summary-metric-bar-item colour="light-blue">
+  <opal-lib-custom-summary-metric-bar-item backgroundColour="#D2E2F1" textColour="#144E81">
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
   </opal-lib-custom-summary-metric-bar-item>
-  <opal-lib-custom-summary-metric-bar-item colour="light-blue">
+  <opal-lib-custom-summary-metric-bar-item backgroundColour="#D2E2F1" textColour="#144E81">
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
   </opal-lib-custom-summary-metric-bar-item>
-  <opal-lib-custom-summary-metric-bar-item colour="light-blue">
+  <opal-lib-custom-summary-metric-bar-item backgroundColour="#D2E2F1" textColour="#144E81">
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
   </opal-lib-custom-summary-metric-bar-item>
-  <opal-lib-custom-summary-metric-bar-item colour="blue">
+  <opal-lib-custom-summary-metric-bar-item backgroundColour="#1D70B8" textColour="#ffffff">
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
   </opal-lib-custom-summary-metric-bar-item>
 </div>
 ```
 
-
-
 ## Inputs
 
-| Input         | Type     | Description                                                                      |
-| ------------  | -------- | -------------------------------------------------------------------------------- |
-| `colour`      | `string` | colour of item. grey | light-blue | blue as per design of account enquiry flow   |
+There are no custom inputs for this component.
 
 ## Outputs
 
@@ -81,5 +73,3 @@ yarn test
 ## Contributing
 
 Feel free to submit issues or pull requests to improve this component.
-
----

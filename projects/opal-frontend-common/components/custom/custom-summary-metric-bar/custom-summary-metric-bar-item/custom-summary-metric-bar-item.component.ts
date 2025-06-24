@@ -1,14 +1,19 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-type Colours = 'grey' | 'light-blue' | 'blue';
+import { Component, Input, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'opal-lib-custom-summary-metric-bar-item',
-  imports: [CommonModule],
   templateUrl: './custom-summary-metric-bar-item.component.html',
-  styleUrl: './custom-summary-metric-bar-item.component.css',
+  styleUrl: './custom-summary-metric-bar-item.component.scss',
 })
 export class CustomSummaryMetricBarItemComponent {
-  @Input({ required: false }) colour: Colours = 'grey';
+  @Input() backgroundColour: string = '';
+  @Input() textColour: string = '';
+
+  @HostBinding('style.backgroundColor') get bg(): string {
+    return this.backgroundColour;
+  }
+
+  @HostBinding('style.color') get fg(): string {
+    return this.textColour;
+  }
 }

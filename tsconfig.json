@@ -75,6 +75,15 @@
       "@hmcts/opal-frontend-common/components/custom/custom-summary-metric-bar": [
         "./dist/opal-frontend-common/components/custom/custom-summary-metric-bar"
       ],
+      "@hmcts/opal-frontend-common/components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item": [
+        "./dist/opal-frontend-common/components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item/custom-summary-metric-bar-item-label": [
+        "./dist/opal-frontend-common/components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item/custom-summary-metric-bar-item-label"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item/custom-summary-metric-bar-item-value": [
+        "./dist/opal-frontend-common/components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item/custom-summary-metric-bar-item-value"
+      ],
       "@hmcts/opal-frontend-common/components/govuk/govuk-accordion": [
         "./dist/opal-frontend-common/components/govuk/govuk-accordion"
       ],
