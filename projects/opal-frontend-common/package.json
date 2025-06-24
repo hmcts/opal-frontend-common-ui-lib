@@ -74,6 +74,18 @@
     "./components/custom/custom-page-header": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-page-header.mjs"
     },
+    "./components/custom/custom-page-header/custom-page-header-action-buttons-container": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-page-header-custom-page-header-action-buttons-container.mjs"
+    },
+    "./components/custom/custom-page-header/custom-page-header-heading-container": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-page-header-custom-page-header-heading-container.mjs"
+    },
+    "./components/custom/custom-page-header/custom-page-header-heading-container/custom-page-header-heading-caption": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-page-header-custom-page-header-heading-container-custom-page-header-heading-caption.mjs"
+    },
+    "./components/custom/custom-page-header/custom-page-header-heading-container/custom-page-header-heading-title": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-page-header-custom-page-header-heading-container-custom-page-header-heading-title.mjs"
+    },
     "./components/govuk/govuk-accordion": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-accordion.mjs"
     },

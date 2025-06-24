@@ -75,6 +75,18 @@
       "@hmcts/opal-frontend-common/components/custom/custom-page-header": [
         "./dist/opal-frontend-common/components/custom/custom-page-header"
       ],
+      "@hmcts/opal-frontend-common/components/custom/custom-page-header/custom-page-header-action-button": [
+        "./dist/opal-frontend-common/components/custom/custom-page-header/custom-page-header-action-button"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-page-header/custom-page-header-heading-container": [
+        "./dist/opal-frontend-common/components/custom/custom-page-header/custom-page-header-heading-container"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-page-header/custom-page-header-heading-caption": [
+        "./dist/opal-frontend-common/components/custom/custom-page-header/custom-page-header-heading-caption"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-page-header/custom-page-header-heading-title": [
+        "./dist/opal-frontend-common/components/custom/custom-page-header/custom-page-header-heading-title"
+      ],
       "@hmcts/opal-frontend-common/components/govuk/govuk-accordion": [
         "./dist/opal-frontend-common/components/govuk/govuk-accordion"
       ],
