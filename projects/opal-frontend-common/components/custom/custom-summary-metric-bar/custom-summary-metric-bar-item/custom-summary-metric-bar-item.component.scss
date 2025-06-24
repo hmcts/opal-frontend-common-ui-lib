@@ -1,0 +1,14 @@
+:host {
+  padding: 15px;
+  align-items: center;
+  gap: 10px;
+  flex: 1 0 0;
+}
+
+.custom-summary-metric-bar-item-frame {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+}
