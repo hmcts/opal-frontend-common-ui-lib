@@ -25,7 +25,7 @@ You can use the custom section header component in your template as follows:
 ### Divider On
 
 ```html
-<div opal-lib-custom-section-header dividerColour="#ffffff" showDiviver="true">
+<div opal-lib-custom-section-header dividerColour="#1d70b8" >
   <h2 customSectionHeaderTitle>Payment terms</h2>
 </div>
 ```
@@ -33,7 +33,7 @@ You can use the custom section header component in your template as follows:
 ### Divider Off
 
 ```html
-<div opal-lib-custom-section-header dividerColour="#1d70b8" showDiviver="false">
+<div opal-lib-custom-section-header dividerColour="#ffffff" showDiviver="false">
   <h2 customSectionHeaderTitle>Payment terms</h2>
 </div>
 ```
