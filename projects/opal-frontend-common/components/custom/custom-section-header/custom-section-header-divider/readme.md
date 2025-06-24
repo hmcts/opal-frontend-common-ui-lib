@@ -1,6 +1,6 @@
 # Custom Section Header Divider Component
 
-This Angular component provides a custom section header Divider component, which is an optional divider than can be used within the custom section header component..
+This Angular component provides a custom section header divider component, which is an optional divider than can be used within the custom section header component..
 
 ## Table of Contents
 
@@ -15,7 +15,6 @@ This Angular component provides a custom section header Divider component, which
 ## Installation
 
 ```typescript
-import { CustomSectionHeaderComponent } from '@hmcts/opal-frontend-common/components/custom/custom-section-header';
 import { CustomSectionHeaderDividerComponent } from '@hmcts/opal-frontend-common/components/custom/custom-section-header/custom-section-header-divider';
 ```
 
@@ -24,10 +23,10 @@ import { CustomSectionHeaderDividerComponent } from '@hmcts/opal-frontend-common
 You can use the custom section header divider component in your template as follows:
 
 ```html
-<div opal-lib-custom-section-header>
-  <h2 customSectionHeaderTitle>Payment Terms</h2>
-  <opal-lib-custom-section-header-divider customSectionHeaderDivider></opal-lib-custom-section-header-divider>
-</div>
+<opal-lib-custom-section-header-divider
+  backgroundColour="#ff0000"
+  customSectionHeaderDivider
+></opal-lib-custom-section-header-divider>
 ```
 
 ## Inputs
