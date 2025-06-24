@@ -22,18 +22,28 @@ import { CustomSectionHeaderComponent } from '@hmcts/opal-frontend-common/compon
 
 You can use the custom section header component in your template as follows:
 
+### Divider On
+
 ```html
-<div opal-lib-custom-section-header>
+<div opal-lib-custom-section-header dividerColour="#ffffff" showDiviver="true">
+  <h2 customSectionHeaderTitle>Payment terms</h2>
+</div>
+```
+
+### Divider Off
+
+```html
+<div opal-lib-custom-section-header dividerColour="#1d70b8" showDiviver="false">
   <h2 customSectionHeaderTitle>Payment terms</h2>
 </div>
 ```
 
 ## Inputs
 
-| Input           | Type      | Default    | Description                                              |
-| --------------- | --------- | ---------- | -------------------------------------------------------- |
-| `dividerColour` | `string`  | #1d70b8  | Colour code to set the background colour of the divider. |
-| `showDivider`   | `boolean` | true       | Boolean value to hide/show the divider.                  |
+| Input           | Type      | Default   | Description                                                |
+| --------------- | --------- | --------- | ---------------------------------------------------------- |
+| `dividerColour` | `string`  | #1d70b8 | Colour code to set the background colour of the divider.   |
+| `showDivider`   | `boolean` | true      | Boolean value to hide/show the divider.                    |
 
 ## Outputs
 
