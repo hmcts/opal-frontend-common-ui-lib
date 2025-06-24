@@ -85,7 +85,7 @@
     },
     "./components/custom/custom-page-header/custom-page-header-heading-container/custom-page-header-heading-title": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-page-header-custom-page-header-heading-container-custom-page-header-heading-title.mjs"
-
+    },
     "./components/custom/custom-account-information/custom-account-information-item": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-account-information-custom-account-information-item.mjs"
     },

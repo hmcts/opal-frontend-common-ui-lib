@@ -86,7 +86,7 @@
       ],
       "@hmcts/opal-frontend-common/components/custom/custom-page-header/custom-page-header-heading-title": [
         "./dist/opal-frontend-common/components/custom/custom-page-header/custom-page-header-heading-title"
-
+      ],
       "@hmcts/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item": [
         "./dist/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item"
       ],
