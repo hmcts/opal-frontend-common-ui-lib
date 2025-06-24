@@ -1,4 +1,2 @@
-<h2 class="custom-section-heading">
-  {{ customSectionHeading }}
-</h2>
-<hr class="custom-section-header-divider" />
+<ng-content class="custom-section-heading" select="[customSectionHeaderTitle]"></ng-content>
+<ng-content select="[customSectionHeaderDivider]"></ng-content>

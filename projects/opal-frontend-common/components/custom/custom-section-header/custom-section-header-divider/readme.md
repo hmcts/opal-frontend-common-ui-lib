@@ -1,6 +1,6 @@
-# Custom Section Header Component
+# Custom Section Header Divider Component
 
-This Angular component provides a custom section header component, which will be used for the account enquiry flow and other flows throughout the program.
+This Angular component provides a custom section header Divider component, which is an optional divider than can be used within the custom section header component..
 
 ## Table of Contents
 
@@ -21,7 +21,7 @@ import { CustomSectionHeaderDividerComponent } from '@hmcts/opal-frontend-common
 
 ## Usage
 
-You can use the custom section header component in your template as follows:
+You can use the custom section header divider component in your template as follows:
 
 ```html
 <div opal-lib-custom-section-header>
@@ -32,7 +32,9 @@ You can use the custom section header component in your template as follows:
 
 ## Inputs
 
-There are no custom inputs for this component
+| Input              | Type     | Description                                                                               |
+| ------------------ | -------- | ----------------------------------------------------------------------------------------- |
+| `backgroundColour` | `string` | Used to set the background colour of the divider. You should pass a colour code as input. |
 
 ## Outputs
 
@@ -44,7 +46,7 @@ There are no custom methods for this component.
 
 ## Testing
 
-Unit tests for this component can be found in the `custom-section-header.component.spec.ts` file. To run the tests, use:
+Unit tests for this component can be found in the `custom-section-header-divider.component.spec.ts` file. To run the tests, use:
 
 ```bash
 yarn test

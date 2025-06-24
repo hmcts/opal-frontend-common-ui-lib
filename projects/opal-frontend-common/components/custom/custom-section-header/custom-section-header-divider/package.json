@@ -1,0 +1,5 @@
+{
+  "sideEffects": false,
+  "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-custom-custom-section-header-custom-section-header-divider.mjs",
+  "typings": "../../../../dist/opal-frontend-common/components/custom/custom-section-header/custom-section-header-divider/index.d.ts"
+}

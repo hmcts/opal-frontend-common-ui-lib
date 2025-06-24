@@ -1,11 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'opal-lib-custom-section-header, [opal-lib-custom-section-header]',
-  imports: [],
   templateUrl: './custom-section-header.component.html',
-  styleUrl: './custom-section-header.component.css',
+  styleUrl: './custom-section-header.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomSectionHeaderComponent {
-  @Input({ required: true }) customSectionHeading!: string;
-}
+export class CustomSectionHeaderComponent {}

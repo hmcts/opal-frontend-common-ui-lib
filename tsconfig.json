@@ -75,6 +75,9 @@
       "@hmcts/opal-frontend-common/components/custom/custom-section-header": [
         "./dist/opal-frontend-common/components/custom/custom-section-header"
       ],
+      "@hmcts/opal-frontend-common/components/custom/custom-section-header/custom-section-header-divider": [
+        "./dist/opal-frontend-common/components/custom/custom-section-header/custom-section-header-divider"
+      ],
       "@hmcts/opal-frontend-common/components/govuk/govuk-accordion": [
         "./dist/opal-frontend-common/components/govuk/govuk-accordion"
       ],
