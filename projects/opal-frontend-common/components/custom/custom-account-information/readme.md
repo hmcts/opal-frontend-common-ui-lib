@@ -23,7 +23,7 @@ import { CustomAccountInformationItemValueComponent } from '@hmcts/opal-frontend
 
 ## Usage
 
-You can use the custom accoint information component in your template as follows:
+You can use the custom account information component in your template as follows:
 
 ```html
 <div opal-lib-custom-account-information>
