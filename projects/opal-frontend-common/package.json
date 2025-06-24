@@ -74,9 +74,6 @@
     "./components/custom/custom-section-header": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-section-header.mjs"
     },
-    "./components/custom/custom-section-header/custom-section-header-divider": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-section-header-custom-section-header-divider.mjs"
-    },
     "./components/govuk/govuk-accordion": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-accordion.mjs"
     },

@@ -1,2 +1,4 @@
 <ng-content class="custom-section-heading" select="[customSectionHeaderTitle]"></ng-content>
-<ng-content select="[customSectionHeaderDivider]"></ng-content>
+@if (showDivider) {
+  <hr class="custom-section-header-divider" [style.background-color]="dividerColour" />
+}
