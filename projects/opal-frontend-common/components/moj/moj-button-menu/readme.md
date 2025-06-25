@@ -1,5 +1,3 @@
----
-
 # MOJ Button Menu Component
 
 This Angular component provides a Ministry of Justice (MOJ)-styled button menu, typically used to display a list of actions in a menu format.
@@ -59,6 +57,3 @@ ng test
 
 Feel free to submit issues or pull requests to improve this component.
 
----
-
-This `README.md` provides an overview of how to use the `moj-button-menu` component for displaying a list of buttons in a menu layout following MOJ standards.
