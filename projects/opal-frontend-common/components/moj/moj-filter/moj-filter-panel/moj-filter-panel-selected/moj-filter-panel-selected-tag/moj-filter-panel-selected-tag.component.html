@@ -1,0 +1,12 @@
+@for (data of filterData; track data.categoryName) {
+  <h3 class="govuk-heading-s govuk-!-margin-bottom-0">{{ data.categoryName }}</h3>
+  <ul class="moj-filter-tags">
+    @for (tag of data.options; track tag.value) {
+      <li>
+        <a class="moj-filter__tag" href="#" (click)="removeTag(data.categoryName, tag.value, $event)">
+          <span class="govuk-visually-hidden">{{ ariaLabelPrefix }}</span> {{ tag.label }}
+        </a>
+      </li>
+    }
+  </ul>
+}
