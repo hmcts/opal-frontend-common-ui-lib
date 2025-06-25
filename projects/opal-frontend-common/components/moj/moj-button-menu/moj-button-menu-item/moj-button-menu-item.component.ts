@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 
 @Component({
   selector: 'opal-lib-moj-button-menu-item',
-  imports: [],
   templateUrl: './moj-button-menu-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
