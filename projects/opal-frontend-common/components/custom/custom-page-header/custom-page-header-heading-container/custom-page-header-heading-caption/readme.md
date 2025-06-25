@@ -1,8 +1,7 @@
----
+# Custom Page Header Heading caption Component
 
-# Custom Account Information Component
+This Angular component provides a custom page header heading caption, which will be used to display the caption of the heading and will be encapsulated by the page header heading container component for the correct layout and styling.
 
-This Angular component provides a custom account information component, which will be used for the account enquiry flow and other flows throughout the program.
 ## Table of Contents
 
 - [Installation](#installation)
@@ -16,39 +15,19 @@ This Angular component provides a custom account information component, which wi
 ## Installation
 
 ```typescript
-  import {
-    CustomAccountInformationComponent,
-    CustomAccountInformationItemComponent,
-    CustomAccountInformationItemValueComponent,
-    CustomAccountInformationItemLabelComponent,
-  } from '@hmcts/opal-frontend-common/components/custom/custom-account-information';
+import { CustomPageHeaderHeadingCaptionComponent } from '@hmcts/opal-frontend-common/components/custom/custom-page-header/custom-page-header-heading-container/custom-page-header-heading-caption';
 ```
-
 
 ## Usage
 
-You can use the alert component in your template as follows:
+You can use the custom page header heading caption component in your template as follows:
 
 ```html
-  <div opal-lib-custom-account-information>
-    <opal-lib-custom-account-information-item>
-      <div opal-lib-custom-account-information-item-label>Account Name:</div>
-      <div opal-lib-custom-account-information-item-value>Dave Smith</div>
-    </opal-lib-custom-account-information-item>
-    <opal-lib-custom-account-information-item>
-      <div opal-lib-custom-account-information-item-label>Account Name:</div>
-      <div opal-lib-custom-account-information-item-value>John Doe</div>
-    </opal-lib-custom-account-information-item>
-    <opal-lib-custom-account-information-item>
-      <div opal-lib-custom-account-information-item-label>Account Name:</div>
-      <div opal-lib-custom-account-information-item-value>John Doe</div>
-    </opal-lib-custom-account-information-item>
-  </div>
+<opal-lib-custom-page-header-heading-caption pageHeaderCaption> Mr dave smith </opal-lib-custom-page-header-heading-caption>
 ```
 
-
-
 ## Inputs
+
 There are no input fields for this component.
 
 ## Outputs
@@ -61,7 +40,7 @@ There are no custom methods for this component.
 
 ## Testing
 
-Unit tests for this component can be found in the `custom-account-information.component.spec.ts` file. To run the tests, use:
+Unit tests for this component can be found in the `custom-page-header-heading-caption.component.spec.ts` file. To run the tests, use:
 
 ```bash
 yarn test
@@ -70,5 +49,3 @@ yarn test
 ## Contributing
 
 Feel free to submit issues or pull requests to improve this component.
-
----
