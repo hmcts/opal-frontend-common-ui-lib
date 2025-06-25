@@ -8,6 +8,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 })
 export class MojButtonMenuComponent {
   @Input({ required: true }) menuButtonTitle!: string;
+  public isExpanded = true;
 
   /**
    * Toggles the button menu by changing the `aria-expanded` attribute of the toggle button.
@@ -16,5 +17,6 @@ export class MojButtonMenuComponent {
     const button = document.querySelector('.moj-button-menu__toggle-button')!;
     const isExpanded = button.getAttribute('aria-expanded') === 'true';
     button.setAttribute('aria-expanded', String(!isExpanded));
+    this.isExpanded = !isExpanded;
   }
 }

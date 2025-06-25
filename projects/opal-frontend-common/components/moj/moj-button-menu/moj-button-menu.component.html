@@ -1,18 +1,28 @@
-<div class="moj-button-menu">
+<div
+  class="moj-button-menu"
+  data-module="moj-button-menu"
+  data-button-text="Review"
+  data-button-classes="govuk-button--secondary"
+  data-moj-button-menu-init=""
+>
   <button
-    class="govuk-button moj-button-menu__toggle-button govuk-button--secondary moj-button-menu__toggle-button--secondary"
+    class="govuk-button moj-button-menu__toggle-button govuk-button--secondary"
     type="button"
     aria-haspopup="true"
-    aria-expanded="false"
+    aria-expanded="true"
     (click)="toggleButtonMenu()"
   >
-    {{ menuButtonTitle }}
-    <svg width="11" height="5" viewBox="0 0 11 5" xmlns="http://www.w3.org/2000/svg">
-      <path d="M5.5 0L11 5L0 5L5.5 0Z" fill="currentColor"></path>
-    </svg>
+    <span>
+      {{ menuButtonTitle }}
+      <svg width="11" height="5" viewBox="0 0 11 5" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5.5 0L11 5L0 5L5.5 0Z" fill="currentColor"></path>
+      </svg>
+    </span>
   </button>
 
-  <div class="moj-button-menu__wrapper" role="menu">
-    <ng-content></ng-content>
-  </div>
+  @if (!isExpanded) {
+    <ul role="list" class="moj-button-menu__wrapper">
+      <ng-content></ng-content>
+    </ul>
+  }
 </div>

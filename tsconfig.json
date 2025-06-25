@@ -198,6 +198,9 @@
       "@hmcts/opal-frontend-common/components/moj/moj-button-menu": [
         "./dist/opal-frontend-common/components/moj/moj-button-menu"
       ],
+      "@hmcts/opal-frontend-common/components/moj/moj-button-menu/moj-button-menu-item": [
+        "./dist/opal-frontend-common/components/moj/moj-button-menu/moj-button-menu-item"
+      ],
       "@hmcts/opal-frontend-common/components/moj/moj-date-picker": [
         "./dist/opal-frontend-common/components/moj/moj-date-picker"
       ],

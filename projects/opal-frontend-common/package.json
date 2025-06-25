@@ -203,6 +203,9 @@
     "./components/moj/moj-button-menu": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-button-menu.mjs"
     },
+    "./components/moj/moj-button-menu/moj-button-menu-item": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-button-menu-moj-button-menu-item.mjs"
+    },
     "./components/moj/moj-date-picker": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-date-picker.mjs"
     },
