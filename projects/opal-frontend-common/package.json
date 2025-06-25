@@ -149,6 +149,12 @@
     "./components/govuk/govuk-tabs": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-tabs.mjs"
     },
+    "./components/govuk/govuk-tabs/govuk-tabs-list-item": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-tabs-govuk-tabs-list-item.mjs"
+    },
+    "./components/govuk/govuk-tabs/govuk-tabs-panel": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-tabs-govuk-tabs-panel.mjs"
+    },
     "./components/govuk/govuk-tags": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-tags.mjs"
     },
