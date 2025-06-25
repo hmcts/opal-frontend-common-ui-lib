@@ -8,9 +8,8 @@ describe('CustomPageHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CustomPageHeaderComponent]
-    })
-    .compileComponents();
+      imports: [CustomPageHeaderComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CustomPageHeaderComponent);
     component = fixture.componentInstance;

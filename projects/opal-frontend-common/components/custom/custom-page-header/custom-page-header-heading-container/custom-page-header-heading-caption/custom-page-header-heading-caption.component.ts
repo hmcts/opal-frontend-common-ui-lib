@@ -1,4 +1,4 @@
-import { Component,ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'opal-lib-custom-page-header-heading-caption, [opal-lib-custom-page-header-heading-caption]',

@@ -7,7 +7,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MojButtonMenuItemComponent {
-  @Input({required:true}) itemText!: string;
+  @Input({ required: true }) itemText!: string;
   @Output() actionClick = new EventEmitter<boolean>();
 
   public handleClick(event: Event) {
