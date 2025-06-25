@@ -5,9 +5,10 @@ import { Component } from '@angular/core';
 import { addGdsBodyClass } from '../helpers/add-gds-body-class';
 
 @Component({
-  template: `<opal-lib-govuk-tabs tabsId="test"
-    ><span items>Test Content</span><span panels>More Test Content</span></opal-lib-govuk-tabs
-  >`,
+  template: `<opal-lib-govuk-tabs>
+    <ng-container tab-list-items><li>Test Tab</li></ng-container>
+    <ng-container tab-panels><div class="govuk-tabs__panel">Test Panel</div></ng-container>
+  </opal-lib-govuk-tabs>`,
   imports: [GovukTabsComponent],
 })
 class TestHostComponent {}
@@ -43,9 +44,8 @@ describe('GovukTabsComponent', () => {
       fail('fixture returned null');
       return;
     }
-
     const element = fixture.nativeElement.querySelector('.govuk-tabs__list');
-    expect(element.innerText).toBe('Test Content');
+    expect(element.innerText).toContain('Test Tab');
   });
 
   it('should render into panels ng-content', () => {
@@ -53,7 +53,7 @@ describe('GovukTabsComponent', () => {
       fail('fixture returned null');
       return;
     }
-    const element = fixture.nativeElement.querySelector('.govuk-tabs > span');
-    expect(element.innerText).toBe('More Test Content');
+    const element = fixture.nativeElement.querySelector('.govuk-tabs__panel');
+    expect(element.innerText).toContain('Test Panel');
   });
 });
