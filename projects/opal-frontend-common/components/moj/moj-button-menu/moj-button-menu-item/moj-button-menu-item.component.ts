@@ -1,12 +1,12 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'opal-lib-moj-button-menu-item',
-  imports: [],
   templateUrl: './moj-button-menu-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MojButtonMenuItemComponent {
+  @Input({ required: true }) itemText!: string;
   @Output() actionClick = new EventEmitter<boolean>();
 
   public handleClick(event: Event) {
