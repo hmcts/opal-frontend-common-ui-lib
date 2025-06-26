@@ -395,6 +395,9 @@
     "./validators/past-date": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-past-date.mjs"
     },
+    "./validators/pattern-validator": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-validators-pattern-validator.mjs"
+    },
     "./validators/special-characters": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-special-characters.mjs"
     },
