@@ -8,9 +8,8 @@ describe('HodLoadingSpinnerTextComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HodLoadingSpinnerTextComponent]
-    })
-    .compileComponents();
+      imports: [HodLoadingSpinnerTextComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(HodLoadingSpinnerTextComponent);
     component = fixture.componentInstance;
