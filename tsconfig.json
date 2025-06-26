@@ -320,6 +320,9 @@
       ],
       "@hmcts/opal-frontend-common/validators/over-eighteen": ["./dist/opal-frontend-common/validators/over-eighteen"],
       "@hmcts/opal-frontend-common/validators/past-date": ["./dist/opal-frontend-common/validators/past-date"],
+      "@hmcts/opal-frontend-common/validators/pattern-validator": [
+        "./dist/opal-frontend-common/validators/pattern-validator"
+      ],
       "@hmcts/opal-frontend-common/validators/special-characters": [
         "./dist/opal-frontend-common/validators/special-characters"
       ],
