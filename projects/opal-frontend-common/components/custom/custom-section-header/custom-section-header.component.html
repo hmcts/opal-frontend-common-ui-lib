@@ -1,4 +1,4 @@
-<ng-content class="custom-section-heading" select="[customSectionHeaderTitle]"></ng-content>
-@if (showDivider) {
-  <hr class="custom-section-header-divider" [style.background-color]="dividerColour" />
-}
+<h2 class="govuk-heading-m">
+  <ng-content></ng-content>
+</h2>
+<hr class="govuk-section-break govuk-section-break--visible custom-section-break" />

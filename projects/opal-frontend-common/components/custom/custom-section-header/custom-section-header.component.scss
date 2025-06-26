@@ -1,17 +1,5 @@
-:host {
-  display: flex;
-  flex-direction: column;
-}
+@import 'govuk-frontend/dist/govuk/helpers/colour';
 
-.custom-section-heading {
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 30px;
-  align-self: stretch;
-  margin: 0;
-}
-
-.custom-section-header-divider {
-  height: 4px;
-  margin: 0;
+.custom-section-break {
+  border-bottom: 4px solid govuk-colour('blue');
 }

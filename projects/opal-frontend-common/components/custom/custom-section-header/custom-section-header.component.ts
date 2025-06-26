@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'opal-lib-custom-section-header, [opal-lib-custom-section-header]',
@@ -6,7 +6,4 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
   styleUrl: './custom-section-header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomSectionHeaderComponent {
-  @Input({ required: false }) dividerColour: string = '#1d70b8';
-  @Input({ required: false }) showDivider: boolean = true;
-}
+export class CustomSectionHeaderComponent {}
