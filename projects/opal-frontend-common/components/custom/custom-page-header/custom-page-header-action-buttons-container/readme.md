@@ -24,13 +24,14 @@ You can use the custom page header action buttons container component in your te
 
 ```html
 <opal-lib-custom-page-header-action-buttons-container>
-  <opal-lib-govuk-button buttonId="return">Return to account details</opal-lib-govuk-button>
+  <opal-lib-govuk-button buttonId="return" buttonClasses="govuk-button--secondary"
+    >Return to account details</opal-lib-govuk-button
+  >
   <opal-lib-moj-button-menu menuButtonTitle="More Options:">
     <opal-lib-moj-button-menu-item itemText="Option 1"></opal-lib-moj-button-menu-item>
     <opal-lib-moj-button-menu-item itemText="Option 2"></opal-lib-moj-button-menu-item>
-    <opal-lib-moj-button-menu-item itemText="Option 3"></opal-lib-moj-button-menu-item>
-  </opal-lib-moj-button-menu>
-</opal-lib-custom-page-header-action-buttons-container>
+    <opal-lib-moj-button-menu-item itemText="Option 3"></opal-lib-moj-button-menu-item> </opal-lib-moj-button-menu
+></opal-lib-custom-page-header-action-buttons-container>
 ```
 
 ## Inputs

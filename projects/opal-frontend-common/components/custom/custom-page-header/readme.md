@@ -17,9 +17,6 @@ This Angular component provides a custom page header component, which will be us
 ```typescript
 import { CustomPageHeaderComponent } from '@hmcts/opal-frontend-common/components/custom/custom-page-header';
 import { CustomPageHeaderActionButtonsContainerComponent } from '@hmcts/opal-frontend-common/components/custom/custom-page-header/custom-page-header-action-buttons-container';
-import { CustomPageHeaderHeadingContainerComponent } from '@hmcts/opal-frontend-common/components/custom/custom-page-header/custom-page-header-heading-container';
-import { CustomPageHeaderHeadingCaptionComponent } from '@hmcts/opal-frontend-common/components/custom/custom-page-header/custom-page-header-heading-container/custom-page-header-heading-caption';
-import { CustomPageHeaderHeadingTitleComponent } from '@hmcts/opal-frontend-common/components/custom/custom-page-header/custom-page-header-heading-container/custom-page-header-heading-title';
 import { GovukButtonComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-button';
 import { MojButtonMenuComponent } from '@hmcts/opal-frontend-common/components/moj/moj-button-menu';
 import { MojButtonMenuItemComponent } from '@hmcts/opal-frontend-common/components/moj/moj-button-menu/moj-button-menu-item';
@@ -31,16 +28,11 @@ You can use the custom page header component in your template as follows:
 
 ```html
 <opal-lib-custom-page-header>
-  <opal-lib-custom-page-header-heading-container>
-    <opal-lib-custom-page-header-heading-caption pageHeaderCaption
-      >ABD32D213d
-    </opal-lib-custom-page-header-heading-caption>
-    <opal-lib-custom-page-header-heading-title pageHeaderTitle>
-      Mr dave smith
-    </opal-lib-custom-page-header-heading-title>
-  </opal-lib-custom-page-header-heading-container>
+  <opal-lib-govuk-heading-with-caption captionText="hello" headingText="hello"></opal-lib-govuk-heading-with-caption>
   <opal-lib-custom-page-header-action-buttons-container>
-    <opal-lib-govuk-button buttonId="return">Return to account details</opal-lib-govuk-button>
+    <opal-lib-govuk-button buttonId="return" buttonClasses="govuk-button--secondary"
+      >Return to account details</opal-lib-govuk-button
+    >
     <opal-lib-moj-button-menu menuButtonTitle="More Options:">
       <opal-lib-moj-button-menu-item itemText="Option 1"></opal-lib-moj-button-menu-item>
       <opal-lib-moj-button-menu-item itemText="Option 2"></opal-lib-moj-button-menu-item>
