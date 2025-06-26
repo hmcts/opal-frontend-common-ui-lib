@@ -1,1 +1,1 @@
-export * from './date.service.interface'
+export * from './date.service.interface';

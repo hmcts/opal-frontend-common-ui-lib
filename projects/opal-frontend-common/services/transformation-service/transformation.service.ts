@@ -78,12 +78,13 @@ export class TransformationService {
    * @returns A new object with the keys replaced.
    * @template T - The type of the form data object.
    */
-  public replaceKeys<T extends object>(
-    data: T,
-    currentPrefix: string,
-    replacementPrefix: string,
-  ): Record<string, string> {
-    const result: Record<string, string> = {};
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public replaceKeys<T extends object>(data: T, currentPrefix: string, replacementPrefix: string): Record<string, any> {
+    if (typeof data !== 'object' || data === null) {
+      return {};
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result: Record<string, any> = {};
 
     for (const [key, value] of Object.entries(data)) {
       const newKey = key.replace(currentPrefix, replacementPrefix);
