@@ -1,36 +1,82 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GovukTabsListItemComponent } from './govuk-tabs-list-item.component';
-
-@Component({
-  template: `
-    <opal-lib-govuk-tabs-list-item>
-      <a class="govuk-tabs__tab" href="#test" id="tab-test">Test Tab</a>
-    </opal-lib-govuk-tabs-list-item>
-  `,
-  standalone: true,
-  imports: [GovukTabsListItemComponent],
-})
-class TestHostComponent {}
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 describe('GovukTabsListItemComponent', () => {
-  let fixture: ComponentFixture<TestHostComponent>;
+  let component: GovukTabsListItemComponent;
+  let fixture: ComponentFixture<GovukTabsListItemComponent>;
+  let router: Router;
+  let route: ActivatedRoute;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestHostComponent],
+      imports: [GovukTabsListItemComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TestHostComponent);
+    fixture = TestBed.createComponent(GovukTabsListItemComponent);
+    component = fixture.componentInstance;
+    router = TestBed.inject(Router);
+    route = TestBed.inject(ActivatedRoute);
+    component.tabItemId = 'example';
+    component.tabItemFragment = 'example';
+    component.tabItemText = 'Example';
+    component.activeTabItemFragment = 'example';
     fixture.detectChanges();
   });
 
-  it('should project tab content into the list item', () => {
-    const listItem = fixture.nativeElement.querySelector('li.govuk-tabs__list-item');
-    const tabLink = listItem.querySelector('a.govuk-tabs__tab');
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-    expect(tabLink).toBeTruthy();
-    expect(tabLink.getAttribute('href')).toBe('#test');
-    expect(tabLink.innerText).toBe('Test Tab');
+  it('should have item text', () => {
+    const element = fixture.nativeElement.querySelector('.govuk-tabs__list-item--selected a');
+    expect(element.textContent.trim()).toBe(component.tabItemText);
+  });
+
+  it('should be an active link', () => {
+    component.tabItemFragment = 'example';
+    component.activeTabItemFragment = 'example';
+    fixture.detectChanges();
+
+    const hostElement = fixture.nativeElement;
+    expect(hostElement.classList.contains('govuk-tabs__list-item--selected')).toBeTrue();
+  });
+
+  it('should not be an active link', () => {
+    component.activeTabItemFragment = 'not-example';
+    const cdr = fixture.debugElement.injector.get<ChangeDetectorRef>(ChangeDetectorRef);
+    cdr.detectChanges();
+
+    const element = fixture.nativeElement.querySelector('.govuk-tabs__list-item--selected');
+    expect(element).toBeFalsy();
+  });
+
+  it('should navigate to the correct route with fragment', () => {
+    const event = new Event('click');
+    const navigateSpy = spyOn(router, 'navigate');
+
+    component.handleItemClick(event, component.tabItemFragment);
+
+    expect(navigateSpy).toHaveBeenCalledWith(['./'], {
+      relativeTo: route,
+      fragment: component.tabItemFragment,
+    });
+  });
+
+  it('should include href attribute', () => {
+    const link = fixture.nativeElement.querySelector('.govuk-tabs__list-item a.govuk-tabs__tab');
+    expect(link.getAttribute('href')).toBe('#');
+  });
+
+  it('should not apply selected class when tabItemFragment does not match activeTabItemFragment', () => {
+    component.tabItemFragment = 'different';
+    component.activeTabItemFragment = 'example';
+    fixture.detectChanges();
+
+    const hostElement = fixture.nativeElement;
+    expect(hostElement.classList.contains('govuk-tabs__list-item--selected')).toBeFalse();
+    expect(hostElement.classList.contains('govuk-tabs__list-item')).toBeTrue();
   });
 });

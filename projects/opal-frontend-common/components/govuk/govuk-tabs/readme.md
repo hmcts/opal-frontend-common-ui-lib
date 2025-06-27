@@ -23,31 +23,45 @@ import { GovukTabPanelComponent } from 'opal-frontend-common/components/govuk/go
 
 The component uses content projection, meaning you pass in your own tab list and tab panels.
 
+To track and control which tab is selected, subscribe to the `(activeTabFragmentChange)` output and bind it to your component's internal state (e.g. `activeTab`).
+
+Each tab item uses `[tabItemFragment]` and `[activeTabItemFragment]` to determine which tab is visually active.
+
 ### Example
 
 ```html
-<opal-lib-govuk-tabs>
+<opal-lib-govuk-tabs [tabId]="'searchTabs'" (activeTabFragmentChange)="activeTab = $event">
   <ng-container tab-list-items>
-    <opal-lib-govuk-tab-list-item>
-      <a id="tab-individuals" href="#panel-individuals" class="govuk-tabs__tab">Individuals</a>
+    <opal-lib-govuk-tab-list-item
+      [tabItemFragment]="'individuals'"
+      [activeTabItemFragment]="activeTab"
+      [tabItemId]="'tab-individuals'"
+      [tabItemText]="'Individuals'"
+    >
+      <a id="tab-individuals" href="#individuals" class="govuk-tabs__tab">Individuals</a>
     </opal-lib-govuk-tab-list-item>
-    <opal-lib-govuk-tab-list-item>
-      <a id="tab-companies" href="#panel-companies" class="govuk-tabs__tab">Companies</a>
+    <opal-lib-govuk-tab-list-item
+      [tabItemFragment]="'companies'"
+      [activeTabItemFragment]="activeTab"
+      [tabItemId]="'tab-companies'"
+      [tabItemText]="'Companies'"
+    >
+      <a id="tab-companies" href="#companies" class="govuk-tabs__tab">Companies</a>
     </opal-lib-govuk-tab-list-item>
   </ng-container>
 
   <ng-container tab-panels>
-    <opal-lib-govuk-tab-panel id="panel-individuals">
+    <opal-lib-govuk-tab-panel id="individuals">
       <h2 class="govuk-heading-m">Individuals</h2>
-      <!-- panel content -->
     </opal-lib-govuk-tab-panel>
-    <opal-lib-govuk-tab-panel id="panel-companies">
+    <opal-lib-govuk-tab-panel id="companies">
       <h2 class="govuk-heading-m">Companies</h2>
-      <!-- panel content -->
     </opal-lib-govuk-tab-panel>
   </ng-container>
 </opal-lib-govuk-tabs>
 ```
+
+You can derive `activeTab` from Angular’s `ActivatedRoute.fragment`, or allow the component to emit the currently selected fragment via `(activeTabFragmentChange)` and store it in your component's state.
 
 ## Testing
 
