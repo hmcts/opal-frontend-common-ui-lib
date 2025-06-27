@@ -26,7 +26,8 @@ You must provide the following inputs:
 - `tabItemFragment` — a unique string fragment to identify this tab
 - `activeTabItemFragment` — the currently selected fragment (e.g. from the route or state)
 - `tabItemId` — the unique ID for accessibility
-- `tabItemText` — the display text for the tab
+
+The link text inside the `<a>` is projected using `<ng-content>`.
 
 ### Example
 
@@ -35,9 +36,8 @@ You must provide the following inputs:
   [tabItemFragment]="'panel-individuals'"
   [activeTabItemFragment]="activeTabFragment"
   [tabItemId]="'tab-individuals'"
-  [tabItemText]="'Individuals'"
 >
-  <a id="tab-individuals" href="#panel-individuals" class="govuk-tabs__tab"> Individuals </a>
+  <ng-content [linkText]>Individuals</ng-content>
 </opal-lib-govuk-tabs-list-item>
 ```
 
@@ -45,7 +45,7 @@ This results in:
 
 ```html
 <li class="govuk-tabs__list-item govuk-tabs__list-item--selected" id="tab-individuals">
-  <a id="tab-individuals" href="#panel-individuals" class="govuk-tabs__tab"> Individuals </a>
+  <a id="tab-individuals" href="#panel-individuals" class="govuk-tabs__tab">Individuals</a>
 </li>
 ```
 

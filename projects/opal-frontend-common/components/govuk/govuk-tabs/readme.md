@@ -36,7 +36,6 @@ Each tab item uses `[tabItemFragment]` and `[activeTabItemFragment]` to determin
       [tabItemFragment]="'individuals'"
       [activeTabItemFragment]="activeTab"
       [tabItemId]="'tab-individuals'"
-      [tabItemText]="'Individuals'"
     >
       <a id="tab-individuals" href="#individuals" class="govuk-tabs__tab">Individuals</a>
     </opal-lib-govuk-tab-list-item>
@@ -44,7 +43,6 @@ Each tab item uses `[tabItemFragment]` and `[activeTabItemFragment]` to determin
       [tabItemFragment]="'companies'"
       [activeTabItemFragment]="activeTab"
       [tabItemId]="'tab-companies'"
-      [tabItemText]="'Companies'"
     >
       <a id="tab-companies" href="#companies" class="govuk-tabs__tab">Companies</a>
     </opal-lib-govuk-tab-list-item>

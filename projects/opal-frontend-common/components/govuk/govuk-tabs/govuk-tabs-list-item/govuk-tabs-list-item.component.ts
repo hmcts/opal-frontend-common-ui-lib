@@ -12,7 +12,6 @@ export class GovukTabsListItemComponent {
 
   @Input({ required: true }) public tabItemId!: string;
   @Input({ required: true }) public tabItemFragment!: string;
-  @Input({ required: true }) public tabItemText!: string;
   @Input({ required: true }) public activeTabItemFragment!: string;
 
   @HostBinding('class')

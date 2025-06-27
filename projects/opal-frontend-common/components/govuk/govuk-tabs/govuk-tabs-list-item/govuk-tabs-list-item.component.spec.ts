@@ -21,18 +21,12 @@ describe('GovukTabsListItemComponent', () => {
     route = TestBed.inject(ActivatedRoute);
     component.tabItemId = 'example';
     component.tabItemFragment = 'example';
-    component.tabItemText = 'Example';
     component.activeTabItemFragment = 'example';
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should have item text', () => {
-    const element = fixture.nativeElement.querySelector('.govuk-tabs__list-item--selected a');
-    expect(element.textContent.trim()).toBe(component.tabItemText);
   });
 
   it('should be an active link', () => {
