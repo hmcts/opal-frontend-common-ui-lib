@@ -80,4 +80,50 @@ describe('TransformationService', () => {
       expect(service.transformObjectValues(input, transformItems)).toEqual({ nested: { dateKey: '1991-01-01' } });
     });
   });
+
+  describe('replaceKeys', () => {
+    it('should replace keys in an object based on the provided params', () => {
+      const input = { old_name: 'name', old_age: 20, id: 1 };
+      const output = { new_name: 'name', new_age: 20, id: 1 };
+      const currentPrefix = 'old_';
+      const replacementPrefix = 'new_';
+
+      const result = service.replaceKeys(input, currentPrefix, replacementPrefix);
+
+      expect(result).toEqual(output);
+    });
+
+    it('should return the input object if no keys match the current prefix', () => {
+      const input = { name: 'name', age: 20, id: 1 };
+      const currentPrefix = 'old_';
+      const replacementPrefix = 'new_';
+
+      const result = service.replaceKeys(input, currentPrefix, replacementPrefix);
+
+      expect(result).toEqual(input);
+    });
+
+    it('should return an empty object if the input is null, undefined or not an object type', () => {
+      const input = null;
+      const currentPrefix = 'old_';
+      const replacementPrefix = 'new_';
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const result = service.replaceKeys(input as any, currentPrefix, replacementPrefix);
+
+      expect(result).toEqual({});
+
+      const undefinedInput = undefined;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const resultUndefined = service.replaceKeys(undefinedInput as any, currentPrefix, replacementPrefix);
+
+      expect(resultUndefined).toEqual({});
+
+      const notAnObjectInput = 'string';
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const resultNotAnObject = service.replaceKeys(notAnObjectInput as any, currentPrefix, replacementPrefix);
+
+      expect(resultNotAnObject).toEqual({});
+    });
+  });
 });
