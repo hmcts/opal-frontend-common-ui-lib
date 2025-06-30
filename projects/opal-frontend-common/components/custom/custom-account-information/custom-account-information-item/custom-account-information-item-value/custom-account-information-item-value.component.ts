@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'opal-lib-custom-account-information-item-value, [opal-lib-custom-account-information-item-value]',
@@ -6,4 +6,6 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   styleUrl: './custom-account-information-item-value.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomAccountInformationItemValueComponent {}
+export class CustomAccountInformationItemValueComponent {
+  @HostBinding('class') hostClass = 'govuk-body-s govuk-!-margin-0';
+}
