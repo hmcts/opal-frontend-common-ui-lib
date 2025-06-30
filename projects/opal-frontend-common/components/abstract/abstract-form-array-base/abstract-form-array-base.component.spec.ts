@@ -345,4 +345,42 @@ describe('AbstractFormArrayBaseComponent', () => {
 
     expect(result).toEqual([{ field1_0: 'value1' }, { field2_1: 'value4' }]);
   });
+
+  it('should return the correct FormGroup from the form array', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const formArray = component.form.get('impositions') as FormArray;
+    const group = new FormGroup({ example_0: new FormControl('test') });
+    formArray.push(group);
+
+    const result = component.getFormArrayFormGroup(0, 'impositions');
+    expect(result).toBe(group);
+  });
+
+  it('should return the correct FormControl from a form group', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const group = new FormGroup({ test_0: new FormControl('value') });
+    const result = component.getFormArrayFormGroupControl(group, 'test', 0);
+
+    expect(result.value).toBe('value');
+  });
+
+  it('should add validators to a form array form group control', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const control = new FormControl('');
+    component.addFormArrayFormGroupControlValidators(control, [Validators.required]);
+    control.setValue(null);
+    expect(control.valid).toBe(false);
+  });
 });
