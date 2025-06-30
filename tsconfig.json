@@ -72,9 +72,6 @@
       "@hmcts/opal-frontend-common/components/custom/custom-account-information": [
         "./dist/opal-frontend-common/components/custom/custom-account-information"
       ],
-      "@hmcts/opal-frontend-common/components/custom/custom-section-header": [
-        "./dist/opal-frontend-common/components/custom/custom-section-header"
-      ],
       "@hmcts/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item": [
         "./dist/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item"
       ],
@@ -262,7 +259,7 @@
         "./dist/opal-frontend-common/services/auth-service/constants"
       ],
       "@hmcts/opal-frontend-common/services/date-service": ["./dist/opal-frontend-common/services/date-service"],
-        
+
       "@hmcts/opal-frontend-common/services/date-service/interfaces": [
         "./dist/opal-frontend-common/services/date-service/interfaces"
       ],
