@@ -3,11 +3,14 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GovukTabsComponent } from './govuk-tabs.component';
 import { Component } from '@angular/core';
 import { addGdsBodyClass } from '../helpers/add-gds-body-class';
+import { ActivatedRoute } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
-  template: `<opal-lib-govuk-tabs tabsId="test"
-    ><span items>Test Content</span><span panels>More Test Content</span></opal-lib-govuk-tabs
-  >`,
+  template: `<opal-lib-govuk-tabs>
+    <ng-container tab-list-items><li>Test Tab</li></ng-container>
+    <ng-container tab-panels><div class="govuk-tabs__panel">Test Panel</div></ng-container>
+  </opal-lib-govuk-tabs>`,
   imports: [GovukTabsComponent],
 })
 class TestHostComponent {}
@@ -15,16 +18,22 @@ class TestHostComponent {}
 describe('GovukTabsComponent', () => {
   let component: TestHostComponent | null;
   let fixture: ComponentFixture<TestHostComponent> | null;
+  const fragment$ = new BehaviorSubject<string | null>('test-tab');
 
   beforeAll(addGdsBodyClass);
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TestHostComponent],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: { fragment: fragment$.asObservable() },
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
     component = fixture.componentInstance;
-
     fixture.detectChanges();
   });
 
@@ -43,9 +52,8 @@ describe('GovukTabsComponent', () => {
       fail('fixture returned null');
       return;
     }
-
     const element = fixture.nativeElement.querySelector('.govuk-tabs__list');
-    expect(element.innerText).toBe('Test Content');
+    expect(element.innerText).toContain('Test Tab');
   });
 
   it('should render into panels ng-content', () => {
@@ -53,7 +61,16 @@ describe('GovukTabsComponent', () => {
       fail('fixture returned null');
       return;
     }
-    const element = fixture.nativeElement.querySelector('.govuk-tabs > span');
-    expect(element.innerText).toBe('More Test Content');
+    const element = fixture.nativeElement.querySelector('.govuk-tabs__panel');
+    expect(element.innerText).toContain('Test Panel');
+  });
+
+  it('should emit activeTabFragmentChange on fragment change', () => {
+    const tabsComponent = fixture?.debugElement.children[0].componentInstance as GovukTabsComponent;
+    const emitSpy = spyOn(tabsComponent.activeTabFragmentChange, 'emit');
+
+    fragment$.next('companies');
+
+    expect(emitSpy).toHaveBeenCalledWith('companies');
   });
 });
