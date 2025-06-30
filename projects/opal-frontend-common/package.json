@@ -299,6 +299,9 @@
     "./services/date-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-date-service.mjs"
     },
+    "./services/date-service/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-date-service-interfaces.mjs"
+    },
     "./services/permissions-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-permissions-service.mjs"
     },
