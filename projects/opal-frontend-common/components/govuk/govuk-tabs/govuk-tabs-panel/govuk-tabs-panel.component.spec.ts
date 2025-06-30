@@ -1,14 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { GovukTabPanelComponent } from './govuk-tab-panel.component';
+import { GovukTabsPanelComponent } from './govuk-tabs-panel.component';
 import { Component } from '@angular/core';
 
 @Component({
-  template: `<opal-lib-govuk-tab-panel tabsId="testOne" tabsPanelId="testTwo">Hello World</opal-lib-govuk-tab-panel>`,
-  imports: [GovukTabPanelComponent],
+  template: `<opal-lib-govuk-tabs-panel id="test-panel">Hello World</opal-lib-govuk-tabs-panel>`,
+  imports: [GovukTabsPanelComponent],
 })
 class TestHostComponent {}
-describe('GovukTabPanelComponent', () => {
+describe('GovukTabsPanelComponent', () => {
   let component: TestHostComponent | null;
   let fixture: ComponentFixture<TestHostComponent> | null;
 
@@ -37,8 +36,7 @@ describe('GovukTabPanelComponent', () => {
       fail('fixture returned null');
       return;
     }
-
-    const element = fixture.nativeElement.querySelector('#testOneTestTwo');
-    expect(element.innerText).toBe('Hello World');
+    const element = fixture.nativeElement.querySelector('#test-panel');
+    expect(element.innerText).toContain('Hello World');
   });
 });

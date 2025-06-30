@@ -391,14 +391,17 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Sets the value of a specified form control and marks it as touched.
+   * Sets the value of a form control specified by its path and marks it as touched.
    *
-   * @param {string} value - The value to set for the form control.
-   * @param {string} control - The name of the form control to update.
+   * @param value - The value to set for the form control.
+   * @param controlPath - The dot-delimited path to the form control within the form group.
    */
-  protected setInputValue(value: string, control: string) {
-    this.form.controls[control].patchValue(value);
-    this.form.controls[control].markAsTouched();
+  protected setInputValue(value: string, controlPath: string): void {
+    const control = this.form.get(controlPath);
+    if (control) {
+      control.patchValue(value);
+      control.markAsTouched();
+    }
   }
 
   /**
@@ -520,16 +523,20 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
    * @param route string of route
    * @param nonRelative boolean indicating if route is relative to the parent
    */
-  public handleRoute(route: string, nonRelative: boolean = false, event?: Event): void {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public handleRoute(route: string, nonRelative: boolean = false, event?: Event, routeData?: any): void {
     if (event) {
       event.preventDefault();
     }
+
     this.unsavedChanges.emit(this.hasUnsavedChanges());
-    if (nonRelative) {
-      this.router.navigate([route]);
-    } else {
-      this.router.navigate([route], { relativeTo: this.activatedRoute.parent });
-    }
+
+    const navigationExtras = {
+      ...(nonRelative ? {} : { relativeTo: this.activatedRoute.parent }),
+      ...(routeData !== undefined ? { state: routeData } : {}),
+    };
+
+    this.router.navigate([route], navigationExtras);
   }
 
   /**
