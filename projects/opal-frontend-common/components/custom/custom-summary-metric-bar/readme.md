@@ -27,23 +27,23 @@ You can use the Custom Metric Bar Component in your template as follows:
 
 ```html
 <div opal-lib-custom-summary-metric-bar>
-  <opal-lib-custom-summary-metric-bar-item backgroundColour="#EEEFEF" textColour="#383F43">
+  <opal-lib-custom-summary-metric-bar-item itemColour="light-grey">
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 1:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 1</div>
   </opal-lib-custom-summary-metric-bar-item>
-  <opal-lib-custom-summary-metric-bar-item backgroundColour="#D2E2F1" textColour="#144E81">
+  <opal-lib-custom-summary-metric-bar-item itemColour="light-blue">
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
   </opal-lib-custom-summary-metric-bar-item>
-  <opal-lib-custom-summary-metric-bar-item backgroundColour="#D2E2F1" textColour="#144E81">
+  <opal-lib-custom-summary-metric-bar-item itemColour="light-blue">
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
   </opal-lib-custom-summary-metric-bar-item>
-  <opal-lib-custom-summary-metric-bar-item backgroundColour="#D2E2F1" textColour="#144E81">
+  <opal-lib-custom-summary-metric-bar-item itemColour="light-blue">
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
   </opal-lib-custom-summary-metric-bar-item>
-  <opal-lib-custom-summary-metric-bar-item backgroundColour="#1D70B8" textColour="#ffffff">
+  <opal-lib-custom-summary-metric-bar-item itemColour="blue">
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
   </opal-lib-custom-summary-metric-bar-item>

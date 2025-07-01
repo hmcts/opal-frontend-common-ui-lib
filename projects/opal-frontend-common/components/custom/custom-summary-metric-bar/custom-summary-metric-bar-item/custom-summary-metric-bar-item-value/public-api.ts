@@ -1,1 +1,1 @@
-export * from './custom-summary-metric-bar-item-value.component'
+export * from './custom-summary-metric-bar-item-value.component';

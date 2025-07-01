@@ -19,4 +19,10 @@ describe('CustomSummaryMetricBarItemValueComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should bind the correct host class', () => {
+    const expectedClass = 'govuk-!-font-size-24 govuk-!-font-weight-bold govuk-!-margin-0 govuk-body';
+    const hostElement: HTMLElement = fixture.nativeElement;
+    expect(hostElement.className).toBe(expectedClass);
+  });
 });

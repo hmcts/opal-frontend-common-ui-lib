@@ -1,20 +1,18 @@
-import { Component, Input, HostBinding, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, HostBinding } from '@angular/core';
+
+export type ITEM_COLOURS = 'light-grey' | 'light-blue' | 'blue';
 
 @Component({
   selector: 'opal-lib-custom-summary-metric-bar-item',
   templateUrl: './custom-summary-metric-bar-item.component.html',
-  styleUrl: './custom-summary-metric-bar-item.component.scss',
+  styleUrls: ['./custom-summary-metric-bar-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomSummaryMetricBarItemComponent {
-  @Input() backgroundColour: string = '#EEEFEF';
-  @Input() textColour: string = '#383F43';
+  @Input() itemColour: ITEM_COLOURS = 'light-grey';
 
-  @HostBinding('style.backgroundColor') get backgroundColourStyle(): string {
-    return this.backgroundColour;
-  }
-
-  @HostBinding('style.color') get textColourStyle(): string {
-    return this.textColour;
+  @HostBinding('class')
+  get hostClasses(): string {
+    return `${this.itemColour}-item`;
   }
 }

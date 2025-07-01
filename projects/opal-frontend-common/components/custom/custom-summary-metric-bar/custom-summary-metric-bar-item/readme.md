@@ -25,7 +25,7 @@ import { CustomSummaryMetricBarItemValueComponent } from '@hmcts/opal-frontend-c
 You can use the Custom Summary Metric Bar Item component in your template as follows:
 
 ```html
-<opal-lib-custom-summary-metric-bar-item backgroundColour="#ffffff" textColour="#383F43">
+<opal-lib-custom-summary-metric-bar-item itemColour="light-blue">
   <div opal-lib-custom-summary-metric-bar-item-label>Metric 1:</div>
   <div opal-lib-custom-summary-metric-bar-item-value>Value 1</div>
 </opal-lib-custom-summary-metric-bar-item>
@@ -33,10 +33,9 @@ You can use the Custom Summary Metric Bar Item component in your template as fol
 
 ## Inputs
 
-| Input             | Type     | Default   | Description                                                                         |
-| ----------------- | -------- | --------- | ----------------------------------------------------------------------------------- |
-| `backgroundColor` | `string` | #EEEFEF | The colour code for the background colour of the individual item in the metric bar. |
-| `textColor`       | `string` | #383F43 | The colour code for the text colour of the individual item in the metric bar.       |
+| Input        | Type     | Default      | Description                                                                                          |
+| ------------ | -------- | ------------ | ---------------------------------------------------------------------------------------------------- |
+| `itemColour` | `string` | 'light-grey' | GDS colours that apply colour to background and text of the item. 'light-grey', 'light-blue', 'blue' |
 
 ## Outputs
 

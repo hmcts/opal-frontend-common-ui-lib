@@ -1,9 +1,10 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'opal-lib-custom-summary-metric-bar-item-label, [opal-lib-custom-summary-metric-bar-item-label]',
   templateUrl: './custom-summary-metric-bar-item-label.component.html',
-  styleUrl: './custom-summary-metric-bar-item-label.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomSummaryMetricBarItemLabelComponent {}
+export class CustomSummaryMetricBarItemLabelComponent {
+  @HostBinding('class') hostClass = 'govuk-body govuk-!-font-size-19 govuk-!-font-weight-bold govuk-!-margin-0';
+}
