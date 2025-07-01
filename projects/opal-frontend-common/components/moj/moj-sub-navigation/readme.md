@@ -1,5 +1,3 @@
----
-
 # MOJ Sub Navigation Component
 
 This Angular component provides a Ministry of Justice (MOJ)-styled sub-navigation, typically used for secondary navigation links within a section.

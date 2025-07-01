@@ -67,4 +67,30 @@ export class TransformationService {
     }
     return obj;
   }
+
+  /**
+   * replaces the keys in the object provided
+   * by replacing the current prefix with a new prefix.
+   * Useful when mapping object keys to a different format or structure.
+   * @param data - The data object containing key-value pairs.
+   * @param currentPrefix - The prefix to be replaced in the keys.
+   * @param replacementPrefix - The prefix to replace the current prefix with.
+   * @returns A new object with the keys replaced.
+   * @template T - The type of the form data object.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public replaceKeys<T extends object>(data: T, currentPrefix: string, replacementPrefix: string): Record<string, any> {
+    if (typeof data !== 'object' || data === null) {
+      return {};
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result: Record<string, any> = {};
+
+    for (const [key, value] of Object.entries(data)) {
+      const newKey = key.replace(currentPrefix, replacementPrefix);
+      result[newKey] = value;
+    }
+
+    return result;
+  }
 }
