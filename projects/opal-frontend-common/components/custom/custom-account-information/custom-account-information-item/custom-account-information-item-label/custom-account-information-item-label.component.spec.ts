@@ -19,4 +19,12 @@ describe('CustomAccountInformationItemLabelComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have the correct hostClass binding', () => {
+    const hostElement: HTMLElement = fixture.nativeElement;
+    expect(hostElement.className).toContain('govuk-body');
+    expect(hostElement.className).toContain('govuk-!-font-size-16');
+    expect(hostElement.className).toContain('govuk-!-font-weight-bold');
+    expect(hostElement.className).toContain('govuk-!-margin-0');
+  });
 });
