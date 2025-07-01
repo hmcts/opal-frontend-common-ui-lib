@@ -178,17 +178,6 @@ export abstract class AbstractSortableTableComponent extends AbstractTableFilter
   });
 
   /**
-   * Retrieves the currently active sort key and its direction from the sort state.
-   *
-   * @returns A tuple containing the active sort key as a string and its sort direction (`SortDirectionType`),
-   *          or `undefined` if no sort is currently active.
-   */
-  protected getActiveSortKey(): [string, SortDirectionType] | undefined {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    return Object.entries(this.sortStateSignal()).find(([_, sort]) => sort !== 'none');
-  }
-
-  /**
    * Lifecycle hook to initialise the sort state.
    */
   public ngOnInit(): void {
@@ -206,15 +195,13 @@ export abstract class AbstractSortableTableComponent extends AbstractTableFilter
   public override onApplyFilters(): void {
     super.onApplyFilters();
 
-    const activeSortKey = this.getActiveSortKey();
-    if (!activeSortKey) {
+    const key = this.sortedColumnTitleSignal();
+    const sortType = this.sortedColumnDirectionSignal();
+
+    if (!key || sortType === 'none') {
       this.sortedTableDataSignal.set([...this.filteredTableDataSignal()]);
     } else {
-      const [key, sortType] = activeSortKey;
-
-      if (sortType !== 'none') {
-        this.onSortChange({ key, sortType });
-      }
+      this.onSortChange({ key, sortType });
     }
   }
 
@@ -228,14 +215,13 @@ export abstract class AbstractSortableTableComponent extends AbstractTableFilter
   public override clearAllFilters(): void {
     super.clearAllFilters();
 
-    const activeSortKey = this.getActiveSortKey();
-    if (!activeSortKey) {
+    const key = this.sortedColumnTitleSignal();
+    const sortType = this.sortedColumnDirectionSignal();
+
+    if (!key || sortType === 'none') {
       this.sortedTableDataSignal.set([...this.filteredTableDataSignal()]);
     } else {
-      const [key, sortType] = activeSortKey;
-      if (sortType !== 'none') {
-        this.onSortChange({ key, sortType });
-      }
+      this.onSortChange({ key, sortType });
     }
   }
 }

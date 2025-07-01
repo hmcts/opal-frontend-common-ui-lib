@@ -1,3 +1,8 @@
+// This styling replicates MoJ's original JS-enhanced layout structure.
+// The `.moj-filter__selected-heading` container is required to align
+// the heading and "Clear filters" link properly, especially when wrapping
+// on narrow viewports. The layout is applied manually here because we are
+// not using MoJ's JavaScript injection, only their design pattern structure.
 .moj-filter__selected-heading {
   display: flex;
   justify-content: space-between;

@@ -19,7 +19,7 @@ export class MojFilterPanelOptionFormGroupKeywordComponent {
    *
    * @param event - The DOM event triggered by a change in the input element.
    */
-  onKeywordChange(event?: Event): void {
+  public onKeywordChange(event?: Event): void {
     let keyword = '';
     if (event) {
       keyword = (event.target as HTMLInputElement).value;
