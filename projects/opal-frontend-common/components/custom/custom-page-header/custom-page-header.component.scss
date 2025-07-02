@@ -1,6 +1,12 @@
-:host {
+.custom-grid-class {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
+}
+.custom-column-class {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+}
+.custom-button-group-class {
+  justify-content: right;
+  align-items: center;
 }

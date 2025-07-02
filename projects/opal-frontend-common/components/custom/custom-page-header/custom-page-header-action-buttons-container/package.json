@@ -1,5 +1,0 @@
-{
-  "sideEffects": false,
-  "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-custom-custom-page-header-custom-page-header-action-buttons-container.mjs",
-  "typings": "../../../../dist/opal-frontend-common/components/custom/custom-page-header/custom-page-header-action-buttons-container/index.d.ts"
-}
