@@ -16,6 +16,8 @@ This Angular component provides a Home-office-styled loading spinner component, 
 
 ```typescript
 import { HodLoadingSpinnerComponent } from '@hmcts/opal-frontend-common/components/hod/hod-loading-spinner';
+import { HodLoadingSpinnerContentComponent } from '@hmcts/opal-frontend-common/components/hod/hod-loading-spinner/hod-loading-spinner-content';
+import { HodLoadingSpinnerTextComponent } from '@hmcts/opal-frontend-common/components/hod/hod-loading-spinner/hod-loading-spinner-content/hod-loading-spinner-text';
 ```
 
 ## Usage
