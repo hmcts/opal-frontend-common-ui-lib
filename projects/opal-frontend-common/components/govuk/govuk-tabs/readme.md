@@ -1,5 +1,3 @@
----
-
 # GOV.UK Tabs Component
 
 This Angular component renders GOV.UK-styled tabs, allowing users to switch between different sections of content.
@@ -8,53 +6,60 @@ This Angular component renders GOV.UK-styled tabs, allowing users to switch betw
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Inputs](#inputs)
-- [Outputs](#outputs)
-- [Methods](#methods)
 - [Testing](#testing)
 - [Contributing](#contributing)
 
 ## Installation
 
+Import the main component and its supporting subcomponents individually as required from their respective paths:
+
 ```typescript
-import { GovukTabsComponent } from '@components/govuk/govuk-tabs/govuk-tabs.component';
+import { GovukTabsComponent } from 'opal-frontend-common/components/govuk/govuk-tabs';
+import { GovukTabListItemComponent } from 'opal-frontend-common/components/govuk/govuk-tabs/govuk-tab-list-item';
+import { GovukTabPanelComponent } from 'opal-frontend-common/components/govuk/govuk-tabs/govuk-tab-panel';
 ```
 
 ## Usage
 
-You can use the tabs component in your template as follows:
+The component uses content projection, meaning you pass in your own tab list and tab panels.
+
+To track and control which tab is selected, subscribe to the `(activeTabFragmentChange)` output and bind it to your component's internal state (e.g. `activeTab`).
+
+Each tab item uses `[tabItemFragment]` and `[activeTabItemFragment]` to determine which tab is visually active.
+
+### Example
 
 ```html
-<opal-lib-govuk-tabs [tabs]="tabsData"></opal-lib-govuk-tabs>
+<opal-lib-govuk-tabs [tabId]="'searchTabs'" (activeTabFragmentChange)="activeTab = $event">
+  <ng-container tab-list-items>
+    <opal-lib-govuk-tab-list-item
+      [tabItemFragment]="'individuals'"
+      [activeTabItemFragment]="activeTab"
+      [tabItemId]="'tab-individuals'"
+    >
+      <a id="tab-individuals" href="#individuals" class="govuk-tabs__tab">Individuals</a>
+    </opal-lib-govuk-tab-list-item>
+    <opal-lib-govuk-tab-list-item
+      [tabItemFragment]="'companies'"
+      [activeTabItemFragment]="activeTab"
+      [tabItemId]="'tab-companies'"
+    >
+      <a id="tab-companies" href="#companies" class="govuk-tabs__tab">Companies</a>
+    </opal-lib-govuk-tab-list-item>
+  </ng-container>
+
+  <ng-container tab-panels>
+    <opal-lib-govuk-tab-panel id="individuals">
+      <h2 class="govuk-heading-m">Individuals</h2>
+    </opal-lib-govuk-tab-panel>
+    <opal-lib-govuk-tab-panel id="companies">
+      <h2 class="govuk-heading-m">Companies</h2>
+    </opal-lib-govuk-tab-panel>
+  </ng-container>
+</opal-lib-govuk-tabs>
 ```
 
-### Example in HTML:
-
-```html
-<div class="govuk-tabs" data-module="govuk-tabs">
-  <h2 class="govuk-tabs__title">Contents</h2>
-  <ul class="govuk-tabs__list">
-    <li *ngFor="let tab of tabs" class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="#">{{ tab.title }}</a>
-    </li>
-  </ul>
-  <div class="govuk-tabs__panel" *ngFor="let tab of tabs">{{ tab.content }}</div>
-</div>
-```
-
-## Inputs
-
-| Input  | Type    | Description                                                           |
-| ------ | ------- | --------------------------------------------------------------------- |
-| `tabs` | `Array` | Array of tab objects where each tab contains a `title` and `content`. |
-
-## Outputs
-
-There are no custom outputs for this component.
-
-## Methods
-
-There are no custom methods for this component.
+You can derive `activeTab` from Angular’s `ActivatedRoute.fragment`, or allow the component to emit the currently selected fragment via `(activeTabFragmentChange)` and store it in your component's state.
 
 ## Testing
 
@@ -67,7 +72,3 @@ ng test
 ## Contributing
 
 Feel free to submit issues or pull requests to improve this component.
-
----
-
-This `README.md` explains how to use the `govuk-tabs` component to display tabbed content in a GOV.UK-styled layout.

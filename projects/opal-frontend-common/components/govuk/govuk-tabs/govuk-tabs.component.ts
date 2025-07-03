@@ -1,27 +1,53 @@
-import { isPlatformBrowser } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, Component, Input, PLATFORM_ID, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  inject,
+} from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'opal-lib-govuk-tabs',
-  imports: [],
   templateUrl: './govuk-tabs.component.html',
-
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GovukTabsComponent implements AfterViewInit {
-  private readonly platformId = inject(PLATFORM_ID);
+export class GovukTabsComponent implements OnInit, OnDestroy {
+  private readonly route = inject(ActivatedRoute);
+  private readonly ngUnsubscribe = new Subject<void>();
 
-  @Input({ required: true }) public tabsId!: string;
+  @Input({ required: true }) public tabId!: string;
+  @Output() public activeTabFragmentChange = new EventEmitter<string>();
+
+  private setupListeners(): void {
+    this.route.fragment.pipe(takeUntil(this.ngUnsubscribe)).subscribe((fragment) => {
+      if (fragment) {
+        this.activeTabFragmentChange.emit(fragment);
+      }
+    });
+  }
+
   /**
-   * Lifecycle hook that is called after Angular has fully initialized the component's view.
-   * It is called only once after the first ngAfterContentChecked.
-   * We use it to initialize the govuk-frontend component.
+   * Angular lifecycle hook that is called after the component's data-bound properties have been initialized.
+   * Initializes the component by setting up necessary event listeners.
+   *
+   * @remarks
+   * This method is part of the Angular OnInit lifecycle interface.
    */
-  ngAfterViewInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      import('govuk-frontend').then((govuk) => {
-        govuk.initAll();
-      });
-    }
+  public ngOnInit(): void {
+    this.setupListeners();
+  }
+
+  /**
+   * Lifecycle hook that is called when the component is about to be destroyed.
+   * Unsubscribes from the route fragment subscription.
+   */
+  public ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

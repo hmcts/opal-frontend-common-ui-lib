@@ -28,16 +28,16 @@ You can use the custom account information component in your template as follows
 ```html
 <div opal-lib-custom-account-information>
   <opal-lib-custom-account-information-item>
-    <div opal-lib-custom-account-information-item-label>Account Name:</div>
-    <div opal-lib-custom-account-information-item-value>Dave Smith</div>
+    <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
+    <p opal-lib-custom-account-information-item-value>Dave Smith</p>
   </opal-lib-custom-account-information-item>
   <opal-lib-custom-account-information-item>
-    <div opal-lib-custom-account-information-item-label>Account Name:</div>
-    <div opal-lib-custom-account-information-item-value>John Doe</div>
+    <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
+    <p opal-lib-custom-account-information-item-value>John Doe</p>
   </opal-lib-custom-account-information-item>
   <opal-lib-custom-account-information-item>
-    <div opal-lib-custom-account-information-item-label>Account Name:</div>
-    <div opal-lib-custom-account-information-item-value>John Doe</div>
+    <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
+    <p opal-lib-custom-account-information-item-value>John Doe</p>
   </opal-lib-custom-account-information-item>
 </div>
 ```
