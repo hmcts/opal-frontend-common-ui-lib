@@ -19,4 +19,9 @@ describe('CustomAccountInformationComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have host element class "govuk-grid-row"', () => {
+    const hostElement: HTMLElement = fixture.nativeElement;
+    expect(hostElement.classList.contains('govuk-grid-row')).toBeTruthy();
+  });
 });
