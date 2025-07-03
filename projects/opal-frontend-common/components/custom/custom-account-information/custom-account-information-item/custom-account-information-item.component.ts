@@ -1,9 +1,10 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'opal-lib-custom-account-information-item',
   templateUrl: './custom-account-information-item.component.html',
-  styleUrl: './custom-account-information-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomAccountInformationItemComponent {}
+export class CustomAccountInformationItemComponent {
+  @HostBinding('class') hostClass = 'govuk-grid-column-one-quarter';
+}
