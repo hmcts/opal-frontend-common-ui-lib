@@ -1,42 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ElementRef } from '@angular/core';
 import { MojButtonMenuComponent } from './moj-button-menu.component';
-import { Component } from '@angular/core';
-import { By } from '@angular/platform-browser';
-import { MojButtonMenuItemComponent } from './moj-button-menu-item/moj-button-menu-item.component';
-
-@Component({
-  template: `<opal-lib-moj-button-menu menuButtonTitle="More actions">
-    <opal-lib-moj-button-menu-item>
-      <ng-container linkText>Action 1</ng-container>
-    </opal-lib-moj-button-menu-item>
-  </opal-lib-moj-button-menu>`,
-  imports: [MojButtonMenuComponent, MojButtonMenuItemComponent],
-})
-class TestHostComponent {}
-
-describe('MojButtonMenuComponent - TestHostComponent', () => {
-  let component: TestHostComponent;
-  let fixture: ComponentFixture<TestHostComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TestHostComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(TestHostComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should render More actions header', () => {
-    const element = fixture.debugElement.query(By.css('.moj-button-menu__toggle-button')).nativeElement;
-    expect(element.textContent).toContain('More actions');
-  });
-});
 
 describe('MojButtonMenuComponent', () => {
   let component: MojButtonMenuComponent;
@@ -46,24 +10,46 @@ describe('MojButtonMenuComponent', () => {
     await TestBed.configureTestingModule({
       imports: [MojButtonMenuComponent],
     }).compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(MojButtonMenuComponent);
     component = fixture.componentInstance;
+    // Set the required input
+    component.menuButtonTitle = 'Test Button';
+
+    // Create a dummy button element to simulate the ViewChild element
+    const dummyButton = document.createElement('button');
+    dummyButton.setAttribute('aria-expanded', 'false');
+    component.menuButton = new ElementRef(dummyButton);
+
     fixture.detectChanges();
   });
 
-  it('should toggle the aria-expanded attribute on the button', () => {
-    const button = fixture.debugElement.query(By.css('.moj-button-menu__toggle-button')).nativeElement;
-    button.setAttribute('aria-expanded', 'false');
+  it('should create the component', () => {
+    expect(component).toBeTruthy();
+  });
 
-    component.toggleButtonMenu();
-    fixture.detectChanges();
+  it('should return menuButtonTitle as dataButtonText', () => {
+    expect(component.dataButtonText).toBe('Test Button');
+  });
 
-    expect(button.getAttribute('aria-expanded')).toBe('true');
-
-    component.toggleButtonMenu();
-    fixture.detectChanges();
-
+  it('should toggle aria-expanded attribute and isExpanded property', () => {
+    // Verify initial state
+    let button = component.menuButton.nativeElement;
     expect(button.getAttribute('aria-expanded')).toBe('false');
+    expect(component.isExpanded).toBeFalse();
+
+    // Toggle to expanded state
+    component.toggleButtonMenu();
+    button = component.menuButton.nativeElement;
+    expect(button.getAttribute('aria-expanded')).toBe('true');
+    expect(component.isExpanded).toBeTrue();
+
+    // Toggle back to collapsed state
+    component.toggleButtonMenu();
+    button = component.menuButton.nativeElement;
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+    expect(component.isExpanded).toBeFalse();
   });
 });

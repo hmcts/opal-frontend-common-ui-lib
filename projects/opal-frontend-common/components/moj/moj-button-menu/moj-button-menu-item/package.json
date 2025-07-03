@@ -1,0 +1,5 @@
+{
+  "sideEffects": false,
+  "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-moj-moj-button-men-moj-button-menu-item.mjs",
+  "typings": "../../../../dist/opal-frontend-common/components/moj/moj-button-menu/moj-button-menu-item/index.d.ts"
+}

@@ -1,5 +1,3 @@
----
-
 # MOJ Button Menu Component
 
 This Angular component provides a Ministry of Justice (MOJ)-styled button menu, typically used to display a list of actions in a menu format.
@@ -24,27 +22,20 @@ import { MojButtonMenuComponent } from '@components/moj/moj-button-menu/moj-butt
 
 You can use the button menu component in your template as follows:
 
-```html
-<opal-lib-moj-button-menu [menuItems]="menuItems"></opal-lib-moj-button-menu>
-```
-
-### Example in HTML:
 
 ```html
-<div class="moj-button-menu">
-  <ul>
-    <li *ngFor="let item of menuItems">
-      <button class="moj-button">{{ item.label }}</button>
-    </li>
-  </ul>
-</div>
+<opal-lib-moj-button-menu menuButtonTitle="More Options:">
+      <opal-lib-moj-button-menu-item itemText="Option 1"></opal-lib-moj-button-menu-item>
+      <opal-lib-moj-button-menu-item itemText="Option 2"></opal-lib-moj-button-menu-item>
+      <opal-lib-moj-button-menu-item itemText="Option 3"></opal-lib-moj-button-menu-item>
+</opal-lib-moj-button-menu>
 ```
 
 ## Inputs
 
-| Input       | Type    | Description                                             |
-| ----------- | ------- | ------------------------------------------------------- |
-| `menuItems` | `Array` | An array of menu items, each with a `label` and action. |
+| Input             | Type    | Description                               |
+| ----------------- | --------------------------------------------------- |
+| `menuButtonTitle` | `String` | Sets the text of the expandable button.  |
 
 ## Outputs
 
@@ -66,6 +57,3 @@ ng test
 
 Feel free to submit issues or pull requests to improve this component.
 
----
-
-This `README.md` provides an overview of how to use the `moj-button-menu` component for displaying a list of buttons in a menu layout following MOJ standards.
