@@ -175,9 +175,7 @@
       "@hmcts/opal-frontend-common/components/hod/hod-loading-spinner/hod-loading-spinner-content": [
         "./dist/opal-frontend-common/components/hod/hod-loading-spinner-hod-loading-spinner-content"
       ],
-      "@hmcts/opal-frontend-common/components/hod/hod-loading-spinner/hod-loading-spinner-content/hod-loading-spinner-text": [
-        "./dist/opal-frontend-common/components/hod/hod-loading-spinner-hod-loading-spinner-content-hod-loading-spinner-text"
-      ],
+
       "@hmcts/opal-frontend-common/components/moj/moj-alert": ["./dist/opal-frontend-common/components/moj/moj-alert"],
       "@hmcts/opal-frontend-common/components/moj/moj-badge": ["./dist/opal-frontend-common/components/moj/moj-badge"],
       "@hmcts/opal-frontend-common/components/moj/moj-button-menu": [

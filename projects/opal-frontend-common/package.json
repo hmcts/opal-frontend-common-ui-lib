@@ -179,9 +179,6 @@
     "./components/hod/hod-loading-spinner/hod-loading-spinner-content": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-hod-hod-loading-spinner-hod-loading-spinner-content.mjs"
     },
-    "./components/hod/hod-loading-spinner/hod-loading-spinner-content/hod-loading-spinner-text": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-components-hod-hod-loading-spinner-hod-loading-spinner-content-hod-loading-spinner-text.mjs"
-    },
     "./components/moj/moj-alert": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-alert.mjs"
     },

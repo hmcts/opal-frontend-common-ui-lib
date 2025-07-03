@@ -17,7 +17,6 @@ This Angular component provides a Home-office-styled loading spinner component, 
 ```typescript
 import { HodLoadingSpinnerComponent } from '@hmcts/opal-frontend-common/components/hod/hod-loading-spinner';
 import { HodLoadingSpinnerContentComponent } from '@hmcts/opal-frontend-common/components/hod/hod-loading-spinner/hod-loading-spinner-content';
-import { HodLoadingSpinnerTextComponent } from '@hmcts/opal-frontend-common/components/hod/hod-loading-spinner/hod-loading-spinner-content/hod-loading-spinner-text';
 ```
 
 ## Usage
@@ -27,8 +26,8 @@ You can use the loading spinner component in your template as follows:
 ```html
 <div opal-lib-hod-loading-spinner>
   <div opal-lib-hod-loading-spinner-content>
-    <h2 class="govuk-heading-m" opal-lib-hod-loading-spinner-text>Processing request</h2>
-    <p class="govuk-body" opal-lib-hod-loading-spinner-text>This may take up to 3 minutes</p>
+    <ng-container hodLoadingSpinnerHeading> Processing request</ng-container>
+    <ng-container hodLoadingSpinnerText>This may take up to 3 minutes</ng-container>
   </div>
 </div>
 ```
