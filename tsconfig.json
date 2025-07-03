@@ -176,6 +176,12 @@
       "@hmcts/opal-frontend-common/components/govuk/govuk-tabs": [
         "./dist/opal-frontend-common/components/govuk/govuk-tabs"
       ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-tabs/govuk-tabs-list-item": [
+        "./dist/opal-frontend-common/components/govuk/govuk-tabs/govuk-tabs-list-item"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-tabs/govuk-tabs-panel": [
+        "./dist/opal-frontend-common/components/govuk/govuk-tabs/govuk-tabs-panel"
+      ],
       "@hmcts/opal-frontend-common/components/govuk/govuk-tag": [
         "./dist/opal-frontend-common/components/govuk/govuk-tag"
       ],
@@ -267,6 +273,11 @@
         "./dist/opal-frontend-common/services/auth-service/constants"
       ],
       "@hmcts/opal-frontend-common/services/date-service": ["./dist/opal-frontend-common/services/date-service"],
+        
+      "@hmcts/opal-frontend-common/services/date-service/interfaces": [
+        "./dist/opal-frontend-common/services/date-service/interfaces"
+      ],
+
       "@hmcts/opal-frontend-common/services/launch-darkly-service": [
         "./dist/opal-frontend-common/services/launch-darkly-service"
       ],
@@ -340,6 +351,11 @@
       ],
       "@hmcts/opal-frontend-common/validators/over-eighteen": ["./dist/opal-frontend-common/validators/over-eighteen"],
       "@hmcts/opal-frontend-common/validators/past-date": ["./dist/opal-frontend-common/validators/past-date"],
+
+      "@hmcts/opal-frontend-common/validators/pattern-validator": [
+        "./dist/opal-frontend-common/validators/pattern-validator"
+      ],
+
       "@hmcts/opal-frontend-common/validators/special-characters": [
         "./dist/opal-frontend-common/validators/special-characters"
       ],

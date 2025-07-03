@@ -23,7 +23,7 @@ import { CustomAccountInformationItemLabelComponent } from '@hmcts/opal-frontend
 You can use the custom account information item label component in your template as follows:
 
 ```html
-<div opal-lib-custom-account-information-item-label>Account Name:</div>
+<h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
 ```
 
 ## Inputs
