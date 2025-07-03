@@ -7,10 +7,10 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 })
 export class MojButtonMenuItemComponent {
   @Input({ required: true }) itemText!: string;
-  @Output() actionClick = new EventEmitter<boolean>();
+  @Output() actionClick = new EventEmitter<void>();
 
   public handleClick(event: Event) {
     event.preventDefault();
-    this.actionClick.emit(true);
+    this.actionClick.emit();
   }
 }
