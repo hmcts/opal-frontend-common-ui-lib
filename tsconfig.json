@@ -81,6 +81,18 @@
       "@hmcts/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete/interfaces": [
         "./dist/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete/interfaces"
       ],
+      "@hmcts/opal-frontend-common/components/custom/custom-account-information": [
+        "./dist/opal-frontend-common/components/custom/custom-account-information"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item": [
+        "./dist/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item/custom-account-information-item-label": [
+        "./dist/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item/custom-account-information-item-label"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item/custom-account-information-item-value": [
+        "./dist/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item/custom-account-information-item-value"
+      ],
       "@hmcts/opal-frontend-common/components/govuk/govuk-accordion": [
         "./dist/opal-frontend-common/components/govuk/govuk-accordion"
       ],
@@ -283,9 +295,11 @@
         "./dist/opal-frontend-common/services/auth-service/constants"
       ],
       "@hmcts/opal-frontend-common/services/date-service": ["./dist/opal-frontend-common/services/date-service"],
+        
       "@hmcts/opal-frontend-common/services/date-service/interfaces": [
         "./dist/opal-frontend-common/services/date-service/interfaces"
       ],
+
       "@hmcts/opal-frontend-common/services/launch-darkly-service": [
         "./dist/opal-frontend-common/services/launch-darkly-service"
       ],
@@ -359,9 +373,11 @@
       ],
       "@hmcts/opal-frontend-common/validators/over-eighteen": ["./dist/opal-frontend-common/validators/over-eighteen"],
       "@hmcts/opal-frontend-common/validators/past-date": ["./dist/opal-frontend-common/validators/past-date"],
+
       "@hmcts/opal-frontend-common/validators/pattern-validator": [
         "./dist/opal-frontend-common/validators/pattern-validator"
       ],
+
       "@hmcts/opal-frontend-common/validators/special-characters": [
         "./dist/opal-frontend-common/validators/special-characters"
       ],
