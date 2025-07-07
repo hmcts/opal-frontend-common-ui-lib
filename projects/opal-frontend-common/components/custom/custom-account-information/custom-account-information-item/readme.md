@@ -1,6 +1,6 @@
 # Custom Account Information item Component
 
-This Angular component acts as a layout wrapper for a single label–value pair within the `<opal-lib-custom-account-information>` block. It should only be used in combination with `<opal-lib-custom-account-information-item-label>` and `<opal-lib-custom-account-information-item-value>` to enforce consistent styling and alignment across metadata summaries.  
+This Angular component acts as a layout wrapper for a single label–value pair within the `<opal-lib-custom-account-information>` block. It should only be used in combination with `<opal-lib-custom-account-information-item-label>` and `<opal-lib-custom-account-information-item-value>` to enforce consistent styling and alignment across metadata summaries.
 
 ## Table of Contents
 
@@ -26,16 +26,17 @@ import { CustomAccountInformationItemValueComponent } from '@hmcts/opal-frontend
 You can use the custom account information item component in your template as follows:
 
 ```html
-<opal-lib-custom-account-information-item>  
-  <h3 opal-lib-custom-account-information-item-label>Account name:</h3>  
-  <p opal-lib-custom-account-information-item-value>Dave Smith</p>  
-</opal-lib-custom-account-information-item>  
-
+<opal-lib-custom-account-information-item govukGridClass="govuk-grid-column-one-fifth">
+  <h3 opal-lib-custom-account-information-item-label>Account name:</h3>
+  <p opal-lib-custom-account-information-item-value>Dave Smith</p>
+</opal-lib-custom-account-information-item>
 ```
 
 ## Inputs
 
-There are no input fields for this component.
+| Input            | Type     | Default                       | Description                                                    |
+| ---------------- | -------- | ----------------------------- | -------------------------------------------------------------- |
+| `govukGridClass` | `string` | `govuk-grid-column-one-fifth` | Sets the grid layout of the item using gds grid-column classes |
 
 ## Outputs
 
