@@ -60,6 +60,18 @@
       "@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table-pagination": [
         "./dist/opal-frontend-common/components/abstract/abstract-sortable-table-pagination"
       ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-tab-data": [
+        "./dist/opal-frontend-common/components/abstract/abstract-tab-data"
+      ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-table-filter": [
+        "./dist/opal-frontend-common/components/abstract/abstract-table-filter"
+      ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-table-filter/interfaces": [
+        "./dist/opal-frontend-common/components/abstract/abstract-table-filter/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-table-filter/types": [
+        "./dist/opal-frontend-common/components/abstract/abstract-table-filter/types"
+      ],
       "@hmcts/opal-frontend-common/components/abstract/interfaces": [
         "./dist/opal-frontend-common/components/abstract/interfaces"
       ],
@@ -191,6 +203,30 @@
       ],
       "@hmcts/opal-frontend-common/components/moj/moj-date-picker": [
         "./dist/opal-frontend-common/components/moj/moj-date-picker"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-filter": [
+        "./dist/opal-frontend-common/components/moj/moj-filter"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-filter/moj-filter-panel": [
+        "./dist/opal-frontend-common/components/moj/moj-filter/moj-filter-panel"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-filter/moj-filter-panel/moj-filter-panel-header": [
+        "./dist/opal-frontend-common/components/moj/moj-filter/moj-filter-panel/moj-filter-panel-header"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-filter/moj-filter-panel/moj-filter-panel-option": [
+        "./dist/opal-frontend-common/components/moj/moj-filter/moj-filter-panel/moj-filter-panel-option"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-filter/moj-filter-panel/moj-filter-panel-option/moj-filter-panel-option-form-group-item": [
+        "./dist/opal-frontend-common/components/moj/moj-filter/moj-filter-panel/moj-filter-panel-option/moj-filter-panel-option-form-group-item"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-filter/moj-filter-panel/moj-filter-panel-option/moj-filter-panel-option-form-group-keyword": [
+        "./dist/opal-frontend-common/components/moj/moj-filter/moj-filter-panel/moj-filter-panel-option/moj-filter-panel-option-form-group-keyword"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-filter/moj-filter-panel/moj-filter-panel-selected": [
+        "./dist/opal-frontend-common/components/moj/moj-filter/moj-filter-panel/moj-filter-panel-selected"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-filter/moj-filter-panel/moj-filter-panel-selected/moj-filter-panel-selected-tag": [
+        "./dist/opal-frontend-common/components/moj/moj-filter/moj-filter-panel/moj-filter-panel-selected/moj-filter-panel-selected-tag"
       ],
       "@hmcts/opal-frontend-common/components/moj/moj-header": [
         "./dist/opal-frontend-common/components/moj/moj-header"

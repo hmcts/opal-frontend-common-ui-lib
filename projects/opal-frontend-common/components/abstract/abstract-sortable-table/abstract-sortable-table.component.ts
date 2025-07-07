@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, inject, signal } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, effect, inject, signal } from '@angular/core';
 import {
   IAbstractSortState,
   IAbstractTableData,
@@ -8,14 +8,16 @@ import {
   SortableValuesType,
   SortDirectionType,
 } from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/types';
+import { AbstractTableFilterComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-table-filter';
 
 @Component({
   template: '',
 })
-export abstract class AbstractSortableTableComponent implements OnInit {
+export abstract class AbstractSortableTableComponent extends AbstractTableFilterComponent implements OnInit {
   private readonly sortService = inject(SortService);
-
-  public abstractTableDataSignal = signal<IAbstractTableData<SortableValuesType>[]>([]);
+  public override displayTableDataSignal = signal<IAbstractTableData<SortableValuesType>[]>([]);
+  public override filteredTableDataSignal = signal<IAbstractTableData<SortableValuesType>[]>([]);
+  public sortedTableDataSignal = signal<IAbstractTableData<SortableValuesType>[]>([]);
   public abstractExistingSortState: IAbstractSortState | null = null;
   public sortStateSignal = signal<IAbstractSortState>({});
   public sortedColumnTitleSignal = signal<string>('');
@@ -51,7 +53,8 @@ export abstract class AbstractSortableTableComponent implements OnInit {
    */
   private initialiseSortState(): void {
     const existingSortState = this.abstractExistingSortState;
-    const initialSortState = existingSortState || this.createSortState(this.abstractTableDataSignal());
+    const initialSortState = existingSortState || this.createSortState(this.displayTableDataSignal());
+    this.applyFilterState();
 
     this.sortStateSignal.set(initialSortState);
 
@@ -94,11 +97,11 @@ export abstract class AbstractSortableTableComponent implements OnInit {
   ): IAbstractTableData<SortableValuesType>[] {
     return sortType === 'ascending'
       ? (this.sortService.sortObjectArrayAsc(
-          this.abstractTableDataSignal(),
+          this.filteredTableDataSignal(),
           key,
         ) as IAbstractTableData<SortableValuesType>[])
       : (this.sortService.sortObjectArrayDesc(
-          this.abstractTableDataSignal(),
+          this.filteredTableDataSignal(),
           key,
         ) as IAbstractTableData<SortableValuesType>[]);
   }
@@ -147,16 +150,78 @@ export abstract class AbstractSortableTableComponent implements OnInit {
     const sortedData = this.getSortedTableData(key, sortType);
 
     // Update the table data signal
-    this.abstractTableDataSignal.set(sortedData);
+    this.sortedTableDataSignal.set(sortedData);
 
     // Emit the updated sort state
     this.abstractSortState.emit(this.sortStateSignal());
   }
 
   /**
+   * Synchronizes the sorted table data with the current filter and sort state.
+   *
+   * This effect observes changes to the filtered table data and the sort state signals.
+   * If no active sort key is found (i.e., no sorting is applied), it sets the sorted table data
+   * to a shallow copy of the filtered data. Otherwise, sorting logic should be applied elsewhere.
+   *
+   * @protected
+   */
+  protected syncSortedDataEffect = effect(() => {
+    const filtered = this.filteredTableDataSignal();
+    const currentSort = this.sortStateSignal();
+
+    const activeSortKey = Object.keys(currentSort).find((k) => currentSort[k] !== 'none');
+
+    if (!activeSortKey) {
+      // No sort applied – use filtered data directly
+      this.sortedTableDataSignal.set([...filtered]);
+    }
+  });
+
+  /**
    * Lifecycle hook to initialise the sort state.
    */
   public ngOnInit(): void {
     this.initialiseSortState();
+  }
+  /**
+   * Applies the current filters to the table data and updates the sorted data accordingly.
+   *
+   * This method overrides the parent implementation to additionally handle sorting.
+   * If there is an active sort key, it applies the corresponding sort to the filtered data.
+   * If no sort key is active, it simply updates the sorted data to match the filtered data.
+   *
+   * @override
+   */
+  public override onApplyFilters(): void {
+    super.onApplyFilters();
+
+    const key = this.sortedColumnTitleSignal();
+    const sortType = this.sortedColumnDirectionSignal();
+
+    if (!key || sortType === 'none') {
+      this.sortedTableDataSignal.set([...this.filteredTableDataSignal()]);
+    } else {
+      this.onSortChange({ key, sortType });
+    }
+  }
+
+  /**
+   * Clears all filters applied to the table and restores the data to its unfiltered state.
+   * If a sort is currently active, re-applies the sort after clearing filters.
+   * Otherwise, resets the sorted table data to match the filtered data.
+   *
+   * @override
+   */
+  public override clearAllFilters(): void {
+    super.clearAllFilters();
+
+    const key = this.sortedColumnTitleSignal();
+    const sortType = this.sortedColumnDirectionSignal();
+
+    if (!key || sortType === 'none') {
+      this.sortedTableDataSignal.set([...this.filteredTableDataSignal()]);
+    } else {
+      this.onSortChange({ key, sortType });
+    }
   }
 }
