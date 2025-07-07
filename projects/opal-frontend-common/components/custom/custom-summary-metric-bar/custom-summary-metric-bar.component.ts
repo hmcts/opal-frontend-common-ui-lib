@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'opal-lib-custom-summary-metric-bar, [opal-lib-custom-summary-metric-bar]',
@@ -6,4 +6,6 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   styleUrl: './custom-summary-metric-bar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomSummaryMetricBarComponent {}
+export class CustomSummaryMetricBarComponent {
+  @HostBinding('class') hostClass = 'govuk-grid-row';
+}

@@ -10,9 +10,10 @@ export type ITEM_COLOURS = 'light-grey' | 'light-blue' | 'blue';
 })
 export class CustomSummaryMetricBarItemComponent {
   @Input() itemColour: ITEM_COLOURS = 'light-grey';
+  @Input() govukGridClass: string = 'govuk-grid-column-one-fifth';
 
   @HostBinding('class')
   get hostClasses(): string {
-    return `${this.itemColour}-item`;
+    return this.govukGridClass;
   }
 }
