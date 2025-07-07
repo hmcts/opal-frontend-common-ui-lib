@@ -27,8 +27,8 @@ You can use the custom account information item component in your template as fo
 
 ```html
 <opal-lib-custom-account-information-item>  
-  <opal-lib-custom-account-information-item-label>Account name:</opal-lib-custom-account-information-item-label>  
-  <opal-lib-custom-account-information-item-value>Dave Smith</opal-lib-custom-account-information-item-value>  
+  <h3 opal-lib-custom-account-information-item-label>Account name:</h3>  
+  <p opal-lib-custom-account-information-item-value>Dave Smith</p>  
 </opal-lib-custom-account-information-item>  
 
 ```
