@@ -25,6 +25,8 @@ import { CustomAccountInformationItemValueComponent } from '@hmcts/opal-frontend
 
 You can use the custom account information component in your template as follows:
 
+Example of one-third Layout:
+
 ```html
 <div opal-lib-custom-account-information>
   <opal-lib-custom-account-information-item>
@@ -36,6 +38,56 @@ You can use the custom account information component in your template as follows
     <p opal-lib-custom-account-information-item-value>John Doe</p>
   </opal-lib-custom-account-information-item>
   <opal-lib-custom-account-information-item>
+    <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
+    <p opal-lib-custom-account-information-item-value>John Doe</p>
+  </opal-lib-custom-account-information-item>
+</div>
+```
+
+Example of one-quarter Layout:
+
+```html
+<div opal-lib-custom-account-information>
+  <opal-lib-custom-account-information-item govukGridClass="govuk-grid-column-one-quarter">
+    <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
+    <p opal-lib-custom-account-information-item-value>Dave Smith</p>
+  </opal-lib-custom-account-information-item>
+  <opal-lib-custom-account-information-itemg govukGridClass="govuk-grid-column-one-quarter">
+    <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
+    <p opal-lib-custom-account-information-item-value>John Doe</p>
+  </opal-lib-custom-account-information-itemg>
+  <opal-lib-custom-account-information-item govukGridClass="govuk-grid-column-one-quarter">
+    <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
+    <p opal-lib-custom-account-information-item-value>John Doe</p>
+  </opal-lib-custom-account-information-item>
+  <opal-lib-custom-account-information-item govukGridClass="govuk-grid-column-one-quarter">
+    <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
+    <p opal-lib-custom-account-information-item-value>John Doe</p>
+  </opal-lib-custom-account-information-item>
+</div>
+```
+
+Example of One-fifth Layout:
+
+```html
+<div opal-lib-custom-account-information>
+  <opal-lib-custom-account-information-item govukGridClass="govuk-grid-column-one-fifth">
+    <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
+    <p opal-lib-custom-account-information-item-value>Dave Smith</p>
+  </opal-lib-custom-account-information-item>
+  <opal-lib-custom-account-information-itemg govukGridClass="govuk-grid-column-one-fifth">
+    <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
+    <p opal-lib-custom-account-information-item-value>John Doe</p>
+  </opal-lib-custom-account-information-itemg>
+  <opal-lib-custom-account-information-item govukGridClass="govuk-grid-column-one-fifth">
+    <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
+    <p opal-lib-custom-account-information-item-value>John Doe</p>
+  </opal-lib-custom-account-information-item>
+  <opal-lib-custom-account-information-item govukGridClass="govuk-grid-column-one-fifth">
+    <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
+    <p opal-lib-custom-account-information-item-value>John Doe</p>
+  </opal-lib-custom-account-information-item>
+  <opal-lib-custom-account-information-item govukGridClass="govuk-grid-column-one-fifth">
     <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
     <p opal-lib-custom-account-information-item-value>John Doe</p>
   </opal-lib-custom-account-information-item>

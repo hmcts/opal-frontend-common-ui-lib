@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, HostBinding } from '@angular/core';
+import { Component, ChangeDetectionStrategy, HostBinding, Input } from '@angular/core';
 
 @Component({
   selector: 'opal-lib-custom-account-information-item',
@@ -6,5 +6,10 @@ import { Component, ChangeDetectionStrategy, HostBinding } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomAccountInformationItemComponent {
-  @HostBinding('class') hostClass = 'govuk-grid-column-one-fifth';
+  @Input({ required: false }) govukGridClass: string = 'govuk-grid-column-one-third';
+  
+  @HostBinding('class')
+  get hostClass(): string {
+    return this.govukGridClass;
+  }
 }
