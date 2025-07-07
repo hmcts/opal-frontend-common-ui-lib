@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, HostBinding, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
-  selector: 'opal-lib-moj-button-menu , [opal-lib-moj-button-menu]',
+  selector: 'opal-lib-moj-button-menu',
   templateUrl: './moj-button-menu.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
