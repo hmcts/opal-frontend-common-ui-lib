@@ -20,8 +20,17 @@ describe('CustomAccountInformationItemComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should assign the CSS class to the host element', () => {
-    const element: HTMLElement = fixture.nativeElement;
-    expect(element.classList).toContain('govuk-grid-column-one-fifth');
+  it('should apply the default host class', () => {
+    fixture.detectChanges();
+    const hostEl: HTMLElement = fixture.nativeElement;
+    expect(component.govukGridClass).toBe('govuk-grid-column-one-third');
+    expect(hostEl.classList).toContain('govuk-grid-column-one-third');
+  });
+
+  it('should update the host class when govukGridClass changes', () => {
+    component.govukGridClass = 'custom-class';
+    fixture.detectChanges();
+    const hostEl: HTMLElement = fixture.nativeElement;
+    expect(hostEl.classList).toContain('custom-class');
   });
 });
