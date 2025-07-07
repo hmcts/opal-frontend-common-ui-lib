@@ -22,6 +22,6 @@ describe('CustomAccountInformationItemComponent', () => {
 
   it('should assign the CSS class to the host element', () => {
     const element: HTMLElement = fixture.nativeElement;
-    expect(element.classList).toContain('govuk-grid-column-one-quarter');
+    expect(element.classList).toContain('govuk-grid-column-one-fifth');
   });
 });

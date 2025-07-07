@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "license": "MIT",
   "peerDependencies": {
     "@angular/common": "^18.2.0 || ^19.0.0",
@@ -58,6 +58,15 @@
     },
     "./components/abstract/abstract-tab-data": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-tab-data.mjs"
+    },
+    "./components/abstract/abstract-table-filter": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-table-filter.mjs"
+    },
+    "./components/abstract/abstract-table-filter/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-table-filter-interfaces.mjs"
+    },
+    "./components/abstract/abstract-table-filter/types": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-table-filter-types.mjs"
     },
     "./components/abstract/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-interfaces.mjs"
@@ -208,6 +217,30 @@
     },
     "./components/moj/moj-date-picker": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-date-picker.mjs"
+    },
+    "./components/moj/moj-filter": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-filter.mjs"
+    },
+    "./components/moj/moj-filter/moj-filter-panel": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-filter-moj-filter-panel.mjs"
+    },
+    "./components/moj/moj-filter/moj-filter-panel/moj-filter-panel-header": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-filter-moj-filter-panel-moj-filter-panel-header.mjs"
+    },
+    "./components/moj/moj-filter/moj-filter-panel/moj-filter-panel-option": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-filter-moj-filter-panel-moj-filter-panel-option.mjs"
+    },
+    "./components/moj/moj-filter/moj-filter-panel/moj-filter-panel-option/moj-filter-panel-option-form-group-item": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-filter-moj-filter-panel-moj-filter-panel-option-moj-filter-panel-option-form-group-item.mjs"
+    },
+    "./components/moj/moj-filter/moj-filter-panel/moj-filter-panel-option/moj-filter-panel-option-form-group-keyword": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-filter-moj-filter-panel-moj-filter-panel-option-moj-filter-panel-option-form-group-keyword.mjs"
+    },
+    "./components/moj/moj-filter/moj-filter-panel/moj-filter-panel-selected": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-filter-moj-filter-panel-moj-filter-panel-selected.mjs"
+    },
+    "./components/moj/moj-filter/moj-filter-panel/moj-filter-panel-selected/moj-filter-panel-selected-tag": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-filter-moj-filter-panel-moj-filter-panel-selected-moj-filter-panel-selected-tag.mjs"
     },
     "./components/moj/moj-header": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-header.mjs"

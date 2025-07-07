@@ -6,5 +6,5 @@ import { Component, ChangeDetectionStrategy, HostBinding } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomAccountInformationItemComponent {
-  @HostBinding('class') hostClass = 'govuk-grid-column-one-quarter';
+  @HostBinding('class') hostClass = 'govuk-grid-column-one-fifth';
 }

@@ -1,6 +1,6 @@
 # Abstract Sortable Table Component
 
-This Angular component serves as a foundational base for managing table sorting functionality. It provides reusable logic for handling table data sorting and is designed to be extended by other table components.
+This Angular component serves as a foundational base for managing table sorting functionality. It provides reusable logic for handling table data sorting and is designed to be extended by other table components. It inherits from the `AbstractTableFilterComponent` to provide additional filtering capabilities alongside sorting.
 
 ## Table of Contents
 
@@ -23,7 +23,7 @@ import { AbstractSortableTableComponent } from '@hmcts/opal-frontend-common/abst
 
 ## Usage
 
-This component is designed to be used as a base class for managing sorting in a reusable and scalable way.
+This component is designed to be used as a base class for managing sorting in a reusable and scalable way. It extends `AbstractTableFilterComponent` to combine filtering and sorting logic.
 
 ### Example Usage:
 
@@ -36,7 +36,7 @@ import { AbstractSortableTableComponent } from '@hmcts/opal-frontend-common/abst
   templateUrl: './sortable-table.component.html',
 })
 export class SortableTableComponent extends AbstractSortableTableComponent {
-  public abstractTableDataSignal = signal([
+  public sortedTableDataSignal = signal([
     { name: 'Alice', age: 30 },
     { name: 'Bob', age: 25 },
   ]);
@@ -69,10 +69,10 @@ export class SortableTableComponent extends AbstractSortableTableComponent {
     </th>
   </ng-container>
   <ng-container row>
-    @for (row of abstractTableDataSignal(); track row.name) {
+    @for (row of sortedTableDataSignal(); track row.name) {
     <tr opal-lib-moj-sortable-table-row>
       <td opal-lib-moj-sortable-table-row-data id="name">{{ row.name }}</td>
-      <td opal-lib-moj-sortable-table-row-data id="defendant">{{ row.age }}</a>
+      <td opal-lib-moj-sortable-table-row-data id="defendant">{{ row.age }}</td>
     </tr>
     }
   </ng-container>
@@ -89,11 +89,13 @@ export class SortableTableComponent extends AbstractSortableTableComponent {
 
 ### Signals
 
-| Signal                    | Type                           | Description                                |
-| ------------------------- | ------------------------------ | ------------------------------------------ |
-| `abstractTableDataSignal` | `signal<IAbstractTableData[]>` | The table data to be displayed and sorted. |
+| Signal                  | Type                           | Description                                                         |
+| ----------------------- | ------------------------------ | ------------------------------------------------------------------- |
+| `sortedTableDataSignal` | `signal<IAbstractTableData[]>` | The final filtered and sorted dataset to be displayed in the table. |
 
-> **Note**: `abstractTableDataSignal` is an Angular signal. Changing this signal triggers re-sorting of the table data and updates the component’s rendering. Ensure updates to `abstractTableDataSignal` are handled reactively.
+> **Note**: `sortedTableDataSignal` is an Angular signal. Changing this signal triggers re-sorting of the table data and updates the component’s rendering. Ensure updates to `sortedTableDataSignal` are handled reactively.
+
+> **Note**: `sortedTableDataSignal` holds the final filtered and sorted dataset that is rendered in the table after applying sorting and filtering logic.
 
 ## Outputs
 
@@ -169,7 +171,7 @@ These mocks can be used in unit tests to validate table sorting behaviour.
 
 ## Testing
 
-Unit tests for this component can be found in the `abstract-sortable-table.component.spec.ts` file. To run the tests, use:
+Unit tests for this component can be found in the `abstractSortableTable.component.spec.ts` file. To run the tests, use:
 
 ```bash
 ng test
@@ -190,10 +192,10 @@ import { AbstractSortableTableDataMock } from '@hmcts/opal-frontend-common/abstr
 
 it('should sort data by name in ascending order', () => {
   const mockData = AbstractSortableTableDataMock.getMockData();
-  component.abstractTableDataSignal.set(mockData);
+  component.setTableData(mockData);
   component.onSortChange({ key: 'name', sortType: 'ascending' });
 
-  expect(component.abstractTableDataSignal()).toEqual([
+  expect(component.sortedTableDataSignal()).toEqual([
     { name: 'Alice', age: 30 },
     { name: 'Bob', age: 25 },
   ]);
