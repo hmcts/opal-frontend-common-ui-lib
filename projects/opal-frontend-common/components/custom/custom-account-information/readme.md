@@ -68,6 +68,7 @@ Example of one-quarter layout:
 ```
 
 Example of one-fifth Layout:
+"govuk-grid-column-one-fifth" is a custom style developed in [styles](projects/opal-frontend-common/styles/styles.scss).
 
 ```html
 <div opal-lib-custom-account-information>
