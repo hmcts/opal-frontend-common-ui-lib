@@ -1,0 +1,5 @@
+{
+  "sideEffects": false,
+  "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-moj-moj-filter.mjs",
+  "typings": "../../../../dist/opal-frontend-common/components/moj/moj-filter/index.d.ts"
+}

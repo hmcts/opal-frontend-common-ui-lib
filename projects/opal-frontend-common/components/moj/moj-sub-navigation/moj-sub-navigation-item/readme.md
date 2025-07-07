@@ -1,5 +1,3 @@
----
-
 # MOJ Sub Navigation Item Component
 
 This Angular component represents an individual item in the MOJ sub-navigation, used to create links within a sub-navigation bar for secondary navigation.

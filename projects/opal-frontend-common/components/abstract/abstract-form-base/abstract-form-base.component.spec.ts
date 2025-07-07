@@ -690,29 +690,29 @@ describe('AbstractFormBaseComponent', () => {
     expect(component.formErrorSummaryMessage).toEqual([]);
   });
 
-  it('should navigate to account-details page on handleRoute', () => {
+  it('should test handleRoute', () => {
     if (!component) {
       fail('component returned null');
       return;
     }
 
     const routerSpy = spyOn(component['router'], 'navigate');
-    component.handleRoute('test');
+    component['handleRoute']('test');
     expect(routerSpy).toHaveBeenCalledWith(['test'], { relativeTo: component['activatedRoute'].parent });
   });
 
-  it('should navigate to relative route', () => {
+  it('should test handleRoute with no activated route', () => {
     if (!component) {
       fail('component returned null');
       return;
     }
 
     const routerSpy = spyOn(component['router'], 'navigate');
-    component.handleRoute('test', true);
-    expect(routerSpy).toHaveBeenCalledWith(['test']);
+    component['handleRoute']('test', true);
+    expect(routerSpy).toHaveBeenCalledWith(['test'], {});
   });
 
-  it('should navigate to relative route with event', () => {
+  it('should test handleRoute with event', () => {
     if (!component) {
       fail('component returned null');
       return;
@@ -721,9 +721,26 @@ describe('AbstractFormBaseComponent', () => {
     const routerSpy = spyOn(component['router'], 'navigate');
     const event = jasmine.createSpyObj('event', ['preventDefault']);
 
-    component.handleRoute('test', true, event);
+    component['handleRoute']('test', false, event);
+    expect(routerSpy).toHaveBeenCalledWith(['test'], { relativeTo: component['activatedRoute'].parent });
+    expect(event.preventDefault).toHaveBeenCalled();
+  });
 
-    expect(routerSpy).toHaveBeenCalledWith(['test']);
+  it('should test handleRoute with routeData', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const routerSpy = spyOn(component['router'], 'navigate');
+    const event = jasmine.createSpyObj('event', ['preventDefault']);
+    const routeData = { someData: 'test' };
+
+    component['handleRoute']('test', false, event, routeData);
+    expect(routerSpy).toHaveBeenCalledWith(['test'], {
+      relativeTo: component['activatedRoute'].parent,
+      state: routeData,
+    });
     expect(event.preventDefault).toHaveBeenCalled();
   });
 
@@ -874,5 +891,148 @@ describe('AbstractFormBaseComponent', () => {
 
     expect(component['utilsService'].upperCaseAllLetters).toHaveBeenCalledWith('lowercase text');
     expect(mockInputElement.value).toBe('LOWERCASE TEXT');
+  });
+
+  it('should focus and scroll to the error summary if present', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const errorSummaryElement = document.createElement('div');
+    errorSummaryElement.classList.add('govuk-error-summary');
+    document.body.appendChild(errorSummaryElement);
+    // Spy on focus after appending to the DOM
+    spyOn(errorSummaryElement, 'focus');
+
+    const scrollSpy = spyOn(component['utilsService'], 'scrollToTop');
+
+    component['focusAndScrollToErrorSummary']();
+
+    expect(errorSummaryElement.focus).toHaveBeenCalledWith({ preventScroll: true });
+    expect(scrollSpy).toHaveBeenCalled();
+
+    document.body.removeChild(errorSummaryElement);
+  });
+
+  it('should call focusAndScrollToErrorSummary when form is invalid on submit', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    // Make form invalid
+    component.form.get('court')?.setValue(null);
+    component.form.markAsTouched();
+
+    // Provide a valid fieldErrors object for 'court'
+    component['fieldErrors'] = {
+      court: {
+        required: {
+          message: 'Select a court',
+          priority: 1,
+        },
+      },
+    };
+
+    const errorSummary = document.createElement('div');
+    errorSummary.classList.add('govuk-error-summary');
+    document.body.appendChild(errorSummary);
+    spyOn(errorSummary, 'focus');
+
+    const scrollSpy = spyOn(component['utilsService'], 'scrollToTop');
+
+    component.handleFormSubmit(new SubmitEvent('submit'));
+
+    expect(errorSummary.focus).toHaveBeenCalledWith({ preventScroll: true });
+    expect(scrollSpy).toHaveBeenCalled();
+
+    document.body.removeChild(errorSummary);
+  });
+
+  it('should update an existing control with new validators', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const controlName = 'surname';
+    component.form.get(controlName)?.setValidators([]); // clear validators
+
+    component['updateControl'](controlName, [Validators.required]);
+
+    const control = component.form.get(controlName);
+    expect(control?.hasValidator(Validators.required)).toBeTrue();
+  });
+
+  it('should create a control if it does not exist when updating validators', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const controlName = 'newControl';
+    component['updateControl'](controlName, [Validators.required]);
+
+    const control = component.form.get(controlName);
+    expect(control).toBeDefined();
+    expect(control?.hasValidator(Validators.required)).toBeTrue();
+  });
+
+  it('should emit formSubmit with nestedFlow true when valid form is submitted via nested-flow button', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const mockFormData = ABSTRACT_FORM_BASE_FORM_STATE_MOCK;
+    component['rePopulateForm'](mockFormData);
+    component.form.markAsDirty();
+
+    const submitEvent = new SubmitEvent('submit', {
+      bubbles: true,
+      cancelable: true,
+      composed: true,
+    });
+
+    Object.defineProperty(submitEvent, 'submitter', {
+      value: { className: 'nested-flow' },
+    });
+
+    const emitSpy = spyOn(component['formSubmit'], 'emit');
+
+    component.handleFormSubmit(submitEvent);
+
+    expect(emitSpy).toHaveBeenCalledWith({
+      formData: component.form.value,
+      nestedFlow: true,
+    });
+  });
+
+  it('should emit formSubmit with nestedFlow false when event.submitter is undefined', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const mockFormData = ABSTRACT_FORM_BASE_FORM_STATE_MOCK;
+    component['rePopulateForm'](mockFormData);
+    component.form.markAsDirty();
+
+    const submitEvent = new SubmitEvent('submit');
+
+    // Remove submitter
+    Object.defineProperty(submitEvent, 'submitter', {
+      value: undefined,
+    });
+
+    const emitSpy = spyOn(component['formSubmit'], 'emit');
+
+    component.handleFormSubmit(submitEvent);
+
+    expect(emitSpy).toHaveBeenCalledWith({
+      formData: component.form.value,
+      nestedFlow: false,
+    });
   });
 });
