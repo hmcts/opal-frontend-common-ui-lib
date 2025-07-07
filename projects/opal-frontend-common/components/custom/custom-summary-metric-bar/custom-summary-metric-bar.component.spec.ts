@@ -19,4 +19,9 @@ describe('CustomSummaryMetricBarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have the host binding class "govuk-grid-row" on its element', () => {
+    const element: HTMLElement = fixture.nativeElement;
+    expect(element.classList.contains('govuk-grid-row')).toBeTrue();
+  });
 });

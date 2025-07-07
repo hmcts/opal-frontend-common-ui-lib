@@ -3,7 +3,6 @@ import { Component, ChangeDetectionStrategy, HostBinding } from '@angular/core';
 @Component({
   selector: 'opal-lib-custom-summary-metric-bar, [opal-lib-custom-summary-metric-bar]',
   templateUrl: './custom-summary-metric-bar.component.html',
-  styleUrl: './custom-summary-metric-bar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomSummaryMetricBarComponent {

@@ -22,22 +22,16 @@ describe('CustomSummaryMetricBarItemComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have default host class "light-grey-item"', () => {
-    expect(component.hostClasses).toBe('light-grey-item');
-    expect(hostEl.className).toContain('light-grey-item');
+  it('should use the default host class from itemClasses ("govuk-grid-column-one-fifth")', () => {
+    expect(component.itemClasses).toBe('govuk-grid-column-one-fifth');
+    expect(component.hostClasses).toBe('govuk-grid-column-one-fifth');
+    expect(hostEl.className).toContain('govuk-grid-column-one-fifth');
   });
 
-  it('should update host class when itemColour is set to "blue"', () => {
-    component.itemColour = 'blue';
+  it('should update host class when itemClasses is changed', () => {
+    component.itemClasses = 'custom-class';
     fixture.detectChanges();
-    expect(component.hostClasses).toBe('blue-item');
-    expect(hostEl.className).toContain('blue-item');
-  });
-
-  it('should update host class when itemColour is set to "light-blue"', () => {
-    component.itemColour = 'light-blue';
-    fixture.detectChanges();
-    expect(component.hostClasses).toBe('light-blue-item');
-    expect(hostEl.className).toContain('light-blue-item');
+    expect(component.hostClasses).toBe('custom-class');
+    expect(hostEl.className).toContain('custom-class');
   });
 });

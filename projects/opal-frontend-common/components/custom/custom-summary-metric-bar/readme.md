@@ -25,6 +25,8 @@ import { CustomSummaryMetricBarComponent } from '@hmcts/opal-frontend-common/com
 
 You can use the Custom Metric Bar Component in your template as follows:
 
+Example of one-fifth Layout:
+
 ```html
 <div opal-lib-custom-summary-metric-bar>
   <opal-lib-custom-summary-metric-bar-item itemColour="light-grey">
@@ -44,6 +46,29 @@ You can use the Custom Metric Bar Component in your template as follows:
     <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
   </opal-lib-custom-summary-metric-bar-item>
   <opal-lib-custom-summary-metric-bar-item itemColour="blue">
+    <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
+    <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
+  </opal-lib-custom-summary-metric-bar-item>
+</div>
+```
+
+Example of one-quarter layout:
+
+```html
+<div opal-lib-custom-summary-metric-bar>
+  <opal-lib-custom-summary-metric-bar-item itemColour="light-grey" itemClasses="govuk-grid-column-one-quarter">
+    <div opal-lib-custom-summary-metric-bar-item-label>Metric 1:</div>
+    <div opal-lib-custom-summary-metric-bar-item-value>Value 1</div>
+  </opal-lib-custom-summary-metric-bar-item>
+  <opal-lib-custom-summary-metric-bar-item itemColour="light-blue" itemClasses="govuk-grid-column-one-quarter">
+    <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
+    <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
+  </opal-lib-custom-summary-metric-bar-item>
+  <opal-lib-custom-summary-metric-bar-item itemColour="light-blue" itemClasses="govuk-grid-column-one-quarter">
+    <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
+    <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
+  </opal-lib-custom-summary-metric-bar-item>
+  <opal-lib-custom-summary-metric-bar-item itemColour="light-blue" itemClasses="govuk-grid-column-one-quarter">
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
   </opal-lib-custom-summary-metric-bar-item>

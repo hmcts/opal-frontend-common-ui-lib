@@ -26,6 +26,8 @@ You can use the Custom Summary Metric Bar Item Label component in your template 
 <div opal-lib-custom-summary-metric-bar-item-label>Metric 1:</div>
 ```
 
+The component uses defaulted govuk classes to remove margin and set font size and weight using this GDS class 'govuk-!-font-size-19 govuk-!-font-weight-bold govuk-!-margin-0 govuk-body'.
+
 ## Inputs
 
 There are no custom inputs for this component.
