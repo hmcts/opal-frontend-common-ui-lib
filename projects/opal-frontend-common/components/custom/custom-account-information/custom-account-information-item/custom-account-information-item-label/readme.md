@@ -26,6 +26,8 @@ You can use the custom account information item label component in your template
 <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
 ```
 
+The component uses defaulted govuk classes to remove margin and set font size and weight using this GDS class 'govuk-body govuk-!-font-size-16 govuk-!-font-weight-bold govuk-!-margin-0'.
+
 ## Inputs
 
 There are no input fields for this component.

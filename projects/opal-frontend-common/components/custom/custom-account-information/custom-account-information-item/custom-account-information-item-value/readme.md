@@ -26,6 +26,8 @@ You can use the custom account information item value component in your template
 <p opal-lib-custom-account-information-item-value>Dave Smith</p>
 ```
 
+The component uses defaulted govuk classes to remove margin and set font size and weight using this GDS class 'govuk-body govuk-!-font-size-16 govuk-!-margin-0'.
+
 ## Inputs
 
 There are no input fields for this component.
