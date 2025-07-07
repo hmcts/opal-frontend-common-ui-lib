@@ -1,0 +1,5 @@
+{
+  "sideEffects": false,
+  "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-moj-moj-filter-moj-filter-panel-moj-filter-panel-option-moj-filter-panel-option-form-group-keyword.mjs",
+  "typings": "../../../../dist/opal-frontend-common/components/moj/moj-filter/moj-filter-panel/moj-filter-panel-option/moj-filter-panel-option-form-group-keyword/index.d.ts"
+}

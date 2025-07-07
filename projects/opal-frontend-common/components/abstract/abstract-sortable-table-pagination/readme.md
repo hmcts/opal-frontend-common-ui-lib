@@ -1,6 +1,6 @@
 # Abstract Sortable Table Pagination Component
 
-This Angular component extends the functionality of the `AbstractSortableTableComponent` to include pagination capabilities. It provides reusable logic for handling table data sorting and pagination, making it ideal for components that require both functionalities.
+This Angular component extends the functionality of the `AbstractTableFilterComponent` to include pagination capabilities. It provides reusable logic for handling table data sorting and pagination, making it ideal for components that require both functionalities. It inherits sorting logic from `AbstractSortableTableComponent` and uses filtered and sorted data for pagination.
 
 ## Table of Contents
 
@@ -23,11 +23,11 @@ import { AbstractSortableTablePaginationComponent } from '@hmcts/opal-frontend-c
 
 ## Usage
 
-This component is designed to be used as a base class for managing sorting and pagination in a reusable and scalable way.
+This component is designed to be used as a base class for managing sorting and pagination in a reusable and scalable way. It inherits sorting capabilities from `AbstractSortableTableComponent` and applies pagination on the filtered and sorted dataset.
 
 ### Dynamic Data
 
-If the table data is fetched asynchronously, ensure that `abstractTableDataSignal` is updated reactively:
+If the table data is fetched asynchronously, ensure that `sortedTableDataSignal` is updated reactively:
 
 ```typescript
 fetchData(): void {
@@ -37,7 +37,7 @@ fetchData(): void {
   fetch('/api/data')
     .then((response) => response.json())
     .then((data) => {
-      this.abstractTableDataSignal.set(data);
+      this.sortedTableDataSignal.set(data);
       this.isLoading = false;
     })
     .catch((err) => {
@@ -70,7 +70,7 @@ The `app-govuk-pagination` component renders pagination controls. Ensure that th
 })
 export class SortableTablePaginationComponent extends AbstractSortableTablePaginationComponent {
   // Define the full dataset for the table (Angular Signal for reactivity)
-  public abstractTableDataSignal = signal([
+  public sortedTableDataSignal = signal([
     { name: 'Alice', age: 30 },
     { name: 'Bob', age: 25 },
     { name: 'Charlie', age: 35 },
@@ -117,16 +117,16 @@ export class SortableTablePaginationComponent extends AbstractSortableTablePagin
     @for (row of paginatedTableDataComputed(); track row.name) {
     <tr opal-lib-moj-sortable-table-row>
       <td opal-lib-moj-sortable-table-row-data id="name">{{ row.name }}</td>
-      <td opal-lib-moj-sortable-table-row-data id="defendant">{{ row.age }}</a>
+      <td opal-lib-moj-sortable-table-row-data id="defendant">{{ row.age }}</td>
     </tr>
     }
   </ng-container>
 </opal-lib-moj-sortable-table>
-@if (abstractTableDataSignal()!.length > this.paginatedTableDataComputed().length) {
+@if (sortedTableDataSignal()!.length > paginatedTableDataComputed().length) {
 <opal-lib-govuk-pagination
   [currentPage]="currentPageSignal()"
   [limit]="itemsPerPageSignal()"
-  [total]="abstractTableDataSignal().length"
+  [total]="sortedTableDataSignal().length"
   (changePage)="onPageChange($event)"
 ></opal-lib-govuk-pagination>
 }
@@ -138,26 +138,26 @@ The following signals and computed properties are available to manage table data
 
 ### Signals
 
-| Input                     | Type                           | Description                                               |
-| ------------------------- | ------------------------------ | --------------------------------------------------------- |
-| `currentPageSignal`       | `signal<number>`               | Tracks the current page in the pagination.                |
-| `itemsPerPageSignal`      | `signal<number>`               | Specifies the number of items per page.                   |
-| `abstractTableDataSignal` | `signal<IAbstractTableData[]>` | Holds the full dataset for the table, updated reactively. |
+| Input                   | Type                           | Description                                                 |
+| ----------------------- | ------------------------------ | ----------------------------------------------------------- |
+| `currentPageSignal`     | `signal<number>`               | Tracks the current page in the pagination.                  |
+| `itemsPerPageSignal`    | `signal<number>`               | Specifies the number of items per page.                     |
+| `sortedTableDataSignal` | `signal<IAbstractTableData[]>` | Holds the sorted dataset for the table, updated reactively. |
 
 ### Computed Properties
 
 Computed properties reactively calculate their values based on signals and other computed properties. For example:
 
-- `paginatedTableDataComputed` depends on `abstractTableDataSignal`, `startIndexComputed`, and `endIndexComputed`.
+- `paginatedTableDataComputed` depends on `sortedTableDataSignal`, `startIndexComputed`, and `endIndexComputed`.
 - Changes to any of these dependencies automatically update `paginatedTableDataComputed`.
 
-| Property                     | Type                             | Description                                                                                                            |
-| ---------------------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `startIndexComputed`         | `computed<number>`               | The 1-based index of the first item on the current page. Depends on `currentPageSignal` and `itemsPerPageSignal`.      |
-| `endIndexComputed`           | `computed<number>`               | The 1-based index of the last item on the current page. Depends on `startIndexComputed` and `abstractTableDataSignal`. |
-| `paginatedTableDataComputed` | `computed<IAbstractTableData[]>` | Combines sorting and pagination. Depends on `abstractTableDataSignal`, `startIndexComputed`, and `endIndexComputed`.   |
+| Property                     | Type                             | Description                                                                                                                                        |
+| ---------------------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `startIndexComputed`         | `computed<number>`               | The 1-based index of the first item on the current page. Depends on `currentPageSignal` and `itemsPerPageSignal`.                                  |
+| `endIndexComputed`           | `computed<number>`               | The 1-based index of the last item on the current page. Depends on `startIndexComputed` and `sortedTableDataSignal`.                               |
+| `paginatedTableDataComputed` | `computed<IAbstractTableData[]>` | Combines sorting and pagination on the filtered and sorted data. Depends on `sortedTableDataSignal`, `startIndexComputed`, and `endIndexComputed`. |
 
-> **Note**: Signals (`currentPageSignal`, `itemsPerPageSignal`, `abstractTableDataSignal`) are Angular reactive properties that trigger re-computation of dependent computed properties like `paginatedTableDataComputed` whenever they are updated.
+> **Note**: Signals (`currentPageSignal`, `itemsPerPageSignal`, `sortedTableDataSignal`) are Angular reactive properties that trigger re-computation of dependent computed properties like `paginatedTableDataComputed` whenever they are updated.
 
 ## Methods
 
@@ -220,7 +220,7 @@ Use the mock files provided to test various scenarios, such as:
 - Sorting data by different columns and verifying the updated order.
 - Changing the current page and validating that the correct data subset is displayed.
 - Adjusting the number of items per page and ensuring the table updates accordingly.
-- **Dynamic Data Updates**: Verify that `paginatedTableDataComputed` updates correctly when `abstractTableDataSignal` changes dynamically (e.g., after an API call).
+- **Dynamic Data Updates**: Verify that `paginatedTableDataComputed` updates correctly when `sortedTableDataSignal` changes dynamically (e.g., after an API call).
 
 ### Additional Testing Scenarios
 
