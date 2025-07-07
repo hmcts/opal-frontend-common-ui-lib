@@ -25,8 +25,19 @@ import { CustomAccountInformationItemValueComponent } from '@hmcts/opal-frontend
 
 You can use the custom account information item component in your template as follows:
 
+By default the item will be set to use 'govuk-grid-column-one-third':
+
 ```html
-<opal-lib-custom-account-information-item govukGridClass="govuk-grid-column-one-fifth">
+<opal-lib-custom-account-information-item>
+  <h3 opal-lib-custom-account-information-item-label>Account name:</h3>
+  <p opal-lib-custom-account-information-item-value>Dave Smith</p>
+</opal-lib-custom-account-information-item>
+```
+
+You can input into the itemClasses string with another govuk-grid-column class as required:
+
+```html
+<opal-lib-custom-account-information-item itemClasses="govuk-grid-column-one-fifth">
   <h3 opal-lib-custom-account-information-item-label>Account name:</h3>
   <p opal-lib-custom-account-information-item-value>Dave Smith</p>
 </opal-lib-custom-account-information-item>
@@ -34,9 +45,9 @@ You can use the custom account information item component in your template as fo
 
 ## Inputs
 
-| Input            | Type     | Default                       | Description                                                    |
-| ---------------- | -------- | ----------------------------- | -------------------------------------------------------------- |
-| `govukGridClass` | `string` | `govuk-grid-column-one-fifth` | Sets the grid layout of the item using gds grid-column classes |
+| Input         | Type     | Default                       | Description                                                    |
+| ------------- | -------- | ----------------------------- | -------------------------------------------------------------- |
+| `itemClasses` | `string` | `govuk-grid-column-one-third` | Sets the grid layout of the item using gds grid-column classes |
 
 ## Outputs
 
