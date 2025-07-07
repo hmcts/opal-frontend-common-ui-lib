@@ -6,10 +6,10 @@ import { Component, ChangeDetectionStrategy, HostBinding, Input } from '@angular
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomAccountInformationItemComponent {
-  @Input({ required: false }) govukGridClass: string = 'govuk-grid-column-one-third';
+  @Input({ required: false }) itemClasses: string = 'govuk-grid-column-one-third';
   
   @HostBinding('class')
   get hostClass(): string {
-    return this.govukGridClass;
+    return this.itemClasses;
   }
 }
