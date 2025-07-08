@@ -28,4 +28,9 @@ describe('HodLoadingSpinnerComponent', () => {
     const hostElement: HTMLElement = fixture.nativeElement;
     expect(hostElement.classList.contains('hods-loading-spinner')).toBe(true);
   });
+
+  it('should have role attribute set to "status"', () => {
+    const hostElement: HTMLElement = fixture.nativeElement;
+    expect(hostElement.getAttribute('role')).toBe('status');
+  });
 });

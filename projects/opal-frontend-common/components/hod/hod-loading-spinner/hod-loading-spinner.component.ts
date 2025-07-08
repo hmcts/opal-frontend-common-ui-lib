@@ -1,4 +1,4 @@
-import { Component, HostBinding, ChangeDetectionStrategy } from '@angular/core';
+import { Component, HostBinding, ChangeDetectionStrategy, Input } from '@angular/core';
 
 @Component({
   selector: 'opal-lib-hod-loading-spinner, [opal-lib-hod-loading-spinner]',
@@ -6,5 +6,8 @@ import { Component, HostBinding, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HodLoadingSpinnerComponent {
+  @Input({ required: true }) spinnerId!: string;
+
   @HostBinding('class') hostClasses = 'hods-loading-spinner';
+  @HostBinding('attr.role') role = 'status';
 }
