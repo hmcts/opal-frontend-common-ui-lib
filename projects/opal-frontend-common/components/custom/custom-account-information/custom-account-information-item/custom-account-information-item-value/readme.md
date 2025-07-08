@@ -23,8 +23,10 @@ import { CustomAccountInformationItemValueComponent } from '@hmcts/opal-frontend
 You can use the custom account information item value component in your template as follows:
 
 ```html
-<div opal-lib-custom-account-information-item-value>Dave Smith</div>
+<p opal-lib-custom-account-information-item-value>Dave Smith</p>
 ```
+
+The component uses defaulted govuk classes to remove margin and set font size and weight using this GDS class 'govuk-body govuk-!-font-size-16 govuk-!-margin-0'.
 
 ## Inputs
 

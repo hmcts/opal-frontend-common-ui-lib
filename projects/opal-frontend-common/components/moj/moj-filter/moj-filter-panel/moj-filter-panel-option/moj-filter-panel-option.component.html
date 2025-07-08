@@ -1,0 +1,12 @@
+<div class="moj-filter__options">
+  <button
+    type="button"
+    class="govuk-button"
+    data-module="govuk-button"
+    data-test-id="submit-button"
+    (click)="onApplyFilters()"
+  >
+    {{ buttonText }}
+  </button>
+  <ng-content select="[mojFilterPanelKeyword]"></ng-content>
+</div>
