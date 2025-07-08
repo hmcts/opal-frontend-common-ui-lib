@@ -37,7 +37,7 @@ By default the item will be set to use 'govuk-grid-column-one-third':
 You can input into the itemClasses string with another govuk-grid-column class as required:
 
 ```html
-<opal-lib-custom-account-information-item itemClasses="govuk-grid-column-one-fifth">
+<opal-lib-custom-account-information-item itemClasses="govuk-grid-column-one-fourth">
   <h3 opal-lib-custom-account-information-item-label>Account name:</h3>
   <p opal-lib-custom-account-information-item-value>Dave Smith</p>
 </opal-lib-custom-account-information-item>
