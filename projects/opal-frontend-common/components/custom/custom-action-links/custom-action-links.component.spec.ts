@@ -8,9 +8,8 @@ describe('CustomActionLinksComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CustomActionLinksComponent]
-    })
-    .compileComponents();
+      imports: [CustomActionLinksComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CustomActionLinksComponent);
     component = fixture.componentInstance;
@@ -19,5 +18,10 @@ describe('CustomActionLinksComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should have host binding class set to govuk-grid-column-one-third', () => {
+    const hostElement: HTMLElement = fixture.nativeElement;
+    expect(hostElement.className).toContain('govuk-grid-column-one-third');
   });
 });

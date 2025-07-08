@@ -1,6 +1,6 @@
-# GOV.UK List Component
+# GOV.UK List Link Component
 
-This Angular component displays a GOV.UK-styled List, typically used for List-links or List items.
+This Angular component displays a GOV.UK-styled List Link, which will be content projected into govuk-list to form the entire govuk style list link.
 
 ## Table of Contents
 
@@ -15,55 +15,48 @@ This Angular component displays a GOV.UK-styled List, typically used for List-li
 ## Installation
 
 ```typescript
-import { GovukNotificationBannerComponent } from '@components/govuk/govuk-notification-banner/govuk-notification-banner.component';
+import { GovukListLinkComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-list/govuk-list-link';
 ```
 
 ## Usage
 
-You can use the notification banner component in your template as follows:
+You can use the list link component in your template as follows:
 
 ```html
-<opal-lib-govuk-notification-banner
-  [type]="'success'"
-  [titleText]="'Success notification'"
-  [headingText]="'Operation Successful'"
-  [messageText]="'Your changes have been saved successfully.'"
-></opal-lib-govuk-notification-banner>
+<opal-lib-govuk-list-link
+  linkText="Add enforcement action"
+  (linkClickEvent)="linkClickEvent1()"
+></opal-lib-govuk-list-link>
 ```
 
-### Example in HTML:
-
-```html
-<div
-  class="govuk-notification-banner govuk-notification-banner--{{ type }}"
-  role="alert"
-  aria-labelledby="govuk-notification-banner-title"
-  data-module="govuk-notification-banner"
->
-  <div class="govuk-notification-banner__header">
-    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">{{ titleText }}</h2>
-  </div>
-  <div class="govuk-notification-banner__content">
-    <h3 class="govuk-notification-banner__heading">{{ headingText }}</h3>
-    <p class="govuk-body">{{ messageText }}</p>
-  </div>
-</div>
-```
-
-This component creates a banner that can be used to display important notifications like success messages or warnings.
+This component creates a list item with a link inside that inputs a link text and outputs a list event that can be captured by the parent.
 
 ## Inputs
 
-| Input         | Type     | Description                                            |
-| ------------- | -------- | ------------------------------------------------------ |
-| `type`        | `string` | The type of notification (e.g., 'success', 'warning'). |
-| `titleText`   | `string` | The title text for the notification banner.            |
-| `headingText` | `string` | The main heading displayed in the banner.              |
-| `messageText` | `string` | The message body displayed in the notification banner. |
+| Input      | Type     | Description                            |
+| ---------- | -------- | -------------------------------------- |
+| `linkText` | `string` | The text displayed inside of the link. |
 
 ## Outputs
 
-There are no custom outputs for this component.
+| Output           | Type    | Description                                                                                                |
+| ---------------- | ------- | ---------------------------------------------------------------------------------------------------------- |
+| `linkClickEvent` | `Event` | Emits an empty event when the link is clicked which can be captured by the parent to perform link actions. |
+
+Example of event captured by parent:
+
+```html
+<opal-lib-govuk-list-link
+  linkText="Add enforcement action"
+  (linkClickEvent)="linkClickEvent1()"
+></opal-lib-govuk-list-link>
+```
+
+```typescript
+ public linkClickEvent1(): void {
+    console.log('Link 1 clicked');
+  }
+```
 
 ## Methods
 
@@ -71,13 +64,12 @@ There are no custom methods for this component.
 
 ## Testing
 
-Unit tests for this component can be found in the `govuk-notification-banner.component.spec.ts` file. To run the tests, use:
+Unit tests for this component can be found in the `govuk-list-link.component.spec.ts` file. To run the tests, use:
 
 ```bash
-ng test
+yarn test
 ```
 
 ## Contributing
 
 Feel free to submit issues or pull requests to improve this component.
-
