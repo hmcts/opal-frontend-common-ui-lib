@@ -29,21 +29,30 @@ Example of one quarter layout:
 
 ```html
 <div opal-lib-custom-summary-metric-bar>
-  <opal-lib-custom-summary-metric-bar-item itemColour="light-grey">
+  <opal-lib-custom-summary-metric-bar-item>
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 1:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 1</div>
   </opal-lib-custom-summary-metric-bar-item>
-  <opal-lib-custom-summary-metric-bar-item itemColour="light-blue">
+  <opal-lib-custom-summary-metric-bar-item
+    backgroundColour="govuk-lighter-blue-background-color"
+    textColour="govuk-dark-blue-text-color"
+  >
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
   </opal-lib-custom-summary-metric-bar-item>
-  <opal-lib-custom-summary-metric-bar-item itemColour="light-blue">
+  <opal-lib-custom-summary-metric-bar-item
+    backgroundColour="govuk-lighter-blue-background-color"
+    textColour="govuk-dark-blue-text-color"
+  >
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
   </opal-lib-custom-summary-metric-bar-item>
-  <opal-lib-custom-summary-metric-bar-item itemColour="light-blue">
-    <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
-    <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
+  <opal-lib-custom-summary-metric-bar-item
+    backgroundColour="govuk-blue-background-color"
+    textColour="govuk-white-text-color"
+  >
+    <div opal-lib-custom-summary-metric-bar-item-label>Metric 1:</div>
+    <div opal-lib-custom-summary-metric-bar-item-value>Value 1</div>
   </opal-lib-custom-summary-metric-bar-item>
 </div>
 ```
@@ -52,15 +61,23 @@ Example of one-third layout:
 
 ```html
 <div opal-lib-custom-summary-metric-bar>
-  <opal-lib-custom-summary-metric-bar-item itemColour="light-grey" itemClasses="govuk-grid-column-one-third">
+  <opal-lib-custom-summary-metric-bar-item itemClasses="govuk-grid-column-one-third">
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 1:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 1</div>
   </opal-lib-custom-summary-metric-bar-item>
-  <opal-lib-custom-summary-metric-bar-item itemColour="light-blue" itemClasses="govuk-grid-column-one-third">
+  <opal-lib-custom-summary-metric-bar-item
+    itemClasses="govuk-grid-column-one-third"
+    backgroundColour="govuk-blue-background-color"
+    textColour="govuk-white-text-color"
+  >
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
   </opal-lib-custom-summary-metric-bar-item>
-  <opal-lib-custom-summary-metric-bar-item itemColour="light-blue" itemClasses="govuk-grid-column-one-third">
+  <opal-lib-custom-summary-metric-bar-item
+    itemClasses="govuk-grid-column-one-third"
+    backgroundColour="govuk-blue-background-color"
+    textColour="govuk-white-text-color"
+  >
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
   </opal-lib-custom-summary-metric-bar-item>

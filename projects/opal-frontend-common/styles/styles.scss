@@ -1,7 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'govuk-frontend/dist/govuk/all.scss';
 @import './custom/_custom-section_break.scss';
-@import './custom/_custom-summary-metric-bar.scss';
 
 html,
 body {
@@ -64,10 +63,6 @@ opal-lib-govuk-footer {
   color: $govuk-link-colour;
 }
 
-.govuk-light-grey-background-color {
-  background-color: govuk-colour('light-grey');
-}
-
 .govuk-blue-background-white-text {
   background-color: govuk-colour('blue');
   color: govuk-colour('white');
@@ -75,4 +70,44 @@ opal-lib-govuk-footer {
 
 .govuk-white-background {
   background-color: govuk-colour('white');
+}
+
+.govuk-light-grey-background-color {
+  background-color: govuk-colour('light-grey') !important;
+}
+
+.govuk-lighter-blue-background-color {
+  background-color: govuk-tint(govuk-colour('light-blue'), 50) !important;
+}
+
+.govuk-blue-background-color {
+  background-color: govuk-colour('blue') !important;
+}
+
+.govuk-blue-text-color {
+  color: govuk-colour('blue') !important;
+  .govuk-body {
+    color: govuk-colour('blue') !important;
+  }
+}
+
+.govuk-dark-blue-text-color {
+  color: govuk-colour('dark-blue') !important;
+  .govuk-body {
+    color: govuk-colour('dark-blue') !important;
+  }
+}
+
+.govuk-grey-text-color {
+  color: govuk-colour('dark-grey') !important;
+  .govuk-body {
+    color: govuk-colour('dark-grey') !important;
+  }
+}
+
+.govuk-white-text-color {
+  color: govuk-colour('white') !important;
+  .govuk-body {
+    color: govuk-colour('white') !important;
+  }
 }
