@@ -28,7 +28,7 @@ export class MojButtonMenuComponent {
    *
    * @returns void
    */
-  public toggleButtonMenu() {
+  public toggleButtonMenu() : void {
     const button = this.menuButton.nativeElement;
     const isExpanded = button.getAttribute('aria-expanded') === 'true';
     button.setAttribute('aria-expanded', String(!isExpanded));

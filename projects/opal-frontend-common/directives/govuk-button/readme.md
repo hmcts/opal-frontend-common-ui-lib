@@ -1,6 +1,6 @@
-# Capitalisation Directive
+# Govuk Button Directive
 
-This Angular directive automatically capitalises all characters in an input field in real-time as the user types. It is used to ensure consistent formatting in fields like reference numbers or codes.
+This Angular directive applies govuk button classes on a regular button element.
 
 ## Table of Contents
 
@@ -16,57 +16,45 @@ This Angular directive automatically capitalises all characters in an input fiel
 ## Installation
 
 ```typescript
-import { CapitalisationDirective } from '@hmcts/opal-frontend-common/directives/capitalisation';
+import { GovukButtonDirective } from '@hmcts/opal-frontend-common/directives/govuk-button';
 ```
 
 Ensure the directive is declared or imported in your component/module:
 
 ```typescript
 @Component({
-  imports: [CapitalisationDirective],
+  imports: [GovukButtonDirective],
 })
 export class SharedModule {}
 ```
 
 ## Selector
 
-Use this attribute selector on any component or element by passing in an Angular form control via the directive input. The directive listens for value changes and capitalises the content of the provided control.
+Use this attribute selector on any button element to apply GDS button classes onto it.
 
-[opalLibCapitaliseAllCharacters]
+[opalLibGovukButton]
 
 ## Usage
 
-You can apply the directive to any component or element by binding it to an Angular form control. The directive listens to the control's value changes and converts the value to uppercase.
-
-### Native Input Example
+You can apply the directive to any button to apply the GDS button classes like so:
 
 ```html
-<input type="text" [formControl]="formControl" [opalLibCapitaliseAllCharacters]="formControl" />
+<button opalLibGovukButton buttonId="Return">Return to account details</button>
 ```
-
-### Custom Component Example
-
-```html
-<opal-lib-govuk-text-input
-  [opalLibCapitaliseAllCharacters]="form.controls['exampleInput']"
-  inputId="exampleInput"
-  inputName="exampleInput"
-  labelText="Reference Number"
-  [control]="form.controls['exampleInput']"
-/>
-```
-
-### Expected Behaviour
-
-For example, if a user types `ab12cd`, the form control's value will be transformed to `AB12CD` in real time via the control's value changes.
 
 ## Inputs
 
-- `opalLibCapitaliseAllCharacters` – Accepts an `AbstractControl` (such as `FormControl`). The directive subscribes to its value changes and updates it to uppercase.
+| Input           | Type     | Description                                                                        |
+| --------------- | -------- | ---------------------------------------------------------------------------------- |
+| `buttonId`      | `String` | Sets the id of the button                                                          |
+| `buttonClasses` | `String` | Sets the additional classes for the button                                         |
+| `type`          | `String` | Sets the type for the button. Defaulted to submit but can be button, submit ,reset |
 
 ## Outputs
 
-There are no custom outputs for this directive.
+| Output             | Type    | Description                                                         |
+| ------------------ | ------- | ------------------------------------------------------------------- |
+| `buttonClickEvent` | `Event` | Emits an event for the parent to capture when the button is clicked |
 
 ## Methods
 
@@ -74,7 +62,7 @@ There are no custom methods for this directive.
 
 ## Testing
 
-Unit tests for this directive are located in the capitalisation.directive.spec.ts file.
+Unit tests for this directive are located in the govuk-button.directive.spec.ts file.
 
 ```bash
 yarn test

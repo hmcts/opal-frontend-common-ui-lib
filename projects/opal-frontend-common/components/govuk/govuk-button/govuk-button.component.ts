@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'opal-lib-govuk-button , [opal-lib-govuk-button]',
+  selector: 'opal-lib-govuk-button',
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './govuk-button.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

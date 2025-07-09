@@ -27,8 +27,6 @@ describe('MojButtonMenuItemComponent in TestHostComponent', () => {
   it('should create TestHostComponent', () => {
     expect(hostComponent).toBeTruthy();
   });
-
-  // Additional integration tests could be placed here if needed.
 });
 
 describe('MojButtonMenuItemComponent isolated', () => {

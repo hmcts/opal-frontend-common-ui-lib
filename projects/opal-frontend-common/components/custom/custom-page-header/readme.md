@@ -19,7 +19,7 @@ import { CustomPageHeaderComponent } from '@hmcts/opal-frontend-common/component
 import { MojButtonMenuComponent } from '@hmcts/opal-frontend-common/components/moj/moj-button-menu';
 import { MojButtonMenuItemComponent } from '@hmcts/opal-frontend-common/components/moj/moj-button-menu/moj-button-menu-item';
 import { GovukHeadingWithCaptionComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-heading-with-caption';
-import { GovukButtonDirective } from '@hmcts/opal-frontend-common/directives/govuk-button';
+import { GovukButtonComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-button';
 ```
 
 ## Usage
@@ -35,12 +35,14 @@ You can use the custom page header component in your template as follows:
     ></opal-lib-govuk-heading-with-caption>
   </ng-container>
   <ng-container pageHeaderButtons>
-    <button opalLibGovukButton buttonId="hello" buttonClasses="govuk-button--secondary">Hello</button>
-    <div opal-lib-moj-button-menu menuButtonTitle="More Options:">
+    <opal-lib-govuk-button buttonId="hello" buttonClasses="govuk-button--secondary"
+      >return to account type</opal-lib-govuk-button
+    >
+    <opal-lib-moj-button-menu menuButtonTitle="More Options:">
       <opal-lib-moj-button-menu-item itemText="Option 1"></opal-lib-moj-button-menu-item>
       <opal-lib-moj-button-menu-item itemText="Option 2"></opal-lib-moj-button-menu-item>
       <opal-lib-moj-button-menu-item itemText="Option 3"></opal-lib-moj-button-menu-item>
-    </div>
+    </opal-lib-moj-button-menu>
   </ng-container>
 </opal-lib-custom-page-header>
 ```
