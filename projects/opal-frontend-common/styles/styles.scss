@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'govuk-frontend/dist/govuk/all.scss';
 @import './custom/_custom-section_break.scss';
+@import './custom/_custom-summary-metric-bar.scss';
 
 html,
 body {
@@ -84,26 +85,5 @@ opal-lib-govuk-footer {
   @include govuk-media-query($from: tablet) {
     width: 20%;
     float: left;
-  }
-}
-
-.light-grey-item {
-  background-color: govuk-colour(light-grey);
-  .govuk-body {
-    color: govuk-colour(dark-grey);
-  }
-}
-
-.light-blue-item {
-  background-color: govuk-tint(govuk-colour(light-blue), 50);
-  .govuk-body {
-    color: govuk-colour(dark-blue);
-  }
-}
-
-.blue-item {
-  background-color: govuk-colour(blue);
-  .govuk-body {
-    color: govuk-colour(white);
   }
 }
