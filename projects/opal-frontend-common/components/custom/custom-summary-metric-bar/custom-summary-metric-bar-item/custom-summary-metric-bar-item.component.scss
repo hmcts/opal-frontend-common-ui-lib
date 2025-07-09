@@ -1,26 +1,6 @@
-@import '../../../../../../node_modules/govuk-frontend/dist/govuk/helpers/colour';
 
 .custom-summary-metric-bar-item-frame {
   padding: 15px;
 }
 
-::ng-deep .light-grey-item {
-  background-color: govuk-colour(light-grey);
-  .govuk-body {
-    color: govuk-colour(dark-grey);
-  }
-}
 
-::ng-deep .light-blue-item {
-  background-color: govuk-tint(govuk-colour(light-blue), 50);
-  .govuk-body {
-    color: govuk-colour(dark-blue);
-  }
-}
-
-::ng-deep .blue-item {
-  background-color: govuk-colour(blue);
-  .govuk-body {
-    color: govuk-colour(white);
-  }
-}

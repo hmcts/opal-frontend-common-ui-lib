@@ -1,6 +1,6 @@
 # Custom Summary Metric Bar Item Value Component
 
-This Angular component provides a CustomSummaryMetricBarItemValue component which will be content projected into the CustomSummaryMetricBarItem component alongside the CustomSummaryMetricBarItemLabel to form the complete layout and consistent stylings of each item in the metric bar.
+This Angular component provides a Metric Bar Item Value component which will be content projected into the Metric Bar Item component alongside the Metric Bar Item Label to form the complete layout and consistent stylings of each item in the metric bar.
 
 ## Table of Contents
 

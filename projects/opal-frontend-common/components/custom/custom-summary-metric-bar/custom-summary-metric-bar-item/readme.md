@@ -1,6 +1,6 @@
 # Custom Summary Metric Bar Item Component
 
-This Angular component, CustomSummaryMetricBarItemComponent, serves as a wrapper around both CustomSummaryMetricBarItemValue and CustomSummaryMetricBarItemLabel components. It provides the necessary layout structure and styling for individual items within the custom summary metric bar.
+This Angular component, Metric Bar Item Component, serves as a wrapper around both Metric Bar Item Value and Metric Bar Item Label components. It provides the necessary layout structure and styling for individual items within the custom summary metric bar.
 
 ## Table of Contents
 
@@ -24,7 +24,7 @@ import { CustomSummaryMetricBarItemValueComponent } from '@hmcts/opal-frontend-c
 
 You can use the Custom Summary Metric Bar Item component in your template as follows:
 
-By default the item will be set to use 'govuk-grid-column-one-fifth':
+By default the item will be set to use 'govuk-grid-column-one-quarter':
 
 ```html
 <opal-lib-custom-summary-metric-bar-item itemColour="light-blue">
@@ -35,8 +35,10 @@ By default the item will be set to use 'govuk-grid-column-one-fifth':
 
 You can input into the itemClasses string with another govuk-grid-column class as required:
 
+Example using one third layout:
+
 ```html
-<opal-lib-custom-summary-metric-bar-item itemColour="light-blue" itemClasses="govuk-grid-column-one-quarter">
+<opal-lib-custom-summary-metric-bar-item itemColour="light-blue" itemClasses="govuk-grid-column-one-third">
   <div opal-lib-custom-summary-metric-bar-item-label>Metric 1:</div>
   <div opal-lib-custom-summary-metric-bar-item-value>Value 1</div>
 </opal-lib-custom-summary-metric-bar-item>
@@ -44,10 +46,10 @@ You can input into the itemClasses string with another govuk-grid-column class a
 
 ## Inputs
 
-| Input         | Type     | Default                       | Description                                                                                          |
-| ------------- | -------- | ----------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `itemColour`  | `string` | 'light-grey'                  | GDS colours that apply colour to background and text of the item. 'light-grey', 'light-blue', 'blue' |
-| `itemClasses` | `string` | `govuk-grid-column-one-third` | Sets the grid layout of the item using gds grid-column classes                                       |
+| Input         | Type     | Default                         | Description                                                                                          |
+| ------------- | -------- | ------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `itemColour`  | `string` | 'light-grey'                    | GDS colours that apply colour to background and text of the item. 'light-grey', 'light-blue', 'blue' |
+| `itemClasses` | `string` | `govuk-grid-column-one-quarter` | Sets the grid layout of the item using gds grid-column classes                                       |
 
 ## Outputs
 
