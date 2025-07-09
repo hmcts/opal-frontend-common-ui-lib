@@ -41,9 +41,9 @@ describe('CustomSummaryMetricBarItemComponent', () => {
   });
 
   it('should return updated classes when backgroundColour and textColour are changed', () => {
-    component.backgroundColour = 'new-bg-color';
-    component.textColour = 'new-text-color';
-    const expected = `custom-summary-metric-bar-item-frame new-bg-color new-text-color`;
+    component.backgroundColour = 'new-bg-colour';
+    component.textColour = 'new-text-colour';
+    const expected = `custom-summary-metric-bar-item-frame new-bg-colour new-text-colour`;
     expect(component.getSummaryMetricBarItemClasses()).toBe(expected);
   });
 });

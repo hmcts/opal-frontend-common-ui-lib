@@ -34,22 +34,22 @@ Example of one quarter layout:
     <div opal-lib-custom-summary-metric-bar-item-value>Value 1</div>
   </opal-lib-custom-summary-metric-bar-item>
   <opal-lib-custom-summary-metric-bar-item
-    backgroundColour="govuk-lighter-blue-background-color"
-    textColour="govuk-dark-blue-text-color"
+    backgroundColour="govuk-lighter-blue-background-colour"
+    textColour="govuk-dark-blue-text-colour"
   >
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
   </opal-lib-custom-summary-metric-bar-item>
   <opal-lib-custom-summary-metric-bar-item
-    backgroundColour="govuk-lighter-blue-background-color"
-    textColour="govuk-dark-blue-text-color"
+    backgroundColour="govuk-lighter-blue-background-colour"
+    textColour="govuk-dark-blue-text-colour"
   >
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
   </opal-lib-custom-summary-metric-bar-item>
   <opal-lib-custom-summary-metric-bar-item
-    backgroundColour="govuk-blue-background-color"
-    textColour="govuk-white-text-color"
+    backgroundColour="govuk-blue-background-colour"
+    textColour="govuk-white-text-colour"
   >
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 1:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 1</div>
@@ -67,16 +67,16 @@ Example of one-third layout:
   </opal-lib-custom-summary-metric-bar-item>
   <opal-lib-custom-summary-metric-bar-item
     itemClasses="govuk-grid-column-one-third"
-    backgroundColour="govuk-blue-background-color"
-    textColour="govuk-white-text-color"
+    backgroundColour="govuk-blue-background-colour"
+    textColour="govuk-white-text-colour"
   >
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
   </opal-lib-custom-summary-metric-bar-item>
   <opal-lib-custom-summary-metric-bar-item
     itemClasses="govuk-grid-column-one-third"
-    backgroundColour="govuk-blue-background-color"
-    textColour="govuk-white-text-color"
+    backgroundColour="govuk-blue-background-colour"
+    textColour="govuk-white-text-colour"
   >
     <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
     <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
