@@ -5,5 +5,4 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   templateUrl: './custom-summary-metric-bar.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomSummaryMetricBarComponent {
-}
+export class CustomSummaryMetricBarComponent {}
