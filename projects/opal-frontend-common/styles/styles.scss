@@ -73,41 +73,42 @@ opal-lib-govuk-footer {
 }
 
 .govuk-light-grey-background-color {
-  background-color: govuk-colour('light-grey') !important;
+  background-color: govuk-colour('light-grey');
 }
 
 .govuk-lighter-blue-background-color {
-  background-color: govuk-tint(govuk-colour('light-blue'), 50) !important;
+  background-color: govuk-tint(govuk-colour('light-blue'), 50);
 }
 
 .govuk-blue-background-color {
-  background-color: govuk-colour('blue') !important;
+  background-color: govuk-colour('blue');
 }
 
 .govuk-blue-text-color {
-  color: govuk-colour('blue') !important;
+  color: govuk-colour('blue');
   .govuk-body {
-    color: govuk-colour('blue') !important;
+    color: govuk-colour('blue');
   }
 }
 
 .govuk-dark-blue-text-color {
-  color: govuk-colour('dark-blue') !important;
+  color: govuk-colour('dark-blue');
   .govuk-body {
-    color: govuk-colour('dark-blue') !important;
+    color: govuk-colour('dark-blue');
   }
 }
 
 .govuk-grey-text-color {
-  color: govuk-colour('dark-grey') !important;
+  color: govuk-colour('dark-grey');
   .govuk-body {
-    color: govuk-colour('dark-grey') !important;
+    color: govuk-colour('dark-grey');
   }
 }
 
 .govuk-white-text-color {
-  color: govuk-colour('white') !important;
+  color: govuk-colour('white');
   .govuk-body {
-    color: govuk-colour('white') !important;
+    color: govuk-colour('white');
   }
 }
+
