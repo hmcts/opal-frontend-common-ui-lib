@@ -25,7 +25,7 @@ import { CustomActionLinksComponent } from '@hmcts/opal-frontend-common/componen
 You can use the Custom Action Links component in your template as follows:
 
 ```html
-<opal-lib-custom-action-links>
+<opal-lib-custom-action-links id="actionLinks">
   <h2 class="govuk-heading-s" heading>Actions</h2>
   <opal-lib-govuk-list links>
     <opal-lib-govuk-list-link
@@ -46,7 +46,16 @@ You can use the Custom Action Links component in your template as follows:
 
 ## Inputs
 
-There are no input fields for this component.
+| Input       | Type     | Default                       | Description                                 |
+| ----------- | -------- | ----------------------------- | ------------------------------------------- |
+| `id`        | `string` | None                          | Sets the Id of the action links component.  |
+| `classSize` | `string` | `govuk-grid-column-one-third` | Sets the grid column size of the component. |
+
+Example use of inputs:
+
+```html
+<opal-lib-custom-action-links id="actionLinks" classSize="govuk-grid-column-full"></opal-lib-custom-action-links>
+```
 
 ## Outputs
 
