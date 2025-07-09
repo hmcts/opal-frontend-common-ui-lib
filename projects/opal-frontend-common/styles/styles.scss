@@ -76,14 +76,3 @@ opal-lib-govuk-footer {
 .govuk-white-background {
   background-color: govuk-colour('white');
 }
-
-.govuk-grid-column-one-fifth {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 0 15px;
-
-  @include govuk-media-query($from: tablet) {
-    width: 20%;
-    float: left;
-  }
-}
