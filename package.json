@@ -31,7 +31,6 @@
     "accessible-autocomplete": "^3.0.1",
     "fast-sort": "^3.4.1",
     "govuk-frontend": "^5.9.0",
-    "home-office-kit": "^1.2.0",
     "launchdarkly-js-client-sdk": "^3.5.0",
     "luxon": "^3.5.0",
     "prettier": "^3.5.3",
