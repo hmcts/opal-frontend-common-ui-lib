@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "license": "MIT",
   "peerDependencies": {
     "@angular/common": "^18.2.0 || ^19.0.0",
@@ -76,6 +76,18 @@
     },
     "./components/alphagov/alphagov-accessible-autocomplete/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-alphagov-alphagov-accessible-autocomplete-interfaces.mjs"
+    },
+    "./components/custom/custom-account-information": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-account-information.mjs"
+    },
+    "./components/custom/custom-account-information/custom-account-information-item": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-account-information-custom-account-information-item.mjs"
+    },
+    "./components/custom/custom-account-information/custom-account-information-item/custom-account-information-item-label": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-account-information-custom-account-information-item-custom-account-information-item-label.mjs"
+    },
+    "./components/custom/custom-account-information/custom-account-information-item/custom-account-information-item-value": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-account-information-custom-account-information-item-custom-account-information-item-value.mjs"
     },
     "./components/govuk/govuk-accordion": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-accordion.mjs"
