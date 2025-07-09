@@ -1,0 +1,8 @@
+@import 'govuk-frontend/dist/govuk/helpers/colour';
+
+.custom-section-break--4px {
+  border-bottom: 4px solid govuk-colour('blue') !important;
+}
+.custom-section-break--2px {
+  border-bottom: 2px solid govuk-colour('blue') !important;
+}
