@@ -66,6 +66,7 @@ Example of one-quarter layout:
   </opal-lib-custom-account-information-item>
 </div>
 ```
+
 This component uses a default class from GDS layout to ensure the correct layout for content within it uses 'govuk-grid-row'.
 
 ## Inputs

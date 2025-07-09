@@ -84,7 +84,6 @@
       "@hmcts/opal-frontend-common/components/custom/custom-account-information": [
         "./dist/opal-frontend-common/components/custom/custom-account-information"
       ],
-
       "@hmcts/opal-frontend-common/components/custom/custom-summary-metric-bar": [
         "./dist/opal-frontend-common/components/custom/custom-summary-metric-bar"
       ],
@@ -97,7 +96,6 @@
       "@hmcts/opal-frontend-common/components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item/custom-summary-metric-bar-item-value": [
         "./dist/opal-frontend-common/components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item/custom-summary-metric-bar-item-value"
       ],
-
       "@hmcts/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item": [
         "./dist/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item"
       ],
@@ -106,6 +104,12 @@
       ],
       "@hmcts/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item/custom-account-information-item-value": [
         "./dist/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item/custom-account-information-item-value"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-page-header": [
+        "./dist/opal-frontend-common/components/custom/custom-page-header"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-page-header/custom-page-header-action-button": [
+        "./dist/opal-frontend-common/components/custom/custom-page-header/custom-page-header-action-button"
       ],
       "@hmcts/opal-frontend-common/components/govuk/govuk-accordion": [
         "./dist/opal-frontend-common/components/govuk/govuk-accordion"
@@ -215,6 +219,9 @@
       "@hmcts/opal-frontend-common/components/moj/moj-button-menu": [
         "./dist/opal-frontend-common/components/moj/moj-button-menu"
       ],
+      "@hmcts/opal-frontend-common/components/moj/moj-button-menu/moj-button-menu-item": [
+        "./dist/opal-frontend-common/components/moj/moj-button-menu/moj-button-menu-item"
+      ],
       "@hmcts/opal-frontend-common/components/moj/moj-date-picker": [
         "./dist/opal-frontend-common/components/moj/moj-date-picker"
       ],
@@ -273,6 +280,7 @@
         "./dist/opal-frontend-common/components/moj/moj-timeline"
       ],
       "@hmcts/opal-fronted-common/directives/capitalisation": ["./dist/opal-frontend-common/directives/capitalisation"],
+      "@hmcts/opal-fronted-common/directives/govuk-button": ["./dist/opal-frontend-common/directives/govuk-button"],
       "@hmcts/opal-frontend-common/constants": ["./dist/opal-frontend-common/constants"],
       "@hmcts/opal-frontend-common/guards/auth": ["./dist/opal-frontend-common/guards/auth"],
       "@hmcts/opal-frontend-common/guards/can-deactivate": ["./dist/opal-frontend-common/guards/can-deactivate"],
