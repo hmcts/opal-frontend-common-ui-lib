@@ -1,6 +1,6 @@
 # GOV.UK List Link Component
 
-This Angular component displays a GOV.UK-styled List Link, which will be content projected into govuk-list to form the entire govuk style list link.
+This Angular component renders a single GOV.UK-styled list link, intended to be content projected into the parent `govuk-list` component to build a complete styled list.  
 
 ## Table of Contents
 

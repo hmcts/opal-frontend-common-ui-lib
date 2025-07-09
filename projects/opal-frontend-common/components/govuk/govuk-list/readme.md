@@ -1,6 +1,6 @@
 # GOV.UK List Component
 
-This Angular component displays a GOV.UK-styled List, typically used for List-links or List items.
+This component renders a list of actionable links using GOV.UK styles. It is designed for scenarios where users need to select from a set of common actions, such as managing records or initiating processes. Each item appears as a text-based link, typically used in administrative workflows.  
 
 ## Table of Contents
 
@@ -41,9 +41,6 @@ Example using a list link:
   ></opal-lib-govuk-list-link>
 </opal-lib-govuk-list>
 ```
-
-This component creates a list structure that list items can be content projected in to be used to display lists such as list-links.
-
 ## Inputs
 
 There are no custom inputs for this component.
