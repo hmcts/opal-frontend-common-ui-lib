@@ -67,35 +67,6 @@ Example of one-quarter layout:
 </div>
 ```
 
-Example of one-fifth Layout:
-
-```html
-<div opal-lib-custom-account-information>
-  <opal-lib-custom-account-information-item itemClasses="govuk-grid-column-one-fifth">
-    <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
-    <p opal-lib-custom-account-information-item-value>Dave Smith</p>
-  </opal-lib-custom-account-information-item>
-  <opal-lib-custom-account-information-item itemClasses="govuk-grid-column-one-fifth">
-    <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
-    <p opal-lib-custom-account-information-item-value>John Doe</p>
-  </opal-lib-custom-account-information-item>
-  <opal-lib-custom-account-information-item itemClasses="govuk-grid-column-one-fifth">
-    <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
-    <p opal-lib-custom-account-information-item-value>John Doe</p>
-  </opal-lib-custom-account-information-item>
-  <opal-lib-custom-account-information-item itemClasses="govuk-grid-column-one-fifth">
-    <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
-    <p opal-lib-custom-account-information-item-value>John Doe</p>
-  </opal-lib-custom-account-information-item>
-  <opal-lib-custom-account-information-item itemClasses="govuk-grid-column-one-fifth">
-    <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
-    <p opal-lib-custom-account-information-item-value>John Doe</p>
-  </opal-lib-custom-account-information-item>
-</div>
-```
-
-"govuk-grid-column-one-fifth" is a custom style developed in [styles](projects/opal-frontend-common/styles/styles.scss).
-
 This component uses a default class from GDS layout to ensure the correct layout for content within it uses 'govuk-grid-row'.
 
 ## Inputs

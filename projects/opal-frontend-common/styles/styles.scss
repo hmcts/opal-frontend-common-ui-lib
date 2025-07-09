@@ -49,7 +49,8 @@ opal-lib-govuk-footer {
   }
 }
 
-.govuk-color {
+
+.govuk-colour {
   &__error {
     color: govuk-colour('red') !important;
   }
@@ -63,10 +64,6 @@ opal-lib-govuk-footer {
   color: $govuk-link-colour;
 }
 
-.govuk-light-grey-background-color {
-  background-color: govuk-colour('light-grey');
-}
-
 .govuk-blue-background-white-text {
   background-color: govuk-colour('blue');
   color: govuk-colour('white');
@@ -76,13 +73,30 @@ opal-lib-govuk-footer {
   background-color: govuk-colour('white');
 }
 
-.govuk-grid-column-one-fifth {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 0 15px;
+.govuk-light-grey-background-colour {
+  background-color: govuk-colour('light-grey');
+}
 
-  @include govuk-media-query($from: tablet) {
-    width: 20%;
-    float: left;
-  }
+.govuk-lighter-blue-background-colour {
+  background-color: govuk-tint(govuk-colour('light-blue'), 50);
+}
+
+.govuk-blue-background-colour {
+  background-color: govuk-colour('blue');
+}
+
+.govuk-blue-text-colour {
+  color: govuk-colour('blue');
+}
+
+.govuk-dark-blue-text-colour {
+  color: govuk-colour('dark-blue');
+}
+
+.govuk-dark-grey-text-colour {
+  color: govuk-colour('dark-grey');
+}
+
+.govuk-white-text-colour {
+  color: govuk-colour('white');
 }

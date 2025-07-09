@@ -1,0 +1,5 @@
+{
+  "sideEffects": false,
+  "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-custom-custom-summary-metric-bar-custom-summary-metric-bar-item.mjs",
+  "typings": "../../../../dist/opal-frontend-common/components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item/index.d.ts"
+}
