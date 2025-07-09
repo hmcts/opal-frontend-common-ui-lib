@@ -50,11 +50,31 @@ You can apply the directive to any button to apply the GDS button classes like s
 | `buttonClasses` | `String` | Sets the additional classes for the button                                         |
 | `type`          | `String` | Sets the type for the button. Defaulted to submit but can be button, submit ,reset |
 
+Example usage of inputs:
+
+```html
+<button opalLibGovukButton buttonId="test-button" buttonClasses="govuk-button--secondary" type="reset">
+  Test Button
+</button>
+```
+
 ## Outputs
 
 | Output             | Type    | Description                                                         |
 | ------------------ | ------- | ------------------------------------------------------------------- |
 | `buttonClickEvent` | `Event` | Emits an event for the parent to capture when the button is clicked |
+
+Example of using the output in the parent:
+
+```html
+<button opalLibGovukButton buttonId="Return" (buttonClickEvent)="onTestButtonClick()">Return to account details</button>
+```
+
+```typescript
+public onTestButtonClick(): void {
+  console.log('Test button clicked');
+  }
+```
 
 ## Methods
 

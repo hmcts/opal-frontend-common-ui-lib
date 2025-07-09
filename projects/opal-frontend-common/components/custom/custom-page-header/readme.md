@@ -36,9 +36,9 @@ You can use the custom page header component in your template as follows:
   </ng-container>
   <ng-container pageHeaderButtons>
     <opal-lib-govuk-button buttonId="hello" buttonClasses="govuk-button--secondary"
-      >return to account type</opal-lib-govuk-button
+      >Return to account type</opal-lib-govuk-button
     >
-    <opal-lib-moj-button-menu menuButtonTitle="More Options:">
+    <opal-lib-moj-button-menu menuButtonTitle="More options:">
       <opal-lib-moj-button-menu-item itemText="Option 1"></opal-lib-moj-button-menu-item>
       <opal-lib-moj-button-menu-item itemText="Option 2"></opal-lib-moj-button-menu-item>
       <opal-lib-moj-button-menu-item itemText="Option 3"></opal-lib-moj-button-menu-item>
