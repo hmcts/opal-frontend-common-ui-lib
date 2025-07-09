@@ -80,6 +80,18 @@
     "./components/custom/custom-account-information": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-account-information.mjs"
     },
+    "./components/custom/custom-summary-metric-bar": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-summary-metric-bar.mjs"
+    },
+    "./components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-summary-metric-bar-custom-summary-metric-bar-item.mjs"
+    },
+    "./components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item/custom-summary-metric-bar-item-label": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-summary-metric-bar-custom-summary-metric-bar-item-custom-summary-metric-bar-item-label.mjs"
+    },
+    "./components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item/custom-summary-metric-bar-item-value": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-summary-metric-bar-custom-summary-metric-bar-item-custom-summary-metric-bar-item-value.mjs"
+    },
     "./components/custom/custom-account-information/custom-account-information-item": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-account-information-custom-account-information-item.mjs"
     },
