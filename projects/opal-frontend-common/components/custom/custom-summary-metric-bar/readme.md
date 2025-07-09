@@ -28,31 +28,22 @@ You can use the Custom Metric Bar Component in your template as follows:
 Example of one quarter layout:
 
 ```html
-<div opal-lib-custom-summary-metric-bar>
+div opal-lib-custom-summary-metric-bar>
   <opal-lib-custom-summary-metric-bar-item>
-    <div opal-lib-custom-summary-metric-bar-item-label>Metric 1:</div>
-    <div opal-lib-custom-summary-metric-bar-item-value>Value 1</div>
+    <p opal-lib-custom-summary-metric-bar-item-label>Metric 1:</p>
+    <p opal-lib-custom-summary-metric-bar-item-value>Value 1</p>
   </opal-lib-custom-summary-metric-bar-item>
-  <opal-lib-custom-summary-metric-bar-item
-    backgroundColour="govuk-lighter-blue-background-colour"
-    textColour="govuk-dark-blue-text-colour"
-  >
-    <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
-    <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
+  <opal-lib-custom-summary-metric-bar-item backgroundColour="govuk-lighter-blue-background-colour">
+    <p opal-lib-custom-summary-metric-bar-item-label textColour="govuk-dark-blue-text-colour">Metric 2:</p>
+    <p opal-lib-custom-summary-metric-bar-item-value textColour="govuk-dark-blue-text-colour">Value 2</p>
   </opal-lib-custom-summary-metric-bar-item>
-  <opal-lib-custom-summary-metric-bar-item
-    backgroundColour="govuk-lighter-blue-background-colour"
-    textColour="govuk-dark-blue-text-colour"
-  >
-    <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
-    <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
+  <opal-lib-custom-summary-metric-bar-item backgroundColour="govuk-lighter-blue-background-colour">
+    <p opal-lib-custom-summary-metric-bar-item-label textColour="govuk-dark-blue-text-colour">Metric 2:</p>
+    <p opal-lib-custom-summary-metric-bar-item-value textColour="govuk-dark-blue-text-colour">Value 2</p>
   </opal-lib-custom-summary-metric-bar-item>
-  <opal-lib-custom-summary-metric-bar-item
-    backgroundColour="govuk-blue-background-colour"
-    textColour="govuk-white-text-colour"
-  >
-    <div opal-lib-custom-summary-metric-bar-item-label>Metric 1:</div>
-    <div opal-lib-custom-summary-metric-bar-item-value>Value 1</div>
+  <opal-lib-custom-summary-metric-bar-item backgroundColour="govuk-blue-background-colour">
+    <p opal-lib-custom-summary-metric-bar-item-label textColour="govuk-white-text-colour">Metric 1:</p>
+    <p opal-lib-custom-summary-metric-bar-item-value textColour="govuk-white-text-colour">Value 1</p>
   </opal-lib-custom-summary-metric-bar-item>
 </div>
 ```
@@ -60,26 +51,18 @@ Example of one quarter layout:
 Example of one-third layout:
 
 ```html
-<div opal-lib-custom-summary-metric-bar>
-  <opal-lib-custom-summary-metric-bar-item itemClasses="govuk-grid-column-one-third">
-    <div opal-lib-custom-summary-metric-bar-item-label>Metric 1:</div>
-    <div opal-lib-custom-summary-metric-bar-item-value>Value 1</div>
+div opal-lib-custom-summary-metric-bar>
+  <opal-lib-custom-summary-metric-bar-item>
+    <p opal-lib-custom-summary-metric-bar-item-label>Metric 1:</p>
+    <p opal-lib-custom-summary-metric-bar-item-value>Value 1</p>
   </opal-lib-custom-summary-metric-bar-item>
-  <opal-lib-custom-summary-metric-bar-item
-    itemClasses="govuk-grid-column-one-third"
-    backgroundColour="govuk-blue-background-colour"
-    textColour="govuk-white-text-colour"
-  >
-    <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
-    <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
+  <opal-lib-custom-summary-metric-bar-item backgroundColour="govuk-lighter-blue-background-colour">
+    <p opal-lib-custom-summary-metric-bar-item-label textColour="govuk-dark-blue-text-colour">Metric 2:</p>
+    <p opal-lib-custom-summary-metric-bar-item-value textColour="govuk-dark-blue-text-colour">Value 2</p>
   </opal-lib-custom-summary-metric-bar-item>
-  <opal-lib-custom-summary-metric-bar-item
-    itemClasses="govuk-grid-column-one-third"
-    backgroundColour="govuk-blue-background-colour"
-    textColour="govuk-white-text-colour"
-  >
-    <div opal-lib-custom-summary-metric-bar-item-label>Metric 2:</div>
-    <div opal-lib-custom-summary-metric-bar-item-value>Value 2</div>
+  <opal-lib-custom-summary-metric-bar-item backgroundColour="govuk-lighter-blue-background-colour">
+    <p opal-lib-custom-summary-metric-bar-item-label textColour="govuk-dark-blue-text-colour">Metric 2:</p>
+    <p opal-lib-custom-summary-metric-bar-item-value textColour="govuk-dark-blue-text-colour">Value 2</p>
   </opal-lib-custom-summary-metric-bar-item>
 </div>
 ```

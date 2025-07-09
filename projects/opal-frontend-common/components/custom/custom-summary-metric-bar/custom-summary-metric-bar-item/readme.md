@@ -24,7 +24,7 @@ import { CustomSummaryMetricBarItemValueComponent } from '@hmcts/opal-frontend-c
 
 You can use the Custom Summary Metric Bar Item component in your template as follows:
 
-By default the item will be set to use `govuk-grid-column-one-quarter` and the background colour to use `govuk-light-grey-background-colour` and the text colour to use `govuk-grey-text-colour`:
+By default the item will be set to use `govuk-grid-column-one-quarter` and the background colour to use `govuk-light-grey-background-colour`:
 
 ```html
 <opal-lib-custom-summary-metric-bar-item>
@@ -40,21 +40,19 @@ Example using one third layout:
 ```html
 <opal-lib-custom-summary-metric-bar-item
   backgroundColour="govuk-blue-background-colour"
-  textColour="govuk-white-text-colour"
   itemClasses="govuk-grid-column-one-third"
 >
-  <div opal-lib-custom-summary-metric-bar-item-label>Metric 1:</div>
-  <div opal-lib-custom-summary-metric-bar-item-value>Value 1</div>
+  <p opal-lib-custom-summary-metric-bar-item-label textColour="govuk-white-text-colour">Metric 1:</p>
+  <p opal-lib-custom-summary-metric-bar-item-value textColour="govuk-white-text-colour">Value 1</p>
 </opal-lib-custom-summary-metric-bar-item>
 ```
 
 ## Inputs
 
-| Input              | Type     | Default                             | Description                                                                                      |
-| ------------------ | -------- | ----------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Input              | Type     | Default                              | Description                                                                                      |
+| ------------------ | -------- | ------------------------------------ | ------------------------------------------------------------------------------------------------ |
 | `backgroundColour` | `string` | `govuk-light-grey-background-colour` | Applies the background colour dependant using GDS background colour classes found in styles.scss |
-| `textColour`       | `string` | `govuk-grey-text-colour`             | Applies the text colour dependant using GDS text colour classes found in styles.scss             |
-| `itemClasses`      | `string` | `govuk-grid-column-one-quarter`     | Sets the grid layout of the item using gds grid-column classes                                   |
+| `itemClasses`      | `string` | `govuk-grid-column-one-quarter`      | Sets the grid layout of the item using gds grid-column classes                                   |
 
 ## Outputs
 

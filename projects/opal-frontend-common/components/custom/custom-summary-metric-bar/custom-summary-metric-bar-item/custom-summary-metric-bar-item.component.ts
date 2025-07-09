@@ -7,8 +7,7 @@ import { Component, Input, ChangeDetectionStrategy, HostBinding } from '@angular
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomSummaryMetricBarItemComponent {
-  @Input({ required: false }) backgroundColour: string = 'govuk-light-grey-background-color';
-  @Input({ required: false }) textColour: string = 'govuk-grey-text-color';
+  @Input({ required: false }) backgroundColour: string = 'govuk-light-grey-background-colour';
   @Input({ required: false }) itemClasses: string = 'govuk-grid-column-one-quarter';
 
   @HostBinding('class')
@@ -25,6 +24,6 @@ export class CustomSummaryMetricBarItemComponent {
    * @returns {string} A space-separated list of CSS classes to apply to the component.
    */
   public getSummaryMetricBarItemClasses(): string {
-    return `custom-summary-metric-bar-item-frame ${this.backgroundColour} ${this.textColour}`;
+    return `custom-summary-metric-bar-item-frame ${this.backgroundColour}`;
   }
 }

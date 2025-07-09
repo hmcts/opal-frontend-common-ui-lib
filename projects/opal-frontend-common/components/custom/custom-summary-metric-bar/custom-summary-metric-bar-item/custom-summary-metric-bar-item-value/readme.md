@@ -22,15 +22,25 @@ import { CustomSummaryMetricBarItemValueComponent } from '@hmcts/opal-frontend-c
 
 You can use the Custom Summary Metric Bar Item Value component in your template as follows:
 
+By default the text colour is set to use `govuk-dark-grey-text-colour`:
+
 ```html
-<div opal-lib-custom-summary-metric-bar-item-value>Value 1</div>
+<p opal-lib-custom-summary-metric-bar-item-value>Value 2:</p>
+```
+
+You can change the text colour using the textColour input and provide a valid GDS text colour class found in styles.scss:
+
+```html
+<p opal-lib-custom-summary-metric-bar-item-value textColour="govuk-dark-blue-text-colour">Value 2</p>
 ```
 
 The component uses defaulted govuk classes to remove margin and set font size and weight using this GDS class 'govuk-body govuk-!-font-size-24 govuk-!-font-weight-bold govuk-!-margin-0'.
 
 ## Inputs
 
-There are no custom inputs for this component.
+| Input        | Type     | Default                       | Description                                                                          |
+| ------------ | -------- | ----------------------------- | ------------------------------------------------------------------------------------ |
+| `textColour` | `string` | `govuk-dark-grey-text-colour` | Applies the text colour dependant using GDS text colour classes found in styles.scss |
 
 ## Outputs
 
