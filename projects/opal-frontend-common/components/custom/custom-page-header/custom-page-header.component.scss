@@ -1,12 +1,11 @@
 .custom-grid-class {
-    display: flex;
-  }
-  .custom-column-class {
-    display: flex;
-    flex-direction: column;
-    justify-content: end;
-  }
-  .custom-button-group-class {
-    justify-content: right;
-  }
-  
+  display: flex;
+}
+.custom-column-class {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+}
+.custom-button-group-class {
+  justify-content: right;
+}
