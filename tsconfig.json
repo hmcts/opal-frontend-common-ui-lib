@@ -301,7 +301,6 @@
         "./dist/opal-frontend-common/services/auth-service/constants"
       ],
       "@hmcts/opal-frontend-common/services/date-service": ["./dist/opal-frontend-common/services/date-service"],
-
       "@hmcts/opal-frontend-common/services/date-service/interfaces": [
         "./dist/opal-frontend-common/services/date-service/interfaces"
       ],
