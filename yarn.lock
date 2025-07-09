@@ -4949,6 +4949,11 @@ hasown@^2.0.2:
   dependencies:
     function-bind "^1.1.2"
 
+home-office-kit@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/home-office-kit/-/home-office-kit-1.2.0.tgz#0374fa3eac03a52531f17402bf1b0125040d03a5"
+  integrity sha512-IWhkmZk+RxPM7JWA2F3/cJuuiTCqAxHU5Xj9/E9rwF5CbhR/YGXtqdU1NLPpJTwRHuJTmDKyuECXJ5Cbs7xhDg==
+
 hosted-git-info@^8.0.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-8.1.0.tgz#153cd84c03c6721481e16a5709eb74b1a0ab2ed0"
