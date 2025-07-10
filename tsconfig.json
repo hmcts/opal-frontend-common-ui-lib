@@ -220,6 +220,9 @@
         "./dist/opal-frontend-common/components/govuk/govuk-text-input"
       ],
       "@hmcts/opal-frontend-common/components/govuk/helpers": ["./dist/opal-frontend-common/components/govuk/helpers"],
+      "@hmcts/opal-frontend-common/components/hod/hod-loading-spinner": [
+        "./dist/opal-frontend-common/components/hod/hod-loading-spinner"
+      ],
       "@hmcts/opal-frontend-common/components/moj/moj-alert": ["./dist/opal-frontend-common/components/moj/moj-alert"],
       "@hmcts/opal-frontend-common/components/moj/moj-badge": ["./dist/opal-frontend-common/components/moj/moj-badge"],
       "@hmcts/opal-frontend-common/components/moj/moj-button-menu": [

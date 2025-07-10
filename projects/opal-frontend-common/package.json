@@ -221,6 +221,9 @@
     "./components/govuk/helpers": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-helpers.mjs"
     },
+    "./components/hod/hod-loading-spinner": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-hod-hod-loading-spinner.mjs"
+    },
     "./components/moj/moj-alert": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-alert.mjs"
     },
