@@ -12,9 +12,10 @@ import { SSO_ENDPOINTS } from '@hmcts/opal-frontend-common/services/auth-service
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignInComponent {
+  private readonly document = inject(DOCUMENT);
+
   public readonly globalStore = inject(GlobalStore);
   public ssoEnabled: boolean | null = true;
-  private readonly document = inject(DOCUMENT);
 
   /**
    * Handles the submission of the stub sign-in form.

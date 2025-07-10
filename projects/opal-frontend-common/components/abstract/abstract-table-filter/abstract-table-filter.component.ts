@@ -16,6 +16,17 @@ export abstract class AbstractTableFilterComponent {
   public appliedKeyword = signal<string>('');
 
   /**
+   * A computed signal that returns the currently selected filter tags.
+   * It filters the filterTags signal to include only those options that are selected,
+   * grouped by their category name.
+   *
+   * @returns An array of filter categories each containing only the selected options.
+   */
+  public abstractSelectedTags: Signal<IAbstractTableFilterCategory[]> = computed(() =>
+    this.getSelectedOptionsFromTags(this.filterTags()),
+  );
+
+  /**
    * Determines whether a given item matches a specific filter option within a category.
    * @param item The data item to test.
    * @param categoryName The category name to check within the item.
@@ -58,17 +69,6 @@ export abstract class AbstractTableFilterComponent {
       }))
       .filter((group) => group.options.length > 0);
   }
-
-  /**
-   * A computed signal that returns the currently selected filter tags.
-   * It filters the filterTags signal to include only those options that are selected,
-   * grouped by their category name.
-   *
-   * @returns An array of filter categories each containing only the selected options.
-   */
-  public abstractSelectedTags: Signal<IAbstractTableFilterCategory[]> = computed(() =>
-    this.getSelectedOptionsFromTags(this.filterTags()),
-  );
 
   /**
    * Updates the keyword used to filter the table data.

@@ -15,6 +15,28 @@ import { AbstractTableFilterComponent } from '@hmcts/opal-frontend-common/compon
 })
 export abstract class AbstractSortableTableComponent extends AbstractTableFilterComponent implements OnInit {
   private readonly sortService = inject(SortService);
+
+  /**
+   * Synchronizes the sorted table data with the current filter and sort state.
+   *
+   * This effect observes changes to the filtered table data and the sort state signals.
+   * If no active sort key is found (i.e., no sorting is applied), it sets the sorted table data
+   * to a shallow copy of the filtered data. Otherwise, sorting logic should be applied elsewhere.
+   *
+   * @protected
+   */
+  protected syncSortedDataEffect = effect(() => {
+    const filtered = this.filteredTableDataSignal();
+    const currentSort = this.sortStateSignal();
+
+    const activeSortKey = Object.keys(currentSort).find((k) => currentSort[k] !== 'none');
+
+    if (!activeSortKey) {
+      // No sort applied – use filtered data directly
+      this.sortedTableDataSignal.set([...filtered]);
+    }
+  });
+
   public override displayTableDataSignal = signal<IAbstractTableData<SortableValuesType>[]>([]);
   public override filteredTableDataSignal = signal<IAbstractTableData<SortableValuesType>[]>([]);
   public sortedTableDataSignal = signal<IAbstractTableData<SortableValuesType>[]>([]);
@@ -155,27 +177,6 @@ export abstract class AbstractSortableTableComponent extends AbstractTableFilter
     // Emit the updated sort state
     this.abstractSortState.emit(this.sortStateSignal());
   }
-
-  /**
-   * Synchronizes the sorted table data with the current filter and sort state.
-   *
-   * This effect observes changes to the filtered table data and the sort state signals.
-   * If no active sort key is found (i.e., no sorting is applied), it sets the sorted table data
-   * to a shallow copy of the filtered data. Otherwise, sorting logic should be applied elsewhere.
-   *
-   * @protected
-   */
-  protected syncSortedDataEffect = effect(() => {
-    const filtered = this.filteredTableDataSignal();
-    const currentSort = this.sortStateSignal();
-
-    const activeSortKey = Object.keys(currentSort).find((k) => currentSort[k] !== 'none');
-
-    if (!activeSortKey) {
-      // No sort applied – use filtered data directly
-      this.sortedTableDataSignal.set([...filtered]);
-    }
-  });
 
   /**
    * Lifecycle hook to initialise the sort state.
