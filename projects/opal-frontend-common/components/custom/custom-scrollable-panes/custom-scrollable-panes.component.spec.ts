@@ -1,22 +1,37 @@
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { CustomScrollablePanesComponent } from './custom-scrollable-panes.component';
 
+@Component({
+  template: `
+    <opal-lib-custom-scrollable-panes>
+      <p class="test-content">Scrollable content</p>
+    </opal-lib-custom-scrollable-panes>
+  `,
+  standalone: true,
+  imports: [CustomScrollablePanesComponent],
+})
+class TestHostComponent {}
+
 describe('CustomScrollablePanesComponent', () => {
-  let component: CustomScrollablePanesComponent;
-  let fixture: ComponentFixture<CustomScrollablePanesComponent>;
+  let fixture: ComponentFixture<TestHostComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CustomScrollablePanesComponent],
+      imports: [TestHostComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CustomScrollablePanesComponent);
-    component = fixture.componentInstance;
+    fixture = TestBed.createComponent(TestHostComponent);
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should render projected content', () => {
+    const projected = fixture.nativeElement.querySelector('.test-content');
+    expect(projected?.textContent).toContain('Scrollable content');
+  });
+
+  it('should have the correct CSS class applied', () => {
+    const scrollWrapper = fixture.nativeElement.querySelector('.custom-scrollable-pane');
+    expect(scrollWrapper).toBeTruthy();
   });
 });
