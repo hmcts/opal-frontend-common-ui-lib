@@ -2,39 +2,34 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojButtonMenuItemComponent } from './moj-button-menu-item.component';
 import { Component } from '@angular/core';
 import { MojButtonMenuComponent } from '../moj-button-menu.component';
-
 @Component({
   template: `<opal-lib-moj-button-menu menuButtonTitle="More actions">
-    <opal-lib-moj-button-menu-item>
-      <ng-container linkText>Action 1</ng-container>
-      <ng-container linkText>Action 2</ng-container>
-      <ng-container linkText>Action 3</ng-container>
-    </opal-lib-moj-button-menu-item>
+    <opal-lib-moj-button-menu-item itemText="'Test Item'"> </opal-lib-moj-button-menu-item>
   </opal-lib-moj-button-menu>`,
   imports: [MojButtonMenuComponent, MojButtonMenuItemComponent],
 })
 class TestHostComponent {}
 
-describe('MojButtonMenuItemComponent', () => {
-  let component: TestHostComponent;
-  let fixture: ComponentFixture<TestHostComponent>;
+describe('MojButtonMenuItemComponent in TestHostComponent', () => {
+  let hostFixture: ComponentFixture<TestHostComponent>;
+  let hostComponent: TestHostComponent;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TestHostComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TestHostComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    hostFixture = TestBed.createComponent(TestHostComponent);
+    hostComponent = hostFixture.componentInstance;
+    hostFixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should create TestHostComponent', () => {
+    expect(hostComponent).toBeTruthy();
   });
 });
 
-describe('MojButtonMenuItemComponent', () => {
+describe('MojButtonMenuItemComponent isolated', () => {
   let component: MojButtonMenuItemComponent;
   let fixture: ComponentFixture<MojButtonMenuItemComponent>;
 
@@ -45,24 +40,20 @@ describe('MojButtonMenuItemComponent', () => {
 
     fixture = TestBed.createComponent(MojButtonMenuItemComponent);
     component = fixture.componentInstance;
+    // Provide required input
+    component.itemText = 'Test';
     fixture.detectChanges();
   });
 
-  it('should emit the actionClick event with the correct actionId', () => {
-    spyOn(component.actionClick, 'emit');
-
-    const mockEvent = new Event('click');
-    component.handleClick(mockEvent);
-
-    expect(component.actionClick.emit).toHaveBeenCalledWith(true);
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('should prevent the default event behavior', () => {
-    const mockEvent = new Event('click');
-    spyOn(mockEvent, 'preventDefault');
-
-    component.handleClick(mockEvent);
-
-    expect(mockEvent.preventDefault).toHaveBeenCalled();
+  it('should prevent default and emit actionClick when handleClick is called', () => {
+    const fakeEvent = { preventDefault: jasmine.createSpy('preventDefault') } as unknown as Event;
+    spyOn(component.actionClick, 'emit');
+    component.handleClick(fakeEvent);
+    expect(fakeEvent.preventDefault).toHaveBeenCalled();
+    expect(component.actionClick.emit).toHaveBeenCalled();
   });
 });

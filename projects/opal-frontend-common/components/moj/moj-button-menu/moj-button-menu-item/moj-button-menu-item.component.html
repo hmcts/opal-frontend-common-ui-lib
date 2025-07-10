@@ -1,11 +1,15 @@
-<a
-  href=""
-  role="menuitem"
-  draggable="false"
-  class="moj-button-menu__item"
-  data-module="govuk-button"
-  data-secondary="true"
-  (click)="handleClick($event)"
->
-  <ng-content select="[linkText]"></ng-content>
-</a>
+<li>
+  <a
+    href="#"
+    role="link"
+    draggable="false"
+    class="moj-button-menu__item"
+    data-module="govuk-button"
+    data-secondary="true"
+    data-govuk-button-init=""
+    tabindex="-1"
+    (click)="handleClick($event)"
+  >
+    {{ itemText }}
+  </a>
+</li>
