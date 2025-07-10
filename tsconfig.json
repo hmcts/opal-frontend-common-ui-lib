@@ -107,6 +107,7 @@
       ],
       "@hmcts/opal-frontend-common/components/custom/custom-action-links": [
         "./dist/opal-frontend-common/components/custom/custom-action-links"
+      ],
       "@hmcts/opal-frontend-common/components/custom/custom-page-header": [
         "./dist/opal-frontend-common/components/custom/custom-page-header"
       ],
