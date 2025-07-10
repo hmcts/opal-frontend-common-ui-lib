@@ -18,21 +18,21 @@ import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service
   template: '',
 })
 export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
-  @Output() protected unsavedChanges = new EventEmitter<boolean>();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @Output() protected formSubmit = new EventEmitter<IAbstractFormBaseForm<any>>();
-
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
   private readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
+
+  @Output() protected unsavedChanges = new EventEmitter<boolean>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @Output() protected formSubmit = new EventEmitter<IAbstractFormBaseForm<any>>();
   protected readonly utilsService = inject(UtilsService);
+  protected fieldErrors!: IAbstractFormBaseFieldErrors;
+  protected formSubmitted = false;
+  protected readonly ngUnsubscribe = new Subject<void>();
 
   public form!: FormGroup;
   public formControlErrorMessages!: IAbstractFormControlErrorMessage;
   public formErrorSummaryMessage!: IAbstractFormBaseFormErrorSummaryMessage[];
-  protected fieldErrors!: IAbstractFormBaseFieldErrors;
-  protected formSubmitted = false;
-  protected readonly ngUnsubscribe = new Subject<void>();
   public formErrors!: IAbstractFormBaseFormError[];
 
   constructor() {}

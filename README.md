@@ -158,6 +158,26 @@ The following commands are available in the `package.json`:
 - `yarn lint`  
   Runs linting using ESLint.
 
+  There is a custom lint rule for member ordering to ensure members in the code are ordered in the following format:
+
+```json
+[
+  "private-static-field",
+  "protected-static-field",
+  "public-static-field",
+  "private-instance-field",
+  "protected-instance-field",
+  "public-instance-field",
+  "constructor",
+  "private-static-method",
+  "protected-static-method",
+  "public-static-method",
+  "private-instance-method",
+  "protected-instance-method",
+  "public-instance-method"
+]
+```
+
 - `yarn prettier`  
   Checks that all files conform to the Prettier formatting rules.
 

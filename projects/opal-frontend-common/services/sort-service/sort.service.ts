@@ -12,26 +12,6 @@ import { SortableValuesType } from '@hmcts/opal-frontend-common/components/abstr
 })
 export class SortService {
   /**
-   * Sorts an array of values in ascending order.
-   *
-   * @param array - The array of values to be sorted.
-   * @returns The sorted array in ascending order.
-   */
-  public arraySortAsc(array: ISortServiceArrayValues): ISortServiceArrayValues {
-    return sort(array).asc();
-  }
-
-  /**
-   * Sorts an array of values in descending order.
-   *
-   * @param array - The array of values to be sorted.
-   * @returns The sorted array in descending order.
-   */
-  public arraySortDesc(array: ISortServiceArrayValues): ISortServiceArrayValues {
-    return sort(array).desc();
-  }
-
-  /**
    * Sorts an array of objects based on a specified key and sort type.
    *
    * @param array - The array of objects to be sorted. Each object should implement the `ISortServiceValues` interface.
@@ -100,5 +80,25 @@ export class SortService {
     key: string,
   ): ISortServiceValues<SortableValuesType>[] | null {
     return this.sortObjectArray(array, { key, sortType: 'descending' });
+  }
+
+  /**
+   * Sorts an array of values in ascending order.
+   *
+   * @param array - The array of values to be sorted.
+   * @returns The sorted array in ascending order.
+   */
+  public arraySortAsc(array: ISortServiceArrayValues): ISortServiceArrayValues {
+    return sort(array).asc();
+  }
+
+  /**
+   * Sorts an array of values in descending order.
+   *
+   * @param array - The array of values to be sorted.
+   * @returns The sorted array in descending order.
+   */
+  public arraySortDesc(array: ISortServiceArrayValues): ISortServiceArrayValues {
+    return sort(array).desc();
   }
 }

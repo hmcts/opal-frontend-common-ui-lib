@@ -9,21 +9,6 @@ export abstract class AbstractFormParentBaseComponent {
   public stateUnsavedChanges!: boolean;
 
   /**
-   * If the user navigates externally from the site or closes the tab
-   * Check if there is unsaved changes form state -> warning message
-   * Otherwise -> no warning message
-   *
-   * @returns boolean
-   */
-  canDeactivate(): CanDeactivateTypes {
-    if (this.stateUnsavedChanges) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  /**
    * Navigates to a specified route using the Angular Router.
    *
    * @param route - The target route to navigate to.
@@ -55,5 +40,20 @@ export abstract class AbstractFormParentBaseComponent {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected hasFormValues(form: { [key: string]: any }): boolean {
     return Object.values(form).some(Boolean);
+  }
+
+  /**
+   * If the user navigates externally from the site or closes the tab
+   * Check if there is unsaved changes form state -> warning message
+   * Otherwise -> no warning message
+   *
+   * @returns boolean
+   */
+  public canDeactivate(): CanDeactivateTypes {
+    if (this.stateUnsavedChanges) {
+      return false;
+    } else {
+      return true;
+    }
   }
 }
