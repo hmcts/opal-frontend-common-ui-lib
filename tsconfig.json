@@ -84,6 +84,18 @@
       "@hmcts/opal-frontend-common/components/custom/custom-account-information": [
         "./dist/opal-frontend-common/components/custom/custom-account-information"
       ],
+      "@hmcts/opal-frontend-common/components/custom/custom-summary-metric-bar": [
+        "./dist/opal-frontend-common/components/custom/custom-summary-metric-bar"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item": [
+        "./dist/opal-frontend-common/components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item/custom-summary-metric-bar-item-label": [
+        "./dist/opal-frontend-common/components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item/custom-summary-metric-bar-item-label"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item/custom-summary-metric-bar-item-value": [
+        "./dist/opal-frontend-common/components/custom/custom-summary-metric-bar/custom-summary-metric-bar-item/custom-summary-metric-bar-item-value"
+      ],
       "@hmcts/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item": [
         "./dist/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item"
       ],
@@ -92,6 +104,15 @@
       ],
       "@hmcts/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item/custom-account-information-item-value": [
         "./dist/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item/custom-account-information-item-value"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-action-links": [
+        "./dist/opal-frontend-common/components/custom/custom-action-links"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-page-header": [
+        "./dist/opal-frontend-common/components/custom/custom-page-header"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-page-header/custom-page-header-action-button": [
+        "./dist/opal-frontend-common/components/custom/custom-page-header/custom-page-header-action-button"
       ],
       "@hmcts/opal-frontend-common/components/custom/custom-horizontal-scroll-pane": [
         "./dist/opal-frontend-common/components/custom/custom-horizontal-scroll-pane"
@@ -150,6 +171,12 @@
       "@hmcts/opal-frontend-common/components/govuk/govuk-inset-text": [
         "./dist/opal-frontend-common/components/govuk/govuk-inset-text"
       ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-list": [
+        "./dist/opal-frontend-common/components/govuk/govuk-list"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-list-link": [
+        "./dist/opal-frontend-common/components/govuk/govuk-list-link"
+      ],
       "@hmcts/opal-frontend-common/components/govuk/govuk-notification-banner": [
         "./dist/opal-frontend-common/components/govuk/govuk-notification-banner"
       ],
@@ -201,14 +228,17 @@
       "@hmcts/opal-frontend-common/components/govuk/govuk-text-input": [
         "./dist/opal-frontend-common/components/govuk/govuk-text-input"
       ],
-      "@hmcts/opal-frontend-common/components/govuk/govuk-text-input-prefix-suffix": [
-        "./dist/opal-frontend-common/components/govuk/govuk-text-input-prefix-suffix"
-      ],
       "@hmcts/opal-frontend-common/components/govuk/helpers": ["./dist/opal-frontend-common/components/govuk/helpers"],
+      "@hmcts/opal-frontend-common/components/hod/hod-loading-spinner": [
+        "./dist/opal-frontend-common/components/hod/hod-loading-spinner"
+      ],
       "@hmcts/opal-frontend-common/components/moj/moj-alert": ["./dist/opal-frontend-common/components/moj/moj-alert"],
       "@hmcts/opal-frontend-common/components/moj/moj-badge": ["./dist/opal-frontend-common/components/moj/moj-badge"],
       "@hmcts/opal-frontend-common/components/moj/moj-button-menu": [
         "./dist/opal-frontend-common/components/moj/moj-button-menu"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-button-menu/moj-button-menu-item": [
+        "./dist/opal-frontend-common/components/moj/moj-button-menu/moj-button-menu-item"
       ],
       "@hmcts/opal-frontend-common/components/moj/moj-date-picker": [
         "./dist/opal-frontend-common/components/moj/moj-date-picker"
@@ -268,6 +298,7 @@
         "./dist/opal-frontend-common/components/moj/moj-timeline"
       ],
       "@hmcts/opal-fronted-common/directives/capitalisation": ["./dist/opal-frontend-common/directives/capitalisation"],
+      "@hmcts/opal-fronted-common/directives/govuk-button": ["./dist/opal-frontend-common/directives/govuk-button"],
       "@hmcts/opal-frontend-common/constants": ["./dist/opal-frontend-common/constants"],
       "@hmcts/opal-frontend-common/guards/auth": ["./dist/opal-frontend-common/guards/auth"],
       "@hmcts/opal-frontend-common/guards/can-deactivate": ["./dist/opal-frontend-common/guards/can-deactivate"],
@@ -304,11 +335,9 @@
         "./dist/opal-frontend-common/services/auth-service/constants"
       ],
       "@hmcts/opal-frontend-common/services/date-service": ["./dist/opal-frontend-common/services/date-service"],
-
       "@hmcts/opal-frontend-common/services/date-service/interfaces": [
         "./dist/opal-frontend-common/services/date-service/interfaces"
       ],
-
       "@hmcts/opal-frontend-common/services/launch-darkly-service": [
         "./dist/opal-frontend-common/services/launch-darkly-service"
       ],
