@@ -105,6 +105,9 @@
       "@hmcts/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item/custom-account-information-item-value": [
         "./dist/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item/custom-account-information-item-value"
       ],
+      "@hmcts/opal-frontend-common/components/custom/custom-action-links": [
+        "./dist/opal-frontend-common/components/custom/custom-action-links"
+      ],
       "@hmcts/opal-frontend-common/components/custom/custom-page-header": [
         "./dist/opal-frontend-common/components/custom/custom-page-header"
       ],
@@ -159,6 +162,12 @@
       "@hmcts/opal-frontend-common/components/govuk/govuk-inset-text": [
         "./dist/opal-frontend-common/components/govuk/govuk-inset-text"
       ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-list": [
+        "./dist/opal-frontend-common/components/govuk/govuk-list"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-list-link": [
+        "./dist/opal-frontend-common/components/govuk/govuk-list-link"
+      ],
       "@hmcts/opal-frontend-common/components/govuk/govuk-notification-banner": [
         "./dist/opal-frontend-common/components/govuk/govuk-notification-banner"
       ],
@@ -209,9 +218,6 @@
       ],
       "@hmcts/opal-frontend-common/components/govuk/govuk-text-input": [
         "./dist/opal-frontend-common/components/govuk/govuk-text-input"
-      ],
-      "@hmcts/opal-frontend-common/components/govuk/govuk-text-input-prefix-suffix": [
-        "./dist/opal-frontend-common/components/govuk/govuk-text-input-prefix-suffix"
       ],
       "@hmcts/opal-frontend-common/components/govuk/helpers": ["./dist/opal-frontend-common/components/govuk/helpers"],
       "@hmcts/opal-frontend-common/components/moj/moj-alert": ["./dist/opal-frontend-common/components/moj/moj-alert"],
@@ -317,7 +323,6 @@
         "./dist/opal-frontend-common/services/auth-service/constants"
       ],
       "@hmcts/opal-frontend-common/services/date-service": ["./dist/opal-frontend-common/services/date-service"],
-        
       "@hmcts/opal-frontend-common/services/date-service/interfaces": [
         "./dist/opal-frontend-common/services/date-service/interfaces"
       ],
