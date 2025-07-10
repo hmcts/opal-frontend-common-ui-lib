@@ -93,6 +93,15 @@
       "@hmcts/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item/custom-account-information-item-value": [
         "./dist/opal-frontend-common/components/custom/custom-account-information/custom-account-information-item/custom-account-information-item-value"
       ],
+      "@hmcts/opal-frontend-common/components/custom/custom-horizontal-scroll-pane": [
+        "./dist/opal-frontend-common/components/custom/custom-horizontal-scroll-pane"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-scrollable-panes": [
+        "./dist/opal-frontend-common/components/custom/custom-scrollable-panes"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-vertical-scroll-pane": [
+        "./dist/opal-frontend-common/components/custom/custom-vertical-scroll-pane"
+      ],
       "@hmcts/opal-frontend-common/components/govuk/govuk-accordion": [
         "./dist/opal-frontend-common/components/govuk/govuk-accordion"
       ],
@@ -295,7 +304,7 @@
         "./dist/opal-frontend-common/services/auth-service/constants"
       ],
       "@hmcts/opal-frontend-common/services/date-service": ["./dist/opal-frontend-common/services/date-service"],
-        
+
       "@hmcts/opal-frontend-common/services/date-service/interfaces": [
         "./dist/opal-frontend-common/services/date-service/interfaces"
       ],

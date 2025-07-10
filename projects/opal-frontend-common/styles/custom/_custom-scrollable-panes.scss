@@ -1,0 +1,7 @@
+.custom-scrollable-pane .govuk-table thead th,
+.custom-vertical-scroll-pane .govuk-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 2;
+}
