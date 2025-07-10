@@ -1,14 +1,21 @@
-<div class="moj-button-menu">
-  <button
-    class="govuk-button moj-button-menu__toggle-button govuk-button--secondary moj-button-menu__toggle-button--secondary"
-    type="button"
-    aria-haspopup="true"
-    aria-expanded="false"
-    (click)="toggleButtonMenu()"
-  >
+<button
+  class="govuk-button moj-button-menu__toggle-button govuk-button--secondary"
+  type="button"
+  aria-haspopup="true"
+  aria-expanded="false"
+  (click)="toggleButtonMenu()"
+  #menuButton
+>
+  <span>
     {{ menuButtonTitle }}
-  </button>
-  <div class="moj-button-menu__wrapper" role="menu">
+    <svg width="11" height="5" viewBox="0 0 11 5" xmlns="http://www.w3.org/2000/svg">
+      <path d="M5.5 0L11 5L0 5L5.5 0Z" fill="currentColor"></path>
+    </svg>
+  </span>
+</button>
+
+@if (isExpanded) {
+  <ul role="list" class="moj-button-menu__wrapper">
     <ng-content></ng-content>
-  </div>
-</div>
+  </ul>
+}

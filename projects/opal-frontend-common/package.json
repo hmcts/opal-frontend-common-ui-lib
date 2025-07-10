@@ -101,11 +101,15 @@
     "./components/custom/custom-account-information/custom-account-information-item/custom-account-information-item-value": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-account-information-custom-account-information-item-custom-account-information-item-value.mjs"
     },
-
     "./components/custom/custom-action-links": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-action-links.mjs"
     },
-
+    "./components/custom/custom-page-header": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-page-header.mjs"
+    },
+    "./components/custom/custom-page-header/custom-page-header-action-buttons-container": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-page-header-custom-page-header-action-buttons-container.mjs"
+    },
     "./components/govuk/govuk-accordion": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-accordion.mjs"
     },
@@ -226,6 +230,9 @@
     "./components/moj/moj-button-menu": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-button-menu.mjs"
     },
+    "./components/moj/moj-button-menu/moj-button-menu-item": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-button-menu-moj-button-menu-item.mjs"
+    },
     "./components/moj/moj-date-picker": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-date-picker.mjs"
     },
@@ -282,6 +289,9 @@
     },
     "./directives/capitalisation": {
       "import": "./fesm2022/hmcts-opal-frontend-common-directives-capitalisation.mjs"
+    },
+    "./directives/govuk-button": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-directives-govuk-button.mjs"
     },
     "./constants": {
       "import": "./fesm2022/hmcts-opal-frontend-common-constants.mjs"
