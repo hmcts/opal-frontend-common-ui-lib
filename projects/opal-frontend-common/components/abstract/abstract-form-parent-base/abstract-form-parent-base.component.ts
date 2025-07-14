@@ -49,7 +49,7 @@ export abstract class AbstractFormParentBaseComponent {
    *
    * @returns boolean
    */
-  public canDeactivate(): CanDeactivateTypes {
+  protected canDeactivate(): CanDeactivateTypes {
     if (this.stateUnsavedChanges) {
       return false;
     } else {

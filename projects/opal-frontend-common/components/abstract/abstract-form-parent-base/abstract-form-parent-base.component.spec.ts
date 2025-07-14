@@ -48,7 +48,7 @@ describe('AbstractFormParentBaseComponent', () => {
     }
 
     component.stateUnsavedChanges = true;
-    expect(component.canDeactivate()).toBe(false);
+    expect(component['canDeactivate']()).toBe(false);
   });
 
   it('should return true if there are no unsaved changes', () => {
@@ -58,7 +58,7 @@ describe('AbstractFormParentBaseComponent', () => {
     }
 
     component.stateUnsavedChanges = false;
-    expect(component.canDeactivate()).toBe(true);
+    expect(component['canDeactivate']()).toBe(true);
   });
 
   it('should test routerNavigate', () => {
