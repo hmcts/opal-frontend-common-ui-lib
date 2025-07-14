@@ -18,25 +18,6 @@ export class GovukPaginationComponent implements OnChanges {
   public ELIPSIS = '...';
 
   /**
-   * Lifecycle hook that is called when any data-bound property of the component changes.
-   * It recalculates the pages for pagination.
-   */
-  ngOnChanges(): void {
-    this.calculatePages();
-  }
-
-  /**
-   * Handles the page change event.
-   *
-   * @param $event - The click event that triggered the page change.
-   * @param page - The new page number.
-   */
-  onPageChanged($event: MouseEvent, page: number) {
-    $event.preventDefault();
-    this.changePage.emit(page);
-  }
-
-  /**
    * Calculates the number of pages based on the total number of items and the limit per page.
    * Updates the `pages` and `elipsedPages` properties accordingly.
    */
@@ -76,5 +57,24 @@ export class GovukPaginationComponent implements OnChanges {
     }
 
     return pages;
+  }
+
+  /**
+   * Handles the page change event.
+   *
+   * @param $event - The click event that triggered the page change.
+   * @param page - The new page number.
+   */
+  public onPageChanged($event: MouseEvent, page: number) {
+    $event.preventDefault();
+    this.changePage.emit(page);
+  }
+
+  /**
+   * Lifecycle hook that is called when any data-bound property of the component changes.
+   * It recalculates the pages for pagination.
+   */
+  public ngOnChanges(): void {
+    this.calculatePages();
   }
 }

@@ -138,18 +138,6 @@ export abstract class AbstractFormArrayBaseComponent extends AbstractFormBaseCom
   }
 
   /**
-   * Adds controls to the form array at the specified index.
-   *
-   * @param index - The index at which the controls should be added.
-   * @param formArrayName - The name of the form array.
-   */
-  public addControlsToFormArray(index: number, formArrayName: string): void {
-    this.formArrayControls.push(
-      this.addFormArrayControls(index, formArrayName, this.formArrayFields, this.formArrayControlsValidation),
-    );
-  }
-
-  /**
    * Removes a form array control at the specified index from the given array of form array controls.
    *
    * @param index - The index of the form array control to be removed.
@@ -299,6 +287,18 @@ export abstract class AbstractFormArrayBaseComponent extends AbstractFormBaseCom
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         {} as { [key: string]: any },
       ),
+    );
+  }
+
+  /**
+   * Adds controls to the form array at the specified index.
+   *
+   * @param index - The index at which the controls should be added.
+   * @param formArrayName - The name of the form array.
+   */
+  public addControlsToFormArray(index: number, formArrayName: string): void {
+    this.formArrayControls.push(
+      this.addFormArrayControls(index, formArrayName, this.formArrayFields, this.formArrayControlsValidation),
     );
   }
 

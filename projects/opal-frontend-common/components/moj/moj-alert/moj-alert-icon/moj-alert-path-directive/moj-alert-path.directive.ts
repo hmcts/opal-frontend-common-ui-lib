@@ -6,9 +6,9 @@ import { MOJ_ALERT_ICON_PATHS } from './constants/alert-icon-path.constant';
   standalone: true,
 })
 export class MojAlertPathDirective implements OnChanges {
-  @Input('opalLibMojAlertSortIcon') type: MojAlertType = 'information';
-
   private readonly icons = MOJ_ALERT_ICON_PATHS;
+
+  @Input('opalLibMojAlertSortIcon') type: MojAlertType = 'information';
 
   constructor(
     private readonly el: ElementRef<SVGSVGElement>,

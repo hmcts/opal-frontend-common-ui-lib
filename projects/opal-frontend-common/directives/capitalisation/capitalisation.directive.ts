@@ -7,9 +7,9 @@ import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service
   selector: '[opalLibCapitaliseAllCharacters]',
 })
 export class CapitalisationDirective implements OnInit, OnDestroy {
-  @Input('opalLibCapitaliseAllCharacters') control!: AbstractControl;
-
   private readonly destroy$ = new Subject<void>();
+
+  @Input('opalLibCapitaliseAllCharacters') control!: AbstractControl;
 
   constructor(private readonly utilsService: UtilsService) {}
 
