@@ -11,8 +11,9 @@ import { GovukButtonComponent } from '@hmcts/opal-frontend-common/components/gov
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignInStubComponent implements OnInit {
-  public signInForm!: FormGroup;
   @Output() private readonly signInFormSubmit = new EventEmitter<ISignInStubForm>();
+
+  public signInForm!: FormGroup;
 
   /**
    * Sets up the sign-in form.

@@ -20,10 +20,10 @@ import { addGdsBodyClass } from '@hmcts/opal-frontend-common/components/govuk/he
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MojDatePickerComponent implements OnInit {
-  private _control!: FormControl;
-  public disabledDatesConcatenated!: string;
-
   private readonly dateService = inject(DateService);
+  private _control!: FormControl;
+
+  public disabledDatesConcatenated!: string;
 
   @Input({ required: true }) labelText!: string;
   @Input({ required: false }) labelClasses!: string;

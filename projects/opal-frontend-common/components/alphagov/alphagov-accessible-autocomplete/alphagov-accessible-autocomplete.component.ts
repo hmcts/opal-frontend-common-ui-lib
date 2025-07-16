@@ -23,6 +23,10 @@ import { Subject, pairwise, startWith, takeUntil } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlphagovAccessibleAutocompleteComponent implements OnInit, OnDestroy {
+  private readonly changeDetector: ChangeDetectorRef = inject(ChangeDetectorRef);
+  private _control!: FormControl;
+  private readonly ngUnsubscribe = new Subject<void>();
+
   @Input({ required: true }) labelText!: string;
   @Input({ required: false }) labelClasses!: string;
   @Input({ required: true }) inputId!: string;
@@ -35,9 +39,6 @@ export class AlphagovAccessibleAutocompleteComponent implements OnInit, OnDestro
 
   @ViewChild('autocomplete') autocompleteContainer!: ElementRef<HTMLElement>;
 
-  private readonly changeDetector: ChangeDetectorRef = inject(ChangeDetectorRef);
-  private _control!: FormControl;
-  private readonly ngUnsubscribe = new Subject<void>();
   public autoCompleteId!: string;
 
   @Input({ required: true }) set control(abstractControl: AbstractControl | null) {
