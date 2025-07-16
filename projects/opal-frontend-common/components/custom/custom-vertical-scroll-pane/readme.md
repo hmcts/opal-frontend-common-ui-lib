@@ -1,57 +1,25 @@
 # CustomVerticalScrollPaneComponent
 
-A reusable Angular standalone component that enables vertical scrolling for any projected content. Commonly used to wrap tables or long content sections where vertical overflow control is required.
+This is a structural wrapper component used to pair together `<opal-lib-custom-vertical-scroll-pane-outer-pane>` and `<opal-lib-custom-vertical-scroll-pane-inner-pane>`.
 
-## Selector
+## Purpose
 
-```html
-<opal-lib-custom-vertical-scroll-pane></opal-lib-custom-vertical-scroll-pane>
-```
-
-## Inputs
-
-| Name        | Type   | Default   | Description                                                                                               |
-| ----------- | ------ | --------- | --------------------------------------------------------------------------------------------------------- |
-| `maxHeight` | string | `'400px'` | Sets the maximum height of the scrollable container. Accepts any valid CSS height unit (e.g. `px`, `vh`). |
+The `CustomVerticalScrollPaneComponent` provides a clean wrapper to contain both outer and inner scrollable panes. It does not apply any styles or logic itself, but serves to encapsulate the pairing and provide a semantic grouping for layout and readability.
 
 ## Usage
 
-### Basic
-
 ```html
 <opal-lib-custom-vertical-scroll-pane>
-  <p>Long content that requires vertical scrolling...</p>
-</opal-lib-custom-vertical-scroll-pane>
-```
-
-### With custom height
-
-```html
-<opal-lib-custom-vertical-scroll-pane [maxHeight]="'600px'">
-  <my-long-table></my-long-table>
+  <opal-lib-custom-vertical-scroll-pane-outer-pane height="100vh">
+    <opal-lib-custom-vertical-scroll-pane-inner-pane maxHeight="calc(100vh - 3rem)">
+      <!-- Table or scrollable content here -->
+    </opal-lib-custom-vertical-scroll-pane-inner-pane>
+  </opal-lib-custom-vertical-scroll-pane-outer-pane>
 </opal-lib-custom-vertical-scroll-pane>
 ```
 
 ## Notes
 
-- Sticky headers (e.g. `<thead> th`) will remain fixed if using a table inside.
-- The component wraps content in a `div.custom-vertical-scroll-pane`, styled with `overflow-y: auto`.
-
-## Styling
-
-The following SCSS styles apply:
-
-```scss
-.custom-vertical-scroll-pane {
-  max-height: inherit;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.custom-vertical-scroll-pane .govuk-table thead th {
-  position: sticky;
-  top: 0;
-  background-color: #fff;
-  z-index: 2;
-}
-```
+- The outer pane controls the overall container height.
+- The inner pane controls the scrollable area.
+- This component is optional but recommended for clarity and future enhancements.

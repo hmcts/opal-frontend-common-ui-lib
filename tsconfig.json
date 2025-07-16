@@ -120,8 +120,17 @@
       "@hmcts/opal-frontend-common/components/custom/custom-scrollable-panes": [
         "./dist/opal-frontend-common/components/custom/custom-scrollable-panes"
       ],
+      "@hmcts/opal-frontend-common/components/custom/custom-scrollable-panes/custom-scrollable-panes-inner-pane": [
+        "./dist/opal-frontend-common/components/custom/custom-scrollable-panes/custom-scrollable-panes-inner-pane"
+      ],
       "@hmcts/opal-frontend-common/components/custom/custom-vertical-scroll-pane": [
         "./dist/opal-frontend-common/components/custom/custom-vertical-scroll-pane"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-vertical-scroll-pane/custom-vertical-scroll-pane-inner-pane": [
+        "./dist/opal-frontend-common/components/custom/custom-vertical-scroll-pane/custom-vertical-scroll-pane-inner-pane"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-vertical-scroll-pane/custom-vertical-scroll-pane-outer-pane": [
+        "./dist/opal-frontend-common/components/custom/custom-vertical-scroll-pane/custom-vertical-scroll-pane-outer-pane"
       ],
       "@hmcts/opal-frontend-common/components/govuk/govuk-accordion": [
         "./dist/opal-frontend-common/components/govuk/govuk-accordion"

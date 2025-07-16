@@ -1,11 +1,10 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'opal-lib-custom-scrollable-panes',
-  templateUrl: './custom-scrollable-panes.component.html',
-  styleUrl: './custom-scrollable-panes.component.scss',
+  selector: 'opal-lib-custom-vertical-scroll-pane-outer-pane',
+  templateUrl: './custom-vertical-scroll-pane-outer-pane.component.html',
 })
-export class CustomScrollablePanesComponent {
+export class CustomVerticalScrollPaneOuterPaneComponent {
   private _height: string = '100%';
 
   @Input()

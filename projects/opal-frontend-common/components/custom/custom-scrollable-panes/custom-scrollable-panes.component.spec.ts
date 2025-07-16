@@ -34,4 +34,28 @@ describe('CustomScrollablePanesComponent', () => {
     const scrollWrapper = fixture.nativeElement.querySelector('.custom-scrollable-pane');
     expect(scrollWrapper).toBeTruthy();
   });
+
+  it('should apply the correct height when height input is set', () => {
+    const componentInstance = fixture.debugElement.children[0].componentInstance as CustomScrollablePanesComponent;
+    componentInstance.height = '300px';
+    fixture.detectChanges();
+    const scrollWrapper = fixture.nativeElement.querySelector('.custom-scrollable-pane');
+    expect(scrollWrapper.style.height).toBe('300px');
+  });
+
+  it('should fallback to default height when invalid value is provided', () => {
+    const componentInstance = fixture.debugElement.children[0].componentInstance as CustomScrollablePanesComponent;
+    componentInstance.height = 'invalid-value';
+    fixture.detectChanges();
+    const scrollWrapper = fixture.nativeElement.querySelector('.custom-scrollable-pane');
+    expect(scrollWrapper.style.height).toBe('100%');
+  });
+
+  it('should fallback to default height when no value is provided', () => {
+    const componentInstance = fixture.debugElement.children[0].componentInstance as CustomScrollablePanesComponent;
+    componentInstance.height = '';
+    fixture.detectChanges();
+    const scrollWrapper = fixture.nativeElement.querySelector('.custom-scrollable-pane');
+    expect(scrollWrapper.style.height).toBe('100%');
+  });
 });

@@ -1,5 +1,5 @@
-.custom-scrollable-pane .govuk-table thead th,
-.custom-vertical-scroll-pane .govuk-table thead th {
+.custom-scrollable-pane.sticky-headers .govuk-table thead th,
+.custom-vertical-scroll-pane-inner-pane.sticky-headers .govuk-table thead th {
   position: sticky;
   top: 0;
   background-color: #fff;

@@ -1,6 +1,6 @@
 # CustomScrollablePanesComponent
 
-A reusable Angular standalone component that enables both vertical and horizontal scrolling for any projected content. Commonly used to wrap large tables or dynamic content that may overflow in both directions.
+A reusable Angular standalone component that enables a vertically scrollable container for any projected content. Commonly used as an outer pane to manage available height for inner content such as tables or long forms. Designed to be paired with `CustomScrollablePanesInnerPaneComponent` for more granular scrolling behaviour.
 
 ## Selector
 
@@ -10,9 +10,9 @@ A reusable Angular standalone component that enables both vertical and horizonta
 
 ## Inputs
 
-| Name        | Type   | Default   | Description                                                             |
-| ----------- | ------ | --------- | ----------------------------------------------------------------------- |
-| `maxHeight` | string | `'400px'` | Sets the maximum height of the scrollable container. Accepts CSS units. |
+| Name     | Type   | Default  | Description                                                           |
+| -------- | ------ | -------- | --------------------------------------------------------------------- |
+| `height` | string | `'100%'` | Sets the height of the outer scrollable container. Accepts CSS units. |
 
 ## Usage
 
@@ -20,37 +20,32 @@ A reusable Angular standalone component that enables both vertical and horizonta
 
 ```html
 <opal-lib-custom-scrollable-panes>
-  <p>Long and wide content goes here…</p>
+  <p>Scrollable content goes here…</p>
 </opal-lib-custom-scrollable-panes>
 ```
 
-### With custom height
+### With inner pane
+
+For more control over inner content scrolling (e.g. sticky headers or scrolling tables), wrap your content in the `CustomScrollablePanesInnerPaneComponent`.
 
 ```html
-<opal-lib-custom-scrollable-panes [maxHeight]="'600px'">
-  <my-table-component></my-table-component>
+<opal-lib-custom-scrollable-panes height="100vh">
+  <opal-lib-custom-scrollable-panes-inner-pane [maxHeight]="'calc(100vh - 3rem)'">
+    <my-table-component></my-table-component>
+  </opal-lib-custom-scrollable-panes-inner-pane>
 </opal-lib-custom-scrollable-panes>
 ```
 
 ## Notes
 
-- Content exceeding the container in height or width will scroll.
-- Sticky `<thead> th` headers remain fixed for tables if styled correctly.
-- Works well with dynamic or complex table layouts.
+- `CustomScrollablePanesComponent` provides the height constraint.
+- `CustomScrollablePanesInnerPaneComponent` handles the scrolling behaviour via `max-height` and `overflow: auto`.
+- Useful for layouts with sticky headers, fixed pagination, or overflow-prone data grids.
 
 ## Styling
 
 ```scss
 .custom-scrollable-pane {
-  max-height: inherit;
-  overflow: auto;
   width: 100%;
-}
-
-.custom-scrollable-pane .govuk-table thead th {
-  position: sticky;
-  top: 0;
-  background-color: #fff;
-  z-index: 2;
 }
 ```
