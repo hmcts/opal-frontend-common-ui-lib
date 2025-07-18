@@ -19,18 +19,41 @@ describe('PermissionsService', () => {
     expect(service['storedUniquePermissionIds']).toEqual([54, 41]);
   });
 
-  it('should return permission access', () => {
-    const hasPermissionAccess = service.hasPermissionAccess(54, 17, SESSION_USER_STATE_MOCK['business_unit_user']);
+  it('should return permission access - hasBusinessUnitPermissionAccess', () => {
+    const hasPermissionAccess = service.hasBusinessUnitPermissionAccess(
+      54,
+      17,
+      SESSION_USER_STATE_MOCK['business_unit_user'],
+    );
     expect(hasPermissionAccess).toBeTrue();
   });
 
-  it('should not return permission access', () => {
-    const hasPermissionAccess = service.hasPermissionAccess(54, 99, SESSION_USER_STATE_MOCK['business_unit_user']);
+  it('should not return permission access - hasBusinessUnitPermissionAccess', () => {
+    const hasPermissionAccess = service.hasBusinessUnitPermissionAccess(
+      54,
+      99,
+      SESSION_USER_STATE_MOCK['business_unit_user'],
+    );
     expect(hasPermissionAccess).toBeFalse();
   });
 
-  it('should return true when no roles are provided', () => {
-    const result = service.hasPermissionAccess(1, 1, []);
+  it('should return true when no roles are provided - hasBusinessUnitPermissionAccess', () => {
+    const result = service.hasBusinessUnitPermissionAccess(1, 1, []);
+    expect(result).toBeTrue();
+  });
+
+  it('should return permission access - hasPermissionAccess', () => {
+    const hasPermissionAccess = service.hasPermissionAccess(54, SESSION_USER_STATE_MOCK['business_unit_user']);
+    expect(hasPermissionAccess).toBeTrue();
+  });
+
+  it('should not return permission access - hasPermissionAccess', () => {
+    const hasPermissionAccess = service.hasPermissionAccess(0, SESSION_USER_STATE_MOCK['business_unit_user']);
+    expect(hasPermissionAccess).toBeFalse();
+  });
+
+  it('should return true when no roles are provided - hasPermissionAccess', () => {
+    const result = service.hasPermissionAccess(1, []);
     expect(result).toBeTrue();
   });
 });

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
   ISessionUserState,
-  ISessionUserStatePermission,
   ISessionUserStateRole,
 } from '@hmcts/opal-frontend-common/services/session-service/interfaces';
 
@@ -30,17 +29,45 @@ export class PermissionsService {
     return this.storedUniquePermissionIds;
   }
 
-  public hasPermissionAccess(permissionId: number, businessUnitId: number, roles: ISessionUserStateRole[]): boolean {
+  /**
+   * Determines whether the user has access to a specific permission based on their roles.
+   *
+   * This method short-circuits and returns as soon as a matching permission is found for efficiency.
+   *
+   * @param permissionId - The ID of the permission to check for access.
+   * @param roles - An array of user roles, each containing a list of permissions.
+   * @returns `true` if the user has the specified permission in any of their roles,
+   *          or if no roles are provided; otherwise, returns `false`.
+   */
+  public hasPermissionAccess(permissionId: number, roles: ISessionUserStateRole[]): boolean {
     if (roles?.length) {
-      // First we need to find the matching role
-      const role = roles?.find((role) => role.business_unit_id === businessUnitId);
+      return roles.some((role) => role.permissions.some((permission) => permission.permission_id === permissionId));
+    }
+    // if we don't have any roles, we can't have any permissions
+    return true;
+  }
 
-      // Then we need to find the matching permission
-      const hasPermission = !!role?.permissions.find(
-        (permission: ISessionUserStatePermission) => permission.permission_id === permissionId,
+  /**
+   * Checks if the user has access to a specific permission within a given business unit.
+   *
+   * This method short-circuits and returns as soon as a matching permission is found for efficiency.
+   *
+   * @param permissionId - The ID of the permission to check.
+   * @param businessUnitId - The ID of the business unit to check against.
+   * @param roles - An array of user roles, each containing permissions and associated business unit IDs.
+   * @returns `true` if the user has the specified permission for the business unit, or if no roles are provided; otherwise, `false`.
+   */
+  public hasBusinessUnitPermissionAccess(
+    permissionId: number,
+    businessUnitId: number,
+    roles: ISessionUserStateRole[],
+  ): boolean {
+    if (roles?.length) {
+      return roles.some(
+        (role) =>
+          role.business_unit_id === businessUnitId &&
+          role.permissions.some((permission) => permission.permission_id === permissionId),
       );
-
-      return hasPermission;
     }
     // if we don't have any roles, we can't have any permissions
     return true;
