@@ -344,6 +344,9 @@
     "./pipes/days-ago": {
       "import": "./fesm2022/hmcts-opal-frontend-common-pipes-days-ago.mjs"
     },
+    "./pipes/national-insurance": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-pipes-national-insurance.mjs"
+    },
     "./resolvers/title": {
       "import": "./fesm2022/hmcts-opal-frontend-common-resolvers-title.mjs"
     },

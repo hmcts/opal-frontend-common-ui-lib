@@ -1,0 +1,5 @@
+{
+  "sideEffects": false,
+  "module": "../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-pipes-national-insurance.mjs",
+  "typings": "../../../dist/opal-frontend-common/pipes/national-insurance/index.d.ts"
+}
