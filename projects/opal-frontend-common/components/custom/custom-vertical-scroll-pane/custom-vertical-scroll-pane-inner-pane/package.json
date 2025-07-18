@@ -1,0 +1,5 @@
+{
+  "sideEffects": false,
+  "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-custom-custom-vertical-scroll-pane-custom-vertical-scroll-pane-inner-pane.mjs",
+  "typings": "../../../../dist/opal-frontend-common/components/custom/custom-vertical-scroll-pane/custom-vertical-scroll-pane-inner-pane/index.d.ts"
+}
