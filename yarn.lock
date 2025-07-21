@@ -2019,9 +2019,9 @@
     "@nevware21/ts-utils" ">= 0.10.4 < 2.x"
 
 "@ministryofjustice/frontend@^5.0.0":
-  version "5.1.4"
-  resolved "https://registry.yarnpkg.com/@ministryofjustice/frontend/-/frontend-5.1.4.tgz#5bc8bf60e46dd6141d4651263084a04f90d9bdb8"
-  integrity sha512-mEeQeBUNd1AgqEqCtYzReaWKdQsbstFmkF+Yaw74PCW0Ql8NvXTAq+FVDLHz5MjUqUA7c9C89zV5GyTnpr0Gsg==
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/@ministryofjustice/frontend/-/frontend-5.1.5.tgz#f251aad828ebf644c1027aa0b938737d3f2cc2d0"
+  integrity sha512-qplsAEv1+8FeMxrBh+Z9NznX4LjZBTRBZubMlUqWKntBasssz5mp7rF/C8VeiuJhMtfOgB3YYDvxoahSQaoKGw==
 
 "@msgpackr-extract/msgpackr-extract-darwin-arm64@3.0.3":
   version "3.0.3"
