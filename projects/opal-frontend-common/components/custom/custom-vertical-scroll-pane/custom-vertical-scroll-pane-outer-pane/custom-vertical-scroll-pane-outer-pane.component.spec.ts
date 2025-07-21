@@ -44,8 +44,6 @@ describe('CustomVerticalScrollPaneOuterPaneComponent', () => {
   });
 
   it('should fallback to 100% if height input is not provided', () => {
-    const componentInstance = fixture.debugElement.children[0].componentInstance;
-    componentInstance.height = '';
     fixture.detectChanges();
     const hostElement = fixture.nativeElement.querySelector('.custom-vertical-scroll-pane-outer-pane');
     expect(hostElement.style.height).toBe('100%');

@@ -21,7 +21,6 @@ describe('CustomScrollablePanesInnerPaneComponent', () => {
   });
 
   it('should apply default max-height if no value is provided', () => {
-    component.maxHeight = '';
     fixture.detectChanges();
     const div = fixture.debugElement.query(By.css('.custom-scrollable-panes-inner-pane')).nativeElement;
     expect(div.style.maxHeight).toBe('500px');

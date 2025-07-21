@@ -52,8 +52,6 @@ describe('CustomScrollablePanesComponent', () => {
   });
 
   it('should fallback to default height when no value is provided', () => {
-    const componentInstance = fixture.debugElement.children[0].componentInstance as CustomScrollablePanesComponent;
-    componentInstance.height = '';
     fixture.detectChanges();
     const scrollWrapper = fixture.nativeElement.querySelector('.custom-scrollable-pane');
     expect(scrollWrapper.style.height).toBe('100%');
