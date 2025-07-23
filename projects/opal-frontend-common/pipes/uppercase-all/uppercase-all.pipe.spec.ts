@@ -1,4 +1,4 @@
-import { UppercaseAllPipe } from './capitalisation.pipe';
+import { UppercaseAllPipe } from './uppercase-all.pipe';
 
 describe('UppercaseAllPipe', () => {
   let pipe: UppercaseAllPipe;

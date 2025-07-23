@@ -1,1 +1,0 @@
-export * from './capitalisation.pipe';

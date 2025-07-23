@@ -356,8 +356,8 @@
     "./pages/routing/constants": {
       "import": "./fesm2022/hmcts-opal-frontend-common-pages-routing-constants.mjs"
     },
-    "./pipes/capitalisation": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-pipes-capitalisation.mjs"
+    "./pipes/uppercase-all": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-pipes-uppercase-all.mjs"
     },
     "./pipes/date-format": {
       "import": "./fesm2022/hmcts-opal-frontend-common-pipes-date-format.mjs"
