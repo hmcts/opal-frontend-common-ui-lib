@@ -114,6 +114,24 @@
       "@hmcts/opal-frontend-common/components/custom/custom-page-header/custom-page-header-action-button": [
         "./dist/opal-frontend-common/components/custom/custom-page-header/custom-page-header-action-button"
       ],
+      "@hmcts/opal-frontend-common/components/custom/custom-horizontal-scroll-pane": [
+        "./dist/opal-frontend-common/components/custom/custom-horizontal-scroll-pane"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-scrollable-panes": [
+        "./dist/opal-frontend-common/components/custom/custom-scrollable-panes"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-scrollable-panes/custom-scrollable-panes-inner-pane": [
+        "./dist/opal-frontend-common/components/custom/custom-scrollable-panes/custom-scrollable-panes-inner-pane"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-vertical-scroll-pane": [
+        "./dist/opal-frontend-common/components/custom/custom-vertical-scroll-pane"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-vertical-scroll-pane/custom-vertical-scroll-pane-inner-pane": [
+        "./dist/opal-frontend-common/components/custom/custom-vertical-scroll-pane/custom-vertical-scroll-pane-inner-pane"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-vertical-scroll-pane/custom-vertical-scroll-pane-outer-pane": [
+        "./dist/opal-frontend-common/components/custom/custom-vertical-scroll-pane/custom-vertical-scroll-pane-outer-pane"
+      ],
       "@hmcts/opal-frontend-common/components/govuk/govuk-accordion": [
         "./dist/opal-frontend-common/components/govuk/govuk-accordion"
       ],
@@ -330,7 +348,6 @@
       "@hmcts/opal-frontend-common/services/date-service/interfaces": [
         "./dist/opal-frontend-common/services/date-service/interfaces"
       ],
-
       "@hmcts/opal-frontend-common/services/launch-darkly-service": [
         "./dist/opal-frontend-common/services/launch-darkly-service"
       ],

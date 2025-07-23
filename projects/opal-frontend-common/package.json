@@ -110,6 +110,24 @@
     "./components/custom/custom-page-header/custom-page-header-action-buttons-container": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-page-header-custom-page-header-action-buttons-container.mjs"
     },
+    "./components/custom/custom-horizontal-scroll-pane": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-horizontal-scroll-pane.mjs"
+    },
+    "./components/custom/custom-scrollable-panes": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-scrollable-panes.mjs"
+    },
+    "./components/custom/custom-scrollable-panes/custom-scrollable-panes-inner-pane": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-scrollable-panes-custom-scrollable-panes-inner-pane.mjs"
+    },
+    "./components/custom/custom-vertical-scroll-pane": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-vertical-scroll-pane.mjs"
+    },
+    "./components/custom/custom-vertical-scroll-pane/custom-vertical-scroll-pane-inner-pane": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-vertical-scroll-pane-custom-vertical-scroll-pane-inner-pane.mjs"
+    },
+    "./components/custom/custom-vertical-scroll-pane/custom-vertical-scroll-pane-outer-pane": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-vertical-scroll-pane-custom-vertical-scroll-pane-outer-pane.mjs"
+    },
     "./components/govuk/govuk-accordion": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-accordion.mjs"
     },
