@@ -328,6 +328,7 @@
       "@hmcts/opal-frontend-common/pages/routing/constants": ["./dist/opal-frontend-common/pages/routing/constants"],
       "@hmcts/opal-frontend-common/pipes/date-format": ["./dist/opal-frontend-common/pipes/date-format"],
       "@hmcts/opal-frontend-common/pipes/days-ago": ["./dist/opal-frontend-common/pipes/days-ago"],
+      "@hmcts/opal-frontend-common/pipes/national-insurance": ["./dist/opal-frontend-common/pipes/national-insurance"],
       "@hmcts/opal-frontend-common/resolvers/title": ["./dist/opal-frontend-common/resolvers/title"],
       "@hmcts/opal-frontend-common/resolvers/user-state": ["./dist/opal-frontend-common/resolvers/user-state"],
       "@hmcts/opal-frontend-common/services/app-insights-service": [
