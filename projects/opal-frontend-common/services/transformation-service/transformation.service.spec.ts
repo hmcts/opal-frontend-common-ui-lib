@@ -30,6 +30,58 @@ describe('TransformationService', () => {
       expect(result).toBe(value);
     });
 
+    it('should return the original value if no value is sent', () => {
+      const value = null;
+      const transformItem: ITransformItem = {
+        key: 'testKey',
+        transformType: 'date',
+        dateInputFormat: 'dd/MM/yyyy',
+        dateOutputFormat: 'yyyy-MM-dd',
+      };
+      const result = service['applyTransformation'](value, transformItem);
+      expect(result).toBe(value);
+    });
+
+    it('should return the original date value if either input or output format are missing', () => {
+      const value = '01/01/1991';
+      const transformItemWithMissingOutputFormat: ITransformItem = {
+        key: 'testKey',
+        transformType: 'date',
+        dateInputFormat: 'dd/MM/yyyy',
+        dateOutputFormat: null,
+      };
+      const transformItemWithMissingInputFormat: ITransformItem = {
+        key: 'testKey',
+        transformType: 'date',
+        dateInputFormat: null,
+        dateOutputFormat: 'yyyy-MM-dd',
+      };
+      const resultWithOutputMissing = service['applyTransformation'](value, transformItemWithMissingOutputFormat);
+      expect(resultWithOutputMissing).toBe(value);
+      const resultWithInputMissing = service['applyTransformation'](value, transformItemWithMissingInputFormat);
+      expect(resultWithInputMissing).toBe(value);
+    });
+
+    it('should return the original time value if either input or output format are missing', () => {
+      const value = '14:30';
+      const transformItemWithMissingOutputFormat: ITransformItem = {
+        key: 'testKey',
+        transformType: 'time',
+        timeInputFormat: 'withoutOffset',
+        timeOutputFormat: null,
+      };
+      const transformItemWithMissingInputFormat: ITransformItem = {
+        key: 'testKey',
+        transformType: 'time',
+        timeInputFormat: null,
+        timeOutputFormat: 'withOffset',
+      };
+      const resultWithOutputMissing = service['applyTransformation'](value, transformItemWithMissingOutputFormat);
+      expect(resultWithOutputMissing).toBe(value);
+      const resultWithInputMissing = service['applyTransformation'](value, transformItemWithMissingInputFormat);
+      expect(resultWithInputMissing).toBe(value);
+    });
+
     it('should transform date values correctly', () => {
       const value = '04/06/1991';
       const transformItem: ITransformItem = {
@@ -41,6 +93,32 @@ describe('TransformationService', () => {
 
       const result = service['applyTransformation'](value, transformItem);
       expect(result).toBe('1991-06-04');
+    });
+
+    it('should transform time values correctly by adding offset', () => {
+      const value = '14:30';
+      const transformItem: ITransformItem = {
+        key: 'timeKey',
+        transformType: 'time',
+        timeInputFormat: 'withoutOffset',
+        timeOutputFormat: 'withOffset',
+      };
+
+      const result = service['applyTransformation'](value, transformItem);
+      expect(result).toBe('14:30:00Z');
+    });
+
+    it('should transform time values correctly by removing offset', () => {
+      const value = '14:30:00Z';
+      const transformItem: ITransformItem = {
+        key: 'timeKey',
+        transformType: 'time',
+        timeInputFormat: 'withOffset',
+        timeOutputFormat: 'withoutOffset',
+      };
+
+      const result = service['applyTransformation'](value, transformItem);
+      expect(result).toBe('14:30');
     });
   });
 
@@ -78,6 +156,19 @@ describe('TransformationService', () => {
         },
       ];
       expect(service.transformObjectValues(input, transformItems)).toEqual({ nested: { dateKey: '1991-01-01' } });
+    });
+
+    it('should transform objects in arrays', () => {
+      const input = { nested: [{ dateKey: '01/01/1991' }] };
+      const transformItems: ITransformItem[] = [
+        {
+          key: 'dateKey',
+          transformType: 'date',
+          dateInputFormat: 'dd/MM/yyyy',
+          dateOutputFormat: 'yyyy-MM-dd',
+        },
+      ];
+      expect(service.transformObjectValues(input, transformItems)).toEqual({ nested: [{ dateKey: '1991-01-01' }] });
     });
   });
 

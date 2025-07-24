@@ -22,11 +22,24 @@ export class TransformationService {
     }
 
     if (transformItem.transformType === 'date') {
-      if (transformItem.dateInputFormat !== null && transformItem.dateOutputFormat !== null) {
+      if (transformItem.dateInputFormat && transformItem.dateOutputFormat) {
         const parsedDate = this.dateService.getFromFormat(value, transformItem.dateInputFormat);
         if (this.dateService.isValidDate(parsedDate)) {
           return this.dateService.toFormat(parsedDate, transformItem.dateOutputFormat);
-        }
+        } 
+      }
+      return value;
+    }
+
+    if (transformItem.transformType === 'time') {
+      if (transformItem.timeInputFormat && transformItem.timeOutputFormat) {
+        if (transformItem.timeInputFormat === 'withoutOffset' && transformItem.timeOutputFormat === 'withOffset') {
+          // Add offset to the time value
+          return `${value}:00Z`;
+        } else if (transformItem.timeInputFormat === 'withOffset' && transformItem.timeOutputFormat === 'withoutOffset') {
+          // Remove offset from the time value
+          return value.replace(/:00Z$/, '');
+        }  
       }
       return value;
     }
