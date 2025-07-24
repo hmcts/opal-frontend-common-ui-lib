@@ -446,9 +446,6 @@
     "./stores/global/types": {
       "import": "./fesm2022/hmcts-opal-frontend-common-stores-global-types.mjs"
     },
-    "./validators/alphabetical-text": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-validators-alphabetical-text.mjs"
-    },
     "./validators/amount": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-amount.mjs"
     },
@@ -470,17 +467,11 @@
     "./validators/national-insurance-number": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-national-insurance-number.mjs"
     },
-    "./validators/numerical-only": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-validators-numerical-only.mjs"
-    },
     "./validators/optional-max-length": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-optional-max-length.mjs"
     },
     "./validators/optional-valid-date": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-optional-valid-date.mjs"
-    },
-    "./validators/optional-valid-email-address": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-validators-optional-valid-email-address.mjs"
     },
     "./validators/optional-valid-telephone": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-optional-valid-telephone.mjs"
@@ -493,12 +484,6 @@
     },
     "./validators/pattern-validator": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-pattern-validator.mjs"
-    },
-    "./validators/special-characters": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-validators-special-characters.mjs"
-    },
-    "./validators/two-decimal-places": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-validators-two-decimal-places.mjs"
     },
     "./validators/valid-value": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-valid-value.mjs"
