@@ -21,14 +21,22 @@ export class TransformationService {
       return value;
     }
 
-    if (transformItem.transformType === 'date') {
-      if (transformItem.dateInputFormat !== null && transformItem.dateOutputFormat !== null) {
-        const parsedDate = this.dateService.getFromFormat(value, transformItem.dateInputFormat);
-        if (this.dateService.isValidDate(parsedDate)) {
-          return this.dateService.toFormat(parsedDate, transformItem.dateOutputFormat);
-        }
+    if (transformItem.transformType === 'date' && transformItem.dateConfig) {
+      const parsedDate = this.dateService.getFromFormat(value, transformItem.dateConfig.inputFormat);
+      if (this.dateService.isValidDate(parsedDate)) {
+        return this.dateService.toFormat(parsedDate, transformItem.dateConfig.outputFormat);
       }
       return value;
+    }
+
+    if (transformItem.transformType === 'time' && transformItem.timeConfig) {
+      if (transformItem.timeConfig.addOffset) {
+        // Add offset to the time value
+        return `${value}:00Z`;
+      } else if (transformItem.timeConfig.removeOffset) {
+        // Remove offset from the time value
+        return value.replace(/:00Z$/, '');
+      }
     }
 
     return value;

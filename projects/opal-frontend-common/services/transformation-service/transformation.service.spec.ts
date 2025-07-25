@@ -23,8 +23,20 @@ describe('TransformationService', () => {
       const transformItem: ITransformItem = {
         key: 'testKey',
         transformType: 'none',
-        dateInputFormat: null,
-        dateOutputFormat: null,
+      };
+      const result = service['applyTransformation'](value, transformItem);
+      expect(result).toBe(value);
+    });
+
+    it('should return the original value if no value is sent', () => {
+      const value = null;
+      const transformItem: ITransformItem = {
+        key: 'testKey',
+        transformType: 'date',
+        dateConfig: {
+          inputFormat: 'dd/MM/yyyy',
+          outputFormat: 'yyyy-MM-dd',
+        },
       };
       const result = service['applyTransformation'](value, transformItem);
       expect(result).toBe(value);
@@ -35,12 +47,57 @@ describe('TransformationService', () => {
       const transformItem: ITransformItem = {
         key: 'dateKey',
         transformType: 'date',
-        dateInputFormat: 'dd/MM/yyyy',
-        dateOutputFormat: 'yyyy-MM-dd',
+        dateConfig: {
+          inputFormat: 'dd/MM/yyyy',
+          outputFormat: 'yyyy-MM-dd',
+        },
       };
 
       const result = service['applyTransformation'](value, transformItem);
       expect(result).toBe('1991-06-04');
+    });
+
+    it('should not transform date if date is not valid', () => {
+      const value = '13/13/1991';
+      const transformItem: ITransformItem = {
+        key: 'dateKey',
+        transformType: 'date',
+        dateConfig: {
+          inputFormat: 'dd/MM/yyyy',
+          outputFormat: 'yyyy-MM-dd',
+        },
+      };
+
+      const result = service['applyTransformation'](value, transformItem);
+      expect(result).toBe('13/13/1991');
+    });
+
+    it('should transform time values correctly by adding offset', () => {
+      const value = '14:30';
+      const transformItem: ITransformItem = {
+        key: 'timeKey',
+        transformType: 'time',
+        timeConfig: {
+          addOffset: true,
+        },
+      };
+
+      const result = service['applyTransformation'](value, transformItem);
+      expect(result).toBe('14:30:00Z');
+    });
+
+    it('should transform time values correctly by removing offset', () => {
+      const value = '14:30:00Z';
+      const transformItem: ITransformItem = {
+        key: 'timeKey',
+        transformType: 'time',
+        timeConfig: {
+          removeOffset: true,
+        },
+      };
+
+      const result = service['applyTransformation'](value, transformItem);
+      expect(result).toBe('14:30');
     });
   });
 
@@ -58,8 +115,10 @@ describe('TransformationService', () => {
         {
           key: 'dateKey',
           transformType: 'date',
-          dateInputFormat: 'dd/MM/yyyy',
-          dateOutputFormat: 'yyyy-MM-dd',
+          dateConfig: {
+            inputFormat: 'dd/MM/yyyy',
+            outputFormat: 'yyyy-MM-dd',
+          },
         },
       ];
 
@@ -73,11 +132,28 @@ describe('TransformationService', () => {
         {
           key: 'dateKey',
           transformType: 'date',
-          dateInputFormat: 'dd/MM/yyyy',
-          dateOutputFormat: 'yyyy-MM-dd',
+          dateConfig: {
+            inputFormat: 'dd/MM/yyyy',
+            outputFormat: 'yyyy-MM-dd',
+          },
         },
       ];
       expect(service.transformObjectValues(input, transformItems)).toEqual({ nested: { dateKey: '1991-01-01' } });
+    });
+
+    it('should transform objects in arrays', () => {
+      const input = { nested: [{ dateKey: '01/01/1991' }] };
+      const transformItems: ITransformItem[] = [
+        {
+          key: 'dateKey',
+          transformType: 'date',
+          dateConfig: {
+            inputFormat: 'dd/MM/yyyy',
+            outputFormat: 'yyyy-MM-dd',
+          },
+        },
+      ];
+      expect(service.transformObjectValues(input, transformItems)).toEqual({ nested: [{ dateKey: '1991-01-01' }] });
     });
   });
 
