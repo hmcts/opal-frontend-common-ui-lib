@@ -1,8 +1,16 @@
+export interface ITransformItemDateConfig {
+    inputFormat: string;
+    outputFormat: string;
+}
+
+export interface ITransformItemTimeConfig {
+    addOffset?: boolean;
+    removeOffset?: boolean;
+}
+
 export interface ITransformItem {
-  key: string;
-  transformType: string;
-  dateInputFormat?: string | null;
-  dateOutputFormat?: string | null;
-  timeInputFormat?: string | null;
-  timeOutputFormat?: string | null;
+    key: string;
+    transformType: string;
+    dateConfig?: ITransformItemDateConfig;
+    timeConfig?: ITransformItemTimeConfig;
 }
