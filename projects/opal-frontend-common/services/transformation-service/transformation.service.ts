@@ -25,7 +25,7 @@ export class TransformationService {
       const parsedDate = this.dateService.getFromFormat(value, transformItem.dateConfig.inputFormat);
       if (this.dateService.isValidDate(parsedDate)) {
         return this.dateService.toFormat(parsedDate, transformItem.dateConfig.outputFormat);
-      } 
+      }
       return value;
     }
 
@@ -36,7 +36,7 @@ export class TransformationService {
       } else if (transformItem.timeConfig.removeOffset) {
         // Remove offset from the time value
         return value.replace(/:00Z$/, '');
-      }  
+      }
     }
 
     return value;

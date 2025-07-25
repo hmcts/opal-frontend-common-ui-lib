@@ -22,7 +22,7 @@ describe('TransformationService', () => {
       const value = 'test';
       const transformItem: ITransformItem = {
         key: 'testKey',
-        transformType: 'none'
+        transformType: 'none',
       };
       const result = service['applyTransformation'](value, transformItem);
       expect(result).toBe(value);
@@ -57,7 +57,7 @@ describe('TransformationService', () => {
       expect(result).toBe('1991-06-04');
     });
 
-    it('should not transform date if date is not valie', () => {
+    it('should not transform date if date is not valid', () => {
       const value = '13/13/1991';
       const transformItem: ITransformItem = {
         key: 'dateKey',

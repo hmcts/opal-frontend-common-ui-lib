@@ -1,16 +1,16 @@
 export interface ITransformItemDateConfig {
-    inputFormat: string;
-    outputFormat: string;
+  inputFormat: string;
+  outputFormat: string;
 }
 
 export interface ITransformItemTimeConfig {
-    addOffset?: boolean;
-    removeOffset?: boolean;
+  addOffset?: boolean;
+  removeOffset?: boolean;
 }
 
 export interface ITransformItem {
-    key: string;
-    transformType: string;
-    dateConfig?: ITransformItemDateConfig;
-    timeConfig?: ITransformItemTimeConfig;
+  key: string;
+  transformType: string;
+  dateConfig?: ITransformItemDateConfig;
+  timeConfig?: ITransformItemTimeConfig;
 }
