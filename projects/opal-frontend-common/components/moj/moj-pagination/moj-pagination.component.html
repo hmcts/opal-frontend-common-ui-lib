@@ -1,52 +1,63 @@
-<nav class="moj-pagination moj-pagination-alignment" [attr.aria-label]="ariaLabel">
-  <ul opal-lib-moj-pagination-list>
-    <li opal-lib-moj-pagination-item class="moj-pagination__item moj-pagination__item--prev">
+@if (totalPages > 1) {
+  <nav class="moj-pagination moj-pagination-alignment" aria-label="Pagination navigation" [id]="id">
+    <ul class="moj-pagination__list">
       @if (currentPage > 1) {
-        <opal-lib-moj-pagination-link
-          [changePage]="changePage"
-          [page]="currentPage - 1"
-          [currentPage]="currentPage"
-          [totalPages]="totalPages()"
-          >Previous<span class="govuk-visually-hidden"> page </span></opal-lib-moj-pagination-link
-        >
-      }
-    </li>
-    @for (page of pages(); track page) {
-      <li
-        opal-lib-moj-pagination-item
-        [class.moj-pagination__item--active]="page === currentPage"
-        [class.moj-pagination__item--dot]="page === '...'"
-      >
-        @if (page !== currentPage && page !== '...') {
-          <opal-lib-moj-pagination-link
-            [changePage]="changePage"
-            [page]="+page"
-            [currentPage]="currentPage"
-            [totalPages]="totalPages()"
+        <li class="moj-pagination__item moj-pagination__item--prev">
+          <a
+            class="moj-pagination__link"
+            (click)="onPageChanged($event, currentPage - 1)"
+            (keydown.enter)="onPageChanged($event, currentPage - 1)"
+            tabindex="0"
+            >Previous<span class="govuk-visually-hidden"> page</span></a
           >
-            {{ page }}
-          </opal-lib-moj-pagination-link>
-        } @else if (page === '...') {
-          <strong>...</strong>
-        } @else {
-          {{ page }}
-        }
-      </li>
-    }
-
-    <li opal-lib-moj-pagination-item class="moj-pagination__item moj-pagination__item--next">
-      @if (currentPage < totalPages()) {
-        <opal-lib-moj-pagination-link
-          [changePage]="changePage"
-          [page]="currentPage + 1"
-          [currentPage]="currentPage"
-          [totalPages]="totalPages()"
-          >Next<span class="govuk-visually-hidden"> page</span></opal-lib-moj-pagination-link
-        >
+        </li>
       }
-    </li>
-  </ul>
-  <p class="moj-pagination__results">
-    Showing <b>{{ startItem() - 1 }}</b> to <b>{{ endItem() }}</b> of <b>{{ totalItems() }}</b> results
-  </p>
-</nav>
+
+      @for (elipsedPage of elipsedPages(); track elipsedPage) {
+        @switch (elipsedPage) {
+          @case (currentPage) {
+            <li
+              class="moj-pagination__item moj-pagination__item--active"
+              [attr.aria-label]="'Page ' + elipsedPage + ' of ' + totalPages"
+              aria-current="page"
+            >
+              {{ elipsedPage }}
+            </li>
+          }
+          @case (ELIPSIS) {
+            <li class="moj-pagination__item moj-pagination__item--dots">{{ ELIPSIS }}</li>
+          }
+          @default {
+            <li class="moj-pagination__item">
+              <a
+                class="moj-pagination__link"
+                (click)="onPageChanged($event, +elipsedPage)"
+                (keydown.enter)="onPageChanged($event, +elipsedPage)"
+                tabindex="0"
+                [attr.aria-label]="'Page ' + elipsedPage + ' of ' + totalPages"
+              >
+                {{ elipsedPage }}
+              </a>
+            </li>
+          }
+        }
+      }
+
+      @if (currentPage < totalPages) {
+        <li class="moj-pagination__item moj-pagination__item--next">
+          <a
+            class="moj-pagination__link"
+            (click)="onPageChanged($event, currentPage + 1)"
+            (keydown.enter)="onPageChanged($event, currentPage + 1)"
+            tabindex="0"
+          >
+            Next<span class="govuk-visually-hidden"> page</span></a
+          >
+        </li>
+      }
+    </ul>
+    <p class="moj-pagination__results govuk-!-text-align-right">
+      Showing <b>{{ pageStart }}</b> to <b>{{ pageEnd }}</b> of <b>{{ total }}</b> results
+    </p>
+  </nav>
+}

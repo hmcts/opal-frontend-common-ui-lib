@@ -1,5 +1,3 @@
----
-
 # MOJ Primary Navigation Component
 
 This Angular component provides a Ministry of Justice (MOJ)-styled primary navigation bar, typically used for the main navigation links of a web application.

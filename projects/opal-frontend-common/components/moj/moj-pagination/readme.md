@@ -1,117 +1,149 @@
----
-# MojPaginationComponent
+# MoJ Pagination Component
 
-The `MojPaginationComponent` is a reusable Angular component that provides pagination functionality for applications. It supports dynamic page generation, ellipses for skipped pages, and custom event handling for page navigation.
----
+A dumb, reusable pagination component that follows the [Ministry of Justice Design System pagination pattern](https://design-patterns.service.justice.gov.uk/components/pagination/). It handles displaying paginated links with ellipses and results count, while delegating navigation logic to the consuming application.
 
-## Features
+This component is used in the Opal Frontend Common UI Library.
 
-- **Dynamic Pagination**: Automatically calculates the total pages based on the provided data and displays appropriate page links.
-- **Ellipses Support**: Includes ellipses (`...`) to represent skipped pages when the total number of pages exceeds the maximum visible pages.
-- **Event-Driven Navigation**: Emits custom events on page changes for seamless integration with parent components.
-- **Accessibility**: Fully accessible navigation with `aria-label` support for screen readers.
-- **Customizable Limits**: Supports configurable page limits and item counts.
+## Table of Contents
 
----
+- [Installation](#installation)
+- [Usage](#usage)
+- [Inputs](#inputs)
+- [Outputs](#outputs)
+- [Pagination Behaviour](#pagination-behaviour)
+- [Accessibility](#accessibility)
+- [Results Summary](#results-summary)
+- [Styling](#styling)
+- [Testing](#testing)
+- [Alternatives](#alternatives)
+- [Source](#source)
+- [Related](#related)
+- [Contributing](#contributing)
+
+## Installation
+
+- Always shows:
+  - First and last pages
+  - Current page
+  - Previous and next pages (when applicable)
+- Adds ellipsis (`…`) when large gaps in page ranges exist
+- Outputs selected page via event
+- Displays a results summary (e.g. “Showing 11 to 20 of 200 results”)
+- Accessible and keyboard-navigable
+- Built using Angular signals and `ChangeDetectionStrategy.OnPush`
+
+## Import
+
+```ts
+import { MojPaginationComponent } from 'opal-frontend-common';
+```
+
+Declare in your module if needed, or import via the shared `OpalFrontendCommonComponentsModule`.
 
 ## Usage
 
-### **Component Integration**
-
-1. Import the `MojPaginationComponent` into your Angular module or use it as a standalone component.
-
-2. Add the following code to your HTML file where you want to display pagination:
+You can use the pagination component in your template as follows:
 
 ```html
-<opal-libmoj-pagination
+<opal-lib-moj-pagination
+  [id]="'search-pagination'"
+  [currentPage]="2"
   [limit]="10"
-  [maxPagesToShow]="2"
-  [total]="100"
-  [currentPage]="currentPage"
-  (changePage)="onPageChange($event)"
-></opal-libmoj-pagination>
+  [total]="47"
+  (changePage)="handlePageChange($event)"
+></opal-lib-moj-pagination>
 ```
 
-### **Input Properties**
+## Inputs
 
-| Property         | Type   | Default | Description                              |
-| ---------------- | ------ | ------- | ---------------------------------------- |
-| `limit`          | number | `10`    | Number of items per page.                |
-| `total`          | number | `0`     | Total number of items to paginate.       |
-| `currentPage`    | number | `1`     | The currently active page number.        |
-| `maxPagesToShow` | number | `1`     | Total number of pages to show before ... |
+| Name          | Type     | Required | Description                                                        |
+| ------------- | -------- | -------- | ------------------------------------------------------------------ |
+| `id`          | `string` | ✅       | `id` attribute for the `<nav>` element (for testing/accessibility) |
+| `currentPage` | `number` | ✅       | The current page number (1-based)                                  |
+| `limit`       | `number` | ✅       | Items per page                                                     |
+| `total`       | `number` | ✅       | Total number of items                                              |
 
-### **Output Events**
+## Outputs
 
-| Event        | Description                                       |
-| ------------ | ------------------------------------------------- |
-| `changePage` | Emits the new page number when a page is clicked. |
+| Name         | Type                   | Description                                                      |
+| ------------ | ---------------------- | ---------------------------------------------------------------- |
+| `changePage` | `EventEmitter<number>` | Emits the selected page number when a pagination link is clicked |
 
----
+## Methods
 
-## Example
+There are no custom methods for this component.
 
-Here’s how you can use the component in your parent component:
+## Pagination Behaviour
 
-ps. The inputs are optional for configuration as these values already have default values( excl currentPage and changePage).
+For large page sets, only a few key pages are shown:
 
-### **Parent Component Template**
+- Always: First page, Last page
+- Active page
+- Previous/Next (if valid)
+- Ellipsis (`…`) to indicate skipped ranges
 
-```html
-<opal-libmoj-pagination
-  [limit]="10"
-  [maxPagesToShow]="2"
-  [total]="100"
-  [currentPage]="currentPage"
-  (changePage)="onPageChange($event)"
-></opal-libmoj-pagination>
+Examples:
+
+| Pages | Current | Output           |
+| ----- | ------- | ---------------- |
+| 5     | 2       | `1 2 3 4 5`      |
+| 8     | 2       | `1 2 3 … 8`      |
+| 8     | 4       | `1 … 3 4 5 … 8`  |
+| 8     | 7       | `1 … 6 7 8`      |
+| 10    | 5       | `1 … 4 5 6 … 10` |
+
+- Ellipses are inserted **only when non-adjacent pages are skipped**.
+- The last page always appears **after** the ellipsis — never before it.
+- Ellipses never appear at the start or end of the pagination list.
+
+## Accessibility
+
+- Adds `aria-current="page"` to the active page
+- Includes visually hidden "page" text in navigation links
+- All navigation is keyboard-friendly
+
+## Results Summary
+
+When `total > 0`, the component displays:
+
+> **"Showing _{start}_ to _{end}_ of _{total}_ results"**
+
+This is automatically calculated based on `currentPage`, `limit`, and `total`.
+
+## Styling
+
+This component relies on the MoJ pagination CSS from `@ministryofjustice/frontend`.
+
+Ensure your global styles include:
+
+```scss
+@use '@ministryofjustice/frontend/moj/components/pagination/pagination';
 ```
-
-### **Parent Component Class**
-
-```typescript
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'opal-libroot',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-})
-export class AppComponent {
-  currentPage = 1;
-
-  onPageChange(newPage: number): void {
-    console.log('Page changed to:', newPage);
-    this.currentPage = newPage;
-  }
-}
-```
-
----
 
 ## Testing
 
-This component includes comprehensive unit tests to ensure correct functionality. To run the tests, use:
+The `id` input is available to help target the `<nav>` element during unit or e2e tests.
+
+Unit tests for this component can be found in the `moj-pagination.component.spec.ts` file. To run the tests, use:
 
 ```bash
-yarn test
+ng test
 ```
 
-### Test Cases
+## Contributing
 
-- **Page Calculation**: Verifies the correct number of pages and ellipses.
-- **Event Emission**: Ensures the `changePage` event emits the correct page number.
-- **Edge Cases**: Tests pagination with large datasets, single pages, and out-of-bound page clicks.
+Feel free to submit issues or pull requests to improve this component.
 
----
+## Alternatives
 
-## Known Issues
+For simpler pagination without ellipses or when using GOV.UK styling, use the [`govuk-pagination`](../govuk/govuk-pagination) component.
 
-- Ensure that the `total` and `limit` inputs are correctly set; otherwise, pagination may behave unexpectedly.
-- Requires Angular 17 or later for the `@for` syntax.
+## Source
 
----
+See implementation in:
+`projects/opal-frontend-common/components/moj/moj-pagination/`
 
-## Contribution
+## Related
 
-Feel free to contribute by creating issues or submitting pull requests to improve the component or add new features.
+- [MoJ Design System - Pagination](https://design-patterns.service.justice.gov.uk/components/pagination/)
+- [GOV.UK Design System - Pagination](https://design-system.service.gov.uk/components/pagination/)

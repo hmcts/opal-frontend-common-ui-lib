@@ -1,192 +1,156 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, signal } from '@angular/core';
-import { MojPaginationItemComponent } from './moj-pagination-item/moj-pagination-item.component';
-import { MojPaginationListComponent } from './moj-pagination-list/moj-pagination-list.component';
-import { MojPaginationLinkComponent } from './moj-pagination-link/moj-pagination-link.component';
-import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'opal-lib-moj-pagination,',
-  styleUrls: ['./moj-pagination.component.scss'],
-
-  imports: [CommonModule, MojPaginationItemComponent, MojPaginationListComponent, MojPaginationLinkComponent],
+  selector: 'opal-lib-moj-pagination',
   templateUrl: './moj-pagination.component.html',
+  styleUrl: './moj-pagination.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MojPaginationComponent implements OnChanges {
-  @Input() currentPage = 1;
-  @Input() total = 0;
-  @Input() maxPagesToShow = 5;
-  @Input() limit = 100;
-  @Input() ariaLabel = 'Pagination navigation';
+  private readonly pages = signal<number[]>([]);
+
+  @Input({ required: true }) id!: string;
+  @Input({ required: true }) currentPage: number = 1;
+  @Input({ required: true }) total: number = 0;
+  @Input({ required: true }) limit: number = 25;
   @Output() changePage = new EventEmitter<number>();
 
-  public pages = signal<(number | string)[]>([]);
-  public totalPages = signal<number>(0);
-  public startItem = signal<number>(0);
-  public endItem = signal<number>(0);
-  public totalItems = signal<number>(0);
+  public readonly elipsedPages = signal<(number | string)[]>([]);
+  public readonly ELIPSIS = '…';
 
   /**
-   * Updates the pagination signals based on the current state.
+   * Gets the total number of pages available.
    *
-   * This method recalculates and sets the following signals:
-   * - `totalPages`: The total number of pages based on the total items and items per page limit.
-   * - `startItem`: The index of the first item on the current page.
-   * - `endItem`: The index of the last item on the current page.
-   * - `pages`: The array of page numbers to be displayed.
-   * - `totalItems`: The total number of items.
+   * @returns The total count of pages as a number.
+   */
+  get totalPages(): number {
+    return this.pages().length;
+  }
+
+  /**
+   * Gets the starting item index for the current page in a paginated list.
+   *
+   * @returns {number} The index of the first item on the current page, or 0 if there are no items.
+   *
+   * If `total` is 0, returns 0. Otherwise, calculates the starting index based on the current page and the limit per page.
+   */
+  get pageStart(): number {
+    return this.total === 0 ? 0 : (this.currentPage - 1) * this.limit + 1;
+  }
+
+  /**
+   * Gets the index of the last item on the current page.
+   *
+   * @returns {number} The index of the last item displayed on the current page.
+   * Returns 0 if there are no items (`total` is 0). Otherwise, returns the lesser of
+   * `currentPage * limit` and `total`, ensuring the end index does not exceed the total number of items.
+   */
+  get pageEnd(): number {
+    return this.total === 0 ? 0 : Math.min(this.currentPage * this.limit, this.total);
+  }
+
+  /**
+   * Calculates and updates the pagination pages and elided (skipped) pages based on the current limit and total items.
+   *
+   * - If either `limit` or `total` is less than or equal to zero, clears the pages and elided pages.
+   * - Otherwise, computes the total number of pages, updates the `pages` observable with the full range,
+   *   and updates the `elipsedPages` observable with the result of skipping pages for ellipsis display.
    *
    * @private
    */
-  private setSignals(): void {
-    this.totalPages.set(this.getTotalPages(this.total, this.limit));
-    this.startItem.set(this.getStartItem(this.currentPage, this.limit));
-    this.endItem.set(this.getEndItem(this.currentPage, this.limit, this.total));
-    this.setPages();
-    this.setTotalItems();
+  private calculatePages() {
+    if (this.limit <= 0 || this.total <= 0) {
+      this.pages.set([]);
+      this.elipsedPages.set([]);
+      return;
+    }
+    const pagesCount = Math.ceil(this.total / this.limit);
+    this.pages.set(this.range(1, pagesCount + 1));
+    this.elipsedPages.set(this.elipseSkippedPages(this.pages(), this.currentPage));
   }
 
   /**
-   * Calculates the total number of pages based on the total number of items and the limit of items per page.
+   * Generates an array of numbers starting from `start` up to, but not including, `end`.
    *
-   * @param total - The total number of items.
-   * @param limit - The number of items per page.
-   * @returns The total number of pages.
+   * @param start - The starting number of the range (inclusive).
+   * @param end - The ending number of the range (exclusive).
+   * @returns An array of numbers from `start` to `end - 1`.
    */
-  private getTotalPages(total: number, limit: number): number {
-    return Math.ceil(total / limit);
+  private range(start: number, end: number): number[] {
+    const result: number[] = [];
+    for (let i = start; i < end; i++) {
+      result.push(i);
+    }
+    return result;
   }
   /**
-   * Sets the pagination pages based on the current page and total pages.
-   * This method updates the `pages` property with the result of the `getPages` method.
+   * Generates a pagination array with ellipses ("...") to represent skipped page ranges.
    *
-   * @private
+   * The resulting array always includes the first and last page numbers, the current page,
+   * and up to one page before and after the current page. Ellipses are inserted where
+   * there are skipped ranges between the displayed pages.
+   *
+   * @param pages - An array of page numbers representing all available pages.
+   * @param currentPage - The currently active page number.
+   * @returns An array containing page numbers and ellipsis strings ("...") to indicate skipped pages.
    */
-  private setPages(): void {
-    this.pages.set(this.getPages(this.currentPage, this.totalPages()));
-  }
+  private elipseSkippedPages(pages: number[], currentPage: number): (number | string)[] {
+    const totalPages = pages.length;
+    const first = 1;
+    const last = totalPages;
 
-  /**
-   * Calculates the starting item index for pagination.
-   *
-   * @param currentPage - The current page number.
-   * @param limit - The number of items per page.
-   * @returns The starting item index for the given page.
-   */
-  private getStartItem(currentPage: number, limit: number): number {
-    return (currentPage - 1) * limit + 1;
-  }
+    const result: (number | string)[] = [];
 
-  /**
-   * Calculates the end item index for pagination.
-   *
-   * @param currentPage - The current page number.
-   * @param limit - The number of items per page.
-   * @param total - The total number of items.
-   * @returns The index of the last item on the current page, or the total number of items if the end of the list is reached.
-   */
-  private getEndItem(currentPage: number, limit: number, total: number): number {
-    return Math.min(currentPage * limit, total);
-  }
-  /**
-   * Updates the total number of items by setting the value of `totalItems` to the current `total`.
-   *
-   * @private
-   */
-  private setTotalItems(): void {
-    this.totalItems.set(this.total);
-  }
+    // Always show the first page
+    result.push(first);
 
-  /**
-   * Generates an array of page numbers and ellipses for pagination display.
-   *
-   * @param currentPage - The current active page number.
-   * @param totalPages - The total number of pages available.
-   * @returns An array of page numbers and ellipses representing the pagination.
-   *
-   * The function ensures that the pagination display shows a maximum of 5 pages at a time.
-   * It calculates the range of pages to display based on the current page and total pages.
-   * If the start page is greater than 1, it adds an ellipsis and the first page at the beginning.
-   * If the end page is less than the total pages, it adds an ellipsis and the last page at the end.
-   */
-  private getPages(currentPage: number, totalPages: number): (number | string)[] {
-    const halfPagesToShow = Math.floor(this.maxPagesToShow / 2);
-    const eclipses = '...';
-
-    const startPage = this.calculateStartPage(currentPage, totalPages, halfPagesToShow);
-    const endPage = this.calculateEndPage(currentPage, totalPages, halfPagesToShow);
-
-    const pages = this.generatePageNumbers(startPage, endPage);
-
-    if (startPage > 1) {
-      pages.unshift(eclipses);
-      pages.unshift(1);
+    // Determine left-side ellipsis
+    if (currentPage > first + 2) {
+      result.push(this.ELIPSIS);
     }
 
-    if (endPage < totalPages) {
-      pages.push(eclipses);
-      pages.push(totalPages);
+    // Middle pages: current - 1, current, current + 1
+    for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+      if (i > first && i < last) {
+        result.push(i);
+      }
     }
 
-    return pages;
+    // Decide whether to add right-side ellipsis
+    const lastIncluded = result.includes(last);
+    const secondLast = last - 1;
+    if (!result.includes(secondLast) && !lastIncluded) {
+      result.push(this.ELIPSIS);
+    }
+
+    // Add last page if not already included
+    if (!lastIncluded && last !== first) {
+      result.push(last);
+    }
+
+    return result;
   }
 
   /**
-   * Calculates the start page for pagination based on the current page, total pages, and the number of pages to show on either side of the current page.
+   * Handles the page change event for the pagination component.
    *
-   * @param currentPage - The current active page number.
-   * @param totalPages - The total number of pages available.
-   * @param halfPagesToShow - The number of pages to show on either side of the current page.
-   * @returns The start page number for pagination.
+   * Prevents the default action of the event (if provided) and emits the selected page number.
+   *
+   * @param event - The event triggered by the page change action. If provided, its default behavior will be prevented.
+   * @param page - The page number to navigate to.
    */
-  private calculateStartPage(currentPage: number, totalPages: number, halfPagesToShow: number): number {
-    let startPage = Math.max(1, currentPage - halfPagesToShow);
-
-    if (currentPage - halfPagesToShow <= 0) {
-      startPage = 1;
-    } else if (currentPage + halfPagesToShow > totalPages) {
-      startPage = Math.max(1, startPage - (currentPage + halfPagesToShow - totalPages));
+  public onPageChanged(event: Event, page: number): void {
+    if (event) {
+      event.preventDefault();
     }
-
-    return startPage;
+    this.changePage.emit(page);
   }
 
   /**
-   * Calculates the end page number for pagination based on the current page, total pages, and the number of pages to show.
-   *
-   * @param currentPage - The current page number.
-   * @param totalPages - The total number of pages.
-   * @param halfPagesToShow - Half the number of pages to show around the current page.
-   * @returns The calculated end page number.
+   * Lifecycle hook that is called when any data-bound property of the component changes.
+   * Invokes the `calculatePages` method to update the pagination state based on the new input values.
    */
-  private calculateEndPage(currentPage: number, totalPages: number, halfPagesToShow: number): number {
-    let endPage = Math.min(totalPages, currentPage + halfPagesToShow);
-
-    if (currentPage - halfPagesToShow <= 0) {
-      endPage = Math.min(totalPages, endPage + (halfPagesToShow - currentPage + 1));
-    } else if (currentPage + halfPagesToShow > totalPages) {
-      endPage = totalPages;
-    }
-
-    return endPage;
-  }
-
-  /**
-   * Generates an array of page numbers from the startPage to the endPage.
-   *
-   * @param startPage - The starting page number.
-   * @param endPage - The ending page number.
-   * @returns An array of page numbers from startPage to endPage.
-   */
-  private generatePageNumbers(startPage: number, endPage: number): (number | string)[] {
-    const pages: (number | string)[] = [];
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(i);
-    }
-    return pages;
-  }
-
   public ngOnChanges(): void {
-    this.setSignals();
+    this.calculatePages();
   }
 }
