@@ -434,6 +434,9 @@
     "./services/transformation-service/mocks": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-transformation-service-mocks.mjs"
     },
+    "./services/transformation-service/constants": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-transformation-service-constants.mjs"
+    },
     "./services/utils-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-utils-service.mjs"
     },

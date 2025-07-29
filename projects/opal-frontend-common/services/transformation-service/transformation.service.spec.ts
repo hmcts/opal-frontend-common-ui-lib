@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { TransformationService } from './transformation.service';
 import { ITransformItem } from '@hmcts/opal-frontend-common/services/transformation-service/interfaces';
+import { TRANSFORM_ITEM_DEFAULTS } from './constants/transform-item.constants';
 
 describe('TransformationService', () => {
   let service: TransformationService;
@@ -21,6 +22,7 @@ describe('TransformationService', () => {
     it('should return the original value if no transformation is applied', () => {
       const value = 'test';
       const transformItem: ITransformItem = {
+        ...TRANSFORM_ITEM_DEFAULTS,
         key: 'testKey',
         transformType: 'none',
       };
@@ -31,6 +33,7 @@ describe('TransformationService', () => {
     it('should return the original value if no value is sent', () => {
       const value = null;
       const transformItem: ITransformItem = {
+        ...TRANSFORM_ITEM_DEFAULTS,
         key: 'testKey',
         transformType: 'date',
         dateConfig: {
@@ -45,6 +48,7 @@ describe('TransformationService', () => {
     it('should transform date values correctly', () => {
       const value = '04/06/1991';
       const transformItem: ITransformItem = {
+        ...TRANSFORM_ITEM_DEFAULTS,
         key: 'dateKey',
         transformType: 'date',
         dateConfig: {
@@ -60,6 +64,7 @@ describe('TransformationService', () => {
     it('should not transform date if date is not valid', () => {
       const value = '13/13/1991';
       const transformItem: ITransformItem = {
+        ...TRANSFORM_ITEM_DEFAULTS,
         key: 'dateKey',
         transformType: 'date',
         dateConfig: {
@@ -75,10 +80,12 @@ describe('TransformationService', () => {
     it('should transform time values correctly by adding offset', () => {
       const value = '14:30';
       const transformItem: ITransformItem = {
+        ...TRANSFORM_ITEM_DEFAULTS,
         key: 'timeKey',
         transformType: 'time',
         timeConfig: {
           addOffset: true,
+          removeOffset: false,
         },
       };
 
@@ -89,10 +96,12 @@ describe('TransformationService', () => {
     it('should transform time values correctly by removing offset', () => {
       const value = '14:30:00Z';
       const transformItem: ITransformItem = {
+        ...TRANSFORM_ITEM_DEFAULTS,
         key: 'timeKey',
         transformType: 'time',
         timeConfig: {
           removeOffset: true,
+          addOffset: false,
         },
       };
 
@@ -113,6 +122,7 @@ describe('TransformationService', () => {
       const input = { dateKey: '01/01/1991', otherKey: 'value' };
       const transformItems: ITransformItem[] = [
         {
+          ...TRANSFORM_ITEM_DEFAULTS,
           key: 'dateKey',
           transformType: 'date',
           dateConfig: {
@@ -130,6 +140,7 @@ describe('TransformationService', () => {
       const input = { nested: { dateKey: '01/01/1991' } };
       const transformItems: ITransformItem[] = [
         {
+          ...TRANSFORM_ITEM_DEFAULTS,
           key: 'dateKey',
           transformType: 'date',
           dateConfig: {
@@ -145,6 +156,7 @@ describe('TransformationService', () => {
       const input = { nested: [{ dateKey: '01/01/1991' }] };
       const transformItems: ITransformItem[] = [
         {
+          ...TRANSFORM_ITEM_DEFAULTS,
           key: 'dateKey',
           transformType: 'date',
           dateConfig: {

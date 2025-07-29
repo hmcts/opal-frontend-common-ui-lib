@@ -4,13 +4,13 @@ export interface ITransformItemDateConfig {
 }
 
 export interface ITransformItemTimeConfig {
-  addOffset?: boolean;
-  removeOffset?: boolean;
+  addOffset: boolean;
+  removeOffset: boolean;
 }
 
 export interface ITransformItem {
   key: string;
   transformType: string;
-  dateConfig?: ITransformItemDateConfig;
-  timeConfig?: ITransformItemTimeConfig;
+  dateConfig: ITransformItemDateConfig | null;
+  timeConfig: ITransformItemTimeConfig | null;
 }
