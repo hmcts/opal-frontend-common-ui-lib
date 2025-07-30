@@ -2167,10 +2167,10 @@
   resolved "https://registry.yarnpkg.com/@nevware21/ts-utils/-/ts-utils-0.12.5.tgz#fe33c10d11ae8b724ccaaa31d2d0109d18601da6"
   integrity sha512-JPQZWPKQJjj7kAftdEZL0XDFfbMgXCGiUAZe0d7EhLC3QlXTlZdSckGqqRIQ2QNl0VTEZyZUvRBw6Ednw089Fw==
 
-"@ngrx/signals@^19.0.1":
-  version "19.2.1"
-  resolved "https://registry.yarnpkg.com/@ngrx/signals/-/signals-19.2.1.tgz#c31042956dc7d04d165cb593f090c3066025b7f7"
-  integrity sha512-Tajd2TVjkxxyFMhnMSWLa5pAWfynjP0VM0B/BCMaLiBrwBBxybxRVENoUDU5tGyiKSax/2tBJC3+sOglmxm27A==
+"@ngrx/signals@^20.0.0":
+  version "20.0.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/signals/-/signals-20.0.0.tgz#84aec4ee1bb9f7ef656a7dbbc12d5c44aa895a60"
+  integrity sha512-ALz9dzu4tkL3QtgtkyHqvO14Od3tY/febpsqS6LaUgIxF8jFtmAneo0VgaGB2O7KamMwrwF005lpZjl/zeZghA==
   dependencies:
     tslib "^2.3.0"
 
