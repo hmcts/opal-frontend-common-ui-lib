@@ -1,3 +1,4 @@
+import { TestBed } from '@angular/core/testing';
 import { DateFormatPipe } from './date-format.pipe';
 import { DateService } from '@hmcts/opal-frontend-common/services/date-service';
 
@@ -6,8 +7,14 @@ describe('DateFormatPipe', () => {
   let dateServiceSpy: jasmine.SpyObj<DateService>;
 
   beforeEach(() => {
-    dateServiceSpy = jasmine.createSpyObj('DateService', ['getFromFormatToFormat']);
-    pipe = new DateFormatPipe(dateServiceSpy);
+    TestBed.configureTestingModule({
+      providers: [
+        DateFormatPipe,
+        { provide: DateService, useValue: jasmine.createSpyObj('DateService', ['getFromFormatToFormat']) },
+      ],
+    });
+    pipe = TestBed.inject(DateFormatPipe);
+    dateServiceSpy = TestBed.inject(DateService) as jasmine.SpyObj<DateService>;
   });
 
   it('should format a valid date using the given formats', () => {
