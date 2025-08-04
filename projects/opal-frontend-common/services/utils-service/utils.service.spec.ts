@@ -221,6 +221,18 @@ describe('UtilsService', () => {
     });
   });
 
+  it('should strip the first parentheses block from a string', () => {
+    const text = 'This is a test (remove this) and keep (this).';
+    const result = service.stripFirstParenthesesBlock(text);
+    expect(result).toEqual('This is a test  and keep (this).');
+  });
+
+  it('should return the original string if no parentheses are present', () => {
+    const text = 'This is a test without parentheses.';
+    const result = service.stripFirstParenthesesBlock(text);
+    expect(result).toEqual('This is a test without parentheses.');
+  });
+
   it('should return true if at least one property is a non-empty string', () => {
     const obj = { a: '', b: 'value', c: null };
     expect(service.hasSetProperty(obj)).toBeTrue();
