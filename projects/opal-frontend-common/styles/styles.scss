@@ -1,7 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* ==========================================================================
+   Library Dependencies
+   ==========================================================================
+   These imports include external styles used across the application.
+*/
 @import 'govuk-frontend/dist/govuk/all.scss';
-@import './custom/_custom-section_break.scss';
+@import '@ministryofjustice/frontend/moj/all.scss';
+@import 'accessible-autocomplete/dist/accessible-autocomplete.min.css';
 @import 'home-office-kit/sass/_loadingSpinner.scss';
+
+/* ==========================================================================
+   Custom Component Styles
+   ==========================================================================
+   Custom Component Styles authored within the OPAL Frontend Common UI Library.
+*/
+@import './custom/_custom-section_break.scss';
 @import './custom/custom-scrollable-panes';
 
 html,
