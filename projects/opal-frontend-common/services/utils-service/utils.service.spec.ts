@@ -226,4 +226,10 @@ describe('UtilsService', () => {
     const result = service.stripFirstParenthesesBlock(text);
     expect(result).toEqual('This is a test  and keep (this).');
   });
+
+  it('should return the original string if no parentheses are present', () => {
+    const text = 'This is a test without parentheses.';
+    const result = service.stripFirstParenthesesBlock(text);
+    expect(result).toEqual('This is a test without parentheses.');
+  });
 });
