@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
@@ -6,7 +6,7 @@ import { Title } from '@angular/platform-browser';
   providedIn: 'root',
 })
 export class TitleResolver implements Resolve<void> {
-  constructor(private readonly titleService: Title) {}
+  private readonly titleService = inject(Title);
 
   resolve(route: ActivatedRouteSnapshot): void {
     const title = route.data['title'] ?? 'Frontend';

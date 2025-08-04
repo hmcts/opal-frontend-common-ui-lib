@@ -1,4 +1,4 @@
-import { Directive, OnChanges, Input, ElementRef, Renderer2 } from '@angular/core';
+import { Directive, OnChanges, Input, ElementRef, Renderer2, inject } from '@angular/core';
 import { MojAlertType } from '../../constants/alert-types.constant';
 import { MOJ_ALERT_ICON_PATHS } from './constants/alert-icon-path.constant';
 @Directive({
@@ -7,13 +7,10 @@ import { MOJ_ALERT_ICON_PATHS } from './constants/alert-icon-path.constant';
 })
 export class MojAlertPathDirective implements OnChanges {
   private readonly icons = MOJ_ALERT_ICON_PATHS;
+  private readonly el = inject(ElementRef<SVGSVGElement>);
+  private readonly renderer = inject(Renderer2);
 
   @Input('opalLibMojAlertSortIcon') type: MojAlertType = 'information';
-
-  constructor(
-    private readonly el: ElementRef<SVGSVGElement>,
-    private readonly renderer: Renderer2,
-  ) {}
 
   /**
    * Retrieves the SVG path(s) corresponding to a given alert type.

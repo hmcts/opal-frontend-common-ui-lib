@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Inject, Injectable, Optional, PLATFORM_ID, TransferState, inject, makeStateKey } from '@angular/core';
+import { Injectable, PLATFORM_ID, TransferState, inject, makeStateKey } from '@angular/core';
 import { ITransferStateServerState } from '@hmcts/opal-frontend-common/services/transfer-state-service/interfaces';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 
@@ -7,16 +7,17 @@ import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
   providedIn: 'root',
 })
 export class TransferStateService {
+  private readonly platformId = inject(PLATFORM_ID);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private readonly serverTransferState = inject<ITransferStateServerState | null>('serverTransferState' as any, {
+    optional: true,
+  });
+  private readonly transferState = inject(TransferState);
+
   private readonly globalStore = inject(GlobalStore);
   private readonly storedServerTransferState!: ITransferStateServerState;
 
-  constructor(
-    @Inject(PLATFORM_ID) private readonly platformId: typeof PLATFORM_ID,
-    @Optional()
-    @Inject('serverTransferState')
-    public readonly serverTransferState: ITransferStateServerState | null,
-    private readonly transferState: TransferState,
-  ) {
+  constructor() {
     const storeKeyTransferState = makeStateKey<ITransferStateServerState>('serverTransferState');
 
     if (isPlatformBrowser(this.platformId)) {

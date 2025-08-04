@@ -1,4 +1,4 @@
-import { Directive, OnChanges, Input, ElementRef, Renderer2 } from '@angular/core';
+import { Directive, OnChanges, Input, ElementRef, Renderer2, inject } from '@angular/core';
 import { MOJ_SORTABLE_TABLE_HEADER_SORT_ICONS } from './constants/moj-sortable-table-header-sort-icons.constant';
 
 @Directive({
@@ -6,12 +6,9 @@ import { MOJ_SORTABLE_TABLE_HEADER_SORT_ICONS } from './constants/moj-sortable-t
   standalone: true,
 })
 export class MojSortableTableHeaderSortIconDirective implements OnChanges {
+  private readonly el = inject(ElementRef<SVGSVGElement>);
+  private readonly renderer = inject(Renderer2);
   @Input('opalLibMojSortableTableHeaderSortIcon') sortDirection: 'ascending' | 'descending' | 'none' = 'none';
-
-  constructor(
-    private readonly el: ElementRef<SVGSVGElement>,
-    private readonly renderer: Renderer2,
-  ) {}
 
   /**
    * Returns the SVG path(s) for the sort icon based on the specified direction.

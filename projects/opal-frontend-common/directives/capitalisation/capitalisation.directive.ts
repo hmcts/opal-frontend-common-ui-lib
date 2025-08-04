@@ -1,4 +1,4 @@
-import { Directive, Input, OnInit, OnDestroy } from '@angular/core';
+import { Directive, Input, OnInit, OnDestroy, inject } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service';
@@ -8,10 +8,9 @@ import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service
 })
 export class CapitalisationDirective implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
+  private readonly utilsService = inject(UtilsService);
 
   @Input('opalLibCapitaliseAllCharacters') control!: AbstractControl;
-
-  constructor(private readonly utilsService: UtilsService) {}
 
   ngOnInit(): void {
     if (!this.control) return;
