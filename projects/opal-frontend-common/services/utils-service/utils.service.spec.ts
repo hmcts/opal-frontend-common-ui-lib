@@ -220,4 +220,10 @@ describe('UtilsService', () => {
       i: {},
     });
   });
+
+  it('should strip the first parentheses block from a string', () => {
+    const text = 'This is a test (remove this) and keep (this).';
+    const result = service.stripFirstParenthesesBlock(text);
+    expect(result).toEqual('This is a test  and keep (this).');
+  });
 });
