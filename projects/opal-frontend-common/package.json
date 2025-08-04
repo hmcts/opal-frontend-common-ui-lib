@@ -314,8 +314,11 @@
     "./directives/govuk-button": {
       "import": "./fesm2022/hmcts-opal-frontend-common-directives-govuk-button.mjs"
     },
-    "./constants": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-constants.mjs"
+    "./constants/index": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-constants-index.mjs"
+    },
+    "./constants/regex-patterns": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-constants-regex-patterns.mjs"
     },
     "./guards/auth": {
       "import": "./fesm2022/hmcts-opal-frontend-common-guards-auth.mjs"

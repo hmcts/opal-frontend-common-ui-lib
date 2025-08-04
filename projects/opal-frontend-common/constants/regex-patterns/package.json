@@ -1,0 +1,5 @@
+{
+  "sideEffects": false,
+  "module": "../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-constants-regex-patterns.mjs",
+  "typings": "../../../dist/opal-frontend-common/constants/regex-patterns/index.d.ts"
+}

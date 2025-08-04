@@ -308,7 +308,8 @@
       ],
       "@hmcts/opal-fronted-common/directives/capitalisation": ["./dist/opal-frontend-common/directives/capitalisation"],
       "@hmcts/opal-fronted-common/directives/govuk-button": ["./dist/opal-frontend-common/directives/govuk-button"],
-      "@hmcts/opal-frontend-common/constants": ["./dist/opal-frontend-common/constants"],
+      "@hmcts/opal-frontend-common/constants/index": ["./dist/opal-frontend-common/constants/index"],
+      "@hmcts/opal-frontend-common/constants/regex-patterns": ["./dist/opal-frontend-common/constants/regex-patterns"],
       "@hmcts/opal-frontend-common/guards/auth": ["./dist/opal-frontend-common/guards/auth"],
       "@hmcts/opal-frontend-common/guards/can-deactivate": ["./dist/opal-frontend-common/guards/can-deactivate"],
       "@hmcts/opal-frontend-common/guards/can-deactivate/interfaces": [
