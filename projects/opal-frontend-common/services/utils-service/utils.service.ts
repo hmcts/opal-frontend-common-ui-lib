@@ -155,4 +155,18 @@ export class UtilsService {
     }
     return text.trim();
   }
+
+  /**
+   * Determines whether the provided object has at least one property set to a meaningful value.
+   *
+   * A property is considered "set" if:
+   * - It is a boolean and its value is `true`.
+   * - It is not a boolean and its value is neither `null` nor an empty string.
+   *
+   * @param value - The object to check for set properties. Can be `null` or `undefined`.
+   * @returns `true` if at least one property is set; otherwise, `false`.
+   */
+  public hasSetProperty(value: object | null | undefined): boolean {
+    return Object.values(value ?? {}).some((v) => (typeof v === 'boolean' ? v === true : v !== null && v !== ''));
+  }
 }
