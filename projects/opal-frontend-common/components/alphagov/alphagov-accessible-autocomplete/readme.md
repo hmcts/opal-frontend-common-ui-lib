@@ -1,8 +1,6 @@
----
-
 # Alphagov Accessible Autocomplete Component
 
-This Angular component provides an accessible autocomplete input field styled with GOV.UK standards, allowing users to search and select options from a list.
+This Angular component provides an accessible, GOV.UK-styled autocomplete input field using the `accessible-autocomplete` library. It supports form validation, dynamic configuration, and seamless integration with Angular Reactive Forms.
 
 ## Table of Contents
 
@@ -10,13 +8,17 @@ This Angular component provides an accessible autocomplete input field styled wi
 - [Usage](#usage)
 - [Inputs](#inputs)
 - [Outputs](#outputs)
-- [Methods](#methods)
+- [Accessibility](#accessibility)
 - [Testing](#testing)
 - [Contributing](#contributing)
 
+---
+
 ## Installation
 
-```typescript
+Import the component into your module or component file:
+
+```ts
 import { AlphagovAccessibleAutocompleteComponent } from '@components/alphagov/alphagov-accessible-autocomplete/alphagov-accessible-autocomplete.component';
 ```
 
@@ -26,40 +28,32 @@ You can use the accessible autocomplete component in your template as follows:
 
 ```html
 <opal-lib-alphagov-accessible-autocomplete
-  [autoCompleteId]="'autocomplete'"
   [labelText]="'Search'"
-  [hintText]="'Start typing to search'"
-  [errors]="'Please select an option'"
-  [inputName]="'search'"
+  [labelClasses]="'govuk-label'"
+  [inputId]="'country-autocomplete-input'"
+  [inputName]="'country'"
+  [inputClasses]="'govuk-input'"
+  [hintText]="'Start typing the country name'"
+  [errors]="formControl.errors?.message"
+  [autoCompleteItems]="countries"
+  [control]="formControl"
 ></opal-lib-alphagov-accessible-autocomplete>
-```
-
-### Example in HTML:
-
-```html
-<div class="govuk-form-group" [class.govuk-form-group--error]="!!errors">
-  <label class="govuk-label {{ labelClasses }}" [for]="autoCompleteId">{{ labelText }}</label>
-  <div id="{{ inputId }}-hint" *ngIf="hintText" class="govuk-hint">{{ hintText }}</div>
-
-  <p *ngIf="errors" id="{{ autoCompleteId }}-error-message" class="govuk-error-message">
-    <span class="govuk-visually-hidden">Error: </span> {{ errors }}
-  </p>
-
-  <div #autocomplete id="{{ autoCompleteId }}-container" class="{{ inputClasses }}"></div>
-  <input [id]="inputId" [name]="inputName" type="hidden" [formControl]="getControl" />
-</div>
 ```
 
 ## Inputs
 
-| Input           | Type     | Default      | Description                                                                 |
-| --------------- | -------- | ------------ | --------------------------------------------------------------------------- |
-| `autoCompleteId`| `string` | `'autocomplete'` | The ID of the autocomplete container.                                         |
-| `labelText`     | `string` | `'Search'`   | The label for the autocomplete input field.                                   |
-| `hintText`      | `string` | `''`         | Optional hint text displayed under the label.                                 |
-| `errors`        | `string` | `''`         | Error message to display if validation fails.                                 |
-| `inputName`     | `string` | `''`         | The name attribute for the hidden input element.                              |
-| `inputId`       | `string` | `'autocomplete-input'` | The ID for the hidden input field.                                              |
+| Input               | Type                                    | Default                | Description                                                             |
+| ------------------- | --------------------------------------- | ---------------------- | ----------------------------------------------------------------------- |
+| `control`           | `FormControl \| AbstractControl`        | —                      | The reactive form control tied to the hidden input field.               |
+| `labelText`         | `string`                                | `'Search'`             | The label for the autocomplete input field.                             |
+| `labelClasses`      | `string`                                | `''`                   | Optional CSS classes for styling the label.                             |
+| `inputId`           | `string`                                | `'autocomplete-input'` | The ID for the hidden input field and autocomplete container.           |
+| `inputName`         | `string`                                | `''`                   | The name attribute for the hidden input element.                        |
+| `inputClasses`      | `string`                                | `''`                   | Optional classes applied to the autocomplete container.                 |
+| `hintText`          | `string`                                | `''`                   | Optional hint text displayed under the label.                           |
+| `errors`            | `string \| null`                        | `null`                 | Error message shown if validation fails.                                |
+| `autoCompleteItems` | `IAlphagovAccessibleAutocompleteItem[]` | `[]`                   | The list of items to populate the autocomplete, with `{ name, value }`. |
+| `showAllValues`     | `boolean`                               | `true`                 | Whether to show all available options in the dropdown.                  |
 
 ## Outputs
 
@@ -74,13 +68,9 @@ There are no custom methods for this component.
 Unit tests for this component can be found in the `alphagov-accessible-autocomplete.component.spec.ts` file. To run the tests, use:
 
 ```bash
-ng test
+yarn test
 ```
 
 ## Contributing
 
 Feel free to submit issues or pull requests to improve this component.
-
----
-
-This `README.md` explains how to use and configure the `alphagov-accessible-autocomplete` component, providing accessible search functionality in a GOV.UK-styled form.
