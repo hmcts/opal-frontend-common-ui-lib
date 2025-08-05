@@ -137,4 +137,22 @@ export class UtilsService {
         }),
     );
   }
+
+  /**
+   * Strips out the first parentheses block from the given text.
+   * This method looks for the first occurrence of parentheses in the text,
+   * removes the content within them, and returns the modified text.
+   * @param {string} text - The text from which to strip the first parentheses block.
+   * @returns {string} - The modified text with the first parentheses block removed.
+   */
+  public stripFirstParenthesesBlock(text: string): string {
+    const open = text.indexOf('(');
+    const close = text.indexOf(')', open);
+    if (open !== -1 && close !== -1 && close > open) {
+      const before = text.slice(0, open);
+      const after = text.slice(close + 1);
+      return (before + after).trim();
+    }
+    return text.trim();
+  }
 }
