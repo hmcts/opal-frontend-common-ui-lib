@@ -232,4 +232,46 @@ describe('UtilsService', () => {
     const result = service.stripFirstParenthesesBlock(text);
     expect(result).toEqual('This is a test without parentheses.');
   });
+
+  it('should return true if at least one property is a non-empty string', () => {
+    const obj = { a: '', b: 'value', c: null };
+    expect(service.hasSetProperty(obj)).toBeTrue();
+  });
+
+  it('should return true if at least one property is a non-null value', () => {
+    const obj = { a: null, b: 0 };
+    expect(service.hasSetProperty(obj)).toBeTrue();
+  });
+
+  it('should return true if at least one property is boolean true', () => {
+    const obj = { a: false, b: true, c: null };
+    expect(service.hasSetProperty(obj)).toBeTrue();
+  });
+
+  it('should return false if all properties are null or empty strings', () => {
+    const obj = { a: null, b: '', c: null };
+    expect(service.hasSetProperty(obj)).toBeFalse();
+  });
+
+  it('should return false for an empty object', () => {
+    expect(service.hasSetProperty({})).toBeFalse();
+  });
+
+  it('should return false for null', () => {
+    expect(service.hasSetProperty(null)).toBeFalse();
+  });
+
+  it('should return false for undefined', () => {
+    expect(service.hasSetProperty(undefined)).toBeFalse();
+  });
+
+  it('should return true if at least one property is a non-empty array', () => {
+    const obj = { a: [], b: [1] };
+    expect(service.hasSetProperty(obj)).toBeTrue();
+  });
+
+  it('should return true if at least one property is a non-empty object', () => {
+    const obj = { a: {}, b: { x: 1 } };
+    expect(service.hasSetProperty(obj)).toBeTrue();
+  });
 });
