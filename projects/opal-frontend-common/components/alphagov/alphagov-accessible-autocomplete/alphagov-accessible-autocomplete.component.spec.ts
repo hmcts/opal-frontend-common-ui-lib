@@ -241,6 +241,21 @@ describe('AlphagovAccessibleAutocompleteComponent', () => {
     expect(component['configureAutoComplete']).not.toHaveBeenCalled();
   });
 
+  it('should render custom dropdown arrow with correct class name', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const className = 'custom-arrow-class';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const svgOutput = (component as any).renderDropdownArrow(className);
+
+    expect(svgOutput).toContain(`<svg class="${className}"`);
+    expect(svgOutput).toContain('<path d="M256,298.3');
+    expect(svgOutput).toContain('</svg>');
+  });
+
   interface PrivateFunctionsComponent {
     handleOnConfirm: (arg: string) => void;
   }

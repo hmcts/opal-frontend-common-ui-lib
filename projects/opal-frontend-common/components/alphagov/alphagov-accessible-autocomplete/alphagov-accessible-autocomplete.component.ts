@@ -34,7 +34,7 @@ export class AlphagovAccessibleAutocompleteComponent implements OnInit, OnDestro
   @Input({ required: false }) inputClasses!: string;
   @Input({ required: false }) hintText!: string;
   @Input({ required: true }) autoCompleteItems: IAlphagovAccessibleAutocompleteItem[] = [];
-  @Input() showAllValues = false;
+  @Input() showAllValues = true;
   @Input({ required: false }) errors: string | null = null;
 
   @ViewChild('autocomplete') autocompleteContainer!: ElementRef<HTMLElement>;
@@ -112,8 +112,23 @@ export class AlphagovAccessibleAutocompleteComponent implements OnInit, OnDestro
       name: this.autoCompleteId,
       showAllValues: this.showAllValues,
       defaultValue: this.getDefaultValue(),
+      dropdownArrow: ({ className }) => this.renderDropdownArrow(className),
       onConfirm: (selectedName: string) => this.handleOnConfirm(selectedName),
     };
+  }
+
+  /**
+   * Renders a custom dropdown arrow.
+   * @param className – The class to apply to the SVG.
+   * @returns An SVG string for the dropdown arrow.
+   */
+  private renderDropdownArrow(className: string): string {
+    return `
+   <svg class="${className}" style="top: 8px;" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <path d="M256,298.3L256,298.3L256,298.3l174.2-167.2c4.3-4.2,11.4-4.1,15.8,0.2l30.6,29.9
+                    c4.4,4.3,4.5,11.3,0.2,15.5L264.1,380.9c-2.2,2.2-5.2,3.2-8.1,3c-3,0.1-5.9-0.9-8.1-3L35.2,176.7
+                    c-4.3-4.2-4.2-11.2,0.2-15.5L66,131.3c4.4-4.3,11.5-4.4,15.8-0.2L256,298.3z"></path>
+          </svg>`;
   }
 
   /**
