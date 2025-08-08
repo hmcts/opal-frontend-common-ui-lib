@@ -35,7 +35,6 @@ export class UtilsService {
     if (typeof amount === 'string') {
       amount = parseFloat(amount);
     }
-    console.log(amount)
     if (amount < 0) {
       negativeValue = true;
       amount = Math.abs(amount);
