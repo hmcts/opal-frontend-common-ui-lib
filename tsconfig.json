@@ -390,9 +390,6 @@
       "@hmcts/opal-frontend-common/stores/global": ["./dist/opal-frontend-common/stores/global"],
       "@hmcts/opal-frontend-common/stores/global/interfaces": ["./dist/opal-frontend-common/stores/global/interfaces"],
       "@hmcts/opal-frontend-common/stores/global/types": ["./dist/opal-frontend-common/stores/global/types"],
-      "@hmcts/opal-frontend-common/validators/alphabetical-text": [
-        "./dist/opal-frontend-common/validators/alphabetical-text"
-      ],
       "@hmcts/opal-frontend-common/validators/amount": ["./dist/opal-frontend-common/validators/amount"],
       "@hmcts/opal-frontend-common/validators/date-after-year": [
         "./dist/opal-frontend-common/validators/date-after-year"
@@ -404,17 +401,11 @@
       "@hmcts/opal-frontend-common/validators/national-insurance-number": [
         "./dist/opal-frontend-common/validators/national-insurance-number"
       ],
-      "@hmcts/opal-frontend-common/validators/numerical-only": [
-        "./dist/opal-frontend-common/validators/numerical-only"
-      ],
       "@hmcts/opal-frontend-common/validators/optional-max-length": [
         "./dist/opal-frontend-common/validators/optional-max-length"
       ],
       "@hmcts/opal-frontend-common/validators/optional-valid-date": [
         "./dist/opal-frontend-common/validators/optional-valid-date"
-      ],
-      "@hmcts/opal-frontend-common/validators/optional-valid-email-address": [
-        "./dist/opal-frontend-common/validators/optional-valid-email-address"
       ],
       "@hmcts/opal-frontend-common/validators/optional-valid-telephone": [
         "./dist/opal-frontend-common/validators/optional-valid-telephone"
@@ -425,18 +416,7 @@
       "@hmcts/opal-frontend-common/validators/pattern-validator": [
         "./dist/opal-frontend-common/validators/pattern-validator"
       ],
-
-      "@hmcts/opal-frontend-common/validators/special-characters": [
-        "./dist/opal-frontend-common/validators/special-characters"
-      ],
-      "@hmcts/opal-frontend-common/validators/two-decimal-places": [
-        "./dist/opal-frontend-common/validators/two-decimal-places"
-      ],
-      "@hmcts/opal-frontend-common/validators/valid-value": ["./dist/opal-frontend-common/validators/valid-value"],
-      "@hmcts/opal-frontend-common/validators/time-format": ["./dist/opal-frontend-common/validators/time-format"],
-      "@hmcts/opal-frontend-common/validators/driving-licence-number": [
-        "./dist/opal-frontend-common/validators/driving-licence-number"
-      ]
+      "@hmcts/opal-frontend-common/validators/valid-value": ["./dist/opal-frontend-common/validators/valid-value"]
     },
     "moduleResolution": "bundler",
     "importHelpers": true,

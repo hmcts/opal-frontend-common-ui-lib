@@ -1,6 +1,0 @@
-{
-    "sideEffects": false,
-    "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-validators-numerical-only.mjs",
-    "typings": "../../../../dist/opal-frontend-common/validators/numerical-only/index.d.ts"
-  }
-  
