@@ -1,136 +1,217 @@
----
-
 # Abstract Form Base Component
 
-This Angular component serves as a foundational base for managing form controls, validation, and error handling. It provides reusable functionality for managing forms and is designed to be extended by other form components.
+This Angular component serves as a foundational base class for managing form controls, validation, and error handling in Angular applications. It provides comprehensive functionality for form management, error handling, validation, and routing.
 
 ## Table of Contents
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Inputs](#inputs)
+- [Properties](#properties)
+- [Outputs](#outputs)
 - [Methods](#methods)
 - [Interfaces](#interfaces)
-- [Mocks](#mocks)
 - [Testing](#testing)
 - [Contributing](#contributing)
 
 ## Installation
 
-To use the `AbstractFormBaseComponent` in your project, ensure that it is extended by form-related components to handle forms in your Angular application.
+To use the `AbstractFormBaseComponent` in your project, extend it in your form components:
 
 ```typescript
-import { AbstractFormBaseComponent } from '@components/abstract/abstract-form-base/abstract-form-base.component';
+import { AbstractFormBaseComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-base/abstract-form-base.component';
 ```
 
 ## Usage
 
-This component is designed to be used as a base class for managing forms, validations, and error handling in a reusable and scalable way.
+This component is designed to be extended by form components to provide consistent form handling, validation, and error management.
 
 ### Example Usage:
 
 ```typescript
-import { Component } from '@angular/core';
-import { AbstractFormBaseComponent } from '@components/abstract/abstract-form-base/abstract-form-base.component';
+import { Component, OnInit, OnDestroy} from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { AbstractFormBaseComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-base/abstract-form-base.component';
 
 @Component({
-  selector: 'opal-lib-my-form',
+  selector: 'app-my-form',
   templateUrl: './my-form.component.html',
 })
-export class MyFormComponent extends AbstractFormBaseComponent {
-  // Define specific form controls and methods for your form
+export class MyFormComponent extends AbstractFormBaseComponent implements OnInit, OnDestroy {
+  // Component logic
 }
 ```
 
-## Inputs
+## Properties
 
-`AbstractFormBaseComponent` provides several key inputs that manage form control groups and their validation state.
+The component provides several public properties for form management:
 
-| Input         | Type       | Description                                         |
-| ------------- | ---------- | --------------------------------------------------- |
-| `formGroup`   | `FormGroup`| The main form group that holds all form controls.    |
+| Property                   | Type                                         | Description                                   |
+| -------------------------- | -------------------------------------------- | --------------------------------------------- |
+| `form`                     | `FormGroup`                                  | The main form group instance                  |
+| `formControlErrorMessages` | `IAbstractFormControlErrorMessage`           | Object containing error messages for controls |
+| `formErrorSummaryMessage`  | `IAbstractFormBaseFormErrorSummaryMessage[]` | Array of error summary messages               |
+| `formErrors`               | `IAbstractFormBaseFormError[]`               | Array of all form errors                      |
+
+## Outputs
+
+| Output           | Type                                  | Description                               |
+| ---------------- | ------------------------------------- | ----------------------------------------- |
+| `unsavedChanges` | `EventEmitter<boolean>`               | Emits when form has unsaved changes       |
+| `formSubmit`     | `EventEmitter<IAbstractFormBaseForm>` | Emits when form is submitted successfully |
 
 ## Methods
 
-`AbstractFormBaseComponent` provides utility methods for managing form controls, validating fields, and handling form error messages.
+### Public Methods
 
-### Common Methods:
+| Method                       | Parameters                                                             | Description                                   |
+| ---------------------------- | ---------------------------------------------------------------------- | --------------------------------------------- |
+| `handleClearForm()`          | None                                                                   | Resets the form to initial state              |
+| `scrollTo(fieldId)`          | `fieldId: string`                                                      | Scrolls to and focuses on the specified field |
+| `handleRoute()`              | `route: string, nonRelative?: boolean, event?: Event, routeData?: any` | Handles navigation with optional route data   |
+| `handleFormSubmit()`         | `event: SubmitEvent`                                                   | Handles form submission and validation        |
+| `handleUppercaseInputMask()` | `event: Event`                                                         | Converts input to uppercase                   |
 
-- **`scroll()`**: Scrolls to the label of the component and focuses on the field id.
-- **`ngOnInit()`**: Lifecycle hook that is called after Angular has initialized all data-bound properties of a directive.
-- **`ngOnDestroy()`**: Lifecycle hook that is called when the directive is destroyed.
-###Examples
+### Protected Methods
 
-```
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <div>
-    <label for="name">Name</label>
-    <input id="name" formControlName="name">
-    <div *ngIf="form.controls.name.invalid && form.controls.name.touched">
-      Name is required.
+| Method                              | Parameters                                                 | Description                                   |
+| ----------------------------------- | ---------------------------------------------------------- | --------------------------------------------- |
+| `createFormControl()`               | `validators: ValidatorFn[], initialValue?: string \| null` | Creates a form control with validators        |
+| `handleErrorMessages()`             | None                                                       | Processes and sets form error messages        |
+| `hasUnsavedChanges()`               | None                                                       | Checks if form has unsaved changes            |
+| `setInputValue()`                   | `value: string, controlPath: string`                       | Sets value for a specific form control        |
+| `handleDateInputFormErrors()`       | None                                                       | Handles date field error processing           |
+| `setInitialErrorMessages()`         | None                                                       | Initializes error message objects             |
+| `rePopulateForm()`                  | `state: any`                                               | Repopulates form with provided state          |
+| `createControl()`                   | `controlName: string, validators: ValidatorFn[]`           | Adds a new control to the form                |
+| `updateControl()`                   | `controlName: string, validators: ValidatorFn[]`           | Updates validators for existing control       |
+| `removeControl()`                   | `controlName: string`                                      | Removes a control from the form               |
+| `removeControlErrors()`             | `controlName: string`                                      | Removes error messages for a specific control |
+| `clearAllErrorMessages()`           | None                                                       | Clears all error messages                     |
+
+
+### Example Template Usage:
+
+```html
+<form [formGroup]="form" (ngSubmit)="handleFormSubmit($event)">
+  <!-- Error Summary -->
+  @if (formErrorSummaryMessage.length > 0) {
+  <div class="govuk-error-summary" role="alert" tabindex="-1">
+    <h2 class="govuk-error-summary__title">There is a problem</h2>
+    <div class="govuk-error-summary__body">
+      <ul class="govuk-list govuk-error-summary__list">
+        @for (error of formErrorSummaryMessage; track error.fieldId) {
+        <li>
+          <a (click)="scrollTo(error.fieldId)">{{ error.message }}</a>
+        </li>
+        }
+      </ul>
     </div>
   </div>
-  <div>
-    <label for="email">Email</label>
-    <input id="email" formControlName="email">
-    <div *ngIf="form.controls.email.invalid && form.controls.email.touched">
-      Enter a valid email.
-    </div>
+  }
+
+  <!-- Form Fields -->
+  <div class="govuk-form-group" [class.govuk-form-group--error]="formControlErrorMessages['name']">
+    <label class="govuk-label" for="name">Name</label>
+    @if (formControlErrorMessages['name']) {
+    <p class="govuk-error-message">{{ formControlErrorMessages['name'] }}</p>
+    }
+    <input
+      class="govuk-input"
+      [class.govuk-input--error]="formControlErrorMessages['name']"
+      id="name"
+      formControlName="name"
+    />
   </div>
-  <button type="submit">Submit</button>
+
+  <div class="govuk-form-group" [class.govuk-form-group--error]="formControlErrorMessages['email']">
+    <label class="govuk-label" for="email">Email</label>
+    @if (formControlErrorMessages['email']) {
+    <p class="govuk-error-message">{{ formControlErrorMessages['email'] }}</p>
+    }
+    <input
+      class="govuk-input"
+      [class.govuk-input--error]="formControlErrorMessages['email']"
+      id="email"
+      type="email"
+      formControlName="email"
+    />
+  </div>
+
+  <button type="submit" class="govuk-button">Submit</button>
+  <button type="button" class="govuk-button govuk-button--secondary" (click)="handleClearForm()">Clear</button>
 </form>
 ```
+
 ## Interfaces
 
-`AbstractFormBaseComponent` utilizes several interfaces to manage form control states, error handling, and validation logic.
+The component utilizes several interfaces for type safety and structure:
 
 ### Key Interfaces:
 
 1. **Error Handling Interfaces**:
-   - `AbstractFormBaseFieldError`: Represents individual field-level error details.
-   - `AbstractFormBaseFormErrorSummaryMessage`: Manages summary-level error messages for the form.
+   - `IAbstractFormBaseFieldError`: Individual field-level error details with priority and message
+   - `IAbstractFormBaseFieldErrors`: Collection of field errors indexed by field name
+   - `IAbstractFormBaseFormError`: Form error with fieldId, message, priority, and type
+   - `IAbstractFormBaseFormErrorSummaryMessage`: Error summary message for display
+   - `IAbstractFormBaseHighPriorityFormError`: High-priority error with type information
 
-2. **Form Status Interfaces**:
-   - `AbstractFormBaseStatus`: Tracks the current form status (e.g., loading, submitted, or idle).
+2. **Form Structure Interfaces**:
+   - `IAbstractFormBaseForm<T>`: Form structure with formData and nestedFlow properties
+   - `IAbstractFormControlErrorMessage`: Error messages indexed by control name
+   - `IAbstractFormArrayControlValidation`: Validation configuration for form array controls
 
-3. **Form Structure Interfaces**:
-   - `AbstractFormBaseForm`: Defines the structure of form controls and their configuration.
-   - `AbstractFormBaseHighPriorityFormError`: Manages high-priority error messages for critical form fields.
+## Error Handling Features
 
-## Mocks
+The component provides comprehensive error handling:
 
-Several mock files are included to simulate form data, error states, and form summaries for testing purposes.
+- **Automatic Error Detection**: Recursively scans FormGroups and FormArrays for errors
+- **Priority-based Error Display**: Shows highest priority errors when multiple errors exist
+- **Date Field Consolidation**: Automatically consolidates date field errors (day, month, year)
+- **Error Summary Generation**: Creates accessible error summaries with scroll-to functionality
+- **Real-time Validation**: Updates error messages as users interact with the form
 
-### Mock Files:
+## Form Management Features
 
-1. **abstract-form-base-form-control-error.mock.ts**: Simulates form control error scenarios.
-2. **abstract-form-base-form-date-error-summary.mock.ts**: Mocks error summaries for date-based form controls.
-3. **abstract-form-base-form-error-summary.mock.ts**: Provides error summaries for the form.
-4. **abstract-form-base-form-state.mock.ts**: Mocks various form states, such as loading, error, and success.
-
-These mocks can be used in unit tests to validate different form behaviors and error states.
+- **Dynamic Control Management**: Add, update, or remove form controls at runtime
+- **Validator Management**: Update validators for existing controls or clear all validators
+- **Form State Tracking**: Monitor unsaved changes and form submission state
+- **Route Integration**: Handle navigation with form state preservation
+- **Accessibility Support**: Focus management and ARIA compliance
 
 ## Testing
 
-Unit tests for this component can be found in the `abstract-form-base.component.spec.ts` file. To run the tests, use:
+Unit tests should cover:
 
-```bash
-ng test
-```
-
-### Testing Scenarios
-
-You can use the mock files to test various scenarios, such as form validation, error handling, and form submission.
+- Form validation scenarios
+- Error message handling and display
+- Dynamic control management
+- Route handling with unsaved changes
+- Error summary functionality
 
 ```typescript
-import { AbstractFormBaseFormErrorSummaryMock } from '@mocks/abstract-form-base-form-error-summary.mock.ts';
-// Simulate form error scenarios in your tests
+describe('MyFormComponent', () => {
+  let component: MyFormComponent;
+  let fixture: ComponentFixture<MyFormComponent>;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [ReactiveFormsModule],
+      declarations: [MyFormComponent],
+    });
+    fixture = TestBed.createComponent(MyFormComponent);
+    component = fixture.componentInstance;
+  });
+
+  it('should handle form submission with validation errors', () => {
+    component.form.patchValue({ name: '', email: 'invalid-email' });
+    component.handleFormSubmit(new SubmitEvent('submit'));
+
+    expect(component.formErrors.length).toBeGreaterThan(0);
+    expect(component.formErrorSummaryMessage.length).toBeGreaterThan(0);
+  });
+});
 ```
 
 ## Contributing
 
 Feel free to submit issues or pull requests to improve this component. Ensure that all changes follow Angular best practices and maintain consistency with form management and validation logic.
-
----
-
-This `README.md` provides a detailed guide on how to extend and use the `AbstractFormBaseComponent` in your Angular application. It also includes references to interfaces and mocks that support form control, validation, and testing.

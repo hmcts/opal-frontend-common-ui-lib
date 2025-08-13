@@ -1035,4 +1035,27 @@ describe('AbstractFormBaseComponent', () => {
       nestedFlow: false,
     });
   });
+
+  it('should clear all error messages', () => {
+    if (!component) {
+      fail('Component is not initialized');
+      return;
+    }
+
+    // Set up initial error messages and errors
+    component.formControlErrorMessages = { field1: 'Error 1', field2: 'Error 2' };
+    component.formErrorSummaryMessage = [
+      { fieldId: 'field1', message: 'Error 1' },
+      { fieldId: 'field2', message: 'Error 2' },
+    ];
+    component.formErrors = [{ fieldId: 'field1', message: 'Error 1', priority: 1, type: 'required' }];
+
+    // Call the method under test
+    component['clearAllErrorMessages']();
+
+    // Assert that all error message containers are cleared
+    expect(component.formControlErrorMessages).toEqual({});
+    expect(component.formErrorSummaryMessage).toEqual([]);
+    expect(component.formErrors).toEqual([]);
+  });
 });
