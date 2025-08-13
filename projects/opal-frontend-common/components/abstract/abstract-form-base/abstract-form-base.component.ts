@@ -508,6 +508,7 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
     this.formControlErrorMessages = {};
     this.formErrorSummaryMessage = [];
     this.formErrors = [];
+    this.form.updateValueAndValidity({ onlySelf: false, emitEvent: false });
   }
 
   /**
