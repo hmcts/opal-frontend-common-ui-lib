@@ -28,7 +28,7 @@ This component is designed to be extended by form components to provide consiste
 ### Example Usage:
 
 ```typescript
-import { Component, OnInit, OnDestroy} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AbstractFormBaseComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-base/abstract-form-base.component';
 
@@ -73,21 +73,23 @@ The component provides several public properties for form management:
 
 ### Protected Methods
 
-| Method                              | Parameters                                                 | Description                                   |
-| ----------------------------------- | ---------------------------------------------------------- | --------------------------------------------- |
-| `createFormControl()`               | `validators: ValidatorFn[], initialValue?: string \| null` | Creates a form control with validators        |
-| `handleErrorMessages()`             | None                                                       | Processes and sets form error messages        |
-| `hasUnsavedChanges()`               | None                                                       | Checks if form has unsaved changes            |
-| `setInputValue()`                   | `value: string, controlPath: string`                       | Sets value for a specific form control        |
-| `handleDateInputFormErrors()`       | None                                                       | Handles date field error processing           |
-| `setInitialErrorMessages()`         | None                                                       | Initializes error message objects             |
-| `rePopulateForm()`                  | `state: any`                                               | Repopulates form with provided state          |
-| `createControl()`                   | `controlName: string, validators: ValidatorFn[]`           | Adds a new control to the form                |
-| `updateControl()`                   | `controlName: string, validators: ValidatorFn[]`           | Updates validators for existing control       |
-| `removeControl()`                   | `controlName: string`                                      | Removes a control from the form               |
-| `removeControlErrors()`             | `controlName: string`                                      | Removes error messages for a specific control |
-| `clearAllErrorMessages()`           | None                                                       | Clears all error messages                     |
-
+| Method                            | Parameters                                                 | Description                                                                                     |
+| --------------------------------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `createFormControl()`             | `validators: ValidatorFn[], initialValue?: string \| null` | Creates a form control with validators                                                          |
+| `handleErrorMessages()`           | None                                                       | Processes and sets form error messages                                                          |
+| `hasUnsavedChanges()`             | None                                                       | Checks if form has unsaved changes                                                              |
+| `setInputValue()`                 | `value: string, controlPath: string`                       | Sets value for a specific form control                                                          |
+| `handleDateInputFormErrors()`     | None                                                       | Handles date field error processing                                                             |
+| `setInitialErrorMessages()`       | None                                                       | Initializes error message objects                                                               |
+| `rePopulateForm()`                | `state: any`                                               | Repopulates form with provided state                                                            |
+| `createControl()`                 | `controlName: string, validators: ValidatorFn[]`           | Adds a new control to the form                                                                  |
+| `updateControl()`                 | `controlName: string, validators: ValidatorFn[]`           | Updates validators for existing control                                                         |
+| `removeControl()`                 | `controlName: string`                                      | Removes a control from the form                                                                 |
+| `removeControlErrors()`           | `controlName: string`                                      | Removes error messages for a specific control                                                   |
+| `clearAllErrorMessages()`         | None                                                       | Clears all error messages                                                                       |
+| `clearFormGroupControls()`        | `group: FormGroup`                                         | Removes all controls from the specified FormGroup, useful for nested group resets               |
+| `addFreshControlsFromTemplates()` | `group: FormGroup, templates: Record<string, FormControl>` | Adds fresh FormControls (copying validator config) from a template map into the given FormGroup |
+| `replaceFormGroupControls()`      | `group: FormGroup, templates: Record<string, FormControl>` | Clears the given FormGroup then adds fresh controls from the provided templates                 |
 
 ### Example Template Usage:
 
