@@ -1058,4 +1058,106 @@ describe('AbstractFormBaseComponent', () => {
     expect(component.formErrorSummaryMessage).toEqual([]);
     expect(component.formErrors).toEqual([]);
   });
+  it('should clear all controls from a provided FormGroup (clearFormGroupControls)', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const nested = new FormGroup({
+      one: new FormControl('1'),
+      two: new FormControl('2'),
+    });
+
+    expect(Object.keys(nested.controls).length).toBe(2);
+
+    // call protected via bracket access
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (component as any).clearFormGroupControls(nested);
+
+    expect(Object.keys(nested.controls).length).toBe(0);
+  });
+
+  it('should add fresh controls from templates without reusing state (addFreshControlsFromTemplates)', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const group = new FormGroup({});
+
+    const templateFirst = new FormControl('seed', [Validators.required]);
+    const templateSecond = new FormControl({ value: 'x', disabled: true });
+
+    const templates: Record<string, FormControl> = {
+      first: templateFirst,
+      second: templateSecond,
+    };
+
+    // call protected via bracket access
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (component as any).addFreshControlsFromTemplates(group, templates);
+
+    // Controls should exist
+    expect(group.get('first')).toBeTruthy();
+    expect(group.get('second')).toBeTruthy();
+
+    // Values should be reset to null (fresh instances)
+    expect(group.get('first')?.value).toBeNull();
+    expect(group.get('second')?.value).toBeNull();
+
+    // Trigger validation
+    group.get('first')?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+
+    // Validators should be copied (by behaviour)
+    expect(group.get('first')?.errors?.['required']).toBeTrue();
+
+    // Ensure new instances were created (not the same references)
+    const firstControl = group.get('first') as FormControl | null;
+    const secondControl = group.get('second') as FormControl | null;
+
+    expect(firstControl === templateFirst).toBeFalse();
+    expect(secondControl === templateSecond).toBeFalse();
+
+    // Mutating template should not affect added controls
+    templateFirst.setValue('changed');
+    expect(group.get('first')?.value).toBeNull();
+  });
+
+  it('should replace all controls in a FormGroup with fresh instances (replaceFormGroupControls)', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const group = new FormGroup({
+      old: new FormControl('stale'),
+    });
+
+    const templates: Record<string, FormControl> = {
+      a: new FormControl('keepMe', [Validators.required]),
+      b: new FormControl({ value: 'disabled', disabled: true }),
+    };
+
+    // call protected via bracket access
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (component as any).replaceFormGroupControls(group, templates);
+
+    // Old control removed
+    expect(group.get('old')).toBeNull();
+
+    // New controls present and fresh
+    expect(group.get('a')).toBeTruthy();
+    expect(group.get('b')).toBeTruthy();
+
+    // Values reset
+    expect(group.get('a')?.value).toBeNull();
+    expect(group.get('b')?.value).toBeNull();
+
+    // Trigger validation
+    group.get('a')?.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+
+    // Validators preserved by behaviour
+    expect(group.get('a')?.errors?.['required']).toBeTrue();
+  });
 });

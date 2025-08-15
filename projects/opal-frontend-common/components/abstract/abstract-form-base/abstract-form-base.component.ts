@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output, inject } from '@angular/core';
-import { FormArray, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { IAbstractFormBaseFieldError } from './interfaces/abstract-form-base-field-error.interface';
@@ -365,6 +365,42 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
    */
   protected createFormControl(validators: ValidatorFn[], initialValue: string | null = null): FormControl {
     return new FormControl(initialValue, { validators: [...validators] });
+  }
+
+  /**
+   * Removes all controls from the provided FormGroup.
+   * Useful for resetting nested groups (e.g., tab-specific criteria) without affecting the root form.
+   */
+  protected clearFormGroupControls(group: FormGroup): void {
+    Object.keys(group.controls).forEach((name) => group.removeControl(name));
+  }
+
+  /**
+   * Adds fresh controls to the provided FormGroup from a template map of FormControls.
+   * The incoming map is treated as a template: only validators
+   * are copied. Values, status, and subscriptions are NOT reused (prevents stale state leaks).
+   */
+  protected addFreshControlsFromTemplates(group: FormGroup, templates: Record<string, FormControl>): void {
+    Object.entries(templates).forEach(([name, template]) => {
+      // Create a fresh control starting empty
+      const fresh = new FormControl(null);
+
+      // Copy validator config
+      if (template.validator) {
+        fresh.setValidators(template.validator);
+      }
+
+      group.addControl(name, fresh);
+    });
+  }
+
+  /**
+   * Replaces all controls in the target FormGroup with fresh instances based on the provided templates.
+   * Combines clear + add into a single, reusable operation for nested groups.
+   */
+  protected replaceFormGroupControls(group: FormGroup, templates: Record<string, FormControl>): void {
+    this.clearFormGroupControls(group);
+    this.addFreshControlsFromTemplates(group, templates);
   }
 
   /**
