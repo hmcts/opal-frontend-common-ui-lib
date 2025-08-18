@@ -154,6 +154,33 @@ describe('AbstractNestedFormBaseComponent', () => {
     expect(c2.valid).toBeTrue();
   });
 
+  it('resetAndValidateControls should safely ignore null entries and still process others', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const c1 = new FormControl<string | null>('x', Validators.required);
+    c1.setErrors({ custom: true });
+    const c2 = new FormControl<number | null>(42);
+
+    // Include a null in the middle to hit the `if (!c) return;` branch
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const list = [c1, null as unknown as any, c2];
+
+    expect(() => component!['resetAndValidateControls'](list)).not.toThrow();
+
+    // c1 processed
+    expect(c1.value).toBeNull();
+    expect(c1.hasError('required')).toBeTrue();
+    expect(c1.errors).not.toEqual(jasmine.objectContaining({ custom: true }));
+
+    // c2 processed
+    expect(c2.value).toBeNull();
+    expect(c2.errors).toBeNull();
+    expect(c2.valid).toBeTrue();
+  });
+
   it('resetAndValidateFormGroup should reset value/touched/pristine and update validity', () => {
     if (!component) {
       fail('component returned null');
