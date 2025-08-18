@@ -1,4 +1,4 @@
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { of } from 'rxjs';
 import { AbstractNestedFormBaseComponent } from './abstract-nested-form-base.component';
 import { IAbstractFormBaseFieldErrors } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-base/interfaces';
@@ -107,28 +107,53 @@ describe('AbstractNestedFormBaseComponent', () => {
     expect(Object.keys(component.form.controls)).toEqual(['baz']);
   });
 
-  it('setRequired should add/remove Validators.required and update validity', () => {
+  it('setValidatorPresence should add/remove a single validator and update validity', () => {
     if (!component) {
       fail('component returned null');
       return;
     }
 
     // early-return branch when control is null
-    expect(component['setRequired'](null as unknown as AbstractControl, true)).toBeFalse();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect(component['setValidatorPresence'](null as unknown as any, Validators.required, true)).toBeFalse();
 
     const c = new FormControl<string | null>(null);
 
-    // make required
-    const nowReq = component['setRequired'](c, true);
-    expect(nowReq).toBeTrue();
+    // add required
+    const nowPresent = component['setValidatorPresence'](c, Validators.required, true);
+    expect(nowPresent).toBeTrue();
     c.updateValueAndValidity({ onlySelf: true });
     expect(c.hasError('required')).toBeTrue();
 
     // remove required
-    const nowNotReq = component['setRequired'](c, false);
-    expect(nowNotReq).toBeFalse();
+    const nowAbsent = component['setValidatorPresence'](c, Validators.required, false);
+    expect(nowAbsent).toBeFalse();
     c.updateValueAndValidity({ onlySelf: true });
     expect(c.hasError('required')).toBeFalse();
+  });
+
+  it('setValidatorPresence should add/remove multiple validators at once', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const c = new FormControl<string | null>('AB', []);
+
+    // add minlength(3) and pattern(/^[A-Z]+$/)
+    const validators = [Validators.minLength(3), Validators.pattern(/^[A-Z]+$/)];
+    component['setValidatorPresence'](c, validators, true);
+    c.updateValueAndValidity({ onlySelf: true });
+
+    // 'AB' fails minlength but passes pattern
+    expect(c.hasError('minlength')).toBeTrue();
+    expect(c.hasError('pattern')).toBeFalse();
+
+    // remove both validators
+    component['setValidatorPresence'](c, validators, false);
+    c.updateValueAndValidity({ onlySelf: true });
+
+    expect(c.errors).toBeNull();
   });
 
   it('resetAndValidateControls should clear values and errors and update validity', () => {

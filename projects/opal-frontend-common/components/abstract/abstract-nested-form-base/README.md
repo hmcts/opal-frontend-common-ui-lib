@@ -67,16 +67,16 @@ export class ChildSubFormComponent extends AbstractNestedFormBaseComponent imple
 
 ### Public / Protected Methods
 
-| Method                              | Parameters                                    | Description                                                                 |
-| ----------------------------------- | --------------------------------------------- | --------------------------------------------------------------------------- |
-| `addControlsToNestedFormGroup`      | `source: FormGroup, target?: FormGroup`       | Installs detached controls into target form (defaults to `this.form`).      |
-| `removeControlsFromNestedFormGroup` | `source: FormGroup, target?: FormGroup`       | Removes controls from target whose names are in `source`.                   |
-| `setRequired`                       | `control: AbstractControl, required: boolean` | Adds or removes `Validators.required` and updates validity.                 |
-| `resetAndValidateControls`          | `controls: (AbstractControl \| null)[]`       | Resets given controls, clears errors, reapplies validators.                 |
-| `resetAndValidateFormGroup`         | `group: FormGroup`                            | Resets entire group, marks pristine/untouched, updates validity.            |
-| `subscribeValidation`               | `handler: () => void, ...controls`            | Subscribes a handler to `valueChanges` of controls with auto-unsubscribe.   |
-| `registerNestedFormFieldErrors`     | `child: IAbstractFormBaseFieldErrors`         | Merges this component’s error definitions into the active map.              |
-| `unregisterNestedFormFieldErrors`   | None                                          | Removes only the error definitions previously registered by this component. |
+| Method                              | Parameters                                                                             | Description                                                                 |
+| ----------------------------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `addControlsToNestedFormGroup`      | `source: FormGroup, target?: FormGroup`                                                | Installs detached controls into target form (defaults to `this.form`).      |
+| `removeControlsFromNestedFormGroup` | `source: FormGroup, target?: FormGroup`                                                | Removes controls from target whose names are in `source`.                   |
+| `setValidatorPresence`              | `control: AbstractControl, validators: ValidatorFn \| ValidatorFn[], present: boolean` | Adds or removes one or more validators and updates validity.                |
+| `resetAndValidateControls`          | `controls: (AbstractControl \| null)[]`                                                | Resets given controls, clears errors, reapplies validators.                 |
+| `resetAndValidateFormGroup`         | `group: FormGroup`                                                                     | Resets entire group, marks pristine/untouched, updates validity.            |
+| `subscribeValidation`               | `handler: () => void, ...controls`                                                     | Subscribes a handler to `valueChanges` of controls with auto-unsubscribe.   |
+| `registerNestedFormFieldErrors`     | `child: IAbstractFormBaseFieldErrors`                                                  | Merges this component’s error definitions into the active map.              |
+| `unregisterNestedFormFieldErrors`   | None                                                                                   | Removes only the error definitions previously registered by this component. |
 
 ## Error Handling
 

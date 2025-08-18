@@ -28,7 +28,7 @@ This component is designed to be extended by form components to provide consiste
 ### Example Usage:
 
 ```typescript
-import { Component, OnInit, OnDestroy} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AbstractFormBaseComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-base/abstract-form-base.component';
 
@@ -63,31 +63,32 @@ The component provides several public properties for form management:
 
 ### Public Methods
 
-| Method                       | Parameters                                                             | Description                                   |
-| ---------------------------- | ---------------------------------------------------------------------- | --------------------------------------------- |
-| `handleClearForm()`          | None                                                                   | Resets the form to initial state              |
-| `scrollTo(fieldId)`          | `fieldId: string`                                                      | Scrolls to and focuses on the specified field |
-| `handleRoute()`              | `route: string, nonRelative?: boolean, event?: Event, routeData?: any` | Handles navigation with optional route data   |
-| `handleFormSubmit()`         | `event: SubmitEvent`                                                   | Handles form submission and validation        |
-| `handleUppercaseInputMask()` | `event: Event`                                                         | Converts input to uppercase                   |
+| Method                            | Parameters                                                             | Description                                               |
+| --------------------------------- | ---------------------------------------------------------------------- | --------------------------------------------------------- |
+| `handleClearForm()`               | None                                                                   | Resets the form to initial state                          |
+| `scrollTo(fieldId)`               | `fieldId: string`                                                      | Scrolls to and focuses on the specified field             |
+| `handleRoute()`                   | `route: string, nonRelative?: boolean, event?: Event, routeData?: any` | Handles navigation with optional route data               |
+| `handleFormSubmit()`              | `event: SubmitEvent`                                                   | Handles form submission and validation                    |
+| `handleUppercaseInputMask()`      | `event: Event`                                                         | Converts input to uppercase                               |
+| `updateFieldErrors()`             | None                                                                   | Updates the collection of field-level errors for the form |
+| `updateFormControlErrorMessage()` | `controlName: string`                                                  | Updates the error message for a specific form control     |
 
 ### Protected Methods
 
-| Method                              | Parameters                                                 | Description                                   |
-| ----------------------------------- | ---------------------------------------------------------- | --------------------------------------------- |
-| `createFormControl()`               | `validators: ValidatorFn[], initialValue?: string \| null` | Creates a form control with validators        |
-| `handleErrorMessages()`             | None                                                       | Processes and sets form error messages        |
-| `hasUnsavedChanges()`               | None                                                       | Checks if form has unsaved changes            |
-| `setInputValue()`                   | `value: string, controlPath: string`                       | Sets value for a specific form control        |
-| `handleDateInputFormErrors()`       | None                                                       | Handles date field error processing           |
-| `setInitialErrorMessages()`         | None                                                       | Initializes error message objects             |
-| `rePopulateForm()`                  | `state: any`                                               | Repopulates form with provided state          |
-| `createControl()`                   | `controlName: string, validators: ValidatorFn[]`           | Adds a new control to the form                |
-| `updateControl()`                   | `controlName: string, validators: ValidatorFn[]`           | Updates validators for existing control       |
-| `removeControl()`                   | `controlName: string`                                      | Removes a control from the form               |
-| `removeControlErrors()`             | `controlName: string`                                      | Removes error messages for a specific control |
-| `clearAllErrorMessages()`           | None                                                       | Clears all error messages                     |
-
+| Method                        | Parameters                                                 | Description                                   |
+| ----------------------------- | ---------------------------------------------------------- | --------------------------------------------- |
+| `createFormControl()`         | `validators: ValidatorFn[], initialValue?: string \| null` | Creates a form control with validators        |
+| `handleErrorMessages()`       | None                                                       | Processes and sets form error messages        |
+| `hasUnsavedChanges()`         | None                                                       | Checks if form has unsaved changes            |
+| `setInputValue()`             | `value: string, controlPath: string`                       | Sets value for a specific form control        |
+| `handleDateInputFormErrors()` | None                                                       | Handles date field error processing           |
+| `setInitialErrorMessages()`   | None                                                       | Initializes error message objects             |
+| `rePopulateForm()`            | `state: any`                                               | Repopulates form with provided state          |
+| `createControl()`             | `controlName: string, validators: ValidatorFn[]`           | Adds a new control to the form                |
+| `updateControl()`             | `controlName: string, validators: ValidatorFn[]`           | Updates validators for existing control       |
+| `removeControl()`             | `controlName: string`                                      | Removes a control from the form               |
+| `removeControlErrors()`       | `controlName: string`                                      | Removes error messages for a specific control |
+| `clearAllErrorMessages()`     | None                                                       | Clears all error messages                     |
 
 ### Example Template Usage:
 

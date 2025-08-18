@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AbstractControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { AbstractFormBaseComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-base';
 import { merge } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -23,6 +23,30 @@ import {
  */
 export abstract class AbstractNestedFormBaseComponent extends AbstractFormBaseComponent {
   private registeredFieldErrors: Record<string, string[]> = {};
+
+  /**
+   * Removes only the error types that were previously registered by this component.
+   *
+   * If a control key has no error types left after removal, the key is deleted from the map.
+   * Safe to call multiple times.
+   */
+  private unregisterNestedFormFieldErrors(): void {
+    const registry = this.registeredFieldErrors;
+    if (!registry || !this.fieldErrors) return;
+
+    Object.entries(registry).forEach(([controlKey, types]) => {
+      const existing = this.fieldErrors[controlKey];
+      if (!existing) return;
+      types.forEach((t) => {
+        delete existing[t];
+      });
+      if (!Object.keys(existing).length) {
+        delete this.fieldErrors[controlKey];
+      }
+    });
+
+    this.registeredFieldErrors = {};
+  }
 
   /**
    * Installs all controls from a **detached** builder group into a target FormGroup (defaults to `this.form`).
@@ -55,21 +79,27 @@ export abstract class AbstractNestedFormBaseComponent extends AbstractFormBaseCo
   }
 
   /**
-   * Adds or removes `Validators.required` on a control and updates validity without emitting events.
+   * Adds or removes one or more validators on a control and updates validity without emitting events.
    *
    * @param control The control to modify. If null/undefined, the method no-ops and returns `false`.
-   * @param required Whether the control should be required.
-   * @returns `true` if the control is now required; otherwise `false`.
+   * @param validators A single `ValidatorFn` or an array of `ValidatorFn`s to add/remove.
+   * @param present When `true`, validators are added; when `false`, the same validators are removed.
+   * @returns The `present` flag (for convenient inline use in conditionals).
    */
-  protected setRequired(control: AbstractControl | null, required: boolean): boolean {
+  protected setValidatorPresence(
+    control: AbstractControl | null,
+    validators: ValidatorFn | ValidatorFn[],
+    present: boolean,
+  ): boolean {
     if (!control) return false;
-    if (required) {
-      control.addValidators(Validators.required);
+    const list = Array.isArray(validators) ? validators : [validators];
+    if (present) {
+      control.addValidators(list);
     } else {
-      control.removeValidators(Validators.required);
+      control.removeValidators(list);
     }
     control.updateValueAndValidity({ emitEvent: false, onlySelf: true });
-    return required;
+    return present;
   }
 
   /**
@@ -146,30 +176,6 @@ export abstract class AbstractNestedFormBaseComponent extends AbstractFormBaseCo
         this.registeredFieldErrors[controlKey] = [...(this.registeredFieldErrors[controlKey] ?? []), ...addedTypes];
       }
     });
-  }
-
-  /**
-   * Removes only the error types that were previously registered by this component.
-   *
-   * If a control key has no error types left after removal, the key is deleted from the map.
-   * Safe to call multiple times.
-   */
-  protected unregisterNestedFormFieldErrors(): void {
-    const registry = this.registeredFieldErrors;
-    if (!registry || !this.fieldErrors) return;
-
-    Object.entries(registry).forEach(([controlKey, types]) => {
-      const existing = this.fieldErrors[controlKey];
-      if (!existing) return;
-      types.forEach((t) => {
-        delete existing[t];
-      });
-      if (!Object.keys(existing).length) {
-        delete this.fieldErrors[controlKey];
-      }
-    });
-
-    this.registeredFieldErrors = {};
   }
 
   /**

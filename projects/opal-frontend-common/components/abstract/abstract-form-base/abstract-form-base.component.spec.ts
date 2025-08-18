@@ -1058,4 +1058,46 @@ describe('AbstractFormBaseComponent', () => {
     expect(component.formErrorSummaryMessage).toEqual([]);
     expect(component.formErrors).toEqual([]);
   });
+
+  it('should update fieldErrors when updateFieldErrors is called', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const mockFieldErrors = {
+      court: {
+        required: {
+          message: 'Court is required',
+          priority: 1,
+        },
+      },
+      surname: {
+        required: {
+          message: 'Surname is required',
+          priority: 2,
+        },
+      },
+    };
+
+    component.updateFieldErrors(mockFieldErrors);
+
+    expect(component['fieldErrors']).toEqual(mockFieldErrors);
+  });
+
+  it('should update formControlErrorMessages when updateFormControlErrorMessages is called', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const mockErrorMessages = {
+      court: 'Court is required',
+      surname: 'Surname is required',
+    };
+
+    component.updateFormControlErrorMessages(mockErrorMessages);
+
+    expect(component.formControlErrorMessages).toEqual(mockErrorMessages);
+  });
 });

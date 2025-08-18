@@ -579,6 +579,25 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
     input.value = this.utilsService.upperCaseAllLetters(input.value);
   }
 
+  /**
+   * Updates the form's field error state with the provided errors.
+   *
+   * @param event - An object containing the latest field errors to be set on the form.
+   */
+  public updateFieldErrors(event: IAbstractFormBaseFieldErrors): void {
+    this.fieldErrors = event;
+  }
+
+  /**
+   * Updates the form control error messages with the provided event data.
+   *
+   * @param event - An object implementing the `IAbstractFormControlErrorMessage` interface,
+   *                containing the latest error messages for the form control.
+   */
+  public updateFormControlErrorMessages(event: IAbstractFormControlErrorMessage): void {
+    this.formControlErrorMessages = event;
+  }
+
   public ngOnInit(): void {
     if (this.form) {
       this.setupListener();
