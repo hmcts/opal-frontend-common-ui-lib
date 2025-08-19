@@ -28,7 +28,7 @@ This component is designed to be extended by form components to provide consiste
 ### Example Usage:
 
 ```typescript
-import { Component, OnInit, OnDestroy} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AbstractFormBaseComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-base/abstract-form-base.component';
 
@@ -63,31 +63,36 @@ The component provides several public properties for form management:
 
 ### Public Methods
 
-| Method                       | Parameters                                                             | Description                                   |
-| ---------------------------- | ---------------------------------------------------------------------- | --------------------------------------------- |
-| `handleClearForm()`          | None                                                                   | Resets the form to initial state              |
-| `scrollTo(fieldId)`          | `fieldId: string`                                                      | Scrolls to and focuses on the specified field |
-| `handleRoute()`              | `route: string, nonRelative?: boolean, event?: Event, routeData?: any` | Handles navigation with optional route data   |
-| `handleFormSubmit()`         | `event: SubmitEvent`                                                   | Handles form submission and validation        |
-| `handleUppercaseInputMask()` | `event: Event`                                                         | Converts input to uppercase                   |
+| Method                             | Parameters                                                             | Description                                                                |
+| ---------------------------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `handleClearForm()`                | —                                                                      | Resets the form to its initial state.                                      |
+| `scrollTo(fieldId)`                | `fieldId: string`                                                      | Scrolls to and focuses the specified field.                                |
+| `handleRoute()`                    | `route: string, nonRelative?: boolean, event?: Event, routeData?: any` | Handles navigation with optional route data, respecting unsaved changes.   |
+| `handleFormSubmit()`               | `event: SubmitEvent`                                                   | Runs validation and emits `formSubmit` when valid; focuses summary if not. |
+| `handleUppercaseInputMask()`       | `event: Event`                                                         | Uppercases all letters in the event target input.                          |
+| `updateFieldErrors()`              | `event: IAbstractFormBaseFieldErrors`                                  | Replaces the current map of field-level error templates.                   |
+| `updateFormControlErrorMessages()` | `event: IAbstractFormControlErrorMessage`                              | Replaces the current per-control inline error messages map.                |
+| `updateFormErrorSummaryMessage()`  | `event: IAbstractFormBaseFormErrorSummaryMessage[]`                    | Replaces the current error summary items array.                            |
+| `updateFormErrors()`               | `event: IAbstractFormBaseFormError[]`                                  | Replaces the current raw error collection (rarely needed directly).        |
 
 ### Protected Methods
 
-| Method                              | Parameters                                                 | Description                                   |
-| ----------------------------------- | ---------------------------------------------------------- | --------------------------------------------- |
-| `createFormControl()`               | `validators: ValidatorFn[], initialValue?: string \| null` | Creates a form control with validators        |
-| `handleErrorMessages()`             | None                                                       | Processes and sets form error messages        |
-| `hasUnsavedChanges()`               | None                                                       | Checks if form has unsaved changes            |
-| `setInputValue()`                   | `value: string, controlPath: string`                       | Sets value for a specific form control        |
-| `handleDateInputFormErrors()`       | None                                                       | Handles date field error processing           |
-| `setInitialErrorMessages()`         | None                                                       | Initializes error message objects             |
-| `rePopulateForm()`                  | `state: any`                                               | Repopulates form with provided state          |
-| `createControl()`                   | `controlName: string, validators: ValidatorFn[]`           | Adds a new control to the form                |
-| `updateControl()`                   | `controlName: string, validators: ValidatorFn[]`           | Updates validators for existing control       |
-| `removeControl()`                   | `controlName: string`                                      | Removes a control from the form               |
-| `removeControlErrors()`             | `controlName: string`                                      | Removes error messages for a specific control |
-| `clearAllErrorMessages()`           | None                                                       | Clears all error messages                     |
-
+| Method                        | Parameters                                                                             | Description                                                                         |
+| ----------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `createFormControl()`         | `validators: ValidatorFn[], initialValue?: string \| null`                             | Creates a `FormControl` with validators.                                            |
+| `handleErrorMessages()`       | —                                                                                      | Computes `formErrors`, inline messages, and summary from the current form state.    |
+| `hasUnsavedChanges()`         | —                                                                                      | Returns `true` when the form is dirty and not yet submitted.                        |
+| `setInputValue()`             | `value: string, controlPath: string`                                                   | Patches a control’s value and marks it as touched.                                  |
+| `handleDateInputFormErrors()` | —                                                                                      | Collapses day/month/year errors into a single DOB message when appropriate.         |
+| `setInitialErrorMessages()`   | —                                                                                      | Seeds an empty inline error messages object and clears the summary.                 |
+| `rePopulateForm()`            | `state: any`                                                                           | `patchValue` helper to rehydrate from store/state.                                  |
+| `createControl()`             | `controlName: string, validators: ValidatorFn[]`                                       | Adds a new control to the root form.                                                |
+| `updateControl()`             | `controlName: string, validators: ValidatorFn[]`                                       | Updates validators (or creates the control if absent).                              |
+| `removeControl()`             | `controlName: string`                                                                  | Removes a control and its inline error entry.                                       |
+| `removeControlErrors()`       | `controlName: string`                                                                  | Removes inline error entry for a specific control.                                  |
+| `clearAllErrorMessages()`     | —                                                                                      | Clears inline messages, summary, and cached errors; updates form validity silently. |
+| `addControlsToFormGroup()`    | `formGroup: FormGroup, controls: IAbstractFormArrayControlValidation[], index: number` | Utility for dynamically adding indexed controls.                                    |
+| `mergeFieldErrors()`          | `current: IAbstractFormBaseFieldErrors, incoming: IAbstractFormBaseFieldErrors`        | Shallow-by-key merge; override in parents if multiple children need deep merges.    |
 
 ### Example Template Usage:
 
@@ -140,6 +145,21 @@ The component provides several public properties for form management:
   <button type="submit" class="govuk-button">Submit</button>
   <button type="button" class="govuk-button govuk-button--secondary" (click)="handleClearForm()">Clear</button>
 </form>
+```
+
+### Wiring nested sub-forms
+
+When using nested sub-forms that emit error maps (via the `AbstractNestedFormBaseComponent`), bind directly to the provided handlers so the parent stays in sync:
+
+```html
+<app-my-sub-form
+  [form]="form.get('sub') as FormGroup"
+  (fieldErrorsChange)="updateFieldErrors($event)"
+  (formControlErrorMessagesChange)="updateFormControlErrorMessages($event)"
+  (formErrorSummaryMessageChange)="updateFormErrorSummaryMessage($event)"
+  (formErrorsChange)="updateFormErrors($event)"
+>
+</app-my-sub-form>
 ```
 
 ## Interfaces
