@@ -598,6 +598,15 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
     this.formControlErrorMessages = event;
   }
 
+  /**
+   * Updates the form error summary message with the provided array of error messages.
+   *
+   * @param event - An array of `IAbstractFormBaseFormErrorSummaryMessage` objects representing the current form error messages to display in the summary.
+   */
+  public updateFormErrorSummaryMessage(event: IAbstractFormBaseFormErrorSummaryMessage[]) {
+    this.formErrorSummaryMessage = event;
+  }
+
   public ngOnInit(): void {
     if (this.form) {
       this.setupListener();

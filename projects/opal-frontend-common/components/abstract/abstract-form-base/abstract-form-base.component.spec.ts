@@ -1100,4 +1100,20 @@ describe('AbstractFormBaseComponent', () => {
 
     expect(component.formControlErrorMessages).toEqual(mockErrorMessages);
   });
+
+  it('should update formErrorSummaryMessage when updateFormErrorSummaryMessage is called', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const mockSummaryMessages: IAbstractFormBaseFormErrorSummaryMessage[] = [
+      { fieldId: 'court', message: 'Court is required' },
+      { fieldId: 'surname', message: 'Surname is required' },
+    ];
+
+    component.updateFormErrorSummaryMessage(mockSummaryMessages);
+
+    expect(component.formErrorSummaryMessage).toEqual(mockSummaryMessages);
+  });
 });

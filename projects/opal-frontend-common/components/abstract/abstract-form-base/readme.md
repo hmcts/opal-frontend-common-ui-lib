@@ -70,8 +70,9 @@ The component provides several public properties for form management:
 | `handleRoute()`                   | `route: string, nonRelative?: boolean, event?: Event, routeData?: any` | Handles navigation with optional route data               |
 | `handleFormSubmit()`              | `event: SubmitEvent`                                                   | Handles form submission and validation                    |
 | `handleUppercaseInputMask()`      | `event: Event`                                                         | Converts input to uppercase                               |
-| `updateFieldErrors()`             | None                                                                   | Updates the collection of field-level errors for the form |
-| `updateFormControlErrorMessage()` | `controlName: string`                                                  | Updates the error message for a specific form control     |
+| `updateFieldErrors()`             | `event: IAbstractFormBaseFieldErrors`                                  | Updates the collection of field-level errors for the form |
+| `updateFormControlErrorMessage()` | `event: IAbstractFormControlErrorMessage`                              | Updates the error message for a specific form control     |
+| `updateFormErrorSummaryMessage()` | `event: IAbstractFormBaseFormErrorSummaryMessage`                      | Updates the error summary message array                   |
 
 ### Protected Methods
 
