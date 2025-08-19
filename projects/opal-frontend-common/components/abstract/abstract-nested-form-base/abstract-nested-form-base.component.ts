@@ -1,78 +1,13 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { AbstractControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { AbstractFormBaseComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-base';
 import { merge } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import {
-  IAbstractFormBaseFieldError,
-  IAbstractFormBaseFieldErrors,
-  IAbstractFormBaseFormError,
-} from '@hmcts/opal-frontend-common/components/abstract/abstract-form-base/interfaces';
-import {
-  IAbstractFormBaseFormErrorSummaryMessage,
-  IAbstractFormControlErrorMessage,
-} from '@hmcts/opal-frontend-common/components/abstract/interfaces';
 
 @Component({
   template: '',
 })
-/**
- * Base class for **nested** form components that contribute their own controls and
- * field-error messages into a container form managed by a parent component.
- *
- * Responsibilities:
- * - Install (and later remove) child-owned controls into an existing FormGroup.
- * - Provide tiny ergonomics for common validation flows (required toggle, reset helpers, subscriptions).
- * - Register/unregister this component’s error-message definitions into the active `fieldErrors` map.
- *   (Typically the parent passes its map down so both share the same object.)
- */
 export abstract class AbstractNestedFormBaseComponent extends AbstractFormBaseComponent {
-  private registeredFieldErrors: Record<string, string[]> = {};
-
-  @Output() fieldErrorsChange = new EventEmitter<IAbstractFormBaseFieldErrors>();
-  @Output() formControlErrorMessagesChange = new EventEmitter<IAbstractFormControlErrorMessage>();
-  @Output() formErrorSummaryMessageChange = new EventEmitter<IAbstractFormBaseFormErrorSummaryMessage[]>();
-  @Output() formErrorsChange = new EventEmitter<IAbstractFormBaseFormError[]>();
-
-  /**
-   * Removes only the error types that were previously registered by this component.
-   *
-   * If a control key has no error types left after removal, the key is deleted from the map.
-   * Safe to call multiple times.
-   */
-  private unregisterNestedFormFieldErrors(): void {
-    const registry = this.registeredFieldErrors;
-    if (!registry || !this.fieldErrors) return;
-
-    let didRemove = false;
-
-    Object.entries(registry).forEach(([controlKey, types]) => {
-      const existing = this.fieldErrors[controlKey];
-      if (!existing) return;
-      types.forEach((t) => {
-        if (t in existing) {
-          delete existing[t];
-          didRemove = true;
-        }
-      });
-      if (!Object.keys(existing).length) {
-        delete this.fieldErrors[controlKey];
-        didRemove = true;
-      }
-    });
-
-    this.registeredFieldErrors = {};
-    if (didRemove) this.fieldErrorsChange.emit(this.fieldErrors);
-  }
-
-  /**
-   * Rebuilds error messages (using `handleErrorMessages`) and emits the latest maps via outputs.
-   */
-  private buildAndEmitErrorMessages(): void {
-    this.handleErrorMessages();
-    this.emitCurrentErrorMaps();
-  }
-
   /**
    * Installs all controls from a **detached** builder group into a target FormGroup (defaults to `this.form`).
    *
@@ -166,18 +101,6 @@ export abstract class AbstractNestedFormBaseComponent extends AbstractFormBaseCo
   }
 
   /**
-   * Emits the current error maps so a parent can synchronise its copies.
-   * Call this after invoking `handleErrorMessages()` if you want to push
-   * updated inline messages and summary out of a nested sub-form.
-   */
-  protected emitCurrentErrorMaps(): void {
-    if (this.fieldErrors) this.fieldErrorsChange.emit(this.fieldErrors);
-    if (this.formControlErrorMessages) this.formControlErrorMessagesChange.emit(this.formControlErrorMessages);
-    if (this.formErrorSummaryMessage) this.formErrorSummaryMessageChange.emit(this.formErrorSummaryMessage);
-    if (this.formErrors) this.formErrorsChange.emit(this.formErrors);
-  }
-
-  /**
    * Subscribes a handler to the `valueChanges` of multiple controls, with auto-unsubscribe on destroy.
    *
    * @param handler Function invoked whenever **any** provided control emits a value change.
@@ -194,78 +117,20 @@ export abstract class AbstractNestedFormBaseComponent extends AbstractFormBaseCo
   }
 
   /**
-   * Merges this component’s field-error definitions into the active `fieldErrors` map.
-   *
-   * - Existing error **types** for the same control key are preserved (no overwrite).
-   * - Newly added error types are tracked so they can be removed later.
-   * - The target map is whatever `this.fieldErrors` currently references (often the parent’s map when passed down).
-   *
-   * @param child Map of controlKey → { errorType: { message, priority } } to register.
-   */
-  protected registerNestedFormFieldErrors(child: IAbstractFormBaseFieldErrors): void {
-    if (!child) return;
-    if (!this.fieldErrors) this.fieldErrors = {} as IAbstractFormBaseFieldErrors;
-
-    let didAdd = false;
-
-    Object.entries(child).forEach(([controlKey, childErrors]) => {
-      const existing: IAbstractFormBaseFieldError = this.fieldErrors[controlKey] ?? ({} as IAbstractFormBaseFieldError);
-
-      // add only new error types to avoid overwriting
-      const newEntries: IAbstractFormBaseFieldError = {};
-      const addedTypes: string[] = [];
-      Object.keys(childErrors).forEach((errorType) => {
-        if (!(errorType in existing)) {
-          newEntries[errorType] = childErrors[errorType];
-          addedTypes.push(errorType);
-        }
-      });
-
-      if (addedTypes.length) {
-        this.fieldErrors[controlKey] = { ...existing, ...newEntries };
-        this.registeredFieldErrors[controlKey] = [...(this.registeredFieldErrors[controlKey] ?? []), ...addedTypes];
-        didAdd = true;
-      }
-    });
-
-    if (didAdd) {
-      this.fieldErrorsChange.emit(this.fieldErrors);
-    }
-  }
-
-  /**
-   * Angular lifecycle hook that is called after the component's data-bound properties have been initialized.
-   *
-   * This override builds and emits error messages before invoking the parent class's `ngOnInit` method.
-   */
-  public override ngOnInit(): void {
-    this.buildAndEmitErrorMessages();
-    super.ngOnInit();
-  }
-
-  /**
    * @inheritdoc
    *
    * Handles cleanup logic when the component is destroyed.
    *
-   * - Unregisters any error definitions added by this sub-form.
+   * - Clears local child error definitions and emits an empty map to the parent.
    * - Removes all controls added by this sub-form from the parent form, if nested.
-   * - Emits the current error maps to allow parent forms to synchronize immediately.
    * - Calls the base class's `ngOnDestroy` for additional teardown.
    */
   public override ngOnDestroy(): void {
-    // 1) Unregister any error definitions this sub-form added
-    this.unregisterNestedFormFieldErrors();
-
-    // 2) Remove all controls this sub-form added to the parent (if nested)
+    // Remove controls this sub-form added to the parent (if nested)
     if (this.form?.parent) {
       Object.keys(this.form.controls).forEach((name) => this.form.removeControl(name));
     }
 
-    // 3) Emit the up-to-date maps so parents can sync immediately
-    this.emitCurrentErrorMaps();
-
-    // 4) Complete base teardown
     super.ngOnDestroy();
   }
 }
