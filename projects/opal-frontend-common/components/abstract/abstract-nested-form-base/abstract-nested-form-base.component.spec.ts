@@ -48,79 +48,6 @@ describe('AbstractNestedFormBaseComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('ngOnInit should build and emit error maps via abstract helper', () => {
-    if (!component) {
-      fail('component returned null');
-      return;
-    }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const buildSpy = spyOn<any>(component, 'buildAndEmitErrorMessages').and.callThrough();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleSpy = spyOn<any>(component, 'handleErrorMessages').and.callThrough();
-    const emitSpy = spyOn(component.formErrorsChange, 'emit');
-
-    component.ngOnInit();
-
-    expect(buildSpy).toHaveBeenCalled();
-    expect(handleSpy).toHaveBeenCalled();
-    // `emitCurrentErrorMaps` may emit nothing if maps are empty, but `formErrorsChange.emit` will be called when formErrors exists
-    // So we only assert that the helper path executed by checking at least one emitter spy exists
-    expect(emitSpy.calls.any() || true).toBeTrue();
-  });
-
-  it('emitCurrentErrorMaps should emit for each present map', () => {
-    if (!component) {
-      fail('component returned null');
-      return;
-    }
-    // Arrange truthy maps
-    component.fieldErrors = { a: { required: { message: 'm', priority: 1 } } };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (component as any).formControlErrorMessages = { a: 'Required' };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (component as any).formErrorSummaryMessage = [{ message: 'Fix A', anchor: 'a' }];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (component as any).formErrors = [{ controlPath: 'a', errorType: 'required' }];
-
-    const feSpy = spyOn(component.fieldErrorsChange, 'emit');
-    const fcmSpy = spyOn(component.formControlErrorMessagesChange, 'emit');
-    const sumSpy = spyOn(component.formErrorSummaryMessageChange, 'emit');
-    const errsSpy = spyOn(component.formErrorsChange, 'emit');
-
-    // Act
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (component as any).emitCurrentErrorMaps();
-
-    // Assert
-    expect(feSpy).toHaveBeenCalledWith(component.fieldErrors);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect(fcmSpy).toHaveBeenCalledWith((component as any).formControlErrorMessages);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect(sumSpy).toHaveBeenCalledWith((component as any).formErrorSummaryMessage);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect(errsSpy).toHaveBeenCalledWith((component as any).formErrors);
-  });
-
-  it('unregisterNestedFormFieldErrors should emit fieldErrorsChange when entries are removed', () => {
-    if (!component) {
-      fail('component returned null');
-      return;
-    }
-    // seed with an existing entry so removal happens
-    component.fieldErrors = { test: { required: { message: 'm', priority: 1 } } };
-    component['registerNestedFormFieldErrors']({ test: { minlength: { message: 'x', priority: 2 } } });
-
-    const emitSpy = spyOn(component.fieldErrorsChange, 'emit');
-
-    // Act – call the private via index access
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (component as any).unregisterNestedFormFieldErrors();
-
-    // Assert – the child-added type is gone and emit fired
-    expect(component.fieldErrors['test']['minlength']).toBeUndefined();
-    expect(emitSpy).toHaveBeenCalledWith(component.fieldErrors);
-  });
-
   it('addControlsToNestedFormGroup should add controls into the default target (this.form)', () => {
     if (!component) {
       fail('component returned null');
@@ -378,115 +305,6 @@ describe('AbstractNestedFormBaseComponent', () => {
     expect(handler).not.toHaveBeenCalled();
   });
 
-  it('registerNestedFormFieldErrors should merge child errors without overwriting existing, and unregister should remove only what was added', () => {
-    if (!component) {
-      fail('component returned null');
-      return;
-    }
-
-    component['fieldErrors'] = {
-      controlA: {
-        required: { message: 'Parent required', priority: 1 },
-      },
-    };
-
-    const childErrors: IAbstractFormBaseFieldErrors = {
-      controlA: {
-        required: { message: 'Child required (should NOT overwrite)', priority: 99 },
-        maxlength: { message: 'Too long', priority: 2 },
-      },
-      controlB: {
-        pattern: { message: 'Invalid', priority: 3 },
-      },
-    };
-
-    component['registerNestedFormFieldErrors'](childErrors);
-
-    // existing parent message preserved; new types added
-    expect(component['fieldErrors']['controlA']['required'].message).toBe('Parent required');
-    expect(component['fieldErrors']['controlA']['maxlength'].message).toBe('Too long');
-    expect(component['fieldErrors']['controlB']['pattern'].message).toBe('Invalid');
-
-    // Unregister removes only what the child added
-    component['unregisterNestedFormFieldErrors']();
-
-    expect(component['fieldErrors']['controlA']['required'].message).toBe('Parent required');
-    expect(component['fieldErrors']['controlA']['maxlength']).toBeUndefined();
-    expect(component['fieldErrors']['controlB']).toBeUndefined();
-  });
-
-  it('registerNestedFormFieldErrors should init fieldErrors map when undefined', () => {
-    if (!component) {
-      fail('component returned null');
-      return;
-    }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (component as any).fieldErrors = undefined; // hit init branch
-    component['registerNestedFormFieldErrors']({
-      foo: { required: { message: 'm', priority: 1 } },
-    });
-    expect(component['fieldErrors']['foo']['required'].message).toBe('m');
-  });
-
-  it('registerNestedFormFieldErrors should ignore falsy input', () => {
-    if (!component) {
-      fail('component returned null');
-      return;
-    }
-    component['fieldErrors'] = {};
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    component['registerNestedFormFieldErrors'](null as unknown as any);
-    expect(component['fieldErrors']).toEqual({});
-  });
-
-  it('unregisterNestedFormFieldErrors should no-op when registry or fieldErrors are falsy', () => {
-    if (!component) {
-      fail('component returned null');
-      return;
-    }
-    // Case 1: empty registry
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (component as any).registeredFieldErrors = {};
-    expect(() => {
-      if (!component) {
-        fail('component returned null');
-        return;
-      }
-      component['unregisterNestedFormFieldErrors']();
-    }).not.toThrow();
-
-    // Case 2: undefined fieldErrors
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (component as any).registeredFieldErrors = { ghost: ['required'] };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (component as any).fieldErrors = undefined;
-    expect(() => {
-      if (!component) {
-        fail('component returned null');
-        return;
-      }
-      component['unregisterNestedFormFieldErrors']();
-    }).not.toThrow();
-  });
-
-  it('unregisterNestedFormFieldErrors should skip keys that are not present in fieldErrors', () => {
-    if (!component) {
-      fail('component returned null');
-      return;
-    }
-    component['fieldErrors'] = { keep: { required: { message: 'keep', priority: 1 } } };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (component as any).registeredFieldErrors = { missing: ['maxlength'] };
-    expect(() => {
-      if (!component) {
-        fail('component returned null');
-        return;
-      }
-      component['unregisterNestedFormFieldErrors']();
-    }).not.toThrow();
-    expect(component['fieldErrors']['keep']['required'].message).toBe('keep');
-  });
-
   it('ngOnDestroy should unregister field errors and clear nested form controls when the form has a parent', () => {
     if (!component) {
       fail('component returned null');
@@ -495,7 +313,6 @@ describe('AbstractNestedFormBaseComponent', () => {
 
     // Prepare field errors with a child entry that will be unregistered
     component['fieldErrors'] = { XYZ: { required: { message: 'msg', priority: 1 } } };
-    component['registerNestedFormFieldErrors']({ XYZ: { minlength: { message: 'm', priority: 2 } } });
 
     // Put component.form under a parent so parent-child relationship exists
     const root = new FormGroup({});
@@ -503,8 +320,6 @@ describe('AbstractNestedFormBaseComponent', () => {
 
     // Add a control so we can verify it gets removed
     component.form.addControl('a', new FormControl('1'));
-
-    const feSpy = spyOn(component.fieldErrorsChange, 'emit');
 
     component.ngOnDestroy();
 
@@ -514,7 +329,5 @@ describe('AbstractNestedFormBaseComponent', () => {
 
     // Controls: cleared because form had a parent
     expect(Object.keys(component.form.controls).length).toBe(0);
-
-    expect(feSpy).toHaveBeenCalled();
   });
 });

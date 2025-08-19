@@ -147,18 +147,12 @@ The component provides several public properties for form management:
 </form>
 ```
 
-### Wiring nested sub-forms
+### Wiring nested sub-forms (simplified)
 
-When using nested sub-forms that emit error maps (via the `AbstractNestedFormBaseComponent`), bind directly to the provided handlers so the parent stays in sync:
+Parent remains the single source of truth for `fieldErrors` and computes `formControlErrorMessages` (for example via a tab-specific map). Children do **not** emit error maps; they only receive the nested `FormGroup` and the inline messages to display.
 
 ```html
-<app-my-sub-form
-  [form]="form.get('sub') as FormGroup"
-  (fieldErrorsChange)="updateFieldErrors($event)"
-  (formControlErrorMessagesChange)="updateFormControlErrorMessages($event)"
-  (formErrorSummaryMessageChange)="updateFormErrorSummaryMessage($event)"
-  (formErrorsChange)="updateFormErrors($event)"
->
+<app-my-sub-form [form]="form.get('sub') as FormGroup" [formControlErrorMessages]="formControlErrorMessages">
 </app-my-sub-form>
 ```
 
@@ -181,6 +175,11 @@ The component utilizes several interfaces for type safety and structure:
    - `IAbstractFormArrayControlValidation`: Validation configuration for form array controls
 
 ## Error Handling Features
+
+**Ownership model:**
+
+- Parent is the single source of truth for field error templates and computed messages.
+- Children install/remove their own controls and manage validators; they do not emit error maps.
 
 The component provides comprehensive error handling:
 
