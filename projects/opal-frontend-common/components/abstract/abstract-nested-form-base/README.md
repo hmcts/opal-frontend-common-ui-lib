@@ -67,22 +67,31 @@ export class ChildSubFormComponent extends AbstractNestedFormBaseComponent imple
 
 ### Public / Protected Methods
 
-| Method                              | Parameters                                                                             | Description                                                                 |
-| ----------------------------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| `addControlsToNestedFormGroup`      | `source: FormGroup, target?: FormGroup`                                                | Installs detached controls into target form (defaults to `this.form`).      |
-| `removeControlsFromNestedFormGroup` | `source: FormGroup, target?: FormGroup`                                                | Removes controls from target whose names are in `source`.                   |
-| `setValidatorPresence`              | `control: AbstractControl, validators: ValidatorFn \| ValidatorFn[], present: boolean` | Adds or removes one or more validators and updates validity.                |
-| `resetAndValidateControls`          | `controls: (AbstractControl \| null)[]`                                                | Resets given controls, clears errors, reapplies validators.                 |
-| `resetAndValidateFormGroup`         | `group: FormGroup`                                                                     | Resets entire group, marks pristine/untouched, updates validity.            |
-| `subscribeValidation`               | `handler: () => void, ...controls`                                                     | Subscribes a handler to `valueChanges` of controls with auto-unsubscribe.   |
-| `registerNestedFormFieldErrors`     | `child: IAbstractFormBaseFieldErrors`                                                  | Merges this component’s error definitions into the active map.              |
-| `unregisterNestedFormFieldErrors`   | None                                                                                   | Removes only the error definitions previously registered by this component. |
+| Method                              | Parameters                                                                             | Description                                                                                               |
+| ----------------------------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `addControlsToNestedFormGroup`      | `source: FormGroup, target?: FormGroup`                                                | Installs detached controls into target form (defaults to `this.form`).                                    |
+| `removeControlsFromNestedFormGroup` | `source: FormGroup, target?: FormGroup`                                                | Removes controls from target whose names are in `source`.                                                 |
+| `setValidatorPresence`              | `control: AbstractControl, validators: ValidatorFn \| ValidatorFn[], present: boolean` | Adds or removes one or more validators and updates validity.                                              |
+| `resetAndValidateControls`          | `controls: (AbstractControl \| null)[]`                                                | Resets given controls, clears errors, reapplies validators.                                               |
+| `resetAndValidateFormGroup`         | `group: FormGroup`                                                                     | Resets entire group, marks pristine/untouched, updates validity.                                          |
+| `subscribeValidation`               | `handler: () => void, ...controls`                                                     | Subscribes a handler to `valueChanges` of controls with auto-unsubscribe.                                 |
+| `registerNestedFormFieldErrors`     | `child: IAbstractFormBaseFieldErrors`                                                  | Merges this component’s error definitions into the active map.                                            |
+| `unregisterNestedFormFieldErrors`   | None                                                                                   | Removes only the error definitions previously registered by this component.                               |
+| `emitCurrentErrorMaps`              | None                                                                                   | Emits the current `fieldErrors`, `formControlErrorMessages`, `formErrorSummaryMessage`, and `formErrors`. |
+| Lifecycle: `ngOnInit`               | None                                                                                   | Builds and emits initial error maps, then invokes the base `ngOnInit`.                                    |
+| Lifecycle: `ngOnDestroy`            | None                                                                                   | Unregisters errors, removes added controls, emits cleaned maps, calls base `ngOnDestroy`.                 |
+| **Outputs:**                        |                                                                                        |                                                                                                           |
+| `fieldErrorsChange`                 | `IAbstractFormBaseFieldErrors`                                                         | Emits whenever nested error definitions are registered or unregistered.                                   |
+| `formControlErrorMessagesChange`    | `IAbstractFormControlErrorMessage`                                                     | Emits the latest inline messages map.                                                                     |
+| `formErrorSummaryMessageChange`     | `IAbstractFormBaseFormErrorSummaryMessage[]`                                           | Emits the latest error summary messages.                                                                  |
+| `formErrorsChange`                  | `IAbstractFormBaseFormError[]`                                                         | Emits the latest raw error collection.                                                                    |
 
 ## Error Handling
 
 - **Shared Map Registration**: Each sub-form registers its error definitions into the parent’s `fieldErrors` map using `registerNestedFormFieldErrors`.
 - **Scoped Unregister**: On destroy, only error types added by the sub-form are removed (safe even if called multiple times).
 - **Consistent UI**: Ensures both the error summary and inline messages include sub-form controls when validation fails.
+- **Auto-emits**: On `ngOnInit`, the component builds and emits its current error maps. On `ngOnDestroy`, it unregisters its errors, removes its controls, and emits the cleaned maps. Parents can subscribe via the provided outputs to stay synchronised.
 
 ## Testing
 

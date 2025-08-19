@@ -512,6 +512,21 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Utility for parents that need to merge maps from multiple children (optional override).
+   * Default implementation performs a shallow-by-key merge and returns a new object reference.
+   */
+  protected mergeFieldErrors(
+    current: IAbstractFormBaseFieldErrors,
+    incoming: IAbstractFormBaseFieldErrors,
+  ): IAbstractFormBaseFieldErrors {
+    const out: IAbstractFormBaseFieldErrors = { ...(current ?? {}) } as IAbstractFormBaseFieldErrors;
+    Object.entries(incoming ?? {}).forEach(([key, defs]) => {
+      out[key] = { ...(out[key] ?? {}), ...(defs ?? {}) } as IAbstractFormBaseFieldError;
+    });
+    return out;
+  }
+
+  /**
    * Clears the search form.
    */
   public handleClearForm(): void {
@@ -580,31 +595,36 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Updates the form's field error state with the provided errors.
+   * Updates the known error-message templates (`fieldErrors`) from a child sub-form.
    *
-   * @param event - An object containing the latest field errors to be set on the form.
+   * NOTE: This performs a shallow replacement. If multiple children can emit concurrently,
+   * override this in the concrete parent and deep-merge by key instead.
    */
-  public updateFieldErrors(event: IAbstractFormBaseFieldErrors): void {
-    this.fieldErrors = event;
+  public updateFieldErrors(next: IAbstractFormBaseFieldErrors): void {
+    // Replace with a new reference to play nicely with OnPush CD
+    this.fieldErrors = next ? { ...next } : ({} as IAbstractFormBaseFieldErrors);
   }
 
   /**
-   * Updates the form control error messages with the provided event data.
-   *
-   * @param event - An object implementing the `IAbstractFormControlErrorMessage` interface,
-   *                containing the latest error messages for the form control.
+   * Updates the current per-control inline messages built by a child sub-form.
+   * Typically the parent owns message building; only use this if children push messages upstream.
    */
-  public updateFormControlErrorMessages(event: IAbstractFormControlErrorMessage): void {
-    this.formControlErrorMessages = event;
+  public updateFormControlErrorMessages(next: IAbstractFormControlErrorMessage): void {
+    this.formControlErrorMessages = next ? { ...next } : {};
   }
 
   /**
-   * Updates the form error summary message with the provided array of error messages.
-   *
-   * @param event - An array of `IAbstractFormBaseFormErrorSummaryMessage` objects representing the current form error messages to display in the summary.
+   * Updates the current error summary messages built by a child sub-form.
    */
-  public updateFormErrorSummaryMessage(event: IAbstractFormBaseFormErrorSummaryMessage[]) {
-    this.formErrorSummaryMessage = event;
+  public updateFormErrorSummaryMessage(next: IAbstractFormBaseFormErrorSummaryMessage[]): void {
+    this.formErrorSummaryMessage = Array.isArray(next) ? [...next] : [];
+  }
+
+  /**
+   * Updates the raw validation error collection reported by a child sub-form.
+   */
+  public updateFormErrors(next: IAbstractFormBaseFormError[]): void {
+    this.formErrors = Array.isArray(next) ? [...next] : [];
   }
 
   public ngOnInit(): void {
