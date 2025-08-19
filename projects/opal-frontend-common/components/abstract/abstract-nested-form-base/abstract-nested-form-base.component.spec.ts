@@ -8,6 +8,10 @@ import { ActivatedRoute } from '@angular/router';
 class TestAbstractNestedFormBaseComponent extends AbstractNestedFormBaseComponent {
   public override form: FormGroup = new FormGroup({});
   public override fieldErrors: IAbstractFormBaseFieldErrors = {};
+  // Expose protected helper for tests
+  public testHasValue(v: unknown): boolean {
+    return this.hasValue(v);
+  }
 }
 
 describe('AbstractNestedFormBaseComponent', () => {
@@ -175,6 +179,50 @@ describe('AbstractNestedFormBaseComponent', () => {
 
     // Expect only baz to remain in the component.form
     expect(Object.keys(component.form.controls)).toEqual(['baz']);
+  });
+
+  describe('hasValue (in abstract)', () => {
+    it('returns false for null and undefined', () => {
+      if (!component) {
+        fail('component returned null');
+        return;
+      }
+      expect(component.testHasValue(null)).toBeFalse();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect(component.testHasValue(undefined as any)).toBeFalse();
+    });
+
+    it('returns false for empty or whitespace-only strings', () => {
+      if (!component) {
+        fail('component returned null');
+        return;
+      }
+      expect(component.testHasValue('')).toBeFalse();
+      expect(component.testHasValue('   ')).toBeFalse();
+      expect(component.testHasValue('\n\t')).toBeFalse();
+    });
+
+    it('returns true for non-empty strings', () => {
+      if (!component) {
+        fail('component returned null');
+        return;
+      }
+      expect(component.testHasValue('x')).toBeTrue();
+      expect(component.testHasValue('  x  ')).toBeTrue();
+    });
+
+    it('returns true for non-string values', () => {
+      if (!component) {
+        fail('component returned null');
+        return;
+      }
+      expect(component.testHasValue(0)).toBeTrue();
+      expect(component.testHasValue(false)).toBeTrue();
+      expect(component.testHasValue({})).toBeTrue();
+      expect(component.testHasValue([])).toBeTrue();
+      const d = new Date();
+      expect(component.testHasValue(d)).toBeTrue();
+    });
   });
 
   it('setValidatorPresence should add/remove a single validator and update validity', () => {

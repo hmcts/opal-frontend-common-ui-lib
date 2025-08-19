@@ -128,6 +128,17 @@ export abstract class AbstractNestedFormBaseComponent extends AbstractFormBaseCo
   }
 
   /**
+   * Truthy-value helper used by multiple sub-forms.
+   *
+   * Returns `false` for `null`/`undefined`. For strings, trims whitespace and checks for non-zero length.
+   * For all other types, returns `true` (treat non-string values as present).
+   */
+  protected hasValue(v: unknown): boolean {
+    if (v == null) return false;
+    return typeof v === 'string' ? v.trim().length > 0 : true;
+  }
+
+  /**
    * Resets a list of controls and re-computes validity without emitting value-change events.
    *
    * For each control: clears errors, resets the value to `null`, and calls `updateValueAndValidity`.
