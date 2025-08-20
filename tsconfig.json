@@ -321,6 +321,9 @@
         "./dist/opal-frontend-common/guards/can-deactivate/types"
       ],
       "@hmcts/opal-frontend-common/guards/has-flow-state": ["./dist/opal-frontend-common/guards/has-flow-state"],
+      "@hmcts/opal-frontend-common/guards/has-url-state-match": [
+        "./dist/opal-frontend-common/guards/has-url-state-match"
+      ],
       "@hmcts/opal-frontend-common/guards/helpers": ["./dist/opal-frontend-common/guards/helpers"],
       "@hmcts/opal-frontend-common/guards/route-permissions": ["./dist/opal-frontend-common/guards/route-permissions"],
       "@hmcts/opal-frontend-common/guards/signed-in": ["./dist/opal-frontend-common/guards/signed-in"],
