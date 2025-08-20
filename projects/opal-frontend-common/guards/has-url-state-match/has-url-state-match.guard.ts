@@ -35,13 +35,18 @@ export function hasUrlStateMatchGuard<T>(
     const state = getState();
     const { queryParams, fragment } = route;
 
-    return checkRoute(route)
-      ? true
-      : checkCondition(state, route)
-        ? true
-        : router.createUrlTree([getNavigationPath(route)], {
-            queryParams: Object.keys(queryParams || {}).length > 0 ? queryParams : undefined,
-            fragment: fragment ?? undefined,
-          });
+    if (checkRoute(route)) {
+      return true;
+    }
+
+    if (checkCondition(state, route)) {
+      return true;
+    }
+
+    const hasQueryParams = Object.keys(queryParams || {}).length > 0;
+    return router.createUrlTree([getNavigationPath(route)], {
+      queryParams: hasQueryParams ? queryParams : undefined,
+      fragment: fragment ?? undefined,
+    });
   };
 }
