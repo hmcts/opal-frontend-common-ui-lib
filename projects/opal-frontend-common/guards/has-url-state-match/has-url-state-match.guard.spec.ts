@@ -300,7 +300,7 @@ describe('hasUrlStateMatchGuard', () => {
     );
 
     mockRoute.params = { accountNumber: 'ADMIN123' };
-    mockState = {}; 
+    mockState = {};
 
     const result = TestBed.runInInjectionContext(() => guard(mockRoute, {} as RouterStateSnapshot));
 
