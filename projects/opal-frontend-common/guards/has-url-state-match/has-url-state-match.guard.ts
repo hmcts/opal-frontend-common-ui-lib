@@ -35,18 +35,22 @@ export function hasUrlStateMatchGuard<T>(
     const state = getState();
     const { queryParams, fragment } = route;
 
-    if (checkRoute(route)) {
-      return true;
+    const createRedirectUrlTree = () => {
+      const hasQueryParams = Object.keys(queryParams || {}).length > 0;
+      return router.createUrlTree([getNavigationPath(route)], {
+        queryParams: hasQueryParams ? queryParams : undefined,
+        fragment: fragment ?? undefined,
+      });
+    };
+
+    if (!checkRoute(route)) {
+      return createRedirectUrlTree();
     }
 
-    if (checkCondition(state, route)) {
-      return true;
+    if (!checkCondition(state, route)) {
+      return createRedirectUrlTree();
     }
 
-    const hasQueryParams = Object.keys(queryParams || {}).length > 0;
-    return router.createUrlTree([getNavigationPath(route)], {
-      queryParams: hasQueryParams ? queryParams : undefined,
-      fragment: fragment ?? undefined,
-    });
+    return true;
   };
 }

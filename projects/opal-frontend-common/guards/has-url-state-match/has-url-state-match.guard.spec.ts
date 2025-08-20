@@ -63,7 +63,7 @@ describe('hasUrlStateMatchGuard', () => {
   it('should return true when account numbers match', () => {
     const guard = hasUrlStateMatchGuard(
       () => mockState,
-      (route) => !route.params['accountNumber'],
+      (route) => !!route.params['accountNumber'], // checkRoute should return true to proceed
       (state, route) => state.selectedAccount?.accountNumber === route.params['accountNumber'],
       (route) => `/account/${route.params['accountNumber']}/search`,
     );
@@ -164,7 +164,7 @@ describe('hasUrlStateMatchGuard', () => {
   it('should work with query parameter validation', () => {
     const guard = hasUrlStateMatchGuard(
       () => mockState,
-      (route) => !route.queryParams['userId'],
+      (route) => !!route.queryParams['userId'], // checkRoute should return true to proceed
       (state, route) => state.selectedAccount?.accountNumber === route.queryParams['userId'],
       () => '/login',
     );
@@ -201,7 +201,7 @@ describe('hasUrlStateMatchGuard', () => {
 
     const guard = hasUrlStateMatchGuard(
       () => complexState,
-      (route) => !route.params['accountId'],
+      (route) => !!route.params['accountId'], // checkRoute should return true to proceed
       (state, route) => {
         const urlAccountId = route.params['accountId'];
         const hasAccount = state.user?.accounts?.some((account) => account.id === urlAccountId) ?? false;
@@ -221,7 +221,7 @@ describe('hasUrlStateMatchGuard', () => {
   it('should work with multiple parameter validation', () => {
     const guard = hasUrlStateMatchGuard(
       () => mockState,
-      (route) => !route.params['accountId'] || !route.params['caseId'],
+      (route) => !!(route.params['accountId'] && route.params['caseId']), // checkRoute should return true when both params exist
       (state, route) => {
         const expectedKey = `${route.params['accountId']}-${route.params['caseId']}`;
         const stateKey = state.selectedAccount ? `${state.selectedAccount.accountNumber}-case123` : '';
@@ -300,7 +300,11 @@ describe('hasUrlStateMatchGuard', () => {
     );
 
     mockRoute.params = { accountNumber: 'ADMIN123' };
-    mockState = {};
+    mockState = {
+      selectedAccount: {
+        accountNumber: 'ADMIN123', // Match the route param so checkCondition passes
+      },
+    };
 
     const result = TestBed.runInInjectionContext(() => guard(mockRoute, {} as RouterStateSnapshot));
 
