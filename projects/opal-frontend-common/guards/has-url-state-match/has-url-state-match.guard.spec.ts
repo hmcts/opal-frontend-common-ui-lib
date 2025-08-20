@@ -320,7 +320,7 @@ describe('hasUrlStateMatchGuard', () => {
     );
 
     mockRoute.params = { accountNumber: '12345' };
-    // Explicitly set queryParams to undefined to test the || {} fallback
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mockRoute.queryParams = undefined as any;
     mockRoute.fragment = null;
     mockState = {};
