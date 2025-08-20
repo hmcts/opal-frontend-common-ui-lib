@@ -307,4 +307,30 @@ describe('hasUrlStateMatchGuard', () => {
     expect(result).toBe(true);
     expect(router.createUrlTree).not.toHaveBeenCalled();
   });
+
+  it('should handle undefined queryParams when redirecting', () => {
+    const mockUrlTree = {} as UrlTree;
+    router.createUrlTree.and.returnValue(mockUrlTree);
+
+    const guard = hasUrlStateMatchGuard(
+      () => mockState,
+      (route) => !route.params['accountNumber'],
+      (state, route) => state.selectedAccount?.accountNumber === route.params['accountNumber'],
+      (route) => `/account/${route.params['accountNumber']}/search`,
+    );
+
+    mockRoute.params = { accountNumber: '12345' };
+    // Explicitly set queryParams to undefined to test the || {} fallback
+    mockRoute.queryParams = undefined as any;
+    mockRoute.fragment = null;
+    mockState = {};
+
+    const result = TestBed.runInInjectionContext(() => guard(mockRoute, {} as RouterStateSnapshot));
+
+    expect(router.createUrlTree).toHaveBeenCalledWith(['/account/12345/search'], {
+      queryParams: undefined,
+      fragment: undefined,
+    });
+    expect(result).toBe(mockUrlTree);
+  });
 });
