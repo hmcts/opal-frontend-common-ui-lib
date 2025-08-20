@@ -1,7 +1,6 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 
-
 /**
  * Factory function to create a route guard that checks URL state matching.
  *
