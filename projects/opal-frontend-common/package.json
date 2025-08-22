@@ -335,6 +335,9 @@
     "./guards/has-flow-state": {
       "import": "./fesm2022/hmcts-opal-frontend-common-guards-has-flow-state.mjs"
     },
+    "./guards/has-url-state-match": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-guards-has-url-state-match.mjs"
+    },
     "./guards/helpers": {
       "import": "./fesm2022/hmcts-opal-frontend-common-guards-helpers.mjs"
     },
