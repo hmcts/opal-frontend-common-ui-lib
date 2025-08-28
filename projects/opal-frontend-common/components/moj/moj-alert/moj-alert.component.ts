@@ -29,7 +29,7 @@ export class MojAlertComponent {
   /**
    * Dismisses the alert component.
    *
-   * This method emits the dismissed event to it's parent and 
+   * This method emits the dismissed event to it's parent and
    * sets the component's visibility state to false,
    * effectively hiding the alert from view.
    */
