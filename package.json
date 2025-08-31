@@ -55,7 +55,7 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "ng-packagr": "^20.0.0",
     "typescript": "~5.8.2",
-    "typescript-eslint": "8.40.0"
+    "typescript-eslint": "8.41.0"
   },
   "resolutions": {
     "http-proxy-middleware": "^3.0.5"
