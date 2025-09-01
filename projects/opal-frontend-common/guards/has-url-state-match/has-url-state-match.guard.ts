@@ -2,31 +2,28 @@ import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 
 /**
- * Factory function to create a route guard that checks URL state matching.
+ * Creates a route guard that checks whether the current URL state matches specific conditions.
  *
- * The returned guard function evaluates the current route and state conditions to determine if navigation should
- * proceed or if the user should be redirected to a different path. It performs the following checks in order:
+ * This function returns a CanActivate guard function that performs the following steps:
+ * 1. Retrieves the current state using the provided getState function.
+ * 2. Checks the route using the checkRoute function.
+ * 3. Evaluates the state and route using the checkCondition function.
+ * 4. If the route or condition check fails, it redirects to a URL created by the getNavigationPath function
+ *    while preserving query parameters and the URL fragment.
  *
- * 1. Uses the provided `checkRoute` function to determine if the current route meets specific criteria. If true,
- *    the guard returns `true`, allowing navigation.
+ * @typeParam T The type of the state returned by getState.
  *
- * 2. If the above check fails, it then evaluates the state condition using the `checkCondition` function with the
- *    current state (fetched via `getState`) and the `ActivatedRouteSnapshot`. If this check passes, navigation is allowed.
- *
- * 3. If both checks fail, the guard redirects the user to a path determined by `getNavigationPath`, preserving any query
- *    parameters (if present) and the URL fragment.
- *
- * @template T - The type of the state object retrieved by `getState`.
  * @param getState - A function that returns the current state.
- * @param checkRoute - A function that checks whether the current route (via `ActivatedRouteSnapshot`) meets specific criteria.
- * @param checkCondition - A function that checks a condition based on the current state and the route snapshot.
- * @param getNavigationPath - A function that returns a navigation path string based on the current route snapshot.
- * @returns A route guard function complying with the `CanActivateFn` interface, which returns either `true` (allowing navigation)
- *          or a UrlTree (redirecting to an alternative URL).
+ * @param isCanonicalUrl - A function that receives an ActivatedRouteSnapshot and returns a boolean indicating whether the route meets certain criteria.
+ * @param checkCondition - A function that evaluates whether the current state satisfies the necessary condition based on the ActivatedRouteSnapshot.
+ * @param getNavigationPath - A function that receives an ActivatedRouteSnapshot and returns the navigation path as a string for redirection.
+ *
+ * @returns A function implementing the CanActivate guard that returns `true` if the route and state meet the required conditions,
+ *          or a UrlTree for redirection if they do not.
  */
 export function hasUrlStateMatchGuard<T>(
   getState: () => T,
-  checkRoute: (route: ActivatedRouteSnapshot) => boolean,
+  isCanonicalUrl: (route: ActivatedRouteSnapshot) => boolean,
   checkCondition: (state: T, route: ActivatedRouteSnapshot) => boolean,
   getNavigationPath: (route: ActivatedRouteSnapshot) => string,
 ): CanActivateFn {
@@ -43,7 +40,7 @@ export function hasUrlStateMatchGuard<T>(
       });
     };
 
-    if (!checkRoute(route)) {
+    if (!isCanonicalUrl(route)) {
       return createRedirectUrlTree();
     }
 

@@ -1,5 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, Router, UrlTree, RouterStateSnapshot } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  Router,
+  UrlTree,
+  RouterStateSnapshot,
+  ParamMap,
+  convertToParamMap,
+} from '@angular/router';
 import { hasUrlStateMatchGuard } from './has-url-state-match.guard';
 
 interface MockState {
@@ -7,10 +14,36 @@ interface MockState {
     accountNumber: string;
   };
 }
+
+function mockActivatedRouteSnapshot(
+  queryParams?: Record<string, string> | undefined,
+  fragment?: string | null,
+): ActivatedRouteSnapshot {
+  return {
+    queryParams: queryParams,
+    fragment: fragment,
+    url: [],
+    params: {},
+    data: {},
+    title: undefined,
+    outlet: 'primary',
+    component: null,
+    routeConfig: null,
+    root: {} as ActivatedRouteSnapshot,
+    parent: null,
+    firstChild: null,
+    children: [],
+    pathFromRoot: [],
+    paramMap: queryParams ? convertToParamMap(queryParams) : ({} as ParamMap),
+    queryParamMap: queryParams ? convertToParamMap(queryParams) : ({} as ParamMap),
+  } as ActivatedRouteSnapshot;
+}
+
 describe('hasUrlStateMatchGuard', () => {
   let router: jasmine.SpyObj<Router>;
   let mockRoute: ActivatedRouteSnapshot;
   let mockState: MockState;
+  let mockRouterState: RouterStateSnapshot;
 
   beforeEach(() => {
     const routerSpy = jasmine.createSpyObj('Router', ['createUrlTree']);
@@ -21,320 +54,343 @@ describe('hasUrlStateMatchGuard', () => {
 
     router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
 
-    mockRoute = {
-      params: {},
-      queryParams: {},
-      fragment: null,
-    } as ActivatedRouteSnapshot;
+    mockRoute = mockActivatedRouteSnapshot();
 
     mockState = {};
+    mockRouterState = {} as RouterStateSnapshot;
   });
 
-  it('should return true when no account number in URL', () => {
-    const guard = hasUrlStateMatchGuard(
-      () => mockState,
-      (route) => !route.params['accountNumber'], // Skip if no account number
-      (state, route) => state.selectedAccount?.accountNumber === route.params['accountNumber'],
-      (route) => `/account/${route.params['accountNumber']}/search`,
-    );
-
-    mockRoute.params = {};
-
-    const result = TestBed.runInInjectionContext(() => guard(mockRoute, {} as RouterStateSnapshot));
-
-    expect(result).toBe(true);
-  });
-
-  it('should return true when URL parameter is undefined', () => {
-    const guard = hasUrlStateMatchGuard(
-      () => mockState,
-      (route) => !route.params['accountNumber'],
-      (state, route) => state.selectedAccount?.accountNumber === route.params['accountNumber'],
-      (route) => `/account/${route.params['accountNumber']}/search`,
-    );
-
-    mockRoute.params = { accountNumber: undefined };
-
-    const result = TestBed.runInInjectionContext(() => guard(mockRoute, {} as RouterStateSnapshot));
-
-    expect(result).toBe(true);
-  });
-
-  it('should return true when account numbers match', () => {
-    const guard = hasUrlStateMatchGuard(
-      () => mockState,
-      (route) => !!route.params['accountNumber'], // checkRoute should return true to proceed
-      (state, route) => state.selectedAccount?.accountNumber === route.params['accountNumber'],
-      (route) => `/account/${route.params['accountNumber']}/search`,
-    );
-
-    mockRoute.params = { accountNumber: '12345' };
-    mockState = {
-      selectedAccount: {
-        accountNumber: '12345',
-      },
-    };
-
-    const result = TestBed.runInInjectionContext(() => guard(mockRoute, {} as RouterStateSnapshot));
-
-    expect(result).toBe(true);
-    expect(router.createUrlTree).not.toHaveBeenCalled();
-  });
-
-  describe('and checkCondition returns false (validation fails)', () => {
-    it('should redirect when no account in state', () => {
+  it('should return UrlTree and redirect when isCanonicalUrl returns false', () => {
+    TestBed.runInInjectionContext(() => {
       const mockUrlTree = {} as UrlTree;
       router.createUrlTree.and.returnValue(mockUrlTree);
 
-      const guard = hasUrlStateMatchGuard(
-        () => mockState,
-        (route) => !route.params['accountNumber'],
-        (state, route) => state.selectedAccount?.accountNumber === route.params['accountNumber'],
-        (route) => `/account/${route.params['accountNumber']}/search`,
-      );
+      const getState = () => mockState;
+      const isCanonicalUrl = () => false;
+      const checkCondition = () => true;
+      const getNavigationPath = () => '/redirect';
 
-      mockRoute.params = { accountNumber: '12345' };
-      mockRoute.queryParams = {};
-      mockRoute.fragment = null;
-      mockState = {}; // No selectedAccount
+      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
 
-      const result = TestBed.runInInjectionContext(() => guard(mockRoute, {} as RouterStateSnapshot));
+      const result = guard(mockRoute, mockRouterState);
 
-      expect(router.createUrlTree).toHaveBeenCalledWith(['/account/12345/search'], {
+      expect(result).toBe(mockUrlTree);
+      expect(router.createUrlTree).toHaveBeenCalledWith(['/redirect'], {
         queryParams: undefined,
         fragment: undefined,
       });
-      expect(result).toBe(mockUrlTree);
     });
+  });
 
-    it('should redirect when account numbers do not match', () => {
+  it('should return UrlTree regardless of state or condition when isCanonicalUrl returns false', () => {
+    TestBed.runInInjectionContext(() => {
       const mockUrlTree = {} as UrlTree;
       router.createUrlTree.and.returnValue(mockUrlTree);
 
-      const guard = hasUrlStateMatchGuard(
-        () => mockState,
-        (route) => !route.params['accountNumber'],
-        (state, route) => state.selectedAccount?.accountNumber === route.params['accountNumber'],
-        (route) => `/account/${route.params['accountNumber']}/search`,
-      );
+      mockState.selectedAccount = { accountNumber: '12345' };
 
-      mockRoute.params = { accountNumber: '12345' };
-      mockRoute.queryParams = {};
-      mockState = {
-        selectedAccount: {
-          accountNumber: '67890',
-        },
+      const getState = () => mockState;
+      const isCanonicalUrl = () => false;
+      const checkCondition = (state: MockState) => state.selectedAccount?.accountNumber === '99999';
+      const getNavigationPath = () => '/redirect';
+
+      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+
+      const result = guard(mockRoute, mockRouterState);
+
+      expect(result).toBe(mockUrlTree);
+      expect(router.createUrlTree).toHaveBeenCalledWith(['/redirect'], {
+        queryParams: undefined,
+        fragment: undefined,
+      });
+    });
+  });
+
+  it('should return true when checkCondition returns true', () => {
+    TestBed.runInInjectionContext(() => {
+      mockState.selectedAccount = { accountNumber: '12345' };
+
+      const getState = () => mockState;
+      const isCanonicalUrl = () => true;
+      const checkCondition = (state: MockState) => state.selectedAccount?.accountNumber === '12345';
+      const getNavigationPath = () => '/redirect';
+
+      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+
+      const result = guard(mockRoute, mockRouterState);
+
+      expect(result).toBe(true);
+      expect(router.createUrlTree).not.toHaveBeenCalled();
+    });
+  });
+
+  it('should return true when checkCondition returns true with complex state', () => {
+    TestBed.runInInjectionContext(() => {
+      const complexState = {
+        selectedAccount: { accountNumber: 'ACCOUNT123' },
+        user: { id: 'user1' },
       };
 
-      const result = TestBed.runInInjectionContext(() => guard(mockRoute, {} as RouterStateSnapshot));
+      const getState = () => complexState;
+      const isCanonicalUrl = () => true;
+      const checkCondition = (state: typeof complexState) =>
+        state.selectedAccount?.accountNumber === 'ACCOUNT123' && state.user?.id === 'user1';
+      const getNavigationPath = () => '/redirect';
 
-      expect(router.createUrlTree).toHaveBeenCalledWith(['/account/12345/search'], {
-        queryParams: undefined,
-        fragment: undefined,
-      });
-      expect(result).toBe(mockUrlTree);
+      const guard = hasUrlStateMatchGuard<typeof complexState>(
+        getState,
+        isCanonicalUrl,
+        checkCondition,
+        getNavigationPath,
+      );
+
+      const result = guard(mockRoute, mockRouterState);
+
+      expect(result).toBe(true);
+      expect(router.createUrlTree).not.toHaveBeenCalled();
     });
+  });
 
-    it('should preserve query params and fragment when redirecting', () => {
+  it('should return UrlTree when checkCondition returns false', () => {
+    TestBed.runInInjectionContext(() => {
       const mockUrlTree = {} as UrlTree;
       router.createUrlTree.and.returnValue(mockUrlTree);
 
-      const guard = hasUrlStateMatchGuard(
-        () => mockState,
-        (route) => !route.params['accountNumber'],
-        (state, route) => state.selectedAccount?.accountNumber === route.params['accountNumber'],
-        (route) => `/account/${route.params['accountNumber']}/search`,
-      );
+      mockState.selectedAccount = { accountNumber: '12345' };
 
-      mockRoute.params = { accountNumber: '12345' };
-      mockRoute.queryParams = { tab: 'details' };
+      const getState = () => mockState;
+      const isCanonicalUrl = () => true;
+      const checkCondition = (state: MockState) => state.selectedAccount?.accountNumber === '99999';
+      const getNavigationPath = () => '/redirect';
+
+      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+
+      const result = guard(mockRoute, mockRouterState);
+
+      expect(result).toBe(mockUrlTree);
+      expect(router.createUrlTree).toHaveBeenCalledWith(['/redirect'], {
+        queryParams: undefined,
+        fragment: undefined,
+      });
+    });
+  });
+
+  it('should return UrlTree when state is undefined', () => {
+    TestBed.runInInjectionContext(() => {
+      const mockUrlTree = {} as UrlTree;
+      router.createUrlTree.and.returnValue(mockUrlTree);
+
+      const getState = () => mockState;
+      const isCanonicalUrl = () => true;
+      const checkCondition = (state: MockState) => !!state.selectedAccount;
+      const getNavigationPath = () => '/redirect';
+
+      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+
+      const result = guard(mockRoute, mockRouterState);
+
+      expect(result).toBe(mockUrlTree);
+      expect(router.createUrlTree).toHaveBeenCalledWith(['/redirect'], {
+        queryParams: undefined,
+        fragment: undefined,
+      });
+    });
+  });
+
+  it('should throw error when checkCondition throws an error', () => {
+    TestBed.runInInjectionContext(() => {
+      const getState = () => mockState;
+      const isCanonicalUrl = () => true;
+      const checkCondition = () => {
+        throw new Error('Condition check failed');
+      };
+      const getNavigationPath = () => '/redirect';
+
+      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+
+      expect(() => guard(mockRoute, mockRouterState)).toThrowError('Condition check failed');
+    });
+  });
+
+  it('should redirect to specified route path', () => {
+    TestBed.runInInjectionContext(() => {
+      const mockUrlTree = {} as UrlTree;
+      router.createUrlTree.and.returnValue(mockUrlTree);
+
+      const getState = () => mockState;
+      const isCanonicalUrl = () => true;
+      const checkCondition = () => false;
+      const getNavigationPath = () => '/custom/redirect/path';
+
+      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+
+      const result = guard(mockRoute, mockRouterState);
+
+      expect(result).toBe(mockUrlTree);
+      expect(router.createUrlTree).toHaveBeenCalledWith(['/custom/redirect/path'], {
+        queryParams: undefined,
+        fragment: undefined,
+      });
+    });
+  });
+
+  it('should redirect to root when getNavigationPath returns empty string', () => {
+    TestBed.runInInjectionContext(() => {
+      const mockUrlTree = {} as UrlTree;
+      router.createUrlTree.and.returnValue(mockUrlTree);
+
+      const getState = () => mockState;
+      const isCanonicalUrl = () => true;
+      const checkCondition = () => false;
+      const getNavigationPath = () => '';
+
+      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+
+      const result = guard(mockRoute, mockRouterState);
+
+      expect(result).toBe(mockUrlTree);
+      expect(router.createUrlTree).toHaveBeenCalledWith([''], {
+        queryParams: undefined,
+        fragment: undefined,
+      });
+    });
+  });
+
+  it('should preserve query parameters and fragment in redirect', () => {
+    TestBed.runInInjectionContext(() => {
+      const mockUrlTree = {} as UrlTree;
+      router.createUrlTree.and.returnValue(mockUrlTree);
+
+      mockRoute.queryParams = { param1: 'value1', param2: 'value2' };
       mockRoute.fragment = 'section1';
-      mockState = {};
 
-      const result = TestBed.runInInjectionContext(() => guard(mockRoute, {} as RouterStateSnapshot));
+      const getState = () => mockState;
+      const isCanonicalUrl = () => true;
+      const checkCondition = () => false;
+      const getNavigationPath = () => '/redirect';
 
-      expect(router.createUrlTree).toHaveBeenCalledWith(['/account/12345/search'], {
-        queryParams: { tab: 'details' },
+      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+
+      const result = guard(mockRoute, mockRouterState);
+
+      expect(result).toBe(mockUrlTree);
+      expect(router.createUrlTree).toHaveBeenCalledWith(['/redirect'], {
+        queryParams: { param1: 'value1', param2: 'value2' },
         fragment: 'section1',
       });
-      expect(result).toBe(mockUrlTree);
     });
   });
 
-  it('should work with query parameter validation', () => {
-    const guard = hasUrlStateMatchGuard(
-      () => mockState,
-      (route) => !!route.queryParams['userId'], // checkRoute should return true to proceed
-      (state, route) => state.selectedAccount?.accountNumber === route.queryParams['userId'],
-      () => '/login',
-    );
-
-    mockRoute.queryParams = { userId: '12345' };
-    mockState = {
-      selectedAccount: {
-        accountNumber: '12345',
-      },
-    };
-
-    const result = TestBed.runInInjectionContext(() => guard(mockRoute, {} as RouterStateSnapshot));
-
-    expect(result).toBe(true);
-  });
-
-  it('should work with complex validation logic', () => {
-    interface ComplexState {
-      user?: {
-        accounts?: Array<{ id: string; name: string }>;
-        currentAccountId?: string;
-      };
-    }
-
-    const complexState: ComplexState = {
-      user: {
-        accounts: [
-          { id: 'ACC123', name: 'Account 1' },
-          { id: 'ACC456', name: 'Account 2' },
-        ],
-        currentAccountId: 'ACC123',
-      },
-    };
-
-    const guard = hasUrlStateMatchGuard(
-      () => complexState,
-      (route) => !!route.params['accountId'], // checkRoute should return true to proceed
-      (state, route) => {
-        const urlAccountId = route.params['accountId'];
-        const hasAccount = state.user?.accounts?.some((account) => account.id === urlAccountId) ?? false;
-        const isCurrentAccount = state.user?.currentAccountId === urlAccountId;
-        return hasAccount && isCurrentAccount;
-      },
-      (route) => `/accounts/${route.params['accountId']}/details`,
-    );
-
-    mockRoute.params = { accountId: 'ACC123' };
-
-    const result = TestBed.runInInjectionContext(() => guard(mockRoute, {} as RouterStateSnapshot));
-
-    expect(result).toBe(true);
-  });
-
-  it('should work with multiple parameter validation', () => {
-    const guard = hasUrlStateMatchGuard(
-      () => mockState,
-      (route) => !!(route.params['accountId'] && route.params['caseId']), // checkRoute should return true when both params exist
-      (state, route) => {
-        const expectedKey = `${route.params['accountId']}-${route.params['caseId']}`;
-        const stateKey = state.selectedAccount ? `${state.selectedAccount.accountNumber}-case123` : '';
-        return expectedKey === stateKey;
-      },
-      (route) => `/account/${route.params['accountId']}/cases`,
-    );
-
-    mockRoute.params = { accountId: '12345', caseId: 'case123' };
-    mockState = {
-      selectedAccount: {
-        accountNumber: '12345',
-      },
-    };
-
-    const result = TestBed.runInInjectionContext(() => guard(mockRoute, {} as RouterStateSnapshot));
-
-    expect(result).toBe(true);
-  });
   it('should handle null state gracefully', () => {
-    const mockUrlTree = {} as UrlTree;
-    router.createUrlTree.and.returnValue(mockUrlTree);
+    TestBed.runInInjectionContext(() => {
+      const mockUrlTree = {} as UrlTree;
+      router.createUrlTree.and.returnValue(mockUrlTree);
 
-    const guard = hasUrlStateMatchGuard(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      () => null as any,
-      (route) => !route.params['accountNumber'],
-      (state, route) => state?.selectedAccount?.accountNumber === route.params['accountNumber'],
-      (route) => `/account/${route.params['accountNumber']}/search`,
-    );
+      const getState = () => null as any;
+      const isCanonicalUrl = () => true;
+      const checkCondition = (state: MockState | null) => !!state?.selectedAccount;
+      const getNavigationPath = () => '/redirect';
 
-    mockRoute.params = { accountNumber: '12345' };
-    mockRoute.queryParams = {};
+      const guard = hasUrlStateMatchGuard<MockState | null>(
+        getState,
+        isCanonicalUrl,
+        checkCondition,
+        getNavigationPath,
+      );
 
-    const result = TestBed.runInInjectionContext(() => guard(mockRoute, {} as RouterStateSnapshot));
+      const result = guard(mockRoute, mockRouterState);
 
-    expect(router.createUrlTree).toHaveBeenCalledWith(['/account/12345/search'], {
-      queryParams: undefined,
-      fragment: undefined,
+      expect(result).toBe(mockUrlTree);
+      expect(router.createUrlTree).toHaveBeenCalledWith(['/redirect'], {
+        queryParams: undefined,
+        fragment: undefined,
+      });
     });
-    expect(result).toBe(mockUrlTree);
   });
 
-  it('should handle undefined state gracefully', () => {
-    const mockUrlTree = {} as UrlTree;
-    router.createUrlTree.and.returnValue(mockUrlTree);
+  it('should handle falsy checkCondition results', () => {
+    TestBed.runInInjectionContext(() => {
+      const mockUrlTree = {} as UrlTree;
+      router.createUrlTree.and.returnValue(mockUrlTree);
 
-    const guard = hasUrlStateMatchGuard(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      () => undefined as any,
-      (route) => !route.params['accountNumber'],
-      (state, route) => state?.selectedAccount?.accountNumber === route.params['accountNumber'],
-      (route) => `/account/${route.params['accountNumber']}/search`,
-    );
+      const getState = () => mockState;
+      const isCanonicalUrl = () => true;
+      const checkCondition = () => 0 as any; // falsy value
+      const getNavigationPath = () => '/redirect';
 
-    mockRoute.params = { accountNumber: '12345' };
-    mockRoute.queryParams = {};
+      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
 
-    const result = TestBed.runInInjectionContext(() => guard(mockRoute, {} as RouterStateSnapshot));
+      const result = guard(mockRoute, mockRouterState);
 
-    expect(router.createUrlTree).toHaveBeenCalledWith(['/account/12345/search'], {
-      queryParams: undefined,
-      fragment: undefined,
+      expect(result).toBe(mockUrlTree);
+      expect(router.createUrlTree).toHaveBeenCalledWith(['/redirect'], {
+        queryParams: undefined,
+        fragment: undefined,
+      });
     });
-    expect(result).toBe(mockUrlTree);
   });
 
-  it('should handle custom checkRoute logic', () => {
-    const guard = hasUrlStateMatchGuard(
-      () => mockState,
-      (route) => {
-        return route.params['accountNumber']?.startsWith('ADMIN');
-      },
-      (state, route) => state.selectedAccount?.accountNumber === route.params['accountNumber'],
-      (route) => `/account/${route.params['accountNumber']}/search`,
-    );
+  it('should handle truthy checkCondition results', () => {
+    TestBed.runInInjectionContext(() => {
+      const getState = () => mockState;
+      const isCanonicalUrl = () => true;
+      const checkCondition = () => 'truthy' as any; // truthy value
+      const getNavigationPath = () => '/redirect';
 
-    mockRoute.params = { accountNumber: 'ADMIN123' };
-    mockState = {
-      selectedAccount: {
-        accountNumber: 'ADMIN123', // Match the route param so checkCondition passes
-      },
-    };
+      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
 
-    const result = TestBed.runInInjectionContext(() => guard(mockRoute, {} as RouterStateSnapshot));
+      const result = guard(mockRoute, mockRouterState);
 
-    expect(result).toBe(true);
-    expect(router.createUrlTree).not.toHaveBeenCalled();
+      expect(result).toBe(true);
+      expect(router.createUrlTree).not.toHaveBeenCalled();
+    });
   });
 
-  it('should handle undefined queryParams when redirecting', () => {
-    const mockUrlTree = {} as UrlTree;
-    router.createUrlTree.and.returnValue(mockUrlTree);
+  it('should pass route parameter to isCanonicalUrl function', () => {
+    TestBed.runInInjectionContext(() => {
+      const getState = () => mockState;
+      const isCanonicalUrl = jasmine.createSpy('isCanonicalUrl').and.returnValue(false);
+      const checkCondition = () => true;
+      const getNavigationPath = () => '/redirect';
 
-    const guard = hasUrlStateMatchGuard(
-      () => mockState,
-      (route) => !route.params['accountNumber'],
-      (state, route) => state.selectedAccount?.accountNumber === route.params['accountNumber'],
-      (route) => `/account/${route.params['accountNumber']}/search`,
-    );
+      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
 
-    mockRoute.params = { accountNumber: '12345' };
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    mockRoute.queryParams = undefined as any;
-    mockRoute.fragment = null;
-    mockState = {};
+      guard(mockRoute, mockRouterState);
 
-    const result = TestBed.runInInjectionContext(() => guard(mockRoute, {} as RouterStateSnapshot));
-
-    expect(router.createUrlTree).toHaveBeenCalledWith(['/account/12345/search'], {
-      queryParams: undefined,
-      fragment: undefined,
+      expect(isCanonicalUrl).toHaveBeenCalledWith(mockRoute);
     });
-    expect(result).toBe(mockUrlTree);
+  });
+
+  it('should pass state and route to checkCondition function', () => {
+    TestBed.runInInjectionContext(() => {
+      const getState = () => mockState;
+      const isCanonicalUrl = () => true;
+      const checkCondition = jasmine.createSpy('checkCondition').and.returnValue(true);
+      const getNavigationPath = () => '/redirect';
+
+      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+
+      guard(mockRoute, mockRouterState);
+
+      expect(checkCondition).toHaveBeenCalledWith(mockState, mockRoute);
+    });
+  });
+
+  it('should pass route to getNavigationPath function when redirecting', () => {
+    TestBed.runInInjectionContext(() => {
+      const mockUrlTree = {} as UrlTree;
+      router.createUrlTree.and.returnValue(mockUrlTree);
+
+      const getState = () => mockState;
+      const isCanonicalUrl = () => true;
+      const checkCondition = () => false;
+      const getNavigationPath = jasmine.createSpy('getNavigationPath').and.returnValue('/redirect');
+
+      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+
+      guard(mockRoute, mockRouterState);
+
+      expect(getNavigationPath).toHaveBeenCalledWith(mockRoute);
+    });
   });
 });
