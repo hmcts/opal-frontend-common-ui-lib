@@ -14,7 +14,7 @@ import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
  * @typeParam T The type of the state returned by getState.
  *
  * @param getState - A function that returns the current state.
- * @param isCanonicalUrl - A function that receives an ActivatedRouteSnapshot and returns a boolean indicating whether the route meets certain criteria.
+ * @param hasRouteParams - A function that receives an ActivatedRouteSnapshot and returns a boolean indicating whether the route meets certain criteria.
  * @param checkCondition - A function that evaluates whether the current state satisfies the necessary condition based on the ActivatedRouteSnapshot.
  * @param getNavigationPath - A function that receives an ActivatedRouteSnapshot and returns the navigation path as a string for redirection.
  *
@@ -23,7 +23,7 @@ import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
  */
 export function hasUrlStateMatchGuard<T>(
   getState: () => T,
-  isCanonicalUrl: (route: ActivatedRouteSnapshot) => boolean,
+  hasRouteParams: (route: ActivatedRouteSnapshot) => boolean,
   checkCondition: (state: T, route: ActivatedRouteSnapshot) => boolean,
   getNavigationPath: (route: ActivatedRouteSnapshot) => string,
 ): CanActivateFn {
@@ -40,7 +40,7 @@ export function hasUrlStateMatchGuard<T>(
       });
     };
 
-    if (!isCanonicalUrl(route)) {
+    if (!hasRouteParams(route)) {
       return createRedirectUrlTree();
     }
 

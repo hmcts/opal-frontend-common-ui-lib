@@ -48,7 +48,7 @@ hasUrlStateMatchGuard
 
 The guard performs validation in the following order:
 
-1. **URL Validation**: Calls `isCanonicalUrl(route)` to check if the URL format is valid
+1. **URL Validation**: Calls `hasRouteParams(route)` to check if the URL format is valid
    - If `false`, redirects immediately
    - If `true`, proceeds to state validation
 
@@ -96,12 +96,12 @@ export const userAccountGuard = hasUrlStateMatchGuard(
 
 ## Inputs
 
-| Input               | Type                                                   | Description                                                                 |
-| ------------------- | ------------------------------------------------------ | --------------------------------------------------------------------------- |
-| `getState`          | `() => T`                                              | Function that returns the current application state                         |
-| `isCanonicalUrl`    | `(route: ActivatedRouteSnapshot) => boolean`           | Function that checks if the URL is canonical/valid (return `true` if valid) |
-| `checkCondition`    | `(state: T, route: ActivatedRouteSnapshot) => boolean` | Function that validates state against route (return `true` if valid)        |
-| `getNavigationPath` | `(route: ActivatedRouteSnapshot) => string`            | Function that returns the redirect path when validation fails               |
+| Input               | Type                                                   | Description                                                             |
+| ------------------- | ------------------------------------------------------ | ----------------------------------------------------------------------- |
+| `getState`          | `() => T`                                              | Function that returns the current application state                     |
+| `hasRouteParams`    | `(route: ActivatedRouteSnapshot) => boolean`           | Function that checks if the route params valid (return `true` if valid) |
+| `checkCondition`    | `(state: T, route: ActivatedRouteSnapshot) => boolean` | Function that validates state against route (return `true` if valid)    |
+| `getNavigationPath` | `(route: ActivatedRouteSnapshot) => string`            | Function that returns the redirect path when validation fails           |
 
 Example usage of inputs:
 
@@ -158,4 +158,3 @@ yarn test
 
 Feel free to submit issues or pull requests to improve this guard.
 If you encounter any bugs or missing functionality, please raise an issue.
-

@@ -60,17 +60,17 @@ describe('hasUrlStateMatchGuard', () => {
     mockRouterState = {} as RouterStateSnapshot;
   });
 
-  it('should return UrlTree and redirect when isCanonicalUrl returns false', () => {
+  it('should return UrlTree and redirect when hasRouteParams returns false', () => {
     TestBed.runInInjectionContext(() => {
       const mockUrlTree = {} as UrlTree;
       router.createUrlTree.and.returnValue(mockUrlTree);
 
       const getState = () => mockState;
-      const isCanonicalUrl = () => false;
+      const hasRouteParams = () => false;
       const checkCondition = () => true;
       const getNavigationPath = () => '/redirect';
 
-      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+      const guard = hasUrlStateMatchGuard<MockState>(getState, hasRouteParams, checkCondition, getNavigationPath);
 
       const result = guard(mockRoute, mockRouterState);
 
@@ -82,7 +82,7 @@ describe('hasUrlStateMatchGuard', () => {
     });
   });
 
-  it('should return UrlTree regardless of state or condition when isCanonicalUrl returns false', () => {
+  it('should return UrlTree regardless of state or condition when hasRouteParams returns false', () => {
     TestBed.runInInjectionContext(() => {
       const mockUrlTree = {} as UrlTree;
       router.createUrlTree.and.returnValue(mockUrlTree);
@@ -90,11 +90,11 @@ describe('hasUrlStateMatchGuard', () => {
       mockState.selectedAccount = { accountNumber: '12345' };
 
       const getState = () => mockState;
-      const isCanonicalUrl = () => false;
+      const hasRouteParams = () => false;
       const checkCondition = (state: MockState) => state.selectedAccount?.accountNumber === '99999';
       const getNavigationPath = () => '/redirect';
 
-      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+      const guard = hasUrlStateMatchGuard<MockState>(getState, hasRouteParams, checkCondition, getNavigationPath);
 
       const result = guard(mockRoute, mockRouterState);
 
@@ -111,11 +111,11 @@ describe('hasUrlStateMatchGuard', () => {
       mockState.selectedAccount = { accountNumber: '12345' };
 
       const getState = () => mockState;
-      const isCanonicalUrl = () => true;
+      const hasRouteParams = () => true;
       const checkCondition = (state: MockState) => state.selectedAccount?.accountNumber === '12345';
       const getNavigationPath = () => '/redirect';
 
-      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+      const guard = hasUrlStateMatchGuard<MockState>(getState, hasRouteParams, checkCondition, getNavigationPath);
 
       const result = guard(mockRoute, mockRouterState);
 
@@ -132,14 +132,14 @@ describe('hasUrlStateMatchGuard', () => {
       };
 
       const getState = () => complexState;
-      const isCanonicalUrl = () => true;
+      const hasRouteParams = () => true;
       const checkCondition = (state: typeof complexState) =>
         state.selectedAccount?.accountNumber === 'ACCOUNT123' && state.user?.id === 'user1';
       const getNavigationPath = () => '/redirect';
 
       const guard = hasUrlStateMatchGuard<typeof complexState>(
         getState,
-        isCanonicalUrl,
+        hasRouteParams,
         checkCondition,
         getNavigationPath,
       );
@@ -159,11 +159,11 @@ describe('hasUrlStateMatchGuard', () => {
       mockState.selectedAccount = { accountNumber: '12345' };
 
       const getState = () => mockState;
-      const isCanonicalUrl = () => true;
+      const hasRouteParams = () => true;
       const checkCondition = (state: MockState) => state.selectedAccount?.accountNumber === '99999';
       const getNavigationPath = () => '/redirect';
 
-      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+      const guard = hasUrlStateMatchGuard<MockState>(getState, hasRouteParams, checkCondition, getNavigationPath);
 
       const result = guard(mockRoute, mockRouterState);
 
@@ -181,11 +181,11 @@ describe('hasUrlStateMatchGuard', () => {
       router.createUrlTree.and.returnValue(mockUrlTree);
 
       const getState = () => mockState;
-      const isCanonicalUrl = () => true;
+      const hasRouteParams = () => true;
       const checkCondition = (state: MockState) => !!state.selectedAccount;
       const getNavigationPath = () => '/redirect';
 
-      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+      const guard = hasUrlStateMatchGuard<MockState>(getState, hasRouteParams, checkCondition, getNavigationPath);
 
       const result = guard(mockRoute, mockRouterState);
 
@@ -200,13 +200,13 @@ describe('hasUrlStateMatchGuard', () => {
   it('should throw error when checkCondition throws an error', () => {
     TestBed.runInInjectionContext(() => {
       const getState = () => mockState;
-      const isCanonicalUrl = () => true;
+      const hasRouteParams = () => true;
       const checkCondition = () => {
         throw new Error('Condition check failed');
       };
       const getNavigationPath = () => '/redirect';
 
-      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+      const guard = hasUrlStateMatchGuard<MockState>(getState, hasRouteParams, checkCondition, getNavigationPath);
 
       expect(() => guard(mockRoute, mockRouterState)).toThrowError('Condition check failed');
     });
@@ -218,11 +218,11 @@ describe('hasUrlStateMatchGuard', () => {
       router.createUrlTree.and.returnValue(mockUrlTree);
 
       const getState = () => mockState;
-      const isCanonicalUrl = () => true;
+      const hasRouteParams = () => true;
       const checkCondition = () => false;
       const getNavigationPath = () => '/custom/redirect/path';
 
-      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+      const guard = hasUrlStateMatchGuard<MockState>(getState, hasRouteParams, checkCondition, getNavigationPath);
 
       const result = guard(mockRoute, mockRouterState);
 
@@ -240,11 +240,11 @@ describe('hasUrlStateMatchGuard', () => {
       router.createUrlTree.and.returnValue(mockUrlTree);
 
       const getState = () => mockState;
-      const isCanonicalUrl = () => true;
+      const hasRouteParams = () => true;
       const checkCondition = () => false;
       const getNavigationPath = () => '';
 
-      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+      const guard = hasUrlStateMatchGuard<MockState>(getState, hasRouteParams, checkCondition, getNavigationPath);
 
       const result = guard(mockRoute, mockRouterState);
 
@@ -285,15 +285,14 @@ describe('hasUrlStateMatchGuard', () => {
     TestBed.runInInjectionContext(() => {
       const mockUrlTree = {} as UrlTree;
       router.createUrlTree.and.returnValue(mockUrlTree);
-
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const getState = () => null as any;
-      const isCanonicalUrl = () => true;
+      const hasRouteParams = () => true;
       const checkCondition = (state: MockState | null) => !!state?.selectedAccount;
       const getNavigationPath = () => '/redirect';
-
       const guard = hasUrlStateMatchGuard<MockState | null>(
         getState,
-        isCanonicalUrl,
+        hasRouteParams,
         checkCondition,
         getNavigationPath,
       );
@@ -314,11 +313,12 @@ describe('hasUrlStateMatchGuard', () => {
       router.createUrlTree.and.returnValue(mockUrlTree);
 
       const getState = () => mockState;
-      const isCanonicalUrl = () => true;
+      const hasRouteParams = () => true;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const checkCondition = () => 0 as any; // falsy value
       const getNavigationPath = () => '/redirect';
 
-      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+      const guard = hasUrlStateMatchGuard<MockState>(getState, hasRouteParams, checkCondition, getNavigationPath);
 
       const result = guard(mockRoute, mockRouterState);
 
@@ -333,11 +333,12 @@ describe('hasUrlStateMatchGuard', () => {
   it('should handle truthy checkCondition results', () => {
     TestBed.runInInjectionContext(() => {
       const getState = () => mockState;
-      const isCanonicalUrl = () => true;
+      const hasRouteParams = () => true;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const checkCondition = () => 'truthy' as any; // truthy value
       const getNavigationPath = () => '/redirect';
 
-      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+      const guard = hasUrlStateMatchGuard<MockState>(getState, hasRouteParams, checkCondition, getNavigationPath);
 
       const result = guard(mockRoute, mockRouterState);
 
@@ -346,29 +347,29 @@ describe('hasUrlStateMatchGuard', () => {
     });
   });
 
-  it('should pass route parameter to isCanonicalUrl function', () => {
+  it('should pass route parameter to hasRouteParams function', () => {
     TestBed.runInInjectionContext(() => {
       const getState = () => mockState;
-      const isCanonicalUrl = jasmine.createSpy('isCanonicalUrl').and.returnValue(false);
+      const hasRouteParams = jasmine.createSpy('hasRouteParams').and.returnValue(false);
       const checkCondition = () => true;
       const getNavigationPath = () => '/redirect';
 
-      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+      const guard = hasUrlStateMatchGuard<MockState>(getState, hasRouteParams, checkCondition, getNavigationPath);
 
       guard(mockRoute, mockRouterState);
 
-      expect(isCanonicalUrl).toHaveBeenCalledWith(mockRoute);
+      expect(hasRouteParams).toHaveBeenCalledWith(mockRoute);
     });
   });
 
   it('should pass state and route to checkCondition function', () => {
     TestBed.runInInjectionContext(() => {
       const getState = () => mockState;
-      const isCanonicalUrl = () => true;
+      const hasRouteParams = () => true;
       const checkCondition = jasmine.createSpy('checkCondition').and.returnValue(true);
       const getNavigationPath = () => '/redirect';
 
-      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+      const guard = hasUrlStateMatchGuard<MockState>(getState, hasRouteParams, checkCondition, getNavigationPath);
 
       guard(mockRoute, mockRouterState);
 
@@ -382,11 +383,11 @@ describe('hasUrlStateMatchGuard', () => {
       router.createUrlTree.and.returnValue(mockUrlTree);
 
       const getState = () => mockState;
-      const isCanonicalUrl = () => true;
+      const hasRouteParams = () => true;
       const checkCondition = () => false;
       const getNavigationPath = jasmine.createSpy('getNavigationPath').and.returnValue('/redirect');
 
-      const guard = hasUrlStateMatchGuard<MockState>(getState, isCanonicalUrl, checkCondition, getNavigationPath);
+      const guard = hasUrlStateMatchGuard<MockState>(getState, hasRouteParams, checkCondition, getNavigationPath);
 
       guard(mockRoute, mockRouterState);
 
