@@ -19,6 +19,8 @@ export class GovukTextInputComponent {
   @Input({ required: false }) hintText!: string;
   @Input({ required: false }) hintHtml!: boolean;
   @Input({ required: false }) errors: string | null = null;
+  @Input({ required: false }) characterCountEnabled: boolean = false;
+  @Input({ required: false }) maxCharacterLimit: number = 30;
   @Input({ required: true }) set control(abstractControl: AbstractControl | null) {
     // Form controls are passed in as abstract controls, we need to re-cast it.
     this._control = abstractControl as FormControl;
@@ -26,5 +28,9 @@ export class GovukTextInputComponent {
 
   get getControl() {
     return this._control;
+  }
+
+  get remainingCharacterCount() {
+    return this.maxCharacterLimit - (this._control.value?.length ?? 0);
   }
 }

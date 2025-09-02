@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GovukTextInputComponent } from './govuk-text-input.component';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, AbstractControl } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ChangeDetectorRef } from '@angular/core';
 
@@ -75,5 +75,28 @@ describe('GovukTextInputComponent', () => {
     cdr.detectChanges();
 
     expect(elem.classes[labelClass]).toBeTruthy();
+  });
+
+  it('should calculate the remaining character count correctly', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const control: AbstractControl = new FormControl('Hello, World!');
+    component.control = control;
+    component.maxCharacterLimit = 500;
+    expect(component.remainingCharacterCount).toBe(500 - 13);
+  });
+
+  it('should return the remaining character count when value is undefined', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+    const control: AbstractControl = new FormControl(undefined);
+    component.control = control;
+    component.maxCharacterLimit = 500;
+    expect(component.remainingCharacterCount).toBe(500);
   });
 });
