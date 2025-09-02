@@ -60,7 +60,6 @@ describe('hasUrlStateMatchGuard', () => {
     mockRouterState = {} as RouterStateSnapshot;
   });
 
-
   it('should return UrlTree and redirect when hasRouteParams returns false', () => {
     TestBed.runInInjectionContext(() => {
       const mockUrlTree = {} as UrlTree;
