@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, computed, signal, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
@@ -9,7 +10,13 @@ import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/form
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GovukTextInputComponent {
+  private readonly destroyRef = inject(DestroyRef);
   private _control!: FormControl;
+  private readonly _controlValue = signal<string>('');
+
+  protected readonly remainingCharacterCount = computed(() => {
+    return this.maxCharacterLimit - this._controlValue().length;
+  });
 
   @Input({ required: true }) labelText!: string;
   @Input({ required: false }) labelClasses!: string;
@@ -20,17 +27,18 @@ export class GovukTextInputComponent {
   @Input({ required: false }) hintHtml!: boolean;
   @Input({ required: false }) errors: string | null = null;
   @Input({ required: false }) characterCountEnabled: boolean = false;
-  @Input({ required: false }) maxCharacterLimit: number = 30;
+  @Input({ required: false }) maxCharacterLimit!: number;
   @Input({ required: true }) set control(abstractControl: AbstractControl | null) {
-    // Form controls are passed in as abstract controls, we need to re-cast it.
     this._control = abstractControl as FormControl;
+
+    this._controlValue.set(this._control.value || '');
+
+    this._control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
+      this._controlValue.set(value || '');
+    });
   }
 
   get getControl() {
     return this._control;
-  }
-
-  get remainingCharacterCount() {
-    return this.maxCharacterLimit - (this._control.value?.length ?? 0);
   }
 }
