@@ -60,7 +60,8 @@ describe('MojAlertComponent', () => {
     expect(element?.getAttribute('data-module')).toBe('moj-alert');
   });
 
-  it('should dismiss the alert when dismiss is called', () => {
+  it('should dismiss the alert when dismiss is called and emit a `dismissed` event', () => {
+    spyOn(component.dismissed, 'emit');
     component.isVisible = true;
     component.type = 'information';
     fixture.detectChanges();
@@ -71,5 +72,6 @@ describe('MojAlertComponent', () => {
     expect(component.isVisible).toBeFalse();
     const element: HTMLElement = fixture.nativeElement;
     expect(element.className.trim()).toBe('');
+    expect(component.dismissed.emit).toHaveBeenCalled();
   });
 });
