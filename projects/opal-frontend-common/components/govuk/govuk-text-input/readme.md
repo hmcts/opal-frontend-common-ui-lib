@@ -43,12 +43,14 @@ You can use the text input component in your template as follows:
 
 ## Inputs
 
-| Input       | Type     | Description                                              |
-| ----------- | -------- | -------------------------------------------------------- |
-| `inputId`   | `string` | The ID for the text input element.                       |
-| `labelText` | `string` | The label for the text input.                            |
-| `hintText`  | `string` | Optional hint text displayed below the label.            |
-| `inputType` | `string` | The type attribute of the input (e.g., 'text', 'email'). |
+| Input                   | Type     | Description                                                  |
+| ----------------------- | -------- | ------------------------------------------------------------ |
+| `inputId`               | `string` | The ID for the text input element.                           |
+| `labelText`             | `string` | The label for the text input.                                |
+| `hintText`              | `string` | Optional hint text displayed below the label.                |
+| `inputType`             | `string` | The type attribute of the input (e.g., 'text', 'email').     |
+| `maxCharacterLimit`     | `int`    | The maximum number of characters that can be entered.        |
+| `characterCountEnabled` | `bool`   | This boolean allows hint of character limit to be displayed. |
 
 ## Outputs
 
