@@ -31,10 +31,10 @@ export class GovukTextAreaComponent {
   @Input({ required: true }) set control(abstractControl: AbstractControl | null) {
     this._control = abstractControl as FormControl;
 
-    this._controlValue.set(this._control.value || '');
+    this._controlValue.set(this._control.value ?? '');
 
     this._control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
-      this._controlValue.set(value || '');
+      this._controlValue.set(value ?? '');
     });
   }
   get getControl() {
