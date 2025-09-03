@@ -61,11 +61,40 @@ import { AbstractGovukTextComponent } from '../abstract/abstract-govuk-text.comp
 @Component({
   selector: 'my-text-input',
   template: `
-    <div class="govuk-form-group">
-      <label [for]="inputId">{{ labelText }}</label>
-      <input [id]="inputId" [name]="inputName" [formControl]="getControl" [maxlength]="maxCharacterLimit" />
+    <div class="govuk-form-group govuk-character-count" [class.govuk-form-group--error]="!!errors">
+      <h1 class="govuk-label-wrapper">
+        <label class="govuk-label {{ labelClasses }}" [for]="inputId">
+          {{ labelText }}
+        </label>
+      </h1>
+      @if (hintText) {
+        <div id="{{ inputId }}-hint" class="govuk-hint">
+          {{ hintText }}
+        </div>
+      }
+
+      @if (hintHtml) {
+        <div id="{{ inputId }}-hint" class="govuk-hint"><ng-content></ng-content></div>
+      }
+
+      @if (errors) {
+        <p id="{{ this.inputId }}-error-message" class="govuk-error-message">
+          <span class="govuk-visually-hidden">Error: </span> {{ errors }}
+        </p>
+      }
+
+      <input
+        class="govuk-input {{ inputClasses }}"
+        [id]="inputId"
+        [name]="inputName"
+        type="text"
+        [formControl]="getControl"
+        [maxlength]="maxCharacterLimit"
+      />
       @if (characterCountEnabled) {
-        <div>{{ remainingCharacterCount() }} characters remaining</div>
+        <div [id]="inputId + '-hint'" class="govuk-hint">
+          You have {{ remainingCharacterCount() }} character{{ remainingCharacterCount() === 1 ? '' : 's' }} remaining
+        </div>
       }
     </div>
   `,
