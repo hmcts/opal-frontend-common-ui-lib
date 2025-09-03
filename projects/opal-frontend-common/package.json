@@ -44,6 +44,9 @@
     "./components/abstract/abstract-form-parent-base": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-form-parent-base.mjs"
     },
+    "./components/abstract/abstract-govuk-text": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-govuk-text.mjs"
+    },
     "./components/abstract/abstract-nested-form-base": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-nested-form-base.mjs"
     },

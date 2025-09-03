@@ -33,6 +33,9 @@
       "@hmcts/opal-frontend-common/components/abstract/abstract-form-array-parent-base": [
         "./dist/opal-frontend-common/components/abstract/abstract-form-array-parent-base"
       ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-govuk-text": [
+        "./dist/opal-frontend-common/components/abstract/abstract-govuk-text"
+      ],
       "@hmcts/opal-frontend-common/components/abstract/abstract-nested-form-array-base": [
         "./dist/opal-frontend-common/components/abstract/abstract-nested-form-array-base"
       ],
