@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, computed, DestroyRef, inject, Input, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/forms';
-
 @Component({
   selector: 'opal-lib-govuk-text-area',
   imports: [CommonModule, ReactiveFormsModule],
@@ -9,7 +9,13 @@ import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/form
   styles: ``,
 })
 export class GovukTextAreaComponent {
+  private readonly destroyRef = inject(DestroyRef);
   private _control!: FormControl;
+  private readonly _controlValue = signal<string>('');
+
+  protected readonly remainingCharacterCount = computed(() => {
+    return this.maxCharacterLimit - this._controlValue().length;
+  });
 
   @Input({ required: true }) labelText!: string;
   @Input({ required: false }) labelClasses!: string;
@@ -23,15 +29,15 @@ export class GovukTextAreaComponent {
   @Input({ required: false }) characterCountEnabled: boolean = false;
   @Input({ required: false }) maxCharacterLimit: number = 500;
   @Input({ required: true }) set control(abstractControl: AbstractControl | null) {
-    // Form controls are passed in as abstract controls, we need to re-cast it.
     this._control = abstractControl as FormControl;
-  }
 
+    this._controlValue.set(this._control.value ?? '');
+
+    this._control.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((value) => {
+      this._controlValue.set(value ?? '');
+    });
+  }
   get getControl() {
     return this._control;
-  }
-
-  get remainingCharacterCount() {
-    return this.maxCharacterLimit - (this._control.value?.length ?? 0);
   }
 }

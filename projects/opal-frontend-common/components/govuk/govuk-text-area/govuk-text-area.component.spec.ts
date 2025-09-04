@@ -56,16 +56,42 @@ describe('GovukTextAreaComponent', () => {
 
     const control: AbstractControl = new FormControl('Hello, World!');
     component.control = control;
-    expect(component.remainingCharacterCount).toBe(500 - 13);
+    expect(component['remainingCharacterCount']()).toBe(500 - 13);
   });
 
-  it('should return the remaining character count when value is undefined', () => {
+  it('should update remainingCharacterCount when form control value changes', () => {
     if (!component) {
       fail('component returned null');
       return;
     }
-    const control: AbstractControl = new FormControl(undefined);
+    component.maxCharacterLimit = 100;
+
+    const control: FormControl = new FormControl('initial');
     component.control = control;
-    expect(component.remainingCharacterCount).toBe(500);
+    expect(component['remainingCharacterCount']()).toBe(93); // 100 - 7
+
+    control.setValue('new value');
+    expect(component['remainingCharacterCount']()).toBe(91); // 100 - 9
+  });
+
+  it('should handle null and undefined values in valueChanges subscription', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+    component.maxCharacterLimit = 100;
+
+    const control: FormControl = new FormControl('initial');
+    component.control = control;
+    expect(component['remainingCharacterCount']()).toBe(93); // 100 - 7
+
+    control.setValue(null);
+    expect(component['remainingCharacterCount']()).toBe(100); // 100 - 0 (empty string)
+
+    control.setValue(undefined);
+    expect(component['remainingCharacterCount']()).toBe(100); // 100 - 0 (empty string)
+
+    control.setValue('');
+    expect(component['remainingCharacterCount']()).toBe(100); // 100 - 0
   });
 });

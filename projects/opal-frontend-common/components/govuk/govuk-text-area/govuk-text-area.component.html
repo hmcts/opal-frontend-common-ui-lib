@@ -28,7 +28,7 @@
   ></textarea>
   @if (characterCountEnabled) {
     <div [id]="inputId + '-hint'" class="govuk-hint">
-      You have {{ remainingCharacterCount }} character{{ remainingCharacterCount === 1 ? '' : 's' }} remaining
+      You have {{ remainingCharacterCount() }} character{{ remainingCharacterCount() === 1 ? '' : 's' }} remaining
     </div>
   }
 </div>
