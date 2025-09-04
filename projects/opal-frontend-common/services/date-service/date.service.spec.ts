@@ -482,8 +482,14 @@ describe('DateServiceService', () => {
   });
 
   it('should return a date object with the correct age properties for an adult', () => {
-    spyOn(service, 'getDateNow').and.returnValue(DateTime.fromISO('2024-05-20'));
-    const dateOfBirth = '19/08/1990';
+    const fixedNow = DateTime.fromISO('2024-05-20');
+    // Stub both the service clock and Luxon's global clock used by calculateAge
+    spyOn(service, 'getDateNow').and.returnValue(fixedNow);
+    spyOn(DateTime, 'now').and.returnValue(fixedNow as DateTime<true>);
+
+    // Create a DOB that is exactly 34 years before the fixed date (same month/day)
+    const dateOfBirth = fixedNow.minus({ years: 34 }).toFormat('dd/MM/yyyy');
+
     const result = service.getAgeObject(dateOfBirth);
     expect(result).toEqual({
       value: 34,
@@ -492,8 +498,14 @@ describe('DateServiceService', () => {
   });
 
   it('should return a date object with the correct age properties for an youth', () => {
-    spyOn(service, 'getDateNow').and.returnValue(DateTime.fromISO('2024-05-20'));
-    const dateOfBirth = '19/08/2009';
+    const fixedNow = DateTime.fromISO('2024-05-20');
+    // Stub both the service clock and Luxon's global clock used by calculateAge
+    spyOn(service, 'getDateNow').and.returnValue(fixedNow);
+    spyOn(DateTime, 'now').and.returnValue(fixedNow as DateTime<true>);
+
+    // Create a DOB that is exactly 15 years before the fixed date (same month/day)
+    const dateOfBirth = fixedNow.minus({ years: 15 }).toFormat('dd/MM/yyyy');
+
     const result = service.getAgeObject(dateOfBirth);
     expect(result).toEqual({
       value: 15,

@@ -34,7 +34,7 @@ import { MojAlertIconComponent } from '@hmcts/opal-frontend-common/components/mo
 You can use the alert component in your template as follows:
 
 ```html
-  <opal-lib-moj-alert type="success" ariaLabel="hello" [showDismiss]="true"></opal-lib-moj-alert>
+  <opal-lib-moj-alert type="success" ariaLabel="hello" [showDismiss]="true" (dismissed)="handleDismissedAlert()></opal-lib-moj-alert>
 ```
 
 You can add optional attachments in your template as follows:
@@ -81,7 +81,10 @@ You additionally have to specify the select tag for each content projected compo
 
 ## Outputs
 
-There are no custom outputs for this component.
+| Output        | Type     | Description                                                            |
+| ------------  | -------- | --------------------------------------------------------------------   |
+| `dismissed`   | `Event`  | Emits an event for the parent to capture when the alert is dismissed   |
+
 
 ## Methods
 

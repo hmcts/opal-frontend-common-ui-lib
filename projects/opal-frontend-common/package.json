@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.32",
+  "version": "0.0.37",
   "license": "MIT",
   "peerDependencies": {
     "@angular/common": "^18.2.0 || ^19.0.0 || ^20.0.0",
@@ -43,6 +43,9 @@
     },
     "./components/abstract/abstract-form-parent-base": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-form-parent-base.mjs"
+    },
+    "./components/abstract/abstract-nested-form-base": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-nested-form-base.mjs"
     },
     "./components/abstract/abstract-sortable-table": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-sortable-table.mjs"
@@ -331,6 +334,9 @@
     },
     "./guards/has-flow-state": {
       "import": "./fesm2022/hmcts-opal-frontend-common-guards-has-flow-state.mjs"
+    },
+    "./guards/has-url-state-match": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-guards-has-url-state-match.mjs"
     },
     "./guards/helpers": {
       "import": "./fesm2022/hmcts-opal-frontend-common-guards-helpers.mjs"
