@@ -329,9 +329,9 @@
     "@angular-eslint/bundled-angular-compiler" "20.2.0"
 
 "@angular/animations@^20.1.4":
-  version "20.2.3"
-  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-20.2.3.tgz#d57fa60320d8c83afcc72854db737848783ae175"
-  integrity sha512-cyON3oVfaotz8d8DHP3uheC/XDG2gJD8aiyuG/SEAZ2X1S/tAHdVetESbDZM830lLdi+kB/3GBrMbWCCpMWD7Q==
+  version "20.2.4"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-20.2.4.tgz#575efa1d7935c7ffe24be60853a8c8ad04a66e55"
+  integrity sha512-mXiTlXZgAF4uYonOt7l2w7uvLLTJEk6jqs3H291bYuoDRM8R166UjN7ygAeBmPiJ4TLMyKGkwMQy3b1Vvw4RQA==
   dependencies:
     tslib "^2.3.0"
 
@@ -394,16 +394,16 @@
     zod "3.25.76"
 
 "@angular/common@^20.1.4":
-  version "20.2.3"
-  resolved "https://registry.yarnpkg.com/@angular/common/-/common-20.2.3.tgz#50b9007531e330c04e9c886f591ac49807bdf8c3"
-  integrity sha512-QLffWL8asy2oG7p3jvoNmx9s1V1WuJAm6JmQ1S8J3AN/BxumCJan49Nj8rctP8J4uwJDPQV48hqbXUdl1v7CDg==
+  version "20.2.4"
+  resolved "https://registry.yarnpkg.com/@angular/common/-/common-20.2.4.tgz#3af6feb6d51b229314e2a6ae9c0a30d4cb7a11c7"
+  integrity sha512-mc6Sq1cYjaPJYThnvG6x0f/E27pWksqwaNJxT1RtwhAGc1i2jsc0su6b7e5NnXEgVbdPqu1MZHAEFdXZ5+/MwQ==
   dependencies:
     tslib "^2.3.0"
 
 "@angular/compiler-cli@^20.1.4":
-  version "20.2.3"
-  resolved "https://registry.yarnpkg.com/@angular/compiler-cli/-/compiler-cli-20.2.3.tgz#c3bfef8802b4a566c298352f7082dd7e80523d7e"
-  integrity sha512-adLyPXmKbH8VZJCyOraaha+RPTdAjEBRTqwZ5YkjkViTMMANFkuj1w3pDwQsG3LFknRJ99aym+9neGINeAaI7A==
+  version "20.2.4"
+  resolved "https://registry.yarnpkg.com/@angular/compiler-cli/-/compiler-cli-20.2.4.tgz#7d4af5d21908be1b9e471f4b33edddca9db4e960"
+  integrity sha512-II2hEpfbo73dL12D42DoIHYGiTYAiO9cpwh29BIo8VD054ei4cm0oK+jCyryDQH5T3+wyCWlj0OFjcZ/GmO7HQ==
   dependencies:
     "@babel/core" "7.28.3"
     "@jridgewell/sourcemap-codec" "^1.4.14"
@@ -415,44 +415,44 @@
     yargs "^18.0.0"
 
 "@angular/compiler@^20.1.4":
-  version "20.2.3"
-  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-20.2.3.tgz#0d6c6d689503d993789cedee86fd51ca3bb82246"
-  integrity sha512-vYGDluko8zAIWhQmKijhcGO0tzanwGONDRgbJ01mCqUsQV+XwmDgUUDZKrUY9uve0wxxM3Xvo4/BjEpGpeG75w==
+  version "20.2.4"
+  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-20.2.4.tgz#b1aec5cf2e3bf6d4c3387402e2c49436a7f80f8f"
+  integrity sha512-LQzf+Azb/Ms+BavpCFIat+f1C0gUJpby2RW4yebF3JkBFKfJ7M8d49TQpF8rSnGxMRTf49mln7laz4nBYTLDGA==
   dependencies:
     tslib "^2.3.0"
 
 "@angular/core@^20.1.4":
-  version "20.2.3"
-  resolved "https://registry.yarnpkg.com/@angular/core/-/core-20.2.3.tgz#9a06b401e56a9d5e8e402d3e80d2f17f8147f807"
-  integrity sha512-pFMfg11X8SNNZHcLa+wy4y+eAN3FApt+wPzaxkaXaJ64c+tyHcrPNLotoWgE0jmiw8Idn4gGjKAL/WC0uw5dQA==
+  version "20.2.4"
+  resolved "https://registry.yarnpkg.com/@angular/core/-/core-20.2.4.tgz#17e701d7f3289f75207df6bb261bacf8f6150e69"
+  integrity sha512-8yvfvPDWX8M7o82GBl5P1nlvm1ywQ2XZi5HWj3llKpSJE2XjzhATgPrpKwiNVnpgjZWTOwM11fpoAaRKqQjxTA==
   dependencies:
     tslib "^2.3.0"
 
 "@angular/forms@^20.1.4":
-  version "20.2.3"
-  resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-20.2.3.tgz#c93485f9dd405d09f18a90af6ecb12292e6992f4"
-  integrity sha512-efMn/Hnspg91SzRTm69WpyGq0dgbCtWqUOrR0iZXTR/oDlJw9F/y/nrST36tOBwRNT0QQ2iU5z43iJY1Rl1Bng==
+  version "20.2.4"
+  resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-20.2.4.tgz#4ccb38825258738a8a79aa3364009d6ac5ed59e9"
+  integrity sha512-wbgnW+GALVAmK6hgFegkwlHKw35onvh9Z5A236HCyUySEAOiaD/3CoDg5Hw4iHQAiSU6Fn2NwDiv+W0xki6WDw==
   dependencies:
     tslib "^2.3.0"
 
 "@angular/platform-browser-dynamic@^20.1.4":
-  version "20.2.3"
-  resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-20.2.3.tgz#c93a70d5fd484780af5d6ed97ed6d6606404a488"
-  integrity sha512-uxqLv2yNibd2vf3OObyH4arVfwu+o9FKgkUcnFUdowK31emiZe1nAY8uEe/92JIsMMAoIllI/GAVzWH8dp05mg==
+  version "20.2.4"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-20.2.4.tgz#8b3ccfc5289d37399d9135c6804a66b02fe27bd5"
+  integrity sha512-ktunGTMWuWtnKUicOdXjF8Nc1RInf78YW7TqMV35rF32VXpHwRRKw2M7OKViPk18MlbDE2pc5HCX558BEUla0A==
   dependencies:
     tslib "^2.3.0"
 
 "@angular/platform-browser@^20.1.4":
-  version "20.2.3"
-  resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-20.2.3.tgz#8db6863267c488f581acaa4d45e4369f209ebe48"
-  integrity sha512-oNaRqcGUve+E/CwR9fJb8uern5rb7qNOis1bZRdPXq5rHKaWgDCxUPkoqxRi0EytorntuYsWYPUPW3ul4Ea9tw==
+  version "20.2.4"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-20.2.4.tgz#65d72cffdfc173eea0ea96dcfbe7b47676dbbe1f"
+  integrity sha512-81vzW8xhnJU7AiYJKXLR2MuvawzhRDgwyNkPEep58wty5zNuIUCXdUERJSsXo7m/U2Dg1FUFfqLm4RC2UkqLzA==
   dependencies:
     tslib "^2.3.0"
 
 "@angular/router@^20.1.4":
-  version "20.2.3"
-  resolved "https://registry.yarnpkg.com/@angular/router/-/router-20.2.3.tgz#3a6da3d0ef8caafd34889a7193b40a9d28eca223"
-  integrity sha512-r8yGJcxHPfeIHZOoyCxN2H4nMgBD/k4TVTFaq8MHf5ryy1iLzayIMPJTFaZe7xpwlJJuBYEjBrYfUN38fYKWgA==
+  version "20.2.4"
+  resolved "https://registry.yarnpkg.com/@angular/router/-/router-20.2.4.tgz#150c628965793791033469e6e73d4a27df2ba8b1"
+  integrity sha512-KoduI1o+iBfCBGtXMvmy/qncDIwGxd2hNt2hDkkiYZTftmSg/XUJDxJqN84ckm2WLkdJpR9EirrwfHapJBIZOQ==
   dependencies:
     tslib "^2.3.0"
 
@@ -3545,9 +3545,9 @@ ansi-regex@^5.0.1:
   integrity sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==
 
 ansi-regex@^6.0.1:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-6.2.0.tgz#2f302e7550431b1b7762705fffb52cf1ffa20447"
-  integrity sha512-TKY5pyBkHyADOPYlRT9Lx6F544mPl0vS5Ew7BJ45hA08Q+t3GjbueLliBWN3sMICk6+y7HdyxSzC4bWS8baBdg==
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-6.2.2.tgz#60216eea464d864597ce2832000738a0589650c1"
+  integrity sha512-Bq3SmSpyFHaWjPk8If9yc6svM8c56dB5BAtW4Qbw5jHTwwXXcTLoRMkpDJp6VL0XzlWaCHTXrkFURMYmD0sLqg==
 
 ansi-styles@^4.0.0, ansi-styles@^4.1.0:
   version "4.3.0"
@@ -3556,10 +3556,15 @@ ansi-styles@^4.0.0, ansi-styles@^4.1.0:
   dependencies:
     color-convert "^2.0.1"
 
-ansi-styles@^6.0.0, ansi-styles@^6.1.0, ansi-styles@^6.2.1:
+ansi-styles@^6.0.0, ansi-styles@^6.1.0:
   version "6.2.1"
   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-6.2.1.tgz#0e62320cf99c21afff3b3012192546aacbfb05c5"
   integrity sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==
+
+ansi-styles@^6.2.1:
+  version "6.2.3"
+  resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-6.2.3.tgz#c044d5dcc521a076413472597a1acb1f103c4041"
+  integrity sha512-4Dj6M28JB+oAH8kFkTLUo+a2jwOFkuqb3yucU0CANcRRUbxS0cP0nZYCGjcc3BNXwRIsUVmDGgzawme7zvJHvg==
 
 ansis@^4.0.0:
   version "4.1.0"
@@ -7711,10 +7716,17 @@ strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   dependencies:
     ansi-regex "^5.0.1"
 
-strip-ansi@^7.0.1, strip-ansi@^7.1.0:
+strip-ansi@^7.0.1:
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-7.1.0.tgz#d5b6568ca689d8561370b0707685d22434faff45"
   integrity sha512-iq6eVVI64nQQTRYq2KtEg2d2uU7LElhTJwsH4YzIHZshxlgZms/wIc4VoDQTlG/IvVIrBKG06CrZnp0qv7hkcQ==
+  dependencies:
+    ansi-regex "^6.0.1"
+
+strip-ansi@^7.1.0:
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-7.1.2.tgz#132875abde678c7ea8d691533f2e7e22bb744dba"
+  integrity sha512-gmBGslpoQJtgnMAvOVqGZpEz9dyoKTCzy2nfz/n8aIFhN/jCE/rCmcxabB6jOOHV+0WNnylOxaxBQPSvcWklhA==
   dependencies:
     ansi-regex "^6.0.1"
 
@@ -8264,9 +8276,9 @@ wrap-ansi@^8.1.0:
     strip-ansi "^7.0.1"
 
 wrap-ansi@^9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-9.0.0.tgz#1a3dc8b70d85eeb8398ddfb1e4a02cd186e58b3e"
-  integrity sha512-G8ura3S+3Z2G+mkgNRq8dqaFZAuxfsxpBB8OCTGRTCtp+l/v9nbFNmCUP1BZMts3G1142MsZfn6eeUKrr4PD1Q==
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-9.0.1.tgz#d2d51f1abed815c3a65d1319b82e60d43286808a"
+  integrity sha512-n84lsZmcV2vUTRThlsxQhujZcDja2KIPCsEKZYP04cGtceS1vXTCboD7/zIJcZgEL9r3PdYrIX5KqX/DDWyMKw==
   dependencies:
     ansi-styles "^6.2.1"
     string-width "^7.0.0"
