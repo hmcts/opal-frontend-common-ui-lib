@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "license": "MIT",
   "peerDependencies": {
     "@angular/common": "^18.2.0 || ^19.0.0 || ^20.0.0",
@@ -46,6 +46,15 @@
     },
     "./components/abstract/abstract-nested-form-base": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-nested-form-base.mjs"
+    },
+    "./components/abstract/abstract-selectable-table": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-selectable-table.mjs"
+    },
+    "./components/abstract/abstract-selectable-table/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-selectable-table-interfaces.mjs"
+    },
+    "./components/abstract/abstract-selectable-table/types": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-selectable-table-types.mjs"
     },
     "./components/abstract/abstract-sortable-table": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-sortable-table.mjs"
@@ -289,6 +298,9 @@
     },
     "./components/moj/moj-header/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-header-interfaces.mjs"
+    },
+    "./components/moj/moj-multi-select": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-multi-select.mjs"
     },
     "./components/moj/moj-notification-badge": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-notification-badge.mjs"
