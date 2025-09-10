@@ -270,18 +270,25 @@ describe('AbstractSelectableTableComponent (TestBed style)', () => {
   });
 
   it('selectedRowsComputed returns the selected row objects', () => {
-    if (!component) { fail('component is null'); return; }
+    if (!component) {
+      fail('component is null');
+      return;
+    }
 
     component.toggleRow(TEST_ROWS[0], true); // id 1
     component.toggleRow(TEST_ROWS[2], true); // id 3
 
     const rows = component.selectedRowsComputed();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const ids = rows.map((r: any) => r.id);
     expect(new Set(ids)).toEqual(new Set([1, 3]));
   });
 
   it('isAllVisibleSelected() returns false when there are no visible rows', () => {
-    if (!component) { fail('component is null'); return; }
+    if (!component) {
+      fail('component is null');
+      return;
+    }
 
     // Make page size 0 so visible slice is empty
     component.itemsPerPageSignal.set(0);
@@ -290,7 +297,10 @@ describe('AbstractSelectableTableComponent (TestBed style)', () => {
   });
 
   it('toggleRow is a no-op when deselecting an unselected row (branch coverage)', () => {
-    if (!component) { fail('component is null'); return; }
+    if (!component) {
+      fail('component is null');
+      return;
+    }
 
     // Ensure the row is not selected
     expect(component.rowIsSelected(TEST_ROWS[1])).toBeFalse();
