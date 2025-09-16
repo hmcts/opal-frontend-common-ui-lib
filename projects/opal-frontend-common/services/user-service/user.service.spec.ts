@@ -36,19 +36,26 @@ describe('UserService', () => {
     req.flush(mockUserState);
   });
 
-  it('should set undefined user_id when payload has malformed id type', () => {
+  it('should error on malformed id type and not update the store', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const malformed = { ...(USER_STATE_MOCK as unknown as Record<string, any>), user_id: '500000000' };
 
-    service.getUserState().subscribe((response) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      expect(response.user_id as unknown as any).toBeUndefined();
-      expect(globalStore.userState()?.username).toEqual(USER_STATE_MOCK.username);
+    let captured: unknown;
+    service.getUserState().subscribe({
+      next: () => fail('expected error'),
+      error: (e) => (captured = e),
     });
 
     const req = httpMock.expectOne(USER_ENDPOINTS.userState);
     expect(req.request.method).toBe('GET');
+    // flush a structurally invalid payload (string id instead of number)
     req.flush(malformed);
+
+    // The service validates and throws Error('Invalid user state payload')
+    expect(captured instanceof Error && (captured as Error).message === 'Invalid user state payload').toBeTrue();
+
+    // Store must not be updated on validation error
+    expect(globalStore.userState()).toEqual({} as IUserState);
   });
 
   it('should retry failed requests up to MAX_RETRIES and then succeed', fakeAsync(() => {
