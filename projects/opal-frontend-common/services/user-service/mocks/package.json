@@ -1,0 +1,5 @@
+{
+  "sideEffects": false,
+  "module": "../../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-services-user-service-mocks.mjs",
+  "typings": "../../../../../dist/opal-frontend-common/services/user-service/mocks/index.d.ts"
+}

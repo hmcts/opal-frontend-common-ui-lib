@@ -2,19 +2,19 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot, UrlSegment } from '@angular/router';
 import { userStateResolver } from './user-state.resolver';
 import { of } from 'rxjs';
-import { SessionService } from '@hmcts/opal-frontend-common/services/session-service';
-import { ISessionUserState } from '@hmcts/opal-frontend-common/services/session-service/interfaces';
-import { SESSION_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/services/session-service/mocks';
+import { IUserState } from '@hmcts/opal-frontend-common/services/user-service/interfaces';
+import { UserService } from '@hmcts/opal-frontend-common/services/user-service';
+import { USER_STATE_MOCK } from 'projects/opal-frontend-common/services/user-service/mocks/user-state.mock';
 
 describe('userStateResolver', () => {
-  const executeResolver: ResolveFn<ISessionUserState> = (...resolverParameters) =>
+  const executeResolver: ResolveFn<IUserState> = (...resolverParameters) =>
     TestBed.runInInjectionContext(() => userStateResolver(...resolverParameters));
-  let mockSessionService: jasmine.SpyObj<SessionService>;
+  let mockUserService: jasmine.SpyObj<UserService>;
   beforeEach(() => {
-    mockSessionService = jasmine.createSpyObj(SessionService, ['getUserState']);
+    mockUserService = jasmine.createSpyObj(UserService, ['getUserState']);
 
     TestBed.configureTestingModule({
-      providers: [{ provide: SessionService, useValue: mockSessionService }],
+      providers: [{ provide: UserService, useValue: mockUserService }],
     });
   });
 
@@ -23,8 +23,8 @@ describe('userStateResolver', () => {
   });
 
   it('should resolve user state', async () => {
-    const mockUserState: ISessionUserState = SESSION_USER_STATE_MOCK;
-    mockSessionService.getUserState.and.returnValue(of(mockUserState));
+    const mockUserState: IUserState = USER_STATE_MOCK;
+    mockUserService.getUserState.and.returnValue(of(mockUserState));
 
     const urlPath = 'account-enquiry-search';
     const dummyRoute = new ActivatedRouteSnapshot();
