@@ -9,8 +9,8 @@ import {
   TRANSFER_STATE_LAUNCH_DARKLY_CONFIG_MOCK,
 } from '@hmcts/opal-frontend-common/services/transfer-state-service/mocks';
 import { LAUNCH_DARKLY_CHANGE_FLAGS_MOCK } from '@hmcts/opal-frontend-common/services/launch-darkly-service/mocks';
-import { IUserState } from '@hmcts/opal-frontend-common/services/user-service/interfaces';
-import { USER_STATE_MOCK } from 'projects/opal-frontend-common/services/user-service/mocks/user-state.mock';
+import { IOpalUserState } from '@hmcts/opal-frontend-common/services/opal-user-service/interfaces';
+import { OPAL_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/services/opal-user-service/mocks';
 
 describe('GlobalStore', () => {
   let store: GlobalStoreType;
@@ -23,7 +23,7 @@ describe('GlobalStore', () => {
     expect(store.authenticated()).toBeFalse();
     expect(store.error()).toEqual({ error: false, message: '' });
     expect(store.featureFlags()).toEqual({});
-    expect(store.userState()).toEqual({} as IUserState);
+    expect(store.userState()).toEqual({} as IOpalUserState);
     expect(store.ssoEnabled()).toBeFalse();
     expect(store.launchDarklyConfig()).toEqual({} as ITransferStateLaunchDarklyConfig);
     expect(store.tokenExpiry()).toEqual({} as ISessionTokenExpiry);
@@ -47,7 +47,7 @@ describe('GlobalStore', () => {
   });
 
   it('should update user state', () => {
-    const userState = USER_STATE_MOCK;
+    const userState = OPAL_USER_STATE_MOCK;
     store.setUserState(userState);
     expect(store.userState()).toEqual(userState);
   });

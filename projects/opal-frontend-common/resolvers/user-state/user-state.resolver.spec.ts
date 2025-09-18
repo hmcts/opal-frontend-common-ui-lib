@@ -2,19 +2,19 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot, UrlSegment } from '@angular/router';
 import { userStateResolver } from './user-state.resolver';
 import { of } from 'rxjs';
-import { IUserState } from '@hmcts/opal-frontend-common/services/user-service/interfaces';
-import { UserService } from '@hmcts/opal-frontend-common/services/user-service';
-import { USER_STATE_MOCK } from 'projects/opal-frontend-common/services/user-service/mocks/user-state.mock';
+import { IOpalUserState } from '@hmcts/opal-frontend-common/services/opal-user-service/interfaces';
+import { OpalUserService } from '@hmcts/opal-frontend-common/services/opal-user-service';
+import { OPAL_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/services/opal-user-service/mocks';
 
 describe('userStateResolver', () => {
-  const executeResolver: ResolveFn<IUserState> = (...resolverParameters) =>
+  const executeResolver: ResolveFn<IOpalUserState> = (...resolverParameters) =>
     TestBed.runInInjectionContext(() => userStateResolver(...resolverParameters));
-  let mockUserService: jasmine.SpyObj<UserService>;
+  let mockOpalUserService: jasmine.SpyObj<OpalUserService>;
   beforeEach(() => {
-    mockUserService = jasmine.createSpyObj(UserService, ['getUserState']);
+    mockOpalUserService = jasmine.createSpyObj(OpalUserService, ['getLoggedInUserState']);
 
     TestBed.configureTestingModule({
-      providers: [{ provide: UserService, useValue: mockUserService }],
+      providers: [{ provide: OpalUserService, useValue: mockOpalUserService }],
     });
   });
 
@@ -23,8 +23,8 @@ describe('userStateResolver', () => {
   });
 
   it('should resolve user state', async () => {
-    const mockUserState: IUserState = USER_STATE_MOCK;
-    mockUserService.getUserState.and.returnValue(of(mockUserState));
+    const mockUserState: IOpalUserState = OPAL_USER_STATE_MOCK;
+    mockOpalUserService.getLoggedInUserState.and.returnValue(of(mockUserState));
 
     const urlPath = 'account-enquiry-search';
     const dummyRoute = new ActivatedRouteSnapshot();

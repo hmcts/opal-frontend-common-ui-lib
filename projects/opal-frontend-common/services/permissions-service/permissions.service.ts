@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { IUserState, IUserBusinessUnitUser } from '@hmcts/opal-frontend-common/services/user-service/interfaces';
+import {
+  IOpalUserState,
+  IOpalUserBusinessUnitUser,
+} from '@hmcts/opal-frontend-common/services/opal-user-service/interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +15,7 @@ export class PermissionsService {
    * If the unique permission IDs have not been stored yet, it calculates them based on the user's roles and permissions.
    * @returns An array of unique permission IDs.
    */
-  public getUniquePermissions(userState: IUserState | null): number[] {
+  public getUniquePermissions(userState: IOpalUserState | null): number[] {
     const roles = userState ? userState['business_unit_users'] : null;
 
     if (!this.storedUniquePermissionIds.length && roles) {
@@ -36,7 +39,7 @@ export class PermissionsService {
    * @returns `true` if the user has the specified permission in any of their roles,
    *          or if no roles are provided; otherwise, returns `false`.
    */
-  public hasPermissionAccess(permissionId: number, roles: IUserBusinessUnitUser[]): boolean {
+  public hasPermissionAccess(permissionId: number, roles: IOpalUserBusinessUnitUser[]): boolean {
     if (roles?.length) {
       return roles.some((role) => role.permissions.some((permission) => permission.permission_id === permissionId));
     }
@@ -57,7 +60,7 @@ export class PermissionsService {
   public hasBusinessUnitPermissionAccess(
     permissionId: number,
     businessUnitId: number,
-    roles: IUserBusinessUnitUser[],
+    roles: IOpalUserBusinessUnitUser[],
   ): boolean {
     if (roles?.length) {
       return roles.some(

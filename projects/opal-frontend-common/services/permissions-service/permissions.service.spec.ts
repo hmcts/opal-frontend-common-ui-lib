@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { PermissionsService } from './permissions.service';
-import { USER_STATE_MOCK } from '../user-service/mocks/user-state.mock';
+import { OPAL_USER_STATE_MOCK } from '../opal-user-service/mocks/opal-user-state.mock';
 
 describe('PermissionsService', () => {
   let service: PermissionsService;
@@ -15,17 +15,25 @@ describe('PermissionsService', () => {
   });
 
   it('should return unique permission IDs', () => {
-    service.getUniquePermissions(USER_STATE_MOCK);
+    service.getUniquePermissions(OPAL_USER_STATE_MOCK);
     expect(service['storedUniquePermissionIds']).toEqual([54, 41]);
   });
 
   it('should return permission access - hasBusinessUnitPermissionAccess', () => {
-    const hasPermissionAccess = service.hasBusinessUnitPermissionAccess(54, 17, USER_STATE_MOCK['business_unit_users']);
+    const hasPermissionAccess = service.hasBusinessUnitPermissionAccess(
+      54,
+      17,
+      OPAL_USER_STATE_MOCK['business_unit_users'],
+    );
     expect(hasPermissionAccess).toBeTrue();
   });
 
   it('should not return permission access - hasBusinessUnitPermissionAccess', () => {
-    const hasPermissionAccess = service.hasBusinessUnitPermissionAccess(54, 99, USER_STATE_MOCK['business_unit_users']);
+    const hasPermissionAccess = service.hasBusinessUnitPermissionAccess(
+      54,
+      99,
+      OPAL_USER_STATE_MOCK['business_unit_users'],
+    );
     expect(hasPermissionAccess).toBeFalse();
   });
 
@@ -35,12 +43,12 @@ describe('PermissionsService', () => {
   });
 
   it('should return permission access - hasPermissionAccess', () => {
-    const hasPermissionAccess = service.hasPermissionAccess(54, USER_STATE_MOCK['business_unit_users']);
+    const hasPermissionAccess = service.hasPermissionAccess(54, OPAL_USER_STATE_MOCK['business_unit_users']);
     expect(hasPermissionAccess).toBeTrue();
   });
 
   it('should not return permission access - hasPermissionAccess', () => {
-    const hasPermissionAccess = service.hasPermissionAccess(0, USER_STATE_MOCK['business_unit_users']);
+    const hasPermissionAccess = service.hasPermissionAccess(0, OPAL_USER_STATE_MOCK['business_unit_users']);
     expect(hasPermissionAccess).toBeFalse();
   });
 

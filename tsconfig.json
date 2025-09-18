@@ -393,12 +393,14 @@
         "./dist/opal-frontend-common/services/transformation-service/interfaces"
       ],
       "@hmcts/opal-frontend-common/services/utils-service": ["./dist/opal-frontend-common/services/utils-service"],
-      "@hmcts/opal-frontend-common/services/user-service": ["./dist/opal-frontend-common/services/user-service"],
-      "@hmcts/opal-frontend-common/services/user-service/interfaces": [
-        "./dist/opal-frontend-common/services/user-service/interfaces"
+      "@hmcts/opal-frontend-common/services/opal-user-service": [
+        "./dist/opal-frontend-common/services/opal-user-service"
       ],
-      "@hmcts/opal-frontend-common/services/user-service/mocks": [
-        "./dist/opal-frontend-common/services/user-service/mocks"
+      "@hmcts/opal-frontend-common/services/opal-user-service/interfaces": [
+        "./dist/opal-frontend-common/services/opal-user-service/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/services/opal-user-service/mocks": [
+        "./dist/opal-frontend-common/services/opal-user-service/mocks"
       ],
       "@hmcts/opal-frontend-common/stores/global": ["./dist/opal-frontend-common/stores/global"],
       "@hmcts/opal-frontend-common/stores/global/interfaces": ["./dist/opal-frontend-common/stores/global/interfaces"],

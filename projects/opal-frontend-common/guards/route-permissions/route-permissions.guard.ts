@@ -3,14 +3,14 @@ import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 import { catchError, map, of } from 'rxjs';
 import { PermissionsService } from '@hmcts/opal-frontend-common/services/permissions-service';
 import { PAGES_ROUTING_PATHS } from '@hmcts/opal-frontend-common/pages/routing/constants';
-import { UserService } from '@hmcts/opal-frontend-common/services/user-service';
+import { OpalUserService } from '@hmcts/opal-frontend-common/services/opal-user-service';
 
 export const routePermissionsGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const permissionService = inject(PermissionsService);
-  const userService = inject(UserService);
+  const opalUserService = inject(OpalUserService);
   const router = inject(Router);
 
-  return userService.getUserState().pipe(
+  return opalUserService.getLoggedInUserState().pipe(
     map((resp) => {
       const routePermissionIds: number[] = route.data['routePermissionId'] ?? []; // Ensure it's an array
       const accessDeniedPath = route.data['accessDeniedPath'] ?? `/${PAGES_ROUTING_PATHS.children.accessDenied}`; // Default to the provided path

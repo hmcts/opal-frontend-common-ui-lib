@@ -446,14 +446,14 @@
     "./services/utils-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-utils-service.mjs"
     },
-    "./services/user-service": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-services-user-service.mjs"
+    "./services/opal-user-service": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-opal-user-service.mjs"
     },
-    "./services/user-service/interfaces": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-services-user-service-interfaces.mjs"
+    "./services/opal-user-service/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-opal-user-service-interfaces.mjs"
     },
-    "./services/user-service/mocks": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-services-user-service-mocks.mjs"
+    "./services/opal-user-service/mocks": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-opal-user-service-mocks.mjs"
     },
     "./stores/global": {
       "import": "./fesm2022/hmcts-opal-frontend-common-stores-global.mjs"
