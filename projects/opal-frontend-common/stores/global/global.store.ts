@@ -4,11 +4,9 @@ import {
   ITransferStateLaunchDarklyConfig,
   ITransferStateAppInsightsConfig,
 } from '@hmcts/opal-frontend-common/services/transfer-state-service/interfaces';
-import {
-  ISessionTokenExpiry,
-  ISessionUserState,
-} from '@hmcts/opal-frontend-common/services/session-service/interfaces';
+import { ISessionTokenExpiry } from '@hmcts/opal-frontend-common/services/session-service/interfaces';
 import { IErrorState } from '@hmcts/opal-frontend-common/stores/global/interfaces';
+import { IOpalUserState } from '@hmcts/opal-frontend-common/services/opal-user-service/interfaces';
 
 export const GlobalStore = signalStore(
   { providedIn: 'root' },
@@ -16,7 +14,7 @@ export const GlobalStore = signalStore(
     authenticated: false,
     error: { error: false, message: '' },
     featureFlags: {} as LDFlagSet,
-    userState: {} as ISessionUserState,
+    userState: {} as IOpalUserState,
     ssoEnabled: false,
     launchDarklyConfig: {} as ITransferStateLaunchDarklyConfig,
     appInsightsConfig: {} as ITransferStateAppInsightsConfig,
@@ -32,7 +30,7 @@ export const GlobalStore = signalStore(
     setFeatureFlags: (featureFlags: LDFlagSet) => {
       patchState(store, { featureFlags });
     },
-    setUserState: (userState: ISessionUserState) => {
+    setUserState: (userState: IOpalUserState) => {
       patchState(store, { userState });
     },
     setSsoEnabled: (ssoEnabled: boolean) => {
