@@ -1107,6 +1107,7 @@ describe('AbstractFormBaseComponent', () => {
     }
 
     // Ensure there is NO fieldErrors mapping for the FormRecord key
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     component['fieldErrors'] = {} as any;
 
     // Create a form with a FormRecord and attach a record-level error
