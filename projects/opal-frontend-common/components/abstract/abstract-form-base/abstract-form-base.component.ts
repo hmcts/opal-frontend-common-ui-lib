@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output, inject } from '@angular/core';
-import { FormArray, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, FormRecord, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { IAbstractFormBaseFieldError } from './interfaces/abstract-form-base-field-error.interface';
@@ -131,6 +131,18 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
       .filter((controlName) => formControls[controlName].invalid)
       .map((controlName) => {
         const control = formControls[controlName];
+
+        if (control instanceof FormRecord) {
+          // We only support FormControls in FormRecords
+          const recordFieldErrorDetails = this.getFieldErrorDetails([...controlPath, controlName]);
+
+          return {
+            fieldId: controlName,
+            message: recordFieldErrorDetails?.message ?? null,
+            priority: recordFieldErrorDetails?.priority ?? 999999999,
+            type: recordFieldErrorDetails?.type ?? null,
+          };
+        }
 
         if (control instanceof FormGroup) {
           return this.getFormErrors(control, [...controlPath, controlName]);

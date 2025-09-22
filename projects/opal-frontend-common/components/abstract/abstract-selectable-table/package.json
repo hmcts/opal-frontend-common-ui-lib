@@ -1,5 +1,0 @@
-{
-  "sideEffects": false,
-  "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-selectable-table.mjs",
-  "typings": "../../../../dist/opal-frontend-common/components/abstract/abstract-selectable-table/index.d.ts"
-}

@@ -51,15 +51,6 @@
       "@hmcts/opal-frontend-common/components/abstract/abstract-form-parent-base": [
         "./dist/opal-frontend-common/components/abstract/abstract-form-parent-base"
       ],
-      "@hmcts/opal-frontend-common/components/abstract/abstract-selectable-table": [
-        "./dist/opal-frontend-common/components/abstract/abstract-selectable-table"
-      ],
-      "@hmcts/opal-frontend-common/components/abstract/abstract-selectable-table/interfaces": [
-        "./dist/opal-frontend-common/components/abstract/abstract-selectable-table/interfaces"
-      ],
-      "@hmcts/opal-frontend-common/components/abstract/abstract-selectable-table/types": [
-        "./dist/opal-frontend-common/components/abstract/abstract-selectable-table/types"
-      ],
       "@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table": [
         "./dist/opal-frontend-common/components/abstract/abstract-sortable-table"
       ],
@@ -293,9 +284,6 @@
       ],
       "@hmcts/opal-frontend-common/components/moj/moj-header/interfaces": [
         "./dist/opal-frontend-common/components/moj/moj-header/interfaces"
-      ],
-      "@hmcts/opal-frontend-common/components/moj/moj-multi-select": [
-        "./dist/opal-frontend-common/components/moj/moj-multi-select"
       ],
       "@hmcts/opal-frontend-common/components/moj/moj-notification-badge": [
         "./dist/opal-frontend-common/components/moj/moj-notification-badge"

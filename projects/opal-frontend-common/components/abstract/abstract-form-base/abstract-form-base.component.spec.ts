@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AbstractFormBaseComponent } from './abstract-form-base.component';
-import { FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, FormRecord, ValidatorFn, Validators } from '@angular/forms';
 import { IAbstractFormBaseFieldError } from './interfaces/abstract-form-base-field-error.interface';
 import { IAbstractFormBaseFormError } from './interfaces/abstract-form-base-form-error.interface';
 import { IAbstractFormBaseFormErrorSummaryMessage } from '../interfaces/abstract-form-base-form-error-summary-message.interface';
@@ -1057,5 +1057,75 @@ describe('AbstractFormBaseComponent', () => {
     expect(component.formControlErrorMessages).toEqual({});
     expect(component.formErrorSummaryMessage).toEqual([]);
     expect(component.formErrors).toEqual([]);
+  });
+
+  it('should return an error summary entry for a FormRecord control when the record has errors', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    // Arrange: set fieldErrors metadata for the FormRecord key
+    component['fieldErrors'] = {
+      myRecord: {
+        required: {
+          message: 'Please select at least one item',
+          priority: 1,
+        },
+      },
+    };
+
+    // Create a form with a FormRecord and attach a record-level error
+    component.form = new FormGroup({
+      myRecord: new FormRecord({}),
+    });
+
+    // Mark the FormRecord as invalid via a record-level error
+    const record = component.form.get('myRecord');
+    record?.setErrors({ required: true });
+
+    fixture.detectChanges();
+
+    // Act: collect errors
+    const result = component['getFormErrors'](component.form);
+
+    // Assert: one error entry for the FormRecord itself, using the mapped message
+    expect(result).toEqual([
+      {
+        fieldId: 'myRecord',
+        message: 'Please select at least one item',
+        priority: 1,
+        type: 'required',
+      },
+    ]);
+  });
+
+  it('should create a default FormRecord error object (null, 999999999, null) and then filter it out when no fieldErrors mapping exists', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    // Ensure there is NO fieldErrors mapping for the FormRecord key
+    component['fieldErrors'] = {} as any;
+
+    // Create a form with a FormRecord and attach a record-level error
+    component.form = new FormGroup({
+      myRecord: new FormRecord({}),
+    });
+
+    // Mark the FormRecord as invalid via a record-level error
+    const record = component.form.get('myRecord');
+    record?.setErrors({ required: true });
+
+    fixture.detectChanges();
+
+    // Act: collect errors
+    const result = component['getFormErrors'](component.form);
+
+    // Because there is no fieldErrors mapping, the constructed entry will have
+    // message=null, priority=999999999, type=null and then be FILTERED OUT
+    // by the final `filter(item => item?.message !== null)` step.
+    expect(result).toEqual([]);
   });
 });
