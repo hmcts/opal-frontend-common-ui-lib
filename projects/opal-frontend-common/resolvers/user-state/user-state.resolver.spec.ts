@@ -2,19 +2,19 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot, UrlSegment } from '@angular/router';
 import { userStateResolver } from './user-state.resolver';
 import { of } from 'rxjs';
-import { SessionService } from '@hmcts/opal-frontend-common/services/session-service';
-import { ISessionUserState } from '@hmcts/opal-frontend-common/services/session-service/interfaces';
-import { SESSION_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/services/session-service/mocks';
+import { IOpalUserState } from '@hmcts/opal-frontend-common/services/opal-user-service/interfaces';
+import { OpalUserService } from '@hmcts/opal-frontend-common/services/opal-user-service';
+import { OPAL_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/services/opal-user-service/mocks';
 
 describe('userStateResolver', () => {
-  const executeResolver: ResolveFn<ISessionUserState> = (...resolverParameters) =>
+  const executeResolver: ResolveFn<IOpalUserState> = (...resolverParameters) =>
     TestBed.runInInjectionContext(() => userStateResolver(...resolverParameters));
-  let mockSessionService: jasmine.SpyObj<SessionService>;
+  let mockOpalUserService: jasmine.SpyObj<OpalUserService>;
   beforeEach(() => {
-    mockSessionService = jasmine.createSpyObj(SessionService, ['getUserState']);
+    mockOpalUserService = jasmine.createSpyObj(OpalUserService, ['getLoggedInUserState']);
 
     TestBed.configureTestingModule({
-      providers: [{ provide: SessionService, useValue: mockSessionService }],
+      providers: [{ provide: OpalUserService, useValue: mockOpalUserService }],
     });
   });
 
@@ -23,8 +23,8 @@ describe('userStateResolver', () => {
   });
 
   it('should resolve user state', async () => {
-    const mockUserState: ISessionUserState = SESSION_USER_STATE_MOCK;
-    mockSessionService.getUserState.and.returnValue(of(mockUserState));
+    const mockUserState: IOpalUserState = OPAL_USER_STATE_MOCK;
+    mockOpalUserService.getLoggedInUserState.and.returnValue(of(mockUserState));
 
     const urlPath = 'account-enquiry-search';
     const dummyRoute = new ActivatedRouteSnapshot();

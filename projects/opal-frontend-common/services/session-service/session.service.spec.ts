@@ -1,12 +1,8 @@
 import { fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import {
-  ISessionTokenExpiry,
-  ISessionUserState,
-} from '@hmcts/opal-frontend-common/services/session-service/interfaces';
+import { ISessionTokenExpiry } from '@hmcts/opal-frontend-common/services/session-service/interfaces';
 import { SESSION_TOKEN_EXPIRY_MOCK } from './mocks/session-token-expiry.mock';
-import { SESSION_USER_STATE_MOCK } from './mocks/session-user-state.mock';
 import { SessionService } from './session.service';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
@@ -39,75 +35,6 @@ describe('SessionService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
-  });
-
-  it('should return the user state', () => {
-    const mockUserState: ISessionUserState = SESSION_USER_STATE_MOCK;
-
-    service.getUserState().subscribe((response) => {
-      expect(response).toEqual(mockUserState);
-      expect(globalStore.userState()).toEqual(mockUserState);
-    });
-
-    const req = httpMock.expectOne(SESSION_ENDPOINTS.userState);
-    expect(req.request.method).toBe('GET');
-    req.flush(mockUserState);
-  });
-
-  it('should return cached response ', () => {
-    const mockUserState: ISessionUserState = SESSION_USER_STATE_MOCK;
-
-    service.getUserState().subscribe((response) => {
-      expect(response).toEqual(mockUserState);
-      expect(globalStore.userState()).toEqual(mockUserState);
-    });
-
-    const req = httpMock.expectOne(SESSION_ENDPOINTS.userState);
-    expect(req.request.method).toBe('GET');
-    req.flush(mockUserState);
-
-    // Make a second call
-    service.getUserState().subscribe((response) => {
-      expect(response).toEqual(mockUserState);
-      expect(globalStore.userState()).toEqual(mockUserState);
-    });
-
-    // No new request should be made since the response is cached
-    httpMock.expectNone(SESSION_ENDPOINTS.userState);
-  });
-
-  it('should do a new request if the cached response is empty ', () => {
-    const mockUserState: ISessionUserState = SESSION_USER_STATE_MOCK;
-
-    service.getUserState().subscribe((response) => {
-      expect(response).toEqual(mockUserState);
-      expect(globalStore.userState()).toEqual(mockUserState);
-    });
-
-    let req = httpMock.expectOne(SESSION_ENDPOINTS.userState);
-    expect(req.request.method).toBe('GET');
-    req.flush(mockUserState);
-
-    // Make a second call
-    service.getUserState().subscribe((response) => {
-      expect(response).toEqual(mockUserState);
-      expect(globalStore.userState()).toEqual(mockUserState);
-    });
-
-    // No new request should be made since the response is cached
-    httpMock.expectNone(SESSION_ENDPOINTS.userState);
-
-    // Clear the cache
-    globalStore.setUserState({} as ISessionUserState);
-
-    // Make a third call
-    service.getUserState().subscribe((response) => {
-      expect(response).toEqual(mockUserState);
-    });
-
-    req = httpMock.expectOne(SESSION_ENDPOINTS.userState);
-    expect(req.request.method).toBe('GET');
-    req.flush(mockUserState);
   });
 
   it('should return the token expiry information', () => {

@@ -13,10 +13,10 @@ import { Observable, of, throwError } from 'rxjs';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { handleObservableResult } from '../helpers/handle-observable-result';
 import { PermissionsService } from '@hmcts/opal-frontend-common/services/permissions-service';
-import { SessionService } from '@hmcts/opal-frontend-common/services/session-service';
 import { PAGES_ROUTING_PATHS } from '@hmcts/opal-frontend-common/pages/routing/constants';
-import { SESSION_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/services/session-service/mocks';
 import { ROUTE_PERMISSIONS_MOCK } from './mocks/route-permissions.mock';
+import { OpalUserService } from '@hmcts/opal-frontend-common/services/opal-user-service';
+import { OPAL_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/services/opal-user-service/mocks';
 
 async function runRoutePermissionGuard(
   guard: typeof routePermissionsGuard,
@@ -39,7 +39,7 @@ async function runRoutePermissionGuard(
 
 describe('routePermissionsGuard', () => {
   let mockPermissionsService: jasmine.SpyObj<PermissionsService>;
-  let mockSessionService: jasmine.SpyObj<SessionService>;
+  let mockOpalUserService: jasmine.SpyObj<OpalUserService>;
   let mockRouter: jasmine.SpyObj<Router>;
 
   const urlPath = '/manual-account-creation';
@@ -47,8 +47,8 @@ describe('routePermissionsGuard', () => {
   beforeEach(() => {
     mockPermissionsService = jasmine.createSpyObj(routePermissionsGuard, ['getUniquePermissions']);
 
-    mockSessionService = jasmine.createSpyObj(routePermissionsGuard, ['getUserState']);
-    mockSessionService.getUserState.and.returnValue(of(SESSION_USER_STATE_MOCK));
+    mockOpalUserService = jasmine.createSpyObj(routePermissionsGuard, ['getLoggedInUserState']);
+    mockOpalUserService.getLoggedInUserState.and.returnValue(of(OPAL_USER_STATE_MOCK));
 
     mockRouter = jasmine.createSpyObj(routePermissionsGuard, ['navigate', 'createUrlTree', 'parseUrl']);
     mockRouter.parseUrl.and.callFake((url: string) => {
@@ -70,8 +70,8 @@ describe('routePermissionsGuard', () => {
           useValue: mockPermissionsService,
         },
         {
-          provide: SessionService,
-          useValue: mockSessionService,
+          provide: OpalUserService,
+          useValue: mockOpalUserService,
         },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
@@ -114,7 +114,7 @@ describe('routePermissionsGuard', () => {
   }));
 
   it('should allow access to login if catches an error ', fakeAsync(async () => {
-    mockSessionService.getUserState.and.returnValue(throwError(() => 'Error'));
+    mockOpalUserService.getLoggedInUserState.and.returnValue(throwError(() => 'Error'));
     const guard = await runRoutePermissionGuard(routePermissionsGuard, ROUTE_PERMISSIONS_MOCK['test-route'], urlPath);
     expect(guard).toBeFalsy();
   }));
