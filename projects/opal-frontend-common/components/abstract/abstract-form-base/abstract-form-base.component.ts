@@ -108,7 +108,7 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
       // Use Array.prototype.at for clarity when accessing the last segment of the control path
       const controlKey = controlPath.at(-1);
       const errorKeys = Object.keys(controlErrors) || [];
-      const fieldErrors = controlKey !== undefined ? this.fieldErrors[controlKey] || {} : {};
+      const fieldErrors = controlKey === undefined ? {} : this.fieldErrors[controlKey] || {};
 
       if (errorKeys.length && Object.keys(fieldErrors).length) {
         return this.getHighestPriorityError(errorKeys, fieldErrors);
