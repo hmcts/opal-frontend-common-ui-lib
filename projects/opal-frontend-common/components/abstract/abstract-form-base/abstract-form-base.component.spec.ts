@@ -1163,6 +1163,7 @@ describe('AbstractFormBaseComponent', () => {
       foo: {
         required: { message: 'Foo is required', priority: 1 },
       },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any;
 
     component.form = new FormGroup({
@@ -1220,10 +1221,12 @@ describe('AbstractFormBaseComponent', () => {
     const emptyPath: (string | number)[] = [];
 
     // Spy on form.get to return a control-like object with errors so the code enters the `if (controlErrors)` block
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const fakeControlWithErrors = { errors: { required: true } } as unknown as any;
     const getSpy = spyOn(component.form, 'get').and.returnValue(fakeControlWithErrors);
 
     // Act
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result = (component as any)['getFieldErrorDetails'](emptyPath);
 
     // Assert
