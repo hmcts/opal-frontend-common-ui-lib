@@ -105,9 +105,10 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
 
     if (controlErrors) {
       /// Get all the error keys
-      const controlKey = controlPath[controlPath.length - 1];
+      // Use Array.prototype.at for clarity when accessing the last segment of the control path
+      const controlKey = controlPath.at(-1);
       const errorKeys = Object.keys(controlErrors) || [];
-      const fieldErrors = this.fieldErrors[controlKey] || {};
+      const fieldErrors = controlKey !== undefined ? this.fieldErrors[controlKey] || {} : {};
 
       if (errorKeys.length && Object.keys(fieldErrors).length) {
         return this.getHighestPriorityError(errorKeys, fieldErrors);
@@ -129,7 +130,7 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
 
     const errorSummary = Object.keys(formControls)
       .filter((controlName) => formControls[controlName].invalid)
-      .map((controlName) => {
+      .flatMap((controlName) => {
         const control = formControls[controlName];
 
         if (control instanceof FormRecord) {
@@ -149,16 +150,13 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
         }
 
         if (control instanceof FormArray) {
-          return control.controls
-            .map((controlItem, index) => {
-              // We only support FormGroups in FormArrays
-              if (controlItem instanceof FormGroup) {
-                return this.getFormErrors(controlItem, [...controlPath, controlName, index]);
-              }
-
-              return [];
-            })
-            .flat();
+          return control.controls.flatMap((controlItem, index) => {
+            // We only support FormGroups in FormArrays
+            if (controlItem instanceof FormGroup) {
+              return this.getFormErrors(controlItem, [...controlPath, controlName, index]);
+            }
+            return [];
+          });
         }
 
         const getFieldErrorDetails = this.getFieldErrorDetails([...controlPath, controlName]);
@@ -171,8 +169,7 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
           priority: getFieldErrorDetails?.priority ?? 999999999,
           type: getFieldErrorDetails?.type ?? null,
         };
-      })
-      .flat();
+      });
 
     // Remove any null errors
     return errorSummary.filter((item) => item?.message !== null);
@@ -188,10 +185,10 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
     this.formErrorSummaryMessage = [];
 
     // Set the form error messages based on the error summary entries
-    formErrors.forEach((entry) => {
+    for (const entry of formErrors) {
       this.formControlErrorMessages[entry.fieldId] = entry.message;
       this.formErrorSummaryMessage.push({ fieldId: entry.fieldId, message: entry.message });
-    });
+    }
   }
 
   /**
@@ -235,7 +232,10 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
   ): number[] {
     return fieldIds.reduce((acc: number[], field) => {
       const index = formErrorSummaryMessage.findIndex((error) => error.fieldId === field);
-      return index !== -1 ? [...acc, index] : acc;
+      if (index === -1) {
+        return acc;
+      }
+      return [...acc, index];
     }, []);
   }
 
@@ -269,13 +269,13 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
     const cleanFormErrors: IAbstractFormBaseFormError[] = [];
     const removedFormErrors: IAbstractFormBaseFormError[] = [];
 
-    formErrors.forEach((error) => {
+    for (const error of formErrors) {
       if (fieldIds.includes(error.fieldId)) {
         removedFormErrors.push(error);
       } else {
         cleanFormErrors.push(error);
       }
-    });
+    }
 
     return [cleanFormErrors, removedFormErrors];
   }
@@ -295,17 +295,17 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
     formErrors: IAbstractFormBaseFormError[],
   ): IAbstractFormBaseFormError[] {
     const manipulatedFields: IAbstractFormBaseFormError[] = [];
-    formErrors.forEach((field) => {
+    for (const field of formErrors) {
       if (fields.includes(field.fieldId)) {
         if (field.type === errorType) {
           manipulatedFields.push({ ...field, message: messageOverride });
         } else {
           manipulatedFields.push(field);
         }
-      } else {
-        manipulatedFields.push(field);
+        continue;
       }
-    });
+      manipulatedFields.push(field);
+    }
 
     return manipulatedFields;
   }
@@ -363,9 +363,9 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
     controls: IAbstractFormArrayControlValidation[],
     index: number,
   ): void {
-    controls.forEach(({ controlName, validators }) => {
+    for (const { controlName, validators } of controls) {
       formGroup.addControl(`${controlName}_${index}`, new FormControl(null, validators));
-    });
+    }
   }
 
   /**
@@ -449,9 +449,9 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
     const formControls = this.form.controls;
     const initialFormControlErrorMessages: IAbstractFormControlErrorMessage = {};
 
-    Object.keys(formControls).forEach((controlName) => {
+    for (const controlName of Object.keys(formControls)) {
       initialFormControlErrorMessages[controlName] = null;
-    });
+    }
 
     this.formControlErrorMessages = initialFormControlErrorMessages;
     this.formErrorSummaryMessage = [];
@@ -555,7 +555,7 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
 
     const navigationExtras = {
       ...(nonRelative ? {} : { relativeTo: this.activatedRoute.parent }),
-      ...(routeData !== undefined ? { state: routeData } : {}),
+      ...(routeData === undefined ? {} : { state: routeData }),
     };
 
     this.router.navigate([route], navigationExtras);
