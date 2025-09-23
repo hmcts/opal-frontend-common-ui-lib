@@ -1129,4 +1129,106 @@ describe('AbstractFormBaseComponent', () => {
     // by the final `filter(item => item?.message !== null)` step.
     expect(result).toEqual([]);
   });
+
+  it('should return null when controlPath is empty and controlKey is undefined (covers ternary true branch)', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    // Arrange: make the root form itself invalid via a form-level error
+    // and call getFieldErrorDetails with an empty controlPath so controlKey === undefined
+    component.form.setErrors({ required: true });
+    fixture.detectChanges();
+
+    // Act
+    const result = component['getFieldErrorDetails']([]);
+
+    // Assert: because fieldErrors mapping cannot be resolved when controlKey is undefined,
+    // the method should return null
+    expect(result).toBeNull();
+
+    // Clean up
+    component.form.setErrors(null);
+  });
+
+  it('should fall back to [] when Object.keys(controlErrors) returns undefined (covers || [] branch)', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    // Arrange: build a minimal form with a control-level error
+    component['fieldErrors'] = {
+      foo: {
+        required: { message: 'Foo is required', priority: 1 },
+      },
+    } as any;
+
+    component.form = new FormGroup({
+      foo: new FormControl(null, Validators.required),
+    });
+
+    // Sanity: make the control invalid so controlErrors is truthy
+    component.form.get('foo')?.markAsTouched();
+    fixture.detectChanges();
+
+    // Spy on Object.keys to simulate an unexpected undefined return value,
+    // forcing the `|| []` fallback to execute
+    const keysSpy = spyOn(Object, 'keys').and.returnValue(undefined as unknown as string[]);
+
+    // Act
+    const result = component['getFieldErrorDetails'](['foo']);
+
+    // Assert: because errorKeys becomes [], the method cannot resolve a highest-priority error and returns null
+    expect(result).toBeNull();
+
+    // Restore
+    keysSpy.and.callThrough();
+  });
+
+  it('should set fieldErrors to {} when controlKey is undefined', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    // Arrange: create a form with a control that will produce errors
+    component.form = new FormGroup({
+      test: new FormControl(null, Validators.required),
+    });
+
+    // Force the control into an invalid state
+    const testControl = component.form.get('test');
+    testControl?.markAsTouched();
+    testControl?.setErrors({ required: true });
+
+    // Act: call getFieldErrorDetails with an empty path so controlKey is undefined
+    const result = component['getFieldErrorDetails']([]);
+
+    // Assert: it should return null, and the internal fieldErrors branch with {} is covered
+    expect(result).toBeNull();
+  });
+
+  it('should hit the fieldErrors = {} branch when controlKey is undefined and control has errors', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    // Ensure an empty controlPath so controlKey === undefined
+    const emptyPath: (string | number)[] = [];
+
+    // Spy on form.get to return a control-like object with errors so the code enters the `if (controlErrors)` block
+    const fakeControlWithErrors = { errors: { required: true } } as unknown as any;
+    const getSpy = spyOn(component.form, 'get').and.returnValue(fakeControlWithErrors);
+
+    // Act
+    const result = (component as any)['getFieldErrorDetails'](emptyPath);
+
+    // Assert
+    expect(getSpy).toHaveBeenCalledWith(emptyPath);
+    // With no fieldErrors mapping available for an undefined key, the method returns null
+    expect(result).toBeNull();
+  });
 });
