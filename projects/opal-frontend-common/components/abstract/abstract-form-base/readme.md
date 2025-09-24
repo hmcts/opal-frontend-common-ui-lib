@@ -77,22 +77,24 @@ The component provides several public properties for form management:
 
 ### Protected Methods
 
-| Method                        | Parameters                                                                             | Description                                                                         |
-| ----------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `createFormControl()`         | `validators: ValidatorFn[], initialValue?: string \| null`                             | Creates a `FormControl` with validators.                                            |
-| `handleErrorMessages()`       | —                                                                                      | Computes `formErrors`, inline messages, and summary from the current form state.    |
-| `hasUnsavedChanges()`         | —                                                                                      | Returns `true` when the form is dirty and not yet submitted.                        |
-| `setInputValue()`             | `value: string, controlPath: string`                                                   | Patches a control’s value and marks it as touched.                                  |
-| `handleDateInputFormErrors()` | —                                                                                      | Collapses day/month/year errors into a single DOB message when appropriate.         |
-| `setInitialErrorMessages()`   | —                                                                                      | Seeds an empty inline error messages object and clears the summary.                 |
-| `rePopulateForm()`            | `state: any`                                                                           | `patchValue` helper to rehydrate from store/state.                                  |
-| `createControl()`             | `controlName: string, validators: ValidatorFn[]`                                       | Adds a new control to the root form.                                                |
-| `updateControl()`             | `controlName: string, validators: ValidatorFn[]`                                       | Updates validators (or creates the control if absent).                              |
-| `removeControl()`             | `controlName: string`                                                                  | Removes a control and its inline error entry.                                       |
-| `removeControlErrors()`       | `controlName: string`                                                                  | Removes inline error entry for a specific control.                                  |
-| `clearAllErrorMessages()`     | —                                                                                      | Clears inline messages, summary, and cached errors; updates form validity silently. |
-| `addControlsToFormGroup()`    | `formGroup: FormGroup, controls: IAbstractFormArrayControlValidation[], index: number` | Utility for dynamically adding indexed controls.                                    |
-| `mergeFieldErrors()`          | `current: IAbstractFormBaseFieldErrors, incoming: IAbstractFormBaseFieldErrors`        | Shallow-by-key merge; override in parents if multiple children need deep merges.    |
+| Method                        | Parameters                                                                                                                                                | Description                                                                                                                |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `createFormControl()`         | `validators: ValidatorFn[], initialValue?: string \| null`                                                                                                | Creates a `FormControl` with validators.                                                                                   |
+| `handleErrorMessages()`       | —                                                                                                                                                         | Computes `formErrors`, inline messages, and summary from the current form state.                                           |
+| `hasUnsavedChanges()`         | —                                                                                                                                                         | Returns `true` when the form is dirty and not yet submitted.                                                               |
+| `setInputValue()`             | `value: string, controlPath: string`                                                                                                                      | Patches a control’s value and marks it as touched.                                                                         |
+| `handleDateInputFormErrors()` | —                                                                                                                                                         | Collapses day/month/year errors into a single DOB message when appropriate.                                                |
+| `setInitialErrorMessages()`   | —                                                                                                                                                         | Seeds an empty inline error messages object and clears the summary.                                                        |
+| `rePopulateForm()`            | `state: any`                                                                                                                                              | `patchValue` helper to rehydrate from store/state.                                                                         |
+| `createControl()`             | `controlName: string, validators: ValidatorFn[]`                                                                                                          | Adds a new control to the root form.                                                                                       |
+| `updateControl()`             | `controlName: string, validators: ValidatorFn[]`                                                                                                          | Updates validators (or creates the control if absent).                                                                     |
+| `removeControl()`             | `controlName: string`                                                                                                                                     | Removes a control and its inline error entry.                                                                              |
+| `removeControlErrors()`       | `controlName: string`                                                                                                                                     | Removes inline error entry for a specific control.                                                                         |
+| `clearAllErrorMessages()`     | —                                                                                                                                                         | Clears inline messages, summary, and cached errors; updates form validity silently.                                        |
+| `addControlsToFormGroup()`    | `formGroup: FormGroup, controls: IAbstractFormArrayControlValidation[], index: number`                                                                    | Utility for dynamically adding indexed controls.                                                                           |
+| `mergeFieldErrors()`          | `current: IAbstractFormBaseFieldErrors, incoming: IAbstractFormBaseFieldErrors`                                                                           | Shallow-by-key merge; override in parents if multiple children need deep merges.                                           |
+| `normaliseRecord()`           | `record: FormRecord<FormControl<T \| null \| undefined>>, opts?: { keyCoerce?: (key: string) => K; valueCoerce?: (value: T \| null \| undefined) => U }`  | Normalises a `FormRecord<T>` into a plain object. Allows coercion of string keys to `K` (e.g. `number`) and values to `U`. |
+| `writeRecord()`               | `record: FormRecord<FormControl<T>>, map: Record<K, T>, opts?: { emitEvent?: boolean; keyCoerce?: (key: K) => string; equals?: (a: T, b: T) => boolean }` | Efficiently writes a map into a `FormRecord<T>` (diffed sets, optional event emission, key coercion, and custom equality). |
 
 ### Example Template Usage:
 
@@ -145,6 +147,55 @@ The component provides several public properties for form management:
   <button type="submit" class="govuk-button">Submit</button>
   <button type="button" class="govuk-button govuk-button--secondary" (click)="handleClearForm()">Clear</button>
 </form>
+```
+
+### Generic FormRecord helpers (examples)
+
+#### 1) Boolean checkbox record (string keys -> number keys)
+
+```ts
+// Convert raw record values to number-keyed map of booleans
+const selections = this.normaliseRecord<boolean, boolean, number>(this.record, {
+  keyCoerce: Number,
+  valueCoerce: (v) => !!v, // coerce null/undefined to false
+});
+
+// Apply a selection map (number keys -> string control names)
+this.writeRecord<boolean, number>(this.record, selectionMap, {
+  emitEvent: false,
+  keyCoerce: (k) => k.toString(),
+});
+```
+
+#### 2) Numeric inputs with default coercions (identity)
+
+```ts
+// Keys stay as strings, values left as numbers
+const values = this.normaliseRecord<number>(this.record);
+
+// Patch only changed controls, without emitting events
+this.writeRecord<number, string>(this.record, values, { emitEvent: false });
+```
+
+#### 3) String inputs with trimming
+
+```ts
+const names = this.normaliseRecord<string, string, number>(this.record, {
+  keyCoerce: Number,
+  valueCoerce: (v) => (v ?? '').trim(),
+});
+```
+
+> **Tip:** Use `equals` when values are objects to avoid redundant updates:
+
+```ts
+this.writeRecord<{ x: number }, string>(
+  this.record,
+  { a: { x: 1 } },
+  {
+    equals: (lhs, rhs) => lhs?.x === rhs?.x,
+  },
+);
 ```
 
 ### Wiring nested sub-forms (simplified)

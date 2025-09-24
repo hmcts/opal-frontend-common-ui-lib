@@ -524,6 +524,54 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Normalise a FormRecord<T> into a plain object.
+   * - Coerces keys (string -> K) with keyCoerce (defaults to string keys).
+   * - Coerces values (T | null | undefined -> U) with valueCoerce (defaults to identity).
+   */
+  protected normaliseRecord<T, U = T, K extends string | number = string>(
+    record: FormRecord<FormControl<T | null | undefined>>,
+    opts?: {
+      keyCoerce?: (key: string) => K;
+      valueCoerce?: (value: T | null | undefined) => U;
+    },
+  ): Record<K, U> {
+    const keyCoerce = opts?.keyCoerce ?? ((k: string) => k as unknown as K);
+    const valueCoerce = opts?.valueCoerce ?? ((v: T | null | undefined) => v as unknown as U);
+
+    const out = {} as Record<K, U>;
+    for (const key of Object.keys(record.controls)) {
+      out[keyCoerce(key)] = valueCoerce(record.controls[key].value);
+    }
+    return out;
+  }
+
+  /**
+   * Patch a FormRecord<T> from a plain object.
+   * - Only sets controls whose value actually changes.
+   * - Lets you choose event emission.
+   */
+  protected writeRecord<T, K extends string | number = string>(
+    record: FormRecord<FormControl<T>>,
+    map: Record<K, T>,
+    opts?: {
+      emitEvent?: boolean;
+      keyCoerce?: (key: K) => string; // how the provided keys map to control names
+      equals?: (a: T, b: T) => boolean;
+    },
+  ): void {
+    const emitEvent = opts?.emitEvent ?? false;
+    const keyCoerce = opts?.keyCoerce ?? ((k: K) => String(k));
+    const equals = opts?.equals ?? ((a, b) => a === b);
+
+    for (const [k, v] of Object.entries(map) as [K, T][]) {
+      const ctrl = record.get(keyCoerce(k)) as FormControl<T> | null;
+      if (ctrl && !equals(ctrl.value as T, v)) {
+        ctrl.setValue(v, { emitEvent });
+      }
+    }
+  }
+
+  /**
    * Clears the search form.
    */
   public handleClearForm(): void {

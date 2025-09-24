@@ -1234,4 +1234,135 @@ describe('AbstractFormBaseComponent', () => {
     // With no fieldErrors mapping available for an undefined key, the method returns null
     expect(result).toBeNull();
   });
+
+  it('normaliseRecord should coerce keys to numbers and values to booleans', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const record = new FormRecord({
+      '5': new FormControl(true),
+      '8': new FormControl(null),
+      '9': new FormControl(false),
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result = (component as any)['normaliseRecord'](record, {
+      keyCoerce: Number,
+      valueCoerce: (v: boolean | null | undefined) => !!v,
+    });
+
+    expect(result).toEqual({ 5: true, 8: false, 9: false });
+  });
+
+  it('normaliseRecord should default to identity for keys and values when no coercers provided', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const record = new FormRecord({
+      a: new FormControl(1),
+      b: new FormControl(2),
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result = (component as any)['normaliseRecord'](record);
+    expect(result).toEqual({ a: 1, b: 2 });
+  });
+
+  it('writeRecord should only update controls whose value changes (no emit)', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const r = new FormRecord({
+      '1': new FormControl(false),
+      '2': new FormControl(true),
+    });
+
+    const spy1 = spyOn(r.get('1') as FormControl<boolean>, 'setValue').and.callThrough();
+    const spy2 = spyOn(r.get('2') as FormControl<boolean>, 'setValue').and.callThrough();
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (component as any)['writeRecord'](r, { '1': true, '2': true }, { emitEvent: false });
+
+    expect(spy1).toHaveBeenCalledTimes(1);
+    expect(spy1).toHaveBeenCalledWith(true, { emitEvent: false });
+    expect(spy2).not.toHaveBeenCalled();
+  });
+
+  it('writeRecord should respect keyCoerce and emitEvent=true by emitting once per changed control', (done) => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const r = new FormRecord({
+      '10': new FormControl(0),
+      '11': new FormControl(1),
+    });
+
+    let emissions = 0;
+    const sub = r.valueChanges.subscribe(() => emissions++);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (component as any)['writeRecord'](r, { 10: 2, 11: 1 }, { emitEvent: true, keyCoerce: (k: number) => k.toString() });
+
+    setTimeout(() => {
+      expect((r.get('10') as FormControl<number>).value).toBe(2);
+      expect((r.get('11') as FormControl<number>).value).toBe(1);
+      expect(emissions).toBe(1); // only key '10' changed
+      sub.unsubscribe();
+      done();
+    }, 0);
+  });
+
+  it('writeRecord should skip setValue when equals comparator deems values equal', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    type Obj = { x: number };
+    const r = new FormRecord({
+      a: new FormControl<Obj>({ x: 1 }),
+    });
+
+    const spy = spyOn(r.get('a') as FormControl<Obj>, 'setValue');
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (component as any)['writeRecord'](
+      r,
+      { a: { x: 1 } as Obj },
+      { emitEvent: false, equals: (lhs: Obj, rhs: Obj) => lhs?.x === rhs?.x },
+    );
+
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('writeRecord should default emitEvent to false when not provided', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const r = new FormRecord({
+      '1': new FormControl(false),
+      '2': new FormControl(true),
+    });
+
+    const spy1 = spyOn(r.get('1') as FormControl<boolean>, 'setValue').and.callThrough();
+    const spy2 = spyOn(r.get('2') as FormControl<boolean>, 'setValue').and.callThrough();
+
+    // Call without opts (no emitEvent specified) → should default to { emitEvent: false }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (component as any)['writeRecord'](r, { '1': true, '2': true });
+
+    expect(spy1).toHaveBeenCalledTimes(1);
+    expect(spy1).toHaveBeenCalledWith(true, { emitEvent: false });
+    expect(spy2).not.toHaveBeenCalled();
+  });
 });
