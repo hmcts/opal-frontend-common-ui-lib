@@ -603,7 +603,7 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
         // If the control isn't present, skip silently. Callers can validate separately.
         continue;
       }
-      if (!isEqual(ctrl.value as T, v)) {
+      if (!isEqual(ctrl.value, v)) {
         ctrl.setValue(v, { emitEvent });
       }
     }
