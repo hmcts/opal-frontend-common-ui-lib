@@ -524,48 +524,86 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Normalise a FormRecord<T> into a plain object.
-   * - Coerces keys (string -> K) with keyCoerce (defaults to string keys).
-   * - Coerces values (T | null | undefined -> U) with valueCoerce (defaults to identity).
+   * Create a plain object from a FormRecord of FormControls.
+   *
+   * What it does: copies each control's current value onto a plain object.
+   * When to use: when you need the raw values from a FormRecord (e.g. to send to an API).
+   *
+   * Example
+   * -------
+   * // record: FormRecord<FormControl<string | null>> with a single control 'firstName'
+   * const out = this.objectFromFormRecord(record, {
+   *   mapKey: k => k,            // optional (defaults to identity)
+   *   mapValue: v => v ?? ''     // turn null/undefined into ''
+   * });
+   * // out -> { firstName: '' }
+   *
+   * @typeParam T - Control value type.
+   * @typeParam U - Output value type (defaults to T).
+   * @typeParam K - Output key type (defaults to string). Control names are strings; provide `mapKey` if you need numbers.
    */
-  protected normaliseRecord<T, U = T, K extends string | number = string>(
-    record: FormRecord<FormControl<T | null | undefined>>,
-    opts?: {
-      keyCoerce?: (key: string) => K;
-      valueCoerce?: (value: T | null | undefined) => U;
+  protected objectFromFormRecord<T, U = T, K extends string | number = string>(
+    controlRecord: FormRecord<FormControl<T | null | undefined>>,
+    options?: {
+      mapKey?: (key: string) => K;
+      mapValue?: (value: T | null | undefined) => U;
     },
   ): Record<K, U> {
-    const keyCoerce = opts?.keyCoerce ?? ((k: string) => k as unknown as K);
-    const valueCoerce = opts?.valueCoerce ?? ((v: T | null | undefined) => v as unknown as U);
+    const mapKey = options?.mapKey ?? ((k: string) => k as unknown as K);
+    const mapValue = options?.mapValue ?? ((v: T | null | undefined) => v as unknown as U);
 
-    const out = {} as Record<K, U>;
-    for (const key of Object.keys(record.controls)) {
-      out[keyCoerce(key)] = valueCoerce(record.controls[key].value);
+    const result = {} as Record<K, U>;
+
+    for (const [name, control] of Object.entries(controlRecord.controls)) {
+      result[mapKey(name)] = mapValue(control.value);
     }
-    return out;
+
+    return result;
   }
 
   /**
-   * Patch a FormRecord<T> from a plain object.
-   * - Only sets controls whose value actually changes.
-   * - Lets you choose event emission.
+   * Patch a FormRecord of FormControls from a plain object.
+   *
+   * What it does: for each entry in `values`, finds the matching control by name
+   * (optionally mapped via `mapKey`) and sets its value **only if** it changes.
+   * When to use: when you need to patch many controls at once, without
+   * triggering extra updates for unchanged values.
+   *
+   * Example
+   * -------
+   * // controlRecord: FormRecord<FormControl<string>> with controls 'firstName', 'lastName'
+   * this.patchFormRecordFromObject(controlRecord, { firstName: 'Ada', lastName: 'Lovelace' }, {
+   *   emitEvent: true,
+   *   isEqual: (a, b) => a === b,
+   *   // mapKey: k => `ctrl_${k as string}` // optional: map incoming keys to control names
+   * });
+   *
+   * @typeParam T - Control value type.
+   * @typeParam K - Keys present in the `values` object (string or number).
    */
-  protected writeRecord<T, K extends string | number = string>(
-    record: FormRecord<FormControl<T>>,
-    map: Record<K, T>,
-    opts?: {
+  protected patchFormRecordFromObject<T, K extends string | number = string>(
+    controlRecord: FormRecord<FormControl<T>>,
+    values: Record<K, T>,
+    options?: {
       emitEvent?: boolean;
-      keyCoerce?: (key: K) => string; // how the provided keys map to control names
-      equals?: (a: T, b: T) => boolean;
+      /** How provided keys map to control names (defaults to String(key)). */
+      mapKey?: (key: K) => string;
+      /** Equality check used to avoid unnecessary writes (defaults to Object.is). */
+      isEqual?: (a: T, b: T) => boolean;
     },
   ): void {
-    const emitEvent = opts?.emitEvent ?? false;
-    const keyCoerce = opts?.keyCoerce ?? ((k: K) => String(k));
-    const equals = opts?.equals ?? ((a, b) => a === b);
+    const emitEvent = options?.emitEvent ?? false;
+    const mapKey = options?.mapKey ?? ((k: K) => String(k));
+    const isEqual = options?.isEqual ?? ((a: T, b: T) => Object.is(a, b));
 
-    for (const [k, v] of Object.entries(map) as [K, T][]) {
-      const ctrl = record.get(keyCoerce(k)) as FormControl<T> | null;
-      if (ctrl && !equals(ctrl.value as T, v)) {
+    for (const [k, v] of Object.entries(values) as [K, T][]) {
+      const controlName = mapKey(k);
+      const ctrl = controlRecord.get(controlName) as FormControl<T> | null;
+      if (!ctrl) {
+        // If the control isn't present, skip silently. Callers can validate separately.
+        continue;
+      }
+      if (!isEqual(ctrl.value as T, v)) {
         ctrl.setValue(v, { emitEvent });
       }
     }

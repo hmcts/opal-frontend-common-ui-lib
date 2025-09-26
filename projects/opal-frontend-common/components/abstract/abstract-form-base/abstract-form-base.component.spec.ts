@@ -1235,7 +1235,7 @@ describe('AbstractFormBaseComponent', () => {
     expect(result).toBeNull();
   });
 
-  it('normaliseRecord should coerce keys to numbers and values to booleans', () => {
+  it('objectFromFormRecord should map keys to numbers and values to booleans', () => {
     if (!component) {
       fail('component returned null');
       return;
@@ -1248,15 +1248,15 @@ describe('AbstractFormBaseComponent', () => {
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const result = (component as any)['normaliseRecord'](record, {
-      keyCoerce: Number,
-      valueCoerce: (v: boolean | null | undefined) => !!v,
+    const result = (component as any)['objectFromFormRecord'](record, {
+      mapKey: Number,
+      mapValue: (v: boolean | null | undefined) => !!v,
     });
 
     expect(result).toEqual({ 5: true, 8: false, 9: false });
   });
 
-  it('normaliseRecord should default to identity for keys and values when no coercers provided', () => {
+  it('objectFromFormRecord should default to identity for keys and values when no mappers are provided', () => {
     if (!component) {
       fail('component returned null');
       return;
@@ -1268,11 +1268,11 @@ describe('AbstractFormBaseComponent', () => {
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const result = (component as any)['normaliseRecord'](record);
+    const result = (component as any)['objectFromFormRecord'](record);
     expect(result).toEqual({ a: 1, b: 2 });
   });
 
-  it('writeRecord should only update controls whose value changes (no emit)', () => {
+  it('patchFormRecordFromObject should only update controls whose value changes (no emit)', () => {
     if (!component) {
       fail('component returned null');
       return;
@@ -1287,14 +1287,14 @@ describe('AbstractFormBaseComponent', () => {
     const spy2 = spyOn(r.get('2') as FormControl<boolean>, 'setValue').and.callThrough();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (component as any)['writeRecord'](r, { '1': true, '2': true }, { emitEvent: false });
+    (component as any)['patchFormRecordFromObject'](r, { '1': true, '2': true }, { emitEvent: false });
 
     expect(spy1).toHaveBeenCalledTimes(1);
     expect(spy1).toHaveBeenCalledWith(true, { emitEvent: false });
     expect(spy2).not.toHaveBeenCalled();
   });
 
-  it('writeRecord should respect keyCoerce and emitEvent=true by emitting once per changed control', (done) => {
+  it('patchFormRecordFromObject should respect mapKey and emitEvent=true by emitting once per changed control', (done) => {
     if (!component) {
       fail('component returned null');
       return;
@@ -1309,7 +1309,11 @@ describe('AbstractFormBaseComponent', () => {
     const sub = r.valueChanges.subscribe(() => emissions++);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (component as any)['writeRecord'](r, { 10: 2, 11: 1 }, { emitEvent: true, keyCoerce: (k: number) => k.toString() });
+    (component as any)['patchFormRecordFromObject'](
+      r,
+      { 10: 2, 11: 1 },
+      { emitEvent: true, mapKey: (k: number) => k.toString() },
+    );
 
     setTimeout(() => {
       expect((r.get('10') as FormControl<number>).value).toBe(2);
@@ -1320,7 +1324,7 @@ describe('AbstractFormBaseComponent', () => {
     }, 0);
   });
 
-  it('writeRecord should skip setValue when equals comparator deems values equal', () => {
+  it('patchFormRecordFromObject should skip setValue when isEqual comparator deems values equal', () => {
     if (!component) {
       fail('component returned null');
       return;
@@ -1334,16 +1338,16 @@ describe('AbstractFormBaseComponent', () => {
     const spy = spyOn(r.get('a') as FormControl<Obj>, 'setValue');
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (component as any)['writeRecord'](
+    (component as any)['patchFormRecordFromObject'](
       r,
       { a: { x: 1 } as Obj },
-      { emitEvent: false, equals: (lhs: Obj, rhs: Obj) => lhs?.x === rhs?.x },
+      { emitEvent: false, isEqual: (lhs: Obj, rhs: Obj) => lhs?.x === rhs?.x },
     );
 
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it('writeRecord should default emitEvent to false when not provided', () => {
+  it('patchFormRecordFromObject should default emitEvent to false when not provided', () => {
     if (!component) {
       fail('component returned null');
       return;
@@ -1359,10 +1363,30 @@ describe('AbstractFormBaseComponent', () => {
 
     // Call without opts (no emitEvent specified) → should default to { emitEvent: false }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (component as any)['writeRecord'](r, { '1': true, '2': true });
+    (component as any)['patchFormRecordFromObject'](r, { '1': true, '2': true });
 
     expect(spy1).toHaveBeenCalledTimes(1);
     expect(spy1).toHaveBeenCalledWith(true, { emitEvent: false });
     expect(spy2).not.toHaveBeenCalled();
+  });
+
+  it('patchFormRecordFromObject should skip keys that do not map to a control (covers continue)', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const r = new FormRecord({
+      existing: new FormControl('keep'),
+    });
+
+    const setSpy = spyOn(r.get('existing') as FormControl<string>, 'setValue');
+
+    // Provide a key that doesn't exist in the FormRecord to trigger the `continue` branch
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (component as any)['patchFormRecordFromObject'](r, { missing: 'new' });
+
+    expect(setSpy).not.toHaveBeenCalled();
+    expect((r.get('existing') as FormControl<string>).value).toBe('keep');
   });
 });

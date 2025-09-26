@@ -93,8 +93,8 @@ The component provides several public properties for form management:
 | `clearAllErrorMessages()`     | —                                                                                                                                                         | Clears inline messages, summary, and cached errors; updates form validity silently.                                        |
 | `addControlsToFormGroup()`    | `formGroup: FormGroup, controls: IAbstractFormArrayControlValidation[], index: number`                                                                    | Utility for dynamically adding indexed controls.                                                                           |
 | `mergeFieldErrors()`          | `current: IAbstractFormBaseFieldErrors, incoming: IAbstractFormBaseFieldErrors`                                                                           | Shallow-by-key merge; override in parents if multiple children need deep merges.                                           |
-| `normaliseRecord()`           | `record: FormRecord<FormControl<T \| null \| undefined>>, opts?: { keyCoerce?: (key: string) => K; valueCoerce?: (value: T \| null \| undefined) => U }`  | Normalises a `FormRecord<T>` into a plain object. Allows coercion of string keys to `K` (e.g. `number`) and values to `U`. |
-| `writeRecord()`               | `record: FormRecord<FormControl<T>>, map: Record<K, T>, opts?: { emitEvent?: boolean; keyCoerce?: (key: K) => string; equals?: (a: T, b: T) => boolean }` | Efficiently writes a map into a `FormRecord<T>` (diffed sets, optional event emission, key coercion, and custom equality). |
+| `objectFromFormRecord()`      | `record: FormRecord<FormControl<T \| null \| undefined>>, options?: { keyCoerce?: (key: string) => K; valueCoerce?: (value: T \| null \| undefined) => U }`  | Creates a plain object from a FormRecord. Lets you map keys and values if needed (e.g. convert string keys to numbers, handle null values). |
+| `patchFormRecordFromObject()` | `record: FormRecord<FormControl<T>>, values: Record<K, T>, options?: { emitEvent?: boolean; keyCoerce?: (key: K) => string; equals?: (a: T, b: T) => boolean }` | Updates a FormRecord from a plain object. Only changes controls whose values differ. Lets you customise key mapping, equality check, and whether to emit events. |
 
 ### Example Template Usage:
 
@@ -154,14 +154,14 @@ The component provides several public properties for form management:
 #### 1) Boolean checkbox record (string keys -> number keys)
 
 ```ts
-// Convert raw record values to number-keyed map of booleans
-const selections = this.normaliseRecord<boolean, boolean, number>(this.record, {
+// Convert raw record values to a number-keyed map of booleans (turn null into false)
+const selections = this.objectFromFormRecord<boolean, boolean, number>(this.record, {
   keyCoerce: Number,
-  valueCoerce: (v) => !!v, // coerce null/undefined to false
+  valueCoerce: (v) => !!v, // turn null into false
 });
 
 // Apply a selection map (number keys -> string control names)
-this.writeRecord<boolean, number>(this.record, selectionMap, {
+this.patchFormRecordFromObject<boolean, number>(this.record, selectionMap, {
   emitEvent: false,
   keyCoerce: (k) => k.toString(),
 });
@@ -171,16 +171,16 @@ this.writeRecord<boolean, number>(this.record, selectionMap, {
 
 ```ts
 // Keys stay as strings, values left as numbers
-const values = this.normaliseRecord<number>(this.record);
+const values = this.objectFromFormRecord<number>(this.record);
 
 // Patch only changed controls, without emitting events
-this.writeRecord<number, string>(this.record, values, { emitEvent: false });
+this.patchFormRecordFromObject<number, string>(this.record, values, { emitEvent: false });
 ```
 
 #### 3) String inputs with trimming
 
 ```ts
-const names = this.normaliseRecord<string, string, number>(this.record, {
+const names = this.objectFromFormRecord<string, string, number>(this.record, {
   keyCoerce: Number,
   valueCoerce: (v) => (v ?? '').trim(),
 });
@@ -189,7 +189,7 @@ const names = this.normaliseRecord<string, string, number>(this.record, {
 > **Tip:** Use `equals` when values are objects to avoid redundant updates:
 
 ```ts
-this.writeRecord<{ x: number }, string>(
+this.patchFormRecordFromObject<{ x: number }, string>(
   this.record,
   { a: { x: 1 } },
   {
