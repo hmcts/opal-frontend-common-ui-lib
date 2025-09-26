@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AbstractFormBaseComponent } from './abstract-form-base.component';
-import { FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, FormRecord, ValidatorFn, Validators } from '@angular/forms';
 import { IAbstractFormBaseFieldError } from './interfaces/abstract-form-base-field-error.interface';
 import { IAbstractFormBaseFormError } from './interfaces/abstract-form-base-form-error.interface';
 import { IAbstractFormBaseFormErrorSummaryMessage } from '../interfaces/abstract-form-base-form-error-summary-message.interface';
@@ -1057,5 +1057,336 @@ describe('AbstractFormBaseComponent', () => {
     expect(component.formControlErrorMessages).toEqual({});
     expect(component.formErrorSummaryMessage).toEqual([]);
     expect(component.formErrors).toEqual([]);
+  });
+
+  it('should return an error summary entry for a FormRecord control when the record has errors', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    // Arrange: set fieldErrors metadata for the FormRecord key
+    component['fieldErrors'] = {
+      myRecord: {
+        required: {
+          message: 'Please select at least one item',
+          priority: 1,
+        },
+      },
+    };
+
+    // Create a form with a FormRecord and attach a record-level error
+    component.form = new FormGroup({
+      myRecord: new FormRecord({}),
+    });
+
+    // Mark the FormRecord as invalid via a record-level error
+    const record = component.form.get('myRecord');
+    record?.setErrors({ required: true });
+
+    fixture.detectChanges();
+
+    // Act: collect errors
+    const result = component['getFormErrors'](component.form);
+
+    // Assert: one error entry for the FormRecord itself, using the mapped message
+    expect(result).toEqual([
+      {
+        fieldId: 'myRecord',
+        message: 'Please select at least one item',
+        priority: 1,
+        type: 'required',
+      },
+    ]);
+  });
+
+  it('should create a default FormRecord error object (null, 999999999, null) and then filter it out when no fieldErrors mapping exists', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    // Ensure there is NO fieldErrors mapping for the FormRecord key
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    component['fieldErrors'] = {} as any;
+
+    // Create a form with a FormRecord and attach a record-level error
+    component.form = new FormGroup({
+      myRecord: new FormRecord({}),
+    });
+
+    // Mark the FormRecord as invalid via a record-level error
+    const record = component.form.get('myRecord');
+    record?.setErrors({ required: true });
+
+    fixture.detectChanges();
+
+    // Act: collect errors
+    const result = component['getFormErrors'](component.form);
+
+    // Because there is no fieldErrors mapping, the constructed entry will have
+    // message=null, priority=999999999, type=null and then be FILTERED OUT
+    // by the final `filter(item => item?.message !== null)` step.
+    expect(result).toEqual([]);
+  });
+
+  it('should return null when controlPath is empty and controlKey is undefined (covers ternary true branch)', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    // Arrange: make the root form itself invalid via a form-level error
+    // and call getFieldErrorDetails with an empty controlPath so controlKey === undefined
+    component.form.setErrors({ required: true });
+    fixture.detectChanges();
+
+    // Act
+    const result = component['getFieldErrorDetails']([]);
+
+    // Assert: because fieldErrors mapping cannot be resolved when controlKey is undefined,
+    // the method should return null
+    expect(result).toBeNull();
+
+    // Clean up
+    component.form.setErrors(null);
+  });
+
+  it('should fall back to [] when Object.keys(controlErrors) returns undefined (covers || [] branch)', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    // Arrange: build a minimal form with a control-level error
+    component['fieldErrors'] = {
+      foo: {
+        required: { message: 'Foo is required', priority: 1 },
+      },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any;
+
+    component.form = new FormGroup({
+      foo: new FormControl(null, Validators.required),
+    });
+
+    // Sanity: make the control invalid so controlErrors is truthy
+    component.form.get('foo')?.markAsTouched();
+    fixture.detectChanges();
+
+    // Spy on Object.keys to simulate an unexpected undefined return value,
+    // forcing the `|| []` fallback to execute
+    const keysSpy = spyOn(Object, 'keys').and.returnValue(undefined as unknown as string[]);
+
+    // Act
+    const result = component['getFieldErrorDetails'](['foo']);
+
+    // Assert: because errorKeys becomes [], the method cannot resolve a highest-priority error and returns null
+    expect(result).toBeNull();
+
+    // Restore
+    keysSpy.and.callThrough();
+  });
+
+  it('should set fieldErrors to {} when controlKey is undefined', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    // Arrange: create a form with a control that will produce errors
+    component.form = new FormGroup({
+      test: new FormControl(null, Validators.required),
+    });
+
+    // Force the control into an invalid state
+    const testControl = component.form.get('test');
+    testControl?.markAsTouched();
+    testControl?.setErrors({ required: true });
+
+    // Act: call getFieldErrorDetails with an empty path so controlKey is undefined
+    const result = component['getFieldErrorDetails']([]);
+
+    // Assert: it should return null, and the internal fieldErrors branch with {} is covered
+    expect(result).toBeNull();
+  });
+
+  it('should hit the fieldErrors = {} branch when controlKey is undefined and control has errors', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    // Ensure an empty controlPath so controlKey === undefined
+    const emptyPath: (string | number)[] = [];
+
+    // Spy on form.get to return a control-like object with errors so the code enters the `if (controlErrors)` block
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const fakeControlWithErrors = { errors: { required: true } } as unknown as any;
+    const getSpy = spyOn(component.form, 'get').and.returnValue(fakeControlWithErrors);
+
+    // Act
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result = (component as any)['getFieldErrorDetails'](emptyPath);
+
+    // Assert
+    expect(getSpy).toHaveBeenCalledWith(emptyPath);
+    // With no fieldErrors mapping available for an undefined key, the method returns null
+    expect(result).toBeNull();
+  });
+
+  it('objectFromFormRecord should map keys to numbers and values to booleans', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const record = new FormRecord({
+      '5': new FormControl(true),
+      '8': new FormControl(null),
+      '9': new FormControl(false),
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result = (component as any)['objectFromFormRecord'](record, {
+      mapKey: Number,
+      mapValue: (v: boolean | null | undefined) => !!v,
+    });
+
+    expect(result).toEqual({ 5: true, 8: false, 9: false });
+  });
+
+  it('objectFromFormRecord should default to identity for keys and values when no mappers are provided', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const record = new FormRecord({
+      a: new FormControl(1),
+      b: new FormControl(2),
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result = (component as any)['objectFromFormRecord'](record);
+    expect(result).toEqual({ a: 1, b: 2 });
+  });
+
+  it('patchFormRecordFromObject should only update controls whose value changes (no emit)', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const r = new FormRecord({
+      '1': new FormControl(false),
+      '2': new FormControl(true),
+    });
+
+    const spy1 = spyOn(r.get('1') as FormControl<boolean>, 'setValue').and.callThrough();
+    const spy2 = spyOn(r.get('2') as FormControl<boolean>, 'setValue').and.callThrough();
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (component as any)['patchFormRecordFromObject'](r, { '1': true, '2': true }, { emitEvent: false });
+
+    expect(spy1).toHaveBeenCalledTimes(1);
+    expect(spy1).toHaveBeenCalledWith(true, { emitEvent: false });
+    expect(spy2).not.toHaveBeenCalled();
+  });
+
+  it('patchFormRecordFromObject should respect mapKey and emitEvent=true by emitting once per changed control', (done) => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const r = new FormRecord({
+      '10': new FormControl(0),
+      '11': new FormControl(1),
+    });
+
+    let emissions = 0;
+    const sub = r.valueChanges.subscribe(() => emissions++);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (component as any)['patchFormRecordFromObject'](
+      r,
+      { 10: 2, 11: 1 },
+      { emitEvent: true, mapKey: (k: number) => k.toString() },
+    );
+
+    setTimeout(() => {
+      expect((r.get('10') as FormControl<number>).value).toBe(2);
+      expect((r.get('11') as FormControl<number>).value).toBe(1);
+      expect(emissions).toBe(1); // only key '10' changed
+      sub.unsubscribe();
+      done();
+    }, 0);
+  });
+
+  it('patchFormRecordFromObject should skip setValue when isEqual comparator deems values equal', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    type Obj = { x: number };
+    const r = new FormRecord({
+      a: new FormControl<Obj>({ x: 1 }),
+    });
+
+    const spy = spyOn(r.get('a') as FormControl<Obj>, 'setValue');
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (component as any)['patchFormRecordFromObject'](
+      r,
+      { a: { x: 1 } as Obj },
+      { emitEvent: false, isEqual: (lhs: Obj, rhs: Obj) => lhs?.x === rhs?.x },
+    );
+
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('patchFormRecordFromObject should default emitEvent to false when not provided', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const r = new FormRecord({
+      '1': new FormControl(false),
+      '2': new FormControl(true),
+    });
+
+    const spy1 = spyOn(r.get('1') as FormControl<boolean>, 'setValue').and.callThrough();
+    const spy2 = spyOn(r.get('2') as FormControl<boolean>, 'setValue').and.callThrough();
+
+    // Call without opts (no emitEvent specified) → should default to { emitEvent: false }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (component as any)['patchFormRecordFromObject'](r, { '1': true, '2': true });
+
+    expect(spy1).toHaveBeenCalledTimes(1);
+    expect(spy1).toHaveBeenCalledWith(true, { emitEvent: false });
+    expect(spy2).not.toHaveBeenCalled();
+  });
+
+  it('patchFormRecordFromObject should skip keys that do not map to a control (covers continue)', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const r = new FormRecord({
+      existing: new FormControl('keep'),
+    });
+
+    const setSpy = spyOn(r.get('existing') as FormControl<string>, 'setValue');
+
+    // Provide a key that doesn't exist in the FormRecord to trigger the `continue` branch
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (component as any)['patchFormRecordFromObject'](r, { missing: 'new' });
+
+    expect(setSpy).not.toHaveBeenCalled();
+    expect((r.get('existing') as FormControl<string>).value).toBe('keep');
   });
 });
