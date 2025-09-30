@@ -6,6 +6,6 @@ export function invalidValueValidator(invalidValues: string[]): ValidatorFn {
       return null;
     }
 
-    return invalidValues.some((value) => value === control.value) ? { valueInArray: true } : null;
+    return invalidValues.includes(control.value) ? { valueInArray: true } : null;
   };
 }

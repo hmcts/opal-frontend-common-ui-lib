@@ -7,7 +7,7 @@ export function amountValidator(maxIntegers: number, maxDecimals: number): Valid
     }
 
     // Ensure the value is numerical, allowing only digits and optionally one decimal point
-    if (isNaN(control.value)) {
+    if (Number.isNaN(Number(control.value))) {
       return { invalidAmountValue: true };
     }
 

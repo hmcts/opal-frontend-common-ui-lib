@@ -10,7 +10,7 @@ import { SSO_ENDPOINTS } from '@hmcts/opal-frontend-common/services/auth-service
 export const REDIRECT_TO_SSO = new InjectionToken<() => void>('redirectToSsoLogin', {
   providedIn: 'root',
   factory: () => () => {
-    window.location.href = SSO_ENDPOINTS.login;
+    globalThis.location.href = SSO_ENDPOINTS.login;
   },
 });
 

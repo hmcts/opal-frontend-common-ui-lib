@@ -68,8 +68,6 @@ export class LaunchDarklyService implements OnDestroy {
           throw err;
         });
     }
-
-    return Promise.resolve();
   }
 
   /**

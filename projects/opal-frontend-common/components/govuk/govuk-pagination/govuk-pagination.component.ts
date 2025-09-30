@@ -34,7 +34,7 @@ export class GovukPaginationComponent implements OnChanges {
    * @returns An array of numbers within the specified range.
    */
   private range(start: number, end: number): number[] {
-    return [...Array(end).keys()].map((el) => el + start);
+    return [...new Array(end).keys()].map((el) => el + start);
   }
 
   /**

@@ -4,7 +4,7 @@ export function optionalPhoneNumberValidator(): ValidatorFn {
   const numericPattern = /^[\d\s]*$/;
   return (control: AbstractControl): { [key: string]: unknown } | null => {
     if (control.value) {
-      const valueWithoutSpaces = control.value.replace(/\s+/g, '');
+      const valueWithoutSpaces = control.value.replaceAll(/\s+/g, '');
       const isValidPattern = numericPattern.test(control.value);
       const isValidLength = valueWithoutSpaces.length === 11;
       const valid = isValidPattern && isValidLength;
