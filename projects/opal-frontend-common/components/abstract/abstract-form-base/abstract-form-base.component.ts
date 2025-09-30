@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output, inject } from '@angular/core';
-import { FormArray, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, FormRecord, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { IAbstractFormBaseFieldError } from './interfaces/abstract-form-base-field-error.interface';
@@ -105,9 +105,10 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
 
     if (controlErrors) {
       /// Get all the error keys
-      const controlKey = controlPath[controlPath.length - 1];
+      // Use Array.prototype.at for clarity when accessing the last segment of the control path
+      const controlKey = controlPath.at(-1);
       const errorKeys = Object.keys(controlErrors) || [];
-      const fieldErrors = this.fieldErrors[controlKey] || {};
+      const fieldErrors = controlKey === undefined ? {} : this.fieldErrors[controlKey] || {};
 
       if (errorKeys.length && Object.keys(fieldErrors).length) {
         return this.getHighestPriorityError(errorKeys, fieldErrors);
@@ -129,24 +130,33 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
 
     const errorSummary = Object.keys(formControls)
       .filter((controlName) => formControls[controlName].invalid)
-      .map((controlName) => {
+      .flatMap((controlName) => {
         const control = formControls[controlName];
+
+        if (control instanceof FormRecord) {
+          // We only support FormControls in FormRecords
+          const recordFieldErrorDetails = this.getFieldErrorDetails([...controlPath, controlName]);
+
+          return {
+            fieldId: controlName,
+            message: recordFieldErrorDetails?.message ?? null,
+            priority: recordFieldErrorDetails?.priority ?? 999999999,
+            type: recordFieldErrorDetails?.type ?? null,
+          };
+        }
 
         if (control instanceof FormGroup) {
           return this.getFormErrors(control, [...controlPath, controlName]);
         }
 
         if (control instanceof FormArray) {
-          return control.controls
-            .map((controlItem, index) => {
-              // We only support FormGroups in FormArrays
-              if (controlItem instanceof FormGroup) {
-                return this.getFormErrors(controlItem, [...controlPath, controlName, index]);
-              }
-
-              return [];
-            })
-            .flat();
+          return control.controls.flatMap((controlItem, index) => {
+            // We only support FormGroups in FormArrays
+            if (controlItem instanceof FormGroup) {
+              return this.getFormErrors(controlItem, [...controlPath, controlName, index]);
+            }
+            return [];
+          });
         }
 
         const getFieldErrorDetails = this.getFieldErrorDetails([...controlPath, controlName]);
@@ -159,8 +169,7 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
           priority: getFieldErrorDetails?.priority ?? 999999999,
           type: getFieldErrorDetails?.type ?? null,
         };
-      })
-      .flat();
+      });
 
     // Remove any null errors
     return errorSummary.filter((item) => item?.message !== null);
@@ -176,10 +185,10 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
     this.formErrorSummaryMessage = [];
 
     // Set the form error messages based on the error summary entries
-    formErrors.forEach((entry) => {
+    for (const entry of formErrors) {
       this.formControlErrorMessages[entry.fieldId] = entry.message;
       this.formErrorSummaryMessage.push({ fieldId: entry.fieldId, message: entry.message });
-    });
+    }
   }
 
   /**
@@ -223,7 +232,10 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
   ): number[] {
     return fieldIds.reduce((acc: number[], field) => {
       const index = formErrorSummaryMessage.findIndex((error) => error.fieldId === field);
-      return index !== -1 ? [...acc, index] : acc;
+      if (index === -1) {
+        return acc;
+      }
+      return [...acc, index];
     }, []);
   }
 
@@ -257,13 +269,13 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
     const cleanFormErrors: IAbstractFormBaseFormError[] = [];
     const removedFormErrors: IAbstractFormBaseFormError[] = [];
 
-    formErrors.forEach((error) => {
+    for (const error of formErrors) {
       if (fieldIds.includes(error.fieldId)) {
         removedFormErrors.push(error);
       } else {
         cleanFormErrors.push(error);
       }
-    });
+    }
 
     return [cleanFormErrors, removedFormErrors];
   }
@@ -283,17 +295,17 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
     formErrors: IAbstractFormBaseFormError[],
   ): IAbstractFormBaseFormError[] {
     const manipulatedFields: IAbstractFormBaseFormError[] = [];
-    formErrors.forEach((field) => {
+    for (const field of formErrors) {
       if (fields.includes(field.fieldId)) {
         if (field.type === errorType) {
           manipulatedFields.push({ ...field, message: messageOverride });
         } else {
           manipulatedFields.push(field);
         }
-      } else {
-        manipulatedFields.push(field);
+        continue;
       }
-    });
+      manipulatedFields.push(field);
+    }
 
     return manipulatedFields;
   }
@@ -351,9 +363,9 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
     controls: IAbstractFormArrayControlValidation[],
     index: number,
   ): void {
-    controls.forEach(({ controlName, validators }) => {
+    for (const { controlName, validators } of controls) {
       formGroup.addControl(`${controlName}_${index}`, new FormControl(null, validators));
-    });
+    }
   }
 
   /**
@@ -437,9 +449,9 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
     const formControls = this.form.controls;
     const initialFormControlErrorMessages: IAbstractFormControlErrorMessage = {};
 
-    Object.keys(formControls).forEach((controlName) => {
+    for (const controlName of Object.keys(formControls)) {
       initialFormControlErrorMessages[controlName] = null;
-    });
+    }
 
     this.formControlErrorMessages = initialFormControlErrorMessages;
     this.formErrorSummaryMessage = [];
@@ -512,6 +524,92 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Create a plain object from a FormRecord of FormControls.
+   *
+   * What it does: copies each control's current value onto a plain object.
+   * When to use: when you need the raw values from a FormRecord (e.g. to send to an API).
+   *
+   * Example
+   * -------
+   * // record: FormRecord<FormControl<string | null>> with a single control 'firstName'
+   * const out = this.objectFromFormRecord(record, {
+   *   mapKey: k => k,            // optional (defaults to identity)
+   *   mapValue: v => v ?? ''     // turn null/undefined into ''
+   * });
+   * // out -> { firstName: '' }
+   *
+   * @typeParam T - Control value type.
+   * @typeParam U - Output value type (defaults to T).
+   * @typeParam K - Output key type (defaults to string). Control names are strings; provide `mapKey` if you need numbers.
+   */
+  protected objectFromFormRecord<T, U = T, K extends string | number = string>(
+    controlRecord: FormRecord<FormControl<T | null | undefined>>,
+    options?: {
+      mapKey?: (key: string) => K;
+      mapValue?: (value: T | null | undefined) => U;
+    },
+  ): Record<K, U> {
+    const mapKey = options?.mapKey ?? ((k: string) => k as unknown as K);
+    const mapValue = options?.mapValue ?? ((v: T | null | undefined) => v as unknown as U);
+
+    const result = {} as Record<K, U>;
+
+    for (const [name, control] of Object.entries(controlRecord.controls)) {
+      result[mapKey(name)] = mapValue(control.value);
+    }
+
+    return result;
+  }
+
+  /**
+   * Patch a FormRecord of FormControls from a plain object.
+   *
+   * What it does: for each entry in `values`, finds the matching control by name
+   * (optionally mapped via `mapKey`) and sets its value **only if** it changes.
+   * When to use: when you need to patch many controls at once, without
+   * triggering extra updates for unchanged values.
+   *
+   * Example
+   * -------
+   * // controlRecord: FormRecord<FormControl<string>> with controls 'firstName', 'lastName'
+   * this.patchFormRecordFromObject(controlRecord, { firstName: 'Ada', lastName: 'Lovelace' }, {
+   *   emitEvent: true,
+   *   isEqual: (a, b) => a === b,
+   *   // mapKey: k => `ctrl_${k as string}` // optional: map incoming keys to control names
+   * });
+   *
+   * @typeParam T - Control value type.
+   * @typeParam K - Keys present in the `values` object (string or number).
+   */
+  protected patchFormRecordFromObject<T, K extends string | number = string>(
+    controlRecord: FormRecord<FormControl<T>>,
+    values: Record<K, T>,
+    options?: {
+      emitEvent?: boolean;
+      /** How provided keys map to control names (defaults to String(key)). */
+      mapKey?: (key: K) => string;
+      /** Equality check used to avoid unnecessary writes (defaults to Object.is). */
+      isEqual?: (a: T, b: T) => boolean;
+    },
+  ): void {
+    const emitEvent = options?.emitEvent ?? false;
+    const mapKey = options?.mapKey ?? ((k: K) => String(k));
+    const isEqual = options?.isEqual ?? ((a: T, b: T) => Object.is(a, b));
+
+    for (const [k, v] of Object.entries(values) as [K, T][]) {
+      const controlName = mapKey(k);
+      const ctrl = controlRecord.get(controlName) as FormControl<T> | null;
+      if (!ctrl) {
+        // If the control isn't present, skip silently. Callers can validate separately.
+        continue;
+      }
+      if (!isEqual(ctrl.value, v)) {
+        ctrl.setValue(v, { emitEvent });
+      }
+    }
+  }
+
+  /**
    * Clears the search form.
    */
   public handleClearForm(): void {
@@ -543,7 +641,7 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
 
     const navigationExtras = {
       ...(nonRelative ? {} : { relativeTo: this.activatedRoute.parent }),
-      ...(routeData !== undefined ? { state: routeData } : {}),
+      ...(routeData === undefined ? {} : { state: routeData }),
     };
 
     this.router.navigate([route], navigationExtras);
