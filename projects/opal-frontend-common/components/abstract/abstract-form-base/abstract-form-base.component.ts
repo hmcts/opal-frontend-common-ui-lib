@@ -593,8 +593,8 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
     },
   ): void {
     const emitEvent = options?.emitEvent ?? false;
-    const mapKey = options?.mapKey ?? ((k: K) => String(k));
-    const isEqual = options?.isEqual ?? ((a: T, b: T) => Object.is(a, b));
+    const mapKey = options?.mapKey ?? String;
+    const isEqual = options?.isEqual ?? Object.is;
 
     for (const [k, v] of Object.entries(values) as [K, T][]) {
       const controlName = mapKey(k);
