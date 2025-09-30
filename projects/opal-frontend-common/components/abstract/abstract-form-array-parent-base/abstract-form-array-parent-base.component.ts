@@ -15,12 +15,12 @@ export abstract class AbstractFormArrayParentBaseComponent extends AbstractFormP
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return data.reduce((result: any[], indexedObject) => {
       let currentIndex!: number;
-      Object.keys(indexedObject).forEach((key) => {
-        const match = RegExp(/^(.*)_(\d+)$/).exec(key);
+      for (const key of Object.keys(indexedObject)) {
+        const match = new RegExp(/^(.*)_(\d+)$/).exec(key);
         if (match) {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const [_, baseKey, index] = match;
-          const idx = parseInt(index, 10);
+          const idx = Number.parseInt(index, 10);
 
           currentIndex = idx; // Set the current index based on the last indexed key
 
@@ -31,7 +31,7 @@ export abstract class AbstractFormArrayParentBaseComponent extends AbstractFormP
           result[currentIndex] = result[currentIndex] ?? {};
           result[currentIndex][key] = indexedObject[key];
         }
-      });
+      }
       return result;
     }, []);
   }

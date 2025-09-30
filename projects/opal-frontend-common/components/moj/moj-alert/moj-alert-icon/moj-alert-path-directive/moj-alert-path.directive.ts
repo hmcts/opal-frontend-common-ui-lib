@@ -49,11 +49,11 @@ export class MojAlertPathDirective implements OnChanges {
     this.renderer.setAttribute(svg, 'fill', 'none');
 
     while (svg.firstChild) {
-      svg.removeChild(svg.firstChild);
+      svg.firstChild.remove();
     }
 
     const paths = this.getPathsForType(this.type);
-    paths.forEach((pathD) => {
+    for (const pathD of paths) {
       const path = this.renderer.createElement('path', 'svg');
       this.renderer.setAttribute(path, 'd', pathD);
       this.renderer.setAttribute(path, 'fill', 'currentColor');
@@ -61,6 +61,6 @@ export class MojAlertPathDirective implements OnChanges {
       this.renderer.setAttribute(path, 'clip-rule', 'evenodd');
 
       svg.appendChild(path);
-    });
+    }
   }
 }

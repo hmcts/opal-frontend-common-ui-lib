@@ -18,7 +18,7 @@ export abstract class AbstractFormArrayRemovalComponent {
   ): IAbstractFormArrayRemovalBaseControlValue[keyof IAbstractFormArrayRemovalBaseControlValue] {
     const value = formArray.controls[rowIndex]?.get(controlName)?.value;
 
-    if (typeof value === 'string' && !isNaN(Number(value))) {
+    if (typeof value === 'string' && !Number.isNaN(Number(value))) {
       return Number(value);
     }
 
@@ -77,7 +77,7 @@ export abstract class AbstractFormArrayRemovalComponent {
     fieldNames: string[],
     dynamicFieldPrefix: string,
   ): void {
-    fieldNames.forEach((field) => {
+    for (const field of fieldNames) {
       const currentKey = `${dynamicFieldPrefix}_${field}_${index + 1}`;
       const newKey = `${dynamicFieldPrefix}_${field}_${index}`;
 
@@ -91,7 +91,7 @@ export abstract class AbstractFormArrayRemovalComponent {
         // Add the control with the updated key
         formGroup.addControl(newKey, control);
       }
-    });
+    }
   }
 
   /**

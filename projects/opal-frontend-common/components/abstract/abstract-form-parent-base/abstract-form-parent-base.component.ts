@@ -25,7 +25,7 @@ export abstract class AbstractFormParentBaseComponent {
 
     const navigationExtras = {
       ...(nonRelative ? {} : { relativeTo: this.activatedRoute.parent }),
-      ...(routeData !== undefined ? { state: routeData } : {}),
+      ...(routeData ? { state: routeData } : {}),
     };
 
     this.router.navigate([route], navigationExtras);
