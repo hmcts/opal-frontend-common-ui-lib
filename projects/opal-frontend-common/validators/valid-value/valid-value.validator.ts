@@ -6,6 +6,6 @@ export function validValueValidator(validValues: string[]): ValidatorFn {
       return null;
     }
 
-    return validValues.some((value) => value === control.value) ? null : { valueNotInArray: true };
+    return validValues.includes(control.value) ? null : { valueNotInArray: true };
   };
 }
