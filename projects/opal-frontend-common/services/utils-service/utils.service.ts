@@ -33,7 +33,7 @@ export class UtilsService {
   public convertToMonetaryString(amount: number | string): string {
     let negativeValue = false;
     if (typeof amount === 'string') {
-      amount = parseFloat(amount);
+      amount = Number.parseFloat(amount);
     }
     if (amount < 0) {
       negativeValue = true;

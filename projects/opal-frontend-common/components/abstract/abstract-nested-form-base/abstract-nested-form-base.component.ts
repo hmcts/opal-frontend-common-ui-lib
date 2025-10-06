@@ -19,9 +19,9 @@ export abstract class AbstractNestedFormBaseComponent extends AbstractFormBaseCo
    * - If a control already has a parent, Angular will throw when adding it to `target`.
    */
   protected addControlsToNestedFormGroup(source: FormGroup, target: FormGroup = this.form): void {
-    Object.entries(source.controls).forEach(([name, ctrl]) => {
+    for (const [name, ctrl] of Object.entries(source.controls)) {
       target.addControl(name, ctrl);
-    });
+    }
   }
 
   /**
@@ -33,9 +33,9 @@ export abstract class AbstractNestedFormBaseComponent extends AbstractFormBaseCo
    * Use this with the same builder group you used to add controls so you only remove what you added.
    */
   protected removeControlsFromNestedFormGroup(source: FormGroup, target: FormGroup = this.form): void {
-    Object.keys(source.controls).forEach((name) => {
+    for (const name of Object.keys(source.controls)) {
       target.removeControl(name);
-    });
+    }
   }
 
   /**
@@ -80,12 +80,12 @@ export abstract class AbstractNestedFormBaseComponent extends AbstractFormBaseCo
    * This means built-in validators (e.g. `required`) will be re-applied after reset.
    */
   protected resetAndValidateControls(controls: (AbstractControl | null)[]): void {
-    controls.forEach((c) => {
-      if (!c) return;
+    for (const c of controls) {
+      if (!c) continue;
       c.setErrors(null);
       c.reset(null, { emitEvent: false });
       c.updateValueAndValidity({ emitEvent: false, onlySelf: true });
-    });
+    }
   }
 
   /**
@@ -128,7 +128,9 @@ export abstract class AbstractNestedFormBaseComponent extends AbstractFormBaseCo
   public override ngOnDestroy(): void {
     // Remove controls this sub-form added to the parent (if nested)
     if (this.form?.parent) {
-      Object.keys(this.form.controls).forEach((name) => this.form.removeControl(name));
+      for (const name of Object.keys(this.form.controls)) {
+        this.form.removeControl(name);
+      }
     }
 
     super.ngOnDestroy();

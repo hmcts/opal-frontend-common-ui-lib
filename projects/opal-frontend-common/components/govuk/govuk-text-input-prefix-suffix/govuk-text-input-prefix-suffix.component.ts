@@ -34,13 +34,13 @@ export class GovukTextInputPrefixSuffixComponent {
   public onBlurFormatToTwoDecimalPlaces() {
     let value = this._control.value;
 
-    if (value && !isNaN(parseFloat(value))) {
+    if (value && !Number.isNaN(Number.parseFloat(value))) {
       const parts = value.split('.');
 
       // Check if the value has a decimal point and exactly one digit after it
       if (parts.length === 2 && parts[1].length === 1) {
         // Convert the value to two decimal places
-        value = parseFloat(value).toFixed(2);
+        value = Number.parseFloat(value).toFixed(2);
         this._control.setValue(value, { emitEvent: false });
       }
     }

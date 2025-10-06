@@ -17,9 +17,9 @@ export function optionalValidDateValidator(): ValidatorFn {
       // Check if the date is valid
       const date = new Date(`${year}-${month}-${day}`);
       if (
-        date.getDate() !== parseInt(day, 10) ||
-        date.getMonth() + 1 !== parseInt(month, 10) ||
-        date.getFullYear() !== parseInt(year, 10)
+        date.getDate() !== Number.parseInt(day, 10) ||
+        date.getMonth() + 1 !== Number.parseInt(month, 10) ||
+        date.getFullYear() !== Number.parseInt(year, 10)
       ) {
         return { invalidDate: { value: value } };
       }

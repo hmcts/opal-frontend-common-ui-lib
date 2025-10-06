@@ -85,9 +85,9 @@ export abstract class AbstractFormAliasBaseComponent extends AbstractFormBaseCom
     const control = this.form.get(formArrayName) as FormArray;
 
     // Clear the error messages...
-    [...formArrayControls].forEach((_element, index) => {
+    for (const [index] of formArrayControls.entries()) {
       this.removeFormAliasControlsErrors(index, formArrayControls, fieldNames);
-    });
+    }
 
     // Reset the form array controls...
     control.clear();
@@ -156,9 +156,9 @@ export abstract class AbstractFormAliasBaseComponent extends AbstractFormBaseCom
     const formArrayControl = formArrayControls[index];
 
     if (formArrayControl) {
-      fieldNames.forEach((field) => {
+      for (const field of fieldNames) {
         delete this.formControlErrorMessages?.[formArrayControl[field].controlName];
-      });
+      }
     }
   }
 

@@ -18,7 +18,7 @@ export class MojAlertComponent {
 
   @HostBinding('class')
   get hostClass(): string {
-    return !this.isVisible ? '' : `moj-alert moj-alert--${this.type}`;
+    return this.isVisible ? `moj-alert moj-alert--${this.type}` : '';
   }
   @HostBinding('attr.aria-label')
   get computedAriaLabel(): string {

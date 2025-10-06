@@ -81,11 +81,11 @@ export abstract class AbstractSortableTableComponent extends AbstractTableFilter
     this.sortStateSignal.set(initialSortState);
 
     if (existingSortState) {
-      Object.entries(existingSortState).forEach(([key, sortType]) => {
+      for (const [key, sortType] of Object.entries(existingSortState)) {
         if (sortType !== 'none') {
           this.onSortChange({ key, sortType });
         }
-      });
+      }
     }
     this.getSortedColumn();
   }
