@@ -1389,4 +1389,296 @@ describe('AbstractFormBaseComponent', () => {
     expect(setSpy).not.toHaveBeenCalled();
     expect((r.get('existing') as FormControl<string>).value).toBe('keep');
   });
+
+  it('should return true for an element with a tabIndex >= 0 and no disabled attribute', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const element = document.createElement('div');
+    element.tabIndex = 0;
+
+    const result = component['canReceiveFocus'](element as unknown as HTMLAnchorElement);
+
+    expect(result).toBeTrue();
+  });
+
+  it('should return false for an element with a tabIndex >= 0 but with a disabled attribute', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const element = document.createElement('div');
+    element.tabIndex = 0;
+    element.setAttribute('disabled', '');
+
+    const result = component['canReceiveFocus'](element);
+
+    expect(result).toBeFalse();
+  });
+
+  it('should return true for an anchor element with a valid href', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const element = document.createElement('a');
+    element.tabIndex = -1; // Ensure the anchor is not focusable by default
+    element.href = 'https://example.com';
+
+    const result = component['canReceiveFocus'](element);
+
+    expect(result).toBeTrue();
+  });
+
+  it('should return true for an enabled input element', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const element = document.createElement('input');
+
+    const result = component['canReceiveFocus'](element);
+
+    expect(result).toBeTrue();
+  });
+
+  it('should return false for a disabled input element', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const element = document.createElement('input');
+    element.disabled = true;
+
+    const result = component['canReceiveFocus'](element);
+
+    expect(result).toBeFalse();
+  });
+
+  it('should return true for an enabled select element', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const element = document.createElement('select');
+
+    const result = component['canReceiveFocus'](element);
+
+    expect(result).toBeTrue();
+  });
+
+  it('should return false for a disabled select element', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const element = document.createElement('select');
+    element.disabled = true;
+
+    const result = component['canReceiveFocus'](element);
+
+    expect(result).toBeFalse();
+  });
+
+  it('should return true for an enabled textarea element', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const element = document.createElement('textarea');
+
+    const result = component['canReceiveFocus'](element);
+
+    expect(result).toBeTrue();
+  });
+
+  it('should return false for a disabled textarea element', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const element = document.createElement('textarea');
+    element.disabled = true;
+
+    const result = component['canReceiveFocus'](element);
+
+    expect(result).toBeFalse();
+  });
+
+  it('should return true for an enabled button element', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const element = document.createElement('button');
+
+    const result = component['canReceiveFocus'](element);
+
+    expect(result).toBeTrue();
+  });
+
+  it('should return false for a disabled button element', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const element = document.createElement('button');
+    element.disabled = true;
+
+    const result = component['canReceiveFocus'](element);
+
+    expect(result).toBeFalse();
+  });
+
+  it('should return false for an element that is not focusable', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const element = document.createElement('span');
+
+    const result = component['canReceiveFocus'](element);
+
+    expect(result).toBeFalse();
+  });
+
+  it('should scroll to and focus on the autocomplete label if present', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const fieldId = 'testField';
+    const autocompleteLabel = document.createElement('label');
+    autocompleteLabel.setAttribute('for', `${fieldId}-autocomplete`);
+    document.body.appendChild(autocompleteLabel);
+
+    spyOn(autocompleteLabel, 'scrollIntoView');
+
+    component['scroll'](fieldId);
+
+    expect(autocompleteLabel.scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
+
+    document.body.removeChild(autocompleteLabel);
+  });
+
+  it('should scroll to and focus on the regular label if present', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const fieldId = 'testField';
+    const regularLabel = document.createElement('label');
+    regularLabel.setAttribute('for', fieldId);
+    document.body.appendChild(regularLabel);
+    spyOn(regularLabel, 'scrollIntoView');
+
+    component['scroll'](fieldId);
+
+    expect(regularLabel.scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
+
+    document.body.removeChild(regularLabel);
+  });
+
+  it('should scroll to and focus on the fieldset legend if present', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const fieldId = 'testField';
+    const fieldset = document.createElement('div');
+    fieldset.id = fieldId;
+    const legend = document.createElement('div');
+    legend.classList.add('govuk-fieldset__legend');
+    fieldset.appendChild(legend);
+    document.body.appendChild(fieldset);
+
+    spyOn(fieldset, 'focus');
+    spyOn(legend, 'scrollIntoView');
+
+    component['scroll'](fieldId);
+
+    expect(legend.scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
+    expect(fieldset.focus).toHaveBeenCalled();
+
+    document.body.removeChild(fieldset);
+  });
+
+  it('should scroll to and focus on the field element if no label or legend is found', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const fieldId = 'testField';
+    const fieldElement = document.createElement('input');
+    fieldElement.id = fieldId;
+    document.body.appendChild(fieldElement);
+    spyOn(fieldElement, 'focus');
+    spyOn(fieldElement, 'scrollIntoView');
+
+    component['scroll'](fieldId);
+
+    expect(fieldElement.scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
+    expect(fieldElement.focus).toHaveBeenCalled();
+
+    document.body.removeChild(fieldElement);
+  });
+
+  it('should scroll to and focus on a nested focusable element if the field element is not focusable', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const fieldId = 'testField';
+    const fieldElement = document.createElement('div');
+    fieldElement.id = fieldId;
+    const nestedInput = document.createElement('input');
+    fieldElement.appendChild(nestedInput);
+    document.body.appendChild(fieldElement);
+    spyOn(nestedInput, 'focus');
+    spyOn(nestedInput, 'scrollIntoView');
+
+    component['scroll'](fieldId);
+
+    expect(nestedInput.scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
+    expect(nestedInput.focus).toHaveBeenCalled();
+
+    document.body.removeChild(fieldElement);
+  });
+
+  // it('should not throw an error if no matching elements are found', () => {
+  //   if (!component) {
+  //     fail('component returned null');
+  //     return;
+  //   }
+
+  //   const fieldId = 'nonExistentField';
+  //   const scrollSpy = spyOn(component['utilsService'], 'scrollToTop');
+
+  //   expect(() => {
+  //     if (!component) {
+  //       fail('component returned null');
+  //       return;
+  //     }
+  //     component['scroll'](fieldId);
+  //   }).not.toThrow();
+  //   expect(scrollSpy).not.toHaveBeenCalled();
+  // });
 });

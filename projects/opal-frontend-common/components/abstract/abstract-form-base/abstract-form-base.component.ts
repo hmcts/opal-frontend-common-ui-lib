@@ -38,32 +38,80 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
   constructor() {}
 
   /**
-   * Scrolls to the label of the component and focuses on the field id
+   * Scrolls to a specific form field and attempts to focus on it.
    *
-   * @param fieldId - Field id of the component
+   * This method locates the target field or its associated label/legend
+   * based on the provided `fieldId`. It ensures that the field or its
+   * nested focusable element is brought into view and focused, if possible.
+   *
+   * The scrolling behavior is smooth, and the method prioritizes the following
+   * elements in order:
+   * 1. A label associated with an autocomplete field (`label[for="${fieldId}-autocomplete"]`).
+   * 2. A regular label associated with the field (`label[for="${fieldId}"]`).
+   * 3. A legend within a fieldset associated with the field (`[id="${fieldId}"] .govuk-fieldset__legend`).
+   * 4. The field itself or its nested focusable element.
+   *
+   * @param fieldId - The ID of the form field to scroll to and focus on.
    */
   private scroll(fieldId: string): void {
-    let labelTarget;
-    let fieldElement;
+    const autocompleteLabel = document.querySelector<HTMLElement>(`label[for="${fieldId}-autocomplete"]`);
+    const regularLabel = document.querySelector<HTMLElement>(`label[for="${fieldId}"]`);
+    const fieldsetLegend = document.querySelector<HTMLElement>(`[id="${fieldId}"] .govuk-fieldset__legend`);
 
-    const autocompleteLabel = document.querySelector(`label[for=${fieldId}-autocomplete]`);
-    const regularLabel = document.querySelector(`label[for=${fieldId}]`);
-    const fieldsetLegend = document.querySelector(`#${fieldId} .govuk-fieldset__legend`);
+    const labelTarget = autocompleteLabel ?? regularLabel ?? fieldsetLegend ?? null;
+    const focusableSelector = 'input:not([type="hidden"]), select, textarea, button, [tabindex]:not([tabindex="-1"])';
 
-    if (autocompleteLabel) {
-      labelTarget = autocompleteLabel;
-      fieldElement = document.getElementById(`${fieldId}-autocomplete`);
-    } else {
-      labelTarget = regularLabel || fieldsetLegend;
-      fieldElement = document.getElementById(fieldId);
-    }
+    let fieldElement =
+      (document.getElementById(`${fieldId}-autocomplete`) as HTMLElement | null) ??
+      (document.getElementById(fieldId) as HTMLElement | null);
 
-    if (fieldElement) {
-      if (labelTarget) {
-        labelTarget.scrollIntoView({ behavior: 'smooth' });
+    if (fieldElement && !this.canReceiveFocus(fieldElement)) {
+      const nestedFocusable = fieldElement.querySelector<HTMLElement>(focusableSelector);
+      if (nestedFocusable) {
+        fieldElement = nestedFocusable;
       }
-      fieldElement.focus();
     }
+
+    if (!fieldElement) {
+      fieldElement = document.querySelector<HTMLElement>(`[id="${fieldId}"] ${focusableSelector}`);
+    }
+
+    if (labelTarget) {
+      labelTarget.scrollIntoView({ behavior: 'smooth' });
+    } else if (fieldElement) {
+      fieldElement.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    fieldElement?.focus();
+  }
+
+  /**
+   * Determines whether a given HTML element can receive focus.
+   *
+   * An element is considered focusable if:
+   * - It has a `tabIndex` greater than or equal to 0 and does not have the `disabled` attribute.
+   * - It is an anchor (`<a>`) element with a valid `href` attribute.
+   * - It is one of the following tags: `INPUT`, `SELECT`, `TEXTAREA`, or `BUTTON`,
+   *   and it is not disabled.
+   *
+   * @param element - The HTML element to check for focusability.
+   * @returns `true` if the element can receive focus, otherwise `false`.
+   */
+  private canReceiveFocus(element: HTMLElement): boolean {
+    if (element.tabIndex >= 0 && !element.hasAttribute('disabled')) {
+      return true;
+    }
+
+    if (element instanceof HTMLAnchorElement && element.hasAttribute('href') && element.href) {
+      return !!element.href;
+    }
+
+    const focusableTags = ['INPUT', 'SELECT', 'TEXTAREA', 'BUTTON'];
+    if (focusableTags.includes(element.tagName)) {
+      return !(element as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | HTMLButtonElement).disabled;
+    }
+
+    return false;
   }
 
   /**
