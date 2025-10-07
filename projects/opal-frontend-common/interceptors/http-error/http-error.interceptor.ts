@@ -15,7 +15,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
       globalStore.setError({ error: false, message: '' });
     }),
     catchError((error) => {
-      const isBrowser = typeof window !== 'undefined';
+      const isBrowser = typeof globalThis !== 'undefined';
 
       if (isBrowser) {
         globalStore.setError({

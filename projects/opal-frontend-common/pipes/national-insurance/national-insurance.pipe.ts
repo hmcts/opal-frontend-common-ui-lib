@@ -10,7 +10,7 @@ export class NationalInsurancePipe implements PipeTransform {
       return '';
     }
 
-    const cleaned = value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+    const cleaned = value.replaceAll(/[^a-zA-Z0-9]/g, '').toUpperCase();
 
     if (cleaned.length < 9) return value;
 

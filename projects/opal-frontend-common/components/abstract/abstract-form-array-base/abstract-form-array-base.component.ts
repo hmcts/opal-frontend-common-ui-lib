@@ -131,9 +131,9 @@ export abstract class AbstractFormArrayBaseComponent extends AbstractFormBaseCom
     const formArrayControl = formArrayControls[index];
 
     if (formArrayControl) {
-      fieldNames.forEach((field) => {
+      for (const field of fieldNames) {
         delete this.formControlErrorMessages?.[formArrayControl[field].controlName];
-      });
+      }
     }
   }
 
@@ -214,7 +214,7 @@ export abstract class AbstractFormArrayBaseComponent extends AbstractFormBaseCom
    * @param formArrayName - The name of the form array.
    */
   public removeFormArrayControlFromArray(formArrayControl: IAbstractFormArrayControls, formArrayName: string): void {
-    const formArrayControlIndex = this.formArrayControls.findIndex((control) => control === formArrayControl);
+    const formArrayControlIndex = this.formArrayControls.indexOf(formArrayControl);
     this.removeFormArrayControls(formArrayControlIndex, formArrayName, this.formArrayControls, this.formArrayFields);
   }
 

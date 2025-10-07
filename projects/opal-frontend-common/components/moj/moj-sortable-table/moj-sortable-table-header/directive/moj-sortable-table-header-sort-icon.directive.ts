@@ -35,17 +35,17 @@ export class MojSortableTableHeaderSortIconDirective implements OnChanges {
 
     // Clear existing <path> children
     while (svg.firstChild) {
-      svg.removeChild(svg.firstChild);
+      svg.firstChild.remove();
     }
 
     // Append new <path> elements based on sortDirection
     const paths = this.getPathsForDirection(this.sortDirection);
-    paths.forEach((pathD) => {
+    for (const pathD of paths) {
       const path = this.renderer.createElement('path', 'svg');
       this.renderer.setAttribute(path, 'd', pathD);
       this.renderer.setAttribute(path, 'fill', 'currentColor');
 
       svg.appendChild(path);
-    });
+    }
   }
 }
