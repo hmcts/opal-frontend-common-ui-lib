@@ -13,5 +13,11 @@
   }
 
   <div #autocomplete id="{{ autoCompleteId }}-container" class="{{ inputClasses }}"></div>
-  <input [id]="inputId" [name]="inputName" type="hidden" [formControl]="getControl" />
+  <input
+    [id]="inputId"
+    [name]="inputName"
+    type="hidden"
+    [formControl]="getControl"
+    [attr.aria-describedby]="hintText ? inputId + '-hint' : null"
+  />
 </div>

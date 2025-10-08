@@ -13,6 +13,11 @@ describe('GovukSummaryListRowActionItemComponent', () => {
 
     fixture = TestBed.createComponent(GovukSummaryListRowActionItemComponent);
     component = fixture.componentInstance;
+
+    component.actionName = 'Change';
+    component.actionId = 'change';
+    component.visuallyHiddenText = 'Minor Creditor';
+
     fixture.detectChanges();
   });
 
