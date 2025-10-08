@@ -61,9 +61,7 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
     const labelTarget = autocompleteLabel ?? regularLabel ?? fieldsetLegend ?? null;
     const focusableSelector = 'input:not([type="hidden"]), select, textarea, button, [tabindex]:not([tabindex="-1"])';
 
-    let fieldElement =
-      (document.getElementById(`${fieldId}-autocomplete`) as HTMLElement | null) ??
-      (document.getElementById(fieldId) as HTMLElement | null);
+    let fieldElement = document.getElementById(`${fieldId}-autocomplete`) ?? document.getElementById(fieldId);
 
     if (fieldElement && !this.canReceiveFocus(fieldElement)) {
       const nestedFocusable = fieldElement.querySelector<HTMLElement>(focusableSelector);
@@ -72,9 +70,7 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (!fieldElement) {
-      fieldElement = document.querySelector<HTMLElement>(`[id="${fieldId}"] ${focusableSelector}`);
-    }
+    fieldElement ??= document.querySelector<HTMLElement>(`[id="${fieldId}"] ${focusableSelector}`);
 
     if (labelTarget) {
       labelTarget.scrollIntoView({ behavior: 'smooth' });
