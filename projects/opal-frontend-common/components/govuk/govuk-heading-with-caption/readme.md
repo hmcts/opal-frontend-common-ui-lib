@@ -1,5 +1,3 @@
----
-
 # GOV.UK Heading with Caption Component
 
 This Angular component displays a heading with an optional caption, styled according to GOV.UK standards.
@@ -31,21 +29,30 @@ You can use the heading with caption component in your template as follows:
 ></opal-lib-govuk-heading-with-caption>
 ```
 
-### Example in HTML:
+### Example with different heading levels:
 
 ```html
-<span class="govuk-caption-l">{{ captionText }}</span>
-<h1 class="govuk-heading-l">{{ headingText }}</h1>
-```
+<!-- Default h1 heading -->
+<opal-lib-govuk-heading-with-caption
+  [captionText]="'HY35014'"
+  [headingText]="'Riding a bicycle on a footpath'"
+></opal-lib-govuk-heading-with-caption>
 
-This component renders a GOV.UK-styled large heading (`h1`) along with an optional caption displayed above the heading.
+<!-- h2 heading for accessibility -->
+<opal-lib-govuk-heading-with-caption
+  [captionText]="'HY35014'"
+  [headingText]="'Riding a bicycle on a footpath'"
+  [headingLevel]="2"
+></opal-lib-govuk-heading-with-caption>
+```
 
 ## Inputs
 
-| Input         | Type     | Description                                              |
-| ------------- | -------- | -------------------------------------------------------- |
-| `captionText` | `string` | The caption text displayed above the heading (optional). |
-| `headingText` | `string` | The main heading text.                                   |
+| Input          | Type     | Default | Description                                                            |
+| -------------- | -------- | ------- | ---------------------------------------------------------------------- |
+| `captionText`  | `string` | None    | The caption text displayed inside the heading                          |
+| `headingText`  | `string` | None    | The main heading                                                       |
+| `headingLevel` | `string` | 1       | The heading level (1-6). Determines which HTML heading element to use. |
 
 ## Outputs
 
@@ -60,13 +67,9 @@ There are no custom methods for this component.
 Unit tests for this component can be found in the `govuk-heading-with-caption.component.spec.ts` file. To run the tests, use:
 
 ```bash
-ng test
+yarn test
 ```
 
 ## Contributing
 
 Feel free to submit issues or pull requests to improve this component.
-
----
-
-If there are additional features in the new version of the component, let me know and I can modify the `README.md` accordingly.
