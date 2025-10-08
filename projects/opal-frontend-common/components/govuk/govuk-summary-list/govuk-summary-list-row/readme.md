@@ -1,5 +1,3 @@
----
-
 # GOV.UK Summary List Row Component
 
 This Angular component represents an individual row in a GOV.UK-styled summary list, displaying a key-value pair along with optional actions.
@@ -27,7 +25,7 @@ You can use the summary list row component in your template as follows:
 ```html
 <opal-lib-govuk-summary-list-row [key]="'Full name'" [value]="'John Doe'">
   <ng-container actions>
-    <a href="/edit-name">Change</a>
+    <a href="/edit-name">Change <span class="govuk-visually-hidden">John Doe</span></a>
   </ng-container>
 </opal-lib-govuk-summary-list-row>
 ```
@@ -70,7 +68,5 @@ ng test
 ## Contributing
 
 Feel free to submit issues or pull requests to improve this component.
-
----
 
 This `README.md` explains how to use and configure the `govuk-summary-list-row` component for displaying individual rows in a GOV.UK-styled summary list.
