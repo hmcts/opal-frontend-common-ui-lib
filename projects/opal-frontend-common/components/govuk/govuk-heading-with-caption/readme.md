@@ -38,7 +38,7 @@ You can use the heading with caption component in your template as follows:
   [headingText]="'Riding a bicycle on a footpath'"
 ></opal-lib-govuk-heading-with-caption>
 
-<!-- h2 heading for accessibility -->
+<!-- Changing heading level to h2 -->
 <opal-lib-govuk-heading-with-caption
   [captionText]="'HY35014'"
   [headingText]="'Riding a bicycle on a footpath'"

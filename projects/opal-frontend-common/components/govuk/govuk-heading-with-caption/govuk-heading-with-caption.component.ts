@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
-
+import { HeadingLevel } from './types/govuk-heading-with-caption-heading-level.type';
 @Component({
   selector: 'opal-lib-govuk-heading-with-caption',
   imports: [CommonModule],
