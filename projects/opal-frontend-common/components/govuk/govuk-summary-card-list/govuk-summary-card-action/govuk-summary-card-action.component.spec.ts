@@ -15,6 +15,7 @@ describe('GovukSummaryCardActionComponent', () => {
 
     component.actionText = 'Change';
     component.actionRoute = 'change';
+    component.visuallyHiddenText = 'Minor Creditor';
 
     fixture.detectChanges();
   });

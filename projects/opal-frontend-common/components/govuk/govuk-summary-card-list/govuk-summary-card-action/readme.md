@@ -1,5 +1,3 @@
----
-
 # GOV.UK Summary Card Action Component
 
 This Angular component provides a GOV.UK-styled action button or link inside a summary card, allowing users to take actions such as editing or deleting information.
@@ -25,23 +23,29 @@ import { GovukSummaryCardActionComponent } from '@components/govuk/govuk-summary
 You can use the summary card action component in your template as follows:
 
 ```html
-<opal-lib-govuk-summary-card-action [actionLink]="'/edit-item'" [actionText]="'Edit'"></opal-lib-govuk-summary-card-action>
+<opal-lib-govuk-summary-card-action
+  [actionLink]="'/edit-item'"
+  [actionText]="'Edit'"
+></opal-lib-govuk-summary-card-action>
 ```
 
 ### Example in HTML:
 
 ```html
 <div class="govuk-summary-card__action">
-  <a class="govuk-link" [routerLink]="actionLink">{{ actionText }}</a>
+  <a class="govuk-link" [routerLink]="actionLink"
+    >{{ actionText }} <span class="govuk-visually-hidden"> {{ visuallyHiddenText }}</span></a
+  >
 </div>
 ```
 
 ## Inputs
 
-| Input        | Type     | Description                                       |
-| ------------ | -------- | ------------------------------------------------- |
-| `actionLink` | `string` | The link URL or route for the action.             |
-| `actionText` | `string` | The text displayed for the action button or link. |
+| Input                | Type     | Description                                         |
+| -------------------- | -------- | --------------------------------------------------- |
+| `actionLink`         | `string` | The link URL or route for the action.               |
+| `actionText`         | `string` | The text displayed for the action button or link.   |
+| `visuallyHiddenText` | `string` | The text visually hidden for accessibility purposes |
 
 ## Outputs
 

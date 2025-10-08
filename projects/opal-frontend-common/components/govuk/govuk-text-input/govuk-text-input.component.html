@@ -1,9 +1,9 @@
 <div class="govuk-form-group" [class.govuk-form-group--error]="!!errors">
-  <h1 class="govuk-label-wrapper">
+  <div class="govuk-label-wrapper">
     <label class="govuk-label {{ labelClasses }}" [for]="inputId">
       {{ labelText }}
     </label>
-  </h1>
+  </div>
   @if (hintText) {
     <div id="{{ inputId }}-hint" class="govuk-hint">
       {{ hintText }}
@@ -26,5 +26,6 @@
     [name]="inputName"
     type="text"
     [formControl]="getControl"
+    [attr.aria-describedby]="hintText ? inputId + '-hint' : null"
   />
 </div>
