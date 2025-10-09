@@ -6,6 +6,8 @@
   (keyup.enter)="onClick($event, actionRoute)"
   tabindex="0"
 >
-  <strong>{{ actionText }}</strong
-  ><span class="govuk-visually-hidden">{{ actionText }}</span>
+  <strong>{{ actionText }}</strong>
+  @if (visuallyHiddenText) {
+    <span class="govuk-visually-hidden">{{ visuallyHiddenText }}</span>
+  }
 </a>

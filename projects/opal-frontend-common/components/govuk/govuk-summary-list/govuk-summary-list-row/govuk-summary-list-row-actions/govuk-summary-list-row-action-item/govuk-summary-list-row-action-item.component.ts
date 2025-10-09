@@ -9,6 +9,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, O
 export class GovukSummaryListRowActionItemComponent {
   @Input({ required: true }) actionName!: string;
   @Input({ required: true }) actionId!: string;
+  @Input({ required: false }) visuallyHiddenText!: string;
   @Output() public linkClick = new EventEmitter<string>();
 
   @HostBinding('class') hostClass = 'govuk-summary-list__actions-list-item govuk-link-colour';

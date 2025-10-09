@@ -9,6 +9,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, O
 export class GovukSummaryCardActionComponent {
   @Input({ required: true }) actionText!: string;
   @Input({ required: true }) actionRoute!: string;
+  @Input({ required: false }) visuallyHiddenText!: string;
   @Output() clickEvent = new EventEmitter<string>();
 
   @HostBinding('class') hostClass = 'govuk-summary-card__action';

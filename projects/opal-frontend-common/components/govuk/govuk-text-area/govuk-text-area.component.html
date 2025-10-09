@@ -1,7 +1,9 @@
 <div class="govuk-form-group govuk-character-count" [class.govuk-form-group--error]="!!errors">
-  <label class="govuk-label {{ labelClasses }}" [for]="inputId">
-    {{ labelText }}
-  </label>
+  <div class="govuk-label-wrapper">
+    <label class="govuk-label {{ labelClasses }}" [for]="inputId">
+      {{ labelText }}
+    </label>
+  </div>
   @if (hintText) {
     <div id="{{ inputId }}-hint" class="govuk-hint">
       {{ hintText }}
@@ -23,10 +25,18 @@
     [formControl]="getControl"
     [inputMode]="inputMode"
     [maxlength]="maxCharacterLimit"
-    [attr.aria-describedby]="describedBy"
+    [attr.aria-describedby]="
+      hintText ? (characterCountEnabled ? inputId + '-hint ' + inputId + '-with-hint-info' : inputId + '-hint') : null
+    "
   ></textarea>
   @if (characterCountEnabled) {
-    <div [id]="inputId + '-info'" class="govuk-hint govuk-character-count__message" aria-live="polite">
+    <div [id]="inputId + '-with-hint-info'" class="govuk-hint govuk-character-count__message govuk-visually-hidden">
+      You can enter up to {{ maxCharacterLimit }} characters
+    </div>
+    <div class="govuk-hint govuk-character-count__message govuk-character-count__status" aria-hidden="true">
+      You have {{ remainingCharacterCount() }} character{{ remainingCharacterCount() === 1 ? '' : 's' }} remaining
+    </div>
+    <div class="govuk-character-count__sr-status govuk-visually-hidden" aria-live="polite">
       You have {{ remainingCharacterCount() }} character{{ remainingCharacterCount() === 1 ? '' : 's' }} remaining
     </div>
   }
