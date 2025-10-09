@@ -40,15 +40,4 @@ export class GovukTextAreaComponent {
   get getControl() {
     return this._control;
   }
-
-  /**
-   * Returns a space-separated string of IDs for the elements that describe the textarea, or null if there are none.
-   */
-  get describedBy(): string | null {
-    const ids: string[] = [];
-    if (this.hintText) ids.push(`${this.inputId}-hint`);
-    if (this.errors) ids.push(`${this.inputId}-error-message`);
-    if (this.characterCountEnabled) ids.push(`${this.inputId}-info`);
-    return ids.length ? ids.join(' ') : null;
-  }
 }
