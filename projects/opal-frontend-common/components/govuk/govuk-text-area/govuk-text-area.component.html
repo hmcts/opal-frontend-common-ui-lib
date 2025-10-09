@@ -23,9 +23,10 @@
     [formControl]="getControl"
     [inputMode]="inputMode"
     [maxlength]="maxCharacterLimit"
+    [attr.aria-describedby]="describedBy"
   ></textarea>
   @if (characterCountEnabled) {
-    <div [id]="inputId + '-hint'" class="govuk-hint">
+    <div [id]="inputId + '-info'" class="govuk-hint govuk-character-count__message" aria-live="polite">
       You have {{ remainingCharacterCount() }} character{{ remainingCharacterCount() === 1 ? '' : 's' }} remaining
     </div>
   }
