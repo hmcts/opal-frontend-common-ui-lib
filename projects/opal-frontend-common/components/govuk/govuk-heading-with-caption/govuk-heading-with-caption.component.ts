@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
+import { HeadingLevel } from './types/govuk-heading-with-caption-heading-level.type';
 @Component({
   selector: 'opal-lib-govuk-heading-with-caption',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './govuk-heading-with-caption.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -11,4 +12,5 @@ export class GovukHeadingWithCaptionComponent {
   @Input({ required: true }) headingText!: string;
   @Input({ required: false }) headingClasses: string = 'govuk-heading-l';
   @Input({ required: false }) captionClasses: string = 'govuk-caption-l';
+  @Input({ required: false }) headingLevel: HeadingLevel = 1;
 }
