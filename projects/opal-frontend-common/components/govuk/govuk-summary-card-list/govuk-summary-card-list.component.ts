@@ -10,6 +10,7 @@ export class GovukSummaryCardListComponent implements OnInit {
   @Input({ required: true }) summaryCardListId!: string;
   @Input({ required: false }) cardTitle!: string;
   @Input({ required: false }) contentHidden!: boolean;
+  @Input({ required: false }) headingLevel: 1 | 2 | 3 | 4 | 5 | 6 = 2;
 
   public id!: string;
 

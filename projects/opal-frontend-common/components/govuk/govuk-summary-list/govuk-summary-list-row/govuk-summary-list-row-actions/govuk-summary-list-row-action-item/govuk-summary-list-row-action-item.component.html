@@ -6,6 +6,8 @@
   (keyup.enter)="handleActionClick($event, actionId)"
   tabindex="0"
 >
-  <strong>{{ actionName }}</strong
-  ><span class="govuk-visually-hidden">{{ visuallyHiddenText }}</span></a
->
+  <strong>{{ actionName }}</strong>
+  @if (visuallyHiddenText) {
+    <span class="govuk-visually-hidden">{{ visuallyHiddenText }}</span>
+  }
+</a>

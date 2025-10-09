@@ -1,7 +1,26 @@
 <div class="govuk-summary-card" [id]="id">
   @if (cardTitle && cardTitle.length > 0) {
     <div class="govuk-summary-card__title-wrapper">
-      <h2 class="govuk-summary-card__title">{{ cardTitle }}</h2>
+      @switch (headingLevel) {
+        @case (1) {
+          <h1 class="govuk-summary-card__title">{{ cardTitle }}</h1>
+        }
+        @case (2) {
+          <h2 class="govuk-summary-card__title">{{ cardTitle }}</h2>
+        }
+        @case (3) {
+          <h3 class="govuk-summary-card__title">{{ cardTitle }}</h3>
+        }
+        @case (4) {
+          <h4 class="govuk-summary-card__title">{{ cardTitle }}</h4>
+        }
+        @case (5) {
+          <h5 class="govuk-summary-card__title">{{ cardTitle }}</h5>
+        }
+        @case (6) {
+          <h6 class="govuk-summary-card__title">{{ cardTitle }}</h6>
+        }
+      }
       <ul class="govuk-summary-card__actions" role="list">
         <ng-content select="[actions]"></ng-content>
       </ul>

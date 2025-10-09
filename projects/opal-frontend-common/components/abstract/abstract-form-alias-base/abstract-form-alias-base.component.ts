@@ -1,6 +1,6 @@
 import { FormArray, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { takeUntil } from 'rxjs';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { IAbstractFormAliasBaseAliasControls } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-alias-base/interfaces';
 import { AbstractFormBaseComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-base';
 import {
@@ -8,11 +8,13 @@ import {
   IAbstractFormArrayControls,
   IAbstractFormArrayControl,
 } from '@hmcts/opal-frontend-common/components/abstract/interfaces';
+import { GovukTextInputComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-text-input';
 
 @Component({
   template: '',
 })
 export abstract class AbstractFormAliasBaseComponent extends AbstractFormBaseComponent implements OnInit, OnDestroy {
+  @ViewChildren('aliasFirstField') aliasFirstField!: QueryList<GovukTextInputComponent>;
   public aliasControls: IAbstractFormAliasBaseAliasControls[] = [];
   public aliasControlsValidation: IAbstractFormArrayControlValidation[] = [];
   public aliasFields: string[] = [];
@@ -199,10 +201,33 @@ export abstract class AbstractFormAliasBaseComponent extends AbstractFormBaseCom
     }
 
     addAliasControl.valueChanges.pipe(takeUntil(this['ngUnsubscribe'])).subscribe((shouldAddAlias) => {
-      this.aliasControls = shouldAddAlias
-        ? this.buildFormAliasControls([0], formArrayName, this.aliasFields, this.aliasControlsValidation)
-        : this.removeAllFormAliasControls(this.aliasControls, formArrayName, this.aliasFields);
+      if (shouldAddAlias) {
+        this.aliasControls = this.buildFormAliasControls(
+          [0],
+          formArrayName,
+          this.aliasFields,
+          this.aliasControlsValidation,
+        );
+        this.focusFirstAliasField();
+      } else {
+        this.aliasControls = this.removeAllFormAliasControls(this.aliasControls, formArrayName, this.aliasFields);
+      }
     });
+  }
+
+  /**
+   * Sets focus to the first input field of a newly added alias row.
+   */
+  public focusFirstAliasField(): void {
+    this['changeDetectorRef'].detectChanges();
+    setTimeout(() => {
+      const index = this.aliasControls.length - 1;
+      const inputId = this.aliasFirstField.get(index)?.inputId;
+      if (inputId) {
+        const el = document.getElementById(inputId);
+        el?.focus();
+      }
+    }, 0);
   }
 
   /**
@@ -234,6 +259,7 @@ export abstract class AbstractFormAliasBaseComponent extends AbstractFormBaseCom
 
   /**
    * Adds an alias to the specified index of the form array.
+   * Sets user focus to the first field of the newly added alias.
    *
    * @param index - The index at which to add the alias.
    * @param formArrayName - The name of the form array.
@@ -242,6 +268,7 @@ export abstract class AbstractFormAliasBaseComponent extends AbstractFormBaseCom
     this.aliasControls.push(
       this.addAliasControls(index, formArrayName, this.aliasFields, this.aliasControlsValidation),
     );
+    this.focusFirstAliasField();
   }
 
   /**
