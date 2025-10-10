@@ -1,2 +1,36 @@
-<span class="{{ captionClasses }}">{{ captionText }}</span>
-<h1 class="{{ headingClasses }}">{{ headingText }}</h1>
+<ng-template #headingContent>
+  <span class="{{ captionClasses }}">{{ captionText }}</span> {{ headingText }}
+</ng-template>
+
+@switch (headingLevel) {
+  @case (1) {
+    <h1 class="{{ headingClasses }}">
+      <ng-container *ngTemplateOutlet="headingContent"></ng-container>
+    </h1>
+  }
+  @case (2) {
+    <h2 class="{{ headingClasses }}">
+      <ng-container *ngTemplateOutlet="headingContent"></ng-container>
+    </h2>
+  }
+  @case (3) {
+    <h3 class="{{ headingClasses }}">
+      <ng-container *ngTemplateOutlet="headingContent"></ng-container>
+    </h3>
+  }
+  @case (4) {
+    <h4 class="{{ headingClasses }}">
+      <ng-container *ngTemplateOutlet="headingContent"></ng-container>
+    </h4>
+  }
+  @case (5) {
+    <h5 class="{{ headingClasses }}">
+      <ng-container *ngTemplateOutlet="headingContent"></ng-container>
+    </h5>
+  }
+  @case (6) {
+    <h6 class="{{ headingClasses }}">
+      <ng-container *ngTemplateOutlet="headingContent"></ng-container>
+    </h6>
+  }
+}
