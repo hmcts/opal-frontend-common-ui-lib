@@ -22,11 +22,12 @@ async function runRoutePermissionGuard(
   guard: typeof routePermissionsGuard,
   guardParameters: number | null,
   urlPath: string,
+  extraRouteData: Record<string, unknown> = {},
 ) {
   const dummyRoute = new ActivatedRouteSnapshot();
   dummyRoute.url = [new UrlSegment(urlPath, {})];
 
-  dummyRoute.data = { routePermissionId: [guardParameters] };
+  dummyRoute.data = { ...extraRouteData, routePermissionId: [guardParameters] };
 
   const dummyState: RouterStateSnapshot = {
     url: urlPath,
@@ -134,5 +135,35 @@ describe('routePermissionsGuard', () => {
     const result = TestBed.runInInjectionContext(() => routePermissionsGuard(dummyRoute, dummyState));
     const authenticated = result instanceof Observable ? await handleObservableResult(result) : result;
     expect(authenticated).toBeTrue();
+  }));
+
+  it('should redirect to account created page when user status is not active', fakeAsync(async () => {
+    mockOpalUserService.getLoggedInUserState.and.returnValue(
+      of({
+        ...OPAL_USER_STATE_MOCK,
+        status: 'pending',
+      }),
+    );
+
+    await runRoutePermissionGuard(routePermissionsGuard, ROUTE_PERMISSIONS_MOCK['test-route'], urlPath);
+
+    expect(mockPermissionsService.getUniquePermissions).not.toHaveBeenCalled();
+    expect(mockRouter.createUrlTree).toHaveBeenCalledOnceWith([`/${PAGES_ROUTING_PATHS.children.accountCreated}`]);
+  }));
+
+  it('should redirect to custom account created path when provided in route data', fakeAsync(async () => {
+    const customAccountCreatedPath = '/custom-account-created';
+    mockOpalUserService.getLoggedInUserState.and.returnValue(
+      of({
+        ...OPAL_USER_STATE_MOCK,
+        status: 'pending',
+      }),
+    );
+
+    await runRoutePermissionGuard(routePermissionsGuard, ROUTE_PERMISSIONS_MOCK['test-route'], urlPath, {
+      accountCreatedPath: customAccountCreatedPath,
+    });
+
+    expect(mockRouter.createUrlTree).toHaveBeenCalledOnceWith([customAccountCreatedPath]);
   }));
 });

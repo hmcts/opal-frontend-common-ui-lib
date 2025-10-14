@@ -12,19 +12,25 @@ export const routePermissionsGuard: CanActivateFn = (route: ActivatedRouteSnapsh
 
   return opalUserService.getLoggedInUserState().pipe(
     map((resp) => {
-      const routePermissionIds: number[] = route.data['routePermissionId'] ?? []; // Ensure it's an array
-      const accessDeniedPath = route.data['accessDeniedPath'] ?? `/${PAGES_ROUTING_PATHS.children.accessDenied}`; // Default to the provided path
+      if (resp.status && resp.status === 'active') {
+        const routePermissionIds: number[] = route.data['routePermissionId'] ?? []; // Ensure it's an array
+        const accessDeniedPath = route.data['accessDeniedPath'] ?? `/${PAGES_ROUTING_PATHS.children.accessDenied}`; // Default to the provided path
 
-      // Get the unique permission IDs for the user
-      const uniquePermissionIds = permissionService.getUniquePermissions(resp);
+        // Get the unique permission IDs for the user
+        const uniquePermissionIds = permissionService.getUniquePermissions(resp);
 
-      // If no permissions are required for the route, or the user has at least one matching permission, allow access
-      if (routePermissionIds.length === 0 || uniquePermissionIds.some((id) => routePermissionIds.includes(id))) {
-        return true;
+        // If no permissions are required for the route, or the user has at least one matching permission, allow access
+        if (routePermissionIds.length === 0 || uniquePermissionIds.some((id) => routePermissionIds.includes(id))) {
+          return true;
+        }
+
+        // Redirect the user to the access denied page if they lack all required permissions
+        return router.createUrlTree([`${accessDeniedPath}`]);
+      } else {
+        const accountCreatedPath =
+          route.data['accountCreatedPath'] ?? `/${PAGES_ROUTING_PATHS.children.accountCreated}`; // Default to the provided path
+        return router.createUrlTree([`${accountCreatedPath}`]);
       }
-
-      // Redirect the user to the access denied page if they lack all required permissions
-      return router.createUrlTree([`${accessDeniedPath}`]);
     }),
     catchError(() => {
       return of(false);

@@ -21,4 +21,11 @@ export const routing: Routes = [
     data: { title: PAGES_ROUTING_TITLES.children.signIn },
     resolve: { title: TitleResolver },
   },
+  {
+    path: PAGES_ROUTING_PATHS.children.accountCreated,
+    loadComponent: () => import('../account-created/account-created.component').then((c) => c.AccountCreated),
+    canActivate: [authGuard],
+    data: { title: PAGES_ROUTING_TITLES.children.accountCreated },
+    resolve: { title: TitleResolver },
+  },
 ];
