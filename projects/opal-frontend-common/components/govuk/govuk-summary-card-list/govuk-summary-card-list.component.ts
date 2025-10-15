@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { HeadingLevel } from '@hmcts/opal-frontend-common/types';
 
 @Component({
   selector: 'opal-lib-govuk-summary-card-list',
@@ -10,7 +11,7 @@ export class GovukSummaryCardListComponent implements OnInit {
   @Input({ required: true }) summaryCardListId!: string;
   @Input({ required: false }) cardTitle!: string;
   @Input({ required: false }) contentHidden!: boolean;
-  @Input({ required: false }) headingLevel: 1 | 2 | 3 | 4 | 5 | 6 = 2;
+  @Input({ required: false }) headingLevel: HeadingLevel = 2;
 
   public id!: string;
 

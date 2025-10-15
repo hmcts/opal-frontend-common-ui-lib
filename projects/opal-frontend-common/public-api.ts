@@ -18,3 +18,7 @@ export * from './constants/public-api';
 
 // Pages - routing configuration
 export * from './pages/public-api';
+
+// Types - commonly used types and interfaces
+export * from './types/public-api';
+
