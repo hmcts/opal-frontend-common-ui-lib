@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { AbstractFormAliasBaseComponent } from './abstract-form-alias-base.component';
 import { FormGroup, FormArray, FormControl, Validators, ValidatorFn } from '@angular/forms';
 import { of } from 'rxjs';
@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { IAbstractFormArrayControls } from '../interfaces/abstract-form-array-controls.interface';
 import { IAbstractFormControlErrorMessage } from '../interfaces/abstract-form-control-error-message.interface';
 import { IAbstractFormArrayControlValidation } from '../interfaces/abstract-form-array-control-validation.interface';
+import { GovukTextInputComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-text-input';
 
 class TestAbstractFormAliasBaseComponent extends AbstractFormAliasBaseComponent {
   constructor() {
@@ -951,4 +952,47 @@ describe('AbstractFormAliasBaseComponent', () => {
     expect(formArray instanceof FormArray).toBeTruthy();
     expect(formArray.controls.length).toBe(1);
   });
+
+  it('should focus on the first input of the newly added alias row', fakeAsync(() => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+    // Setup: Mock alias controls array
+    component.aliasControls = [
+      {
+        firstNames: {
+          inputId: 'firstNames_0',
+          inputName: 'firstNames_0',
+          controlName: 'firstNames_0',
+        },
+        lastName: {
+          inputId: 'lastName_0',
+          inputName: 'lastName_0',
+          controlName: 'lastName_0',
+        },
+      },
+    ];
+
+    // Mock the aliasFirstField Map
+    const mockFirstField = { inputId: 'firstNames_0' } as GovukTextInputComponent;
+    spyOn(component.aliasFirstField, 'get').and.returnValue(mockFirstField);
+
+    // Mock DOM element and its focus method
+    const mockElement = jasmine.createSpyObj('HTMLElement', ['focus']);
+    spyOn(document, 'getElementById').and.returnValue(mockElement);
+
+    // Spy on change detection
+    spyOn(component['changeDetectorRef'], 'detectChanges');
+
+    // Act
+    component.focusFirstAliasField();
+    tick(); // Advance the timer for setTimeout
+
+    // Assert
+    expect(component['changeDetectorRef'].detectChanges).toHaveBeenCalled();
+    expect(component.aliasFirstField.get).toHaveBeenCalledWith(0); // index = length - 1 = 0
+    expect(document.getElementById).toHaveBeenCalledWith('firstNames_0');
+    expect(mockElement.focus).toHaveBeenCalled();
+  }));
 });

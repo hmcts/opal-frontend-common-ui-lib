@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.43",
+  "version": "0.0.44",
   "license": "MIT",
   "peerDependencies": {
     "@angular/common": "^18.2.0 || ^19.0.0 || ^20.0.0",
@@ -505,6 +505,9 @@
     },
     "./validators/valid-value": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-valid-value.mjs"
+    },
+    "./types": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-types.mjs"
     }
   }
 }

@@ -25,7 +25,15 @@ import { GovukSummaryCardListComponent } from '@components/govuk/govuk-summary-c
 You can use the summary card list component in your template as follows:
 
 ```html
-<opal-lib-govuk-summary-card-list [cards]="summaryCards"></opal-lib-govuk-summary-card-list>
+<opal-lib-govuk-summary-card-list 
+  summaryCardListId="summaryCard"
+  cardTitle="Summary Card"
+  [contentHidden]="false"
+  [headingLevel]="2"
+>
+  <ng-container actions>...</ng-container>
+  <ng-container content>...</ng-container>
+</opal-lib-govuk-summary-card-list>
 ```
 
 ### Example in HTML:
@@ -34,16 +42,36 @@ You can use the summary card list component in your template as follows:
 <ul class="govuk-summary-card-list">
   <li *ngFor="let card of cards" class="govuk-summary-card">
     <!-- Card content here -->
-    <opal-lib-govuk-summary-card [card]="card"></opal-lib-govuk-summary-card>
+    <opal-lib-govuk-summary-card 
+      [summaryCardListId]="card.id"
+      [cardTitle]="card.title"
+      [contentHidden]="false"
+      [headingLevel]="2"
+    >
+    <ng-container actions>
+      <li
+        opal-lib-govuk-summary-card-action
+        [actionText]="isDetailsHidden ? 'Show details' : 'Hide details'"
+        actionRoute="showHideDetails"
+        (clickEvent)="summaryListActionClick($event)"
+      ></li>
+    </ng-container>
+    <ng-container content>
+      <p>Summary content...</p>
+    </ng-container>
+    </opal-lib-govuk-summary-card>
   </li>
 </ul>
 ```
 
 ## Inputs
 
-| Input   | Type    | Description                                                                                                    |
-| ------- | ------- | -------------------------------------------------------------------------------------------------------------- |
-| `cards` | `Array` | An array of card objects to display. Each card contains a title, description, and any other necessary details. |
+| Input               | Type      | Description                                                                                       |
+| ------------------- | --------- | ------------------------------------------------------------------------------------------------- |
+| `summaryCardListId` | `String`  | An string to be used as an id for the wrapping HTML element.                                      |
+| `cardTitle`         | `String`  | An string to be used as the heading text on the card.                                             |
+| `contentHidden`     | `Boolean` | A boolean which dictates whether the content of the card should be hidden.                        |
+| `headingLevel`      | `Number`  | A number between 1 and 6 which dictates the heading level for the title. Default is 2 (H2)        |
 
 ## Outputs
 
