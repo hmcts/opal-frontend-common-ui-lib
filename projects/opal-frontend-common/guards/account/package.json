@@ -1,0 +1,5 @@
+{
+  "sideEffects": false,
+  "module": "../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-guards-account.mjs",
+  "typings": "../../../dist/opal-frontend-common/guards/account/index.d.ts"
+}

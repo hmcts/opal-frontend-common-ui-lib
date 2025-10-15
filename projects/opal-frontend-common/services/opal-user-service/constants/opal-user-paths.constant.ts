@@ -7,6 +7,4 @@ const userState = '/state';
 
 export const OPAL_USER_PATHS: IOpalUserPaths = {
   loggedInUserState: `${baseUrl}${users}${currentUser}${userState}`,
-  addUser: `${baseUrl}${users}`,
-  updateUser: `${baseUrl}${users}`,
 };
