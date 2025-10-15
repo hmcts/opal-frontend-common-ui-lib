@@ -323,6 +323,9 @@
     "./guards/auth": {
       "import": "./fesm2022/hmcts-opal-frontend-common-guards-auth.mjs"
     },
+    "./guards/account": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-guards-account.mjs"
+    },
     "./guards/can-deactivate": {
       "import": "./fesm2022/hmcts-opal-frontend-common-guards-can-deactivate.mjs"
     },
