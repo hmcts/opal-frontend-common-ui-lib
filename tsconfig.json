@@ -431,7 +431,9 @@
       "@hmcts/opal-frontend-common/validators/pattern-validator": [
         "./dist/opal-frontend-common/validators/pattern-validator"
       ],
-      "@hmcts/opal-frontend-common/validators/valid-value": ["./dist/opal-frontend-common/validators/valid-value"]
+      "@hmcts/opal-frontend-common/validators/valid-value": ["./dist/opal-frontend-common/validators/valid-value"],
+
+      "@hmcts/opal-frontend-common/types": ["./dist/opal-frontend-common/types"],
     },
     "moduleResolution": "bundler",
     "importHelpers": true,

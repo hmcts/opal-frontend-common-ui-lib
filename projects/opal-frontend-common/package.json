@@ -505,6 +505,9 @@
     },
     "./validators/valid-value": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-valid-value.mjs"
+    },
+    "./types": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-types.mjs"
     }
   }
 }
