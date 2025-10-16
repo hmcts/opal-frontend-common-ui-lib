@@ -2990,9 +2990,9 @@
     "@types/node" "*"
 
 "@types/jasmine@~5.1.0":
-  version "5.1.9"
-  resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-5.1.9.tgz#9f00abff2a17687e675ce6669e7b53c9e7d145f0"
-  integrity sha512-8t4HtkW4wxiPVedMpeZ63n3vlWxEIquo/zc1Tm8ElU+SqVV7+D3Na2PWaJUp179AzTragMWVwkMv7mvty0NfyQ==
+  version "5.1.11"
+  resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-5.1.11.tgz#2e48472c2e542c341419da8fc4ef0cffd1d7722a"
+  integrity sha512-eAij9lMAsosuA8cvRcqw7p2vO+LUraktQDmOUFx2jAnya8NUchr3DryHksfhZbRzU83vzNUSZhlk1cFdoePxwA==
 
 "@types/json-schema@*", "@types/json-schema@^7.0.15", "@types/json-schema@^7.0.9":
   version "7.0.15"
