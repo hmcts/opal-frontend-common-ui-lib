@@ -80,7 +80,7 @@ describe('httpErrorInterceptor', () => {
       httpErrorInterceptor(req, next).subscribe();
     });
 
-    expect(globalStore.error()).toEqual({ error: false, message: '', title: '', operationId: null});
+    expect(globalStore.error()).toEqual({ error: false, message: '', title: '', operationId: null });
   });
 
   it('should set the error message from error.detail when available', () => {
