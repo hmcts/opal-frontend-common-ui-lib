@@ -12,6 +12,7 @@ import { ErrorResponse } from './interface/http-error-retrievable-error-response
  * @param error - The HTTP error response
  * @returns true if the error has retriable: false
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isNonRetriableError(error: any): boolean {
   return error?.error?.retriable === false;
 }
@@ -21,6 +22,7 @@ function isNonRetriableError(error: any): boolean {
  * @param error - The HTTP error response
  * @returns true if the error has retriable: true or retriable is undefined
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isRetriableError(error: any): boolean {
   const retriable = error?.error?.retriable;
   return retriable === true || retriable === undefined;
@@ -31,6 +33,7 @@ function isRetriableError(error: any): boolean {
  * @param error - The HTTP error response
  * @param globalStore - Global store instance
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function handleRetriableError(error: any, globalStore: any): void {
   const errorResponse: ErrorResponse = error?.error;
   const errorMessage = errorResponse?.detail || GENERIC_HTTP_ERROR_MESSAGE;
@@ -48,6 +51,7 @@ function handleRetriableError(error: any, globalStore: any): void {
  * @param error - The HTTP error response
  * @param router - Angular Router instance
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function handleNonRetriableError(error: any, router: Router): void {
   const errorResponse: ErrorResponse = error?.error;
   const statusCode = error?.status || errorResponse?.status;
