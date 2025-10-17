@@ -312,6 +312,7 @@
       "@hmcts/opal-fronted-common/directives/capitalisation": ["./dist/opal-frontend-common/directives/capitalisation"],
       "@hmcts/opal-fronted-common/directives/govuk-button": ["./dist/opal-frontend-common/directives/govuk-button"],
       "@hmcts/opal-frontend-common/constants": ["./dist/opal-frontend-common/constants"],
+      "@hmcts/opal-frontend-common/guards/account": ["./dist/opal-frontend-common/guards/account"],
       "@hmcts/opal-frontend-common/guards/auth": ["./dist/opal-frontend-common/guards/auth"],
       "@hmcts/opal-frontend-common/guards/can-deactivate": ["./dist/opal-frontend-common/guards/can-deactivate"],
       "@hmcts/opal-frontend-common/guards/can-deactivate/interfaces": [
@@ -336,7 +337,6 @@
       "@hmcts/opal-frontend-common/pipes/days-ago": ["./dist/opal-frontend-common/pipes/days-ago"],
       "@hmcts/opal-frontend-common/pipes/national-insurance": ["./dist/opal-frontend-common/pipes/national-insurance"],
       "@hmcts/opal-frontend-common/resolvers/title": ["./dist/opal-frontend-common/resolvers/title"],
-      "@hmcts/opal-frontend-common/resolvers/user-state": ["./dist/opal-frontend-common/resolvers/user-state"],
       "@hmcts/opal-frontend-common/services/app-insights-service": [
         "./dist/opal-frontend-common/services/app-insights-service"
       ],
