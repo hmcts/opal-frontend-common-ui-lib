@@ -21,7 +21,7 @@ describe('GlobalStore', () => {
 
   it('should initialise with the default state', () => {
     expect(store.authenticated()).toBeFalse();
-    expect(store.error()).toEqual({ error: false, message: '' });
+    expect(store.error()).toEqual({ error: false, message: '', title: '', operationId: null });
     expect(store.featureFlags()).toEqual({});
     expect(store.userState()).toEqual({} as IOpalUserState);
     expect(store.ssoEnabled()).toBeFalse();
@@ -35,7 +35,7 @@ describe('GlobalStore', () => {
   });
 
   it('should update error state', () => {
-    const errorState = { error: true, message: 'Test Error' };
+    const errorState = { error: true, message: 'Test Error', title: 'Test Title', operationId: '12345' };
     store.setError(errorState);
     expect(store.error()).toEqual(errorState);
   });

@@ -12,7 +12,7 @@ export const GlobalStore = signalStore(
   { providedIn: 'root' },
   withState(() => ({
     authenticated: false,
-    error: { error: false, message: '' },
+    error: { error: false, title: '', message: '', operationId: null } as IErrorState,
     featureFlags: {} as LDFlagSet,
     userState: {} as IOpalUserState,
     ssoEnabled: false,
