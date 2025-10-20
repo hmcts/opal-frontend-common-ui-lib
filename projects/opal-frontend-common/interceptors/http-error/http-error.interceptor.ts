@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { catchError, tap, throwError } from 'rxjs';
 import { AppInsightsService } from '@hmcts/opal-frontend-common/services/app-insights-service';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
-import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constant';
+import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constants';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
 import { GENERIC_HTTP_ERROR_MESSAGE } from './constants/http-error-message.constant';
 import { IErrorResponse } from './interfaces/http-error-retrievable-error-response.interface';

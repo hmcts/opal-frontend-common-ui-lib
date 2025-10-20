@@ -1,1 +1,1 @@
-export * from './error-state.interface';
+export * from './global-store-error-state.interface';
