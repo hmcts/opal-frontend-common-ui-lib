@@ -2,7 +2,7 @@ import { IErrorResponse } from '@hmcts/opal-frontend-common/interceptors/http-er
 
 export const ERROR_RESPONSE: IErrorResponse = {
   type: null,
-  title: 'There was a problem',
+  title: null,
   status: null,
   detail: null,
   instance: null,
