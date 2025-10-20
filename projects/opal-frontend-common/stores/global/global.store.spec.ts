@@ -11,6 +11,7 @@ import {
 import { LAUNCH_DARKLY_CHANGE_FLAGS_MOCK } from '@hmcts/opal-frontend-common/services/launch-darkly-service/mocks';
 import { IOpalUserState } from '@hmcts/opal-frontend-common/services/opal-user-service/interfaces';
 import { OPAL_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/services/opal-user-service/mocks';
+import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constant';
 
 describe('GlobalStore', () => {
   let store: GlobalStoreType;
@@ -21,7 +22,7 @@ describe('GlobalStore', () => {
 
   it('should initialise with the default state', () => {
     expect(store.authenticated()).toBeFalse();
-    expect(store.error()).toEqual({ error: false, message: '', title: '', operationId: null });
+    expect(store.error()).toEqual({ ...GLOBAL_ERROR_STATE });
     expect(store.featureFlags()).toEqual({});
     expect(store.userState()).toEqual({} as IOpalUserState);
     expect(store.ssoEnabled()).toBeFalse();
@@ -35,7 +36,13 @@ describe('GlobalStore', () => {
   });
 
   it('should update error state', () => {
-    const errorState = { error: true, message: 'Test Error', title: 'Test Title', operationId: '12345' };
+    const errorState = {
+      ...GLOBAL_ERROR_STATE,
+      error: true,
+      message: 'Test Error',
+      title: 'Test Title',
+      operationId: '12345',
+    };
     store.setError(errorState);
     expect(store.error()).toEqual(errorState);
   });

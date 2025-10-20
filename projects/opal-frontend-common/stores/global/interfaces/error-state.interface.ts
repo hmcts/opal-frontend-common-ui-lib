@@ -1,6 +1,6 @@
 export interface IErrorState {
-  error: boolean;
-  title: string;
-  message: string;
+  error: boolean | null;
+  title: string | null;
+  message: string | null;
   operationId: string | null;
 }

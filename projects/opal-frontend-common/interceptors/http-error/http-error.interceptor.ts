@@ -4,9 +4,10 @@ import { Router } from '@angular/router';
 import { catchError, tap, throwError } from 'rxjs';
 import { AppInsightsService } from '@hmcts/opal-frontend-common/services/app-insights-service';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
+import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constant';
 import { GENERIC_HTTP_ERROR_MESSAGE } from './constants/http-error-message.constant';
-import { ErrorResponse } from './interface/http-error-retrievable-error-response.interface';
-
+import { IErrorResponse } from './interfaces/http-error-retrievable-error-response.interface';
+import { ERROR_RESPONSE } from './constants/http-error-message-response.constant';
 /**
  * Checks if the error is a non-retriable error
  * @param error - The HTTP error response
@@ -25,7 +26,7 @@ function isNonRetriableError(error: any): boolean {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isRetriableError(error: any): boolean {
   const retriable = error?.error?.retriable;
-  return retriable === true || retriable === undefined;
+  return retriable !== false;
 }
 
 /**
@@ -35,14 +36,15 @@ function isRetriableError(error: any): boolean {
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function handleRetriableError(error: any, globalStore: any): void {
-  const errorResponse: ErrorResponse = error?.error;
+  const errorResponse: IErrorResponse = error?.error;
   const errorMessage = errorResponse?.detail || GENERIC_HTTP_ERROR_MESSAGE;
 
   globalStore.setError({
+    ...GLOBAL_ERROR_STATE,
     error: true,
-    title: errorResponse?.title || 'There was a problem',
+    title: errorResponse?.title || ERROR_RESPONSE.title,
     message: errorMessage,
-    operationId: errorResponse?.operation_id || null,
+    operationId: errorResponse?.operation_id || ERROR_RESPONSE.operation_id,
   });
 }
 
@@ -53,7 +55,7 @@ function handleRetriableError(error: any, globalStore: any): void {
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function handleNonRetriableError(error: any, router: Router): void {
-  const errorResponse: ErrorResponse = error?.error;
+  const errorResponse: IErrorResponse = error?.error;
   const statusCode = error?.status || errorResponse?.status;
 
   switch (statusCode) {
@@ -76,7 +78,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     tap(() => {
-      globalStore.setError({ error: false, title: '', message: '', operationId: null });
+      globalStore.setError({ ...GLOBAL_ERROR_STATE, error: false });
     }),
     catchError((error) => {
       const isBrowser = typeof globalThis !== 'undefined';
@@ -88,10 +90,11 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
           handleRetriableError(error, globalStore);
         } else {
           globalStore.setError({
+            ...GLOBAL_ERROR_STATE,
             error: true,
-            title: 'There was a problem',
+            title: ERROR_RESPONSE.title,
             message: GENERIC_HTTP_ERROR_MESSAGE,
-            operationId: null,
+            operationId: ERROR_RESPONSE.operation_id,
           });
         }
       }

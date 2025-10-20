@@ -7,12 +7,12 @@ import {
 import { ISessionTokenExpiry } from '@hmcts/opal-frontend-common/services/session-service/interfaces';
 import { IErrorState } from '@hmcts/opal-frontend-common/stores/global/interfaces';
 import { IOpalUserState } from '@hmcts/opal-frontend-common/services/opal-user-service/interfaces';
-
+import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constant';
 export const GlobalStore = signalStore(
   { providedIn: 'root' },
   withState(() => ({
     authenticated: false,
-    error: { error: false, title: '', message: '', operationId: null } as IErrorState,
+    error: { ...GLOBAL_ERROR_STATE },
     featureFlags: {} as LDFlagSet,
     userState: {} as IOpalUserState,
     ssoEnabled: false,
