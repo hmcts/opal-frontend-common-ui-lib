@@ -5,6 +5,7 @@ import { catchError, tap, throwError } from 'rxjs';
 import { AppInsightsService } from '@hmcts/opal-frontend-common/services/app-insights-service';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constant';
+import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
 import { GENERIC_HTTP_ERROR_MESSAGE } from './constants/http-error-message.constant';
 import { IErrorResponse } from './interfaces/http-error-retrievable-error-response.interface';
 import { ERROR_RESPONSE } from './constants/http-error-message-response.constant';
@@ -39,8 +40,7 @@ function isRetriableError(error: unknown): boolean {
  * @param error - The HTTP error response
  * @param globalStore - Global store instance
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function handleRetriableError(error: unknown, globalStore: any): void {
+function handleRetriableError(error: unknown, globalStore: GlobalStoreType): void {
   let errorResponse: IErrorResponse | undefined;
 
   if (typeof error === 'object' && error !== null && 'error' in error) {
