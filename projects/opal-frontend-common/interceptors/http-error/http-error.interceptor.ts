@@ -92,8 +92,6 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
           globalStore.setError({
             ...GLOBAL_ERROR_STATE,
             error: true,
-            title: ERROR_RESPONSE.title,
-            message: GENERIC_HTTP_ERROR_MESSAGE,
             operationId: ERROR_RESPONSE.operation_id,
           });
         }
