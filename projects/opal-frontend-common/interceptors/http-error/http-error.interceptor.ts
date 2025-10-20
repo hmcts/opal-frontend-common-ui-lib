@@ -39,6 +39,7 @@ function isRetriableError(error: unknown): boolean {
  * @param error - The HTTP error response
  * @param globalStore - Global store instance
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function handleRetriableError(error: unknown, globalStore: any): void {
   let errorResponse: IErrorResponse | undefined;
 

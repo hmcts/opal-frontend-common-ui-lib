@@ -378,7 +378,7 @@ describe('httpErrorInterceptor', () => {
       error: true,
       title: 'There was a problem',
       message: GENERIC_HTTP_ERROR_MESSAGE,
-      operationId: null, 
+      operationId: null,
     };
 
     globalStore.setError(expectedFallbackError);
@@ -388,5 +388,20 @@ describe('httpErrorInterceptor', () => {
     expect(errorSignal.title).toBe('There was a problem');
     expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
     expect(errorSignal.operationId).toBeNull();
+  });
+
+  it('should handle malformed errors without error property', () => {
+    const malformedError = { status: 500, statusText: 'Server Error' };
+    const request = new HttpRequest('GET', '/test');
+    const next: HttpHandlerFn = () => throwError(() => malformedError);
+
+    interceptor(request, next).subscribe({
+      error: () => {
+        const errorSignal = globalStore.error();
+        expect(errorSignal.error).toBeTrue();
+        expect(errorSignal.title).toBe('There was a problem');
+        expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
+      },
+    });
   });
 });
