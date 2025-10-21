@@ -30,10 +30,10 @@ describe('accountGuard', () => {
   const accountCreatedPath = `/${PAGES_ROUTING_PATHS.children.accountCreated}`;
 
   beforeEach(() => {
-    mockOpalUserService = jasmine.createSpyObj(accountGuard, ['getLoggedInUserState']);
+    mockOpalUserService = jasmine.createSpyObj(OpalUserService, ['getLoggedInUserState']);
     mockOpalUserService.getLoggedInUserState.and.returnValue(of(OPAL_USER_STATE_MOCK));
 
-    mockRouter = jasmine.createSpyObj(accountGuard, ['createUrlTree']);
+    mockRouter = jasmine.createSpyObj(Router, ['createUrlTree']);
     mockRouter.createUrlTree.and.callFake(() => new UrlTree());
 
     TestBed.configureTestingModule({
