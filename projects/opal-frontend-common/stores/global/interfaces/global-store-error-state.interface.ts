@@ -1,4 +1,4 @@
-export interface IErrorState {
+export interface IGlobalErrorState {
   error: boolean | null;
   title: string | null;
   message: string | null;

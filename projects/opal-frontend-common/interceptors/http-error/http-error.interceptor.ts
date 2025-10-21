@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { catchError, tap, throwError } from 'rxjs';
 import { AppInsightsService } from '@hmcts/opal-frontend-common/services/app-insights-service';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
-import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constant';
+import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constants';
+import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
 import { GENERIC_HTTP_ERROR_MESSAGE } from './constants/http-error-message.constant';
 import { IErrorResponse } from './interfaces/http-error-retrievable-error-response.interface';
 import { ERROR_RESPONSE } from './constants/http-error-message-response.constant';
@@ -13,9 +14,12 @@ import { ERROR_RESPONSE } from './constants/http-error-message-response.constant
  * @param error - The HTTP error response
  * @returns true if the error has retriable: false
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isNonRetriableError(error: any): boolean {
-  return error?.error?.retriable === false;
+function isNonRetriableError(error: unknown): boolean {
+  if (typeof error === 'object' && error !== null && 'error' in error) {
+    const err = error as { error?: { retriable?: boolean } };
+    return err.error?.retriable === false;
+  }
+  return false;
 }
 
 /**
@@ -23,10 +27,12 @@ function isNonRetriableError(error: any): boolean {
  * @param error - The HTTP error response
  * @returns true if the error has retriable: true or retriable is undefined
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isRetriableError(error: any): boolean {
-  const retriable = error?.error?.retriable;
-  return retriable !== false;
+function isRetriableError(error: unknown): boolean {
+  if (typeof error === 'object' && error !== null && 'error' in error) {
+    const err = error as { error?: { retriable?: boolean } };
+    return err.error?.retriable !== false;
+  }
+  return false;
 }
 
 /**
@@ -34,9 +40,14 @@ function isRetriableError(error: any): boolean {
  * @param error - The HTTP error response
  * @param globalStore - Global store instance
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function handleRetriableError(error: any, globalStore: any): void {
-  const errorResponse: IErrorResponse = error?.error;
+function handleRetriableError(error: unknown, globalStore: GlobalStoreType): void {
+  let errorResponse: IErrorResponse | undefined;
+
+  if (typeof error === 'object' && error !== null && 'error' in error) {
+    const err = error as { error?: IErrorResponse };
+    errorResponse = err.error;
+  }
+
   const errorMessage = errorResponse?.detail || GENERIC_HTTP_ERROR_MESSAGE;
 
   globalStore.setError({
@@ -53,10 +64,22 @@ function handleRetriableError(error: any, globalStore: any): void {
  * @param error - The HTTP error response
  * @param router - Angular Router instance
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function handleNonRetriableError(error: any, router: Router): void {
-  const errorResponse: IErrorResponse = error?.error;
-  const statusCode = error?.status || errorResponse?.status;
+function handleNonRetriableError(error: unknown, router: Router): void {
+  let errorResponse: IErrorResponse | undefined;
+  let status: number | undefined;
+
+  if (typeof error === 'object' && error !== null) {
+    if ('error' in error) {
+      const err = error as { error?: IErrorResponse };
+      errorResponse = err.error;
+    }
+    if ('status' in error) {
+      const statusErr = error as { status?: number };
+      status = statusErr.status;
+    }
+  }
+
+  const statusCode = status || errorResponse?.status;
 
   switch (statusCode) {
     case 409:
@@ -92,6 +115,8 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
           globalStore.setError({
             ...GLOBAL_ERROR_STATE,
             error: true,
+            title: 'There was a problem',
+            message: GENERIC_HTTP_ERROR_MESSAGE,
             operationId: ERROR_RESPONSE.operation_id,
           });
         }

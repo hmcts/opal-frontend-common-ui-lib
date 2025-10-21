@@ -1,0 +1,5 @@
+{
+  "sideEffects": false,
+  "module": "../../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-stores-global-constants.mjs",
+  "typings": "../../../../../dist/opal-frontend-common/stores/global/constants/index.d.ts"
+}

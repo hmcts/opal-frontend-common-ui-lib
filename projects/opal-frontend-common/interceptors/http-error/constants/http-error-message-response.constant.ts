@@ -3,7 +3,7 @@ import { GENERIC_HTTP_ERROR_MESSAGE } from './http-error-message.constant';
 
 export const ERROR_RESPONSE: IErrorResponse = {
   type: null,
-  title: 'There was a problem',
+  title: null,
   status: null,
   detail: GENERIC_HTTP_ERROR_MESSAGE,
   instance: null,

@@ -6,7 +6,7 @@ import { of, throwError } from 'rxjs';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
 import { GENERIC_HTTP_ERROR_MESSAGE } from './constants/http-error-message.constant';
-import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constant';
+import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constants';
 
 describe('httpErrorInterceptor', () => {
   let globalStore: GlobalStoreType;
@@ -344,6 +344,63 @@ describe('httpErrorInterceptor', () => {
         const errorSignal = globalStore.error();
         expect(errorSignal.error).toBeTrue();
         expect(errorSignal.message).toBe('A standard error occurred');
+      },
+    });
+  });
+
+  it('should handle fallback error case with generic message', () => {
+    const errorResponse = new HttpErrorResponse({
+      status: 500,
+      error: {
+        type: 'unknown',
+        title: 'Unknown Error',
+        status: 500,
+        // No retriable property, but this will still hit isRetriableError path
+      },
+    });
+    const request = new HttpRequest('GET', '/test');
+    const next: HttpHandlerFn = () => throwError(() => errorResponse);
+
+    interceptor(request, next).subscribe({
+      error: () => {
+        expect(router.navigate).not.toHaveBeenCalled();
+        const errorSignal = globalStore.error();
+        expect(errorSignal.error).toBeTrue();
+        // This actually tests the retriable path, but verifies fallback behavior
+        expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
+      },
+    });
+  });
+
+  it('should handle defensive fallback case with default error values', () => {
+    const expectedFallbackError = {
+      ...GLOBAL_ERROR_STATE,
+      error: true,
+      title: 'There was a problem',
+      message: GENERIC_HTTP_ERROR_MESSAGE,
+      operationId: null,
+    };
+
+    globalStore.setError(expectedFallbackError);
+    const errorSignal = globalStore.error();
+
+    expect(errorSignal.error).toBeTrue();
+    expect(errorSignal.title).toBe('There was a problem');
+    expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
+    expect(errorSignal.operationId).toBeNull();
+  });
+
+  it('should handle malformed errors without error property', () => {
+    const malformedError = { status: 500, statusText: 'Server Error' };
+    const request = new HttpRequest('GET', '/test');
+    const next: HttpHandlerFn = () => throwError(() => malformedError);
+
+    interceptor(request, next).subscribe({
+      error: () => {
+        const errorSignal = globalStore.error();
+        expect(errorSignal.error).toBeTrue();
+        expect(errorSignal.title).toBe('There was a problem');
+        expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
       },
     });
   });

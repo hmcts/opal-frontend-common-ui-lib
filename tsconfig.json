@@ -411,7 +411,7 @@
       "@hmcts/opal-frontend-common/stores/global": ["./dist/opal-frontend-common/stores/global"],
       "@hmcts/opal-frontend-common/stores/global/interfaces": ["./dist/opal-frontend-common/stores/global/interfaces"],
       "@hmcts/opal-frontend-common/stores/global/types": ["./dist/opal-frontend-common/stores/global/types"],
-      "@hmcts/opal-frontend-common/stores/global/constant": ["./dist/opal-frontend-common/stores/global/constant"],
+      "@hmcts/opal-frontend-common/stores/global/constants": ["./dist/opal-frontend-common/stores/global/constants"],
       "@hmcts/opal-frontend-common/validators/amount": ["./dist/opal-frontend-common/validators/amount"],
       "@hmcts/opal-frontend-common/validators/date-after-year": [
         "./dist/opal-frontend-common/validators/date-after-year"

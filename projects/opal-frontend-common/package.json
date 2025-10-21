@@ -470,8 +470,8 @@
     "./stores/global/types": {
       "import": "./fesm2022/hmcts-opal-frontend-common-stores-global-types.mjs"
     },
-    "./stores/global/constant": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-stores-global-constant.mjs"
+    "./stores/global/constants": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-stores-global-constants.mjs"
     },
     "./validators/amount": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-amount.mjs"
