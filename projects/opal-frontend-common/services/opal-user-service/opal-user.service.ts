@@ -20,7 +20,7 @@ export class OpalUserService {
    * @returns True if the cache has expired, false otherwise.
    */
   private isCacheExpired(): boolean {
-    if (!this.userStateCache || !this.userStateCache.expiryAt) {
+    if (!this.userStateCache?.expiryAt) {
       return true;
     }
 
@@ -49,7 +49,7 @@ export class OpalUserService {
     // Reset user state in global store at the start
     this.globalStore.setUserState({} as IOpalUserState);
 
-    if (this.userStateCache && this.userStateCache.userState && !this.isCacheExpired()) {
+    if (this.userStateCache?.userState && !this.isCacheExpired()) {
       this.globalStore.setUserState(this.userStateCache.userState);
       return of(this.userStateCache.userState);
     }
