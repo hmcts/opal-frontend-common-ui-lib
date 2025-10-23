@@ -2250,9 +2250,9 @@
   integrity sha512-JPQZWPKQJjj7kAftdEZL0XDFfbMgXCGiUAZe0d7EhLC3QlXTlZdSckGqqRIQ2QNl0VTEZyZUvRBw6Ednw089Fw==
 
 "@ngrx/signals@^20.0.0":
-  version "20.0.1"
-  resolved "https://registry.yarnpkg.com/@ngrx/signals/-/signals-20.0.1.tgz#0dd640b2bd7e216e4e1186d37206b26f24491f08"
-  integrity sha512-7YYPH4nTkmLEgibJnwi527toEm3tsnlCzp5AzT9osS8JxN9cHxkG6iQ7fzhw9N4bTt+8wyUZb7PF0YLFYD2RHA==
+  version "20.1.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/signals/-/signals-20.1.0.tgz#2bd40de7aab321aab85471b18d43174531e1adec"
+  integrity sha512-ARAHp5yA131Sw6FEtY8XtYcdGcwW5lgpZaJoDIRxc6i12VO3ZDZYp3M/FQhpIDMDXkXHR+pDqoitrqvzI69aQA==
   dependencies:
     tslib "^2.3.0"
 
