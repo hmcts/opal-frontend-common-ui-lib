@@ -17,8 +17,14 @@ export abstract class AbstractFormParentBaseComponent {
    * @param event - (Optional) The event object, typically from a click event, to prevent its default behavior.
    * @param routeData - (Optional) Additional data to pass to the target route's state.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  protected routerNavigate(route: string, nonRelative: boolean = false, event?: Event, routeData?: any): void {
+  protected routerNavigate(
+    route: string,
+    nonRelative: boolean = false,
+    event?: Event,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    routeData?: any,
+    fragment?: string,
+  ): void {
     if (event) {
       event.preventDefault();
     }
@@ -26,6 +32,7 @@ export abstract class AbstractFormParentBaseComponent {
     const navigationExtras = {
       ...(nonRelative ? {} : { relativeTo: this.activatedRoute.parent }),
       ...(routeData ? { state: routeData } : {}),
+      ...(fragment ? { fragment } : {}),
     };
 
     this.router.navigate([route], navigationExtras);
