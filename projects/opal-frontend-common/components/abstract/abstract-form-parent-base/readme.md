@@ -1,5 +1,3 @@
----
-
 # Abstract Form Parent Base Component
 
 This Angular component serves as a base class for parent components that manage child form controls or child form components. It provides a structure for handling interactions and validations between parent and child forms in a reusable way.
@@ -92,7 +90,5 @@ import { AbstractFormParentBaseComponent } from '@components/abstract/abstract-f
 ## Contributing
 
 Feel free to submit issues or pull requests to improve this component. Ensure that all changes follow Angular best practices and maintain consistency with form management logic between parent and child components.
-
----
 
 This `README.md` provides an overview of how to extend and use the `AbstractFormParentBaseComponent` to manage forms with child form components, handle validation, and manage parent-child form interactions in Angular applications.
