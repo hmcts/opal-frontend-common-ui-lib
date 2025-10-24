@@ -6,5 +6,6 @@ export const PAGES_ROUTING_TITLES: IPagesRoutingPaths = {
     accessDenied: 'Access denied',
     signIn: 'Sign in',
     signInStub: 'Sign in',
+    accountCreated: 'Account created',
   },
 };

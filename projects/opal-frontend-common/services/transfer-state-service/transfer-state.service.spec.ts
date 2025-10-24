@@ -48,4 +48,18 @@ describe('TransferStateService', () => {
 
     expect(globalStore.launchDarklyConfig()).toEqual(service['storedServerTransferState'].launchDarklyConfig);
   });
+
+  it('should initialize app insights', () => {
+    service.initializeAppInsightsConfig();
+
+    expect(globalStore.appInsightsConfig()).toEqual(service['storedServerTransferState'].appInsightsConfig);
+  });
+
+  it('should initialize user state cache expiration milliseconds', () => {
+    service.initializeUserStateCacheExpirationMilliseconds();
+
+    expect(globalStore.userStateCacheExpirationMilliseconds()).toEqual(
+      service['storedServerTransferState'].userStateCacheExpirationMilliseconds,
+    );
+  });
 });
