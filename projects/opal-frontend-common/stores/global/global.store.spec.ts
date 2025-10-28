@@ -81,4 +81,8 @@ describe('GlobalStore', () => {
     store.setTokenExpiry(tokenExpiry);
     expect(store.tokenExpiry()).toEqual(tokenExpiry);
   });
+  it('should reset error state', () => {
+    store.resetError();
+    expect(store.error()).toEqual(GLOBAL_ERROR_STATE);
+  });
 });

@@ -115,6 +115,40 @@ describe('AbstractFormParentBaseComponent', () => {
     expect(event.preventDefault).toHaveBeenCalled();
   });
 
+  it('should test routerNavigate with fragment', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const routerSpy = spyOn(component['router'], 'navigate');
+    const fragment = 'section1';
+
+    component['routerNavigate']('test', false, undefined, undefined, fragment);
+    expect(routerSpy).toHaveBeenCalledWith(['test'], {
+      relativeTo: component['activatedRoute'].parent,
+      fragment: fragment,
+    });
+  });
+
+  it('should test routerNavigate with both routeData and fragment', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const routerSpy = spyOn(component['router'], 'navigate');
+    const routeData = { someData: 'test' };
+    const fragment = 'section2';
+
+    component['routerNavigate']('test', false, undefined, routeData, fragment);
+    expect(routerSpy).toHaveBeenCalledWith(['test'], {
+      relativeTo: component['activatedRoute'].parent,
+      state: routeData,
+      fragment: fragment,
+    });
+  });
+
   it('should return true if any form value is truthy', () => {
     if (!component) {
       fail('component returned null');
