@@ -81,4 +81,14 @@ describe('GlobalStore', () => {
     store.setTokenExpiry(tokenExpiry);
     expect(store.tokenExpiry()).toEqual(tokenExpiry);
   });
+  it('should reset error state', () => {
+    const errorState = {
+      error: true,
+      message: 'Some error',
+      title: 'Error Title',
+      operationId: 'op123',
+    };
+    store.resetError();
+    expect(store.error()).toEqual(GLOBAL_ERROR_STATE);
+  });
 });

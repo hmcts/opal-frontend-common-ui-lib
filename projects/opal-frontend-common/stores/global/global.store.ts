@@ -45,5 +45,8 @@ export const GlobalStore = signalStore(
     setTokenExpiry: (tokenExpiry: ISessionTokenExpiry) => {
       patchState(store, { tokenExpiry });
     },
+    resetError: () => {
+      patchState(store, { error: { ...GLOBAL_ERROR_STATE } });
+    },
   })),
 );
