@@ -7,6 +7,7 @@ import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
 import { GENERIC_HTTP_ERROR_MESSAGE } from './constants/http-error-message.constant';
 import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constants';
+import { ERROR_RESPONSE } from './constants/http-error-message-response.constant';
 
 describe('httpErrorInterceptor', () => {
   let globalStore: GlobalStoreType;
@@ -225,6 +226,7 @@ describe('httpErrorInterceptor', () => {
         title: 'Concurrency Conflict',
         status: 409,
         detail: 'The resource has been modified by another user',
+        operation_id: 'OP-409',
         retriable: false,
       },
     });
@@ -234,6 +236,10 @@ describe('httpErrorInterceptor', () => {
     interceptor(request, next).subscribe({
       error: () => {
         expect(router.navigate).toHaveBeenCalledWith(['/error/concurrency-failure']);
+        const errorSignal = globalStore.error();
+        expect(errorSignal.operationId).toBe('OP-409');
+        expect(errorSignal.title).toBe('Concurrency Conflict');
+        expect(errorSignal.message).toBe('The resource has been modified by another user');
       },
     });
   });
@@ -246,6 +252,7 @@ describe('httpErrorInterceptor', () => {
         title: 'Permission Denied',
         status: 403,
         detail: 'You do not have permission to perform this action',
+        operation_id: 'OP-403',
         retriable: false,
       },
     });
@@ -255,6 +262,10 @@ describe('httpErrorInterceptor', () => {
     interceptor(request, next).subscribe({
       error: () => {
         expect(router.navigate).toHaveBeenCalledWith(['/error/permission-denied']);
+        const errorSignal = globalStore.error();
+        expect(errorSignal.operationId).toBe('OP-403');
+        expect(errorSignal.title).toBe('Permission Denied');
+        expect(errorSignal.message).toBe('You do not have permission to perform this action');
       },
     });
   });
@@ -267,6 +278,7 @@ describe('httpErrorInterceptor', () => {
         title: 'Internal Server Error',
         status: 500,
         detail: 'An unexpected error occurred',
+        operation_id: 'OP-500',
         retriable: false,
       },
     });
@@ -275,7 +287,32 @@ describe('httpErrorInterceptor', () => {
 
     interceptor(request, next).subscribe({
       error: () => {
-        expect(router.navigate).toHaveBeenCalledWith(['/error/internal-server-error']);
+        expect(router.navigate).toHaveBeenCalledWith(['/error/internal-server']);
+        const errorSignal = globalStore.error();
+        expect(errorSignal.operationId).toBe('OP-500');
+        expect(errorSignal.title).toBe('Internal Server Error');
+        expect(errorSignal.message).toBe('An unexpected error occurred');
+      },
+    });
+  });
+
+  it('should populate fallback error details when non-retriable response omits optional fields', () => {
+    const errorResponse = new HttpErrorResponse({
+      status: 500,
+      error: {
+        retriable: false,
+      },
+    });
+    const request = new HttpRequest('GET', '/test');
+    const next: HttpHandlerFn = () => throwError(() => errorResponse);
+
+    interceptor(request, next).subscribe({
+      error: () => {
+        expect(router.navigate).toHaveBeenCalledWith(['/error/internal-server']);
+        const errorSignal = globalStore.error();
+        expect(errorSignal.title).toBe(ERROR_RESPONSE.title);
+        expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
+        expect(errorSignal.operationId).toBe(ERROR_RESPONSE.operation_id);
       },
     });
   });
@@ -287,6 +324,7 @@ describe('httpErrorInterceptor', () => {
         title: 'Concurrency Conflict',
         status: 409,
         detail: 'The resource has been modified by another user',
+        operation_id: 'OP-409',
         retriable: false,
       },
     });
@@ -296,6 +334,10 @@ describe('httpErrorInterceptor', () => {
     interceptor(request, next).subscribe({
       error: () => {
         expect(router.navigate).toHaveBeenCalledWith(['/error/concurrency-failure']);
+        const errorSignal = globalStore.error();
+        expect(errorSignal.operationId).toBe('OP-409');
+        expect(errorSignal.title).toBe('Concurrency Conflict');
+        expect(errorSignal.message).toBe('The resource has been modified by another user');
       },
     });
   });

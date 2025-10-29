@@ -4,6 +4,7 @@ export const PAGES_ROUTING_PATHS: IPagesRoutingPaths = {
   root: '',
   children: {
     accessDenied: 'access-denied',
+    internalServerError: 'error/internal-server',
     signIn: 'sign-in',
     signInStub: 'sign-in-stub',
   },
