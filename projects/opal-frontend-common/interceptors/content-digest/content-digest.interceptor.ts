@@ -1,10 +1,4 @@
-import {
-  HttpEvent,
-  HttpHandlerFn,
-  HttpInterceptorFn,
-  HttpRequest,
-  HttpResponse,
-} from '@angular/common/http';
+import { HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest, HttpResponse } from '@angular/common/http';
 import { from, of } from 'rxjs';
 import { map, mergeMap, switchMap } from 'rxjs/operators';
 import { WebCryptoLikeType } from './types/content-digest-web-crypto-like.type';
