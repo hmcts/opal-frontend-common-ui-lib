@@ -350,6 +350,9 @@
     "./guards/types": {
       "import": "./fesm2022/hmcts-opal-frontend-common-guards-types.mjs"
     },
+    "./interceptors/content-digest": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-interceptors-content-digest.mjs"
+    },
     "./interceptors/http-error": {
       "import": "./fesm2022/hmcts-opal-frontend-common-interceptors-http-error.mjs"
     },

@@ -328,6 +328,9 @@
       "@hmcts/opal-frontend-common/guards/route-permissions": ["./dist/opal-frontend-common/guards/route-permissions"],
       "@hmcts/opal-frontend-common/guards/signed-in": ["./dist/opal-frontend-common/guards/signed-in"],
       "@hmcts/opal-frontend-common/guards/types": ["./dist/opal-frontend-common/guards/types"],
+      "@hmcts/opal-frontend-common/interceptors/content-digest": [
+        "./dist/opal-frontend-common/interceptors/content-digest"
+      ],
       "@hmcts/opal-frontend-common/interceptors/http-error": ["./dist/opal-frontend-common/interceptors/http-error"],
       "@hmcts/opal-frontend-common/interceptors/http-error/constants": [
         "./dist/opal-frontend-common/interceptors/http-error/constants"
