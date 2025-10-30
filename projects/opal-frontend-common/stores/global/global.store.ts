@@ -5,14 +5,14 @@ import {
   ITransferStateAppInsightsConfig,
 } from '@hmcts/opal-frontend-common/services/transfer-state-service/interfaces';
 import { ISessionTokenExpiry } from '@hmcts/opal-frontend-common/services/session-service/interfaces';
-import { IErrorState } from '@hmcts/opal-frontend-common/stores/global/interfaces';
+import { IGlobalErrorState } from '@hmcts/opal-frontend-common/stores/global/interfaces';
 import { IOpalUserState } from '@hmcts/opal-frontend-common/services/opal-user-service/interfaces';
-
+import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constants';
 export const GlobalStore = signalStore(
   { providedIn: 'root' },
   withState(() => ({
     authenticated: false,
-    error: { error: false, message: '' },
+    error: { ...GLOBAL_ERROR_STATE },
     featureFlags: {} as LDFlagSet,
     userState: {} as IOpalUserState,
     ssoEnabled: false,
@@ -25,7 +25,7 @@ export const GlobalStore = signalStore(
     setAuthenticated: (authenticated: boolean) => {
       patchState(store, { authenticated });
     },
-    setError: (error: IErrorState) => {
+    setError: (error: IGlobalErrorState) => {
       patchState(store, { error });
     },
     setFeatureFlags: (featureFlags: LDFlagSet) => {
@@ -45,6 +45,9 @@ export const GlobalStore = signalStore(
     },
     setTokenExpiry: (tokenExpiry: ISessionTokenExpiry) => {
       patchState(store, { tokenExpiry });
+    },
+    resetError: () => {
+      patchState(store, { error: { ...GLOBAL_ERROR_STATE } });
     },
     setUserStateCacheExpirationMilliseconds: (milliseconds: number) => {
       patchState(store, { userStateCacheExpirationMilliseconds: milliseconds });

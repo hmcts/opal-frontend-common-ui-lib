@@ -1,0 +1,5 @@
+{
+  "sideEffects": false,
+  "module": "../../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-interceptors-http-error-interfaces.mjs",
+  "typings": "../../../../../dist/opal-frontend-common/interceptors/http-error/interfaces/index.d.ts"
+}

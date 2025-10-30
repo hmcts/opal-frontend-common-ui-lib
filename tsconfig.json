@@ -330,6 +330,12 @@
       "@hmcts/opal-frontend-common/guards/signed-in": ["./dist/opal-frontend-common/guards/signed-in"],
       "@hmcts/opal-frontend-common/guards/types": ["./dist/opal-frontend-common/guards/types"],
       "@hmcts/opal-frontend-common/interceptors/http-error": ["./dist/opal-frontend-common/interceptors/http-error"],
+      "@hmcts/opal-frontend-common/interceptors/http-error/constants": [
+        "./dist/opal-frontend-common/interceptors/http-error/constants"
+      ],
+      "@hmcts/opal-frontend-common/interceptors/http-error/interfaces": [
+        "./dist/opal-frontend-common/interceptors/http-error/interfaces"
+      ],
       "@hmcts/opal-frontend-common/pages/routing": ["./dist/opal-frontend-common/pages"],
       "@hmcts/opal-frontend-common/pages/routing/interfaces": ["./dist/opal-frontend-common/pages/routing/interfaces"],
       "@hmcts/opal-frontend-common/pages/routing/constants": ["./dist/opal-frontend-common/pages/routing/constants"],
@@ -405,6 +411,7 @@
       "@hmcts/opal-frontend-common/stores/global": ["./dist/opal-frontend-common/stores/global"],
       "@hmcts/opal-frontend-common/stores/global/interfaces": ["./dist/opal-frontend-common/stores/global/interfaces"],
       "@hmcts/opal-frontend-common/stores/global/types": ["./dist/opal-frontend-common/stores/global/types"],
+      "@hmcts/opal-frontend-common/stores/global/constants": ["./dist/opal-frontend-common/stores/global/constants"],
       "@hmcts/opal-frontend-common/validators/amount": ["./dist/opal-frontend-common/validators/amount"],
       "@hmcts/opal-frontend-common/validators/date-after-year": [
         "./dist/opal-frontend-common/validators/date-after-year"
@@ -433,7 +440,7 @@
       ],
       "@hmcts/opal-frontend-common/validators/valid-value": ["./dist/opal-frontend-common/validators/valid-value"],
 
-      "@hmcts/opal-frontend-common/types": ["./dist/opal-frontend-common/types"],
+      "@hmcts/opal-frontend-common/types": ["./dist/opal-frontend-common/types"]
     },
     "moduleResolution": "bundler",
     "importHelpers": true,
