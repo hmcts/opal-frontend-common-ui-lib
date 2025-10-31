@@ -15,6 +15,13 @@ export const routing: Routes = [
     resolve: { userState: userStateResolver, title: TitleResolver },
   },
   {
+    path: PAGES_ROUTING_PATHS.children.internalServerError,
+    loadComponent: () =>
+      import('../internal-server-error/internal-server-error.component').then((c) => c.InternalServerErrorComponent),
+    data: { title: PAGES_ROUTING_TITLES.children.internalServerError },
+    resolve: { title: TitleResolver },
+  },
+  {
     path: PAGES_ROUTING_PATHS.children.signIn,
     loadComponent: () => import('../sign-in/sign-in.component').then((c) => c.SignInComponent),
     canActivate: [signedInGuard],
