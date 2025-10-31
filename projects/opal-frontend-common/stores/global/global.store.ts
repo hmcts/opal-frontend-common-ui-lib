@@ -19,6 +19,7 @@ export const GlobalStore = signalStore(
     launchDarklyConfig: {} as ITransferStateLaunchDarklyConfig,
     appInsightsConfig: {} as ITransferStateAppInsightsConfig,
     tokenExpiry: {} as ISessionTokenExpiry,
+    userStateCacheExpirationMilliseconds: 1800000,
   })),
   withMethods((store) => ({
     setAuthenticated: (authenticated: boolean) => {
@@ -47,6 +48,9 @@ export const GlobalStore = signalStore(
     },
     resetError: () => {
       patchState(store, { error: { ...GLOBAL_ERROR_STATE } });
+    },
+    setUserStateCacheExpirationMilliseconds: (milliseconds: number) => {
+      patchState(store, { userStateCacheExpirationMilliseconds: milliseconds });
     },
   })),
 );

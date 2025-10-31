@@ -5,4 +5,5 @@ export interface ITransferStateServerState {
   launchDarklyConfig: ITransferStateLaunchDarklyConfig;
   ssoEnabled: boolean;
   appInsightsConfig: ITransferStateAppInsightsConfig;
+  userStateCacheExpirationMilliseconds: number;
 }

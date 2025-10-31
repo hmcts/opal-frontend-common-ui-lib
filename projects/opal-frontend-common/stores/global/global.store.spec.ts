@@ -28,6 +28,7 @@ describe('GlobalStore', () => {
     expect(store.ssoEnabled()).toBeFalse();
     expect(store.launchDarklyConfig()).toEqual({} as ITransferStateLaunchDarklyConfig);
     expect(store.tokenExpiry()).toEqual({} as ISessionTokenExpiry);
+    expect(store.userStateCacheExpirationMilliseconds()).toBe(1800000);
   });
 
   it('should update authenticated state', () => {
@@ -84,5 +85,11 @@ describe('GlobalStore', () => {
   it('should reset error state', () => {
     store.resetError();
     expect(store.error()).toEqual(GLOBAL_ERROR_STATE);
+  });
+
+  it('should update user state cache expiration milliseconds', () => {
+    const expirationMilliseconds = 45 * 60 * 1000; // Convert minutes to milliseconds
+    store.setUserStateCacheExpirationMilliseconds(expirationMilliseconds);
+    expect(store.userStateCacheExpirationMilliseconds()).toBe(expirationMilliseconds);
   });
 });

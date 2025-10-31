@@ -5,5 +5,6 @@ export interface IPagesRoutingPaths extends IChildRoutingPaths {
     accessDenied: string;
     signIn: string;
     signInStub: string;
+    accountCreated: string;
   };
 }
