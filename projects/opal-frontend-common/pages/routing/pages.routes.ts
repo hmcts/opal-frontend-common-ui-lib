@@ -15,6 +15,13 @@ export const routing: Routes = [
     resolve: { userState: userStateResolver, title: TitleResolver },
   },
   {
+    path: PAGES_ROUTING_PATHS.children.permissionDenied,
+    loadComponent: () =>
+      import('../permission-denied/permission-denied.component').then((c) => c.PermissionDeniedComponent),
+    data: { title: PAGES_ROUTING_TITLES.children.permissionDenied },
+    resolve: { title: TitleResolver },
+  },
+  {
     path: PAGES_ROUTING_PATHS.children.internalServerError,
     loadComponent: () =>
       import('../internal-server-error/internal-server-error.component').then((c) => c.InternalServerErrorComponent),
