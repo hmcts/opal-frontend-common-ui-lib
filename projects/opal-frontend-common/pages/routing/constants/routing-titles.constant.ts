@@ -4,6 +4,9 @@ export const PAGES_ROUTING_TITLES: IPagesRoutingPaths = {
   root: '',
   children: {
     accessDenied: 'Access denied',
+    concurrencyFailure: 'Sorry, there is a problem',
+    permissionDenied: 'Permission denied',
+    internalServerError: 'Sorry, there is a problem with the service',
     signIn: 'Sign in',
     signInStub: 'Sign in',
     accountCreated: 'Account created',

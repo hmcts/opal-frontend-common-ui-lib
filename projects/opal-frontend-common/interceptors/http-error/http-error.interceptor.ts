@@ -63,8 +63,9 @@ function handleRetriableError(error: unknown, globalStore: GlobalStoreType): voi
  * Handles non-retriable errors by redirecting to appropriate error pages
  * @param error - The HTTP error response
  * @param router - Angular Router instance
+ * @param globalStore - Global store instance
  */
-function handleNonRetriableError(error: unknown, router: Router): void {
+function handleNonRetriableError(error: unknown, router: Router, globalStore: GlobalStoreType): void {
   let errorResponse: IErrorResponse | undefined;
   let status: number | undefined;
 
@@ -81,6 +82,15 @@ function handleNonRetriableError(error: unknown, router: Router): void {
 
   const statusCode = status || errorResponse?.status;
 
+  // When handling non-retriable errors, we set the error state before navigation
+  // However, we do not set error: true as we are navigating to a dedicated error page
+  globalStore.setError({
+    ...GLOBAL_ERROR_STATE,
+    title: errorResponse?.title || ERROR_RESPONSE.title,
+    message: errorResponse?.detail || GENERIC_HTTP_ERROR_MESSAGE,
+    operationId: errorResponse?.operation_id || ERROR_RESPONSE.operation_id,
+  });
+
   switch (statusCode) {
     case 409:
       router.navigate(['/error/concurrency-failure']);
@@ -89,7 +99,7 @@ function handleNonRetriableError(error: unknown, router: Router): void {
       router.navigate(['/error/permission-denied']);
       break;
     default:
-      router.navigate(['/error/internal-server-error']);
+      router.navigate(['/error/internal-server']);
       break;
   }
 }
@@ -108,7 +118,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
 
       if (isBrowser) {
         if (isNonRetriableError(error)) {
-          handleNonRetriableError(error, router);
+          handleNonRetriableError(error, router, globalStore);
         } else if (isRetriableError(error)) {
           handleRetriableError(error, globalStore);
         } else {
