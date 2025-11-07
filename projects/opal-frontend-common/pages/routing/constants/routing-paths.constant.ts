@@ -6,7 +6,7 @@ export const PAGES_ROUTING_PATHS: IPagesRoutingPaths = {
     accessDenied: 'access-denied',
     concurrencyFailure: 'error/concurrency-failure',
     permissionDenied: 'error/permission-denied',
-    internalServerError: 'error/internal-server-error',
+    internalServerError: 'error/internal-server',
     signIn: 'sign-in',
     signInStub: 'sign-in-stub',
   },

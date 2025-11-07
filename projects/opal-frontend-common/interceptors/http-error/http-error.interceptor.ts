@@ -82,9 +82,10 @@ function handleNonRetriableError(error: unknown, router: Router, globalStore: Gl
 
   const statusCode = status || errorResponse?.status;
 
+  // When handling non-retriable errors, we set the error state before navigation
+  // However, we do not set error: true as we are navigating to a dedicated error page
   globalStore.setError({
     ...GLOBAL_ERROR_STATE,
-    error: true,
     title: errorResponse?.title || ERROR_RESPONSE.title,
     message: errorResponse?.detail || GENERIC_HTTP_ERROR_MESSAGE,
     operationId: errorResponse?.operation_id || ERROR_RESPONSE.operation_id,
