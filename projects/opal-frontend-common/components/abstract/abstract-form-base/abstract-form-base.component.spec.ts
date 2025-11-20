@@ -744,6 +744,22 @@ describe('AbstractFormBaseComponent', () => {
     expect(event.preventDefault).toHaveBeenCalled();
   });
 
+  it('should test handleRoute with fragment', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const routerSpy = spyOn(component['router'], 'navigate');
+    const fragment = 'section-header';
+
+    component['handleRoute']('test', false, undefined, undefined, fragment);
+    expect(routerSpy).toHaveBeenCalledWith(['test'], {
+      relativeTo: component['activatedRoute'].parent,
+      fragment: fragment,
+    });
+  });
+
   it('should test hasUnsavedChanges', () => {
     if (!component) {
       fail('component returned null');

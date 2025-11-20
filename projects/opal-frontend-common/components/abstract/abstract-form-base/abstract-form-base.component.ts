@@ -674,9 +674,18 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
    *
    * @param route string of route
    * @param nonRelative boolean indicating if route is relative to the parent
+   * @param event optional event to prevent default behavior
+   * @param routeData optional data to pass with the route
+   * @param fragment optional URL fragment (hash) to navigate to
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public handleRoute(route: string, nonRelative: boolean = false, event?: Event, routeData?: any): void {
+  public handleRoute(
+    route: string,
+    nonRelative: boolean = false,
+    event?: Event,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    routeData?: any,
+    fragment?: string,
+  ): void {
     if (event) {
       event.preventDefault();
     }
@@ -686,6 +695,7 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
     const navigationExtras = {
       ...(nonRelative ? {} : { relativeTo: this.activatedRoute.parent }),
       ...(routeData === undefined ? {} : { state: routeData }),
+      ...(fragment ? { fragment } : {}),
     };
 
     this.router.navigate([route], navigationExtras);
