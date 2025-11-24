@@ -279,7 +279,7 @@ describe('httpErrorInterceptor', () => {
 
     interceptor(request, next).subscribe({
       error: () => {
-        expect(router.navigate).toHaveBeenCalledWith(['/error/internal-server-error'], {
+        expect(router.navigate).toHaveBeenCalledWith(['/error/internal-server'], {
           state: { operationId: 'OP-500' },
         });
       },
@@ -298,7 +298,7 @@ describe('httpErrorInterceptor', () => {
 
     interceptor(request, next).subscribe({
       error: () => {
-        expect(router.navigate).toHaveBeenCalledWith(['/error/internal-server-error'], {
+        expect(router.navigate).toHaveBeenCalledWith(['/error/internal-server'], {
           state: { operationId: ERROR_RESPONSE.operation_id },
         });
       },

@@ -91,7 +91,7 @@ function handleNonRetriableError(error: unknown, router: Router): void {
       router.navigate(['/error/permission-denied']);
       break;
     default:
-      router.navigate(['/error/internal-server-error'], {
+      router.navigate(['/error/internal-server'], {
         state: { operationId },
       });
       break;
