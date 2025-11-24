@@ -22,7 +22,7 @@ describe('GlobalStore', () => {
 
   it('should initialise with the default state', () => {
     expect(store.authenticated()).toBeFalse();
-    expect(store.error()).toEqual({ ...GLOBAL_ERROR_STATE });
+    expect(store.bannerError()).toEqual({ ...GLOBAL_ERROR_STATE });
     expect(store.featureFlags()).toEqual({});
     expect(store.userState()).toEqual({} as IOpalUserState);
     expect(store.ssoEnabled()).toBeFalse();
@@ -35,7 +35,7 @@ describe('GlobalStore', () => {
     expect(store.authenticated()).toBeTrue();
   });
 
-  it('should update error state', () => {
+  it('should update banner error state', () => {
     const errorState = {
       ...GLOBAL_ERROR_STATE,
       error: true,
@@ -43,8 +43,8 @@ describe('GlobalStore', () => {
       title: 'Test Title',
       operationId: '12345',
     };
-    store.setError(errorState);
-    expect(store.error()).toEqual(errorState);
+    store.setBannerError(errorState);
+    expect(store.bannerError()).toEqual(errorState);
   });
 
   it('should update feature flags', () => {
@@ -81,8 +81,9 @@ describe('GlobalStore', () => {
     store.setTokenExpiry(tokenExpiry);
     expect(store.tokenExpiry()).toEqual(tokenExpiry);
   });
-  it('should reset error state', () => {
-    store.resetError();
-    expect(store.error()).toEqual(GLOBAL_ERROR_STATE);
+  it('should reset banner error state', () => {
+    store.setBannerError({ ...GLOBAL_ERROR_STATE, error: true, message: 'banner' });
+    store.resetBannerError();
+    expect(store.bannerError()).toEqual(GLOBAL_ERROR_STATE);
   });
 });

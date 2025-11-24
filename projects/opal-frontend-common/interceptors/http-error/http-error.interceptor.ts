@@ -50,7 +50,7 @@ function handleRetriableError(error: unknown, globalStore: GlobalStoreType): voi
 
   const errorMessage = errorResponse?.detail || GENERIC_HTTP_ERROR_MESSAGE;
 
-  globalStore.setError({
+  globalStore.setBannerError({
     ...GLOBAL_ERROR_STATE,
     error: true,
     title: errorResponse?.title || ERROR_RESPONSE.title,
@@ -63,9 +63,8 @@ function handleRetriableError(error: unknown, globalStore: GlobalStoreType): voi
  * Handles non-retriable errors by redirecting to appropriate error pages
  * @param error - The HTTP error response
  * @param router - Angular Router instance
- * @param globalStore - Global store instance
  */
-function handleNonRetriableError(error: unknown, router: Router, globalStore: GlobalStoreType): void {
+function handleNonRetriableError(error: unknown, router: Router): void {
   let errorResponse: IErrorResponse | undefined;
   let status: number | undefined;
 
@@ -82,14 +81,7 @@ function handleNonRetriableError(error: unknown, router: Router, globalStore: Gl
 
   const statusCode = status || errorResponse?.status;
 
-  // When handling non-retriable errors, we set the error state before navigation
-  // However, we do not set error: true as we are navigating to a dedicated error page
-  globalStore.setError({
-    ...GLOBAL_ERROR_STATE,
-    title: errorResponse?.title || ERROR_RESPONSE.title,
-    message: errorResponse?.detail || GENERIC_HTTP_ERROR_MESSAGE,
-    operationId: errorResponse?.operation_id || ERROR_RESPONSE.operation_id,
-  });
+  const operationId = errorResponse?.operation_id || ERROR_RESPONSE.operation_id;
 
   switch (statusCode) {
     case 409:
@@ -99,7 +91,9 @@ function handleNonRetriableError(error: unknown, router: Router, globalStore: Gl
       router.navigate(['/error/permission-denied']);
       break;
     default:
-      router.navigate(['/error/internal-server']);
+      router.navigate(['/error/internal-server-error'], {
+        state: { operationId },
+      });
       break;
   }
 }
@@ -111,18 +105,18 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     tap(() => {
-      globalStore.setError({ ...GLOBAL_ERROR_STATE, error: false });
+      globalStore.resetBannerError();
     }),
     catchError((error) => {
       const isBrowser = typeof globalThis !== 'undefined';
 
       if (isBrowser) {
         if (isNonRetriableError(error)) {
-          handleNonRetriableError(error, router, globalStore);
+          handleNonRetriableError(error, router);
         } else if (isRetriableError(error)) {
           handleRetriableError(error, globalStore);
         } else {
-          globalStore.setError({
+          globalStore.setBannerError({
             ...GLOBAL_ERROR_STATE,
             error: true,
             title: 'There was a problem',
