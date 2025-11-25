@@ -9,5 +9,6 @@ export const PAGES_ROUTING_TITLES: IPagesRoutingPaths = {
     internalServerError: 'Sorry, there is a problem with the service',
     signIn: 'Sign in',
     signInStub: 'Sign in',
+    accountCreated: 'Account created',
   },
 };

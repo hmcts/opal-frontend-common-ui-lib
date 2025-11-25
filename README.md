@@ -138,7 +138,7 @@ import { GovukTextInputComponent } from '@hmcts/opal-frontend-common/components/
 import { DateService } from '@hmcts/opal-frontend-common/services/date-service';
 import { dateOfBirthValidator } from '@hmcts/opal-frontend-common/validators/date-of-birth';
 import { hasFlowStateGuard } from '@hmcts/opal-frontend-common/guards/has-flow-state';
-import { userStateResolver } from '@hmcts/opal-frontend-common/resolvers/user-state';
+import { TitleResolver } from '@hmcts/opal-frontend-common/resolvers/title';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 ```
 

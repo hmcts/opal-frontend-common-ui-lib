@@ -9,5 +9,6 @@ export const PAGES_ROUTING_PATHS: IPagesRoutingPaths = {
     internalServerError: 'error/internal-server',
     signIn: 'sign-in',
     signInStub: 'sign-in-stub',
+    accountCreated: 'account-created',
   },
 };

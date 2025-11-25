@@ -32,6 +32,13 @@ export class AppInitializerService {
   }
 
   /**
+   * Initializes the user state cache expiration milliseconds.
+   */
+  private initializeUserStateCacheExpirationMilliseconds(): void {
+    this.transferStateService.initializeUserStateCacheExpirationMilliseconds();
+  }
+
+  /**
    * Initializes the application.
    * This method calls the necessary initialization functions.
    */
@@ -39,6 +46,7 @@ export class AppInitializerService {
     this.initializeSsoEnabled();
     this.initializeLaunchDarkly();
     this.initializeAppInsights();
+    this.initializeUserStateCacheExpirationMilliseconds();
     await this.appInsightsService.initialize();
   }
 }
