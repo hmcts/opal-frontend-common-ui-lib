@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'opal-lib-internal-server-error',
@@ -8,17 +8,14 @@ import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
   templateUrl: './internal-server-error.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InternalServerErrorComponent implements OnDestroy {
-  private readonly globalStore = inject(GlobalStore);
-
-  public readonly errorState = computed(() => this.globalStore.error());
+export class InternalServerErrorComponent {
+  private readonly router = inject(Router);
+  private readonly location = inject(Location);
 
   public readonly operationIdDisplay = computed(() => {
-    const operationId = this.errorState().operationId;
+    const navigationState = this.router.currentNavigation()?.extras?.state as { operationId?: string } | undefined;
+    const persistedState = this.location.getState() as { operationId?: string } | undefined;
+    const operationId = navigationState?.operationId ?? persistedState?.operationId;
     return operationId && operationId.trim().length > 0 ? operationId : 'Unavailable';
   });
-
-  public ngOnDestroy(): void {
-    this.globalStore.resetError();
-  }
 }

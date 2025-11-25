@@ -9,7 +9,6 @@ describe('ConcurrencyFailureComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ConcurrencyFailureComponent],
     }).compileComponents();
-
     fixture = TestBed.createComponent(ConcurrencyFailureComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

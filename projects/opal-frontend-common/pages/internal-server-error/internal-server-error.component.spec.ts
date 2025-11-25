@@ -1,20 +1,36 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { InternalServerErrorComponent } from './internal-server-error.component';
-import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
-import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
-import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constants';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 describe('InternalServerErrorComponent', () => {
   let component: InternalServerErrorComponent;
   let fixture: ComponentFixture<InternalServerErrorComponent>;
-  let globalStore: GlobalStoreType;
+  let navigationState: { operationId?: string } | undefined;
+  let persistedState: { operationId?: string } | undefined;
 
   beforeEach(async () => {
+    navigationState = { operationId: 'OP-500' };
+    persistedState = {};
     await TestBed.configureTestingModule({
       imports: [InternalServerErrorComponent],
+      providers: [
+        {
+          provide: Router,
+          useValue: {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            currentNavigation: () => (navigationState ? ({ extras: { state: navigationState } } as any) : null),
+          },
+        },
+        {
+          provide: Location,
+          useValue: {
+            getState: () => persistedState,
+          },
+        },
+      ],
     }).compileComponents();
 
-    globalStore = TestBed.inject(GlobalStore);
     fixture = TestBed.createComponent(InternalServerErrorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -24,39 +40,30 @@ describe('InternalServerErrorComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display an operation id when one is provided', () => {
-    globalStore.setError({
-      ...GLOBAL_ERROR_STATE,
-      error: true,
-      message: null,
-      operationId: 'OP-500',
-    });
-
-    fixture.detectChanges();
-
+  it('should display an operation id from navigation state when provided', () => {
     const errorCodeElement = fixture.nativeElement.querySelector('[data-testid="error-code"]');
     expect(errorCodeElement.textContent.trim()).toBe('Error code: OP-500.');
   });
 
-  it('should display a fallback operation id when none is provided', () => {
-    globalStore.setError({
-      ...GLOBAL_ERROR_STATE,
-      error: true,
-      message: null,
-      operationId: null,
-    });
+  it('should fall back to persisted state when navigation state is unavailable', () => {
+    navigationState = undefined;
+    persistedState = { operationId: 'PERSISTED-123' };
+    fixture = TestBed.createComponent(InternalServerErrorComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
 
+    const errorCodeElement = fixture.nativeElement.querySelector('[data-testid="error-code"]');
+    expect(errorCodeElement.textContent.trim()).toBe('Error code: PERSISTED-123.');
+  });
+
+  it('should show a fallback when no operation id is provided', () => {
+    navigationState = undefined;
+    persistedState = {};
+    fixture = TestBed.createComponent(InternalServerErrorComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
 
     const errorCodeElement = fixture.nativeElement.querySelector('[data-testid="error-code"]');
     expect(errorCodeElement.textContent.trim()).toBe('Error code: Unavailable.');
-  });
-
-  it('should reset the error state on component destroy', () => {
-    spyOn(globalStore, 'resetError');
-
-    component.ngOnDestroy();
-
-    expect(globalStore.resetError).toHaveBeenCalled();
   });
 });
