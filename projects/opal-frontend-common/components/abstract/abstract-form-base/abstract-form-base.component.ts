@@ -13,6 +13,7 @@ import {
 import { IAbstractFormBaseHighPriorityFormError } from './interfaces/abstract-form-base-high-priority-form-error.interface';
 import { IAbstractFormBaseForm } from './interfaces/abstract-form-base-form.interface';
 import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service';
+import { IAbstractFormBaseHandleRouteOptions } from './interfaces/abstract-form-base-handleroute-options.interface';
 
 @Component({
   template: '',
@@ -673,19 +674,11 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
    * Handles route with the supplied route
    *
    * @param route string of route
-   * @param nonRelative boolean indicating if route is relative to the parent
-   * @param event optional event to prevent default behavior
-   * @param routeData optional data to pass with the route
-   * @param fragment optional URL fragment (hash) to navigate to
+   * @param options optional parameters
    */
-  public handleRoute(
-    route: string,
-    nonRelative: boolean = false,
-    event?: Event,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    routeData?: any,
-    fragment?: string,
-  ): void {
+  public handleRoute(route: string, options?: IAbstractFormBaseHandleRouteOptions): void {
+    const { nonRelative = false, event, routeData, fragment } = options ?? {};
+
     if (event) {
       event.preventDefault();
     }
@@ -694,7 +687,7 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
 
     const navigationExtras = {
       ...(nonRelative ? {} : { relativeTo: this.activatedRoute.parent }),
-      ...(routeData === undefined ? {} : { state: routeData }),
+      ...(routeData !== undefined ? { state: routeData } : {}),
       ...(fragment ? { fragment } : {}),
     };
 
