@@ -13,7 +13,7 @@ export class InternalServerErrorComponent {
   private readonly location = inject(Location);
 
   public readonly operationIdDisplay = computed(() => {
-    const navigationState = this.router.getCurrentNavigation()?.extras?.state as { operationId?: string } | undefined;
+    const navigationState = this.router.currentNavigation()?.extras?.state as { operationId?: string } | undefined;
     const persistedState = this.location.getState() as { operationId?: string } | undefined;
     const operationId = navigationState?.operationId ?? persistedState?.operationId;
     return operationId && operationId.trim().length > 0 ? operationId : 'Unavailable';

@@ -19,7 +19,7 @@ describe('InternalServerErrorComponent', () => {
           provide: Router,
           useValue: {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            getCurrentNavigation: () => (navigationState ? ({ extras: { state: navigationState } } as any) : null),
+            currentNavigation: () => (navigationState ? ({ extras: { state: navigationState } } as any) : null),
           },
         },
         {
