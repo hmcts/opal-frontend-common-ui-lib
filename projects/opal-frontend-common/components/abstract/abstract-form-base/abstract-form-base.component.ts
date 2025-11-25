@@ -687,7 +687,7 @@ export abstract class AbstractFormBaseComponent implements OnInit, OnDestroy {
 
     const navigationExtras = {
       ...(nonRelative ? {} : { relativeTo: this.activatedRoute.parent }),
-      ...(routeData !== undefined ? { state: routeData } : {}),
+      ...(routeData ? { state: routeData } : {}),
       ...(fragment ? { fragment } : {}),
     };
 
