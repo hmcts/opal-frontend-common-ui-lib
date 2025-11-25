@@ -28,6 +28,7 @@ describe('GlobalStore', () => {
     expect(store.ssoEnabled()).toBeFalse();
     expect(store.launchDarklyConfig()).toEqual({} as ITransferStateLaunchDarklyConfig);
     expect(store.tokenExpiry()).toEqual({} as ISessionTokenExpiry);
+    expect(store.userStateCacheExpirationMilliseconds()).toBe(1800000);
   });
 
   it('should update authenticated state', () => {
@@ -85,5 +86,11 @@ describe('GlobalStore', () => {
     store.setBannerError({ ...GLOBAL_ERROR_STATE, error: true, message: 'banner' });
     store.resetBannerError();
     expect(store.bannerError()).toEqual(GLOBAL_ERROR_STATE);
+  });
+
+  it('should update user state cache expiration milliseconds', () => {
+    const expirationMilliseconds = 45 * 60 * 1000; // Convert minutes to milliseconds
+    store.setUserStateCacheExpirationMilliseconds(expirationMilliseconds);
+    expect(store.userStateCacheExpirationMilliseconds()).toBe(expirationMilliseconds);
   });
 });

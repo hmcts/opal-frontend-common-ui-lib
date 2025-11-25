@@ -8,5 +8,6 @@ export interface IPagesRoutingPaths extends IChildRoutingPaths {
     internalServerError: string;
     signIn: string;
     signInStub: string;
+    accountCreated: string;
   };
 }

@@ -6,4 +6,5 @@ export const TRANSFER_STATE_MOCK: ITransferStateServerState = {
   launchDarklyConfig: TRANSFER_STATE_LAUNCH_DARKLY_CONFIG_MOCK,
   ssoEnabled: true,
   appInsightsConfig: TRANSFER_STATE_APP_INSIGHTS_CONFIG_MOCK,
+  userStateCacheExpirationMilliseconds: 1800000,
 };
