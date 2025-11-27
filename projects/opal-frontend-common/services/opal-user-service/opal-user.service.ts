@@ -50,7 +50,7 @@ export class OpalUserService {
     }
 
     const storeUser = this.globalStore.userState();
-    if (storeUser && storeUser.user_id && cachedUser.user_id && storeUser.user_id !== cachedUser.user_id) {
+    if (storeUser?.user_id && cachedUser.user_id && storeUser.user_id !== cachedUser.user_id) {
       return null;
     }
 
