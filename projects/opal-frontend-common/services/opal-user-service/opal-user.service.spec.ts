@@ -3,6 +3,7 @@ import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { OpalUserService } from './opal-user.service';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { IOpalUserState } from './interfaces/opal-user-state.interface';
+import { IOpalUserStateCached } from './interfaces/opal-user-state-cached.interface';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
 import { OPAL_USER_STATE_MOCK } from './mocks/opal-user-state.mock';
@@ -27,7 +28,7 @@ describe('OpalUserService', () => {
     globalStore = TestBed.inject(GlobalStore);
     dateService = TestBed.inject(DateService);
 
-    service['clearCache']();
+    service.clearUserStateCache();
   });
 
   afterEach(() => {
@@ -77,6 +78,30 @@ describe('OpalUserService', () => {
 
     // Verify no additional HTTP requests were made
     httpMock.expectNone(OPAL_USER_PATHS.loggedInUserState);
+  });
+
+  it('should fetch fresh data when global store user differs from cache', () => {
+    // Seed cache with user A and mark as unexpired
+    service['userStateCache'] = {
+      userState: mockUserState,
+      expiryAt: DateTime.now().plus({ minutes: 10 }).toISO(),
+    };
+
+    // Simulate global store holding a different user (user B)
+    const differentUser: IOpalUserState = { ...mockUserState, user_id: 999 };
+    globalStore.setUserState(differentUser);
+
+    // Call should bypass cache and fetch fresh data
+    const freshUser: IOpalUserState = { ...mockUserState, user_id: 12345 };
+    service.getLoggedInUserState().subscribe((response) => {
+      expect(response).toEqual(freshUser);
+      expect(globalStore.userState()).toEqual(freshUser);
+      expect(service['userStateCache'].userState).toEqual(freshUser);
+    });
+
+    const req = httpMock.expectOne(OPAL_USER_PATHS.loggedInUserState);
+    expect(req.request.method).toBe('GET');
+    req.flush(freshUser);
   });
 
   it('should fetch fresh data when cache is expired', () => {
@@ -172,7 +197,7 @@ describe('OpalUserService', () => {
 
   it('should return true for isCacheExpired when cache does not exist', () => {
     // Ensure cache is cleared
-    service['clearCache']();
+    service.clearUserStateCache();
 
     // Access the private method to test the uncovered line
     const isExpired = service['isCacheExpired']();
@@ -197,5 +222,18 @@ describe('OpalUserService', () => {
 
     const isExpired = service['isCacheExpired']();
     expect(isExpired).toBe(true);
+  });
+
+  it('should clear cache and reset global store when clearUserStateCache is called', () => {
+    service['userStateCache'] = {
+      userState: mockUserState,
+      expiryAt: DateTime.now().toISO(),
+    };
+    globalStore.setUserState(mockUserState);
+
+    service.clearUserStateCache();
+
+    expect(service['userStateCache']).toEqual({} as IOpalUserStateCached);
+    expect(globalStore.userState()).toEqual({} as IOpalUserState);
   });
 });
