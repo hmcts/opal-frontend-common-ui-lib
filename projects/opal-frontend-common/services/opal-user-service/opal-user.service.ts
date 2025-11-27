@@ -37,6 +37,27 @@ export class OpalUserService {
   }
 
   /**
+   * Returns cached user state when present, unexpired, and matching the store identity; otherwise null.
+   */
+  private getCachedUserIfValid(): IOpalUserState | null {
+    const cachedUser = this.userStateCache?.userState;
+    if (!cachedUser) {
+      return null;
+    }
+
+    if (this.isCacheExpired()) {
+      return null;
+    }
+
+    const storeUser = this.globalStore.userState();
+    if (storeUser && storeUser.user_id && cachedUser.user_id && storeUser.user_id !== cachedUser.user_id) {
+      return null;
+    }
+
+    return cachedUser;
+  }
+
+  /**
    * Retrieves the logged-in user's state as an observable.
    *
    * This method first checks if the user state is cached and the cache is still valid.
@@ -46,12 +67,10 @@ export class OpalUserService {
    * @returns {Observable<IOpalUserState>} An observable that emits the logged-in user's state.
    */
   public getLoggedInUserState(): Observable<IOpalUserState> {
-    // Reset user state in global store at the start
-    this.globalStore.setUserState({} as IOpalUserState);
-
-    if (this.userStateCache?.userState && !this.isCacheExpired()) {
-      this.globalStore.setUserState(this.userStateCache.userState);
-      return of(this.userStateCache.userState);
+    const cachedUser = this.getCachedUserIfValid();
+    if (cachedUser) {
+      this.globalStore.setUserState(cachedUser);
+      return of(cachedUser);
     }
 
     // Calculate new expiry time
@@ -72,12 +91,22 @@ export class OpalUserService {
   }
 
   /**
+   * Clears cached user state and resets the global store user to an empty object.
+   *
+   * Useful for logout/identity switches to avoid reusing stale state.
+   */
+  public clearUserStateCache(): void {
+    this.clearCache();
+    this.globalStore.setUserState({} as IOpalUserState);
+  }
+
+  /**
    * Forces a fresh fetch of user state, bypassing the cache.
    *
    * @returns An Observable that emits the current {@link IOpalUserState}.
    */
   public refreshUserState(): Observable<IOpalUserState> {
-    this.clearCache();
+    this.clearUserStateCache();
     return this.getLoggedInUserState();
   }
 }
