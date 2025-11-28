@@ -21,22 +21,46 @@ export class TransformationService {
       return value;
     }
 
-    if (transformItem.transformType === 'date' && transformItem.dateConfig) {
-      const parsedDate = this.dateService.getFromFormat(value, transformItem.dateConfig.inputFormat);
-      if (this.dateService.isValidDate(parsedDate)) {
-        return this.dateService.toFormat(parsedDate, transformItem.dateConfig.outputFormat);
-      }
-      return value;
-    }
+    switch (transformItem.transformType) {
+      case 'date':
+        if (transformItem.dateConfig) {
+          const parsedDate = this.dateService.getFromFormat(value, transformItem.dateConfig.inputFormat);
 
-    if (transformItem.transformType === 'time' && transformItem.timeConfig) {
-      if (transformItem.timeConfig.addOffset) {
-        // Add offset to the time value
-        return `${value}:00Z`;
-      } else if (transformItem.timeConfig.removeOffset) {
-        // Remove offset from the time value
-        return value.replace(/:00Z$/, '');
-      }
+          if (this.dateService.isValidDate(parsedDate)) {
+            return this.dateService.toFormat(parsedDate, transformItem.dateConfig.outputFormat);
+          }
+
+          return value;
+        }
+        break;
+
+      case 'time':
+        if (transformItem.timeConfig) {
+          if (transformItem.timeConfig.addOffset) {
+            return `${value}:00Z`;
+          }
+          if (transformItem.timeConfig.removeOffset) {
+            return value.replace(/:00Z$/, '');
+          }
+        }
+        break;
+
+      case 'niNumber':
+        if (transformItem.niNumberConfig) {
+          if (transformItem.niNumberConfig.addSpaces) {
+            if (!/\s/.test(value)) {
+              return value.replace(/(.{2})(.{2})(.{2})(.{1})/, '$1 $2 $3 $4');
+            }
+            return value;
+          }
+          if (transformItem.niNumberConfig.removeSpaces) {
+            return value.replace(/\s+/g, '');
+          }
+        }
+        break;
+
+      default:
+        break;
     }
 
     return value;

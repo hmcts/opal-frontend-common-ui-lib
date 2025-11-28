@@ -108,6 +108,74 @@ describe('TransformationService', () => {
       const result = service['applyTransformation'](value, transformItem);
       expect(result).toBe('14:30');
     });
+
+    it('should transform NI number values correctly by adding spaces', () => {
+      const value = 'AB123456C';
+      const transformItem: ITransformItem = {
+        ...TRANSFORM_ITEM_DEFAULTS,
+        key: 'niNumberKey',
+        transformType: 'niNumber',
+        niNumberConfig: {
+          addSpaces: true,
+          removeSpaces: false,
+        },
+      };
+
+      const result = service['applyTransformation'](value, transformItem);
+      expect(result).toBe('AB 12 34 56C');
+    });
+
+    it('should transform NI number values correctly by removing spaces', () => {
+      const value = 'AB 12 34 56C';
+      const transformItem: ITransformItem = {
+        ...TRANSFORM_ITEM_DEFAULTS,
+        key: 'niNumberKey',
+        transformType: 'niNumber',
+        niNumberConfig: {
+          removeSpaces: true,
+          addSpaces: false,
+        },
+      };
+
+      const result = service['applyTransformation'](value, transformItem);
+      expect(result).toBe('AB123456C');
+    });
+
+    it('should return the original date value if there is no dateConfig supplied', () => {
+      const value = '04/06/1991';
+      const transformItem: ITransformItem = {
+        ...TRANSFORM_ITEM_DEFAULTS,
+        key: 'dateKey',
+        transformType: 'date',
+      };
+
+      const result = service['applyTransformation'](value, transformItem);
+      expect(result).toBe(value);
+    });
+
+    it('should return the original time value if there is no timeConfig supplied', () => {
+      const value = '14:30';
+      const transformItem: ITransformItem = {
+        ...TRANSFORM_ITEM_DEFAULTS,
+        key: 'timeKey',
+        transformType: 'time',
+      };
+
+      const result = service['applyTransformation'](value, transformItem);
+      expect(result).toBe(value);
+    });
+
+    it('should return the original NI number value if there is no niNumberConfig supplied', () => {
+      const value = 'AB123456C';
+      const transformItem: ITransformItem = {
+        ...TRANSFORM_ITEM_DEFAULTS,
+        key: 'niNumberKey',
+        transformType: 'niNumber',
+      };
+
+      const result = service['applyTransformation'](value, transformItem);
+      expect(result).toBe(value);
+    });
   });
 
   describe('transformObjectValues', () => {
