@@ -4,12 +4,9 @@ export function nationalInsuranceNumberValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: unknown } | null => {
     const value = control.value;
     if (value) {
-      // Remove all spaces and convert to uppercase for uniformity
-      const cleanedValue = value.replaceAll(/\s+/g, '').toUpperCase();
-
-      // Check if the cleaned value has exactly 9 characters and matches the National Insurance number format
+      // Check if the value has exactly 9 characters and matches the National Insurance number format
       const ninoRegex = /^[A-Z]{2}\d{6}[A-D]$/;
-      if (cleanedValue.length !== 9 || !ninoRegex.test(cleanedValue)) {
+      if (value.length !== 9 || !ninoRegex.test(value)) {
         return { nationalInsuranceNumberPattern: { value: value } };
       }
     }
