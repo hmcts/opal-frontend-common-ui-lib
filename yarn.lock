@@ -2250,10 +2250,10 @@
   dependencies:
     "@nevware21/ts-utils" ">= 0.10.4 < 2.x"
 
-"@ministryofjustice/frontend@^7.0.0":
-  version "7.1.1"
-  resolved "https://registry.yarnpkg.com/@ministryofjustice/frontend/-/frontend-7.1.1.tgz#7cbdc00629f213cfc01ed0f152673d13c985a7e9"
-  integrity sha512-A26Vn8ov7R5oETQ4F3ZqlW3wn6fSrNAHl5UUEnCRx/+wUM1t6mC6GyUcs7o29kgazOy00CWPpVfKfVJt8Mq7vg==
+"@ministryofjustice/frontend@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@ministryofjustice/frontend/-/frontend-8.0.0.tgz#3e32f2338fb79daca5228ab79d6d245cb7492347"
+  integrity sha512-hVWJAFfVdIc+azwFJ3eZQRIuG3BW83wtTwjZDPvxCCUrY6wvGQLSoBOxExFb+1C+cvzM02WkTj0kS46zku7YhA==
 
 "@modelcontextprotocol/sdk@1.24.0":
   version "1.24.0"
