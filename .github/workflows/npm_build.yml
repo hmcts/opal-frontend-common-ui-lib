@@ -23,7 +23,6 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: '24.x'
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -66,7 +65,6 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: '24.x'
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Ensure npm version (Trusted Publishing)
         run: |
@@ -82,5 +80,15 @@ jobs:
       - name: Publish version (OIDC via npm)
         working-directory: dist/opal-frontend-common
         run: |
+          # Ensure we do NOT publish using token-based auth (classic/granular).
           unset NODE_AUTH_TOKEN
+
+          # Use a fresh npm user config with no auth token to force OIDC Trusted Publishing.
+          export NPM_CONFIG_USERCONFIG="$RUNNER_TEMP/npmrc-noauth"
+          printf "registry=https://registry.npmjs.org/\n" > "$NPM_CONFIG_USERCONFIG"
+
+          # Defensive: remove any auth token entries if something tries to inject them.
+          npm config delete //registry.npmjs.org/:_authToken || true
+          npm config delete _authToken || true
+
           npm publish --access public
