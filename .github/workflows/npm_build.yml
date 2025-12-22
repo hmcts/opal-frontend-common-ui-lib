@@ -13,6 +13,9 @@ jobs:
     name: Build, Test, and Analyse
     if: github.event_name != 'release'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -64,13 +67,21 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           always-auth: true
 
+      - name: Ensure npm version (Trusted Publishing)
+        run: |
+          npm --version
+          npm i -g npm@11.5.1
+          npm --version
+
+
       - name: Install dependencies (Release)
         run: yarn install --frozen-lockfile
 
       - name: Build library (Release)
         run: yarn build
 
-      - name: Publish version
-        run: cd dist/opal-frontend-common && yarn publish --new-version ${{ steps.release.outputs.version }} --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm_api_token }}
+      - name: Publish version (OIDC via npm)
+        working-directory: dist/opal-frontend-common
+        run: |
+          npm version "${{ steps.release.outputs.version }}" --no-git-tag-version
+          npm publish --access public
