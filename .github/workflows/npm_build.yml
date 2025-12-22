@@ -15,7 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -50,6 +49,9 @@ jobs:
     name: Release and Publish
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout repository (Release)
         uses: actions/checkout@v6
@@ -65,15 +67,12 @@ jobs:
         with:
           node-version: '24.x'
           registry-url: 'https://registry.npmjs.org'
-          always-auth: true
 
       - name: Ensure npm version (Trusted Publishing)
         run: |
           npm --version
           npm i -g npm@11.5.1
           npm --version
-
-
       - name: Install dependencies (Release)
         run: yarn install --frozen-lockfile
 
@@ -83,5 +82,5 @@ jobs:
       - name: Publish version (OIDC via npm)
         working-directory: dist/opal-frontend-common
         run: |
-          npm version "${{ steps.release.outputs.version }}" --no-git-tag-version
+          unset NODE_AUTH_TOKEN
           npm publish --access public
