@@ -1,12 +1,12 @@
 <div class="moj-filter-layout">
-  <div class="moj-filter-layout__filter" id="filter" [hidden]="!showFilter">
+  <div class="moj-filter-layout__filter" [id]="filterId" [hidden]="!showFilter">
     <ng-content select="[mojFilterPanel]"></ng-content>
   </div>
   <div class="moj-filter-layout__content">
     <button
       type="button"
       class="govuk-button govuk-button--secondary moj-filter-layout__toggle-button"
-      aria-controls="filter"
+      [attr.aria-controls]="filterId"
       [attr.aria-expanded]="showFilter"
       (click)="toggleFilter()"
     >

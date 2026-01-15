@@ -2,9 +2,9 @@
   class="govuk-button moj-button-menu__toggle-button govuk-button--secondary"
   type="button"
   aria-haspopup="true"
-  aria-expanded="false"
+  [attr.aria-controls]="menuId"
+  [attr.aria-expanded]="isExpanded"
   (click)="toggleButtonMenu()"
-  #menuButton
 >
   <span>
     {{ menuButtonTitle }}
@@ -14,8 +14,6 @@
   </span>
 </button>
 
-@if (isExpanded) {
-  <ul role="list" class="moj-button-menu__wrapper">
-    <ng-content></ng-content>
-  </ul>
-}
+<ul [id]="menuId" class="moj-button-menu__wrapper" [hidden]="!isExpanded">
+  <ng-content></ng-content>
+</ul>
