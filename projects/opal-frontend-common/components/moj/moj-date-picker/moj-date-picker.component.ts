@@ -47,6 +47,20 @@ export class MojDatePickerComponent implements OnInit {
     return this._control;
   }
 
+  get describedBy(): string | null {
+    const ids: string[] = [];
+
+    if (this.hintText) {
+      ids.push(`${this.inputId}-hint`);
+    }
+
+    if (this.errors) {
+      ids.push(`${this.inputId}-error-message`);
+    }
+
+    return ids.length ? ids.join(' ') : null;
+  }
+
   constructor() {
     afterNextRender(() => {
       // Only trigger the render of the component in the browser

@@ -49,4 +49,12 @@ export class GovukTextInputPrefixSuffixComponent {
   get getControl() {
     return this._control;
   }
+
+  get describedBy(): string | null {
+    if (this.errors) {
+      return `${this.inputId}-error-message`;
+    }
+
+    return null;
+  }
 }
