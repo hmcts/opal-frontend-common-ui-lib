@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpErrorResponse, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
+import { HttpContext, HttpErrorResponse, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { httpErrorInterceptor } from './http-error.interceptor';
 import { of, throwError } from 'rxjs';
@@ -8,6 +8,7 @@ import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types
 import { GENERIC_HTTP_ERROR_MESSAGE } from './constants/http-error-message.constant';
 import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constants';
 import { ERROR_RESPONSE } from './constants/http-error-message-response.constant';
+import { SKIP_HTTP_ERROR_HANDLER } from '@hmcts/opal-frontend-common/interceptors/http-error/constants';
 
 describe('httpErrorInterceptor', () => {
   let globalStore: GlobalStoreType;
@@ -70,6 +71,44 @@ describe('httpErrorInterceptor', () => {
         const errorSignal = globalStore.bannerError();
         expect(errorSignal.error).toBeTrue();
         expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
+      },
+    });
+  });
+
+  it('should bypass error handling when skip condition matches', () => {
+    const errorResponse = new HttpErrorResponse({
+      status: 409,
+      error: {
+        operation_id: 'OP-500',
+        retriable: false,
+      },
+    });
+    const context = new HttpContext().set(SKIP_HTTP_ERROR_HANDLER, { key: 'operation_id', value: 'OP-500' });
+    const request = new HttpRequest('GET', '/test', null, { context });
+    const next: HttpHandlerFn = () => throwError(() => errorResponse);
+
+    interceptor(request, next).subscribe({
+      error: () => {
+        expect(router.navigate).not.toHaveBeenCalled();
+      },
+    });
+  });
+
+  it('should not bypass error handling when skip condition does not match', () => {
+    const errorResponse = new HttpErrorResponse({
+      status: 409,
+      error: {
+        operation_id: 'OP-500',
+        retriable: false,
+      },
+    });
+    const context = new HttpContext().set(SKIP_HTTP_ERROR_HANDLER, { key: 'operation_id', value: 'OP-400' });
+    const request = new HttpRequest('GET', '/test', null, { context });
+    const next: HttpHandlerFn = () => throwError(() => errorResponse);
+
+    interceptor(request, next).subscribe({
+      error: () => {
+        expect(router.navigate).toHaveBeenCalled();
       },
     });
   });

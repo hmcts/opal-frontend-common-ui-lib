@@ -1,4 +1,4 @@
-import { HttpInterceptorFn } from '@angular/common/http';
+import { HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, tap, throwError } from 'rxjs';
@@ -9,6 +9,7 @@ import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types
 import { GENERIC_HTTP_ERROR_MESSAGE } from './constants/http-error-message.constant';
 import { IErrorResponse } from './interfaces/http-error-retrievable-error-response.interface';
 import { ERROR_RESPONSE } from './constants/http-error-message-response.constant';
+import { SKIP_HTTP_ERROR_HANDLER } from '@hmcts/opal-frontend-common/interceptors/http-error/constants';
 /**
  * Checks if the error is a non-retriable error
  * @param error - The HTTP error response
@@ -98,6 +99,34 @@ function handleNonRetriableError(error: unknown, router: Router): void {
   }
 }
 
+/**
+ * Checks if there is an error handling exception condition which is met
+ * @param error - The HTTP error response
+ * @param req - The HTTP Request
+ * @returns true if the error handling exception condition is met, otherwise false
+ */
+function isErrorHandlingExceptionMet(error: unknown, req: HttpRequest<unknown>): boolean {
+  const reqContext = req.context.get(SKIP_HTTP_ERROR_HANDLER);
+  let errorResponse: IErrorResponse | undefined;
+
+  if (reqContext === null) {
+    return false;
+  }
+
+  if (typeof error === 'object' && error !== null) {
+    if ('error' in error) {
+      const err = error as { error?: IErrorResponse };
+      errorResponse = err.error;
+    }
+  }
+
+  if (errorResponse && errorResponse[reqContext?.key as keyof IErrorResponse] === reqContext?.value) {
+    return true;
+  }
+
+  return false;
+}
+
 export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
   const globalStore = inject(GlobalStore);
   const appInsightsService = inject(AppInsightsService);
@@ -111,6 +140,11 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
       const isBrowser = typeof globalThis !== 'undefined';
 
       if (isBrowser) {
+        // Bypass error handling if exception condition is met
+        if (isErrorHandlingExceptionMet(error, req)) {
+          return throwError(() => error);
+        }
+
         if (isNonRetriableError(error)) {
           handleNonRetriableError(error, router);
         } else if (isRetriableError(error)) {
