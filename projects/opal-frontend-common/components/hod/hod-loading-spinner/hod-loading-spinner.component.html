@@ -1,4 +1,7 @@
 <div class="hods-loading-spinner__spinner"></div>
 <div class="hods-loading-spinner__content">
+  @if (statusText) {
+    <span class="govuk-visually-hidden">{{ statusText }}</span>
+  }
   <ng-content></ng-content>
 </div>
