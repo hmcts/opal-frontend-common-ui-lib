@@ -31,10 +31,9 @@ You can use the loading spinner component in your template as follows:
 
 ## Inputs
 
-| Input        | Type     | Description                                                                                         |
-| ------------ | -------- | --------------------------------------------------------------------------------------------------- |
-| `spinnerId`  | `string` | The ID of the spinner element.                                                                      |
-| `statusText` | `string` | Screen reader-only status text announced by the spinner. Defaults to `Loading...`. Set to `''` to omit. |
+| Input       | Type     | Description                    |
+| ----------- | -------- | ------------------------------ |
+| `spinnerId` | `string` | The ID of the spinner element. |
 
 ## Outputs
 
