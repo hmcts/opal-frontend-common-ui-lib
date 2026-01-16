@@ -7,6 +7,7 @@ import { Component, HostBinding, ChangeDetectionStrategy, Input } from '@angular
 })
 export class HodLoadingSpinnerComponent {
   @Input({ required: true }) spinnerId!: string;
+  @Input() statusText = 'Loading...';
 
   @HostBinding('class') hostClasses = 'hods-loading-spinner';
   @HostBinding('attr.role') role = 'status';

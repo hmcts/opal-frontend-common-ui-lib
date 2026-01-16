@@ -33,4 +33,10 @@ describe('HodLoadingSpinnerComponent', () => {
     const hostElement: HTMLElement = fixture.nativeElement;
     expect(hostElement.getAttribute('role')).toBe('status');
   });
+
+  it('should render default screen reader status text', () => {
+    const hostElement: HTMLElement = fixture.nativeElement;
+    const statusText = hostElement.querySelector('.govuk-visually-hidden');
+    expect(statusText?.textContent?.trim()).toBe('Loading...');
+  });
 });
