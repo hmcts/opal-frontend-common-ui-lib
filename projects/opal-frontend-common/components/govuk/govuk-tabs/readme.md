@@ -25,7 +25,8 @@ The component uses content projection, meaning you pass in your own tab list and
 
 To track and control which tab is selected, subscribe to the `(activeTabFragmentChange)` output and bind it to your component's internal state (e.g. `activeTab`).
 
-Each tab item uses `[tabItemFragment]` and `[activeTabItemFragment]` to determine which tab is visually active.
+Each tab item uses `[tabItemFragment]` and `[activeTabItemFragment]` to determine which tab is visually active. The
+`tabItemFragment` should match the `id` on the corresponding tab panel.
 
 ### Example
 
@@ -37,14 +38,14 @@ Each tab item uses `[tabItemFragment]` and `[activeTabItemFragment]` to determin
       [activeTabItemFragment]="activeTab"
       [tabItemId]="'tab-individuals'"
     >
-      <a id="tab-individuals" href="#individuals" class="govuk-tabs__tab">Individuals</a>
+      Individuals
     </opal-lib-govuk-tab-list-item>
     <opal-lib-govuk-tab-list-item
       [tabItemFragment]="'companies'"
       [activeTabItemFragment]="activeTab"
       [tabItemId]="'tab-companies'"
     >
-      <a id="tab-companies" href="#companies" class="govuk-tabs__tab">Companies</a>
+      Companies
     </opal-lib-govuk-tab-list-item>
   </ng-container>
 

@@ -58,6 +58,18 @@ describe('GovukNotificationBannerComponent', () => {
     expect(bodyElement.nativeElement.textContent.trim()).toBe(component.messageText);
   });
 
+  it('should link the banner to the title id', () => {
+    if (!fixture) {
+      fail('fixture returned null');
+      return;
+    }
+
+    const bannerElement = fixture.debugElement.query(By.css('.govuk-notification-banner'));
+    const titleElement = fixture.debugElement.query(By.css('.govuk-notification-banner__title'));
+
+    expect(bannerElement.attributes['aria-labelledby']).toBe(titleElement.attributes['id']);
+  });
+
   it('should create a success message', () => {
     if (!component || !fixture) {
       fail('component or fixture returned null');

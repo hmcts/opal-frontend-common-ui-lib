@@ -6,6 +6,7 @@
   type="radio"
   [value]="inputValue"
   [attr.data-aria-controls]="ariaControls"
+  [attr.aria-describedby]="inputValueHint ? inputId + '-item-hint' : null"
 />
 <label class="govuk-label govuk-radios__label {{ labelClasses }}" [for]="inputId"> {{ labelText }} </label>
 @if (inputValueHint) {

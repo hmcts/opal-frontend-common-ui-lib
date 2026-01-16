@@ -1,9 +1,14 @@
 <a
+  #tabLink
   class="govuk-tabs__tab"
   (click)="handleItemClick($event, tabItemFragment)"
-  (keyup.enter)="handleItemClick($event, tabItemFragment)"
-  tabindex="0"
-  href="#"
+  (keydown)="handleKeydown($event)"
+  [attr.href]="'#' + tabItemFragment"
+  [id]="resolvedTabItemId"
+  role="tab"
+  [attr.aria-controls]="tabItemFragment"
+  [attr.aria-selected]="isActive ? 'true' : 'false'"
+  [attr.tabindex]="isActive ? 0 : -1"
 >
-  <ng-content [linkText]></ng-content>
+  <ng-content></ng-content>
 </a>

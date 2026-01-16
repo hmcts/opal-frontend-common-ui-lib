@@ -41,7 +41,9 @@ This will render an accordion with multiple sections, similar to:
   <div class="govuk-accordion__section">
     <div class="govuk-accordion__section-header">
       <h2 class="govuk-accordion__section-heading">
-        <span class="govuk-accordion__section-button" id="accordion-default-heading-1"> Writing well for the web </span>
+        <button type="button" class="govuk-accordion__section-button" id="accordion-default-heading-1">
+          Writing well for the web
+        </button>
       </h2>
     </div>
     <div

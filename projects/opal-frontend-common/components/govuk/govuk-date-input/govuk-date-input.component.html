@@ -17,7 +17,7 @@
         <span class="govuk-visually-hidden">Error: </span> {{ errorDay || errorMonth || errorYear }}
       </p>
     }
-    <div class="govuk-date-input" id="passport-issued">
+    <div class="govuk-date-input" [id]="fieldSetId + '-date-input'">
       <div class="govuk-date-input__item">
         <div class="govuk-form-group">
           <label class="govuk-label govuk-date-input__label" [for]="dateInputs.day.inputId">
