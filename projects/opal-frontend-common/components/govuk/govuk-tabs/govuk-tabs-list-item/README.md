@@ -1,6 +1,7 @@
 # GOV.UK Tab List Item Component
 
-This Angular component renders a single `<li>` element with the appropriate GOV.UK class for use within a tabbed navigation structure. It wraps a projected `<a>` tag that acts as the tab link.
+This Angular component renders a single list item wrapper with the appropriate GOV.UK class for use within a tabbed
+navigation structure. It renders the `<a>` tab link and projects the link text.
 
 ## Table of Contents
 
@@ -19,7 +20,7 @@ import { GovukTabListItemComponent } from 'opal-frontend-common/components/govuk
 
 ## Usage
 
-This component renders a `<li>` with appropriate GOV.UK classes for use within a tabs list. It wraps a projected `<a>` element.
+This component renders a list item wrapper with appropriate GOV.UK classes for use within a tabs list.
 
 You must provide the following inputs:
 
@@ -37,15 +38,24 @@ The link text inside the `<a>` is projected using `<ng-content>`.
   [activeTabItemFragment]="activeTabFragment"
   [tabItemId]="'tab-individuals'"
 >
-  <ng-content [linkText]>Individuals</ng-content>
+  Individuals
 </opal-lib-govuk-tabs-list-item>
 ```
 
 This results in:
 
 ```html
-<li class="govuk-tabs__list-item govuk-tabs__list-item--selected" id="tab-individuals">
-  <a id="tab-individuals" href="#panel-individuals" class="govuk-tabs__tab">Individuals</a>
+<li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+  <a
+    id="tab-individuals"
+    href="#panel-individuals"
+    class="govuk-tabs__tab"
+    role="tab"
+    aria-controls="panel-individuals"
+    aria-selected="true"
+  >
+    Individuals
+  </a>
 </li>
 ```
 
