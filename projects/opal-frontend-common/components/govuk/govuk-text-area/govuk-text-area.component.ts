@@ -40,4 +40,22 @@ export class GovukTextAreaComponent {
   get getControl() {
     return this._control;
   }
+
+  get describedBy(): string | null {
+    const ids: string[] = [];
+
+    if (this.hintText) {
+      ids.push(`${this.inputId}-hint`);
+    }
+
+    if (this.errors) {
+      ids.push(`${this.inputId}-error-message`);
+    }
+
+    if (this.characterCountEnabled) {
+      ids.push(`${this.inputId}-with-hint-info`);
+    }
+
+    return ids.length ? ids.join(' ') : null;
+  }
 }

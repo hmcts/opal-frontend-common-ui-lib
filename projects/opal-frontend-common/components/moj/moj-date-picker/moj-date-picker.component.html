@@ -10,11 +10,11 @@
     <label class="govuk-label {{ labelClasses }}" [for]="inputId"> {{ labelText }} </label>
 
     @if (hintText) {
-      <div id="date-hint" class="govuk-hint">{{ hintText }}</div>
+      <div [id]="inputId + '-hint'" class="govuk-hint">{{ hintText }}</div>
     }
 
     @if (errors) {
-      <p id="{{ inputId }}-date-error" class="govuk-error-message">
+      <p id="{{ inputId }}-error-message" class="govuk-error-message">
         <span class="govuk-visually-hidden">Error: </span> {{ errors }}
       </p>
     }
@@ -24,7 +24,7 @@
       [id]="inputId"
       [name]="inputName"
       type="text"
-      [attr.aria-describedby]="hintText ? inputId + '-hint' : null"
+      [attr.aria-describedby]="describedBy"
       autocomplete="off"
       [formControl]="getControl"
       (change)="setDateValue($any($event).target.value)"

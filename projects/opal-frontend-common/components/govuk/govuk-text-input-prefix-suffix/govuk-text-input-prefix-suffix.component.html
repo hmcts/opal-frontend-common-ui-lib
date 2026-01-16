@@ -15,6 +15,7 @@
       [name]="inputName"
       type="text"
       [formControl]="getControl"
+      [attr.aria-describedby]="describedBy"
       (blur)="forceTwoDecimalPoints && onBlurFormatToTwoDecimalPlaces()"
     />
     @if (suffixText) {

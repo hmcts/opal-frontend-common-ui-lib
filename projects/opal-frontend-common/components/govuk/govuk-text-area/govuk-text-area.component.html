@@ -25,9 +25,7 @@
     [formControl]="getControl"
     [inputMode]="inputMode"
     [maxlength]="maxCharacterLimit"
-    [attr.aria-describedby]="
-      hintText ? (characterCountEnabled ? inputId + '-hint ' + inputId + '-with-hint-info' : inputId + '-hint') : null
-    "
+    [attr.aria-describedby]="describedBy"
   ></textarea>
   @if (characterCountEnabled) {
     <div [id]="inputId + '-with-hint-info'" class="govuk-hint govuk-character-count__message govuk-visually-hidden">

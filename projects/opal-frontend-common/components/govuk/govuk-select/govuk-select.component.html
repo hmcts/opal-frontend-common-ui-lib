@@ -2,7 +2,7 @@
   <label class="govuk-label {{ labelClasses }}" [for]="selectId"> {{ labelText }} </label>
 
   @if (selectHint) {
-    <div [id]="selectId ? selectId + 'Hint' : ''" class="govuk-hint">
+    <div [id]="selectId ? selectId + '-hint' : ''" class="govuk-hint">
       {{ selectHint }}
     </div>
   }
@@ -16,7 +16,7 @@
     class="govuk-select {{ selectClasses }}"
     [id]="selectId"
     [name]="selectName"
-    [attr.describedby]="selectHint ? selectId + 'Hint' : ''"
+    [attr.aria-describedby]="describedBy"
     [formControl]="getControl"
   >
     <option value="" selected></option>

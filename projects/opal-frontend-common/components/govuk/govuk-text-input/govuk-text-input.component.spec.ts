@@ -76,4 +76,78 @@ describe('GovukTextInputComponent', () => {
 
     expect(elem.classes[labelClass]).toBeTruthy();
   });
+
+  it('should set aria-describedby with hint only', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    fixture.componentRef.setInput('hintText', 'Hint text');
+    fixture.componentRef.setInput('errors', null);
+    fixture.detectChanges();
+
+    const input = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(input.getAttribute('aria-describedby')).toBe('test-hint');
+  });
+
+  it('should set aria-describedby with hintHtml only', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    fixture.componentRef.setInput('hintText', '');
+    fixture.componentRef.setInput('hintHtml', true);
+    fixture.componentRef.setInput('errors', null);
+    fixture.detectChanges();
+
+    const input = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(input.getAttribute('aria-describedby')).toBe('test-hint');
+  });
+
+  it('should set aria-describedby with error only', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    fixture.componentRef.setInput('hintText', '');
+    fixture.componentRef.setInput('hintHtml', false);
+    fixture.componentRef.setInput('errors', 'Error message');
+    fixture.detectChanges();
+
+    const input = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(input.getAttribute('aria-describedby')).toBe('test-error-message');
+  });
+
+  it('should set aria-describedby with hint and error', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    fixture.componentRef.setInput('hintText', 'Hint text');
+    fixture.componentRef.setInput('hintHtml', false);
+    fixture.componentRef.setInput('errors', 'Error message');
+    fixture.detectChanges();
+
+    const input = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(input.getAttribute('aria-describedby')).toBe('test-hint test-error-message');
+  });
+
+  it('should not set aria-describedby when hint and error are missing', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    fixture.componentRef.setInput('hintText', '');
+    fixture.componentRef.setInput('hintHtml', false);
+    fixture.componentRef.setInput('errors', null);
+    fixture.detectChanges();
+
+    const input = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(input.getAttribute('aria-describedby')).toBeNull();
+  });
 });

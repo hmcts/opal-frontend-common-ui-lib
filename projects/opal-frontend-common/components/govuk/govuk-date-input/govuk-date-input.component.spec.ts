@@ -61,7 +61,7 @@ describe('GovukDateInputComponent', () => {
       return;
     }
 
-    const elem = fixture.debugElement.query(By.css('#dateOfBirth #dateOfBirthHint')).nativeElement;
+    const elem = fixture.debugElement.query(By.css('#dateOfBirth #dateOfBirth-hint')).nativeElement;
 
     expect(elem.textContent).toContain('For example, 04 06 1991');
   });
@@ -104,5 +104,69 @@ describe('GovukDateInputComponent', () => {
     expect(day).toBeTruthy();
     expect(month).toBeTruthy();
     expect(year).toBeTruthy();
+  });
+
+  it('should set aria-describedby with hint only', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    fixture.componentRef.setInput('legendHint', 'For example, 04 06 1991');
+    fixture.componentRef.setInput('errorDay', null);
+    fixture.componentRef.setInput('errorMonth', null);
+    fixture.componentRef.setInput('errorYear', null);
+    fixture.detectChanges();
+
+    const fieldset = fixture.debugElement.query(By.css('#dateOfBirth')).nativeElement;
+    expect(fieldset.getAttribute('aria-describedby')).toBe('dateOfBirth-hint');
+  });
+
+  it('should set aria-describedby with error only', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    fixture.componentRef.setInput('legendHint', '');
+    fixture.componentRef.setInput('errorDay', 'Day error');
+    fixture.componentRef.setInput('errorMonth', null);
+    fixture.componentRef.setInput('errorYear', null);
+    fixture.detectChanges();
+
+    const fieldset = fixture.debugElement.query(By.css('#dateOfBirth')).nativeElement;
+    expect(fieldset.getAttribute('aria-describedby')).toBe('dateOfBirth-error-message');
+  });
+
+  it('should set aria-describedby with hint and error', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    fixture.componentRef.setInput('legendHint', 'For example, 04 06 1991');
+    fixture.componentRef.setInput('errorDay', null);
+    fixture.componentRef.setInput('errorMonth', 'Month error');
+    fixture.componentRef.setInput('errorYear', null);
+    fixture.detectChanges();
+
+    const fieldset = fixture.debugElement.query(By.css('#dateOfBirth')).nativeElement;
+    expect(fieldset.getAttribute('aria-describedby')).toBe('dateOfBirth-hint dateOfBirth-error-message');
+  });
+
+  it('should not set aria-describedby when hint and errors are missing', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    fixture.componentRef.setInput('legendHint', '');
+    fixture.componentRef.setInput('errorDay', null);
+    fixture.componentRef.setInput('errorMonth', null);
+    fixture.componentRef.setInput('errorYear', null);
+    fixture.detectChanges();
+
+    const fieldset = fixture.debugElement.query(By.css('#dateOfBirth')).nativeElement;
+    expect(fieldset.getAttribute('aria-describedby')).toBeNull();
   });
 });

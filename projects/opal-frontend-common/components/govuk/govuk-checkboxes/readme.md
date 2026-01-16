@@ -45,10 +45,10 @@ You can use the checkboxes component in your template as follows:
 
 ```html
 <div class="govuk-form-group">
-  <fieldset class="govuk-fieldset" [id]="fieldSetId" [attr.aria-describedby]="fieldSetId">
-    <legend class="govuk-fieldset__legend {{ legendClasses }}" [attr.describedby]="fieldSetId">{{ legendText }}</legend>
+  <fieldset class="govuk-fieldset" [id]="fieldSetId" [attr.aria-describedby]="describedBy">
+    <legend class="govuk-fieldset__legend {{ legendClasses }}">{{ legendText }}</legend>
 
-    <div class="govuk-hint" *ngIf="legendHint">{{ legendHint }}</div>
+    <div class="govuk-hint" *ngIf="legendHint" [id]="fieldSetId + '-hint'">{{ legendHint }}</div>
 
     <div class="govuk-checkboxes {{ checkboxClasses }}" data-module="govuk-checkboxes">
       <ng-content></ng-content>

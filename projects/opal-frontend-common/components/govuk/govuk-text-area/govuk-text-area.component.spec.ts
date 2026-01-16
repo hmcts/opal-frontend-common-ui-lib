@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, AbstractControl } from '@angular/forms';
 import { GovukTextAreaComponent } from './govuk-text-area.component';
+import { By } from '@angular/platform-browser';
 
 describe('GovukTextAreaComponent', () => {
   let component: GovukTextAreaComponent | null;
@@ -93,5 +94,80 @@ describe('GovukTextAreaComponent', () => {
 
     control.setValue('');
     expect(component['remainingCharacterCount']()).toBe(100); // 100 - 0
+  });
+
+  it('should set aria-describedby with hint only', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    component.hintText = 'Hint text';
+    component.errors = null;
+    component.characterCountEnabled = false;
+    fixture.detectChanges();
+
+    const textarea = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(textarea.getAttribute('aria-describedby')).toBe('test-hint');
+  });
+
+  it('should set aria-describedby with error only', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    component.hintText = '';
+    component.errors = 'Error message';
+    component.characterCountEnabled = false;
+    fixture.detectChanges();
+
+    const textarea = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(textarea.getAttribute('aria-describedby')).toBe('test-error-message');
+  });
+
+  it('should set aria-describedby with hint, error, and character count', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    component.hintText = 'Hint text';
+    component.errors = 'Error message';
+    component.characterCountEnabled = true;
+    fixture.detectChanges();
+
+    const textarea = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(textarea.getAttribute('aria-describedby')).toBe('test-hint test-error-message test-with-hint-info');
+  });
+
+  it('should set aria-describedby with character count only', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    component.hintText = '';
+    component.errors = null;
+    component.characterCountEnabled = true;
+    fixture.detectChanges();
+
+    const textarea = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(textarea.getAttribute('aria-describedby')).toBe('test-with-hint-info');
+  });
+
+  it('should not set aria-describedby when hint, error, and character count are missing', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    component.hintText = '';
+    component.errors = null;
+    component.characterCountEnabled = false;
+    fixture.detectChanges();
+
+    const textarea = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(textarea.getAttribute('aria-describedby')).toBeNull();
   });
 });

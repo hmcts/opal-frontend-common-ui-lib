@@ -5,17 +5,25 @@ import { Component } from '@angular/core';
 
 @Component({
   template: `<opal-lib-govuk-checkboxes
-    fieldSetId="test"
-    legendText="Legend Text"
-    legendHint="Legend Hint"
-    legendClasses="legend-class"
-    checkboxClasses="checkbox-class"
+    [fieldSetId]="fieldSetId"
+    [legendText]="legendText"
+    [legendHint]="legendHint"
+    [legendClasses]="legendClasses"
+    [checkboxClasses]="checkboxClasses"
+    [errors]="errors"
   >
     Hello World</opal-lib-govuk-checkboxes
   >`,
   imports: [GovukCheckboxesComponent],
 })
-class TestHostComponent {}
+class TestHostComponent {
+  fieldSetId = 'test';
+  legendText = 'Legend Text';
+  legendHint = 'Legend Hint';
+  legendClasses = 'legend-class';
+  checkboxClasses = 'checkbox-class';
+  errors: string | null = null;
+}
 describe('GovukCheckboxesNewComponent', () => {
   let component: TestHostComponent | null;
   let fixture: ComponentFixture<TestHostComponent> | null;
@@ -55,7 +63,7 @@ describe('GovukCheckboxesNewComponent', () => {
       return;
     }
 
-    const element = fixture.nativeElement.querySelector('#testHint');
+    const element = fixture.nativeElement.querySelector('#test-hint');
     expect(element.innerText).toBe('Legend Hint');
   });
 
@@ -77,5 +85,56 @@ describe('GovukCheckboxesNewComponent', () => {
 
     const element = fixture.nativeElement.querySelector('#test > .checkbox-class');
     expect(element.innerText).toBe('Hello World');
+  });
+
+  it('should set aria-describedby with hint only', () => {
+    if (!fixture) {
+      fail('fixture returned null');
+      return;
+    }
+
+    const fieldset = fixture.nativeElement.querySelector('#test');
+    expect(fieldset.getAttribute('aria-describedby')).toBe('test-hint');
+  });
+
+  it('should set aria-describedby with error only', () => {
+    if (!fixture || !component) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    component.legendHint = '';
+    component.errors = 'Error';
+    fixture.detectChanges();
+
+    const fieldset = fixture.nativeElement.querySelector('#test');
+    expect(fieldset.getAttribute('aria-describedby')).toBe('test-error-message');
+  });
+
+  it('should set aria-describedby with hint and error', () => {
+    if (!fixture || !component) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    component.errors = 'Error';
+    fixture.detectChanges();
+
+    const fieldset = fixture.nativeElement.querySelector('#test');
+    expect(fieldset.getAttribute('aria-describedby')).toBe('test-hint test-error-message');
+  });
+
+  it('should not set aria-describedby when hint and error are missing', () => {
+    if (!fixture || !component) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    component.legendHint = '';
+    component.errors = null;
+    fixture.detectChanges();
+
+    const fieldset = fixture.nativeElement.querySelector('#test');
+    expect(fieldset.getAttribute('aria-describedby')).toBeNull();
   });
 });

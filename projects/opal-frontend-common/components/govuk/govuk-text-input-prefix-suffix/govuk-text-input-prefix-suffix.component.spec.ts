@@ -147,4 +147,30 @@ describe('GovukTextInputPrefixSuffixComponent', () => {
     // Assert
     expect(component['_control'].value).toBe(value);
   });
+
+  it('should set aria-describedby with error only', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    fixture.componentRef.setInput('errors', 'Error message');
+    fixture.detectChanges();
+
+    const input = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(input.getAttribute('aria-describedby')).toBe('test-error-message');
+  });
+
+  it('should not set aria-describedby when error is missing', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    fixture.componentRef.setInput('errors', null);
+    fixture.detectChanges();
+
+    const input = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(input.getAttribute('aria-describedby')).toBeNull();
+  });
 });

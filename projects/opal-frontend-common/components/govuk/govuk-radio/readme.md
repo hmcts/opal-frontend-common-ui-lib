@@ -47,9 +47,9 @@ You can use the radio component in your template as follows:
 
 ```html
 <div class="govuk-form-group" [class.govuk-form-group--error]="!!errors">
-  <fieldset class="govuk-fieldset" [id]="fieldSetId" [attr.aria-describedby]="fieldSetId">
+  <fieldset class="govuk-fieldset" [id]="fieldSetId" [attr.aria-describedby]="describedBy">
     <legend class="govuk-fieldset__legend {{ legendClasses }}">{{ legendText }}</legend>
-    <div class="govuk-hint">{{ legendHint }}</div>
+    <div class="govuk-hint" [id]="fieldSetId + '-hint'">{{ legendHint }}</div>
 
     <p id="{{ this.fieldSetId }}-error-message" class="govuk-error-message">
       <span class="govuk-visually-hidden">Error: </span> {{ errors }}

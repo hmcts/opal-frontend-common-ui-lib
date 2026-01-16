@@ -68,8 +68,64 @@ describe('GovukSelectComponent', () => {
       return;
     }
 
-    const elem = fixture.debugElement.query(By.css('#courtHint')).nativeElement;
+    const elem = fixture.debugElement.query(By.css('#court-hint')).nativeElement;
     expect(elem.textContent).toContain('hint hint');
+  });
+
+  it('should set aria-describedby with hint only', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    fixture.componentRef.setInput('selectHint', 'hint hint');
+    fixture.componentRef.setInput('errors', null);
+    fixture.detectChanges();
+
+    const select = fixture.debugElement.query(By.css('#court')).nativeElement;
+    expect(select.getAttribute('aria-describedby')).toBe('court-hint');
+  });
+
+  it('should set aria-describedby with error only', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    fixture.componentRef.setInput('selectHint', '');
+    fixture.componentRef.setInput('errors', 'Error message');
+    fixture.detectChanges();
+
+    const select = fixture.debugElement.query(By.css('#court')).nativeElement;
+    expect(select.getAttribute('aria-describedby')).toBe('court-error-message');
+  });
+
+  it('should set aria-describedby with hint and error', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    fixture.componentRef.setInput('selectHint', 'hint hint');
+    fixture.componentRef.setInput('errors', 'Error message');
+    fixture.detectChanges();
+
+    const select = fixture.debugElement.query(By.css('#court')).nativeElement;
+    expect(select.getAttribute('aria-describedby')).toBe('court-hint court-error-message');
+  });
+
+  it('should not set aria-describedby when hint and error are missing', () => {
+    if (!component || !fixture) {
+      fail('component or fixture returned null');
+      return;
+    }
+
+    fixture.componentRef.setInput('selectHint', '');
+    fixture.componentRef.setInput('errors', null);
+    fixture.detectChanges();
+
+    const select = fixture.debugElement.query(By.css('#court')).nativeElement;
+    expect(select.getAttribute('aria-describedby')).toBeNull();
   });
 
   it('should have populated the select', () => {

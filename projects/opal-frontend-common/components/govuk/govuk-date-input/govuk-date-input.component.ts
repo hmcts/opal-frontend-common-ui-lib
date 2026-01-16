@@ -30,4 +30,18 @@ export class GovukDateInputComponent {
   get getGroup() {
     return this._group;
   }
+
+  get describedBy(): string | null {
+    const ids: string[] = [];
+
+    if (this.legendHint) {
+      ids.push(`${this.fieldSetId}-hint`);
+    }
+
+    if (this.errorDay || this.errorMonth || this.errorYear) {
+      ids.push(`${this.fieldSetId}-error-message`);
+    }
+
+    return ids.length ? ids.join(' ') : null;
+  }
 }

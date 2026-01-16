@@ -14,4 +14,18 @@ export class GovukRadioComponent {
   @Input({ required: false }) legendClasses!: string;
   @Input({ required: false }) radioClasses!: string;
   @Input({ required: false }) errors!: string | null;
+
+  get describedBy(): string | null {
+    const ids: string[] = [];
+
+    if (this.legendHint) {
+      ids.push(`${this.fieldSetId}-hint`);
+    }
+
+    if (this.errors) {
+      ids.push(`${this.fieldSetId}-error-message`);
+    }
+
+    return ids.length ? ids.join(' ') : null;
+  }
 }

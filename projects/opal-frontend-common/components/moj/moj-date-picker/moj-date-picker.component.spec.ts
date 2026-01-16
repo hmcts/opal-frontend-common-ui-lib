@@ -68,4 +68,40 @@ describe('MojDatePickerComponent', () => {
 
     expect(component.disabledDatesConcatenated).toEqual('01/01/2024 01/02/2024');
   });
+
+  it('should set aria-describedby with hint only', () => {
+    fixture.componentRef.setInput('hintText', 'Hint text');
+    fixture.componentRef.setInput('errors', null);
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('#datePickerId');
+    expect(input.getAttribute('aria-describedby')).toBe('datePickerId-hint');
+  });
+
+  it('should set aria-describedby with error only', () => {
+    fixture.componentRef.setInput('hintText', '');
+    fixture.componentRef.setInput('errors', 'Error message');
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('#datePickerId');
+    expect(input.getAttribute('aria-describedby')).toBe('datePickerId-error-message');
+  });
+
+  it('should set aria-describedby with hint and error', () => {
+    fixture.componentRef.setInput('hintText', 'Hint text');
+    fixture.componentRef.setInput('errors', 'Error message');
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('#datePickerId');
+    expect(input.getAttribute('aria-describedby')).toBe('datePickerId-hint datePickerId-error-message');
+  });
+
+  it('should not set aria-describedby when hint and error are missing', () => {
+    fixture.componentRef.setInput('hintText', '');
+    fixture.componentRef.setInput('errors', null);
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('#datePickerId');
+    expect(input.getAttribute('aria-describedby')).toBeNull();
+  });
 });
