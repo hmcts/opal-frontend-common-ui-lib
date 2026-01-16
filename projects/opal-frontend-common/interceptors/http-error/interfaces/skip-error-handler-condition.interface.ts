@@ -1,4 +1,4 @@
-export interface ISkipErrorHandlerCondition { 
-    key: string, 
-    value: string 
+export interface ISkipErrorHandlerCondition {
+  key: string;
+  value: string;
 }

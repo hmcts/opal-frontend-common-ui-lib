@@ -84,7 +84,6 @@ function handleNonRetriableError(error: unknown, router: Router): void {
 
   const operationId = errorResponse?.operation_id || ERROR_RESPONSE.operation_id;
 
-
   switch (statusCode) {
     case 409:
       router.navigate(['/error/concurrency-failure']);
@@ -106,22 +105,25 @@ function handleNonRetriableError(error: unknown, router: Router): void {
  * @param req - The HTTP Request
  * @returns true if the error handling exception condition is met, otherwise false
  */
-function isErrorHandlingExceptionMet(error: unknown, req: HttpRequest<unknown>): boolean { 
-  if (req.context.get(SKIP_HTTP_ERROR_HANDLER) === null) {
+function isErrorHandlingExceptionMet(error: unknown, req: HttpRequest<unknown>): boolean {
+  const reqContext = req.context.get(SKIP_HTTP_ERROR_HANDLER);
+  let errorResponse: IErrorResponse | undefined;
+
+  if (reqContext === null) {
     return false;
   }
-  let errorResponse: IErrorResponse | undefined;
-  const key = req.context.get(SKIP_HTTP_ERROR_HANDLER)?.key;
-  const value = req.context.get(SKIP_HTTP_ERROR_HANDLER)?.value;
+
   if (typeof error === 'object' && error !== null) {
     if ('error' in error) {
       const err = error as { error?: IErrorResponse };
       errorResponse = err.error;
     }
   }
-  if (errorResponse && errorResponse[key as keyof IErrorResponse] === value) {
+
+  if (errorResponse && errorResponse[reqContext?.key as keyof IErrorResponse] === reqContext?.value) {
     return true;
   }
+
   return false;
 }
 
@@ -141,8 +143,8 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
         // Bypass error handling if exception condition is met
         if (isErrorHandlingExceptionMet(error, req)) {
           return throwError(() => error);
-        } 
-        
+        }
+
         if (isNonRetriableError(error)) {
           handleNonRetriableError(error, router);
         } else if (isRetriableError(error)) {
