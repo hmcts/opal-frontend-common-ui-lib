@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { SimpleChange } from '@angular/core';
 import { AlphagovAccessibleAutocompleteComponent } from './alphagov-accessible-autocomplete.component';
 import { AccessibleAutocompleteProps } from 'accessible-autocomplete';
 import { FormControl, Validators } from '@angular/forms';
@@ -68,6 +69,219 @@ describe('AlphagovAccessibleAutocompleteComponent', () => {
     expect(actualProps.name).toEqual(expectedProps.name);
     expect(actualProps.showAllValues).toEqual(expectedProps.showAllValues);
     expect(actualProps.defaultValue).toEqual(expectedProps.defaultValue);
+  });
+
+  it('should apply describedby to the visible input with hint and error ids', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    component.hintText = 'Test hint';
+    component.errors = 'Test error';
+
+    const input = document.createElement('input');
+    input.id = component.autoCompleteId;
+    input.setAttribute('aria-describedby', `${component.autoCompleteId}__assistiveHint`);
+    component.autocompleteContainer.nativeElement.innerHTML = '';
+    component.autocompleteContainer.nativeElement.appendChild(input);
+
+    component['applyDescribedBy']();
+
+    const describedBy = input.getAttribute('aria-describedby') ?? '';
+    expect(describedBy).toContain(`${component.inputId}-hint`);
+    expect(describedBy).toContain(`${component.autoCompleteId}-error-message`);
+    expect(describedBy).toContain(`${component.autoCompleteId}__assistiveHint`);
+  });
+
+  it('should add describedby when missing on the input', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    component.hintText = 'Test hint';
+    component.errors = null;
+
+    const input = document.createElement('input');
+    input.id = component.autoCompleteId;
+    component.autocompleteContainer.nativeElement.innerHTML = '';
+    component.autocompleteContainer.nativeElement.appendChild(input);
+
+    component['applyDescribedBy']();
+
+    expect(input.getAttribute('aria-describedby')).toEqual(`${component.inputId}-hint`);
+  });
+
+  it('should remove managed describedby ids when hint and error are cleared', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    component.hintText = '';
+    component.errors = null;
+
+    const input = document.createElement('input');
+    input.id = component.autoCompleteId;
+    input.setAttribute(
+      'aria-describedby',
+      `${component.inputId}-hint ${component.autoCompleteId}-error-message ${component.autoCompleteId}__assistiveHint`,
+    );
+    component.autocompleteContainer.nativeElement.innerHTML = '';
+    component.autocompleteContainer.nativeElement.appendChild(input);
+
+    component['applyDescribedBy']();
+
+    expect(input.getAttribute('aria-describedby')).toEqual(`${component.autoCompleteId}__assistiveHint`);
+  });
+
+  it('should remove describedby when no ids remain', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    component.hintText = '';
+    component.errors = null;
+
+    const input = document.createElement('input');
+    input.id = component.autoCompleteId;
+    input.setAttribute('aria-describedby', `${component.inputId}-hint ${component.autoCompleteId}-error-message`);
+    component.autocompleteContainer.nativeElement.innerHTML = '';
+    component.autocompleteContainer.nativeElement.appendChild(input);
+
+    component['applyDescribedBy']();
+
+    expect(input.hasAttribute('aria-describedby')).toBeFalse();
+  });
+
+  it('should skip describedby updates when the input is missing', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    component.autocompleteContainer.nativeElement.innerHTML = '';
+
+    expect(() => {
+      if (!component) {
+        fail('component returned null');
+        return;
+      }
+      component['applyDescribedBy']();
+    }).not.toThrow();
+  });
+
+  it('should return early when MutationObserver is unavailable', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const originalMutationObserver = (globalThis as any).MutationObserver;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).MutationObserver = undefined;
+
+    const input = document.createElement('input');
+    input.id = component.autoCompleteId;
+    component.autocompleteContainer.nativeElement.innerHTML = '';
+    component.autocompleteContainer.nativeElement.appendChild(input);
+
+    component['observeDescribedBy']();
+    component.autocompleteContainer.nativeElement.innerHTML = '';
+    component['waitForInputAndApply']();
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect((component as any).describedByObserver).toBeNull();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect((component as any).containerObserver).toBeNull();
+    expect(input.hasAttribute('aria-describedby')).toBeFalse();
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).MutationObserver = originalMutationObserver;
+  });
+
+  it('should observe and apply describedby when the input is rendered later', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    component.hintText = 'Test hint';
+    component.errors = null;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const originalMutationObserver = (globalThis as any).MutationObserver;
+    const autoCompleteId = component.autoCompleteId;
+
+    class FakeMutationObserver {
+      private readonly callback: MutationCallback;
+
+      constructor(callback: MutationCallback) {
+        this.callback = callback;
+      }
+
+      observe(target: Node): void {
+        if (target instanceof HTMLElement && target.id === `${autoCompleteId}-container`) {
+          const input = document.createElement('input');
+          input.id = autoCompleteId;
+          target.appendChild(input);
+        }
+        this.callback([], this as unknown as MutationObserver);
+      }
+
+      disconnect(): void {
+        // no-op for tests
+      }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).MutationObserver = FakeMutationObserver;
+
+    component.autocompleteContainer.nativeElement.innerHTML = '';
+    component['waitForInputAndApply']();
+
+    const input = component.autocompleteContainer.nativeElement.querySelector(`#${autoCompleteId}`) as HTMLInputElement;
+    expect(input.getAttribute('aria-describedby')).toEqual(`${component.inputId}-hint`);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).MutationObserver = originalMutationObserver;
+  });
+
+  it('should apply describedby on changes to hint or error inputs', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    spyOn(component as any, 'applyDescribedBy');
+
+    component.ngOnChanges({
+      hintText: new SimpleChange('', 'Updated hint', false),
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect((component as any).applyDescribedBy).toHaveBeenCalled();
+  });
+
+  it('should not apply describedby on unrelated input changes', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    spyOn(component as any, 'applyDescribedBy');
+
+    component.ngOnChanges({
+      labelText: new SimpleChange('Old', 'New', false),
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect((component as any).applyDescribedBy).not.toHaveBeenCalled();
   });
 
   it('should handle on confirm and input should be marked as dirty', () => {
