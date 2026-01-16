@@ -6,4 +6,5 @@ export interface IErrorResponse {
   instance: string | null;
   operation_id: string | null;
   retriable: boolean | null;
+  conflictReason?: string | null;
 }
