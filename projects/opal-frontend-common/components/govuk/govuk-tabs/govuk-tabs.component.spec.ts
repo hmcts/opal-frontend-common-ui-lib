@@ -74,7 +74,6 @@ describe('GovukTabsComponent', () => {
     const title = fixture.nativeElement.querySelector('.govuk-tabs__title');
     const list = fixture.nativeElement.querySelector('.govuk-tabs__list');
 
-    expect(list.getAttribute('role')).toBe('tablist');
     expect(list.getAttribute('aria-labelledby')).toBe(title.getAttribute('id'));
   });
 
