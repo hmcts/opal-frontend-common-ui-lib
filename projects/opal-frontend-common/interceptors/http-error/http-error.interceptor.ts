@@ -10,6 +10,8 @@ import { GENERIC_HTTP_ERROR_MESSAGE } from './constants/http-error-message.const
 import { IErrorResponse } from './interfaces/http-error-retrievable-error-response.interface';
 import { ERROR_RESPONSE } from './constants/http-error-message-response.constant';
 import { SKIP_HTTP_ERROR_HANDLER } from '@hmcts/opal-frontend-common/interceptors/http-error/constants';
+import { ISkipErrorHandlerCondition } from 'dist/opal-frontend-common/types/hmcts-opal-frontend-common-interceptors-http-error-interfaces';
+
 /**
  * Checks if the error is a non-retriable error
  * @param error - The HTTP error response
@@ -100,18 +102,39 @@ function handleNonRetriableError(error: unknown, router: Router): void {
 }
 
 /**
- * Checks if there is an error handling exception condition which is met
+ * Handles bypass of standard error handling based on request context
  * @param error - The HTTP error response
- * @param req - The HTTP Request
+ * @param reqContext - The error handling exception condition context
+ * @param globalStore - Global store instance
  * @returns true if the error handling exception condition is met, otherwise false
  */
-function isErrorHandlingExceptionMet(error: unknown, req: HttpRequest<unknown>): boolean {
-  const reqContext = req.context.get(SKIP_HTTP_ERROR_HANDLER);
+function handleBypassErrorHandling(error: unknown, reqContext: ISkipErrorHandlerCondition, globalStore: GlobalStoreType)
+ {
+  const customErrorMessageKey = reqContext.customErrorMessageKey ?? null;
   let errorResponse: IErrorResponse | undefined;
-
-  if (reqContext === null) {
-    return false;
+  if (typeof error === 'object' && error !== null) {
+    if ('error' in error) {
+      const err = error as { error?: IErrorResponse };
+      errorResponse = err.error;
+    }
   }
+  globalStore.setBannerError({
+    ...GLOBAL_ERROR_STATE,
+    error: true,
+    title: 'There was a problem',
+    message: errorResponse && customErrorMessageKey ? errorResponse[customErrorMessageKey]?.toString()! : GENERIC_HTTP_ERROR_MESSAGE,
+    operationId: errorResponse?.operation_id || ERROR_RESPONSE.operation_id,
+  });
+}
+
+/**
+ * Checks if there is an error handling exception condition which is met
+ * @param error - The HTTP error response
+ * @param reqContext - The error handling exception condition context
+ * @returns true if the error handling exception condition is met, otherwise false
+ */
+function isErrorHandlingExceptionMet(error: unknown, reqContext: ISkipErrorHandlerCondition): boolean {
+  let errorResponse: IErrorResponse | undefined;
 
   if (typeof error === 'object' && error !== null) {
     if ('error' in error) {
@@ -141,7 +164,13 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
 
       if (isBrowser) {
         // Bypass error handling if exception condition is met
-        if (isErrorHandlingExceptionMet(error, req)) {
+        const reqContext = req.context.get(SKIP_HTTP_ERROR_HANDLER);
+        if (reqContext && isErrorHandlingExceptionMet(error, reqContext)) {
+          handleBypassErrorHandling(error, reqContext, globalStore);
+          
+          // Always log exceptions for monitoring
+          appInsightsService.logException(error);
+
           return throwError(() => error);
         }
 
