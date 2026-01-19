@@ -76,4 +76,17 @@ describe('GovukRadiosItemComponent', () => {
     const elem = fixture.nativeElement.querySelector('#test');
     expect(elem).toBeTruthy();
   });
+
+  it('should link item hint to the input', () => {
+    if (!fixture) {
+      fail('fixture returned null');
+      return;
+    }
+
+    fixture.componentRef.setInput('inputValueHint', 'Help text');
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('#test');
+    expect(input.getAttribute('aria-describedby')).toBe('test-item-hint');
+  });
 });

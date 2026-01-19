@@ -61,7 +61,20 @@ describe('GovukTabsListItemComponent', () => {
 
   it('should include href attribute', () => {
     const link = fixture.nativeElement.querySelector('.govuk-tabs__list-item a.govuk-tabs__tab');
-    expect(link.getAttribute('href')).toBe('#');
+    expect(link.getAttribute('href')).toBe('#example');
+  });
+
+  it('should set aria-selected and tabindex based on active state', () => {
+    const link = fixture.nativeElement.querySelector('.govuk-tabs__list-item a.govuk-tabs__tab');
+    expect(link.getAttribute('aria-selected')).toBe('true');
+    expect(link.getAttribute('tabindex')).toBe('0');
+
+    fixture.componentRef.setInput('activeTabItemFragment', 'different');
+    fixture.detectChanges();
+
+    const inactiveLink = fixture.nativeElement.querySelector('.govuk-tabs__list-item a.govuk-tabs__tab');
+    expect(inactiveLink.getAttribute('aria-selected')).toBe('false');
+    expect(inactiveLink.getAttribute('tabindex')).toBe('-1');
   });
 
   it('should not apply selected class when tabItemFragment does not match activeTabItemFragment', () => {
@@ -72,5 +85,13 @@ describe('GovukTabsListItemComponent', () => {
     const hostElement = fixture.nativeElement;
     expect(hostElement.classList.contains('govuk-tabs__list-item--selected')).toBeFalse();
     expect(hostElement.classList.contains('govuk-tabs__list-item')).toBeTrue();
+  });
+
+  it('should default the resolved tab id to the tab prefix when no container id is present', () => {
+    component.tabItemId = undefined;
+    component.tabItemFragment = 'alpha';
+    fixture.detectChanges();
+
+    expect(component.resolvedTabItemId).toBe('tab-alpha');
   });
 });
