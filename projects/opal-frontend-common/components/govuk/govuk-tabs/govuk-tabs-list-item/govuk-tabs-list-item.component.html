@@ -2,7 +2,6 @@
   #tabLink
   class="govuk-tabs__tab"
   (click)="handleItemClick($event, tabItemFragment)"
-  (keydown)="handleKeydown($event)"
   [attr.href]="'#' + tabItemFragment"
   [id]="resolvedTabItemId"
   role="tab"
