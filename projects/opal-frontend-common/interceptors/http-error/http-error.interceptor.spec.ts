@@ -83,7 +83,11 @@ describe('httpErrorInterceptor', () => {
         retriable: false,
       },
     });
-    const context = new HttpContext().set(SKIP_HTTP_ERROR_HANDLER, { key: 'operation_id', value: 'OP-500', customErrorMessageKey: 'operation_id' });
+    const context = new HttpContext().set(SKIP_HTTP_ERROR_HANDLER, {
+      key: 'operation_id',
+      value: 'OP-500',
+      customErrorMessageKey: 'operation_id',
+    });
     const request = new HttpRequest('GET', '/test', null, { context });
     const next: HttpHandlerFn = () => throwError(() => errorResponse);
 
@@ -103,7 +107,10 @@ describe('httpErrorInterceptor', () => {
       },
     });
 
-    const context = new HttpContext().set(SKIP_HTTP_ERROR_HANDLER, { key: 'conflictReason', value: 'Some conflict reason' });
+    const context = new HttpContext().set(SKIP_HTTP_ERROR_HANDLER, {
+      key: 'conflictReason',
+      value: 'Some conflict reason',
+    });
     const request = new HttpRequest('GET', '/test', null, { context });
     const next: HttpHandlerFn = () => throwError(() => errorResponse);
 
@@ -122,7 +129,11 @@ describe('httpErrorInterceptor', () => {
         retriable: false,
       },
     });
-    const context = new HttpContext().set(SKIP_HTTP_ERROR_HANDLER, { key: 'operation_id', value: 'OP-400', customErrorMessageKey: 'operation_id' });
+    const context = new HttpContext().set(SKIP_HTTP_ERROR_HANDLER, {
+      key: 'operation_id',
+      value: 'OP-400',
+      customErrorMessageKey: 'operation_id',
+    });
     const request = new HttpRequest('GET', '/test', null, { context });
     const next: HttpHandlerFn = () => throwError(() => errorResponse);
 

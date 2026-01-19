@@ -1,4 +1,4 @@
-import { HttpInterceptorFn, HttpRequest } from '@angular/common/http';
+import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, tap, throwError } from 'rxjs';
@@ -108,21 +108,28 @@ function handleNonRetriableError(error: unknown, router: Router): void {
  * @param globalStore - Global store instance
  * @returns true if the error handling exception condition is met, otherwise false
  */
-function handleBypassErrorHandling(error: unknown, reqContext: ISkipErrorHandlerCondition, globalStore: GlobalStoreType)
- {
-  const customErrorMessageKey = reqContext.customErrorMessageKey ?? null;
+function handleBypassErrorHandling(
+  error: unknown,
+  reqContext: ISkipErrorHandlerCondition,
+  globalStore: GlobalStoreType,
+) {
+  const customErrorMessageKey = reqContext.customErrorMessageKey as keyof IErrorResponse;
   let errorResponse: IErrorResponse | undefined;
+  let customMessage: string | undefined;
   if (typeof error === 'object' && error !== null) {
     if ('error' in error) {
       const err = error as { error?: IErrorResponse };
       errorResponse = err.error;
+      if (errorResponse && customErrorMessageKey) {
+        customMessage = errorResponse[customErrorMessageKey]?.toString();
+      }
     }
   }
   globalStore.setBannerError({
     ...GLOBAL_ERROR_STATE,
     error: true,
     title: 'There was a problem',
-    message: errorResponse && customErrorMessageKey ? errorResponse[customErrorMessageKey]?.toString()! : GENERIC_HTTP_ERROR_MESSAGE,
+    message: customMessage || GENERIC_HTTP_ERROR_MESSAGE,
     operationId: errorResponse?.operation_id || ERROR_RESPONSE.operation_id,
   });
 }
@@ -167,7 +174,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
         const reqContext = req.context.get(SKIP_HTTP_ERROR_HANDLER);
         if (reqContext && isErrorHandlingExceptionMet(error, reqContext)) {
           handleBypassErrorHandling(error, reqContext, globalStore);
-          
+
           // Always log exceptions for monitoring
           appInsightsService.logException(error);
 
