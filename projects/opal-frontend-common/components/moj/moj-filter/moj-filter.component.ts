@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 
+let nextFilterId = 0;
+
 @Component({
   selector: 'opal-lib-moj-filter',
   standalone: true,
@@ -7,6 +9,7 @@ import { Component, Input } from '@angular/core';
 })
 export class MojFilterComponent {
   @Input({ required: false }) public showFilter = false;
+  @Input({ required: false }) public filterId = `moj-filter-${++nextFilterId}`;
 
   /**
    * Toggles the visibility of the filter panel.
