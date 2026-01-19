@@ -11,6 +11,8 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 
+let nextTabsId = 0;
+
 @Component({
   selector: 'opal-lib-govuk-tabs',
   templateUrl: './govuk-tabs.component.html',
@@ -20,9 +22,20 @@ export class GovukTabsComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly ngUnsubscribe = new Subject<void>();
 
-  @Input({ required: true }) public tabId!: string;
+  @Input({ required: false }) public tabId = `govuk-tabs-${++nextTabsId}`;
+  @Input({ required: false }) public titleText = 'Contents';
   @Output() public activeTabFragmentChange = new EventEmitter<string>();
 
+  /**
+   * Returns the ID for the tabs title element.
+   */
+  get titleId(): string {
+    return `${this.tabId}-title`;
+  }
+
+  /**
+   * Subscribes to URL fragment changes and emits active tab updates.
+   */
   private setupListeners(): void {
     this.route.fragment.pipe(takeUntil(this.ngUnsubscribe)).subscribe((fragment) => {
       if (fragment) {
@@ -50,4 +63,6 @@ export class GovukTabsComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
+
+  // GOV.UK tabs keyboard navigation is handled by govuk-frontend JavaScript when enabled.
 }
