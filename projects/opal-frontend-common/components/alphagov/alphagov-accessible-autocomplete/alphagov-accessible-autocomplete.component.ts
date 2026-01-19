@@ -4,8 +4,10 @@ import {
   Component,
   ElementRef,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
+  SimpleChanges,
   ViewChild,
   afterNextRender,
   inject,
@@ -22,10 +24,12 @@ import { Subject, pairwise, startWith, takeUntil } from 'rxjs';
   styleUrl: './alphagov-accessible-autocomplete.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AlphagovAccessibleAutocompleteComponent implements OnInit, OnDestroy {
+export class AlphagovAccessibleAutocompleteComponent implements OnInit, OnDestroy, OnChanges {
   private readonly changeDetector: ChangeDetectorRef = inject(ChangeDetectorRef);
   private _control!: FormControl;
   private readonly ngUnsubscribe = new Subject<void>();
+  private describedByObserver: MutationObserver | null = null;
+  private containerObserver: MutationObserver | null = null;
 
   @Input({ required: true }) labelText!: string;
   @Input({ required: false }) labelClasses!: string;
@@ -137,7 +141,99 @@ export class AlphagovAccessibleAutocompleteComponent implements OnInit, OnDestro
   private configureAutoComplete(): void {
     import('accessible-autocomplete').then((accessibleAutocomplete) => {
       accessibleAutocomplete.default(this.buildAutoCompleteProps());
+      this.waitForInputAndApply();
     });
+  }
+
+  /**
+   * Gets the rendered autocomplete text input, if present.
+   */
+  private getVisibleInput(): HTMLInputElement | null {
+    return this.autocompleteContainer?.nativeElement?.querySelector(`#${this.autoCompleteId}`);
+  }
+
+  /**
+   * Builds the hint/error ids to apply to aria-describedby.
+   */
+  private buildDescribedByIds(): string[] {
+    const ids: string[] = [];
+
+    if (this.hintText) {
+      ids.push(`${this.inputId}-hint`);
+    }
+
+    if (this.errors) {
+      ids.push(`${this.autoCompleteId}-error-message`);
+    }
+
+    return ids;
+  }
+
+  /**
+   * Updates aria-describedby on the visible input, preserving any non-managed ids.
+   */
+  private applyDescribedBy(): void {
+    const input = this.getVisibleInput();
+    if (!input) {
+      return;
+    }
+
+    const managedIds = new Set([`${this.inputId}-hint`, `${this.autoCompleteId}-error-message`]);
+    const currentValue = input.getAttribute('aria-describedby') ?? '';
+    const currentIds = currentValue.split(' ').filter(Boolean);
+    const preservedIds = currentIds.filter((id) => !managedIds.has(id));
+    const nextIds = [...new Set([...preservedIds, ...this.buildDescribedByIds()])];
+    const nextValue = nextIds.length ? nextIds.join(' ') : '';
+
+    if (currentValue === nextValue) {
+      return;
+    }
+
+    if (nextValue) {
+      input.setAttribute('aria-describedby', nextValue);
+    } else {
+      input.removeAttribute('aria-describedby');
+    }
+  }
+
+  /**
+   * Observes aria-describedby changes on the visible input to reapply managed ids.
+   */
+  private observeDescribedBy(): void {
+    const input = this.getVisibleInput();
+    if (!input || typeof MutationObserver === 'undefined') {
+      return;
+    }
+
+    this.describedByObserver?.disconnect();
+    this.describedByObserver = new MutationObserver(() => this.applyDescribedBy());
+    this.describedByObserver.observe(input, { attributes: true, attributeFilter: ['aria-describedby'] });
+    this.applyDescribedBy();
+  }
+
+  /**
+   * Waits for the visible input to appear, then applies describedby and observers.
+   */
+  private waitForInputAndApply(): void {
+    const input = this.getVisibleInput();
+    if (input) {
+      this.observeDescribedBy();
+      return;
+    }
+
+    if (typeof MutationObserver === 'undefined') {
+      return;
+    }
+
+    this.containerObserver?.disconnect();
+    this.containerObserver = new MutationObserver(() => {
+      if (this.getVisibleInput()) {
+        this.containerObserver?.disconnect();
+        this.observeDescribedBy();
+      }
+    });
+
+    this.containerObserver.observe(this.autocompleteContainer.nativeElement, { childList: true, subtree: true });
   }
 
   /**
@@ -167,8 +263,16 @@ export class AlphagovAccessibleAutocompleteComponent implements OnInit, OnDestro
     this.setupControlSub();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['hintText'] || changes['errors']) {
+      this.applyDescribedBy();
+    }
+  }
+
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+    this.describedByObserver?.disconnect();
+    this.containerObserver?.disconnect();
   }
 }

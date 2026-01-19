@@ -12,7 +12,7 @@ export function amountValidator(maxIntegers: number, maxDecimals: number): Valid
     }
 
     // Regex to match numbers with the specified integer and decimal places
-    const regex = new RegExp(`^-?(0|[1-9]\\d{0,${maxIntegers - 1}})(\\.\\d{0,${maxDecimals}})?$`);
+    const regex = new RegExp(String.raw`^-?(0|[1-9]\d{0,${maxIntegers - 1}})(.\d{0,${maxDecimals}})?$`);
 
     return regex.test(control.value) ? null : { invalidAmount: true };
   };
