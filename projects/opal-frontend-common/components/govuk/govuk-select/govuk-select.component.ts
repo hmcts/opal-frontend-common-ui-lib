@@ -29,4 +29,18 @@ export class GovukSelectComponent {
   get getControl() {
     return this._control;
   }
+
+  get describedBy(): string | null {
+    const ids: string[] = [];
+
+    if (this.selectHint) {
+      ids.push(`${this.selectId}-hint`);
+    }
+
+    if (this.errors) {
+      ids.push(`${this.selectId}-error-message`);
+    }
+
+    return ids.length ? ids.join(' ') : null;
+  }
 }

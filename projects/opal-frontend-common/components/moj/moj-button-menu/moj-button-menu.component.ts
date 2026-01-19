@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, Input, HostBinding, ViewChild, ElementRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, HostBinding } from '@angular/core';
+
+let nextMenuId = 0;
 
 @Component({
   selector: 'opal-lib-moj-button-menu',
@@ -7,7 +9,7 @@ import { ChangeDetectionStrategy, Component, Input, HostBinding, ViewChild, Elem
 })
 export class MojButtonMenuComponent {
   @Input({ required: true }) menuButtonTitle!: string;
-  @ViewChild('menuButton') menuButton!: ElementRef<HTMLElement>;
+  @Input({ required: false }) menuId = `moj-button-menu-${++nextMenuId}`;
 
   @HostBinding('class') hostClasses = 'moj-button-menu';
   @HostBinding('attr.data-module') dataModule = 'moj-button-menu';
@@ -29,9 +31,6 @@ export class MojButtonMenuComponent {
    * @returns void
    */
   public toggleButtonMenu(): void {
-    const button = this.menuButton.nativeElement;
-    const isExpanded = button.getAttribute('aria-expanded') === 'true';
-    button.setAttribute('aria-expanded', String(!isExpanded));
-    this.isExpanded = !isExpanded;
+    this.isExpanded = !this.isExpanded;
   }
 }
