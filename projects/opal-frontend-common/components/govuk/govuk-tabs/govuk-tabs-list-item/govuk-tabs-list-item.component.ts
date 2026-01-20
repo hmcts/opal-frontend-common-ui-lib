@@ -23,6 +23,14 @@ export class GovukTabsListItemComponent {
     return this.isActive ? 'govuk-tabs__list-item govuk-tabs__list-item--selected' : 'govuk-tabs__list-item';
   }
 
+  @HostBinding('attr.role')
+  /**
+   * Sets the host role attribute.
+   */
+  get hostRole(): string {
+    return 'presentation';
+  }
+
   /**
    * Resolves the tab item ID, using the tabs prefix when none is provided.
    */

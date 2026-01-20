@@ -75,6 +75,7 @@ describe('GovukTabsComponent', () => {
     const list = fixture.nativeElement.querySelector('.govuk-tabs__list');
 
     expect(list.getAttribute('aria-labelledby')).toBe(title.getAttribute('id'));
+    expect(list.getAttribute('role')).toBe('tablist');
   });
 
   it('should emit activeTabFragmentChange on fragment change', () => {
