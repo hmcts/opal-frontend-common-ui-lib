@@ -68,6 +68,7 @@ describe('GovukTabsListItemComponent', () => {
     const link = fixture.nativeElement.querySelector('.govuk-tabs__list-item a.govuk-tabs__tab');
     expect(link.getAttribute('aria-selected')).toBe('true');
     expect(link.getAttribute('tabindex')).toBe('0');
+    expect(link.getAttribute('role')).toBe('tab');
 
     fixture.componentRef.setInput('activeTabItemFragment', 'different');
     fixture.detectChanges();

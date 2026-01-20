@@ -1,6 +1,6 @@
 <div class="govuk-tabs govuk-frontend-supported" data-module="govuk-tabs" [id]="tabId">
   <h2 class="govuk-tabs__title" [id]="titleId">{{ titleText }}</h2>
-  <ul class="govuk-tabs__list" [attr.aria-labelledby]="titleId">
+  <ul class="govuk-tabs__list" [attr.aria-labelledby]="titleId" [attr.role]="role">
     <ng-content select="[tab-list-items]"></ng-content>
   </ul>
   <ng-content select="[tab-panels]"></ng-content>

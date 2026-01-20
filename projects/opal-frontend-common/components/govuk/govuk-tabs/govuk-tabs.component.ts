@@ -33,6 +33,13 @@ export class GovukTabsComponent implements OnInit, OnDestroy {
     return `${this.tabId}-title`;
   }
 
+  /*
+   * Returns the role attribute for the tabs list.
+   */
+  get role(): string {
+    return 'tablist';
+  }
+
   /**
    * Subscribes to URL fragment changes and emits active tab updates.
    */
