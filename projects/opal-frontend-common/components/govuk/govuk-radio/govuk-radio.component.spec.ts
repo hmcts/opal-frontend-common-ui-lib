@@ -34,9 +34,14 @@ function ThrowingRadios() {
 describe('GovukRadioComponent', () => {
   let component: TestHostComponent | null;
   let fixture: ComponentFixture<TestHostComponent> | null;
+  let initOuterRadiosSpy: jasmine.Spy;
 
   beforeEach(async () => {
     document.body.classList.add('govuk-frontend-supported', 'js-enabled');
+    initOuterRadiosSpy = spyOn(
+      GovukRadioComponent.prototype as unknown as { initOuterRadios: () => void },
+      'initOuterRadios',
+    ).and.stub();
 
     await TestBed.configureTestingModule({
       imports: [TestHostComponent],
@@ -153,6 +158,8 @@ describe('GovukRadioComponent', () => {
       return;
     }
 
+    initOuterRadiosSpy.and.callThrough();
+
     const debugElement = fixture.debugElement.query(By.directive(GovukRadioComponent));
     const host = debugElement.nativeElement as HTMLElement;
     const radios = host.querySelector('.govuk-radios');
@@ -169,6 +176,8 @@ describe('GovukRadioComponent', () => {
       fail('fixture returned null');
       return;
     }
+
+    initOuterRadiosSpy.and.callThrough();
 
     const debugElement = fixture.debugElement.query(By.directive(GovukRadioComponent));
     const host = debugElement.nativeElement as HTMLElement;
@@ -193,6 +202,8 @@ describe('GovukRadioComponent', () => {
       return;
     }
 
+    initOuterRadiosSpy.and.callThrough();
+
     const debugElement = fixture.debugElement.query(By.directive(GovukRadioComponent));
     const host = debugElement.nativeElement as HTMLElement;
     const radios = host.querySelector('.govuk-radios') as HTMLElement;
@@ -205,9 +216,14 @@ describe('GovukRadioComponent', () => {
     delete radios.dataset['opalGovukRadiosInitialised'];
 
     const radioComponent = debugElement.componentInstance as GovukRadioComponent;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const loadSpy = spyOn(radioComponent as any, 'loadGovukFrontend').and.returnValue(
+      Promise.resolve({ Radios: function () {} }),
+    );
     radioComponent['initOuterRadios']();
     await new Promise((resolve) => setTimeout(resolve, 0));
 
+    expect(loadSpy).toHaveBeenCalled();
     expect(radios.dataset['opalGovukRadiosInitialised']).toBe('true');
   });
 
@@ -216,6 +232,8 @@ describe('GovukRadioComponent', () => {
       fail('fixture returned null');
       return;
     }
+
+    initOuterRadiosSpy.and.callThrough();
 
     const debugElement = fixture.debugElement.query(By.directive(GovukRadioComponent));
     const host = debugElement.nativeElement as HTMLElement;
@@ -255,6 +273,8 @@ describe('GovukRadioComponent', () => {
       fail('fixture returned null');
       return;
     }
+
+    initOuterRadiosSpy.and.callThrough();
 
     const debugElement = fixture.debugElement.query(By.directive(GovukRadioComponent));
     const host = debugElement.nativeElement as HTMLElement;
@@ -298,6 +318,8 @@ describe('GovukRadioComponent', () => {
       return;
     }
 
+    initOuterRadiosSpy.and.callThrough();
+
     const debugElement = fixture.debugElement.query(By.directive(GovukRadioComponent));
     const host = debugElement.nativeElement as HTMLElement;
     const radios = host.querySelector('.govuk-radios') as HTMLElement;
@@ -331,11 +353,29 @@ describe('GovukRadioComponent', () => {
     expect(radios.dataset['opalGovukRadiosInitialised']).toBe('true');
   });
 
+  it('should load govuk-frontend via loadGovukFrontend', async () => {
+    if (!fixture) {
+      fail('fixture returned null');
+      return;
+    }
+
+    const debugElement = fixture.debugElement.query(By.directive(GovukRadioComponent));
+    const radioComponent = debugElement.componentInstance as GovukRadioComponent;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const module = await (radioComponent as any).loadGovukFrontend();
+    expect(
+      typeof module?.initAll === 'function' || typeof module?.default?.initAll === 'function',
+    ).toBeTrue();
+  });
+
   it('should log an error when import fails', async () => {
     if (!fixture) {
       fail('fixture returned null');
       return;
     }
+
+    initOuterRadiosSpy.and.callThrough();
 
     const debugElement = fixture.debugElement.query(By.directive(GovukRadioComponent));
     const host = debugElement.nativeElement as HTMLElement;
@@ -370,6 +410,8 @@ describe('GovukRadioComponent', () => {
       fail('fixture returned null');
       return;
     }
+
+    initOuterRadiosSpy.and.callThrough();
 
     const debugElement = fixture.debugElement.query(By.directive(GovukRadioComponent));
     const host = debugElement.nativeElement as HTMLElement;
