@@ -43,7 +43,6 @@ export class GovukRadioComponent {
     });
   }
 
-  // inside the component class, after view render
   /**
    * Initializes govuk-frontend radios behavior for this component's radio group.
    * Side effects: dynamically imports govuk-frontend, mutates dataset, logs warnings on fallback.
@@ -56,7 +55,7 @@ export class GovukRadioComponent {
     if (rootRadios.dataset['opalGovukRadiosInitialised'] === 'true') return;
     rootRadios.dataset['opalGovukRadiosInitialised'] = 'true';
 
-    import('govuk-frontend')
+    this.loadGovukFrontend()
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .then((module: any) => {
         // Prefer Radios constructor for a scoped init
@@ -84,5 +83,14 @@ export class GovukRadioComponent {
       .catch((err) => {
         console.error('Failed to import govuk-frontend for rootRadios init', err);
       });
+  }
+
+  /**
+   * Loads the govuk-frontend module.
+   * Wrapped for testability so unit tests can stub the dynamic import.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  protected loadGovukFrontend(): Promise<any> {
+    return import('govuk-frontend');
   }
 }
