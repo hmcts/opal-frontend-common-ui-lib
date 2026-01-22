@@ -364,9 +364,7 @@ describe('GovukRadioComponent', () => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const module = await (radioComponent as any).loadGovukFrontend();
-    expect(
-      typeof module?.initAll === 'function' || typeof module?.default?.initAll === 'function',
-    ).toBeTrue();
+    expect(typeof module?.initAll === 'function' || typeof module?.default?.initAll === 'function').toBeTrue();
   });
 
   it('should log an error when import fails', async () => {
