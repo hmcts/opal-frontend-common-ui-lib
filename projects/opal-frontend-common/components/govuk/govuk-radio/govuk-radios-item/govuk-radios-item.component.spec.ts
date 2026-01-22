@@ -22,6 +22,7 @@ describe('GovukRadiosItemComponent', () => {
     component.inputId = 'test';
     component.inputName = 'test';
     component.inputClasses = 'govuk-input--width-20';
+    component.inputValue = 'value';
     component.control = formControl;
 
     fixture.detectChanges();
@@ -75,6 +76,60 @@ describe('GovukRadiosItemComponent', () => {
 
     const elem = fixture.nativeElement.querySelector('#test');
     expect(elem).toBeTruthy();
+  });
+
+  it('should prefix the input id with the input name when needed', () => {
+    if (!fixture) {
+      fail('fixture returned null');
+      return;
+    }
+
+    fixture.componentRef.setInput('inputName', 'group');
+    fixture.componentRef.setInput('inputId', 'option');
+    fixture.detectChanges();
+
+    const elem = fixture.nativeElement.querySelector('#group-option');
+    expect(elem).toBeTruthy();
+  });
+
+  it('should set the name and value attributes', () => {
+    if (!fixture) {
+      fail('fixture returned null');
+      return;
+    }
+
+    const input = fixture.nativeElement.querySelector('input[type="radio"]');
+    expect(input.getAttribute('name')).toBe('test');
+    expect(input.getAttribute('value')).toBe('value');
+  });
+
+  it('should set aria-controls only when provided', () => {
+    if (!fixture) {
+      fail('fixture returned null');
+      return;
+    }
+
+    let input = fixture.nativeElement.querySelector('input[type="radio"]');
+    expect(input.getAttribute('aria-controls')).toBeNull();
+    expect(input.getAttribute('aria-expanded')).toBeNull();
+
+    fixture.componentRef.setInput('ariaControls', 'conditional-panel');
+    fixture.detectChanges();
+
+    input = fixture.nativeElement.querySelector('input[type="radio"]');
+    expect(input.getAttribute('aria-controls')).toBe('conditional-panel');
+    expect(input.getAttribute('aria-expanded')).toBeNull();
+  });
+
+  it('should link the label for to the input id', () => {
+    if (!fixture) {
+      fail('fixture returned null');
+      return;
+    }
+
+    const input = fixture.nativeElement.querySelector('input[type="radio"]');
+    const label = fixture.nativeElement.querySelector('label.govuk-radios__label');
+    expect(label.getAttribute('for')).toBe(input.getAttribute('id'));
   });
 
   it('should link item hint to the input', () => {

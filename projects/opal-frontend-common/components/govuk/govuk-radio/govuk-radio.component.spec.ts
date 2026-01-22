@@ -12,6 +12,7 @@ import { Component } from '@angular/core';
     [radioClasses]="radioClasses"
     [errors]="errors"
   >
+    <input class="govuk-radios__input" id="test-radio" name="test-radio" type="radio" value="test" />
     Hello World</opal-lib-govuk-radio
   >`,
   imports: [GovukRadioComponent],
@@ -29,6 +30,8 @@ describe('GovukRadioComponent', () => {
   let fixture: ComponentFixture<TestHostComponent> | null;
 
   beforeEach(async () => {
+    document.body.classList.add('govuk-frontend-supported');
+
     await TestBed.configureTestingModule({
       imports: [TestHostComponent],
     }).compileComponents();
@@ -84,7 +87,7 @@ describe('GovukRadioComponent', () => {
       return;
     }
     const element = fixture.nativeElement.querySelector('#test > .radio-class');
-    expect(element.innerText).toBe('Hello World');
+    expect(element.textContent?.trim()).toBe('Hello World');
   });
 
   it('should set aria-describedby with hint only', () => {
