@@ -73,10 +73,18 @@ export class GovukRadiosItemComponent {
   }
 
   /**
-   * Normalizes the radio value to a string for attribute binding.
-   * @returns String value for the input.
+   * Exposes the radio value for Angular's RadioControlValueAccessor.
+   * IMPORTANT: keep the original type (e.g. boolean) so Reactive Forms emits the correct value.
    */
-  get resolvedInputValue(): string {
+  get resolvedInputValue(): string | boolean {
+    return this.inputValue;
+  }
+
+  /**
+   * Normalizes the radio value to a string for the HTML attribute binding.
+   * @returns String value for the input's `value` attribute.
+   */
+  get resolvedInputValueAttr(): string {
     const v = this.inputValue;
     return typeof v === 'string' ? v : String(v);
   }

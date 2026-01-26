@@ -156,7 +156,7 @@ describe('GovukRadiosItemComponent', () => {
     expect(component.dataAriaControls).toBe('conditional-panel');
   });
 
-  it('resolvedInputValue should stringify boolean values', () => {
+  it('resolvedInputValue should preserve boolean values for Reactive Forms', () => {
     if (!fixture || !component) {
       fail('fixture/component returned null');
       return;
@@ -164,11 +164,13 @@ describe('GovukRadiosItemComponent', () => {
 
     fixture.componentRef.setInput('inputValue', true);
     fixture.detectChanges();
-    expect(component.resolvedInputValue).toBe('true');
+    expect(component.resolvedInputValue).toBe(true);
+    expect(component.resolvedInputValueAttr).toBe('true');
 
     fixture.componentRef.setInput('inputValue', false);
     fixture.detectChanges();
-    expect(component.resolvedInputValue).toBe('false');
+    expect(component.resolvedInputValue).toBe(false);
+    expect(component.resolvedInputValueAttr).toBe('false');
   });
 
   it('should expose the bound FormControl via getControl', () => {
@@ -283,5 +285,18 @@ describe('GovukRadiosItemComponent', () => {
     fixture.detectChanges();
 
     expect(component.resolvedInputId).toBe('');
+  });
+
+  it('resolvedInputValueAttr should return the same string when inputValue is a string', () => {
+    if (!fixture || !component) {
+      fail('fixture/component returned null');
+      return;
+    }
+
+    fixture.componentRef.setInput('inputValue', 'abc');
+    fixture.detectChanges();
+
+    expect(component.resolvedInputValue).toBe('abc');
+    expect(component.resolvedInputValueAttr).toBe('abc');
   });
 });
