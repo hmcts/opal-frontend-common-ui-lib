@@ -1,5 +1,13 @@
 declare module 'govuk-frontend' {
-  export function initAll(): void;
+  export interface InitAllOptions {
+    /**
+     * Limit initialisation to a specific element subtree.
+     * Useful to avoid double-initialising already-initialised components.
+     */
+    scope?: Element | Document;
+  }
+
+  export function initAll(options?: InitAllOptions): void;
 }
 
 declare module '@ministryofjustice/frontend/moj/all' {

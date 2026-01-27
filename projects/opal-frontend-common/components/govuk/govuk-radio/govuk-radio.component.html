@@ -16,8 +16,15 @@
         <span class="govuk-visually-hidden">Error: </span> {{ errors }}
       </p>
     }
-    <div class="govuk-radios {{ radioClasses }}" data-module="govuk-radios">
-      <ng-content></ng-content>
-    </div>
+
+    <!-- single reusable radios template -->
+    <ng-template #radiosGroup>
+      <div class="govuk-radios {{ radioClasses }}" data-module="govuk-radios">
+        <ng-content></ng-content>
+      </div>
+    </ng-template>
+
+    <!-- render the radiosGroup inside the fieldset -->
+    <ng-container *ngTemplateOutlet="radiosGroup"></ng-container>
   </fieldset>
 </div>

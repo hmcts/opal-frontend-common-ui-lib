@@ -1,16 +1,18 @@
 <input
   class="govuk-radios__input {{ inputClasses }}"
-  [id]="inputId"
-  [name]="inputName"
+  [id]="resolvedInputId"
+  [name]="resolvedInputName"
+  [attr.name]="resolvedInputName"
   [formControl]="getControl"
   type="radio"
-  [value]="inputValue"
-  [attr.data-aria-controls]="ariaControls"
-  [attr.aria-describedby]="inputValueHint ? inputId + '-item-hint' : null"
+  [value]="resolvedInputValue"
+  [attr.value]="resolvedInputValueAttr"
+  [attr.aria-controls]="dataAriaControls || null"
+  [attr.aria-describedby]="inputValueHint ? resolvedInputId + '-item-hint' : null"
 />
-<label class="govuk-label govuk-radios__label {{ labelClasses }}" [for]="inputId"> {{ labelText }} </label>
+<label class="govuk-label govuk-radios__label {{ labelClasses }}" [for]="resolvedInputId"> {{ labelText }} </label>
 @if (inputValueHint) {
-  <div id="{{ inputId }}-item-hint" class="govuk-hint govuk-radios__hint">
+  <div id="{{ resolvedInputId }}-item-hint" class="govuk-hint govuk-radios__hint">
     {{ inputValueHint }}
   </div>
 }
