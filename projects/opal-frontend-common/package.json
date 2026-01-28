@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.58",
+  "version": "0.0.59",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -356,6 +356,9 @@
     },
     "./guards/types": {
       "import": "./fesm2022/hmcts-opal-frontend-common-guards-types.mjs"
+    },
+    "./interceptors/content-digest": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-interceptors-content-digest.mjs"
     },
     "./interceptors/http-error": {
       "import": "./fesm2022/hmcts-opal-frontend-common-interceptors-http-error.mjs"
