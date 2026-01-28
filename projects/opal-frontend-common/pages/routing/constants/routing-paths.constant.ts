@@ -4,7 +4,11 @@ export const PAGES_ROUTING_PATHS: IPagesRoutingPaths = {
   root: '',
   children: {
     accessDenied: 'access-denied',
+    concurrencyFailure: 'error/concurrency-failure',
+    permissionDenied: 'error/permission-denied',
+    internalServerError: 'error/internal-server',
     signIn: 'sign-in',
     signInStub: 'sign-in-stub',
+    accountCreated: 'account-created',
   },
 };

@@ -56,4 +56,19 @@ export class TransferStateService {
   public initializeAppInsightsConfig(): void {
     this.globalStore.setAppInsightsConfig(this.storedServerTransferState?.appInsightsConfig);
   }
+
+  /**
+   * Initializes the user state cache expiration time in milliseconds.
+   * This method retrieves the `userStateCacheExpirationMilliseconds` value
+   * from the stored server transfer state and sets it in the global store.
+   *
+   * @remarks
+   * Ensure that `storedServerTransferState` is properly populated before
+   * calling this method to avoid setting an undefined value.
+   */
+  public initializeUserStateCacheExpirationMilliseconds(): void {
+    this.globalStore.setUserStateCacheExpirationMilliseconds(
+      this.storedServerTransferState?.userStateCacheExpirationMilliseconds,
+    );
+  }
 }

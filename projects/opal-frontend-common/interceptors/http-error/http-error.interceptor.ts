@@ -50,7 +50,7 @@ function handleRetriableError(error: unknown, globalStore: GlobalStoreType): voi
 
   const errorMessage = errorResponse?.detail || GENERIC_HTTP_ERROR_MESSAGE;
 
-  globalStore.setError({
+  globalStore.setBannerError({
     ...GLOBAL_ERROR_STATE,
     error: true,
     title: errorResponse?.title || ERROR_RESPONSE.title,
@@ -81,6 +81,8 @@ function handleNonRetriableError(error: unknown, router: Router): void {
 
   const statusCode = status || errorResponse?.status;
 
+  const operationId = errorResponse?.operation_id || ERROR_RESPONSE.operation_id;
+
   switch (statusCode) {
     case 409:
       router.navigate(['/error/concurrency-failure']);
@@ -89,7 +91,9 @@ function handleNonRetriableError(error: unknown, router: Router): void {
       router.navigate(['/error/permission-denied']);
       break;
     default:
-      router.navigate(['/error/internal-server-error']);
+      router.navigate(['/error/internal-server'], {
+        state: { operationId },
+      });
       break;
   }
 }
@@ -101,7 +105,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     tap(() => {
-      globalStore.setError({ ...GLOBAL_ERROR_STATE, error: false });
+      globalStore.resetBannerError();
     }),
     catchError((error) => {
       const isBrowser = typeof globalThis !== 'undefined';
@@ -112,7 +116,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
         } else if (isRetriableError(error)) {
           handleRetriableError(error, globalStore);
         } else {
-          globalStore.setError({
+          globalStore.setBannerError({
             ...GLOBAL_ERROR_STATE,
             error: true,
             title: 'There was a problem',

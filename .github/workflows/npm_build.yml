@@ -13,15 +13,16 @@ jobs:
     name: Build, Test, and Analyse
     if: github.event_name != 'release'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: '24.x'
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -39,7 +40,7 @@ jobs:
         run: yarn test --watch=false --code-coverage
 
       - name: Analyze with SonarCloud
-        uses: SonarSource/sonarqube-scan-action@v6.0.0
+        uses: SonarSource/sonarqube-scan-action@v7.0.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
@@ -47,9 +48,12 @@ jobs:
     name: Release and Publish
     if: github.event_name == 'release'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout repository (Release)
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.event.release.target_commitish }}
 
@@ -61,16 +65,30 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: '24.x'
-          registry-url: 'https://registry.npmjs.org'
-          always-auth: true
 
+      - name: Ensure npm version (Trusted Publishing)
+        run: |
+          npm --version
+          npm i -g npm@11.5.1
+          npm --version
       - name: Install dependencies (Release)
         run: yarn install --frozen-lockfile
 
       - name: Build library (Release)
         run: yarn build
 
-      - name: Publish version
-        run: cd dist/opal-frontend-common && yarn publish --new-version ${{ steps.release.outputs.version }} --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm_api_token }}
+      - name: Publish version (OIDC via npm)
+        working-directory: dist/opal-frontend-common
+        run: |
+          # Ensure we do NOT publish using token-based auth (classic/granular).
+          unset NODE_AUTH_TOKEN
+
+          # Use a fresh npm user config with no auth token to force OIDC Trusted Publishing.
+          export NPM_CONFIG_USERCONFIG="$RUNNER_TEMP/npmrc-noauth"
+          printf "registry=https://registry.npmjs.org/\n" > "$NPM_CONFIG_USERCONFIG"
+
+          # Defensive: remove any auth token entries if something tries to inject them.
+          npm config delete //registry.npmjs.org/:_authToken || true
+          npm config delete _authToken || true
+
+          npm publish --access public

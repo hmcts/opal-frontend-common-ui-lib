@@ -3,15 +3,12 @@
   [formGroup]="getGroup"
   [class.govuk-form-group--error]="!!errorDay || !!errorMonth || !!errorYear"
 >
-  <fieldset class="govuk-fieldset" role="group" [id]="fieldSetId">
-    <legend
-      class="govuk-fieldset__legend {{ legendClasses }}"
-      [attr.describedby]="legendHint ? fieldSetId + 'Hint' : ''"
-    >
+  <fieldset class="govuk-fieldset" role="group" [id]="fieldSetId" [attr.aria-describedby]="describedBy">
+    <legend class="govuk-fieldset__legend {{ legendClasses }}">
       {{ legendText }}
     </legend>
     @if (legendHint) {
-      <div [id]="fieldSetId ? fieldSetId + 'Hint' : ''" class="govuk-hint">
+      <div [id]="fieldSetId ? fieldSetId + '-hint' : ''" class="govuk-hint">
         {{ legendHint }}
       </div>
     }
@@ -20,7 +17,7 @@
         <span class="govuk-visually-hidden">Error: </span> {{ errorDay || errorMonth || errorYear }}
       </p>
     }
-    <div class="govuk-date-input" id="passport-issued">
+    <div class="govuk-date-input" [id]="fieldSetId + '-date-input'">
       <div class="govuk-date-input__item">
         <div class="govuk-form-group">
           <label class="govuk-label govuk-date-input__label" [for]="dateInputs.day.inputId">

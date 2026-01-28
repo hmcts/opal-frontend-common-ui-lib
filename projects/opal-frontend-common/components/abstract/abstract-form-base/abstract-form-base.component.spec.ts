@@ -708,7 +708,7 @@ describe('AbstractFormBaseComponent', () => {
     }
 
     const routerSpy = spyOn(component['router'], 'navigate');
-    component['handleRoute']('test', true);
+    component['handleRoute']('test', { nonRelative: true });
     expect(routerSpy).toHaveBeenCalledWith(['test'], {});
   });
 
@@ -721,7 +721,7 @@ describe('AbstractFormBaseComponent', () => {
     const routerSpy = spyOn(component['router'], 'navigate');
     const event = jasmine.createSpyObj('event', ['preventDefault']);
 
-    component['handleRoute']('test', false, event);
+    component['handleRoute']('test', { event });
     expect(routerSpy).toHaveBeenCalledWith(['test'], { relativeTo: component['activatedRoute'].parent });
     expect(event.preventDefault).toHaveBeenCalled();
   });
@@ -736,12 +736,28 @@ describe('AbstractFormBaseComponent', () => {
     const event = jasmine.createSpyObj('event', ['preventDefault']);
     const routeData = { someData: 'test' };
 
-    component['handleRoute']('test', false, event, routeData);
+    component['handleRoute']('test', { event, routeData });
     expect(routerSpy).toHaveBeenCalledWith(['test'], {
       relativeTo: component['activatedRoute'].parent,
       state: routeData,
     });
     expect(event.preventDefault).toHaveBeenCalled();
+  });
+
+  it('should test handleRoute with fragment', () => {
+    if (!component) {
+      fail('component returned null');
+      return;
+    }
+
+    const routerSpy = spyOn(component['router'], 'navigate');
+    const fragment = 'section-header';
+
+    component['handleRoute']('test', { fragment });
+    expect(routerSpy).toHaveBeenCalledWith(['test'], {
+      relativeTo: component['activatedRoute'].parent,
+      fragment: fragment,
+    });
   });
 
   it('should test hasUnsavedChanges', () => {

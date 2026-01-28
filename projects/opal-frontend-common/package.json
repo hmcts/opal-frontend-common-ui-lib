@@ -1,7 +1,11 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.47",
+  "version": "0.0.58",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hmcts/opal-frontend-common-ui-lib"
+  },
   "peerDependencies": {
     "@angular/common": "^18.2.0 || ^19.0.0 || ^20.0.0",
     "@angular/core": "^18.2.0 || ^19.0.0 || ^20.0.0"
@@ -323,6 +327,9 @@
     "./guards/auth": {
       "import": "./fesm2022/hmcts-opal-frontend-common-guards-auth.mjs"
     },
+    "./guards/account": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-guards-account.mjs"
+    },
     "./guards/can-deactivate": {
       "import": "./fesm2022/hmcts-opal-frontend-common-guards-can-deactivate.mjs"
     },
@@ -377,14 +384,14 @@
     "./pipes/days-ago": {
       "import": "./fesm2022/hmcts-opal-frontend-common-pipes-days-ago.mjs"
     },
+    "./pipes/monetary": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-pipes-monetary.mjs"
+    },
     "./pipes/national-insurance": {
       "import": "./fesm2022/hmcts-opal-frontend-common-pipes-national-insurance.mjs"
     },
     "./resolvers/title": {
       "import": "./fesm2022/hmcts-opal-frontend-common-resolvers-title.mjs"
-    },
-    "./resolvers/user-state": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-resolvers-user-state.mjs"
     },
     "./services": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services.mjs"

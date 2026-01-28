@@ -1,12 +1,12 @@
 <div class="govuk-form-group" [class.govuk-form-group--error]="!!errors">
-  <fieldset class="govuk-fieldset" [id]="fieldSetId" [attr.aria-describedby]="fieldSetId">
+  <fieldset class="govuk-fieldset" [id]="fieldSetId" [attr.aria-describedby]="describedBy">
     @if (legendText) {
-      <legend class="govuk-fieldset__legend {{ legendClasses }}" [attr.describedby]="fieldSetId">
+      <legend class="govuk-fieldset__legend {{ legendClasses }}">
         {{ legendText }}
       </legend>
     }
     @if (legendHint) {
-      <div [id]="fieldSetId ? fieldSetId + 'Hint' : ''" class="govuk-hint">
+      <div [id]="fieldSetId ? fieldSetId + '-hint' : ''" class="govuk-hint">
         {{ legendHint }}
       </div>
     }
@@ -16,8 +16,15 @@
         <span class="govuk-visually-hidden">Error: </span> {{ errors }}
       </p>
     }
-    <div class="govuk-radios {{ radioClasses }}" data-module="govuk-radios">
-      <ng-content></ng-content>
-    </div>
+
+    <!-- single reusable radios template -->
+    <ng-template #radiosGroup>
+      <div class="govuk-radios {{ radioClasses }}" data-module="govuk-radios">
+        <ng-content></ng-content>
+      </div>
+    </ng-template>
+
+    <!-- render the radiosGroup inside the fieldset -->
+    <ng-container *ngTemplateOutlet="radiosGroup"></ng-container>
   </fieldset>
 </div>

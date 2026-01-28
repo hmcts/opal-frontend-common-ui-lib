@@ -12,20 +12,24 @@ export const GlobalStore = signalStore(
   { providedIn: 'root' },
   withState(() => ({
     authenticated: false,
-    error: { ...GLOBAL_ERROR_STATE },
+    bannerError: { ...GLOBAL_ERROR_STATE },
     featureFlags: {} as LDFlagSet,
     userState: {} as IOpalUserState,
     ssoEnabled: false,
     launchDarklyConfig: {} as ITransferStateLaunchDarklyConfig,
     appInsightsConfig: {} as ITransferStateAppInsightsConfig,
     tokenExpiry: {} as ISessionTokenExpiry,
+    userStateCacheExpirationMilliseconds: 1800000,
   })),
   withMethods((store) => ({
     setAuthenticated: (authenticated: boolean) => {
       patchState(store, { authenticated });
     },
-    setError: (error: IGlobalErrorState) => {
-      patchState(store, { error });
+    setBannerError: (error: IGlobalErrorState) => {
+      patchState(store, { bannerError: error });
+    },
+    resetBannerError: () => {
+      patchState(store, { bannerError: { ...GLOBAL_ERROR_STATE } });
     },
     setFeatureFlags: (featureFlags: LDFlagSet) => {
       patchState(store, { featureFlags });
@@ -45,8 +49,8 @@ export const GlobalStore = signalStore(
     setTokenExpiry: (tokenExpiry: ISessionTokenExpiry) => {
       patchState(store, { tokenExpiry });
     },
-    resetError: () => {
-      patchState(store, { error: { ...GLOBAL_ERROR_STATE } });
+    setUserStateCacheExpirationMilliseconds: (milliseconds: number) => {
+      patchState(store, { userStateCacheExpirationMilliseconds: milliseconds });
     },
   })),
 );

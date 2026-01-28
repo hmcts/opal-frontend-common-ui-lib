@@ -7,6 +7,7 @@ import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
 import { GENERIC_HTTP_ERROR_MESSAGE } from './constants/http-error-message.constant';
 import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constants';
+import { ERROR_RESPONSE } from './constants/http-error-message-response.constant';
 
 describe('httpErrorInterceptor', () => {
   let globalStore: GlobalStoreType;
@@ -30,7 +31,7 @@ describe('httpErrorInterceptor', () => {
   });
 
   it('should be created', () => {
-    expect(globalStore.error().error).toBeFalsy();
+    expect(globalStore.bannerError().error).toBeFalsy();
   });
 
   it('should intercept and set an error', () => {
@@ -38,11 +39,11 @@ describe('httpErrorInterceptor', () => {
     const request = new HttpRequest('GET', '/test');
     const next: HttpHandlerFn = () => throwError(() => errorResponse);
 
-    expect(globalStore.error().error).toBeFalsy();
+    expect(globalStore.bannerError().error).toBeFalsy();
 
     interceptor(request, next).subscribe({
       error: () => {
-        const errorSignal = globalStore.error();
+        const errorSignal = globalStore.bannerError();
         expect(errorSignal.error).toBeTrue();
         expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
       },
@@ -62,11 +63,11 @@ describe('httpErrorInterceptor', () => {
     const request = new HttpRequest('GET', '/test');
     const next: HttpHandlerFn = () => throwError(() => errorResponse);
 
-    expect(globalStore.error().error).toBeFalsy();
+    expect(globalStore.bannerError().error).toBeFalsy();
 
     interceptor(request, next).subscribe({
       error: () => {
-        const errorSignal = globalStore.error();
+        const errorSignal = globalStore.bannerError();
         expect(errorSignal.error).toBeTrue();
         expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
       },
@@ -81,7 +82,7 @@ describe('httpErrorInterceptor', () => {
       httpErrorInterceptor(req, next).subscribe();
     });
 
-    expect(globalStore.error()).toEqual({ ...GLOBAL_ERROR_STATE, error: false });
+    expect(globalStore.bannerError()).toEqual(GLOBAL_ERROR_STATE);
   });
 
   it('should set the error message from error.detail when available', () => {
@@ -94,11 +95,11 @@ describe('httpErrorInterceptor', () => {
     const request = new HttpRequest('GET', '/test');
     const next: HttpHandlerFn = () => throwError(() => errorResponse);
 
-    expect(globalStore.error().error).toBeFalsy();
+    expect(globalStore.bannerError().error).toBeFalsy();
 
     interceptor(request, next).subscribe({
       error: () => {
-        const errorSignal = globalStore.error();
+        const errorSignal = globalStore.bannerError();
         expect(errorSignal.error).toBeTrue();
         expect(errorSignal.message).toBe('This is a problem detail error message');
       },
@@ -120,12 +121,12 @@ describe('httpErrorInterceptor', () => {
     const request = new HttpRequest('GET', '/test');
     const next: HttpHandlerFn = () => throwError(() => errorResponse);
 
-    expect(globalStore.error().error).toBeFalsy();
+    expect(globalStore.bannerError().error).toBeFalsy();
 
     interceptor(request, next).subscribe({
       error: () => {
         expect(router.navigate).not.toHaveBeenCalled();
-        const errorSignal = globalStore.error();
+        const errorSignal = globalStore.bannerError();
         expect(errorSignal.error).toBeTrue();
         expect(errorSignal.message).toBe(customErrorMessage);
       },
@@ -149,7 +150,7 @@ describe('httpErrorInterceptor', () => {
     interceptor(request, next).subscribe({
       error: () => {
         expect(router.navigate).not.toHaveBeenCalled();
-        const errorSignal = globalStore.error();
+        const errorSignal = globalStore.bannerError();
         expect(errorSignal.error).toBeTrue();
         expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
       },
@@ -173,7 +174,7 @@ describe('httpErrorInterceptor', () => {
     interceptor(request, next).subscribe({
       error: () => {
         expect(router.navigate).not.toHaveBeenCalled();
-        const errorSignal = globalStore.error();
+        const errorSignal = globalStore.bannerError();
         expect(errorSignal.error).toBeTrue();
         expect(errorSignal.message).toBe('Something went wrong on our end');
       },
@@ -192,7 +193,7 @@ describe('httpErrorInterceptor', () => {
     interceptor(request, next).subscribe({
       error: () => {
         expect(router.navigate).not.toHaveBeenCalled();
-        const errorSignal = globalStore.error();
+        const errorSignal = globalStore.bannerError();
         expect(errorSignal.error).toBeTrue();
         expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
       },
@@ -210,7 +211,7 @@ describe('httpErrorInterceptor', () => {
     interceptor(request, next).subscribe({
       error: () => {
         expect(router.navigate).not.toHaveBeenCalled();
-        const errorSignal = globalStore.error();
+        const errorSignal = globalStore.bannerError();
         expect(errorSignal.error).toBeTrue();
         expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
       },
@@ -225,6 +226,7 @@ describe('httpErrorInterceptor', () => {
         title: 'Concurrency Conflict',
         status: 409,
         detail: 'The resource has been modified by another user',
+        operation_id: 'OP-409',
         retriable: false,
       },
     });
@@ -246,6 +248,7 @@ describe('httpErrorInterceptor', () => {
         title: 'Permission Denied',
         status: 403,
         detail: 'You do not have permission to perform this action',
+        operation_id: 'OP-403',
         retriable: false,
       },
     });
@@ -267,6 +270,7 @@ describe('httpErrorInterceptor', () => {
         title: 'Internal Server Error',
         status: 500,
         detail: 'An unexpected error occurred',
+        operation_id: 'OP-500',
         retriable: false,
       },
     });
@@ -275,7 +279,28 @@ describe('httpErrorInterceptor', () => {
 
     interceptor(request, next).subscribe({
       error: () => {
-        expect(router.navigate).toHaveBeenCalledWith(['/error/internal-server-error']);
+        expect(router.navigate).toHaveBeenCalledWith(['/error/internal-server'], {
+          state: { operationId: 'OP-500' },
+        });
+      },
+    });
+  });
+
+  it('should populate fallback error details when non-retriable response omits optional fields', () => {
+    const errorResponse = new HttpErrorResponse({
+      status: 500,
+      error: {
+        retriable: false,
+      },
+    });
+    const request = new HttpRequest('GET', '/test');
+    const next: HttpHandlerFn = () => throwError(() => errorResponse);
+
+    interceptor(request, next).subscribe({
+      error: () => {
+        expect(router.navigate).toHaveBeenCalledWith(['/error/internal-server'], {
+          state: { operationId: ERROR_RESPONSE.operation_id },
+        });
       },
     });
   });
@@ -287,6 +312,7 @@ describe('httpErrorInterceptor', () => {
         title: 'Concurrency Conflict',
         status: 409,
         detail: 'The resource has been modified by another user',
+        operation_id: 'OP-409',
         retriable: false,
       },
     });
@@ -317,7 +343,7 @@ describe('httpErrorInterceptor', () => {
     interceptor(request, next).subscribe({
       error: () => {
         expect(router.navigate).not.toHaveBeenCalled();
-        const errorSignal = globalStore.error();
+        const errorSignal = globalStore.bannerError();
         expect(errorSignal.error).toBeTrue();
         expect(errorSignal.message).toBe('A temporary conflict occurred, please try again');
       },
@@ -341,7 +367,7 @@ describe('httpErrorInterceptor', () => {
     interceptor(request, next).subscribe({
       error: () => {
         expect(router.navigate).not.toHaveBeenCalled();
-        const errorSignal = globalStore.error();
+        const errorSignal = globalStore.bannerError();
         expect(errorSignal.error).toBeTrue();
         expect(errorSignal.message).toBe('A standard error occurred');
       },
@@ -364,7 +390,7 @@ describe('httpErrorInterceptor', () => {
     interceptor(request, next).subscribe({
       error: () => {
         expect(router.navigate).not.toHaveBeenCalled();
-        const errorSignal = globalStore.error();
+        const errorSignal = globalStore.bannerError();
         expect(errorSignal.error).toBeTrue();
         // This actually tests the retriable path, but verifies fallback behavior
         expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
@@ -381,8 +407,8 @@ describe('httpErrorInterceptor', () => {
       operationId: null,
     };
 
-    globalStore.setError(expectedFallbackError);
-    const errorSignal = globalStore.error();
+    globalStore.setBannerError(expectedFallbackError);
+    const errorSignal = globalStore.bannerError();
 
     expect(errorSignal.error).toBeTrue();
     expect(errorSignal.title).toBe('There was a problem');
@@ -397,7 +423,7 @@ describe('httpErrorInterceptor', () => {
 
     interceptor(request, next).subscribe({
       error: () => {
-        const errorSignal = globalStore.error();
+        const errorSignal = globalStore.bannerError();
         expect(errorSignal.error).toBeTrue();
         expect(errorSignal.title).toBe('There was a problem');
         expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);

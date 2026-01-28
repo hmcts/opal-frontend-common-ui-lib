@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ElementRef } from '@angular/core';
 import { MojButtonMenuComponent } from './moj-button-menu.component';
 
 describe('MojButtonMenuComponent', () => {
@@ -18,11 +17,6 @@ describe('MojButtonMenuComponent', () => {
     // Set the required input
     component.menuButtonTitle = 'Test Button';
 
-    // Create a dummy button element to simulate the ViewChild element
-    const dummyButton = document.createElement('button');
-    dummyButton.setAttribute('aria-expanded', 'false');
-    component.menuButton = new ElementRef(dummyButton);
-
     fixture.detectChanges();
   });
 
@@ -35,20 +29,23 @@ describe('MojButtonMenuComponent', () => {
   });
 
   it('should toggle aria-expanded attribute and isExpanded property', () => {
-    // Verify initial state
-    let button = component.menuButton.nativeElement;
+    const compiled = fixture.nativeElement as HTMLElement;
+    const button = compiled.querySelector('button') as HTMLButtonElement;
     expect(button.getAttribute('aria-expanded')).toBe('false');
     expect(component.isExpanded).toBeFalse();
 
     // Toggle to expanded state
-    component.toggleButtonMenu();
-    button = component.menuButton.nativeElement;
+    button.click();
+    fixture.detectChanges();
+    const expandedMenuId = button.getAttribute('aria-controls');
     expect(button.getAttribute('aria-expanded')).toBe('true');
     expect(component.isExpanded).toBeTrue();
+    expect(expandedMenuId).toBeTruthy();
+    expect(compiled.querySelector(`#${expandedMenuId}`)).toBeTruthy();
 
     // Toggle back to collapsed state
-    component.toggleButtonMenu();
-    button = component.menuButton.nativeElement;
+    button.click();
+    fixture.detectChanges();
     expect(button.getAttribute('aria-expanded')).toBe('false');
     expect(component.isExpanded).toBeFalse();
   });

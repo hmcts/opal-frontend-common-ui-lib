@@ -27,4 +27,19 @@ export class GovukTextInputComponent {
   get getControl() {
     return this._control;
   }
+
+  get describedBy(): string | null {
+    const ids: string[] = [];
+    const hasHint = !!this.hintText || !!this.hintHtml;
+
+    if (hasHint) {
+      ids.push(`${this.inputId}-hint`);
+    }
+
+    if (this.errors) {
+      ids.push(`${this.inputId}-error-message`);
+    }
+
+    return ids.length ? ids.join(' ') : null;
+  }
 }

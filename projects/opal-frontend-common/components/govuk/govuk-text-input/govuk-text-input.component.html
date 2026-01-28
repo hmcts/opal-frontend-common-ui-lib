@@ -4,14 +4,14 @@
       {{ labelText }}
     </label>
   </div>
-  @if (hintText) {
+  @if (hintText || hintHtml) {
     <div id="{{ inputId }}-hint" class="govuk-hint">
-      {{ hintText }}
+      @if (hintHtml) {
+        <ng-content></ng-content>
+      } @else {
+        {{ hintText }}
+      }
     </div>
-  }
-
-  @if (hintHtml) {
-    <div id="{{ inputId }}-hint" class="govuk-hint"><ng-content></ng-content></div>
   }
 
   @if (errors) {
@@ -26,6 +26,6 @@
     [name]="inputName"
     type="text"
     [formControl]="getControl"
-    [attr.aria-describedby]="hintText ? inputId + '-hint' : null"
+    [attr.aria-describedby]="describedBy"
   />
 </div>

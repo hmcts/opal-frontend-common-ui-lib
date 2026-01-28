@@ -4,3 +4,4 @@ export * from './abstract-form-base-form-error.interface';
 export * from './abstract-form-base-form.interface';
 export * from './abstract-form-base-high-priority-form-error.interface';
 export * from './abstract-form-base-status.interface';
+export * from './abstract-form-base-handleroute-options.interface';

@@ -1,5 +1,3 @@
----
-
 # GOV.UK Checkboxes Component
 
 This Angular component wraps the GOV.UK Checkboxes, providing a customizable way to handle multiple checkboxes with additional legend and hint features.
@@ -29,6 +27,7 @@ You can use the checkboxes component in your template as follows:
   [fieldSetId]="'exampleFieldSet'"
   [legendText]="'Choose your options'"
   [legendHint]="'You can select multiple options'"
+  [errors]="'You must select an option'"
 >
   <!-- Individual checkboxes go here -->
   <div class="govuk-checkboxes__item">
@@ -46,15 +45,10 @@ You can use the checkboxes component in your template as follows:
 
 ```html
 <div class="govuk-form-group">
-  <fieldset class="govuk-fieldset" [id]="fieldSetId" [attr.aria-describedby]="fieldSetId">
-    <legend
-      class="govuk-fieldset__legend {{ legendClasses }}"
-      [attr.describedby]="fieldSetId"
-    >
-      {{ legendText }}
-    </legend>
+  <fieldset class="govuk-fieldset" [id]="fieldSetId" [attr.aria-describedby]="describedBy">
+    <legend class="govuk-fieldset__legend {{ legendClasses }}">{{ legendText }}</legend>
 
-    <div class="govuk-hint" *ngIf="legendHint">{{ legendHint }}</div>
+    <div class="govuk-hint" *ngIf="legendHint" [id]="fieldSetId + '-hint'">{{ legendHint }}</div>
 
     <div class="govuk-checkboxes {{ checkboxClasses }}" data-module="govuk-checkboxes">
       <ng-content></ng-content>
@@ -71,6 +65,7 @@ You can use the checkboxes component in your template as follows:
 | `legendText`      | `string` | The legend or title for the checkbox group.                                   |
 | `legendHint`      | `string` | An optional hint text displayed under the legend.                             |
 | `checkboxClasses` | `string` | Additional CSS classes to apply to the checkboxes.                            |
+| `errors`          | `string` | Error message to display if there are validation errors.                      |
 
 ## Outputs
 
@@ -85,13 +80,9 @@ There are no custom methods for this component.
 Unit tests for this component can be found in the `govuk-checkboxes.component.spec.ts` file. To run the tests, use:
 
 ```bash
-ng test
+yarn test
 ```
 
 ## Contributing
 
 Feel free to submit issues or pull requests to improve this component.
-
----
-
-This `README.md` outlines the key inputs, structure, and usage details of the `govuk-checkboxes` component, along with how to customize it using inputs like `legendText`, `legendHint`, and others.
