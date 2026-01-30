@@ -143,6 +143,9 @@ export class MojPaginationComponent implements OnChanges {
     if (event) {
       event.preventDefault();
     }
+    if (page === this.currentPage) {
+      return;
+    }
     this.changePage.emit(page);
   }
 

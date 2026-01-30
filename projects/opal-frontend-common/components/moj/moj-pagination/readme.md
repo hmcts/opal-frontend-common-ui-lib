@@ -10,6 +10,7 @@ This component is used in the Opal Frontend Common UI Library.
 - [Usage](#usage)
 - [Inputs](#inputs)
 - [Outputs](#outputs)
+- [Migration](#migration)
 - [Pagination Behaviour](#pagination-behaviour)
 - [Accessibility](#accessibility)
 - [Results Summary](#results-summary)
@@ -28,7 +29,7 @@ This component is used in the Opal Frontend Common UI Library.
   - Previous and next pages (when applicable)
 - Adds ellipsis (`…`) when large gaps in page ranges exist
 - Outputs selected page via event
-- Displays a results summary (e.g. “Showing 11 to 20 of 200 results”)
+- Displays a results summary beneath the pagination controls (e.g. “Showing 11 to 20 of 200 total results”)
 - Accessible and keyboard-navigable
 - Built using Angular signals and `ChangeDetectionStrategy.OnPush`
 
@@ -73,6 +74,35 @@ You can use the pagination component in your template as follows:
 
 There are no custom methods for this component.
 
+## Migration
+
+MOJ Frontend v8 uses GOV.UK Pagination markup wrapped in a `.moj-pagination` container. This component now matches that
+structure and moves the results count below the pagination controls.
+
+Before (legacy MoJ markup):
+
+```html
+<nav class="moj-pagination moj-pagination-alignment">
+  <ul class="moj-pagination__list">...</ul>
+  <p class="moj-pagination__results">Showing 11 to 20 of 200 results</p>
+</nav>
+```
+
+After (MOJ Frontend v8-compatible markup):
+
+```html
+<div class="moj-pagination">
+  <nav class="govuk-pagination moj-pagination__pagination" aria-label="Pagination">...</nav>
+  <p class="moj-pagination__results">Showing 11 to 20 of 200 total results</p>
+</div>
+```
+
+Notes:
+
+- If you were targeting `.moj-pagination__*` list classes, update selectors to GOV.UK pagination classes such as
+  `.govuk-pagination__list` and `.govuk-pagination__item`.
+- The results summary now renders whenever `total > 0`, even if there is only one page (pagination controls remain hidden).
+
 ## Pagination Behaviour
 
 For large page sets, only a few key pages are shown:
@@ -106,18 +136,19 @@ Examples:
 
 When `total > 0`, the component displays:
 
-> **"Showing _{start}_ to _{end}_ of _{total}_ results"**
+> **"Showing _{start}_ to _{end}_ of _{total}_ total results"**
 
 This is automatically calculated based on `currentPage`, `limit`, and `total`.
 
 ## Styling
 
-This component relies on the MoJ pagination CSS from `@ministryofjustice/frontend`.
+This component uses GOV.UK pagination markup with a MoJ pagination wrapper.
 
 Ensure your global styles include:
 
 ```scss
-@use '@ministryofjustice/frontend/moj/components/pagination/pagination';
+@import 'govuk-frontend/dist/govuk/all.scss';
+@import '@ministryofjustice/frontend/moj/all.scss';
 ```
 
 ## Testing
@@ -127,7 +158,7 @@ The `id` input is available to help target the `<nav>` element during unit or e2
 Unit tests for this component can be found in the `moj-pagination.component.spec.ts` file. To run the tests, use:
 
 ```bash
-ng test
+yarn test
 ```
 
 ## Contributing
