@@ -1,10 +1,9 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { FormControl, AbstractControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'opal-lib-govuk-text-input-prefix-suffix',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './govuk-text-input-prefix-suffix.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

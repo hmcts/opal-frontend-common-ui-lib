@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { SignInStubComponent } from './sign-in-stub/sign-in-stub.component';
 import { ISignInStubForm } from './interfaces';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
@@ -7,7 +7,7 @@ import { SSO_ENDPOINTS } from '@hmcts/opal-frontend-common/services/auth-service
 
 @Component({
   selector: 'opal-lib-sign-in',
-  imports: [CommonModule, SignInStubComponent],
+  imports: [SignInStubComponent],
   templateUrl: './sign-in.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

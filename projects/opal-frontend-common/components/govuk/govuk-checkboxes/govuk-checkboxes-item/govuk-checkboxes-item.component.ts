@@ -1,10 +1,9 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
 import { FormControl, AbstractControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'opal-lib-govuk-checkboxes-item, [opal-lib-govuk-checkboxes-item]',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './govuk-checkboxes-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

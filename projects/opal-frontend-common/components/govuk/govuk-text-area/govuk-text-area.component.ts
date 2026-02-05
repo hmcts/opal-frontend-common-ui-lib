@@ -1,10 +1,9 @@
-import { CommonModule } from '@angular/common';
 import { Component, computed, DestroyRef, inject, Input, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/forms';
 @Component({
   selector: 'opal-lib-govuk-text-area',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './govuk-text-area.component.html',
   styles: ``,
 })
