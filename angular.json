@@ -30,6 +30,7 @@
             "tsConfig": "projects/opal-frontend-common/tsconfig.spec.json",
             "setupFiles": ["projects/opal-frontend-common/test-setup.ts"],
             "coverage": true,
+            "coverageReporters": ["html", "lcov", "text", "json"],
             "coverageExclude": [
               "**/*.interface.ts",
               "**/*.mock.ts",
