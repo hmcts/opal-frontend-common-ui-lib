@@ -5,6 +5,7 @@ import { PLATFORM_ID, makeStateKey } from '@angular/core';
 import { ITransferStateServerState } from '@hmcts/opal-frontend-common/services/transfer-state-service/interfaces';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('TransferStateService', () => {
   let service: TransferStateService;

@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukRadiosDividerComponent } from './govuk-radios-divider.component';
 import { Component } from '@angular/core';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 @Component({
   template: `<opal-lib-govuk-radios-divider> Hello World</opal-lib-govuk-radios-divider>`,
@@ -34,11 +35,11 @@ describe('GovukRadiosDividerComponent', () => {
 
   it('should project the ng-content', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
     const element = fixture.nativeElement.querySelector('.govuk-radios__divider');
-    expect(element.innerText).toBe('Hello World');
+    expect(element.textContent?.trim()).toBe('Hello World');
   });
 });

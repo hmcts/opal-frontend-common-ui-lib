@@ -10,7 +10,7 @@
       "prefix": "opal-lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "project": "projects/opal-frontend-common/ng-package.json"
           },
@@ -25,13 +25,21 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/opal-frontend-common/tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
+            "setupFiles": ["projects/opal-frontend-common/test-setup.ts"],
+            "coverage": true,
+            "coverageExclude": [
+              "**/*.interface.ts",
+              "**/*.mock.ts",
+              "**/*.type.ts",
+              "**/*.constant.ts",
+              "**/mocks/**",
+              "**/test-setup.ts",
+              "**/*.d.ts",
+              "**/public-api.ts",
+              "**/*.routes.ts"
             ]
           }
         },

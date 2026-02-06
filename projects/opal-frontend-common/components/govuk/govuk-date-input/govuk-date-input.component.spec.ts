@@ -4,6 +4,7 @@ import { GovukDateInputComponent } from './govuk-date-input.component';
 import { FormControl, FormGroup } from '@angular/forms';
 import { GOVUK_DATE_INPUTS_MOCK } from './mocks/govuk-date-inputs.mock';
 import { By } from '@angular/platform-browser';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 describe('GovukDateInputComponent', () => {
   let component: GovukDateInputComponent | null;
@@ -46,7 +47,7 @@ describe('GovukDateInputComponent', () => {
 
   it('should have legend text', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
@@ -57,7 +58,7 @@ describe('GovukDateInputComponent', () => {
 
   it('should have legend hint', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
@@ -68,7 +69,7 @@ describe('GovukDateInputComponent', () => {
 
   it('should have date inputs', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
@@ -83,7 +84,7 @@ describe('GovukDateInputComponent', () => {
 
   it('should have added a class to the legend', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
@@ -93,7 +94,7 @@ describe('GovukDateInputComponent', () => {
 
   it('should have added a class to the day input', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
@@ -108,7 +109,7 @@ describe('GovukDateInputComponent', () => {
 
   it('should set aria-describedby with hint only', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
+      throw new Error('component or fixture returned null');
       return;
     }
 
@@ -124,7 +125,7 @@ describe('GovukDateInputComponent', () => {
 
   it('should set aria-describedby with error only', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
+      throw new Error('component or fixture returned null');
       return;
     }
 
@@ -140,7 +141,7 @@ describe('GovukDateInputComponent', () => {
 
   it('should set aria-describedby with hint and error', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
+      throw new Error('component or fixture returned null');
       return;
     }
 
@@ -156,7 +157,7 @@ describe('GovukDateInputComponent', () => {
 
   it('should not set aria-describedby when hint and errors are missing', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
+      throw new Error('component or fixture returned null');
       return;
     }
 

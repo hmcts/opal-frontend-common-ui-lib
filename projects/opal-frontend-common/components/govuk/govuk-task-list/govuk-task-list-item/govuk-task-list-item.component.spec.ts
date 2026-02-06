@@ -2,9 +2,14 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukTaskListItemComponent } from './govuk-task-list-item.component';
 import { Component } from '@angular/core';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 @Component({
-  template: `<opal-lib-govuk-task-list-item taskListItemId="test" taskListItemClasses="test-class">
+  template: `<opal-lib-govuk-task-list-item
+    taskListItemId="test"
+    taskListItemClasses="test-class"
+    taskListStatusId="test-status"
+  >
     <ng-container name>Tim</ng-container>
     <ng-container status>Hello</ng-container></opal-lib-govuk-task-list-item
   >`,
@@ -37,7 +42,7 @@ describe('GovukTaskListItemComponent', () => {
 
   it('should add the id', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
@@ -48,7 +53,7 @@ describe('GovukTaskListItemComponent', () => {
 
   it('should add the class', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
@@ -59,21 +64,21 @@ describe('GovukTaskListItemComponent', () => {
 
   it('should render into name ng-content', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
     const element = fixture.nativeElement.querySelector('#test .govuk-task-list__name-and-hint');
-    expect(element.innerText).toBe('Tim');
+    expect(element.textContent?.trim()).toBe('Tim');
   });
 
   it('should render into status ng-content', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
     const element = fixture.nativeElement.querySelector('#test .govuk-task-list__status');
-    expect(element.innerText).toBe('Hello');
+    expect(element.textContent?.trim()).toBe('Hello');
   });
 });

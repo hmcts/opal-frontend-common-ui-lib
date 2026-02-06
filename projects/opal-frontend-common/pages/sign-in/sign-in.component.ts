@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { SignInStubComponent } from './sign-in-stub/sign-in-stub.component';
-import { ISignInStubForm } from './interfaces';
+import { ISignInStubForm } from './interfaces/sign-in-stub-form.interface';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { SSO_ENDPOINTS } from '@hmcts/opal-frontend-common/services/auth-service/constants';
 

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CustomAccountInformationItemLabelComponent } from './custom-account-information-item-label.component';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('CustomAccountInformationItemLabelComponent', () => {
   let component: CustomAccountInformationItemLabelComponent;

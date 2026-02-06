@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukSummaryListRowActionsComponent } from './govuk-summary-list-row-actions.component';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('GovukSummaryListRowActionsComponent', () => {
   let component: GovukSummaryListRowActionsComponent;

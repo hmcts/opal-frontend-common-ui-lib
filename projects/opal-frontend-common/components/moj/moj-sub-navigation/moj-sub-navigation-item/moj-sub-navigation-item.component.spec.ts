@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojSubNavigationItemComponent } from './moj-sub-navigation-item.component';
 import { ActivatedRoute, Router, provideRouter } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('MojSubNavigationItemComponent', () => {
   let component: MojSubNavigationItemComponent;
@@ -33,7 +34,7 @@ describe('MojSubNavigationItemComponent', () => {
 
   it('should have item text', () => {
     const element = fixture.nativeElement.querySelector('.moj-sub-navigation__link');
-    expect(element.innerText).toBe(component.subNavItemText);
+    expect(element.textContent?.trim()).toBe(component.subNavItemText);
   });
 
   it('should be an active link', () => {
@@ -54,7 +55,7 @@ describe('MojSubNavigationItemComponent', () => {
 
   it('should navigate to the correct route with fragment', () => {
     const event = new Event('click');
-    const navigateSpy = spyOn(router, 'navigate');
+    const navigateSpy = vi.spyOn(router, 'navigate');
 
     component.handleItemClick(event, component.subNavItemFragment);
 

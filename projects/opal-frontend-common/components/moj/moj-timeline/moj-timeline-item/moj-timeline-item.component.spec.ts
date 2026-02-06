@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojTimelineItemComponent } from './moj-timeline-item.component';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 @Component({
   template: `<opal-lib-moj-timeline-item>

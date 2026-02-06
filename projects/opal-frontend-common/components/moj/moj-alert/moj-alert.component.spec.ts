@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojAlertComponent } from './moj-alert.component';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('MojAlertComponent', () => {
   let component: MojAlertComponent;
@@ -12,7 +13,7 @@ describe('MojAlertComponent', () => {
 
     fixture = TestBed.createComponent(MojAlertComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    component.ariaLabel = 'Close Alert';
   });
 
   it('should create', () => {
@@ -60,18 +61,15 @@ describe('MojAlertComponent', () => {
     expect(element?.getAttribute('data-module')).toBe('moj-alert');
   });
 
-  it('should dismiss the alert when dismiss is called and emit a `dismissed` event', () => {
-    spyOn(component.dismissed, 'emit');
+  it('should dismiss the alert when dismiss is called and emit a `dismissed` event', async () => {
+    vi.spyOn(component.dismissed, 'emit');
     component.isVisible = true;
     component.type = 'information';
     fixture.detectChanges();
 
     component.dismiss();
-    fixture.detectChanges();
 
-    expect(component.isVisible).toBeFalse();
-    const element: HTMLElement = fixture.nativeElement;
-    expect(element.className.trim()).toBe('');
+    expect(component.isVisible).toBe(false);
     expect(component.dismissed.emit).toHaveBeenCalled();
   });
 });

@@ -4,6 +4,7 @@ import { GovukSelectComponent } from './govuk-select.component';
 import { By } from '@angular/platform-browser';
 import { FormControl } from '@angular/forms';
 import { GOVUK_SELECT_OPTIONS_MOCK } from './mocks/govuk-select-options.mock';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 describe('GovukSelectComponent', () => {
   let component: GovukSelectComponent | null;
@@ -44,7 +45,7 @@ describe('GovukSelectComponent', () => {
 
   it('should have label text and an extra class', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
@@ -54,7 +55,7 @@ describe('GovukSelectComponent', () => {
 
   it('should have a select extra class', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
@@ -64,7 +65,7 @@ describe('GovukSelectComponent', () => {
 
   it('should have select hint', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
@@ -74,7 +75,7 @@ describe('GovukSelectComponent', () => {
 
   it('should set aria-describedby with hint only', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
+      throw new Error('component or fixture returned null');
       return;
     }
 
@@ -88,7 +89,7 @@ describe('GovukSelectComponent', () => {
 
   it('should set aria-describedby with error only', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
+      throw new Error('component or fixture returned null');
       return;
     }
 
@@ -102,7 +103,7 @@ describe('GovukSelectComponent', () => {
 
   it('should set aria-describedby with hint and error', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
+      throw new Error('component or fixture returned null');
       return;
     }
 
@@ -116,7 +117,7 @@ describe('GovukSelectComponent', () => {
 
   it('should not set aria-describedby when hint and error are missing', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
+      throw new Error('component or fixture returned null');
       return;
     }
 
@@ -130,7 +131,7 @@ describe('GovukSelectComponent', () => {
 
   it('should have populated the select', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 

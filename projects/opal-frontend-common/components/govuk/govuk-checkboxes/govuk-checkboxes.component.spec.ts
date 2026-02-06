@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukCheckboxesComponent } from './govuk-checkboxes.component';
 import { Component } from '@angular/core';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 @Component({
   template: `<opal-lib-govuk-checkboxes
@@ -35,7 +36,6 @@ describe('GovukCheckboxesNewComponent', () => {
 
     fixture = TestBed.createComponent(TestHostComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   afterAll(() => {
@@ -50,56 +50,61 @@ describe('GovukCheckboxesNewComponent', () => {
 
   it('should render into the Legend Text', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
+    fixture.detectChanges();
     const element = fixture.nativeElement.querySelector('#test > .govuk-fieldset__legend ');
-    expect(element.innerText).toBe('Legend Text');
+    expect(element.textContent?.trim()).toBe('Legend Text');
   });
 
   it('should render into the Legend Hint', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
+    fixture.detectChanges();
     const element = fixture.nativeElement.querySelector('#test-hint');
-    expect(element.innerText).toBe('Legend Hint');
+    expect(element.textContent?.trim()).toBe('Legend Hint');
   });
 
   it('should add a legend class', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
+    fixture.detectChanges();
     const element = fixture.nativeElement.querySelector('#test > .govuk-fieldset__legend.legend-class');
-    expect(element.innerText).toBe('Legend Text');
+    expect(element.textContent?.trim()).toBe('Legend Text');
   });
 
   it('should add a checkbox class', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
+    fixture.detectChanges();
     const element = fixture.nativeElement.querySelector('#test > .checkbox-class');
-    expect(element.innerText).toBe('Hello World');
+    expect(element.textContent?.trim()).toBe('Hello World');
   });
 
   it('should set aria-describedby with hint only', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
+    fixture.detectChanges();
     const fieldset = fixture.nativeElement.querySelector('#test');
     expect(fieldset.getAttribute('aria-describedby')).toBe('test-hint');
   });
 
   it('should set aria-describedby with error only', () => {
     if (!fixture || !component) {
-      fail('component or fixture returned null');
+      throw new Error('component or fixture returned null');
       return;
     }
 
@@ -113,7 +118,7 @@ describe('GovukCheckboxesNewComponent', () => {
 
   it('should set aria-describedby with hint and error', () => {
     if (!fixture || !component) {
-      fail('component or fixture returned null');
+      throw new Error('component or fixture returned null');
       return;
     }
 
@@ -126,7 +131,7 @@ describe('GovukCheckboxesNewComponent', () => {
 
   it('should not set aria-describedby when hint and error are missing', () => {
     if (!fixture || !component) {
-      fail('component or fixture returned null');
+      throw new Error('component or fixture returned null');
       return;
     }
 

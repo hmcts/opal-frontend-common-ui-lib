@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { UtilsService } from './utils.service';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('UtilsService', () => {
   let service: UtilsService;
@@ -74,7 +75,7 @@ describe('UtilsService', () => {
   });
 
   it('should scroll to the top of the page', () => {
-    const viewportScrollerSpy = spyOn(service['viewportScroller'], 'scrollToPosition');
+    const viewportScrollerSpy = vi.spyOn(service['viewportScroller'], 'scrollToPosition');
     service.scrollToTop();
     expect(viewportScrollerSpy).toHaveBeenCalledWith([0, 0]);
   });
@@ -82,13 +83,13 @@ describe('UtilsService', () => {
   it('should check if form values are provided', () => {
     const form = { name: 'John', age: 30 };
     const result = service.checkFormValues(form);
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('should check if form values are not provided', () => {
     const form = { name: '', age: null };
     const result = service.checkFormValues(form);
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
   });
 
   it('should check if all form array values are provided', () => {
@@ -97,7 +98,7 @@ describe('UtilsService', () => {
       { name: 'Jane', age: 25 },
     ];
     const result = service.checkFormArrayValues(forms);
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('should check if not all form array values are provided', () => {
@@ -106,7 +107,7 @@ describe('UtilsService', () => {
       { name: '', age: null },
     ];
     const result = service.checkFormArrayValues(forms);
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
   });
 
   it('should get form status as provided', () => {
@@ -141,50 +142,54 @@ describe('UtilsService', () => {
 
   it('should return true if an array contains values', () => {
     const form = { key1: [1, 2, 3] };
-    expect(service.checkFormValues(form)).toBeTrue();
+    expect(service.checkFormValues(form)).toBe(true);
   });
 
   it('should return false if an array is empty', () => {
     const form = { key1: [] };
-    expect(service.checkFormValues(form)).toBeFalse();
+    expect(service.checkFormValues(form)).toBe(false);
   });
 
   it('should return true for a non-empty string', () => {
     const form = { key1: 'some value' };
-    expect(service.checkFormValues(form)).toBeTrue();
+    expect(service.checkFormValues(form)).toBe(true);
   });
 
   it('should return false for an empty string', () => {
     const form = { key1: '' };
-    expect(service.checkFormValues(form)).toBeFalse();
+    expect(service.checkFormValues(form)).toBe(false);
   });
 
   it('should return false for null', () => {
     const form = { key1: null };
-    expect(service.checkFormValues(form)).toBeFalse();
+    expect(service.checkFormValues(form)).toBe(false);
   });
 
   it('should return false for undefined', () => {
     const form = { key1: undefined };
-    expect(service.checkFormValues(form)).toBeFalse();
+    expect(service.checkFormValues(form)).toBe(false);
   });
 
   it('should copy the provided value to the clipboard', async () => {
     const value = 'Test clipboard value';
-    const writeTextSpy = spyOn(navigator.clipboard, 'writeText').and.returnValue(Promise.resolve());
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText },
+      configurable: true,
+    });
     await service.copyToClipboard(value);
-    expect(writeTextSpy).toHaveBeenCalledWith(value);
+    expect(writeText).toHaveBeenCalledWith(value);
   });
 
   it('should handle clipboard API errors gracefully', async () => {
     const value = 'Test clipboard value';
-    const writeTextSpy = spyOn(navigator.clipboard, 'writeText').and.returnValue(Promise.reject('Clipboard error'));
-    try {
-      await service.copyToClipboard(value);
-    } catch (error) {
-      expect(writeTextSpy).toHaveBeenCalledWith(value);
-      expect(error).toEqual('Clipboard error');
-    }
+    const writeText = vi.fn().mockRejectedValue('Clipboard error');
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText },
+      configurable: true,
+    });
+    await expect(service.copyToClipboard(value)).rejects.toEqual('Clipboard error');
+    expect(writeText).toHaveBeenCalledWith(value);
   });
 
   it('should recursively filter out null and undefined values from an object', () => {
@@ -241,43 +246,43 @@ describe('UtilsService', () => {
 
   it('should return true if at least one property is a non-empty string', () => {
     const obj = { a: '', b: 'value', c: null };
-    expect(service.hasSetProperty(obj)).toBeTrue();
+    expect(service.hasSetProperty(obj)).toBe(true);
   });
 
   it('should return true if at least one property is a non-null value', () => {
     const obj = { a: null, b: 0 };
-    expect(service.hasSetProperty(obj)).toBeTrue();
+    expect(service.hasSetProperty(obj)).toBe(true);
   });
 
   it('should return true if at least one property is boolean true', () => {
     const obj = { a: false, b: true, c: null };
-    expect(service.hasSetProperty(obj)).toBeTrue();
+    expect(service.hasSetProperty(obj)).toBe(true);
   });
 
   it('should return false if all properties are null or empty strings', () => {
     const obj = { a: null, b: '', c: null };
-    expect(service.hasSetProperty(obj)).toBeFalse();
+    expect(service.hasSetProperty(obj)).toBe(false);
   });
 
   it('should return false for an empty object', () => {
-    expect(service.hasSetProperty({})).toBeFalse();
+    expect(service.hasSetProperty({})).toBe(false);
   });
 
   it('should return false for null', () => {
-    expect(service.hasSetProperty(null)).toBeFalse();
+    expect(service.hasSetProperty(null)).toBe(false);
   });
 
   it('should return false for undefined', () => {
-    expect(service.hasSetProperty(undefined)).toBeFalse();
+    expect(service.hasSetProperty(undefined)).toBe(false);
   });
 
   it('should return true if at least one property is a non-empty array', () => {
     const obj = { a: [], b: [1] };
-    expect(service.hasSetProperty(obj)).toBeTrue();
+    expect(service.hasSetProperty(obj)).toBe(true);
   });
 
   it('should return true if at least one property is a non-empty object', () => {
     const obj = { a: {}, b: { x: 1 } };
-    expect(service.hasSetProperty(obj)).toBeTrue();
+    expect(service.hasSetProperty(obj)).toBe(true);
   });
 });

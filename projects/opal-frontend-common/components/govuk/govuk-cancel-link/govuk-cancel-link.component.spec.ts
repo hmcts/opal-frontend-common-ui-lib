@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukCancelLinkComponent } from './govuk-cancel-link.component';
+import { describe, beforeEach, afterAll, it, expect, vi } from 'vitest';
 
 describe('GovukCancelLinkComponent', () => {
   let component: GovukCancelLinkComponent | null;
@@ -28,11 +29,11 @@ describe('GovukCancelLinkComponent', () => {
 
   it('should handle the click', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
+      throw new Error('component or fixture returned null');
       return;
     }
 
-    spyOn(component.linkClickEvent, 'emit');
+    vi.spyOn(component.linkClickEvent, 'emit');
 
     component.handleClick();
 

@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukCheckboxesConditionalComponent } from './govuk-checkboxes-conditional.component';
 import { Component } from '@angular/core';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 @Component({
   template: `<opal-lib-govuk-checkboxes-conditional conditionalId="test">
@@ -37,10 +38,10 @@ describe('GovukCheckboxesConditionalComponent', () => {
 
   it('should create with id', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
     const element = fixture.nativeElement.querySelector('#test-conditional');
-    expect(element.innerText).toBe('Hello World');
+    expect(element.textContent?.trim()).toBe('Hello World');
   });
 });

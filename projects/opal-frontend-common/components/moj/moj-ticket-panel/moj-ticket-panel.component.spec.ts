@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojTicketPanelComponent } from './moj-ticket-panel.component';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 @Component({
   template: `<opal-lib-moj-ticket-panel sectionClasses="moj-ticket-panel__content--blue">

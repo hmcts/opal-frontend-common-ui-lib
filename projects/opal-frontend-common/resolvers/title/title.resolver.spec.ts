@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { TitleResolver } from './title.resolver';
+import { describe, beforeEach, vi, it, expect } from 'vitest';
 
 describe('TitleResolver', () => {
   let resolver: TitleResolver;
@@ -14,7 +15,7 @@ describe('TitleResolver', () => {
         {
           provide: Title,
           useValue: {
-            setTitle: jasmine.createSpy('setTitle'),
+            setTitle: vi.fn(),
           },
         },
       ],

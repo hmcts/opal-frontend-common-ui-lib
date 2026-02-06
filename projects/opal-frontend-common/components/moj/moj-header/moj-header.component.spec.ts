@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { MojHeaderNavigationItemComponent } from './moj-header-navigation-item/moj-header-navigation-item.component';
 import { provideRouter } from '@angular/router';
 import { MOJ_HEADER_LINKS_MOCK } from './mocks/moj-header-links.mock';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 @Component({
   template: `<opal-lib-moj-header [headerLinks]="headerLinks">
@@ -40,16 +41,16 @@ describe('MojHeaderComponent', () => {
 
   it('should render into organisationName ng-content', () => {
     const element = fixture.nativeElement.querySelector('.moj-header__link--organisation-name');
-    expect(element.innerText).toBe('Test Organisation');
+    expect(element.textContent?.trim()).toBe('Test Organisation');
   });
 
   it('should render into serviceName ng-content', () => {
     const element = fixture.nativeElement.querySelector('.moj-header__link--service-name');
-    expect(element.innerText).toBe('Test Service');
+    expect(element.textContent?.trim()).toBe('Test Service');
   });
 
   it('should render into linkText ng-content', () => {
     const element = fixture.nativeElement.querySelector('opal-lib-moj-header-navigation-item');
-    expect(element.innerText).toBe('Test Link');
+    expect(element.textContent?.trim()).toBe('Test Link');
   });
 });

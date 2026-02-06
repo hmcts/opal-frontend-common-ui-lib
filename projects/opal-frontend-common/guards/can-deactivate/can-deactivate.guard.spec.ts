@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { ICanDeactivateCanComponentDeactivate } from './interfaces/can-deactivate-can-component-deactivate.interface';
 import { canDeactivateGuard } from './can-deactivate.guard';
+import { describe, beforeEach, it, vi, expect } from 'vitest';
 
 describe('canDeactivateGuard', () => {
   let mockComponent: ICanDeactivateCanComponentDeactivate;
@@ -19,25 +20,25 @@ describe('canDeactivateGuard', () => {
 
   it('should return true if canDeactivate method of component returns true', () => {
     mockComponent = {
-      canDeactivate: jasmine.createSpy('canDeactivate').and.returnValue(true),
+      canDeactivate: vi.fn().mockReturnValue(true),
     };
 
     const result = canDeactivateGuard(mockComponent, mockCurrentRoute, mockCurrentState, mockNextState);
 
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
     expect(mockComponent.canDeactivate).toHaveBeenCalled();
   });
 
   it('should return false if canDeactivate method of component returns false and user clicks Cancel', () => {
     mockComponent = {
-      canDeactivate: jasmine.createSpy('canDeactivate').and.returnValue(false),
+      canDeactivate: vi.fn().mockReturnValue(false),
     };
 
-    spyOn(window, 'confirm').and.returnValue(false); // Simulate user clicking Cancel
+    vi.spyOn(window, 'confirm').mockReturnValue(false); // Simulate user clicking Cancel
 
     const result = canDeactivateGuard(mockComponent, mockCurrentRoute, mockCurrentState, mockNextState);
 
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
     expect(mockComponent.canDeactivate).toHaveBeenCalled();
     expect(window.confirm).toHaveBeenCalledWith(
       'WARNING: You have unsaved changes. Press Cancel to go back and save these changes, or OK to lose these changes.',
@@ -46,14 +47,14 @@ describe('canDeactivateGuard', () => {
 
   it('should return true if canDeactivate method of component returns false and user clicks OK', () => {
     mockComponent = {
-      canDeactivate: jasmine.createSpy('canDeactivate').and.returnValue(false),
+      canDeactivate: vi.fn().mockReturnValue(false),
     };
 
-    spyOn(window, 'confirm').and.returnValue(true); // Simulate user clicking OK
+    vi.spyOn(window, 'confirm').mockReturnValue(true); // Simulate user clicking OK
 
     const result = canDeactivateGuard(mockComponent, mockCurrentRoute, mockCurrentState, mockNextState);
 
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
     expect(mockComponent.canDeactivate).toHaveBeenCalled();
     expect(window.confirm).toHaveBeenCalledWith(
       'WARNING: You have unsaved changes. Press Cancel to go back and save these changes, or OK to lose these changes.',

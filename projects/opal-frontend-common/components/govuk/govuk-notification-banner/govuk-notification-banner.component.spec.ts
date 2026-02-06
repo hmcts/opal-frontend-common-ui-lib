@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukNotificationBannerComponent } from './govuk-notification-banner.component';
 import { By } from '@angular/platform-browser';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 describe('GovukNotificationBannerComponent', () => {
   let component: GovukNotificationBannerComponent | null;
@@ -34,11 +35,11 @@ describe('GovukNotificationBannerComponent', () => {
 
   it('should create a success message', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
+      throw new Error('component or fixture returned null');
       return;
     }
 
-    component.type = 'success';
+    fixture.componentRef.setInput('type', 'success');
     fixture.detectChanges();
 
     // Query the element with the class 'govuk-notification-banner--success'
@@ -60,7 +61,7 @@ describe('GovukNotificationBannerComponent', () => {
 
   it('should link the banner to the title id', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
@@ -72,11 +73,11 @@ describe('GovukNotificationBannerComponent', () => {
 
   it('should create a success message', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
+      throw new Error('component or fixture returned null');
       return;
     }
 
-    component.type = 'information';
+    fixture.componentRef.setInput('type', 'information');
     fixture.detectChanges();
 
     // Query the element with the class 'govuk-notification-banner--information'

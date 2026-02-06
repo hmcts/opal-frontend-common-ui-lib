@@ -3,6 +3,7 @@ import { GovukTextInputComponent } from './govuk-text-input.component';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ChangeDetectorRef } from '@angular/core';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 describe('GovukTextInputComponent', () => {
   let component: GovukTextInputComponent | null;
@@ -41,7 +42,7 @@ describe('GovukTextInputComponent', () => {
 
   it('should have extra label classes', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
@@ -51,7 +52,7 @@ describe('GovukTextInputComponent', () => {
 
   it('should have labelText', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
@@ -61,7 +62,7 @@ describe('GovukTextInputComponent', () => {
 
   it('should have extra input classes', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
+      throw new Error('component or fixture returned null');
       return;
     }
 
@@ -79,7 +80,7 @@ describe('GovukTextInputComponent', () => {
 
   it('should set aria-describedby with hint only', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
+      throw new Error('component or fixture returned null');
       return;
     }
 
@@ -93,7 +94,7 @@ describe('GovukTextInputComponent', () => {
 
   it('should set aria-describedby with hintHtml only', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
+      throw new Error('component or fixture returned null');
       return;
     }
 
@@ -108,7 +109,7 @@ describe('GovukTextInputComponent', () => {
 
   it('should set aria-describedby with error only', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
+      throw new Error('component or fixture returned null');
       return;
     }
 
@@ -123,7 +124,7 @@ describe('GovukTextInputComponent', () => {
 
   it('should set aria-describedby with hint and error', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
+      throw new Error('component or fixture returned null');
       return;
     }
 
@@ -138,7 +139,7 @@ describe('GovukTextInputComponent', () => {
 
   it('should not set aria-describedby when hint and error are missing', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
+      throw new Error('component or fixture returned null');
       return;
     }
 

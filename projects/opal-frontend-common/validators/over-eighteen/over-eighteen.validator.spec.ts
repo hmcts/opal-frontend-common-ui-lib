@@ -3,19 +3,23 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { overEighteenValidator } from './over-eighteen.validator';
 import { DateTime } from 'luxon';
 import { DateService } from '@hmcts/opal-frontend-common/services/date-service';
+import { describe, vi, beforeEach, it, expect } from 'vitest';
 
 describe('overEighteenValidator', () => {
   let formGroup: FormGroup;
-  let dateService: jasmine.SpyObj<DateService>;
+  let getFromFormat: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
-    const dateServiceSpy = jasmine.createSpyObj('DateService', ['getFromFormat']);
+    getFromFormat = vi.fn().mockName('DateService.getFromFormat');
+    const dateServiceSpy = {
+      getFromFormat,
+    } as unknown as DateService;
 
     TestBed.configureTestingModule({
       providers: [{ provide: DateService, useValue: dateServiceSpy }],
     }).compileComponents();
 
-    dateService = TestBed.inject(DateService) as jasmine.SpyObj<DateService>;
+    TestBed.inject(DateService);
 
     formGroup = new FormGroup(
       {
@@ -54,7 +58,7 @@ describe('overEighteenValidator', () => {
   });
 
   it('should return { underEighteen: true } if the date is less than 18 years ago', () => {
-    dateService.getFromFormat.and.returnValue(DateTime.now().minus({ years: 17 }));
+    getFromFormat.mockReturnValue(DateTime.now().minus({ years: 17 }));
 
     formGroup.setValue({
       dayOfMonth: '01',
@@ -70,7 +74,7 @@ describe('overEighteenValidator', () => {
   });
 
   it('should return null if the date is 18 years ago or more', () => {
-    dateService.getFromFormat.and.returnValue(DateTime.now().minus({ years: 18 }));
+    getFromFormat.mockReturnValue(DateTime.now().minus({ years: 18 }));
 
     formGroup.setValue({
       dayOfMonth: '01',
@@ -85,7 +89,7 @@ describe('overEighteenValidator', () => {
   });
 
   it('should return null if the date is 18 years ago or more (singular numbers)', () => {
-    dateService.getFromFormat.and.returnValue(DateTime.now().minus({ years: 18 }));
+    getFromFormat.mockReturnValue(DateTime.now().minus({ years: 18 }));
 
     formGroup.setValue({
       dayOfMonth: '1',
@@ -100,7 +104,7 @@ describe('overEighteenValidator', () => {
   });
 
   it('should handle invalid date formats correctly', () => {
-    dateService.getFromFormat.and.returnValue(DateTime.invalid('Invalid date'));
+    getFromFormat.mockReturnValue(DateTime.invalid('Invalid date'));
 
     formGroup.setValue({
       dayOfMonth: '32', // Invalid day

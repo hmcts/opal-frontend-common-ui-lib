@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { GovukRadioComponent } from './govuk-radio.component';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { vi, expect } from 'vitest';
 
 @Component({
   template: `<opal-lib-govuk-radio
@@ -34,14 +34,9 @@ function ThrowingRadios() {
 describe('GovukRadioComponent', () => {
   let component: TestHostComponent | null;
   let fixture: ComponentFixture<TestHostComponent> | null;
-  let initOuterRadiosSpy: jasmine.Spy;
 
   beforeEach(async () => {
     document.body.classList.add('govuk-frontend-supported', 'js-enabled');
-    initOuterRadiosSpy = spyOn(
-      GovukRadioComponent.prototype as unknown as { initOuterRadios: () => void },
-      'initOuterRadios',
-    ).and.stub();
 
     await TestBed.configureTestingModule({
       imports: [TestHostComponent],
@@ -49,7 +44,6 @@ describe('GovukRadioComponent', () => {
 
     fixture = TestBed.createComponent(TestHostComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   afterAll(() => {
@@ -64,57 +58,56 @@ describe('GovukRadioComponent', () => {
 
   it('should render into the Legend Text', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
+    fixture.detectChanges();
     const element = fixture.nativeElement.querySelector('#test > .govuk-fieldset__legend ');
-    expect(element.innerText).toBe('Legend Text');
+    expect(element.textContent?.trim()).toBe('Legend Text');
   });
 
   it('should render into the Legend Hint', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
+    fixture.detectChanges();
     const element = fixture.nativeElement.querySelector('#test-hint');
-    expect(element.innerText).toBe('Legend Hint');
+    expect(element.textContent?.trim()).toBe('Legend Hint');
   });
 
   it('should add a legend class', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
+    fixture.detectChanges();
     const element = fixture.nativeElement.querySelector('#test > .govuk-fieldset__legend.legend-class');
-    expect(element.innerText).toBe('Legend Text');
+    expect(element.textContent?.trim()).toBe('Legend Text');
   });
 
   it('should add a radio class', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
+    fixture.detectChanges();
     const element = fixture.nativeElement.querySelector('#test > .radio-class');
     expect(element.textContent?.trim()).toBe('Hello World');
   });
 
   it('should set aria-describedby with hint only', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
+    fixture.detectChanges();
     const fieldset = fixture.nativeElement.querySelector('#test');
     expect(fieldset.getAttribute('aria-describedby')).toBe('test-hint');
   });
 
   it('should set aria-describedby with error only', () => {
     if (!fixture || !component) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
     component.legendHint = '';
@@ -127,8 +120,7 @@ describe('GovukRadioComponent', () => {
 
   it('should set aria-describedby with hint and error', () => {
     if (!fixture || !component) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
     component.errors = 'Error';
@@ -140,8 +132,7 @@ describe('GovukRadioComponent', () => {
 
   it('should not set aria-describedby when hint and error are missing', () => {
     if (!fixture || !component) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
     component.legendHint = '';
@@ -154,12 +145,10 @@ describe('GovukRadioComponent', () => {
 
   it('should return early when radios root is missing', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
-    initOuterRadiosSpy.and.callThrough();
-
+    fixture.detectChanges();
     const debugElement = fixture.debugElement.query(By.directive(GovukRadioComponent));
     const host = debugElement.nativeElement as HTMLElement;
     const radios = host.querySelector('.govuk-radios');
@@ -173,19 +162,16 @@ describe('GovukRadioComponent', () => {
 
   it('should return early when radios are already initialised', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
-    initOuterRadiosSpy.and.callThrough();
-
+    fixture.detectChanges();
     const debugElement = fixture.debugElement.query(By.directive(GovukRadioComponent));
     const host = debugElement.nativeElement as HTMLElement;
     const radios = host.querySelector('.govuk-radios') as HTMLElement;
 
     if (!radios) {
-      fail('radios element missing');
-      return;
+      throw new Error('radios element missing');
     }
 
     radios.dataset['opalGovukRadiosInitialised'] = 'true';
@@ -198,28 +184,29 @@ describe('GovukRadioComponent', () => {
 
   it('should mark radios as initialised when inputs are present', async () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
-    initOuterRadiosSpy.and.callThrough();
-
+    fixture.detectChanges();
     const debugElement = fixture.debugElement.query(By.directive(GovukRadioComponent));
     const host = debugElement.nativeElement as HTMLElement;
     const radios = host.querySelector('.govuk-radios') as HTMLElement;
 
     if (!radios) {
-      fail('radios element missing');
-      return;
+      throw new Error('radios element missing');
     }
 
     delete radios.dataset['opalGovukRadiosInitialised'];
 
     const radioComponent = debugElement.componentInstance as GovukRadioComponent;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const loadSpy = spyOn(radioComponent as any, 'loadGovukFrontend').and.returnValue(
-      Promise.resolve({ Radios: function () {} }),
-    );
+    const loadSpy = vi
+      .spyOn(
+        radioComponent as unknown as {
+          loadGovukFrontend: () => Promise<unknown>;
+        },
+        'loadGovukFrontend',
+      )
+      .mockReturnValue(Promise.resolve({ Radios: function () {} }));
     radioComponent['initOuterRadios']();
     await new Promise((resolve) => setTimeout(resolve, 0));
 
@@ -229,32 +216,33 @@ describe('GovukRadioComponent', () => {
 
   it('should fall back when radios constructor fails', async () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
-    initOuterRadiosSpy.and.callThrough();
-
+    fixture.detectChanges();
     const debugElement = fixture.debugElement.query(By.directive(GovukRadioComponent));
     const host = debugElement.nativeElement as HTMLElement;
     const radios = host.querySelector('.govuk-radios') as HTMLElement;
 
     if (!radios) {
-      fail('radios element missing');
-      return;
+      throw new Error('radios element missing');
     }
 
     delete radios.dataset['opalGovukRadiosInitialised'];
 
     // Simulate a govuk-frontend module where the Radios constructor exists but throws.
-    const initAllSpy = jasmine.createSpy('initAll');
-    const warnSpy = spyOn(console, 'warn');
+    const initAllSpy = vi.fn();
+    const warnSpy = vi.spyOn(console, 'warn');
 
     const radioComponent = debugElement.componentInstance as GovukRadioComponent;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const loadSpy = spyOn(radioComponent as any, 'loadGovukFrontend').and.returnValue(
-      Promise.resolve({ Radios: ThrowingRadios, initAll: initAllSpy }),
-    );
+    const loadSpy = vi
+      .spyOn(
+        radioComponent as unknown as {
+          loadGovukFrontend: () => Promise<unknown>;
+        },
+        'loadGovukFrontend',
+      )
+      .mockReturnValue(Promise.resolve({ Radios: ThrowingRadios, initAll: initAllSpy }));
 
     radioComponent['initOuterRadios']();
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -262,7 +250,7 @@ describe('GovukRadioComponent', () => {
     expect(loadSpy).toHaveBeenCalled();
     expect(warnSpy).toHaveBeenCalledWith(
       'Govuk Radios constructor failed for rootRadios, falling back to initAll',
-      jasmine.anything(),
+      expect.anything(),
     );
     expect(initAllSpy).toHaveBeenCalledWith({ scope: radios });
     expect(radios.dataset['opalGovukRadiosInitialised']).toBe('true');
@@ -270,18 +258,15 @@ describe('GovukRadioComponent', () => {
 
   it('should call Radios constructor when Radios is provided by govuk-frontend', async () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
-    initOuterRadiosSpy.and.callThrough();
-
+    fixture.detectChanges();
     const debugElement = fixture.debugElement.query(By.directive(GovukRadioComponent));
     const host = debugElement.nativeElement as HTMLElement;
     const radios = host.querySelector('.govuk-radios') as HTMLElement;
     if (!radios) {
-      fail('radios element missing');
-      return;
+      throw new Error('radios element missing');
     }
 
     // Ensure not initialised
@@ -295,10 +280,14 @@ describe('GovukRadioComponent', () => {
 
     const radioComponent = debugElement.componentInstance as GovukRadioComponent;
     // Stub loadGovukFrontend instead of spying on import()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const loadSpy = spyOn(radioComponent as any, 'loadGovukFrontend').and.returnValue(
-      Promise.resolve({ Radios: FakeRadios }),
-    );
+    const loadSpy = vi
+      .spyOn(
+        radioComponent as unknown as {
+          loadGovukFrontend: () => Promise<unknown>;
+        },
+        'loadGovukFrontend',
+      )
+      .mockReturnValue(Promise.resolve({ Radios: FakeRadios }));
 
     radioComponent['initOuterRadios']();
 
@@ -314,18 +303,15 @@ describe('GovukRadioComponent', () => {
 
   it('should call initAll(scope) when initAll is provided and Radios is absent', async () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
-    initOuterRadiosSpy.and.callThrough();
-
+    fixture.detectChanges();
     const debugElement = fixture.debugElement.query(By.directive(GovukRadioComponent));
     const host = debugElement.nativeElement as HTMLElement;
     const radios = host.querySelector('.govuk-radios') as HTMLElement;
     if (!radios) {
-      fail('radios element missing');
-      return;
+      throw new Error('radios element missing');
     }
 
     delete radios.dataset['opalGovukRadiosInitialised'];
@@ -340,8 +326,14 @@ describe('GovukRadioComponent', () => {
 
     const radioComponent = debugElement.componentInstance as GovukRadioComponent;
     // Stub loadGovukFrontend instead of spying on import()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const loadSpy = spyOn(radioComponent as any, 'loadGovukFrontend').and.returnValue(Promise.resolve(fakeModule));
+    const loadSpy = vi
+      .spyOn(
+        radioComponent as unknown as {
+          loadGovukFrontend: () => Promise<unknown>;
+        },
+        'loadGovukFrontend',
+      )
+      .mockReturnValue(Promise.resolve(fakeModule));
 
     radioComponent['initOuterRadios']();
 
@@ -355,44 +347,45 @@ describe('GovukRadioComponent', () => {
 
   it('should load govuk-frontend via loadGovukFrontend', async () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
+    fixture.detectChanges();
     const debugElement = fixture.debugElement.query(By.directive(GovukRadioComponent));
     const radioComponent = debugElement.componentInstance as GovukRadioComponent;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const module = await (radioComponent as any).loadGovukFrontend();
-    expect(typeof module?.initAll === 'function' || typeof module?.default?.initAll === 'function').toBeTrue();
+    expect(typeof module?.initAll === 'function' || typeof module?.default?.initAll === 'function').toBe(true);
   });
 
   it('should log an error when import fails', async () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
-    initOuterRadiosSpy.and.callThrough();
-
+    fixture.detectChanges();
     const debugElement = fixture.debugElement.query(By.directive(GovukRadioComponent));
     const host = debugElement.nativeElement as HTMLElement;
     const radios = host.querySelector('.govuk-radios') as HTMLElement;
     if (!radios) {
-      fail('radios element missing');
-      return;
+      throw new Error('radios element missing');
     }
 
     delete radios.dataset['opalGovukRadiosInitialised'];
 
     const radioComponent = debugElement.componentInstance as GovukRadioComponent;
     // Stub loadGovukFrontend instead of spying on import()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const loadSpy = spyOn(radioComponent as any, 'loadGovukFrontend').and.returnValue(
-      Promise.reject(new Error('boom')),
-    );
+    const loadSpy = vi
+      .spyOn(
+        radioComponent as unknown as {
+          loadGovukFrontend: () => Promise<unknown>;
+        },
+        'loadGovukFrontend',
+      )
+      .mockReturnValue(Promise.reject(new Error('boom')));
 
-    const errorSpy = spyOn(console, 'error');
+    const errorSpy = vi.spyOn(console, 'error');
 
     radioComponent['initOuterRadios']();
 
@@ -400,39 +393,42 @@ describe('GovukRadioComponent', () => {
     await new Promise((resolve) => setTimeout(resolve, 0));
 
     expect(loadSpy).toHaveBeenCalled();
-    expect(errorSpy).toHaveBeenCalledWith('Failed to import govuk-frontend for rootRadios init', jasmine.anything());
+    expect(errorSpy).toHaveBeenCalledWith('Failed to import govuk-frontend for rootRadios init', expect.anything());
   });
 
   it('should warn when neither Radios nor initAll are provided by govuk-frontend', async () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
-    initOuterRadiosSpy.and.callThrough();
-
+    fixture.detectChanges();
     const debugElement = fixture.debugElement.query(By.directive(GovukRadioComponent));
     const host = debugElement.nativeElement as HTMLElement;
     const radios = host.querySelector('.govuk-radios') as HTMLElement;
     if (!radios) {
-      fail('radios element missing');
-      return;
+      throw new Error('radios element missing');
     }
 
     delete radios.dataset['opalGovukRadiosInitialised'];
 
-    const warnSpy = spyOn(console, 'warn');
+    const warnSpy = vi.spyOn(console, 'warn');
 
     const radioComponent = debugElement.componentInstance as GovukRadioComponent;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const loadSpy = spyOn(radioComponent as any, 'loadGovukFrontend').and.returnValue(Promise.resolve({}));
+    const loadSpy = vi
+      .spyOn(
+        radioComponent as unknown as {
+          loadGovukFrontend: () => Promise<unknown>;
+        },
+        'loadGovukFrontend',
+      )
+      .mockReturnValue(Promise.resolve({}));
 
     radioComponent['initOuterRadios']();
 
     await new Promise((resolve) => setTimeout(resolve, 0));
 
     expect(loadSpy).toHaveBeenCalled();
-    expect(warnSpy).toHaveBeenCalledWith('govuk-frontend radios init not found for rootRadios', jasmine.anything());
+    expect(warnSpy).toHaveBeenCalledWith('govuk-frontend radios init not found for rootRadios', expect.anything());
     expect(radios.dataset['opalGovukRadiosInitialised']).toBe('true');
   });
 });

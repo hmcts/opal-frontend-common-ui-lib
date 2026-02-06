@@ -5,11 +5,12 @@ import { AppInsightsService } from './app-insights.service';
 import { TRANSFER_STATE_APP_INSIGHTS_CONFIG_MOCK } from '@hmcts/opal-frontend-common/services/transfer-state-service/mocks';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
+import { describe, vi, beforeEach, it, expect } from 'vitest';
 
 describe('AppInsightsService', () => {
   let service: AppInsightsService;
-  let trackPageViewSpy: jasmine.Spy;
-  let trackExceptionSpy: jasmine.Spy;
+  let trackPageViewSpy: ReturnType<typeof vi.spyOn>;
+  let trackExceptionSpy: ReturnType<typeof vi.spyOn>;
   let globalStore: GlobalStoreType;
 
   beforeEach(() => {
@@ -57,32 +58,38 @@ describe('AppInsightsService', () => {
     const pageName = 'Test Page';
     const pageUrl = '/test-url';
     await service.initialize();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    trackPageViewSpy = spyOn((service as any).appInsights, 'trackPageView');
+    const appInsights = (service as unknown as { appInsights: { trackPageView: (payload: unknown) => void } })
+      .appInsights;
+    trackPageViewSpy = vi.spyOn(appInsights, 'trackPageView');
 
     service.logPageView(pageName, pageUrl);
 
     expect(trackPageViewSpy).toHaveBeenCalledTimes(1);
-    expect(trackPageViewSpy).toHaveBeenCalledWith({
-      name: pageName,
-      uri: pageUrl,
-    });
+    expect(trackPageViewSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: pageName,
+        uri: pageUrl,
+      }),
+    );
   });
 
   it('should track an exception', async () => {
     const error = new Error('Test Error');
     const severityLevel = 2;
     await service.initialize();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    trackExceptionSpy = spyOn((service as any).appInsights, 'trackException');
+    const appInsights = (service as unknown as { appInsights: { trackException: (payload: unknown) => void } })
+      .appInsights;
+    trackExceptionSpy = vi.spyOn(appInsights, 'trackException');
 
     service.logException(error, severityLevel);
 
     expect(trackExceptionSpy).toHaveBeenCalledTimes(1);
-    expect(trackExceptionSpy).toHaveBeenCalledWith({
-      exception: error,
-      severityLevel,
-    });
+    expect(trackExceptionSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        exception: error,
+        severityLevel,
+      }),
+    );
   });
 
   it('should not track a page view if appInsightsConfig.enabled is false', () => {

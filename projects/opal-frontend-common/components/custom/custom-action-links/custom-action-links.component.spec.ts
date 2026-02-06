@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CustomActionLinksComponent } from './custom-action-links.component';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('CustomActionLinksComponent', () => {
   let component: CustomActionLinksComponent;
@@ -14,7 +15,7 @@ describe('CustomActionLinksComponent', () => {
 
     fixture = TestBed.createComponent(CustomActionLinksComponent);
     component = fixture.componentInstance;
-    component.id = 'test-id';
+    fixture.componentRef.setInput('id', 'test-id');
     fixture.detectChanges();
     hostElement = fixture.nativeElement;
   });
@@ -32,13 +33,13 @@ describe('CustomActionLinksComponent', () => {
   });
 
   it('should update host id when id input changes', () => {
-    component.id = 'new-id';
+    fixture.componentRef.setInput('id', 'new-id');
     fixture.detectChanges();
     expect(hostElement.getAttribute('id')).toEqual('new-id');
   });
 
   it('should update host class when classSize input changes', () => {
-    component.classSize = 'custom-class';
+    fixture.componentRef.setInput('classSize', 'custom-class');
     fixture.detectChanges();
     expect(hostElement.getAttribute('class')).toEqual('custom-class');
   });

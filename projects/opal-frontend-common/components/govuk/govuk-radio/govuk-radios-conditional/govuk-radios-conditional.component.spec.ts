@@ -4,6 +4,7 @@ import { GovukRadiosConditionalComponent } from './govuk-radios-conditional.comp
 import { Component } from '@angular/core';
 import { GovukRadiosItemComponent } from '../govuk-radios-item/govuk-radios-item.component';
 import { FormControl } from '@angular/forms';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 @Component({
   template: `
@@ -49,27 +50,27 @@ describe('GovukRadiosConditionalComponent', () => {
 
   it('should create with id', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
     const element = fixture.nativeElement.querySelector('#test-panel');
-    expect(element.innerText).toBe('Hello World');
+    expect(element.textContent?.trim()).toBe('Hello World');
   });
 
   it('should render the conditional panel hidden by default', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
     const element = fixture.nativeElement.querySelector('#test-panel');
-    expect(element.classList.contains('govuk-radios__conditional--hidden')).toBeTrue();
+    expect(element.classList.contains('govuk-radios__conditional--hidden')).toBe(true);
   });
 
   it('should match aria-controls with the conditional panel id', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 

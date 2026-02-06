@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukCheckboxesItemComponent } from './govuk-checkboxes-item.component';
 import { FormControl } from '@angular/forms';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 describe('GovukCheckboxesItemComponent', () => {
   let component: GovukCheckboxesItemComponent | null;
@@ -40,7 +41,7 @@ describe('GovukCheckboxesItemComponent', () => {
 
   it('should have extra label classes', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
     const elem = fixture.nativeElement.querySelector('.govuk-checkboxes__label.govuk-label--l');
@@ -49,7 +50,7 @@ describe('GovukCheckboxesItemComponent', () => {
 
   it('should have labelText', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
     const elem = fixture.nativeElement.querySelector('.govuk-label.govuk-label--l');
@@ -58,7 +59,7 @@ describe('GovukCheckboxesItemComponent', () => {
 
   it('should have extra input classes', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
@@ -68,7 +69,7 @@ describe('GovukCheckboxesItemComponent', () => {
 
   it('should have an input id', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
     const elem = fixture.nativeElement.querySelector('#test');
