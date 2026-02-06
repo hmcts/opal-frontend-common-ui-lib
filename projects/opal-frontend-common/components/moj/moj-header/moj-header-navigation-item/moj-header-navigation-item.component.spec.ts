@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 
 import { MojHeaderNavigationItemComponent } from './moj-header-navigation-item.component';
 
 describe('MojHeaderNavigationItemComponent', () => {
   let component: MojHeaderNavigationItemComponent;
   let fixture: ComponentFixture<MojHeaderNavigationItemComponent>;
-  let eventMock: jasmine.SpyObj<Event>;
+  let eventMock: Event;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -16,8 +17,8 @@ describe('MojHeaderNavigationItemComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    eventMock = jasmine.createSpyObj(Event, ['preventDefault']);
-    spyOn(component.actionClick, 'emit');
+    eventMock = { preventDefault: vi.fn() } as unknown as Event;
+    vi.spyOn(component.actionClick, 'emit');
   });
 
   it('should create', () => {

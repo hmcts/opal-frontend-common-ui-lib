@@ -1,1 +1,1 @@
-export * from './transform-item.constants';
+export * from './transform-item.constant';

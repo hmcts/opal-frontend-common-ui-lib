@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukInsetTextComponent } from './govuk-inset-text.component';
 import { Component } from '@angular/core';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 @Component({
   template: `<opal-lib-govuk-inset-text insetTextId="test">Hello World</opal-lib-govuk-inset-text>`,
@@ -35,11 +36,11 @@ describe('GovukInsetTextComponent', () => {
 
   it('should render into inset-text', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
     const element = fixture.nativeElement.querySelector('#test');
-    expect(element.innerText).toBe('Hello World');
+    expect(element.textContent?.trim()).toBe('Hello World');
   });
 });

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojSortableTableHeaderComponent } from './moj-sortable-table-header.component';
 import { By } from '@angular/platform-browser';
+import { describe, beforeEach, vi, it, expect } from 'vitest';
 
 describe('MojSortableTableHeaderComponent', () => {
   let component: MojSortableTableHeaderComponent;
@@ -13,7 +14,7 @@ describe('MojSortableTableHeaderComponent', () => {
 
     fixture = TestBed.createComponent(MojSortableTableHeaderComponent);
     component = fixture.componentInstance;
-    spyOn(component.sortChange, 'emit');
+    vi.spyOn(component.sortChange, 'emit');
     component.columnKey = 'test-column';
   });
 
@@ -114,7 +115,7 @@ describe('MojSortableTableHeaderComponent', () => {
   });
 
   it('should call toggleSort on button click', () => {
-    spyOn(component, 'toggleSort');
+    vi.spyOn(component, 'toggleSort');
     const button = fixture.debugElement.query(By.css('button'));
     button.nativeElement.click();
 

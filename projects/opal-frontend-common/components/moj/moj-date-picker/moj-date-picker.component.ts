@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,7 +14,7 @@ import { addGdsBodyClass } from '@hmcts/opal-frontend-common/components/govuk/he
 
 @Component({
   selector: 'opal-lib-moj-date-picker',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './moj-date-picker.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

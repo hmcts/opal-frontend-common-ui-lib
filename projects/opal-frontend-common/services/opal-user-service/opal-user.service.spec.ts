@@ -10,6 +10,7 @@ import { OPAL_USER_STATE_MOCK } from './mocks/opal-user-state.mock';
 import { OPAL_USER_PATHS } from './constants/opal-user-paths.constant';
 import { DateService } from '@hmcts/opal-frontend-common/services/date-service';
 import { DateTime } from 'luxon';
+import { describe, beforeEach, afterEach, it, expect, vi } from 'vitest';
 
 describe('OpalUserService', () => {
   let service: OpalUserService;
@@ -106,25 +107,19 @@ describe('OpalUserService', () => {
 
   it('should fetch fresh data when cache is expired', () => {
     // Mock DateService to simulate expired cache
-    const pastTime = DateTime.now().minus({ minutes: 35 }); // 35 minutes ago
-    const expiredTime = DateTime.now().minus({ minutes: 5 }); // Expired 5 minutes ago
+    const now = DateTime.now();
+    const pastTime = now.minus({ minutes: 35 }); // 35 minutes ago
+    const expiredTime = now.minus({ minutes: 5 }); // Expired 5 minutes ago
 
-    spyOn(dateService, 'getDateNow').and.returnValues(
-      pastTime, // cachedAt time
-      pastTime.plus({ minutes: 30 }), // expiryAt time
-      DateTime.now(), // current time for expiry check
-    );
+    vi.spyOn(dateService, 'getDateNow').mockReturnValueOnce(pastTime).mockReturnValueOnce(now).mockReturnValueOnce(now);
 
-    spyOn(dateService, 'getFromIso').and.returnValue(expiredTime);
+    vi.spyOn(dateService, 'getFromIso').mockReturnValue(expiredTime);
 
     // First call to populate cache with expired data
     service.getLoggedInUserState().subscribe();
 
     let req = httpMock.expectOne(OPAL_USER_PATHS.loggedInUserState);
     req.flush(mockUserState);
-
-    // Reset the spy to return current time for the second call
-    (dateService.getDateNow as jasmine.Spy).and.returnValue(DateTime.now());
 
     // Second call should fetch fresh data due to expired cache
     service.getLoggedInUserState().subscribe((response) => {
@@ -161,7 +156,7 @@ describe('OpalUserService', () => {
     const now = DateTime.now();
     globalStore.setUserStateCacheExpirationMilliseconds(customExpirationMilliseconds);
 
-    spyOn(dateService, 'getDateNow').and.returnValue(now);
+    vi.spyOn(dateService, 'getDateNow').mockReturnValue(now);
 
     service.getLoggedInUserState().subscribe();
 

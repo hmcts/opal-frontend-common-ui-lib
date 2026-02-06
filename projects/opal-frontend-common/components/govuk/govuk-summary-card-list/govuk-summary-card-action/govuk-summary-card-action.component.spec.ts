@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 import { GovukSummaryCardActionComponent } from './govuk-summary-card-action.component';
 
 describe('GovukSummaryCardActionComponent', () => {
@@ -32,12 +33,11 @@ describe('GovukSummaryCardActionComponent', () => {
 
   it('should test onClick', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
-    const event = jasmine.createSpyObj(Event, ['preventDefault']);
-    spyOn(component.clickEvent, 'emit');
+    const event = { preventDefault: vi.fn() } as unknown as Event;
+    vi.spyOn(component.clickEvent, 'emit');
 
     component.onClick(event, 'test');
 

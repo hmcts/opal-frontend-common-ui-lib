@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukListLinkComponent } from './govuk-list-link.component';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('GovukListLinkComponent', () => {
   let component: GovukListLinkComponent;
@@ -22,8 +23,8 @@ describe('GovukListLinkComponent', () => {
   });
 
   it('should emit linkClickEvent on handleClick', () => {
-    const fakeEvent = { preventDefault: jasmine.createSpy('preventDefault') } as unknown as Event;
-    spyOn(component.linkClickEvent, 'emit');
+    const fakeEvent = { preventDefault: vi.fn() } as unknown as Event;
+    vi.spyOn(component.linkClickEvent, 'emit');
     component.handleClick(fakeEvent);
     expect(fakeEvent.preventDefault).toHaveBeenCalled();
     expect(component.linkClickEvent.emit).toHaveBeenCalled();
@@ -31,7 +32,7 @@ describe('GovukListLinkComponent', () => {
 
   it('should handle event without preventDefault method gracefully', () => {
     const fakeEvent = {} as Event;
-    spyOn(component.linkClickEvent, 'emit');
+    vi.spyOn(component.linkClickEvent, 'emit');
     component.handleClick(fakeEvent);
     expect(component.linkClickEvent.emit).toHaveBeenCalled();
   });

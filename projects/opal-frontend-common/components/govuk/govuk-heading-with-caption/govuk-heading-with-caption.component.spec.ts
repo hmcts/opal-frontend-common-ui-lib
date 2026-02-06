@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukHeadingWithCaptionComponent } from './govuk-heading-with-caption.component';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 describe('GovukHeadingWithCaptionComponent', () => {
   let component: GovukHeadingWithCaptionComponent | null;

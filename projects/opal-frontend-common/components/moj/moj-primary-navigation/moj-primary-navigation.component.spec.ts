@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojPrimaryNavigationComponent } from './moj-primary-navigation.component';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('MojPrimaryNavigationComponent', () => {
   let component: MojPrimaryNavigationComponent;
@@ -38,7 +39,7 @@ describe('MojPrimaryNavigationComponent', () => {
   });
 
   it('should emit the fragment', () => {
-    spyOn(component.activeItemFragment, 'emit');
+    vi.spyOn(component.activeItemFragment, 'emit');
 
     component.ngOnInit();
     fixture.detectChanges();

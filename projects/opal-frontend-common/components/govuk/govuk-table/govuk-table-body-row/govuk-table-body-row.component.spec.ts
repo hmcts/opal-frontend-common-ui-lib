@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukTableBodyRowComponent } from './govuk-table-body-row.component';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 describe('GovukTableBodyRowComponent', () => {
   let component: GovukTableBodyRowComponent | null;
@@ -28,7 +29,7 @@ describe('GovukTableBodyRowComponent', () => {
 
   it('should have the correct host class', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 

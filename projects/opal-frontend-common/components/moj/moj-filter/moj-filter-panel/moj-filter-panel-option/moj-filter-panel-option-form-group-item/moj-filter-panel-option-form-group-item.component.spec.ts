@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojFilterPanelOptionFormGroupItemComponent } from './moj-filter-panel-option-form-group-item.component';
 import { IAbstractTableFilterOption } from 'projects/opal-frontend-common/components/abstract/abstract-table-filter/interfaces/abstract-table-filter.interface';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('MojFilterPanelOptionFormGroupItemComponent', () => {
   let component: MojFilterPanelOptionFormGroupItemComponent;
@@ -31,7 +32,7 @@ describe('MojFilterPanelOptionFormGroupItemComponent', () => {
       target: { checked: true },
     } as unknown as Event;
 
-    spyOn(component.changed, 'emit');
+    vi.spyOn(component.changed, 'emit');
     component.onCheckboxChange(fakeEvent, item);
 
     // Expect the emitted value to be a copy of item with selected: true.
@@ -47,7 +48,7 @@ describe('MojFilterPanelOptionFormGroupItemComponent', () => {
       target: { checked: false },
     } as unknown as Event;
 
-    spyOn(component.changed, 'emit');
+    vi.spyOn(component.changed, 'emit');
     component.onCheckboxChange(fakeEvent, item);
 
     expect(component.changed.emit).toHaveBeenCalledWith({
@@ -70,6 +71,6 @@ describe('MojFilterPanelOptionFormGroupItemComponent', () => {
 
   it('should apply the govuk-form-group class to the host element', () => {
     const hostElement = fixture.nativeElement as HTMLElement;
-    expect(hostElement.classList.contains('govuk-form-group')).toBeTrue();
+    expect(hostElement.classList.contains('govuk-form-group')).toBe(true);
   });
 });

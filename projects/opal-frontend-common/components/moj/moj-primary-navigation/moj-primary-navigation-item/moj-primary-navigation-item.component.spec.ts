@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojPrimaryNavigationItemComponent } from './moj-primary-navigation-item.component';
 import { ActivatedRoute, Router, provideRouter } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('MojPrimaryNavigationItemComponent', () => {
   let component: MojPrimaryNavigationItemComponent;
@@ -33,7 +34,7 @@ describe('MojPrimaryNavigationItemComponent', () => {
 
   it('should have item text', () => {
     const element = fixture.nativeElement.querySelector('.moj-primary-navigation__link');
-    expect(element.innerText).toBe(component.primaryNavigationItemText);
+    expect(element.textContent?.trim()).toBe(component.primaryNavigationItemText);
   });
 
   it('should be an active link', () => {
@@ -54,7 +55,7 @@ describe('MojPrimaryNavigationItemComponent', () => {
 
   it('should navigate to the correct route with fragment', () => {
     const event = new Event('click');
-    const navigateSpy = spyOn(router, 'navigate');
+    const navigateSpy = vi.spyOn(router, 'navigate');
 
     component.handleItemClick(event, component.primaryNavigationItemFragment);
 

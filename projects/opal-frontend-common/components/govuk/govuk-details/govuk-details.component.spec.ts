@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GovukDetailsComponent } from './govuk-details.component';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 @Component({
   template: `<opal-lib-govuk-details summaryText="Test Link"><p>This is a test</p></opal-lib-govuk-details>`,
@@ -35,7 +36,7 @@ describe('GovukDetailsComponent', () => {
 
   it('should render summary link - Test Link', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 
@@ -45,7 +46,7 @@ describe('GovukDetailsComponent', () => {
 
   it('should render detail text - This is a test', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
 

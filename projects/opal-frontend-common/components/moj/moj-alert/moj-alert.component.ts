@@ -1,11 +1,11 @@
 import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 import { MojAlertType } from './constants/alert-types.constant';
-import { CommonModule } from '@angular/common';
+
 import { MojAlertDismissComponent } from './moj-alert-dismiss/moj-alert-dismiss.component';
 
 @Component({
   selector: 'opal-lib-moj-alert, [opal-lib-moj-alert]',
-  imports: [CommonModule, MojAlertDismissComponent],
+  imports: [MojAlertDismissComponent],
   templateUrl: './moj-alert.component.html',
 })
 export class MojAlertComponent {

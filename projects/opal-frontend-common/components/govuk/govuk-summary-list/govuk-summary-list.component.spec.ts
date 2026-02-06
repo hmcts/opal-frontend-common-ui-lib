@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukSummaryListComponent } from './govuk-summary-list.component';
 import { Component } from '@angular/core';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 @Component({
   template: `<opal-lib-govuk-summary-list summaryListId="test">Hello World</opal-lib-govuk-summary-list>`,
@@ -35,10 +36,10 @@ describe('GovukSummaryListComponent', () => {
 
   it('should render into list ng-content', () => {
     if (!fixture) {
-      fail('fixture returned null');
+      throw new Error('fixture returned null');
       return;
     }
     const element = fixture.nativeElement.querySelector('#test');
-    expect(element.innerText).toBe('Hello World');
+    expect(element.textContent?.trim()).toBe('Hello World');
   });
 });

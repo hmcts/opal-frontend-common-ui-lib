@@ -1,5 +1,6 @@
 import { FormControl } from '@angular/forms';
 import { patternValidator } from './pattern.validator';
+import { describe, it, expect } from 'vitest';
 
 describe('patternValidator', () => {
   it('should return null if value matches pattern', () => {

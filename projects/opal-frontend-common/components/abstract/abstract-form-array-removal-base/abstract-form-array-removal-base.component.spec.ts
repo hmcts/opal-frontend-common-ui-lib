@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { AbstractFormArrayRemovalComponent } from './abstract-form-array-removal-base.component';
 import { of } from 'rxjs';
+import { describe, beforeEach, afterAll, it, expect, vi } from 'vitest';
 
 class TestAbstractFormArrayRemovalComponent extends AbstractFormArrayRemovalComponent {
   constructor() {
@@ -42,8 +43,7 @@ describe('AbstractFormArrayRemovalBase', () => {
 
   it('should retrieve control value or default value when control does not exist', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const formArray = new FormArray([new FormGroup({ field: new FormControl('test') })]);
@@ -60,8 +60,7 @@ describe('AbstractFormArrayRemovalBase', () => {
 
   it('should remove control and renumber the remaining controls', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const formArray = new FormArray([
@@ -77,8 +76,7 @@ describe('AbstractFormArrayRemovalBase', () => {
 
   it('should renumber the controls in a FormArray', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const formArray = new FormArray([
@@ -94,8 +92,7 @@ describe('AbstractFormArrayRemovalBase', () => {
 
   it('should update control keys in a form group', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const formGroup = new FormGroup({
@@ -119,34 +116,33 @@ describe('AbstractFormArrayRemovalBase', () => {
 
   it('should navigate to account-details page on handleRoute', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
-    const routerSpy = spyOn(component['router'], 'navigate');
+    const routerSpy = vi.spyOn(component['router'], 'navigate');
     component.handleRoute('test');
     expect(routerSpy).toHaveBeenCalledWith(['test'], { relativeTo: component['activatedRoute'].parent });
   });
 
   it('should navigate to relative route', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
-    const routerSpy = spyOn(component['router'], 'navigate');
+    const routerSpy = vi.spyOn(component['router'], 'navigate');
     component.handleRoute('test', true);
     expect(routerSpy).toHaveBeenCalledWith(['test']);
   });
 
   it('should navigate to relative route with event', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
-    const routerSpy = spyOn(component['router'], 'navigate');
-    const event = jasmine.createSpyObj('event', ['preventDefault']);
+    const routerSpy = vi.spyOn(component['router'], 'navigate');
+    const event = {
+      preventDefault: vi.fn().mockName('event.preventDefault'),
+    } as unknown as Event;
 
     component.handleRoute('test', true, event);
 

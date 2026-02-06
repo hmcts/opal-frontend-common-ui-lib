@@ -1,3 +1,4 @@
+import { describe, beforeEach, afterEach, it, expect } from 'vitest';
 import { addGdsBodyClass } from './add-gds-body-class';
 
 describe('addGdsBodyClass', () => {
@@ -13,16 +14,16 @@ describe('addGdsBodyClass', () => {
 
   it('should add govuk-frontend-supported class to the body', () => {
     document.body.classList.remove('govuk-frontend-supported', 'js-enabled');
-    expect(document.body.classList.contains('govuk-frontend-supported')).toBeFalse();
+    expect(document.body.classList.contains('govuk-frontend-supported')).toBe(false);
     addGdsBodyClass();
-    expect(document.body.classList.contains('govuk-frontend-supported')).toBeTrue();
+    expect(document.body.classList.contains('govuk-frontend-supported')).toBe(true);
   });
 
   it('should add js-enabled class to the body', () => {
     document.body.classList.remove('govuk-frontend-supported', 'js-enabled');
-    expect(document.body.classList.contains('js-enabled')).toBeFalse();
+    expect(document.body.classList.contains('js-enabled')).toBe(false);
     addGdsBodyClass();
-    expect(document.body.classList.contains('js-enabled')).toBeTrue();
+    expect(document.body.classList.contains('js-enabled')).toBe(true);
   });
 
   it('should not add duplicate classes if already present', () => {

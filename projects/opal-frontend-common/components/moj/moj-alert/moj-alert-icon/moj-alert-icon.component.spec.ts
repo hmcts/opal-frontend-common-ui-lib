@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MojAlertIconComponent } from './moj-alert-icon.component';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('MojAlertIconComponent', () => {
   let component: MojAlertIconComponent;

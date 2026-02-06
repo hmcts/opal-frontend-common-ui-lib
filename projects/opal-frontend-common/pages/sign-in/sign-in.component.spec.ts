@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SignInComponent } from './sign-in.component';
-import { ISignInStubForm } from './interfaces';
+import { ISignInStubForm } from './interfaces/sign-in-stub-form.interface';
 import { SSO_ENDPOINTS } from '@hmcts/opal-frontend-common/services/auth-service/constants';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('SignInComponent', () => {
   let component: SignInComponent;
@@ -28,7 +29,7 @@ describe('SignInComponent', () => {
   });
 
   it('should handleStubSignInFormSubmit', () => {
-    const spy = spyOn(component, 'handleStubSignInFormSubmit');
+    const spy = vi.spyOn(component, 'handleStubSignInFormSubmit');
     const mockFormData: ISignInStubForm = { email: 'test' };
 
     component.handleStubSignInFormSubmit(mockFormData);
@@ -38,7 +39,7 @@ describe('SignInComponent', () => {
   it('should handleStubSignInFormSubmit', () => {
     const formData: ISignInStubForm = { email: 'test' };
     const url = `${SSO_ENDPOINTS.login}?email=${formData.email}`;
-    const spy = spyOn(component, 'handleStubSignInFormSubmit').and.callFake(() => {
+    const spy = vi.spyOn(component, 'handleStubSignInFormSubmit').mockImplementation(() => {
       mockDocumentLocation.location.href = url;
     });
     component.handleStubSignInFormSubmit(formData);

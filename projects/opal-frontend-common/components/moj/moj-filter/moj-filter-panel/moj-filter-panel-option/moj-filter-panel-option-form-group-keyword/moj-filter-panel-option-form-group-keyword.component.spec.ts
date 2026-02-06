@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MojFilterPanelOptionFormGroupKeywordComponent } from './moj-filter-panel-option-form-group-keyword.component';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('MojFilterPanelOptionFormGroupKeywordComponent', () => {
   let component: MojFilterPanelOptionFormGroupKeywordComponent;
@@ -21,13 +22,13 @@ describe('MojFilterPanelOptionFormGroupKeywordComponent', () => {
   });
 
   it('should emit an empty string when no event is provided', () => {
-    spyOn(component.keywordChange, 'emit');
+    vi.spyOn(component.keywordChange, 'emit');
     component.onKeywordChange();
     expect(component.keywordChange.emit).toHaveBeenCalledWith('');
   });
 
   it('should emit the correct keyword when an event with a valid input value is provided', () => {
-    spyOn(component.keywordChange, 'emit');
+    vi.spyOn(component.keywordChange, 'emit');
 
     const inputValue = 'test keyword';
     const fakeEvent = { target: { value: inputValue } } as unknown as Event;

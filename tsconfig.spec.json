@@ -1,18 +1,10 @@
 /* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-      "outDir": "./out-tsc/spec",
-      "types": [
-        "jasmine"
-      ]
-    },
-    "include": [
-    "projects/opal-frontend-common/**/*.ts",
-    "**/*.d.ts"
-  ],
-    "exclude": [
-      "projects/**/*.routing.ts"
-    ]
-  }
-  
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/spec",
+    "types": ["vitest/globals"]
+  },
+  "include": ["projects/opal-frontend-common/**/*.ts", "**/*.d.ts"],
+  "exclude": ["projects/**/*.routing.ts"]
+}

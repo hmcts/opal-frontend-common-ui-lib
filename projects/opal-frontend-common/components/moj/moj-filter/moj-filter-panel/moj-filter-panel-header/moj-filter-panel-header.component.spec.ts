@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojFilterPanelHeaderComponent } from './moj-filter-panel-header.component';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('MojFilterPanelHeaderComponent', () => {
   let component: MojFilterPanelHeaderComponent;

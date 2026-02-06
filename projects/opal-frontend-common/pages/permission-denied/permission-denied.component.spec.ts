@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PermissionDeniedComponent } from './permission-denied.component';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('PermissionDeniedComponent', () => {
   let component: PermissionDeniedComponent;

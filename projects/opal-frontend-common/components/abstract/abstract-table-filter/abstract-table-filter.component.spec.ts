@@ -6,6 +6,7 @@ import {
   IAbstractTableFilterCategory,
 } from '@hmcts/opal-frontend-common/components/abstract/abstract-table-filter/interfaces';
 import { SortableValuesType } from '@hmcts/opal-frontend-common/components/abstract/abstract-table-filter/types';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 @Component({
   selector: 'opal-lib-test-concrete-filter',

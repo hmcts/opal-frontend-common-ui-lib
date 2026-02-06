@@ -1,20 +1,23 @@
+import type { MockedObject } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { MonetaryPipe } from './monetary.pipe';
 import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service';
 
 describe('MonetaryPipe', () => {
   let pipe: MonetaryPipe;
-  let utilsService: jasmine.SpyObj<UtilsService>;
+  let utilsService: MockedObject<UtilsService>;
 
   beforeEach(() => {
-    const utilsServiceSpy = jasmine.createSpyObj('UtilsService', ['convertToMonetaryString']);
+    const utilsServiceSpy = {
+      convertToMonetaryString: vi.fn().mockName('UtilsService.convertToMonetaryString'),
+    };
 
     TestBed.configureTestingModule({
       providers: [MonetaryPipe, { provide: UtilsService, useValue: utilsServiceSpy }],
     });
 
     pipe = TestBed.inject(MonetaryPipe);
-    utilsService = TestBed.inject(UtilsService) as jasmine.SpyObj<UtilsService>;
+    utilsService = TestBed.inject(UtilsService) as MockedObject<UtilsService>;
   });
 
   it('should create', () => {
@@ -22,7 +25,7 @@ describe('MonetaryPipe', () => {
   });
 
   it('should transform a number by calling utilsService.convertToMonetaryString', () => {
-    utilsService.convertToMonetaryString.and.returnValue('£123.45');
+    utilsService.convertToMonetaryString.mockReturnValue('£123.45');
 
     const result = pipe.transform(123.45);
 
@@ -31,7 +34,7 @@ describe('MonetaryPipe', () => {
   });
 
   it('should transform a string by calling utilsService.convertToMonetaryString', () => {
-    utilsService.convertToMonetaryString.and.returnValue('£67.89');
+    utilsService.convertToMonetaryString.mockReturnValue('£67.89');
 
     const result = pipe.transform('67.89');
 
@@ -40,7 +43,7 @@ describe('MonetaryPipe', () => {
   });
 
   it('should handle zero value', () => {
-    utilsService.convertToMonetaryString.and.returnValue('£0.00');
+    utilsService.convertToMonetaryString.mockReturnValue('£0.00');
 
     const result = pipe.transform(0);
 
@@ -49,7 +52,7 @@ describe('MonetaryPipe', () => {
   });
 
   it('should handle negative values', () => {
-    utilsService.convertToMonetaryString.and.returnValue('-£50.00');
+    utilsService.convertToMonetaryString.mockReturnValue('-£50.00');
 
     const result = pipe.transform(-50);
 
@@ -58,7 +61,7 @@ describe('MonetaryPipe', () => {
   });
 
   it('should handle large values', () => {
-    utilsService.convertToMonetaryString.and.returnValue('£1,234,567.89');
+    utilsService.convertToMonetaryString.mockReturnValue('£1,234,567.89');
 
     const result = pipe.transform(1234567.89);
 
@@ -67,7 +70,7 @@ describe('MonetaryPipe', () => {
   });
 
   it('should handle decimal string values', () => {
-    utilsService.convertToMonetaryString.and.returnValue('£99.99');
+    utilsService.convertToMonetaryString.mockReturnValue('£99.99');
 
     const result = pipe.transform('99.99');
 
@@ -76,7 +79,7 @@ describe('MonetaryPipe', () => {
   });
 
   it('should handle integer string values', () => {
-    utilsService.convertToMonetaryString.and.returnValue('£100.00');
+    utilsService.convertToMonetaryString.mockReturnValue('£100.00');
 
     const result = pipe.transform('100');
 

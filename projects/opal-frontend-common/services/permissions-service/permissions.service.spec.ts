@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { PermissionsService } from './permissions.service';
 import { OPAL_USER_STATE_MOCK } from '../opal-user-service/mocks/opal-user-state.mock';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('PermissionsService', () => {
   let service: PermissionsService;
@@ -25,7 +26,7 @@ describe('PermissionsService', () => {
       17,
       OPAL_USER_STATE_MOCK['business_unit_users'],
     );
-    expect(hasPermissionAccess).toBeTrue();
+    expect(hasPermissionAccess).toBe(true);
   });
 
   it('should not return permission access - hasBusinessUnitPermissionAccess', () => {
@@ -34,27 +35,27 @@ describe('PermissionsService', () => {
       99,
       OPAL_USER_STATE_MOCK['business_unit_users'],
     );
-    expect(hasPermissionAccess).toBeFalse();
+    expect(hasPermissionAccess).toBe(false);
   });
 
   it('should return true when no roles are provided - hasBusinessUnitPermissionAccess', () => {
     const result = service.hasBusinessUnitPermissionAccess(1, 1, []);
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('should return permission access - hasPermissionAccess', () => {
     const hasPermissionAccess = service.hasPermissionAccess(54, OPAL_USER_STATE_MOCK['business_unit_users']);
-    expect(hasPermissionAccess).toBeTrue();
+    expect(hasPermissionAccess).toBe(true);
   });
 
   it('should not return permission access - hasPermissionAccess', () => {
     const hasPermissionAccess = service.hasPermissionAccess(0, OPAL_USER_STATE_MOCK['business_unit_users']);
-    expect(hasPermissionAccess).toBeFalse();
+    expect(hasPermissionAccess).toBe(false);
   });
 
   it('should return true when no roles are provided - hasPermissionAccess', () => {
     const result = service.hasPermissionAccess(1, []);
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('should return [] when userState is null', () => {

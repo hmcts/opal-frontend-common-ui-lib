@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CustomHorizontalScrollPaneComponent } from './custom-horizontal-scroll-pane.component';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 @Component({
   template: `

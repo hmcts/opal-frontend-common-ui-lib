@@ -1,12 +1,13 @@
 import { UrlTree } from '@angular/router';
 import { of } from 'rxjs';
 import { runAuthGuardWithContext } from './helpers/run-auth-guard-with-context';
+import { describe, it, expect } from 'vitest';
 
 describe('helper - runAuthGuardWithContext', () => {
   it('should handle direct boolean return from authGuard', async () => {
     const authGuard = () => true;
     const result = await runAuthGuardWithContext(authGuard);
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('should handle direct UrlTree return from authGuard', async () => {
@@ -19,6 +20,6 @@ describe('helper - runAuthGuardWithContext', () => {
   it('should handle Observable return from authGuard', async () => {
     const authGuard = () => of(true);
     const result = await runAuthGuardWithContext(authGuard);
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 });
