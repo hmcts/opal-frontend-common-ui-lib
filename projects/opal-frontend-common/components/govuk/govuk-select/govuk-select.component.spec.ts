@@ -46,7 +46,6 @@ describe('GovukSelectComponent', () => {
   it('should have label text and an extra class', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const elem = fixture.debugElement.query(By.css('.ct-list')).nativeElement;
@@ -56,7 +55,6 @@ describe('GovukSelectComponent', () => {
   it('should have a select extra class', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const elem = fixture.debugElement.query(By.css('#court.extra-class')).nativeElement;
@@ -66,7 +64,6 @@ describe('GovukSelectComponent', () => {
   it('should have select hint', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const elem = fixture.debugElement.query(By.css('#court-hint')).nativeElement;
@@ -76,7 +73,6 @@ describe('GovukSelectComponent', () => {
   it('should set aria-describedby with hint only', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('selectHint', 'hint hint');
@@ -90,7 +86,6 @@ describe('GovukSelectComponent', () => {
   it('should set aria-describedby with error only', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('selectHint', '');
@@ -104,7 +99,6 @@ describe('GovukSelectComponent', () => {
   it('should set aria-describedby with hint and error', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('selectHint', 'hint hint');
@@ -118,7 +112,6 @@ describe('GovukSelectComponent', () => {
   it('should not set aria-describedby when hint and error are missing', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('selectHint', '');
@@ -132,7 +125,6 @@ describe('GovukSelectComponent', () => {
   it('should have populated the select', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const select: HTMLSelectElement = fixture.debugElement.query(By.css('#court')).nativeElement;

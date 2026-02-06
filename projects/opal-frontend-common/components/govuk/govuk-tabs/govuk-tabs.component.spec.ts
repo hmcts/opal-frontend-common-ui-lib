@@ -51,7 +51,6 @@ describe('GovukTabsComponent', () => {
   it('should render into list ng-content', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
     const element = fixture.nativeElement.querySelector('.govuk-tabs__list');
     expect(element.textContent ?? '').toContain('Test Tab');
@@ -60,7 +59,6 @@ describe('GovukTabsComponent', () => {
   it('should render into panels ng-content', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
     const element = fixture.nativeElement.querySelector('.govuk-tabs__panel');
     expect(element.textContent ?? '').toContain('Test Panel');
@@ -69,7 +67,6 @@ describe('GovukTabsComponent', () => {
   it('should label the tab list with the title', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const title = fixture.nativeElement.querySelector('.govuk-tabs__title');
@@ -91,7 +88,6 @@ describe('GovukTabsComponent', () => {
   it('should apply the govuk-frontend-supported class on the root element', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const root = fixture.nativeElement.querySelector('.govuk-tabs');
@@ -101,7 +97,6 @@ describe('GovukTabsComponent', () => {
   it('should derive the title id from the tab id', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const root = fixture.nativeElement.querySelector('.govuk-tabs');

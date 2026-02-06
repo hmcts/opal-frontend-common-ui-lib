@@ -478,7 +478,7 @@ describe('AlphagovAccessibleAutocompleteComponent', () => {
 
       expect(component['handleOnConfirm']).toHaveBeenCalledWith('france');
     } else {
-      throw new Error('onConfirm is not a function or is undefined');
+      throw new TypeError('onConfirm is not a function or is undefined');
     }
   });
 });

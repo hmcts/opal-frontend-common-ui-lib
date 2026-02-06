@@ -43,7 +43,6 @@ describe('GovukTextInputPrefixSuffixComponent', () => {
   it('should have extra label classes', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const elem = fixture.debugElement.query(By.css('.govuk-label.govuk-label--l')).nativeElement;
@@ -53,7 +52,6 @@ describe('GovukTextInputPrefixSuffixComponent', () => {
   it('should have labelText', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const elem = fixture.debugElement.query(By.css('.govuk-label.govuk-label--l')).nativeElement;
@@ -63,7 +61,6 @@ describe('GovukTextInputPrefixSuffixComponent', () => {
   it('should have extra input classes', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     const labelClass = 'govuk-input--width-20';
@@ -81,7 +78,6 @@ describe('GovukTextInputPrefixSuffixComponent', () => {
   it('should have a prefix and suffix attached to the input', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     component.prefixText = '£';
@@ -101,7 +97,6 @@ describe('GovukTextInputPrefixSuffixComponent', () => {
   it('should format value to two decimal places on blur', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     // Arrange
@@ -118,7 +113,6 @@ describe('GovukTextInputPrefixSuffixComponent', () => {
   it('should not format value if it is already formatted to two decimal places on blur', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     // Arrange
@@ -151,7 +145,6 @@ describe('GovukTextInputPrefixSuffixComponent', () => {
   it('should set aria-describedby with error only', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('errors', 'Error message');
@@ -164,7 +157,6 @@ describe('GovukTextInputPrefixSuffixComponent', () => {
   it('should not set aria-describedby when error is missing', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('errors', null);

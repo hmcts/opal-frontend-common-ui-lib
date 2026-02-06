@@ -34,7 +34,7 @@ describe('canDeactivateGuard', () => {
       canDeactivate: vi.fn().mockReturnValue(false),
     };
 
-    vi.spyOn(window, 'confirm').mockReturnValue(false); // Simulate user clicking Cancel
+    vi.spyOn(globalThis, 'confirm').mockReturnValue(false); // Simulate user clicking Cancel
 
     const result = canDeactivateGuard(mockComponent, mockCurrentRoute, mockCurrentState, mockNextState);
 
@@ -50,7 +50,7 @@ describe('canDeactivateGuard', () => {
       canDeactivate: vi.fn().mockReturnValue(false),
     };
 
-    vi.spyOn(window, 'confirm').mockReturnValue(true); // Simulate user clicking OK
+    vi.spyOn(globalThis, 'confirm').mockReturnValue(true); // Simulate user clicking OK
 
     const result = canDeactivateGuard(mockComponent, mockCurrentRoute, mockCurrentState, mockNextState);
 

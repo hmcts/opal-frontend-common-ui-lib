@@ -36,7 +36,6 @@ describe('GovukNotificationBannerComponent', () => {
   it('should create a success message', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('type', 'success');
@@ -74,7 +73,6 @@ describe('GovukNotificationBannerComponent', () => {
   it('should create a success message', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('type', 'information');

@@ -110,7 +110,6 @@ describe('GovukDateInputComponent', () => {
   it('should set aria-describedby with hint only', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('legendHint', 'For example, 04 06 1991');
@@ -126,7 +125,6 @@ describe('GovukDateInputComponent', () => {
   it('should set aria-describedby with error only', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('legendHint', '');
@@ -142,7 +140,6 @@ describe('GovukDateInputComponent', () => {
   it('should set aria-describedby with hint and error', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('legendHint', 'For example, 04 06 1991');
@@ -158,7 +155,6 @@ describe('GovukDateInputComponent', () => {
   it('should not set aria-describedby when hint and errors are missing', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('legendHint', '');

@@ -94,7 +94,6 @@ describe('GovukCheckboxesNewComponent', () => {
   it('should set aria-describedby with hint only', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     fixture.detectChanges();
@@ -105,7 +104,6 @@ describe('GovukCheckboxesNewComponent', () => {
   it('should set aria-describedby with error only', () => {
     if (!fixture || !component) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     component.legendHint = '';
@@ -119,7 +117,6 @@ describe('GovukCheckboxesNewComponent', () => {
   it('should set aria-describedby with hint and error', () => {
     if (!fixture || !component) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     component.errors = 'Error';
@@ -132,7 +129,6 @@ describe('GovukCheckboxesNewComponent', () => {
   it('should not set aria-describedby when hint and error are missing', () => {
     if (!fixture || !component) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     component.legendHint = '';

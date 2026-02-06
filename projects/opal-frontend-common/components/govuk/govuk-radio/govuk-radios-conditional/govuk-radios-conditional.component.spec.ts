@@ -61,7 +61,6 @@ describe('GovukRadiosConditionalComponent', () => {
   it('should render the conditional panel hidden by default', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.nativeElement.querySelector('#test-panel');
@@ -71,7 +70,6 @@ describe('GovukRadiosConditionalComponent', () => {
   it('should match aria-controls with the conditional panel id', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const input = fixture.nativeElement.querySelector('input[type="radio"]');

@@ -47,7 +47,6 @@ describe('GovukTabsPanelComponent', () => {
   it('should render into list ng-content', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
     const element = fixture.nativeElement.querySelector('#test-panel');
     expect(element.textContent ?? '').toContain('Hello World');
@@ -56,7 +55,6 @@ describe('GovukTabsPanelComponent', () => {
   it('should link the panel to the default tab id', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
     const element = fixture.nativeElement.querySelector('#test-panel');
     expect(element.getAttribute('aria-labelledby')).toBe('tab-test-panel');
@@ -65,7 +63,6 @@ describe('GovukTabsPanelComponent', () => {
   it('should render as a block element', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.nativeElement.querySelector('#test-panel') as HTMLElement;
@@ -93,7 +90,6 @@ describe('GovukTabsPanelComponent with custom tab id', () => {
   it('should use the provided tabItemId for aria-labelledby', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.nativeElement.querySelector('#custom-panel');
@@ -121,7 +117,6 @@ describe('GovukTabsPanelComponent without id', () => {
   it('should not set aria-labelledby when no id is present', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.nativeElement.querySelector('opal-lib-govuk-tabs-panel');

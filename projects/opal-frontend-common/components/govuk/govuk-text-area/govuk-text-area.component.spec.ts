@@ -96,7 +96,6 @@ describe('GovukTextAreaComponent', () => {
   it('should set aria-describedby with hint only', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('hintText', 'Hint text');
@@ -111,7 +110,6 @@ describe('GovukTextAreaComponent', () => {
   it('should set aria-describedby with error only', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('hintText', '');
@@ -126,7 +124,6 @@ describe('GovukTextAreaComponent', () => {
   it('should set aria-describedby with hint, error, and character count', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('hintText', 'Hint text');
@@ -141,7 +138,6 @@ describe('GovukTextAreaComponent', () => {
   it('should set aria-describedby with character count only', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('hintText', '');
@@ -156,7 +152,6 @@ describe('GovukTextAreaComponent', () => {
   it('should not set aria-describedby when hint, error, and character count are missing', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('hintText', '');

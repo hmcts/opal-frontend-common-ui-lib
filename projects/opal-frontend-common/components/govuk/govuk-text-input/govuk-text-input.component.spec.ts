@@ -43,7 +43,6 @@ describe('GovukTextInputComponent', () => {
   it('should have extra label classes', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const elem = fixture.debugElement.query(By.css('.govuk-label.govuk-label--l')).nativeElement;
@@ -53,7 +52,6 @@ describe('GovukTextInputComponent', () => {
   it('should have labelText', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const elem = fixture.debugElement.query(By.css('.govuk-label.govuk-label--l')).nativeElement;
@@ -63,7 +61,6 @@ describe('GovukTextInputComponent', () => {
   it('should have extra input classes', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     const labelClass = 'govuk-input--width-20';
@@ -81,7 +78,6 @@ describe('GovukTextInputComponent', () => {
   it('should set aria-describedby with hint only', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('hintText', 'Hint text');
@@ -95,7 +91,6 @@ describe('GovukTextInputComponent', () => {
   it('should set aria-describedby with hintHtml only', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('hintText', '');
@@ -110,7 +105,6 @@ describe('GovukTextInputComponent', () => {
   it('should set aria-describedby with error only', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('hintText', '');
@@ -125,7 +119,6 @@ describe('GovukTextInputComponent', () => {
   it('should set aria-describedby with hint and error', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('hintText', 'Hint text');
@@ -140,7 +133,6 @@ describe('GovukTextInputComponent', () => {
   it('should not set aria-describedby when hint and error are missing', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     fixture.componentRef.setInput('hintText', '');
