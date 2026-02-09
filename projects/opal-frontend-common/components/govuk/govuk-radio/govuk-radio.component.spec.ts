@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GovukRadioComponent } from './govuk-radio.component';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { vi, expect } from 'vitest';
+import { vi, expect, afterAll, beforeEach, describe, it } from 'vitest';
 
 @Component({
   template: `<opal-lib-govuk-radio

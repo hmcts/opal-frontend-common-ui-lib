@@ -93,7 +93,7 @@ export class MojDatePickerComponent implements OnInit {
    * Configures the date picker functionality using the moj library.
    */
   public configureDatePicker(): void {
-    import('@ministryofjustice/frontend/moj/all').then((datePicker) => {
+    import('@ministryofjustice/frontend/moj/all.mjs').then((datePicker) => {
       addGdsBodyClass();
       datePicker.initAll();
     });

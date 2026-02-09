@@ -10,7 +10,7 @@ declare module 'govuk-frontend' {
   export function initAll(options?: InitAllOptions): void;
 }
 
-declare module '@ministryofjustice/frontend/moj/all' {
+declare module '@ministryofjustice/frontend/moj/all.mjs' {
   export function initAll(): void;
 }
 

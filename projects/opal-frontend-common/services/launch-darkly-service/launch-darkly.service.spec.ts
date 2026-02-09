@@ -5,7 +5,7 @@ import { LAUNCH_DARKLY_FLAGS_MOCK } from './mocks/launch-darkly-flags.mock';
 import { LAUNCH_DARKLY_CHANGE_FLAGS_MOCK } from './mocks/launch-darkly-change-flags.mock';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
-import { vi, expect } from 'vitest';
+import { vi, expect, beforeEach, describe, it } from 'vitest';
 
 describe('LaunchDarklyService', () => {
   let service: LaunchDarklyService;

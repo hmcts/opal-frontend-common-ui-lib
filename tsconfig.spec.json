@@ -5,6 +5,6 @@
     "outDir": "./out-tsc/spec",
     "types": ["vitest/globals"]
   },
-  "include": ["projects/opal-frontend-common/**/*.ts", "**/*.d.ts"],
-  "exclude": ["projects/**/*.routing.ts"]
+  "exclude": ["node_modules/**", "dist/**", "out-tsc/**"],
+  "include": ["projects/**/**/*.ts", "projects/**/**/*.spec.ts", "projects/**/*.d.ts"]
 }

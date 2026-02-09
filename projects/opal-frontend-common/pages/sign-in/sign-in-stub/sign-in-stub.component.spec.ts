@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SignInStubComponent } from './sign-in-stub.component';
-import { SIGN_IN_STUB_FORM_MOCK } from '../mocks';
+import { SIGN_IN_STUB_FORM_MOCK } from '../mocks/sign-in-stub-form.mock';
 import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('SignInStubComponent', () => {
