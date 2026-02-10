@@ -61,7 +61,6 @@ describe('GovukNotificationBannerComponent', () => {
   it('should link the banner to the title id', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const bannerElement = fixture.debugElement.query(By.css('.govuk-notification-banner'));

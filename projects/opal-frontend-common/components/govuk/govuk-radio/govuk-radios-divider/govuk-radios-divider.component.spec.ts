@@ -36,7 +36,6 @@ describe('GovukRadiosDividerComponent', () => {
   it('should project the ng-content', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.nativeElement.querySelector('.govuk-radios__divider');

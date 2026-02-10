@@ -30,7 +30,6 @@ describe('GovukCancelLinkComponent', () => {
   it('should handle the click', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     vi.spyOn(component.linkClickEvent, 'emit');

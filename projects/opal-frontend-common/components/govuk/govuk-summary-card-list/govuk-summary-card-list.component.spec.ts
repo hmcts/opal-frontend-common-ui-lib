@@ -40,7 +40,6 @@ describe('GovukSummaryCardListComponent', () => {
   it('should render card title and content correctly', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.nativeElement;

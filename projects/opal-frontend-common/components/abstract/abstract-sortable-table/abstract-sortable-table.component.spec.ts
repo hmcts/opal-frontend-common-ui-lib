@@ -49,7 +49,6 @@ describe('AbstractSortableTableComponent', () => {
   it('should not set existing sort state', () => {
     if (!component || !service || !fixture) {
       throw new Error('component, service or fixture returned null');
-      return;
     }
     const newSortState = signal({ ...ABSTRACT_EXISTING_SORT_STATE_MOCK, imposition: 'none' } as IAbstractSortState);
     component.abstractExistingSortState = null;
@@ -62,7 +61,6 @@ describe('AbstractSortableTableComponent', () => {
   it('should not init with an existing sort state', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     const newSortState = signal({ ...ABSTRACT_EXISTING_SORT_STATE_MOCK, imposition: 'none' } as IAbstractSortState);
@@ -75,7 +73,6 @@ describe('AbstractSortableTableComponent', () => {
   it('should set an existing sort state', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     const newSortState = signal({ ...ABSTRACT_EXISTING_SORT_STATE_MOCK } as IAbstractSortState);
@@ -89,7 +86,6 @@ describe('AbstractSortableTableComponent', () => {
   it('should init with a new sort state', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     const newSortState = signal({ ...ABSTRACT_EXISTING_SORT_STATE_MOCK } as IAbstractSortState);
@@ -103,7 +99,6 @@ describe('AbstractSortableTableComponent', () => {
   it('should create a new sort state', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     const newSortState = signal({ ...ABSTRACT_EXISTING_SORT_STATE_MOCK, imposition: 'none' } as IAbstractSortState);
@@ -115,7 +110,6 @@ describe('AbstractSortableTableComponent', () => {
   it('should create a new sort state when tableData is null', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     const newSortState = signal({});
@@ -127,7 +121,6 @@ describe('AbstractSortableTableComponent', () => {
   it('should update sort state and sort data in ascending order', () => {
     if (!component || !service || !fixture) {
       throw new Error('component, service or fixture returned null');
-      return;
     }
     const event = { key: 'amountPaid', sortType: 'ascending' as const };
     const sortedData = service.sortObjectArrayAsc(
@@ -151,7 +144,6 @@ describe('AbstractSortableTableComponent', () => {
   it('should update sort state and sort data in descending order', () => {
     if (!component || !service || !fixture) {
       throw new Error('component, service or fixture returned null');
-      return;
     }
 
     const event = { key: 'amountPaid', sortType: 'descending' as const };
@@ -176,7 +168,6 @@ describe('AbstractSortableTableComponent', () => {
   it('should set sorted column signals when a sorted column is found', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     component.sortStateSignal.set(structuredClone(ABSTRACT_EXISTING_SORT_STATE_MOCK));
@@ -190,7 +181,6 @@ describe('AbstractSortableTableComponent', () => {
   it('should set sorted column signals to empty when no sorted column is found', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     component.sortStateSignal.set({});
@@ -204,7 +194,6 @@ describe('AbstractSortableTableComponent', () => {
   it('should set sortedTableDataSignal to filteredTableDataSignal when no sort key is active', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     const filteredData = MOCK_ABSTRACT_TABLE_DATA.slice(0, 1);
@@ -219,7 +208,6 @@ describe('AbstractSortableTableComponent', () => {
   it('should apply filters and sort data using onApplyFilters()', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture was null');
-      return;
     }
 
     component.sortedColumnTitleSignal.set('amountPaid');
@@ -237,7 +225,6 @@ describe('AbstractSortableTableComponent', () => {
   it('should clear all filters and reapply sort', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture was null');
-      return;
     }
 
     component.sortedColumnTitleSignal.set('creditor');

@@ -37,7 +37,6 @@ describe('GovukCheckboxesDividerComponent', () => {
   it('should project the ng-content', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
     const element = fixture.nativeElement.querySelector('.govuk-checkboxes__divider');
     expect(element.textContent?.trim()).toBe('Hello World');

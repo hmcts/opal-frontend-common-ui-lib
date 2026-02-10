@@ -33,7 +33,6 @@ describe('GovukTableBodyRowDataComponent', () => {
   it('should have the correct host class', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const hostElement: HTMLElement = fixture.nativeElement;
@@ -43,7 +42,6 @@ describe('GovukTableBodyRowDataComponent', () => {
   it('should set the host id to the key input', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
     fixture.detectChanges();
     const hostElement: HTMLElement = fixture.nativeElement;

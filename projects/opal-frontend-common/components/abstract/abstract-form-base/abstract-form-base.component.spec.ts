@@ -248,7 +248,6 @@ describe('AbstractFormBaseComponent', () => {
   it('should return an array of error summary entries for nested form group controls', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     component['fieldErrors'] = {
@@ -774,7 +773,6 @@ describe('AbstractFormBaseComponent', () => {
   it('should add controls to a form group', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     const formGroup = new FormGroup({});
@@ -1020,7 +1018,6 @@ describe('AbstractFormBaseComponent', () => {
   it('should clear all error messages', () => {
     if (!component) {
       throw new Error('Component is not initialized');
-      return;
     }
 
     // Set up initial error messages and errors
@@ -1043,7 +1040,6 @@ describe('AbstractFormBaseComponent', () => {
   it('should return an error summary entry for a FormRecord control when the record has errors', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     // Arrange: set fieldErrors metadata for the FormRecord key
@@ -1084,7 +1080,6 @@ describe('AbstractFormBaseComponent', () => {
   it('should create a default FormRecord error object (null, 999999999, null) and then filter it out when no fieldErrors mapping exists', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     // Ensure there is NO fieldErrors mapping for the FormRecord key
@@ -1114,7 +1109,6 @@ describe('AbstractFormBaseComponent', () => {
   it('should return null when controlPath is empty and controlKey is undefined (covers ternary true branch)', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     // Arrange: make the root form itself invalid via a form-level error
@@ -1136,7 +1130,6 @@ describe('AbstractFormBaseComponent', () => {
   it('should fall back to [] when Object.keys(controlErrors) returns undefined (covers || [] branch)', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     // Arrange: build a minimal form with a control-level error
@@ -1172,7 +1165,6 @@ describe('AbstractFormBaseComponent', () => {
   it('should set fieldErrors to {} when controlKey is undefined', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     // Arrange: create a form with a control that will produce errors

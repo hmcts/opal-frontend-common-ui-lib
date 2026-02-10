@@ -30,7 +30,6 @@ describe('GovukTableBodyRowComponent', () => {
   it('should have the correct host class', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const hostElement: HTMLElement = fixture.nativeElement;

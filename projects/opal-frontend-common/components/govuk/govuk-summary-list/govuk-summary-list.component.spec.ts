@@ -37,7 +37,6 @@ describe('GovukSummaryListComponent', () => {
   it('should render into list ng-content', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
     const element = fixture.nativeElement.querySelector('#test');
     expect(element.textContent?.trim()).toBe('Hello World');

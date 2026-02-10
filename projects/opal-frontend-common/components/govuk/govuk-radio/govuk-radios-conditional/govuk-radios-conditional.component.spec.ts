@@ -51,7 +51,6 @@ describe('GovukRadiosConditionalComponent', () => {
   it('should create with id', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.nativeElement.querySelector('#test-panel');

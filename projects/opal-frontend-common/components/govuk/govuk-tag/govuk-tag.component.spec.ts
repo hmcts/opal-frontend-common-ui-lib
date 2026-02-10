@@ -35,7 +35,6 @@ describe('GovukTagComponent', () => {
   it('should add the id', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.nativeElement.querySelector('#test');
@@ -46,7 +45,6 @@ describe('GovukTagComponent', () => {
   it('should add the class', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.nativeElement.querySelector('.test-class');
@@ -57,7 +55,6 @@ describe('GovukTagComponent', () => {
   it('should render into  ng-content', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.nativeElement.querySelector('#test');

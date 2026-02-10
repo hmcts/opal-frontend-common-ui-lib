@@ -64,7 +64,6 @@ describe('AbstractFormAliasBaseComponent', () => {
   it('should add controls to a form group', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
     const formGroup = new FormGroup({});
     const controls: IAbstractFormArrayControlValidation[] = [

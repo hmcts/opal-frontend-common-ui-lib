@@ -42,7 +42,6 @@ describe('GovukCheckboxesItemComponent', () => {
   it('should have extra label classes', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
     const elem = fixture.nativeElement.querySelector('.govuk-checkboxes__label.govuk-label--l');
     expect(elem).toBeTruthy();
@@ -51,7 +50,6 @@ describe('GovukCheckboxesItemComponent', () => {
   it('should have labelText', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
     const elem = fixture.nativeElement.querySelector('.govuk-label.govuk-label--l');
     expect(elem.textContent).toContain('test');
@@ -60,7 +58,6 @@ describe('GovukCheckboxesItemComponent', () => {
   it('should have extra input classes', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const elem = fixture.nativeElement.querySelector('.govuk-checkboxes__input.govuk-input--width-20');
@@ -70,7 +67,6 @@ describe('GovukCheckboxesItemComponent', () => {
   it('should have an input id', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
     const elem = fixture.nativeElement.querySelector('#test');
     expect(elem).toBeTruthy();

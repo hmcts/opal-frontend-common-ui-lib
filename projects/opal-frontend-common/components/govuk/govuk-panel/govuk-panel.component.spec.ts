@@ -37,7 +37,6 @@ describe('GovukPanelComponent', () => {
   it('should render panel title - Test Title', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.debugElement.query(By.css('.govuk-panel__title'));
@@ -47,7 +46,6 @@ describe('GovukPanelComponent', () => {
   it('should render panel body text - This is a test', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.debugElement.query(By.css('.govuk-panel__body'));

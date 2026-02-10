@@ -31,7 +31,6 @@ describe('GovukTableHeadingComponent', () => {
   it('should have the scope attribute set to "col"', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const thElement = fixture.debugElement.query(By.css('th'));
@@ -41,7 +40,6 @@ describe('GovukTableHeadingComponent', () => {
   it('should have the correct host class', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const thElement = fixture.debugElement.query(By.css('th'));

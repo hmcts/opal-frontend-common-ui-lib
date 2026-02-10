@@ -58,7 +58,6 @@ describe('GovukPaginationComponent', () => {
   it('should emit pageChange event on click', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     vi.spyOn(component.changePage, 'emit');

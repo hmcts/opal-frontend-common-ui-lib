@@ -277,7 +277,6 @@ describe('AlphagovAccessibleAutocompleteComponent', () => {
   it('should handle on confirm and input should be marked as dirty', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
     const selectedName = ALPHAGOV_ACCESSIBLE_AUTOCOMPLETE_ITEMS_MOCK[0].name;
     const inputValue = ALPHAGOV_ACCESSIBLE_AUTOCOMPLETE_ITEMS_MOCK[0].name;
@@ -306,7 +305,6 @@ describe('AlphagovAccessibleAutocompleteComponent', () => {
   it('should handle on confirm and input should be marked as pristine', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     const selectedName = undefined;
@@ -335,7 +333,6 @@ describe('AlphagovAccessibleAutocompleteComponent', () => {
   it('should get the control', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     const result = component.getControl;

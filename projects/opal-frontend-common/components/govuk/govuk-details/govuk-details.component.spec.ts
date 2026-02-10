@@ -37,7 +37,6 @@ describe('GovukDetailsComponent', () => {
   it('should render summary link - Test Link', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.debugElement.query(By.css('.govuk-details__summary-text'));
@@ -47,7 +46,6 @@ describe('GovukDetailsComponent', () => {
   it('should render detail text - This is a test', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.debugElement.query(By.css('.govuk-details__text'));

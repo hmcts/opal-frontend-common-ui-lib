@@ -51,7 +51,6 @@ describe('GovukCheckboxesNewComponent', () => {
   it('should render into the Legend Text', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
     fixture.detectChanges();
     const element = fixture.nativeElement.querySelector('#test > .govuk-fieldset__legend ');
@@ -61,7 +60,6 @@ describe('GovukCheckboxesNewComponent', () => {
   it('should render into the Legend Hint', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     fixture.detectChanges();
@@ -72,7 +70,6 @@ describe('GovukCheckboxesNewComponent', () => {
   it('should add a legend class', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     fixture.detectChanges();
@@ -83,7 +80,6 @@ describe('GovukCheckboxesNewComponent', () => {
   it('should add a checkbox class', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     fixture.detectChanges();

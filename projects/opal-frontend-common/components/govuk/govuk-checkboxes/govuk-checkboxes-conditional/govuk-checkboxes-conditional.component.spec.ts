@@ -39,7 +39,6 @@ describe('GovukCheckboxesConditionalComponent', () => {
   it('should create with id', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
     const element = fixture.nativeElement.querySelector('#test-conditional');
     expect(element.textContent?.trim()).toBe('Hello World');

@@ -48,7 +48,6 @@ describe('GovukDateInputComponent', () => {
   it('should have legend text', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const elem = fixture.debugElement.query(By.css('#dateOfBirth .govuk-fieldset__legend')).nativeElement;
@@ -59,7 +58,6 @@ describe('GovukDateInputComponent', () => {
   it('should have legend hint', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const elem = fixture.debugElement.query(By.css('#dateOfBirth #dateOfBirth-hint')).nativeElement;
@@ -70,7 +68,6 @@ describe('GovukDateInputComponent', () => {
   it('should have date inputs', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const day = fixture.debugElement.query(By.css('#dateOfBirth #dayOfBirth')).nativeElement;
@@ -85,7 +82,6 @@ describe('GovukDateInputComponent', () => {
   it('should have added a class to the legend', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const elem = fixture.debugElement.query(By.css('#dateOfBirth .govuk-fieldset__legend.test-class')).nativeElement;
@@ -95,7 +91,6 @@ describe('GovukDateInputComponent', () => {
   it('should have added a class to the day input', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const day = fixture.debugElement.query(By.css('#dateOfBirth #dayOfBirth.govuk-input--width-2')).nativeElement;

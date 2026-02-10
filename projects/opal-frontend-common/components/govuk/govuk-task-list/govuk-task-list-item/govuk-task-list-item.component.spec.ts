@@ -43,7 +43,6 @@ describe('GovukTaskListItemComponent', () => {
   it('should add the id', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.nativeElement.querySelector('#test');
@@ -54,7 +53,6 @@ describe('GovukTaskListItemComponent', () => {
   it('should add the class', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.nativeElement.querySelector('.test-class');
@@ -65,7 +63,6 @@ describe('GovukTaskListItemComponent', () => {
   it('should render into name ng-content', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.nativeElement.querySelector('#test .govuk-task-list__name-and-hint');
@@ -75,7 +72,6 @@ describe('GovukTaskListItemComponent', () => {
   it('should render into status ng-content', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.nativeElement.querySelector('#test .govuk-task-list__status');

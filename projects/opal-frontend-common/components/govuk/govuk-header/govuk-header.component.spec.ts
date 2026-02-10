@@ -48,7 +48,6 @@ describe('GovukHeaderComponent', () => {
   it('should render into organisationName ng-content', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.nativeElement.querySelector('.govuk-header__logotype-text');
@@ -58,7 +57,6 @@ describe('GovukHeaderComponent', () => {
   it('should render into serviceName ng-content', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.nativeElement.querySelector('.govuk-header__service-name');
@@ -68,7 +66,6 @@ describe('GovukHeaderComponent', () => {
   it('should render into linkText ng-content', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.nativeElement.querySelector('opal-lib-govuk-header-navigation-item');

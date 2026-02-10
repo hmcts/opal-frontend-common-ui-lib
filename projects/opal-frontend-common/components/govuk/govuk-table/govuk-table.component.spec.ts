@@ -37,7 +37,6 @@ describe('GovukTable1Component', () => {
   it('should accept tableClasses as input', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
     component.tableClasses = 'test-class';
     fixture.detectChanges();

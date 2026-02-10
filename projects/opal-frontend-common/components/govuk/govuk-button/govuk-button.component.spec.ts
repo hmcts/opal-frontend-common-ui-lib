@@ -28,7 +28,6 @@ describe('GovukButtonComponent', () => {
   it('should handle the button click', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
 
     vi.spyOn(component.buttonClickEvent, 'emit');

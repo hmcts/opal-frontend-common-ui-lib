@@ -55,7 +55,6 @@ describe('GovukSummaryListRowComponent', () => {
   it('should render into the name ng-content', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     fixture.detectChanges();
@@ -67,7 +66,6 @@ describe('GovukSummaryListRowComponent', () => {
   it('should render into the value ng-content', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     fixture.detectChanges();
@@ -79,7 +77,6 @@ describe('GovukSummaryListRowComponent', () => {
   it('should not render into the action ng-content', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
     fixture.detectChanges();
     const element = fixture.nativeElement.querySelector('#testRowTestActions');
@@ -90,7 +87,6 @@ describe('GovukSummaryListRowComponent', () => {
   it('should render into the action ng-content', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
-      return;
     }
     component.action = true;
     fixture.detectChanges();
@@ -103,7 +99,6 @@ describe('GovukSummaryListRowComponent', () => {
   it('should emit actionClick event when handleActionClick is called', () => {
     if (!componentGSLRC) {
       throw new Error('componentGSLRC returned null');
-      return;
     }
     const event = new Event('click');
     vi.spyOn(componentGSLRC.actionClick, 'emit');
@@ -116,7 +111,6 @@ describe('GovukSummaryListRowComponent', () => {
   it('should prevent default behavior when handleActionClick is called', () => {
     if (!componentGSLRC) {
       throw new Error('componentGSLRC returned null');
-      return;
     }
     const event = new Event('click');
     vi.spyOn(event, 'preventDefault');
@@ -129,7 +123,6 @@ describe('GovukSummaryListRowComponent', () => {
   it('should set the host values onInit', () => {
     if (!componentGSLRC || !fixtureGSLRC) {
       throw new Error('componentGSLRC or fixtureGSLRCreturned null');
-      return;
     }
 
     componentGSLRC.summaryListId = 'test';

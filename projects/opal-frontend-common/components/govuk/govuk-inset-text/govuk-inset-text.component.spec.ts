@@ -37,7 +37,6 @@ describe('GovukInsetTextComponent', () => {
   it('should render into inset-text', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.nativeElement.querySelector('#test');

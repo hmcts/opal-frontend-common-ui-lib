@@ -39,7 +39,6 @@ describe('GovukTaskListComponent', () => {
   it('should render into list ng-content', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.nativeElement.querySelector('#test');
@@ -49,7 +48,6 @@ describe('GovukTaskListComponent', () => {
   it('should have the added class', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
-      return;
     }
 
     const element = fixture.nativeElement.querySelector('.test-class');
