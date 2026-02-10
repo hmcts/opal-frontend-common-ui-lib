@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
 import { addGdsBodyClass } from '../helpers/add-gds-body-class';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { describe, beforeAll, beforeEach, afterAll, it, expect, vi } from 'vitest';
 
 @Component({
   template: `<opal-lib-govuk-tabs>
@@ -49,26 +50,23 @@ describe('GovukTabsComponent', () => {
 
   it('should render into list ng-content', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
     const element = fixture.nativeElement.querySelector('.govuk-tabs__list');
-    expect(element.innerText).toContain('Test Tab');
+    expect(element.textContent ?? '').toContain('Test Tab');
   });
 
   it('should render into panels ng-content', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
     const element = fixture.nativeElement.querySelector('.govuk-tabs__panel');
-    expect(element.innerText).toContain('Test Panel');
+    expect(element.textContent ?? '').toContain('Test Panel');
   });
 
   it('should label the tab list with the title', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const title = fixture.nativeElement.querySelector('.govuk-tabs__title');
@@ -80,7 +78,7 @@ describe('GovukTabsComponent', () => {
 
   it('should emit activeTabFragmentChange on fragment change', () => {
     const tabsComponent = fixture?.debugElement.children[0].componentInstance as GovukTabsComponent;
-    const emitSpy = spyOn(tabsComponent.activeTabFragmentChange, 'emit');
+    const emitSpy = vi.spyOn(tabsComponent.activeTabFragmentChange, 'emit');
 
     fragment$.next('companies');
 
@@ -89,18 +87,16 @@ describe('GovukTabsComponent', () => {
 
   it('should apply the govuk-frontend-supported class on the root element', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const root = fixture.nativeElement.querySelector('.govuk-tabs');
-    expect(root.classList.contains('govuk-frontend-supported')).toBeTrue();
+    expect(root.classList.contains('govuk-frontend-supported')).toBe(true);
   });
 
   it('should derive the title id from the tab id', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const root = fixture.nativeElement.querySelector('.govuk-tabs');

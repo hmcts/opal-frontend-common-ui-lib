@@ -1,7 +1,7 @@
-import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GovukTabsListItemComponent } from './govuk-tabs-list-item.component';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('GovukTabsListItemComponent', () => {
   let component: GovukTabsListItemComponent;
@@ -19,9 +19,9 @@ describe('GovukTabsListItemComponent', () => {
     component = fixture.componentInstance;
     router = TestBed.inject(Router);
     route = TestBed.inject(ActivatedRoute);
-    component.tabItemId = 'example';
-    component.tabItemFragment = 'example';
-    component.activeTabItemFragment = 'example';
+    fixture.componentRef.setInput('tabItemId', 'example');
+    fixture.componentRef.setInput('tabItemFragment', 'example');
+    fixture.componentRef.setInput('activeTabItemFragment', 'example');
     fixture.detectChanges();
   });
 
@@ -30,18 +30,17 @@ describe('GovukTabsListItemComponent', () => {
   });
 
   it('should be an active link', () => {
-    component.tabItemFragment = 'example';
-    component.activeTabItemFragment = 'example';
+    fixture.componentRef.setInput('tabItemFragment', 'example');
+    fixture.componentRef.setInput('activeTabItemFragment', 'example');
     fixture.detectChanges();
 
     const hostElement = fixture.nativeElement;
-    expect(hostElement.classList.contains('govuk-tabs__list-item--selected')).toBeTrue();
+    expect(hostElement.classList.contains('govuk-tabs__list-item--selected')).toBe(true);
   });
 
   it('should not be an active link', () => {
-    component.activeTabItemFragment = 'not-example';
-    const cdr = fixture.debugElement.injector.get<ChangeDetectorRef>(ChangeDetectorRef);
-    cdr.detectChanges();
+    fixture.componentRef.setInput('activeTabItemFragment', 'not-example');
+    fixture.detectChanges();
 
     const element = fixture.nativeElement.querySelector('.govuk-tabs__list-item--selected');
     expect(element).toBeFalsy();
@@ -49,7 +48,7 @@ describe('GovukTabsListItemComponent', () => {
 
   it('should navigate to the correct route with fragment', () => {
     const event = new Event('click');
-    const navigateSpy = spyOn(router, 'navigate');
+    const navigateSpy = vi.spyOn(router, 'navigate');
 
     component.handleItemClick(event, component.tabItemFragment);
 
@@ -79,13 +78,13 @@ describe('GovukTabsListItemComponent', () => {
   });
 
   it('should not apply selected class when tabItemFragment does not match activeTabItemFragment', () => {
-    component.tabItemFragment = 'different';
-    component.activeTabItemFragment = 'example';
+    fixture.componentRef.setInput('tabItemFragment', 'different');
+    fixture.componentRef.setInput('activeTabItemFragment', 'example');
     fixture.detectChanges();
 
     const hostElement = fixture.nativeElement;
-    expect(hostElement.classList.contains('govuk-tabs__list-item--selected')).toBeFalse();
-    expect(hostElement.classList.contains('govuk-tabs__list-item')).toBeTrue();
+    expect(hostElement.classList.contains('govuk-tabs__list-item--selected')).toBe(false);
+    expect(hostElement.classList.contains('govuk-tabs__list-item')).toBe(true);
   });
 
   it('should default the resolved tab id to the tab prefix when no container id is present', () => {

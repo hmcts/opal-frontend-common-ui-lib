@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { GovukPaginationComponent } from './govuk-pagination.component';
+import { describe, beforeEach, afterAll, it, expect, vi } from 'vitest';
 
 describe('GovukPaginationComponent', () => {
   let component: GovukPaginationComponent | null;
@@ -40,8 +41,7 @@ describe('GovukPaginationComponent', () => {
 
   it('should ellipsis skipped pages based on current page', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     component.limit = 10;
@@ -57,11 +57,10 @@ describe('GovukPaginationComponent', () => {
 
   it('should emit pageChange event on click', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
-    spyOn(component.changePage, 'emit');
+    vi.spyOn(component.changePage, 'emit');
     component.limit = 10;
     component.total = 1000;
 

@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojFilterPanelSelectedTagComponent } from './moj-filter-panel-selected-tag.component';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('MojFilterPanelSelectedTagComponent', () => {
   let component: MojFilterPanelSelectedTagComponent;
@@ -20,7 +21,7 @@ describe('MojFilterPanelSelectedTagComponent', () => {
   });
 
   it('should emit removeTagClicked event with the provided label when removeTag is called', () => {
-    spyOn(component.removeTagClicked, 'emit');
+    vi.spyOn(component.removeTagClicked, 'emit');
 
     const categoryName = 'Test Category';
     const optionValue = 'Test Tag';
@@ -30,10 +31,10 @@ describe('MojFilterPanelSelectedTagComponent', () => {
   });
 
   it('should call event.preventDefault if event is provided', () => {
-    spyOn(component.removeTagClicked, 'emit');
+    vi.spyOn(component.removeTagClicked, 'emit');
     const categoryName = 'Test Category';
     const optionValue = 'Test Tag';
-    const event = { preventDefault: jasmine.createSpy('preventDefault') } as unknown as Event;
+    const event = { preventDefault: vi.fn() } as unknown as Event;
 
     component.removeTag(categoryName, optionValue, event);
 

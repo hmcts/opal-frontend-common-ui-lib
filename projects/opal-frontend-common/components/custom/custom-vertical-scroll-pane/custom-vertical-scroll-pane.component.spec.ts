@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CustomVerticalScrollPaneComponent } from './custom-vertical-scroll-pane.component';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('CustomVerticalScrollPaneComponent', () => {
   let component: CustomVerticalScrollPaneComponent;

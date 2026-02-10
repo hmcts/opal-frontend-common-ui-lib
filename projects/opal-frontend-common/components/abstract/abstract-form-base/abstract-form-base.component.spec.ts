@@ -12,6 +12,7 @@ import { ABSTRACT_FORM_BASE_FIELD_ERRORS } from './mocks/abstract-form-base-fiel
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { IAbstractFormArrayControlValidation } from '../interfaces/abstract-form-array-control-validation.interface';
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 class TestAbstractFormBaseComponent extends AbstractFormBaseComponent {
   constructor() {
@@ -35,6 +36,17 @@ class TestAbstractFormBaseComponent extends AbstractFormBaseComponent {
 }
 
 describe('AbstractFormBaseComponent', () => {
+  beforeAll(() => {
+    if (!HTMLElement.prototype.scrollIntoView) {
+      Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
+        value: () => {
+          return;
+        },
+        configurable: true,
+      });
+    }
+  });
+
   let component: TestAbstractFormBaseComponent | null;
   let fixture: ComponentFixture<TestAbstractFormBaseComponent> | null;
 
@@ -70,19 +82,17 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should reset the form when handleClearForm is called', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
-    spyOn(component.form, 'reset');
+    vi.spyOn(component.form, 'reset');
     component.handleClearForm();
     expect(component.form.reset).toHaveBeenCalled();
   });
 
   it('should scroll to the label and focus the field when testScroll is called', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const fieldId = 'testField';
@@ -94,8 +104,8 @@ describe('AbstractFormBaseComponent', () => {
     labelElement.setAttribute('for', fieldId);
     document.body.appendChild(labelElement);
 
-    spyOn(fieldElement, 'focus');
-    spyOn(labelElement, 'scrollIntoView');
+    vi.spyOn(fieldElement, 'focus');
+    vi.spyOn(labelElement, 'scrollIntoView');
 
     component['scroll'](fieldId);
 
@@ -108,8 +118,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should scroll to the govuk-fieldset__legend if no label for fieldId is found', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const fieldId = 'testField';
@@ -121,8 +130,8 @@ describe('AbstractFormBaseComponent', () => {
     legendElement.classList.add('govuk-fieldset__legend');
     fieldElement.appendChild(legendElement);
 
-    spyOn(fieldElement, 'focus');
-    spyOn(legendElement, 'scrollIntoView');
+    vi.spyOn(fieldElement, 'focus');
+    vi.spyOn(legendElement, 'scrollIntoView');
 
     component['scroll'](fieldId);
 
@@ -134,8 +143,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should scroll to label[for=fieldId-autocomplete] if present', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const fieldId = 'testField';
@@ -147,8 +155,8 @@ describe('AbstractFormBaseComponent', () => {
     autocompleteLabelElement.setAttribute('for', `${fieldId}-autocomplete`);
     document.body.appendChild(autocompleteLabelElement);
 
-    spyOn(fieldElement, 'focus');
-    spyOn(autocompleteLabelElement, 'scrollIntoView');
+    vi.spyOn(fieldElement, 'focus');
+    vi.spyOn(autocompleteLabelElement, 'scrollIntoView');
 
     component['scroll'](fieldId);
 
@@ -161,12 +169,15 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should test scrollTo', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    spyOn<any>(component, 'scroll');
+    vi.spyOn(
+      component as unknown as {
+        scroll: (fieldId: string) => void;
+      },
+      'scroll',
+    );
 
     component.scrollTo('forename');
 
@@ -175,8 +186,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return the highest priority error', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const errorKeys = ['required', 'minLength'];
@@ -189,8 +199,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return null if errorKeys is empty', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const errorKeys: string[] = [];
@@ -202,8 +211,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return null if fieldErrors is empty', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const errorKeys = ['required', 'minLength'];
@@ -216,8 +224,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return null if nothing is not passed in', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const result = component['getHighestPriorityError']();
@@ -227,8 +234,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return null if errorKeys and fieldErrors are empty', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const errorKeys: string[] = [];
@@ -241,8 +247,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return an array of error summary entries for nested form group controls', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
     component['fieldErrors'] = {
@@ -279,8 +284,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should repopulate the form', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     component['rePopulateForm'](ABSTRACT_FORM_BASE_FORM_STATE_MOCK);
@@ -289,8 +293,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should remove error summary messages', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     component.formErrorSummaryMessage = ABSTRACT_FORM_BASE_FORM_DATE_ERROR_SUMMARY_MOCK.slice(0, 1);
@@ -302,8 +305,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return the indices of form error summary messages for given field IDs', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const fieldIds = ['dayOfMonth', 'monthOfYear', 'year'];
@@ -317,8 +319,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return an empty array if no form error summary messages match the field IDs', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const fieldIds = ['surname', 'address', 'phone'];
@@ -331,8 +332,7 @@ describe('AbstractFormBaseComponent', () => {
   });
   it('should return the indices of form error summary messages for given field IDs', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const fieldIds = ['dayOfMonth', 'monthOfYear', 'year'];
@@ -346,8 +346,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return an empty array if no form error summary messages match the field IDs', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const fieldIds = ['surname', 'address', 'phone'];
@@ -361,8 +360,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return the indices of form error summary messages to remove for date fields', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     component.formErrorSummaryMessage = ABSTRACT_FORM_BASE_FORM_DATE_ERROR_SUMMARY_MOCK;
@@ -374,8 +372,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return the indices of form error summary messages to remove for date fields when only two fields are present', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     component.formErrorSummaryMessage = ABSTRACT_FORM_BASE_FORM_DATE_ERROR_SUMMARY_MOCK.slice(0, 2);
@@ -387,8 +384,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return an empty array if no form error summary messages to remove for date fields', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     component.formErrorSummaryMessage = [];
@@ -400,8 +396,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should set the error messages', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const errorSummaryEntry: IAbstractFormBaseFormError[] = ABSTRACT_FORM_BASE_FORM_ERROR_SUMMARY_MOCK;
@@ -434,8 +429,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should set initial form error messages to null for each form control', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     component['setInitialErrorMessages']();
@@ -447,8 +441,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return an empty array if the form is valid', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     component.form.patchValue(ABSTRACT_FORM_BASE_FORM_STATE_MOCK);
@@ -459,8 +452,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return an empty array if the form control does not have a field error', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const invalidField = new FormGroup({
@@ -473,8 +465,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return an empty array if the form array does not have any field errors', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const formArray = new FormArray([
@@ -497,8 +488,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should handle FormArray containing non-FormGroup controls', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const formArray = new FormArray([
@@ -519,8 +509,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return the error summary entries', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     component['fieldErrors'] = ABSTRACT_FORM_BASE_FIELD_ERRORS;
@@ -532,8 +521,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return null as no control error', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     expect(component['getFieldErrorDetails'](['surname'])).toBeNull();
@@ -541,8 +529,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should manipulate the form error message for specified fields', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const fields = ['monthOfYear', 'dayOfMonth', 'year'];
@@ -562,8 +549,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should not manipulate the form error message if the error type does not match', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const fields = ['monthOfYear', 'dayOfMonth', 'year'];
@@ -578,8 +564,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return an empty array if formErrors is empty', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const fields = ['monthOfYear', 'dayOfMonth', 'year'];
@@ -594,8 +579,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should handle date input form errors', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     component.formErrors = ABSTRACT_FORM_BASE_FORM_ERROR_SUMMARY_MOCK;
@@ -613,8 +597,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return the highest priority form errors', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const formErrors: IAbstractFormBaseFormError[] = [
@@ -631,8 +614,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return an empty array if formErrors is empty', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const formErrors: IAbstractFormBaseFormError[] = [];
@@ -644,8 +626,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return all form errors if they have the same priority', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const formErrors: IAbstractFormBaseFormError[] = ABSTRACT_FORM_BASE_FORM_ERROR_SUMMARY_MOCK;
@@ -657,8 +638,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should split form errors into clean and removed form errors', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const fieldIds = ['monthOfYear', 'dayOfMonth', 'year'];
@@ -677,8 +657,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should emit form submit event with form value', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const formValue = ABSTRACT_FORM_BASE_FORM_STATE_MOCK;
@@ -692,34 +671,33 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should test handleRoute', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
-    const routerSpy = spyOn(component['router'], 'navigate');
+    const routerSpy = vi.spyOn(component['router'], 'navigate');
     component['handleRoute']('test');
     expect(routerSpy).toHaveBeenCalledWith(['test'], { relativeTo: component['activatedRoute'].parent });
   });
 
   it('should test handleRoute with no activated route', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
-    const routerSpy = spyOn(component['router'], 'navigate');
+    const routerSpy = vi.spyOn(component['router'], 'navigate');
     component['handleRoute']('test', { nonRelative: true });
     expect(routerSpy).toHaveBeenCalledWith(['test'], {});
   });
 
   it('should test handleRoute with event', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
-    const routerSpy = spyOn(component['router'], 'navigate');
-    const event = jasmine.createSpyObj('event', ['preventDefault']);
+    const routerSpy = vi.spyOn(component['router'], 'navigate');
+    const event = {
+      preventDefault: vi.fn().mockName('event.preventDefault'),
+    } as unknown as Event;
 
     component['handleRoute']('test', { event });
     expect(routerSpy).toHaveBeenCalledWith(['test'], { relativeTo: component['activatedRoute'].parent });
@@ -728,12 +706,13 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should test handleRoute with routeData', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
-    const routerSpy = spyOn(component['router'], 'navigate');
-    const event = jasmine.createSpyObj('event', ['preventDefault']);
+    const routerSpy = vi.spyOn(component['router'], 'navigate');
+    const event = {
+      preventDefault: vi.fn().mockName('event.preventDefault'),
+    } as unknown as Event;
     const routeData = { someData: 'test' };
 
     component['handleRoute']('test', { event, routeData });
@@ -746,11 +725,10 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should test handleRoute with fragment', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
-    const routerSpy = spyOn(component['router'], 'navigate');
+    const routerSpy = vi.spyOn(component['router'], 'navigate');
     const fragment = 'section-header';
 
     component['handleRoute']('test', { fragment });
@@ -762,8 +740,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should test hasUnsavedChanges', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     component['formSubmitted'] = false;
@@ -779,8 +756,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should set the value of the form control and mark it as touched', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const testValue = 'newValue';
@@ -791,13 +767,12 @@ describe('AbstractFormBaseComponent', () => {
 
     // Check updated state
     expect(component.form.controls[controlName].value).toBe(testValue);
-    expect(component.form.controls[controlName].touched).toBeTrue();
+    expect(component.form.controls[controlName].touched).toBe(true);
   });
 
   it('should add controls to a form group', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
     const formGroup = new FormGroup({});
@@ -817,8 +792,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should remove control name errors', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     component.formControlErrorMessages = {
@@ -832,8 +806,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should create a new control with the given control name and validators', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const controlName = 'testControl';
@@ -848,8 +821,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should remove a control from the form', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const controlName = 'surname';
@@ -860,8 +832,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should create a form control with the specified validators and initial value', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const validators = [Validators.required];
@@ -876,8 +847,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should create a form control with default initial value of null', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const validators = [Validators.required];
@@ -891,8 +861,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should convert input value to uppercase when handleUppercaseInputMask is called', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const mockInputElement = document.createElement('input');
@@ -901,7 +870,7 @@ describe('AbstractFormBaseComponent', () => {
     const event = new Event('input');
     Object.defineProperty(event, 'target', { writable: false, value: mockInputElement });
 
-    spyOn(component['utilsService'], 'upperCaseAllLetters').and.callThrough();
+    vi.spyOn(component['utilsService'], 'upperCaseAllLetters');
 
     component.handleUppercaseInputMask(event);
 
@@ -911,17 +880,16 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should focus and scroll to the error summary if present', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const errorSummaryElement = document.createElement('div');
     errorSummaryElement.classList.add('govuk-error-summary');
     document.body.appendChild(errorSummaryElement);
     // Spy on focus after appending to the DOM
-    spyOn(errorSummaryElement, 'focus');
+    vi.spyOn(errorSummaryElement, 'focus');
 
-    const scrollSpy = spyOn(component['utilsService'], 'scrollToTop');
+    const scrollSpy = vi.spyOn(component['utilsService'], 'scrollToTop');
 
     component['focusAndScrollToErrorSummary']();
 
@@ -933,8 +901,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should call focusAndScrollToErrorSummary when form is invalid on submit', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     // Make form invalid
@@ -954,9 +921,9 @@ describe('AbstractFormBaseComponent', () => {
     const errorSummary = document.createElement('div');
     errorSummary.classList.add('govuk-error-summary');
     document.body.appendChild(errorSummary);
-    spyOn(errorSummary, 'focus');
+    vi.spyOn(errorSummary, 'focus');
 
-    const scrollSpy = spyOn(component['utilsService'], 'scrollToTop');
+    const scrollSpy = vi.spyOn(component['utilsService'], 'scrollToTop');
 
     component.handleFormSubmit(new SubmitEvent('submit'));
 
@@ -968,8 +935,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should update an existing control with new validators', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const controlName = 'surname';
@@ -978,13 +944,12 @@ describe('AbstractFormBaseComponent', () => {
     component['updateControl'](controlName, [Validators.required]);
 
     const control = component.form.get(controlName);
-    expect(control?.hasValidator(Validators.required)).toBeTrue();
+    expect(control?.hasValidator(Validators.required)).toBe(true);
   });
 
   it('should create a control if it does not exist when updating validators', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const controlName = 'newControl';
@@ -992,13 +957,12 @@ describe('AbstractFormBaseComponent', () => {
 
     const control = component.form.get(controlName);
     expect(control).toBeDefined();
-    expect(control?.hasValidator(Validators.required)).toBeTrue();
+    expect(control?.hasValidator(Validators.required)).toBe(true);
   });
 
   it('should emit formSubmit with nestedFlow true when valid form is submitted via nested-flow button', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const mockFormData = ABSTRACT_FORM_BASE_FORM_STATE_MOCK;
@@ -1015,7 +979,7 @@ describe('AbstractFormBaseComponent', () => {
       value: { className: 'nested-flow' },
     });
 
-    const emitSpy = spyOn(component['formSubmit'], 'emit');
+    const emitSpy = vi.spyOn(component['formSubmit'], 'emit');
 
     component.handleFormSubmit(submitEvent);
 
@@ -1027,8 +991,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should emit formSubmit with nestedFlow false when event.submitter is undefined', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const mockFormData = ABSTRACT_FORM_BASE_FORM_STATE_MOCK;
@@ -1042,7 +1005,7 @@ describe('AbstractFormBaseComponent', () => {
       value: undefined,
     });
 
-    const emitSpy = spyOn(component['formSubmit'], 'emit');
+    const emitSpy = vi.spyOn(component['formSubmit'], 'emit');
 
     component.handleFormSubmit(submitEvent);
 
@@ -1054,8 +1017,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should clear all error messages', () => {
     if (!component) {
-      fail('Component is not initialized');
-      return;
+      throw new Error('Component is not initialized');
     }
 
     // Set up initial error messages and errors
@@ -1077,8 +1039,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return an error summary entry for a FormRecord control when the record has errors', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
     // Arrange: set fieldErrors metadata for the FormRecord key
@@ -1118,8 +1079,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should create a default FormRecord error object (null, 999999999, null) and then filter it out when no fieldErrors mapping exists', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
     // Ensure there is NO fieldErrors mapping for the FormRecord key
@@ -1148,8 +1108,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return null when controlPath is empty and controlKey is undefined (covers ternary true branch)', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
     // Arrange: make the root form itself invalid via a form-level error
@@ -1170,8 +1129,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should fall back to [] when Object.keys(controlErrors) returns undefined (covers || [] branch)', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
     // Arrange: build a minimal form with a control-level error
@@ -1192,7 +1150,7 @@ describe('AbstractFormBaseComponent', () => {
 
     // Spy on Object.keys to simulate an unexpected undefined return value,
     // forcing the `|| []` fallback to execute
-    const keysSpy = spyOn(Object, 'keys').and.returnValue(undefined as unknown as string[]);
+    const keysSpy = vi.spyOn(Object, 'keys').mockReturnValue(undefined as unknown as string[]);
 
     // Act
     const result = component['getFieldErrorDetails'](['foo']);
@@ -1201,13 +1159,12 @@ describe('AbstractFormBaseComponent', () => {
     expect(result).toBeNull();
 
     // Restore
-    keysSpy.and.callThrough();
+    keysSpy.mockRestore();
   });
 
   it('should set fieldErrors to {} when controlKey is undefined', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
     // Arrange: create a form with a control that will produce errors
@@ -1229,8 +1186,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should hit the fieldErrors = {} branch when controlKey is undefined and control has errors', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     // Ensure an empty controlPath so controlKey === undefined
@@ -1239,7 +1195,7 @@ describe('AbstractFormBaseComponent', () => {
     // Spy on form.get to return a control-like object with errors so the code enters the `if (controlErrors)` block
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const fakeControlWithErrors = { errors: { required: true } } as unknown as any;
-    const getSpy = spyOn(component.form, 'get').and.returnValue(fakeControlWithErrors);
+    const getSpy = vi.spyOn(component.form, 'get').mockReturnValue(fakeControlWithErrors);
 
     // Act
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1253,8 +1209,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('objectFromFormRecord should map keys to numbers and values to booleans', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const record = new FormRecord({
@@ -1274,8 +1229,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('objectFromFormRecord should default to identity for keys and values when no mappers are provided', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const record = new FormRecord({
@@ -1290,8 +1244,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('patchFormRecordFromObject should only update controls whose value changes (no emit)', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const r = new FormRecord({
@@ -1299,8 +1252,8 @@ describe('AbstractFormBaseComponent', () => {
       '2': new FormControl(true),
     });
 
-    const spy1 = spyOn(r.get('1') as FormControl<boolean>, 'setValue').and.callThrough();
-    const spy2 = spyOn(r.get('2') as FormControl<boolean>, 'setValue').and.callThrough();
+    const spy1 = vi.spyOn(r.get('1') as FormControl<boolean>, 'setValue');
+    const spy2 = vi.spyOn(r.get('2') as FormControl<boolean>, 'setValue');
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (component as any)['patchFormRecordFromObject'](r, { '1': true, '2': true }, { emitEvent: false });
@@ -1310,10 +1263,9 @@ describe('AbstractFormBaseComponent', () => {
     expect(spy2).not.toHaveBeenCalled();
   });
 
-  it('patchFormRecordFromObject should respect mapKey and emitEvent=true by emitting once per changed control', (done) => {
+  it('patchFormRecordFromObject should respect mapKey and emitEvent=true by emitting once per changed control', async () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const r = new FormRecord({
@@ -1336,22 +1288,22 @@ describe('AbstractFormBaseComponent', () => {
       expect((r.get('11') as FormControl<number>).value).toBe(1);
       expect(emissions).toBe(1); // only key '10' changed
       sub.unsubscribe();
-      done();
     }, 0);
   });
 
   it('patchFormRecordFromObject should skip setValue when isEqual comparator deems values equal', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
-    type Obj = { x: number };
+    type Obj = {
+      x: number;
+    };
     const r = new FormRecord({
       a: new FormControl<Obj>({ x: 1 }),
     });
 
-    const spy = spyOn(r.get('a') as FormControl<Obj>, 'setValue');
+    const spy = vi.spyOn(r.get('a') as FormControl<Obj>, 'setValue');
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (component as any)['patchFormRecordFromObject'](
@@ -1365,8 +1317,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('patchFormRecordFromObject should default emitEvent to false when not provided', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const r = new FormRecord({
@@ -1374,8 +1325,8 @@ describe('AbstractFormBaseComponent', () => {
       '2': new FormControl(true),
     });
 
-    const spy1 = spyOn(r.get('1') as FormControl<boolean>, 'setValue').and.callThrough();
-    const spy2 = spyOn(r.get('2') as FormControl<boolean>, 'setValue').and.callThrough();
+    const spy1 = vi.spyOn(r.get('1') as FormControl<boolean>, 'setValue');
+    const spy2 = vi.spyOn(r.get('2') as FormControl<boolean>, 'setValue');
 
     // Call without opts (no emitEvent specified) → should default to { emitEvent: false }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1388,15 +1339,14 @@ describe('AbstractFormBaseComponent', () => {
 
   it('patchFormRecordFromObject should skip keys that do not map to a control (covers continue)', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const r = new FormRecord({
       existing: new FormControl('keep'),
     });
 
-    const setSpy = spyOn(r.get('existing') as FormControl<string>, 'setValue');
+    const setSpy = vi.spyOn(r.get('existing') as FormControl<string>, 'setValue');
 
     // Provide a key that doesn't exist in the FormRecord to trigger the `continue` branch
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1408,8 +1358,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should return true for an element with a tabIndex >= 0 and no disabled attribute', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const element = document.createElement('div');
@@ -1417,13 +1366,12 @@ describe('AbstractFormBaseComponent', () => {
 
     const result = component['canReceiveFocus'](element as unknown as HTMLAnchorElement);
 
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('should return false for an element with a tabIndex >= 0 but with a disabled attribute', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const element = document.createElement('div');
@@ -1432,13 +1380,12 @@ describe('AbstractFormBaseComponent', () => {
 
     const result = component['canReceiveFocus'](element);
 
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
   });
 
   it('should return true for an anchor element with a valid href', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const element = document.createElement('a');
@@ -1447,26 +1394,24 @@ describe('AbstractFormBaseComponent', () => {
 
     const result = component['canReceiveFocus'](element);
 
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('should return true for an enabled input element', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const element = document.createElement('input');
 
     const result = component['canReceiveFocus'](element);
 
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('should return false for a disabled input element', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const element = document.createElement('input');
@@ -1474,26 +1419,24 @@ describe('AbstractFormBaseComponent', () => {
 
     const result = component['canReceiveFocus'](element);
 
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
   });
 
   it('should return true for an enabled select element', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const element = document.createElement('select');
 
     const result = component['canReceiveFocus'](element);
 
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('should return false for a disabled select element', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const element = document.createElement('select');
@@ -1501,26 +1444,24 @@ describe('AbstractFormBaseComponent', () => {
 
     const result = component['canReceiveFocus'](element);
 
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
   });
 
   it('should return true for an enabled textarea element', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const element = document.createElement('textarea');
 
     const result = component['canReceiveFocus'](element);
 
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('should return false for a disabled textarea element', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const element = document.createElement('textarea');
@@ -1528,26 +1469,24 @@ describe('AbstractFormBaseComponent', () => {
 
     const result = component['canReceiveFocus'](element);
 
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
   });
 
   it('should return true for an enabled button element', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const element = document.createElement('button');
 
     const result = component['canReceiveFocus'](element);
 
-    expect(result).toBeTrue();
+    expect(result).toBe(true);
   });
 
   it('should return false for a disabled button element', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const element = document.createElement('button');
@@ -1555,26 +1494,24 @@ describe('AbstractFormBaseComponent', () => {
 
     const result = component['canReceiveFocus'](element);
 
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
   });
 
   it('should return false for an element that is not focusable', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const element = document.createElement('span');
 
     const result = component['canReceiveFocus'](element);
 
-    expect(result).toBeFalse();
+    expect(result).toBe(false);
   });
 
   it('should scroll to and focus on the autocomplete label if present', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const fieldId = 'testField';
@@ -1582,7 +1519,7 @@ describe('AbstractFormBaseComponent', () => {
     autocompleteLabel.setAttribute('for', `${fieldId}-autocomplete`);
     document.body.appendChild(autocompleteLabel);
 
-    spyOn(autocompleteLabel, 'scrollIntoView');
+    vi.spyOn(autocompleteLabel, 'scrollIntoView');
 
     component['scroll'](fieldId);
 
@@ -1593,15 +1530,14 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should scroll to and focus on the regular label if present', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const fieldId = 'testField';
     const regularLabel = document.createElement('label');
     regularLabel.setAttribute('for', fieldId);
     document.body.appendChild(regularLabel);
-    spyOn(regularLabel, 'scrollIntoView');
+    vi.spyOn(regularLabel, 'scrollIntoView');
 
     component['scroll'](fieldId);
 
@@ -1612,8 +1548,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should scroll to and focus on the fieldset legend if present', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const fieldId = 'testField';
@@ -1624,8 +1559,8 @@ describe('AbstractFormBaseComponent', () => {
     fieldset.appendChild(legend);
     document.body.appendChild(fieldset);
 
-    spyOn(fieldset, 'focus');
-    spyOn(legend, 'scrollIntoView');
+    vi.spyOn(fieldset, 'focus');
+    vi.spyOn(legend, 'scrollIntoView');
 
     component['scroll'](fieldId);
 
@@ -1637,16 +1572,15 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should scroll to and focus on the field element if no label or legend is found', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const fieldId = 'testField';
     const fieldElement = document.createElement('input');
     fieldElement.id = fieldId;
     document.body.appendChild(fieldElement);
-    spyOn(fieldElement, 'focus');
-    spyOn(fieldElement, 'scrollIntoView');
+    vi.spyOn(fieldElement, 'focus');
+    vi.spyOn(fieldElement, 'scrollIntoView');
 
     component['scroll'](fieldId);
 
@@ -1658,8 +1592,7 @@ describe('AbstractFormBaseComponent', () => {
 
   it('should scroll to and focus on a nested focusable element if the field element is not focusable', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const fieldId = 'testField';
@@ -1668,8 +1601,8 @@ describe('AbstractFormBaseComponent', () => {
     const nestedInput = document.createElement('input');
     fieldElement.appendChild(nestedInput);
     document.body.appendChild(fieldElement);
-    spyOn(nestedInput, 'focus');
-    spyOn(nestedInput, 'scrollIntoView');
+    vi.spyOn(nestedInput, 'focus');
+    vi.spyOn(nestedInput, 'scrollIntoView');
 
     component['scroll'](fieldId);
 

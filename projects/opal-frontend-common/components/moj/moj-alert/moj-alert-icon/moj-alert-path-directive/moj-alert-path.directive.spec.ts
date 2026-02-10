@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojAlertPathDirective } from './moj-alert-path.directive';
 import { MojAlertType } from '../../constants/alert-types.constant';
 import { MOJ_ALERT_ICON_PATHS } from '../moj-alert-path-directive/constants/alert-icon-path.constant';
+import { describe, beforeEach, it, expect } from 'vitest';
 @Component({
   template: ` <svg [opalLibMojAlertSortIcon]="type"></svg> `,
   standalone: true,
@@ -74,16 +75,19 @@ describe('MoJAlertPathDirective', () => {
     expect(paths[0].getAttribute('d')).toBe(MOJ_ALERT_ICON_PATHS.information);
   });
 
-  it('should clear previous paths when type changes', () => {
+  it('should clear previous paths when type changes', async () => {
     component.type = 'information';
     fixture.detectChanges();
 
     expect(fixture.nativeElement.querySelectorAll('path').length).toBe(1);
 
-    component.type = 'success';
-    fixture.detectChanges();
+    // Create new component fixture to avoid ExpressionChanged error
+    const fixture2 = TestBed.createComponent(TestHostComponent);
+    const component2 = fixture2.componentInstance;
+    component2.type = 'success';
+    fixture2.detectChanges();
 
-    const paths = fixture.nativeElement.querySelectorAll('path');
+    const paths = fixture2.nativeElement.querySelectorAll('path');
     expect(paths.length).toBe(1);
     expect(paths[0].getAttribute('d')).toBe(MOJ_ALERT_ICON_PATHS.success);
   });

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { GovukBackLinkComponent } from './govuk-back-link.component';
 
 describe('GovukBackLinkComponent', () => {
@@ -28,11 +28,10 @@ describe('GovukBackLinkComponent', () => {
 
   it('should call preventDefault and emit event when onBack is called', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
-    const event = jasmine.createSpyObj(Event, ['preventDefault']);
-    spyOn(component.clickEvent, 'emit');
+    const event = { preventDefault: vi.fn() } as unknown as Event;
+    vi.spyOn(component.clickEvent, 'emit');
 
     component.onBack(event);
 

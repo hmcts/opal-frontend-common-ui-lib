@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { CustomScrollablePanesInnerPaneComponent } from './custom-scrollable-panes-inner-pane.component';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('CustomScrollablePanesInnerPaneComponent', () => {
   let component: CustomScrollablePanesInnerPaneComponent;
@@ -27,7 +28,7 @@ describe('CustomScrollablePanesInnerPaneComponent', () => {
   });
 
   it('should apply provided max-height', () => {
-    component.maxHeight = '300px';
+    fixture.componentRef.setInput('maxHeight', '300px');
     fixture.detectChanges();
     const div = fixture.debugElement.query(By.css('.custom-scrollable-panes-inner-pane')).nativeElement;
     expect(div.style.maxHeight).toBe('300px');
@@ -35,13 +36,13 @@ describe('CustomScrollablePanesInnerPaneComponent', () => {
 
   it('should apply sticky-headers class by default', () => {
     const div = fixture.debugElement.query(By.css('.custom-scrollable-panes-inner-pane'));
-    expect(div.classes['sticky-headers']).toBeTrue();
+    expect(div.classes['sticky-headers']).toBe(true);
   });
 
   it('should not apply sticky-headers class when stickyHeadersEnabled is false', () => {
-    component.stickyHeadersEnabled = false;
+    fixture.componentRef.setInput('stickyHeadersEnabled', false);
     fixture.detectChanges();
     const div = fixture.debugElement.query(By.css('.custom-scrollable-panes-inner-pane'));
-    expect(div.nativeElement.classList.contains('sticky-headers')).toBeFalse();
+    expect(div.nativeElement.classList.contains('sticky-headers')).toBe(false);
   });
 });

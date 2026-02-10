@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GovukFooterComponent } from './govuk-footer.component';
 import { GOVUK_FOOTER_LINKS_MOCK } from './mocks/govuk-footer-links.mock';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 describe('GovukFooterComponent', () => {
   let component: GovukFooterComponent | null;

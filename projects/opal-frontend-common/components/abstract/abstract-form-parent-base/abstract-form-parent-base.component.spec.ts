@@ -3,6 +3,7 @@ import { AbstractFormParentBaseComponent } from './abstract-form-parent-base.com
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
+import { describe, beforeEach, afterAll, it, expect, vi } from 'vitest';
 
 @Component({
   selector: 'opal-lib-test-form-parent-base',
@@ -43,8 +44,7 @@ describe('AbstractFormParentBaseComponent', () => {
 
   it('should return false if there are unsaved changes', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     component.stateUnsavedChanges = true;
@@ -53,8 +53,7 @@ describe('AbstractFormParentBaseComponent', () => {
 
   it('should return true if there are no unsaved changes', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     component.stateUnsavedChanges = false;
@@ -63,34 +62,33 @@ describe('AbstractFormParentBaseComponent', () => {
 
   it('should test routerNavigate', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
-    const routerSpy = spyOn(component['router'], 'navigate');
+    const routerSpy = vi.spyOn(component['router'], 'navigate');
     component['routerNavigate']('test');
     expect(routerSpy).toHaveBeenCalledWith(['test'], { relativeTo: component['activatedRoute'].parent });
   });
 
   it('should test routerNavigate with no activated route', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
-    const routerSpy = spyOn(component['router'], 'navigate');
+    const routerSpy = vi.spyOn(component['router'], 'navigate');
     component['routerNavigate']('test', true);
     expect(routerSpy).toHaveBeenCalledWith(['test'], {});
   });
 
   it('should test routerNavigate with event', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
-    const routerSpy = spyOn(component['router'], 'navigate');
-    const event = jasmine.createSpyObj('event', ['preventDefault']);
+    const routerSpy = vi.spyOn(component['router'], 'navigate');
+    const event = {
+      preventDefault: vi.fn().mockName('event.preventDefault'),
+    } as unknown as Event;
 
     component['routerNavigate']('test', false, event);
     expect(routerSpy).toHaveBeenCalledWith(['test'], { relativeTo: component['activatedRoute'].parent });
@@ -99,12 +97,13 @@ describe('AbstractFormParentBaseComponent', () => {
 
   it('should test routerNavigate with routeData', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
-    const routerSpy = spyOn(component['router'], 'navigate');
-    const event = jasmine.createSpyObj('event', ['preventDefault']);
+    const routerSpy = vi.spyOn(component['router'], 'navigate');
+    const event = {
+      preventDefault: vi.fn().mockName('event.preventDefault'),
+    } as unknown as Event;
     const routeData = { someData: 'test' };
 
     component['routerNavigate']('test', false, event, routeData);
@@ -117,11 +116,10 @@ describe('AbstractFormParentBaseComponent', () => {
 
   it('should test routerNavigate with fragment', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
-    const routerSpy = spyOn(component['router'], 'navigate');
+    const routerSpy = vi.spyOn(component['router'], 'navigate');
     const fragment = 'section1';
 
     component['routerNavigate']('test', false, undefined, undefined, fragment);
@@ -133,11 +131,10 @@ describe('AbstractFormParentBaseComponent', () => {
 
   it('should test routerNavigate with both routeData and fragment', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
-    const routerSpy = spyOn(component['router'], 'navigate');
+    const routerSpy = vi.spyOn(component['router'], 'navigate');
     const routeData = { someData: 'test' };
     const fragment = 'section2';
 
@@ -151,8 +148,7 @@ describe('AbstractFormParentBaseComponent', () => {
 
   it('should return true if any form value is truthy', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const form = {
@@ -166,8 +162,7 @@ describe('AbstractFormParentBaseComponent', () => {
 
   it('should return false if all form values are falsy', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const form = {

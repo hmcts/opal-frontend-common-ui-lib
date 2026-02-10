@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukSummaryListRowActionItemComponent } from './govuk-summary-list-row-action-item.component';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('GovukSummaryListRowActionItemComponent', () => {
   let component: GovukSummaryListRowActionItemComponent;
@@ -27,8 +28,10 @@ describe('GovukSummaryListRowActionItemComponent', () => {
 
   it('should emit linkClicked event when handleActionClick is called', () => {
     const linkClicked = 'change';
-    const event = jasmine.createSpyObj('event', ['preventDefault']);
-    spyOn(component.linkClick, 'emit');
+    const event = {
+      preventDefault: vi.fn().mockName('event.preventDefault'),
+    } as unknown as Event;
+    vi.spyOn(component.linkClick, 'emit');
 
     component.handleActionClick(event, linkClicked);
 

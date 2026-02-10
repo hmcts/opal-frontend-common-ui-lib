@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukTaskListComponent } from './govuk-task-list.component';
 import { Component } from '@angular/core';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 @Component({
   template: `<opal-lib-govuk-task-list taskListId="test" taskListClasses="test-class"
@@ -37,21 +38,19 @@ describe('GovukTaskListComponent', () => {
 
   it('should render into list ng-content', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const element = fixture.nativeElement.querySelector('#test');
-    expect(element.innerText).toBe('Hello World');
+    expect(element.textContent?.trim()).toBe('Hello World');
   });
 
   it('should have the added class', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const element = fixture.nativeElement.querySelector('.test-class');
-    expect(element.innerText).toBe('Hello World');
+    expect(element.textContent?.trim()).toBe('Hello World');
   });
 });

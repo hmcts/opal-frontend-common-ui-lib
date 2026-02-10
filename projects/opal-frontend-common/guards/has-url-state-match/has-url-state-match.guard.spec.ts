@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi, type MockedObject } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import {
   ActivatedRouteSnapshot,
@@ -40,19 +41,21 @@ function mockActivatedRouteSnapshot(
 }
 
 describe('hasUrlStateMatchGuard', () => {
-  let router: jasmine.SpyObj<Router>;
+  let router: MockedObject<Router>;
   let mockRoute: ActivatedRouteSnapshot;
   let mockState: MockState;
   let mockRouterState: RouterStateSnapshot;
 
   beforeEach(() => {
-    const routerSpy = jasmine.createSpyObj('Router', ['createUrlTree']);
+    const routerSpy = {
+      createUrlTree: vi.fn().mockName('Router.createUrlTree'),
+    };
 
     TestBed.configureTestingModule({
       providers: [{ provide: Router, useValue: routerSpy }],
     });
 
-    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    router = TestBed.inject(Router) as MockedObject<Router>;
 
     mockRoute = mockActivatedRouteSnapshot();
 
@@ -63,7 +66,7 @@ describe('hasUrlStateMatchGuard', () => {
   it('should return UrlTree and redirect when hasRouteParams returns false', () => {
     TestBed.runInInjectionContext(() => {
       const mockUrlTree = {} as UrlTree;
-      router.createUrlTree.and.returnValue(mockUrlTree);
+      router.createUrlTree.mockReturnValue(mockUrlTree);
 
       const getState = () => mockState;
       const hasRouteParams = () => false;
@@ -85,7 +88,7 @@ describe('hasUrlStateMatchGuard', () => {
   it('should return UrlTree regardless of state or condition when hasRouteParams returns false', () => {
     TestBed.runInInjectionContext(() => {
       const mockUrlTree = {} as UrlTree;
-      router.createUrlTree.and.returnValue(mockUrlTree);
+      router.createUrlTree.mockReturnValue(mockUrlTree);
 
       mockState.selectedAccount = { accountNumber: '12345' };
 
@@ -154,7 +157,7 @@ describe('hasUrlStateMatchGuard', () => {
   it('should return UrlTree when checkCondition returns false', () => {
     TestBed.runInInjectionContext(() => {
       const mockUrlTree = {} as UrlTree;
-      router.createUrlTree.and.returnValue(mockUrlTree);
+      router.createUrlTree.mockReturnValue(mockUrlTree);
 
       mockState.selectedAccount = { accountNumber: '12345' };
 
@@ -178,7 +181,7 @@ describe('hasUrlStateMatchGuard', () => {
   it('should return UrlTree when state is undefined', () => {
     TestBed.runInInjectionContext(() => {
       const mockUrlTree = {} as UrlTree;
-      router.createUrlTree.and.returnValue(mockUrlTree);
+      router.createUrlTree.mockReturnValue(mockUrlTree);
 
       const getState = () => mockState;
       const hasRouteParams = () => true;
@@ -215,7 +218,7 @@ describe('hasUrlStateMatchGuard', () => {
   it('should redirect to specified route path', () => {
     TestBed.runInInjectionContext(() => {
       const mockUrlTree = {} as UrlTree;
-      router.createUrlTree.and.returnValue(mockUrlTree);
+      router.createUrlTree.mockReturnValue(mockUrlTree);
 
       const getState = () => mockState;
       const hasRouteParams = () => true;
@@ -237,7 +240,7 @@ describe('hasUrlStateMatchGuard', () => {
   it('should redirect to root when getNavigationPath returns empty string', () => {
     TestBed.runInInjectionContext(() => {
       const mockUrlTree = {} as UrlTree;
-      router.createUrlTree.and.returnValue(mockUrlTree);
+      router.createUrlTree.mockReturnValue(mockUrlTree);
 
       const getState = () => mockState;
       const hasRouteParams = () => true;
@@ -259,7 +262,7 @@ describe('hasUrlStateMatchGuard', () => {
   it('should preserve query parameters and fragment in redirect', () => {
     TestBed.runInInjectionContext(() => {
       const mockUrlTree = {} as UrlTree;
-      router.createUrlTree.and.returnValue(mockUrlTree);
+      router.createUrlTree.mockReturnValue(mockUrlTree);
 
       mockRoute.queryParams = { param1: 'value1', param2: 'value2' };
       mockRoute.fragment = 'section1';
@@ -284,7 +287,7 @@ describe('hasUrlStateMatchGuard', () => {
   it('should handle null state gracefully', () => {
     TestBed.runInInjectionContext(() => {
       const mockUrlTree = {} as UrlTree;
-      router.createUrlTree.and.returnValue(mockUrlTree);
+      router.createUrlTree.mockReturnValue(mockUrlTree);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const getState = () => null as any;
       const hasRouteParams = () => true;
@@ -310,7 +313,7 @@ describe('hasUrlStateMatchGuard', () => {
   it('should handle falsy checkCondition results', () => {
     TestBed.runInInjectionContext(() => {
       const mockUrlTree = {} as UrlTree;
-      router.createUrlTree.and.returnValue(mockUrlTree);
+      router.createUrlTree.mockReturnValue(mockUrlTree);
 
       const getState = () => mockState;
       const hasRouteParams = () => true;
@@ -350,7 +353,7 @@ describe('hasUrlStateMatchGuard', () => {
   it('should pass route parameter to hasRouteParams function', () => {
     TestBed.runInInjectionContext(() => {
       const getState = () => mockState;
-      const hasRouteParams = jasmine.createSpy('hasRouteParams').and.returnValue(false);
+      const hasRouteParams = vi.fn().mockReturnValue(false);
       const checkCondition = () => true;
       const getNavigationPath = () => '/redirect';
 
@@ -366,7 +369,7 @@ describe('hasUrlStateMatchGuard', () => {
     TestBed.runInInjectionContext(() => {
       const getState = () => mockState;
       const hasRouteParams = () => true;
-      const checkCondition = jasmine.createSpy('checkCondition').and.returnValue(true);
+      const checkCondition = vi.fn().mockReturnValue(true);
       const getNavigationPath = () => '/redirect';
 
       const guard = hasUrlStateMatchGuard<MockState>(getState, hasRouteParams, checkCondition, getNavigationPath);
@@ -380,12 +383,12 @@ describe('hasUrlStateMatchGuard', () => {
   it('should pass route to getNavigationPath function when redirecting', () => {
     TestBed.runInInjectionContext(() => {
       const mockUrlTree = {} as UrlTree;
-      router.createUrlTree.and.returnValue(mockUrlTree);
+      router.createUrlTree.mockReturnValue(mockUrlTree);
 
       const getState = () => mockState;
       const hasRouteParams = () => true;
       const checkCondition = () => false;
-      const getNavigationPath = jasmine.createSpy('getNavigationPath').and.returnValue('/redirect');
+      const getNavigationPath = vi.fn().mockReturnValue('/redirect');
 
       const guard = hasUrlStateMatchGuard<MockState>(getState, hasRouteParams, checkCondition, getNavigationPath);
 

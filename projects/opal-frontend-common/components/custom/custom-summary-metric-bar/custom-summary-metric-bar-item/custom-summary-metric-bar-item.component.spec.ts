@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CustomSummaryMetricBarItemComponent } from './custom-summary-metric-bar-item.component';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('CustomSummaryMetricBarItemComponent', () => {
   let component: CustomSummaryMetricBarItemComponent;
@@ -29,7 +30,7 @@ describe('CustomSummaryMetricBarItemComponent', () => {
   });
 
   it('should update host class when itemClasses is changed', () => {
-    component.itemClasses = 'custom-class';
+    fixture.componentRef.setInput('itemClasses', 'custom-class');
     fixture.detectChanges();
     expect(component.hostClasses).toBe('custom-class');
     expect(hostEl.className).toContain('custom-class');

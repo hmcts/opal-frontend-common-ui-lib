@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CustomAccountInformationItemValueComponent } from './custom-account-information-item-value.component';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('CustomAccountInformationItemValueComponent', () => {
   let component: CustomAccountInformationItemValueComponent;

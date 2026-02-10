@@ -1,12 +1,12 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AbstractFormAliasBaseComponent } from './abstract-form-alias-base.component';
 import { FormGroup, FormArray, FormControl, Validators, ValidatorFn } from '@angular/forms';
-import { of } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { IAbstractFormArrayControls } from '../interfaces/abstract-form-array-controls.interface';
 import { IAbstractFormControlErrorMessage } from '../interfaces/abstract-form-control-error-message.interface';
 import { IAbstractFormArrayControlValidation } from '../interfaces/abstract-form-array-control-validation.interface';
 import { GovukTextInputComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-text-input';
+import { describe, beforeEach, afterEach, afterAll, it, expect, vi } from 'vitest';
 
 class TestAbstractFormAliasBaseComponent extends AbstractFormAliasBaseComponent {
   constructor() {
@@ -37,8 +37,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   beforeEach(() => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
     component.aliasControls = [];
     component.aliasControlsValidation = [];
@@ -47,8 +46,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   afterEach(() => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
     component.ngOnDestroy();
   });
@@ -65,8 +63,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should add controls to a form group', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
     const formGroup = new FormGroup({});
     const controls: IAbstractFormArrayControlValidation[] = [
@@ -85,8 +82,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should remove the form array control at the specified index', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const index = 1;
@@ -138,8 +134,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should create form controls based on the given fields and index', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
     const fields = ['field1', 'field2', 'field3'];
     const index = 0;
@@ -167,8 +162,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should build form array controls with the given form control count, form array name, field names, and control validation', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
     const formControlCount = [0, 1, 2];
     const formArrayName = 'aliases';
@@ -238,8 +232,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should remove all form array controls and clear error messages', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     // Arrange
@@ -302,8 +295,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should remove field errors for the specified form array control', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const index = 0;
@@ -336,8 +328,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should not remove field errors if the form array control does not exist', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const index = 1;
@@ -370,8 +361,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should add form array controls to the form group', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const index = 0;
@@ -396,8 +386,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should remove the form array control at the specified index', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const index = 1;
@@ -448,8 +437,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should update alias controls based on the value of the checkbox', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const addAliasControl = component.form.get('addAlias');
@@ -472,8 +460,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should add an alias to the aliasControls form array', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const index = 0;
@@ -487,8 +474,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should remove an alias from the aliasControls form array', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const index = 0;
@@ -502,8 +488,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should set up the aliases for the company details form', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const aliases = [
@@ -519,8 +504,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should unsubscribe from addAliasListener on ngOnDestroy', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const addAliasControl = component.form.get('addAlias');
@@ -530,8 +514,8 @@ describe('AbstractFormAliasBaseComponent', () => {
     // Call the setUpAliasCheckboxListener method
     component['setUpAliasCheckboxListener']('addAlias', 'aliases');
 
-    spyOn(component['ngUnsubscribe'], 'next');
-    spyOn(component['ngUnsubscribe'], 'complete');
+    vi.spyOn(component['ngUnsubscribe'], 'next');
+    vi.spyOn(component['ngUnsubscribe'], 'complete');
 
     component.ngOnDestroy();
     expect(component['ngUnsubscribe'].next).toHaveBeenCalled();
@@ -540,33 +524,30 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should return if addAlias control is not found', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
-    spyOn(component.form, 'get').and.returnValue(null);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    spyOn<any>(component, 'setUpAliasCheckboxListener').and.callThrough();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    spyOn<any>(component, 'buildFormAliasControls').and.returnValue(of([]));
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    spyOn<any>(component, 'removeAllFormAliasControls').and.returnValue(of([]));
+    vi.spyOn(component.form, 'get').mockReturnValue(null);
+    const componentWithPrivates = component as unknown as {
+      setUpAliasCheckboxListener: (controlName: string, formArrayName: string) => void;
+      buildFormAliasControls: () => IAbstractFormArrayControls[];
+      removeAllFormAliasControls: () => IAbstractFormArrayControls[];
+    };
+    vi.spyOn(componentWithPrivates, 'setUpAliasCheckboxListener');
+    vi.spyOn(componentWithPrivates, 'buildFormAliasControls').mockReturnValue([]);
+    vi.spyOn(componentWithPrivates, 'removeAllFormAliasControls').mockReturnValue([]);
 
     component['setUpAliasCheckboxListener']('addAlias', 'aliases');
 
     expect(component.form.get).toHaveBeenCalledWith('addAlias');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect<any>(component['setUpAliasCheckboxListener']).toHaveBeenCalled();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect<any>(component['buildFormAliasControls']).not.toHaveBeenCalled();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect<any>(component['removeAllFormAliasControls']).not.toHaveBeenCalled();
+    expect(componentWithPrivates.setUpAliasCheckboxListener).toHaveBeenCalled();
+    expect(componentWithPrivates.buildFormAliasControls).not.toHaveBeenCalled();
+    expect(componentWithPrivates.removeAllFormAliasControls).not.toHaveBeenCalled();
   });
 
   it('should remove field errors for the specified form array control', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const index = 0;
@@ -599,8 +580,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should not remove field errors if the form array control does not exist', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const index = 1;
@@ -633,8 +613,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should add form array controls to the form group', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const index = 0;
@@ -659,8 +638,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should remove the form array control at the specified index', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const index = 1;
@@ -711,8 +689,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should remove the form array control at the specified index', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const index = 1;
@@ -764,8 +741,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should create form controls based on the given fields and index', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const fields = ['field1', 'field2', 'field3'];
@@ -794,8 +770,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should build form array controls with the given form control count, form array name, field names, and control validation', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const formControlCount = [0, 1, 2];
@@ -866,8 +841,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should create a new FormArray with validators and controls', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const validators = [Validators.required];
@@ -885,8 +859,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should create a new FormArray with validators and no controls', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const validators = [Validators.required];
@@ -900,8 +873,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should create a new FormArray without validators and controls', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const formArray = component['createFormAlias']([]);
@@ -913,8 +885,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should create a form array with validators and controls', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const validators: ValidatorFn[] = [Validators.required];
@@ -928,8 +899,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should create a form array with validators and no controls', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const validators: ValidatorFn[] = [Validators.required];
@@ -942,8 +912,7 @@ describe('AbstractFormAliasBaseComponent', () => {
 
   it('should create a form array with no validators and controls', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
     const controls: FormControl[] = [new FormControl('test')];
 
@@ -953,10 +922,9 @@ describe('AbstractFormAliasBaseComponent', () => {
     expect(formArray.controls.length).toBe(1);
   });
 
-  it('should focus on the first input of the newly added alias row', fakeAsync(() => {
+  it('should focus on the first input of the newly added alias row', async () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
     // Setup: Mock alias controls array
     component.aliasControls = [
@@ -976,23 +944,25 @@ describe('AbstractFormAliasBaseComponent', () => {
 
     // Mock the aliasFirstField Map
     const mockFirstField = { inputId: 'firstNames_0' } as GovukTextInputComponent;
-    spyOn(component.aliasFirstField, 'get').and.returnValue(mockFirstField);
+    vi.spyOn(component.aliasFirstField, 'get').mockReturnValue(mockFirstField);
 
     // Mock DOM element and its focus method
-    const mockElement = jasmine.createSpyObj('HTMLElement', ['focus']);
-    spyOn(document, 'getElementById').and.returnValue(mockElement);
+    const mockElement = {
+      focus: vi.fn().mockName('HTMLElement.focus'),
+    } as unknown as HTMLElement;
+    vi.spyOn(document, 'getElementById').mockReturnValue(mockElement);
 
     // Spy on change detection
-    spyOn(component['changeDetectorRef'], 'detectChanges');
+    vi.spyOn(component['changeDetectorRef'], 'detectChanges');
 
     // Act
     component.focusFirstAliasField();
-    tick(); // Advance the timer for setTimeout
+    await new Promise((resolve) => setTimeout(resolve, 0)); // Wait for setTimeout
 
     // Assert
     expect(component['changeDetectorRef'].detectChanges).toHaveBeenCalled();
     expect(component.aliasFirstField.get).toHaveBeenCalledWith(0); // index = length - 1 = 0
     expect(document.getElementById).toHaveBeenCalledWith('firstNames_0');
     expect(mockElement.focus).toHaveBeenCalled();
-  }));
+  });
 });

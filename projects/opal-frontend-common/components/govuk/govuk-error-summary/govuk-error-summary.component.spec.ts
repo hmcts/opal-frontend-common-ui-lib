@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { GovukErrorSummaryComponent } from './govuk-error-summary.component';
 
 describe('GovukErrorSummaryComponent', () => {
   let component: GovukErrorSummaryComponent | null;
   let fixture: ComponentFixture<GovukErrorSummaryComponent> | null;
-  let eventMock: jasmine.SpyObj<Event> | null;
+  let eventMock: Event | null;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -16,8 +17,8 @@ describe('GovukErrorSummaryComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    eventMock = jasmine.createSpyObj(Event, ['preventDefault']);
-    spyOn(component.errorClick, 'emit');
+    eventMock = { preventDefault: vi.fn() } as unknown as Event;
+    vi.spyOn(component.errorClick, 'emit');
   });
 
   afterAll(() => {
@@ -33,8 +34,7 @@ describe('GovukErrorSummaryComponent', () => {
 
   it('should test handleErrorClick', () => {
     if (!component || !eventMock) {
-      fail('component or eventMock returned null');
-      return;
+      throw new Error('component or eventMock returned null');
     }
 
     component.handleErrorClick(eventMock, 'testFieldId');

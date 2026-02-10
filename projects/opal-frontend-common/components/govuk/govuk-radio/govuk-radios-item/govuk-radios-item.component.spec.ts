@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukRadiosItemComponent } from './govuk-radios-item.component';
 import { FormControl } from '@angular/forms';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 describe('GovukRadiosItemComponent', () => {
   let component: GovukRadiosItemComponent | null;
@@ -40,8 +41,7 @@ describe('GovukRadiosItemComponent', () => {
 
   it('should have extra label classes', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const elem = fixture.nativeElement.querySelector('.govuk-radios__label.govuk-label--l');
@@ -50,8 +50,7 @@ describe('GovukRadiosItemComponent', () => {
 
   it('should have labelText', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const elem = fixture.nativeElement.querySelector('.govuk-label.govuk-label--l');
@@ -60,8 +59,7 @@ describe('GovukRadiosItemComponent', () => {
 
   it('should have extra input classes', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const elem = fixture.nativeElement.querySelector('.govuk-radios__input.govuk-input--width-20');
@@ -70,8 +68,7 @@ describe('GovukRadiosItemComponent', () => {
 
   it('should have an input id', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const elem = fixture.nativeElement.querySelector('#test');
@@ -80,8 +77,7 @@ describe('GovukRadiosItemComponent', () => {
 
   it('should prefix the input id with the input name when needed', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     fixture.componentRef.setInput('inputName', 'group');
@@ -94,8 +90,7 @@ describe('GovukRadiosItemComponent', () => {
 
   it('resolvedInputName should trim whitespace and default to empty string', () => {
     if (!fixture || !component) {
-      fail('fixture/component returned null');
-      return;
+      throw new Error('fixture/component returned null');
     }
 
     fixture.componentRef.setInput('inputName', '  group  ');
@@ -111,8 +106,7 @@ describe('GovukRadiosItemComponent', () => {
 
   it('resolvedInputId should not double-prefix when already prefixed', () => {
     if (!fixture || !component) {
-      fail('fixture/component returned null');
-      return;
+      throw new Error('fixture/component returned null');
     }
 
     fixture.componentRef.setInput('inputName', 'group');
@@ -127,8 +121,7 @@ describe('GovukRadiosItemComponent', () => {
 
   it('resolvedInputId should return the base id when base id equals input name', () => {
     if (!fixture || !component) {
-      fail('fixture/component returned null');
-      return;
+      throw new Error('fixture/component returned null');
     }
 
     fixture.componentRef.setInput('inputName', 'group');
@@ -143,8 +136,7 @@ describe('GovukRadiosItemComponent', () => {
 
   it('dataAriaControls should return null for empty/whitespace values and trimmed value otherwise', () => {
     if (!fixture || !component) {
-      fail('fixture/component returned null');
-      return;
+      throw new Error('fixture/component returned null');
     }
 
     fixture.componentRef.setInput('ariaControls', '   ');
@@ -158,8 +150,7 @@ describe('GovukRadiosItemComponent', () => {
 
   it('resolvedInputValue should preserve boolean values for Reactive Forms', () => {
     if (!fixture || !component) {
-      fail('fixture/component returned null');
-      return;
+      throw new Error('fixture/component returned null');
     }
 
     fixture.componentRef.setInput('inputValue', true);
@@ -175,8 +166,7 @@ describe('GovukRadiosItemComponent', () => {
 
   it('should expose the bound FormControl via getControl', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     expect(component.getControl).toBe(formControl);
@@ -184,8 +174,7 @@ describe('GovukRadiosItemComponent', () => {
 
   it('should set the name and value attributes', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const input = fixture.nativeElement.querySelector('input[type="radio"]');
@@ -195,8 +184,7 @@ describe('GovukRadiosItemComponent', () => {
 
   it('should set aria-controls only when provided', () => {
     if (!fixture || !component) {
-      fail('fixture/component returned null');
-      return;
+      throw new Error('fixture/component returned null');
     }
 
     let input = fixture.nativeElement.querySelector('input[type="radio"]');
@@ -214,8 +202,7 @@ describe('GovukRadiosItemComponent', () => {
 
   it('should link the label for to the input id', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const input = fixture.nativeElement.querySelector('input[type="radio"]');
@@ -225,8 +212,7 @@ describe('GovukRadiosItemComponent', () => {
 
   it('should link item hint to the input', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     fixture.componentRef.setInput('inputValueHint', 'Help text');
@@ -238,8 +224,7 @@ describe('GovukRadiosItemComponent', () => {
 
   it('resolvedInputName should return empty string when inputName is undefined', () => {
     if (!fixture || !component) {
-      fail('fixture/component returned null');
-      return;
+      throw new Error('fixture/component returned null');
     }
 
     fixture.componentRef.setInput('inputName', undefined as unknown as string);
@@ -250,8 +235,7 @@ describe('GovukRadiosItemComponent', () => {
 
   it('resolvedInputId should return empty string when inputId is undefined', () => {
     if (!fixture || !component) {
-      fail('fixture/component returned null');
-      return;
+      throw new Error('fixture/component returned null');
     }
 
     fixture.componentRef.setInput('inputName', 'group');
@@ -263,8 +247,7 @@ describe('GovukRadiosItemComponent', () => {
 
   it('resolvedInputId should return base id when inputName is empty', () => {
     if (!fixture || !component) {
-      fail('fixture/component returned null');
-      return;
+      throw new Error('fixture/component returned null');
     }
 
     fixture.componentRef.setInput('inputName', '');
@@ -276,8 +259,7 @@ describe('GovukRadiosItemComponent', () => {
 
   it('resolvedInputId should return empty string when both inputName and inputId are empty', () => {
     if (!fixture || !component) {
-      fail('fixture/component returned null');
-      return;
+      throw new Error('fixture/component returned null');
     }
 
     fixture.componentRef.setInput('inputName', '');
@@ -289,8 +271,7 @@ describe('GovukRadiosItemComponent', () => {
 
   it('resolvedInputValueAttr should return the same string when inputValue is a string', () => {
     if (!fixture || !component) {
-      fail('fixture/component returned null');
-      return;
+      throw new Error('fixture/component returned null');
     }
 
     fixture.componentRef.setInput('inputValue', 'abc');

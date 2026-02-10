@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CustomSummaryMetricBarComponent } from './custom-summary-metric-bar.component';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('CustomSummaryMetricBarComponent', () => {
   let component: CustomSummaryMetricBarComponent;

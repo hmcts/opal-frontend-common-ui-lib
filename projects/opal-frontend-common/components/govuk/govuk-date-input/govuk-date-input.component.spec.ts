@@ -4,6 +4,7 @@ import { GovukDateInputComponent } from './govuk-date-input.component';
 import { FormControl, FormGroup } from '@angular/forms';
 import { GOVUK_DATE_INPUTS_MOCK } from './mocks/govuk-date-inputs.mock';
 import { By } from '@angular/platform-browser';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 describe('GovukDateInputComponent', () => {
   let component: GovukDateInputComponent | null;
@@ -46,8 +47,7 @@ describe('GovukDateInputComponent', () => {
 
   it('should have legend text', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const elem = fixture.debugElement.query(By.css('#dateOfBirth .govuk-fieldset__legend')).nativeElement;
@@ -57,8 +57,7 @@ describe('GovukDateInputComponent', () => {
 
   it('should have legend hint', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const elem = fixture.debugElement.query(By.css('#dateOfBirth #dateOfBirth-hint')).nativeElement;
@@ -68,8 +67,7 @@ describe('GovukDateInputComponent', () => {
 
   it('should have date inputs', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const day = fixture.debugElement.query(By.css('#dateOfBirth #dayOfBirth')).nativeElement;
@@ -83,8 +81,7 @@ describe('GovukDateInputComponent', () => {
 
   it('should have added a class to the legend', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const elem = fixture.debugElement.query(By.css('#dateOfBirth .govuk-fieldset__legend.test-class')).nativeElement;
@@ -93,8 +90,7 @@ describe('GovukDateInputComponent', () => {
 
   it('should have added a class to the day input', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const day = fixture.debugElement.query(By.css('#dateOfBirth #dayOfBirth.govuk-input--width-2')).nativeElement;
@@ -108,8 +104,7 @@ describe('GovukDateInputComponent', () => {
 
   it('should set aria-describedby with hint only', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
     fixture.componentRef.setInput('legendHint', 'For example, 04 06 1991');
@@ -124,8 +119,7 @@ describe('GovukDateInputComponent', () => {
 
   it('should set aria-describedby with error only', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
     fixture.componentRef.setInput('legendHint', '');
@@ -140,8 +134,7 @@ describe('GovukDateInputComponent', () => {
 
   it('should set aria-describedby with hint and error', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
     fixture.componentRef.setInput('legendHint', 'For example, 04 06 1991');
@@ -156,8 +149,7 @@ describe('GovukDateInputComponent', () => {
 
   it('should not set aria-describedby when hint and errors are missing', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
     fixture.componentRef.setInput('legendHint', '');

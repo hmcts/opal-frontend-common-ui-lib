@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SignInStubComponent } from './sign-in-stub.component';
-import { SIGN_IN_STUB_FORM_MOCK } from '../mocks';
+import { SIGN_IN_STUB_FORM_MOCK } from '../mocks/sign-in-stub-form.mock';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('SignInStubComponent', () => {
   let component: SignInStubComponent;
@@ -22,10 +23,12 @@ describe('SignInStubComponent', () => {
   });
 
   it('should call setupSignInForm on ngOnInit', () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    spyOn<any>(component, 'setupSignInForm');
+    const componentWithPrivates = component as unknown as {
+      setupSignInForm: () => void;
+    };
+    vi.spyOn(componentWithPrivates, 'setupSignInForm');
     component.ngOnInit();
-    expect(component['setupSignInForm']).toHaveBeenCalled();
+    expect(componentWithPrivates.setupSignInForm).toHaveBeenCalled();
   });
 
   it('should initialize signInForm with email FormControl', () => {
@@ -42,14 +45,14 @@ describe('SignInStubComponent', () => {
     expect(emailControl?.valid).toBeTruthy();
   });
   it('should emit signInForm value on form submit when form is valid', () => {
-    spyOn(component['signInFormSubmit'], 'emit');
+    vi.spyOn(component['signInFormSubmit'], 'emit');
     component.signInForm.setValue(SIGN_IN_STUB_FORM_MOCK);
     component.handleFormSubmit();
     expect(component['signInFormSubmit'].emit).toHaveBeenCalledWith(SIGN_IN_STUB_FORM_MOCK);
   });
 
   it('should not emit signInForm value on form submit when form is invalid', () => {
-    spyOn(component['signInFormSubmit'], 'emit');
+    vi.spyOn(component['signInFormSubmit'], 'emit');
     component.signInForm.setValue({
       email: null,
     });

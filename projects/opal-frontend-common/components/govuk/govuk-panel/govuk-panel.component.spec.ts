@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GovukPanelComponent } from './govuk-panel.component';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 @Component({
   template: `<opal-lib-govuk-panel panelTitle="Test Title"><div>This is a test</div></opal-lib-govuk-panel>`,
@@ -35,8 +36,7 @@ describe('GovukPanelComponent', () => {
 
   it('should render panel title - Test Title', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const element = fixture.debugElement.query(By.css('.govuk-panel__title'));
@@ -45,8 +45,7 @@ describe('GovukPanelComponent', () => {
 
   it('should render panel body text - This is a test', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const element = fixture.debugElement.query(By.css('.govuk-panel__body'));

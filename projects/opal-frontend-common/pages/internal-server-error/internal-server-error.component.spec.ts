@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { InternalServerErrorComponent } from './internal-server-error.component';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('InternalServerErrorComponent', () => {
   let component: InternalServerErrorComponent;

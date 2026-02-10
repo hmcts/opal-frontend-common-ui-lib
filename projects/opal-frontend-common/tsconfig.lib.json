@@ -5,14 +5,7 @@
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
-    "types": [
-      "./type.d.ts"
-    ]
+    "types": ["./type.d.ts"]
   },
-  "include": [
-    "*.d.ts"
-  ],
-  "exclude": [
-    "**/*.spec.ts"
-  ]
+  "exclude": ["**/*.spec.ts"]
 }

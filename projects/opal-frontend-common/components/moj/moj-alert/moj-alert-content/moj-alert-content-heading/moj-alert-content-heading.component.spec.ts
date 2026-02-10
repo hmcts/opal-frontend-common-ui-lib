@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MojAlertHeadingComponent } from './moj-alert-content-heading.component';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('MojAlertHeadingComponent', () => {
   let component: MojAlertHeadingComponent;

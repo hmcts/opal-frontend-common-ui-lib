@@ -10,7 +10,7 @@
       "prefix": "opal-lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "project": "projects/opal-frontend-common/ng-package.json"
           },
@@ -25,14 +25,27 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/opal-frontend-common/tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "include": ["projects/opal-frontend-common/**/*.spec.ts", "projects/opal-frontend-common/**/*.test.ts"],
+            "coverageExclude": [
+              "dist/**",
+              "**/*.d.ts",
+              "projects/**/hmcts-opal-frontend-common-*.ts",
+              "projects/**/public-api.ts",
+              "projects/**/*.routing.ts",
+              "projects/**/*.routes.ts",
+              "projects/**/*.constant.ts",
+              "projects/**/*.interface.ts",
+              "projects/**/*.type.ts",
+              "projects/**/*.mock.ts",
+              "projects/**/*.html"
+            ],
+            "coverageReporters": ["html", "lcov", "text", "json"],
+            "runner": "vitest",
+            "runnerConfig": "vitest.config.ts",
+            "setupFiles": ["projects/opal-frontend-common/test-setup.ts"]
           }
         },
         "lint": {

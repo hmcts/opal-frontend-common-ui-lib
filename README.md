@@ -103,9 +103,9 @@ After this new version of the library is published, any consuming application sh
 
 ## Running unit tests
 
-Run `yarn test` to execute the unit tests via [karma](https://karma-runner.github.io/latest/index.html).
+Run `yarn test` to execute the unit tests via Vitest (Angular 21 unit-test builder).
 
-To check code coverage, run `yarn test:coverage` to execute the unit tests via [karma](https://karma-runner.github.io/latest/index.html) but with code coverage.
+To check code coverage, run `yarn test:coverage` to execute the unit tests via Vitest with coverage enabled.
 The coverage report will be available in the coverage/ directory (e.g. coverage/index.html).
 
 ## Angular code scaffolding
@@ -150,7 +150,7 @@ The following commands are available in the `package.json`:
   Builds the Angular library and outputs to the `dist/` folder.
 
 - `yarn test`  
-  Executes unit tests via [karma](https://karma-runner.github.io/latest/index.html).
+  Executes unit tests via Vitest.
 
 - `yarn test:coverage`  
   Runs unit tests with code coverage reporting enabled. The coverage report can be found in the `coverage/` directory.

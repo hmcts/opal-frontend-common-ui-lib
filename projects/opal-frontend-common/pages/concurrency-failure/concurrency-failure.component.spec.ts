@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ConcurrencyFailureComponent } from './concurrency-failure.component';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('ConcurrencyFailureComponent', () => {
   let component: ConcurrencyFailureComponent;

@@ -5,6 +5,7 @@ import { LAUNCH_DARKLY_FLAGS_MOCK } from './mocks/launch-darkly-flags.mock';
 import { LAUNCH_DARKLY_CHANGE_FLAGS_MOCK } from './mocks/launch-darkly-change-flags.mock';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
+import { vi, expect, beforeEach, describe, it } from 'vitest';
 
 describe('LaunchDarklyService', () => {
   let service: LaunchDarklyService;
@@ -26,8 +27,8 @@ describe('LaunchDarklyService', () => {
     service.initializeLaunchDarklyClient();
 
     const mockFlags: LDFlagSet = LAUNCH_DARKLY_FLAGS_MOCK;
-    spyOn(service['ldClient'], 'allFlags').and.returnValue(mockFlags);
-    spyOn(service['globalStore'], 'setFeatureFlags');
+    vi.spyOn(service['ldClient'], 'allFlags').mockReturnValue(mockFlags);
+    vi.spyOn(service['globalStore'], 'setFeatureFlags');
 
     service['setLaunchDarklyFlags']();
 
@@ -99,21 +100,31 @@ describe('LaunchDarklyService', () => {
     });
 
     service.initializeLaunchDarklyClient();
-    spyOn(service['ldClient'], 'close');
+    vi.spyOn(service['ldClient'], 'close');
     service['closeLaunchDarklyClient']();
     expect(service['ldClient'].close).toHaveBeenCalled();
   });
 
   it('should call closeLaunchDarklyClient on ngOnDestroy', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    spyOn<any>(service, 'closeLaunchDarklyClient');
+    vi.spyOn(
+      service as unknown as {
+        closeLaunchDarklyClient: () => void;
+      },
+      'closeLaunchDarklyClient',
+    );
     service.ngOnDestroy();
     expect(service['closeLaunchDarklyClient']).toHaveBeenCalled();
   });
 
   it('should initialize LaunchDarkly flags when ldClient is not defined', async () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    spyOn<any>(service, 'setLaunchDarklyFlags');
+    vi.spyOn(
+      service as unknown as {
+        setLaunchDarklyFlags: () => void;
+      },
+      'setLaunchDarklyFlags',
+    );
 
     await service.initializeLaunchDarklyFlags();
 
@@ -129,9 +140,14 @@ describe('LaunchDarklyService', () => {
 
     service.initializeLaunchDarklyClient();
 
-    spyOn(service['ldClient'], 'waitForInitialization').and.returnValue(Promise.resolve());
+    vi.spyOn(service['ldClient'], 'waitForInitialization').mockReturnValue(Promise.resolve());
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    spyOn<any>(service, 'setLaunchDarklyFlags');
+    vi.spyOn(
+      service as unknown as {
+        setLaunchDarklyFlags: () => void;
+      },
+      'setLaunchDarklyFlags',
+    );
 
     await service.initializeLaunchDarklyFlags();
 
@@ -149,9 +165,9 @@ describe('LaunchDarklyService', () => {
     service.initializeLaunchDarklyClient();
 
     const error = new Error('Initialization failed');
-    spyOn(service['ldClient'], 'waitForInitialization').and.returnValue(Promise.reject(error));
+    vi.spyOn(service['ldClient'], 'waitForInitialization').mockReturnValue(Promise.reject(error));
 
-    await expectAsync(service.initializeLaunchDarklyFlags()).toBeRejectedWith(error);
+    await expect(service.initializeLaunchDarklyFlags()).rejects.toEqual(error);
   });
 
   it('should initialize LaunchDarkly change listener when ldClient is defined', () => {
@@ -162,11 +178,11 @@ describe('LaunchDarklyService', () => {
     });
     service.initializeLaunchDarklyClient();
 
-    spyOn(service['ldClient'], 'on');
+    vi.spyOn(service['ldClient'], 'on');
 
     service.initializeLaunchDarklyChangeListener();
 
-    expect(service['ldClient'].on).toHaveBeenCalledWith('change', jasmine.any(Function));
+    expect(service['ldClient'].on).toHaveBeenCalledWith('change', expect.any(Function));
   });
 
   it('should not initialize LaunchDarkly change listener when stream is false', () => {
@@ -177,11 +193,11 @@ describe('LaunchDarklyService', () => {
     });
     service.initializeLaunchDarklyClient();
 
-    spyOn(service['ldClient'], 'on');
+    vi.spyOn(service['ldClient'], 'on');
 
     service.initializeLaunchDarklyChangeListener();
 
-    expect(service['ldClient'].on).not.toHaveBeenCalledWith('change', jasmine.any(Function));
+    expect(service['ldClient'].on).not.toHaveBeenCalledWith('change', expect.any(Function));
   });
 
   it('should update feature flags when ldClient emits change event', () => {
@@ -196,13 +212,15 @@ describe('LaunchDarklyService', () => {
     const mockFlags: LDFlagChangeset = LAUNCH_DARKLY_CHANGE_FLAGS_MOCK;
     const expectedUpdatedFlags = LAUNCH_DARKLY_FLAGS_MOCK;
 
-    spyOn(service['ldClient'], 'on').and.callFake((event: string, callback: (flags: LDFlagChangeset) => void) => {
-      if (event === 'change') {
-        callback(mockFlags);
-      }
-    });
+    vi.spyOn(service['ldClient'], 'on').mockImplementation(
+      (event: string, callback: (flags: LDFlagChangeset) => void) => {
+        if (event === 'change') {
+          callback(mockFlags);
+        }
+      },
+    );
 
-    spyOn(service['globalStore'], 'setFeatureFlags');
+    vi.spyOn(service['globalStore'], 'setFeatureFlags');
 
     service.initializeLaunchDarklyChangeListener();
 
