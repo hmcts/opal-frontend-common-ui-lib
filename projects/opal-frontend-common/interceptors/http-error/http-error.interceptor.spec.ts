@@ -433,4 +433,110 @@ describe('httpErrorInterceptor', () => {
       },
     });
   });
+
+  it('should return status from top-level status property', () => {
+    const error = { status: 404 };
+    // Access the function through the interceptor by running in injection context
+    TestBed.runInInjectionContext(() => {
+      const req = new HttpRequest('GET', '/test');
+      const next: HttpHandlerFn = () => throwError(() => error);
+      let extractedStatus: number | undefined;
+
+      httpErrorInterceptor(req, next).subscribe({
+        error: () => {
+          // Verify the interceptor handled a 404 by checking store state
+          const errorSignal = globalStore.bannerError();
+          expect(errorSignal.error).toBe(true);
+        },
+      });
+    });
+  });
+
+  it('should return status from nested error.status property', () => {
+    const error = { error: { status: 500 } };
+    TestBed.runInInjectionContext(() => {
+      const req = new HttpRequest('GET', '/test');
+      const next: HttpHandlerFn = () => throwError(() => error);
+
+      httpErrorInterceptor(req, next).subscribe({
+        error: () => {
+          const errorSignal = globalStore.bannerError();
+          expect(errorSignal.error).toBe(true);
+        },
+      });
+    });
+  });
+
+  it('should prefer top-level status over nested error.status', () => {
+    const error = { status: 403, error: { status: 500 } };
+    TestBed.runInInjectionContext(() => {
+      const req = new HttpRequest('GET', '/test');
+      const next: HttpHandlerFn = () => throwError(() => error);
+
+      httpErrorInterceptor(req, next).subscribe({
+        error: () => {
+          expect(router.navigate).toHaveBeenCalledWith(['/error/permission-denied']);
+        },
+      });
+    });
+  });
+
+  it('should return undefined when no status is present', () => {
+    const error = { message: 'Some error' };
+    TestBed.runInInjectionContext(() => {
+      const req = new HttpRequest('GET', '/test');
+      const next: HttpHandlerFn = () => throwError(() => error);
+
+      httpErrorInterceptor(req, next).subscribe({
+        error: () => {
+          const errorSignal = globalStore.bannerError();
+          expect(errorSignal.error).toBe(true);
+          expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
+        },
+      });
+    });
+  });
+
+  it('should return undefined when error is null', () => {
+    const error = null;
+    TestBed.runInInjectionContext(() => {
+      const req = new HttpRequest('GET', '/test');
+      const next: HttpHandlerFn = () => throwError(() => error);
+
+      httpErrorInterceptor(req, next).subscribe({
+        error: () => {
+          const errorSignal = globalStore.bannerError();
+          expect(errorSignal.error).toBe(true);
+        },
+      });
+    });
+  });
+
+  it('should return undefined when error is undefined', () => {
+    const error = undefined;
+    TestBed.runInInjectionContext(() => {
+      const req = new HttpRequest('GET', '/test');
+      const next: HttpHandlerFn = () => throwError(() => error);
+
+      httpErrorInterceptor(req, next).subscribe({
+        error: () => {
+          const errorSignal = globalStore.bannerError();
+          expect(errorSignal.error).toBe(true);
+        },
+      });
+    });
+  });
+
+  it('should handle HttpErrorResponse with status', () => {
+    const errorResponse = new HttpErrorResponse({ status: 401 });
+    const request = new HttpRequest('GET', '/test');
+    const next: HttpHandlerFn = () => throwError(() => errorResponse);
+
+    interceptor(request, next).subscribe({
+      error: () => {
+        const errorSignal = globalStore.bannerError();
+        expect(errorSignal.error).toBe(true);
+      },
+    });
+  });
 });

@@ -98,6 +98,28 @@ function handleNonRetriableError(error: unknown, router: Router): void {
   }
 }
 
+/**
+ * Extracts the HTTP status code from an error object.
+ *
+ * Attempts to retrieve the status code by checking for a `status` property
+ * at the top level of the error object, and if not found, checks for a nested
+ * `error.status` property.
+ *
+ * @param error - The error object to extract the status code from
+ * @returns The HTTP status code if found, otherwise `undefined`
+ */
+function getStatusCode(error: unknown): number | undefined {
+  if (typeof error === 'object' && error !== null && 'status' in error) {
+    const statusErr = error as { status?: number };
+    return statusErr.status;
+  }
+  if (typeof error === 'object' && error !== null && 'error' in error) {
+    const err = error as { error?: { status?: number } };
+    return err.error?.status;
+  }
+  return undefined;
+}
+
 export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
   const globalStore = inject(GlobalStore);
   const appInsightsService = inject(AppInsightsService);
@@ -109,13 +131,19 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
     }),
     catchError((error) => {
       const isBrowser = typeof globalThis !== 'undefined';
+      const statusCode = getStatusCode(error);
 
       if (isBrowser) {
         if (isNonRetriableError(error)) {
           handleNonRetriableError(error, router);
         } else if (isRetriableError(error)) {
           handleRetriableError(error, globalStore);
-          return EMPTY;
+
+          // Swallow ONLY retriable 409s so they don't bubble as uncaught exceptions.
+          // Do NOT swallow other statuses (e.g. 401) as callers may relay on an emission.
+          if (statusCode === 409) {
+            return EMPTY;
+          }
         } else {
           globalStore.setBannerError({
             ...GLOBAL_ERROR_STATE,
