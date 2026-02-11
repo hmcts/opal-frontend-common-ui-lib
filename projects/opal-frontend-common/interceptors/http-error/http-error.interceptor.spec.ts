@@ -467,7 +467,7 @@ describe('httpErrorInterceptor', () => {
   });
 
   it('should prefer top-level status over nested error.status', () => {
-    const error = { status: 403, error: { status: 500 } };
+    const error = { status: 403, error: { status: 500, retriable: false } };
     TestBed.runInInjectionContext(() => {
       const req = new HttpRequest('GET', '/test');
       const next: HttpHandlerFn = () => throwError(() => error);
