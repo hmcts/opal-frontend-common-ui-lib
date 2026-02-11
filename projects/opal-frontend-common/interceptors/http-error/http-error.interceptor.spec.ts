@@ -440,7 +440,6 @@ describe('httpErrorInterceptor', () => {
     TestBed.runInInjectionContext(() => {
       const req = new HttpRequest('GET', '/test');
       const next: HttpHandlerFn = () => throwError(() => error);
-      let extractedStatus: number | undefined;
 
       httpErrorInterceptor(req, next).subscribe({
         error: () => {
