@@ -1,7 +1,7 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, tap, throwError } from 'rxjs';
+import { catchError, EMPTY, tap, throwError } from 'rxjs';
 import { AppInsightsService } from '@hmcts/opal-frontend-common/services/app-insights-service';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constants';
@@ -115,6 +115,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
           handleNonRetriableError(error, router);
         } else if (isRetriableError(error)) {
           handleRetriableError(error, globalStore);
+          return EMPTY;
         } else {
           globalStore.setBannerError({
             ...GLOBAL_ERROR_STATE,
