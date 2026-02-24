@@ -10,6 +10,7 @@
     "test": "ng test --runner=vitest --watch=false",
     "test:watch": "ng test --runner=vitest --watch",
     "test:coverage": "ng test --runner=vitest --watch=false --coverage",
+    "pack:check": "node scripts/validate-package-surface.mjs",
     "lint": "yarn prettier && yarn lint:ng",
     "lint:ng": "ng lint",
     "prettier": "prettier --check \"./**/*.{ts,js,html,scss}\"",

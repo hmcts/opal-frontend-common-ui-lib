@@ -8,9 +8,27 @@
   },
   "peerDependencies": {
     "@angular/common": "^18.2.0 || ^19.0.0 || ^20.0.0 || ^21.0.0",
-    "@angular/core": "^18.2.0 || ^19.0.0 || ^20.0.0 || ^21.0.0"
+    "@angular/core": "^18.2.0 || ^19.0.0 || ^20.0.0 || ^21.0.0",
+    "@angular/forms": "^18.2.0 || ^19.0.0 || ^20.0.0 || ^21.0.0",
+    "@angular/platform-browser": "^18.2.0 || ^19.0.0 || ^20.0.0 || ^21.0.0",
+    "@angular/router": "^18.2.0 || ^19.0.0 || ^20.0.0 || ^21.0.0",
+    "@ngrx/signals": "^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0",
+    "rxjs": "^7.8.0"
+  },
+  "peerDependenciesMeta": {
+    "@ngrx/signals": {
+      "optional": true
+    }
   },
   "dependencies": {
+    "@microsoft/applicationinsights-web": "^3.3.6",
+    "@ministryofjustice/frontend": "^8.0.0",
+    "accessible-autocomplete": "^3.0.1",
+    "fast-sort": "^3.4.1",
+    "govuk-frontend": "^6.0.0",
+    "home-office-kit": "^1.2.0",
+    "launchdarkly-js-client-sdk": "^3.5.0",
+    "luxon": "^3.5.0",
     "tslib": "^2.3.0"
   },
   "sideEffects": false,
@@ -113,9 +131,6 @@
     },
     "./components/custom/custom-page-header": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-page-header.mjs"
-    },
-    "./components/custom/custom-page-header/custom-page-header-action-buttons-container": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-page-header-custom-page-header-action-buttons-container.mjs"
     },
     "./components/custom/custom-horizontal-scroll-pane": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-horizontal-scroll-pane.mjs"
@@ -228,11 +243,13 @@
     "./components/govuk/govuk-tabs/govuk-tabs-panel": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-tabs-govuk-tabs-panel.mjs"
     },
-    "./components/govuk/govuk-tags": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-tags.mjs"
-    },
     "./components/govuk/govuk-task-list": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-task-list.mjs"
+    },
+    "./components/govuk/govuk-tags": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-tag.mjs",
+      "types": "./types/hmcts-opal-frontend-common-components-govuk-govuk-tag.d.ts",
+      "default": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-tag.mjs"
     },
     "./components/govuk/govuk-text-area": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-text-area.mjs"
@@ -390,9 +407,6 @@
     "./resolvers/title": {
       "import": "./fesm2022/hmcts-opal-frontend-common-resolvers-title.mjs"
     },
-    "./services": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-services.mjs"
-    },
     "./services/app-insights-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-app-insights-service.mjs"
     },
@@ -449,9 +463,6 @@
     },
     "./services/transformation-service/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-transformation-service-interfaces.mjs"
-    },
-    "./services/transformation-service/mocks": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-services-transformation-service-mocks.mjs"
     },
     "./services/transformation-service/constants": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-transformation-service-constants.mjs"

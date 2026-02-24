@@ -41,6 +41,9 @@ jobs:
       - name: Build library
         run: yarn build
 
+      - name: Validate publish surface
+        run: yarn pack:check
+
       - name: Run unit tests
         run: yarn test:coverage
 
@@ -86,6 +89,9 @@ jobs:
 
       - name: Build library (Release)
         run: yarn build
+
+      - name: Validate publish surface (Release)
+        run: yarn pack:check
 
       - name: Publish version (OIDC via npm)
         working-directory: dist/opal-frontend-common
