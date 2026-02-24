@@ -32,6 +32,7 @@
     "tslib": "^2.3.0"
   },
   "sideEffects": false,
+  "sass": "./styles/styles.scss",
   "exports": {
     ".": {
       "import": "./fesm2022/hmcts-opal-frontend-common.mjs"
@@ -532,6 +533,14 @@
     },
     "./validators/valid-value": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-valid-value.mjs"
+    },
+    "./styles": {
+      "sass": "./styles/styles.scss",
+      "default": "./styles/styles.scss"
+    },
+    "./styles/styles.scss": {
+      "sass": "./styles/styles.scss",
+      "default": "./styles/styles.scss"
     },
     "./types": {
       "import": "./fesm2022/hmcts-opal-frontend-common-types.mjs"
