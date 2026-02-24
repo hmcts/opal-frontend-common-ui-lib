@@ -7,7 +7,7 @@ const PACKAGE_NAME = '@hmcts/opal-frontend-common';
 const PACKAGE_NAME_TYPOS = ['@hmcts/opal-fronted-common'];
 const TS_CONFIG_PATH = resolve('tsconfig.json');
 const LIB_PACKAGE_JSON_PATH = resolve('projects/opal-frontend-common/package.json');
-const IGNORED_EXPORT_SUBPATHS = new Set(['./styles', './styles/styles.scss']);
+const IGNORED_EXPORT_SUBPATHS = new Set(['./styles', './styles/styles.scss', './package.json']);
 
 function formatCompilerError(error) {
   const message = ts.flattenDiagnosticMessageText(error.messageText, '\n');

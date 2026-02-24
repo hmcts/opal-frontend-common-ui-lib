@@ -43,6 +43,39 @@ yarn
 
 Run `yarn ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
+## Using This Library in an Angular Application (e.g. opal-frontend)
+
+Install in the consuming application:
+
+```bash
+yarn add @hmcts/opal-frontend-common
+```
+
+Import from the package root only for the root public API:
+
+```ts
+import { HEADER_LINKS, routing, type HeadingLevel } from '@hmcts/opal-frontend-common';
+```
+
+Import components/services/guards/validators from explicit subpaths:
+
+```ts
+import { GovukTextInputComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-text-input';
+import { GovukTagComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-tag';
+import { DateService } from '@hmcts/opal-frontend-common/services/date-service';
+import { hasFlowStateGuard } from '@hmcts/opal-frontend-common/guards/has-flow-state';
+```
+
+Import global styles through the exported style entrypoint:
+
+```scss
+@import '@hmcts/opal-frontend-common/styles';
+```
+
+`@hmcts/opal-frontend-common/components/govuk/govuk-tags` remains available as a compatibility alias, but new code should prefer `.../govuk-tag`.
+
+Do not deep-import from `dist/`, `fesm2022/`, `types/`, or internal source folders.
+
 ## Switching Between Local and Published Versions
 
 See [opal-frontend](https://github.com/hmcts/opal-frontend) for how this library is consumed in practice.
@@ -58,17 +91,19 @@ To use a published version of this library during development in another project
 
 To use a local version of this library during development in another project:
 
-1. Build this library:
+1. Build and pack this library:
 
    ```bash
-   yarn build
+   yarn pack:local
    ```
 
-2. In your consuming project (e.g. `opal-frontend`), ensure you have set an environment variable pointing to the local build:
+   This generates a local `.tgz` artifact in this repository root (e.g. `hmcts-opal-frontend-common-X.Y.Z.tgz`).
+
+2. In your consuming project (e.g. `opal-frontend`), ensure you have set an environment variable pointing to this repository root:
 
    ```bash
    # In your shell config file (.zshrc, .bash_profile, or .bashrc)
-   export COMMON_UI_LIB_PATH="[INSERT PATH TO COMMON UI LIB FOLDER]"
+   export COMMON_UI_LIB_PATH="[INSERT PATH TO COMMON UI LIB REPOSITORY ROOT]"
    ```
 
 3. In the consuming project (e.g. `opal-frontend`), run:
@@ -77,7 +112,7 @@ To use a local version of this library during development in another project:
    yarn import:local:common-ui-lib
    ```
 
-   This will remove the published version and install the local build using the path provided.
+   This will remove the published version and install the locally packed `.tgz` artifact from the path provided.
 
 4. To switch back to the published version:
    ```bash

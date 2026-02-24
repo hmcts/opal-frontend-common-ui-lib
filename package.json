@@ -12,6 +12,7 @@
     "test:coverage": "ng test --runner=vitest --watch=false --coverage",
     "exports:check": "node scripts/validate-path-alias-exports-sync.mjs",
     "pack:check": "node scripts/validate-package-surface.mjs",
+    "pack:local": "yarn exports:check && yarn build && yarn pack:check && find . -maxdepth 1 -type f \\( -name 'hmcts-opal-frontend-common-*.tgz' -o -name 'hmcts-opal-frontend-common-ui-lib-*.tgz' \\) -delete && npm_config_cache=${TMPDIR:-/tmp}/npm-cache-opal-common-ui npm pack ./dist/opal-frontend-common",
     "lint": "yarn prettier && yarn lint:ng",
     "lint:ng": "ng lint",
     "prettier": "prettier --check \"./**/*.{ts,js,html,scss}\"",
