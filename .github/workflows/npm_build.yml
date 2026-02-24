@@ -38,6 +38,9 @@ jobs:
       - name: Audit vulnerabilities (known issues check)
         run: yarn audit:check
 
+      - name: Validate export/path sync
+        run: yarn exports:check
+
       - name: Build library
         run: yarn build
 
@@ -86,6 +89,9 @@ jobs:
           npm --version
       - name: Install dependencies (Release)
         run: yarn install --frozen-lockfile
+
+      - name: Validate export/path sync (Release)
+        run: yarn exports:check
 
       - name: Build library (Release)
         run: yarn build

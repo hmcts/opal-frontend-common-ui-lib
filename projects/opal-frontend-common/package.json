@@ -37,6 +37,14 @@
     "tslib": "^2.3.0"
   },
   "sideEffects": false,
+  "files": [
+    "LICENSE",
+    "README.md",
+    "package.json",
+    "fesm2022/**/*.mjs",
+    "types/**/*.d.ts",
+    "styles/**/*"
+  ],
   "sass": "./styles/styles.scss",
   "exports": {
     ".": {
@@ -201,6 +209,9 @@
     "./components/govuk/govuk-heading-with-caption": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-heading-with-caption.mjs"
     },
+    "./components/govuk/govuk-heading-with-caption/types": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-heading-with-caption-types.mjs"
+    },
     "./components/govuk/govuk-inset-text": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-inset-text.mjs"
     },
@@ -251,6 +262,9 @@
     },
     "./components/govuk/govuk-task-list": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-task-list.mjs"
+    },
+    "./components/govuk/govuk-tag": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-tag.mjs"
     },
     "./components/govuk/govuk-tags": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-tag.mjs",
@@ -332,6 +346,9 @@
     "./components/moj/moj-sortable-table": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-sortable-table.mjs"
     },
+    "./components/moj/moj-sub-navigation": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-sub-navigation.mjs"
+    },
     "./components/moj/moj-ticket-panel": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-ticket-panel.mjs"
     },
@@ -389,6 +406,9 @@
     "./interceptors/http-error/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-interceptors-http-error-interfaces.mjs"
     },
+    "./pages": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-pages.mjs"
+    },
     "./pages/routing": {
       "import": "./fesm2022/hmcts-opal-frontend-common-pages.mjs"
     },
@@ -421,6 +441,12 @@
     },
     "./services/transfer-state-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-transfer-state-service.mjs"
+    },
+    "./services/transfer-state-service/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-transfer-state-service-interfaces.mjs"
+    },
+    "./services/transfer-state-service/mocks": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-transfer-state-service-mocks.mjs"
     },
     "./services/launch-darkly-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-launch-darkly-service.mjs"

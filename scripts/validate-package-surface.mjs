@@ -55,7 +55,7 @@ try {
   const fileSet = new Set(filePaths);
   const issues = [];
 
-  ['package.json', 'README.md'].forEach((requiredFile) => {
+  ['package.json', 'README.md', 'LICENSE'].forEach((requiredFile) => {
     if (!fileSet.has(requiredFile)) {
       issues.push(`Missing required packed file: ${requiredFile}`);
     }
