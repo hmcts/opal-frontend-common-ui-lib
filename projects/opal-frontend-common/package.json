@@ -1,11 +1,16 @@
 {
   "name": "@hmcts/opal-frontend-common",
   "version": "0.0.62",
+  "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/hmcts/opal-frontend-common-ui-lib"
   },
+  "engines": {
+    "node": ">=18"
+  },
+  "types": "./types/hmcts-opal-frontend-common.d.ts",
   "peerDependencies": {
     "@angular/common": "^18.2.0 || ^19.0.0 || ^20.0.0 || ^21.0.0",
     "@angular/core": "^18.2.0 || ^19.0.0 || ^20.0.0 || ^21.0.0",
