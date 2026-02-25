@@ -266,11 +266,6 @@
     "./components/govuk/govuk-tag": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-tag.mjs"
     },
-    "./components/govuk/govuk-tags": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-tag.mjs",
-      "types": "./types/hmcts-opal-frontend-common-components-govuk-govuk-tag.d.ts",
-      "default": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-tag.mjs"
-    },
     "./components/govuk/govuk-text-area": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-text-area.mjs"
     },

@@ -231,9 +231,6 @@
       "@hmcts/opal-frontend-common/components/govuk/govuk-tag": [
         "./dist/opal-frontend-common/components/govuk/govuk-tag"
       ],
-      "@hmcts/opal-frontend-common/components/govuk/govuk-tags": [
-        "./dist/opal-frontend-common/components/govuk/govuk-tag"
-      ],
       "@hmcts/opal-frontend-common/components/govuk/govuk-task-list": [
         "./dist/opal-frontend-common/components/govuk/govuk-task-list"
       ],

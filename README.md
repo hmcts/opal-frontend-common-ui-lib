@@ -76,8 +76,6 @@ Import global styles through the exported style entrypoint:
 @import '@hmcts/opal-frontend-common/styles';
 ```
 
-`@hmcts/opal-frontend-common/components/govuk/govuk-tags` remains available as a compatibility alias, but new code should prefer `.../govuk-tag`.
-
 Do not deep-import from `dist/`, `fesm2022/`, `types/`, or internal source folders.
 
 ## Switching Between Local and Published Versions
