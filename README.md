@@ -12,11 +12,11 @@ This is an [Angular Library](https://angular.dev/tools/libraries).
 - [Getting Started](#getting-started)
 - [Development server](#development-server)
 - [Build](#build)
+- [Using This Library](#using-this-library-in-an-angular-application-eg-opal-frontend)
 - [Switching Between Local and Published Versions](#switching-between-local-and-published-versions)
 - [Running unit tests](#running-unit-tests)
 - [Angular code scaffolding](#angular-code-scaffolding)
 - [Commonly Used Commands](#commonly-used-commands)
-- [Using This Library](#using-this-library-in-an-angular-application-eg-opal-frontend)
 - [Publishing the Library](#publishing-the-library)
 
 ## Getting Started
@@ -25,7 +25,7 @@ This is an [Angular Library](https://angular.dev/tools/libraries).
 
 Running the application requires the following tools to be installed in your environment:
 
-- [Node.js](https://nodejs.org/) v23.7.0 or later
+- [Node.js](https://nodejs.org/) v18 or later
 
 - [yarn](https://yarnpkg.com/) v4
 
@@ -41,7 +41,11 @@ yarn
 
 ## Build
 
-Run `yarn ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run `yarn build` to build the project. The build artifacts will be stored in the `dist/` directory.
+
+## Development server
+
+Run `yarn start` to serve the local harness app via Angular dev server.
 
 ## Using This Library in an Angular Application (e.g. opal-frontend)
 
@@ -183,6 +187,15 @@ The following commands are available in the `package.json`:
 
 - `yarn build`  
   Builds the Angular library and outputs to the `dist/` folder.
+
+- `yarn exports:check`  
+  Validates that source `exports` and local `tsconfig` path aliases stay in sync.
+
+- `yarn pack:check`  
+  Validates the publish surface using `npm pack --dry-run`.
+
+- `yarn pack:local`  
+  Builds and packages the library into a root-level `.tgz` file for local consumer testing.
 
 - `yarn test`  
   Executes unit tests via Vitest.

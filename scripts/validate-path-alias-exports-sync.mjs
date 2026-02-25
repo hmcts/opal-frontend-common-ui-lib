@@ -19,7 +19,8 @@ function toExportSubpath(pathAlias) {
     return '.';
   }
 
-  return `./${pathAlias.slice(`${PACKAGE_NAME}/`.length)}`;
+  const prefix = `${PACKAGE_NAME}/`;
+  return `./${pathAlias.slice(prefix.length)}`;
 }
 
 const configFile = ts.readConfigFile(TS_CONFIG_PATH, ts.sys.readFile);
@@ -31,7 +32,9 @@ if (configFile.error) {
 const compilerPaths = configFile.config?.compilerOptions?.paths ?? {};
 const pathAliases = Object.keys(compilerPaths);
 
-const typoAliases = pathAliases.filter((alias) => PACKAGE_NAME_TYPOS.some((typoPrefix) => alias.startsWith(typoPrefix)));
+const typoAliases = pathAliases.filter((alias) =>
+  PACKAGE_NAME_TYPOS.some((typoPrefix) => alias.startsWith(typoPrefix)),
+);
 const opalAliases = pathAliases.filter((alias) => alias === PACKAGE_NAME || alias.startsWith(`${PACKAGE_NAME}/`));
 const aliasSubpaths = new Set(opalAliases.map(toExportSubpath));
 
@@ -45,23 +48,18 @@ const onlyInExports = [...exportSubpaths].filter((subpath) => !aliasSubpaths.has
 const issues = [];
 
 if (typoAliases.length > 0) {
-  issues.push(
-    `Invalid alias prefix detected (possible typo): ${typoAliases
-      .map((alias) => `\`${alias}\``)
-      .join(', ')}`,
-  );
+  const formattedAliases = typoAliases.map((alias) => `\`${alias}\``).join(', ');
+  issues.push(`Invalid alias prefix detected (possible typo): ${formattedAliases}`);
 }
 
 if (onlyInPaths.length > 0) {
-  issues.push(
-    `Paths without matching source export keys:\n${onlyInPaths.map((subpath) => `  - ${subpath}`).join('\n')}`,
-  );
+  const paths = onlyInPaths.map((subpath) => `  - ${subpath}`).join('\n');
+  issues.push(`Paths without matching source export keys:\n${paths}`);
 }
 
 if (onlyInExports.length > 0) {
-  issues.push(
-    `Source export keys without matching tsconfig alias:\n${onlyInExports.map((subpath) => `  - ${subpath}`).join('\n')}`,
-  );
+  const exports = onlyInExports.map((subpath) => `  - ${subpath}`).join('\n');
+  issues.push(`Source export keys without matching tsconfig alias:\n${exports}`);
 }
 
 if (issues.length > 0) {
