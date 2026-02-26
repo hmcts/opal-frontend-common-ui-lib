@@ -9203,8 +9203,8 @@ __metadata:
   linkType: hard
 
 "ng-packagr@npm:^21.0.0":
-  version: 21.1.0
-  resolution: "ng-packagr@npm:21.1.0"
+  version: 21.2.0
+  resolution: "ng-packagr@npm:21.2.0"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@rollup/plugin-json": "npm:^6.1.0"
@@ -9229,7 +9229,7 @@ __metadata:
     sass: "npm:^1.81.0"
     tinyglobby: "npm:^0.2.12"
   peerDependencies:
-    "@angular/compiler-cli": ^21.0.0 || ^21.1.0-next
+    "@angular/compiler-cli": ^21.0.0 || ^21.2.0-next
     tailwindcss: ^2.0.0 || ^3.0.0 || ^4.0.0
     tslib: ^2.3.0
     typescript: ">=5.9 <6.0"
@@ -9241,7 +9241,7 @@ __metadata:
       optional: true
   bin:
     ng-packagr: src/cli/main.js
-  checksum: 10/639c99266d40c97ad2e3c3d4bc3e5fb2560e4ae4fbdec60bc5d2a2e23285d98661a8ab3d35d5d1d8627261ca5abc9a6c841aee6836de89072359ee4c1bfa8a3e
+  checksum: 10/b57563505b0eddcfc05dd215b99bde5623e940ddee355253518a7d9643beebf7fc3d80b950b4dc11b99f7b3e58097d3f17870d9313ec2d156132388cc2fffeb4
   languageName: node
   linkType: hard
 
