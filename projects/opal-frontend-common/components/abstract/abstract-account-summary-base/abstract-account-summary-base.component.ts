@@ -21,7 +21,7 @@ export abstract class AbstractAccountSummaryBaseComponent<THeader, TTab extends 
 
   public accountData!: THeader;
 
-  // ---- hooks each subclass provides ----  
+  // ---- hooks each subclass provides ----
   protected abstract setupTabDataStream(): void;
   protected abstract getHeaderDataFromRoute(): void;
   protected abstract getHeaderData(accountId: number): Observable<THeader>;
