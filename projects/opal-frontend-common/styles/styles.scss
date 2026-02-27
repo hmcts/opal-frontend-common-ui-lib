@@ -5,18 +5,14 @@
    ==========================================================================
    These imports include external styles used across the application.
 */
-@import 'govuk-frontend/dist/govuk/all.scss';
-@import '@ministryofjustice/frontend/moj/all.scss';
+@use 'govuk-frontend/dist/govuk/index' as *;
+@use '@ministryofjustice/frontend/moj/all' as moj;
+@use './custom/_custom-section_break.scss';
+@use './custom/custom-scrollable-panes';
+
+/* Keep @import until home-office-kit migrates to Sass modules. */
 @import 'accessible-autocomplete/dist/accessible-autocomplete.min.css';
 @import 'home-office-kit/sass/_loadingSpinner.scss';
-
-/* ==========================================================================
-   Custom Component Styles
-   ==========================================================================
-   Custom Component Styles authored within the OPAL Frontend Common UI Library.
-*/
-@import './custom/_custom-section_break.scss';
-@import './custom/custom-scrollable-panes';
 
 html,
 body {
@@ -89,11 +85,11 @@ opal-lib-govuk-footer {
 }
 
 .govuk-light-grey-background-colour {
-  background-color: govuk-colour('light-grey');
+  background-color: govuk-colour('black', $variant: 'tint-95');
 }
 
 .govuk-lighter-blue-background-colour {
-  background-color: govuk-tint(govuk-colour('light-blue'), 50);
+  background-color: govuk-tint(govuk-colour('blue', $variant: 'tint-25'), 50);
 }
 
 .govuk-blue-background-colour {
@@ -105,11 +101,11 @@ opal-lib-govuk-footer {
 }
 
 .govuk-dark-blue-text-colour {
-  color: govuk-colour('dark-blue');
+  color: govuk-colour('blue', $variant: 'shade-50');
 }
 
 .govuk-dark-grey-text-colour {
-  color: govuk-colour('dark-grey');
+  color: govuk-colour('black', $variant: 'tint-25');
 }
 
 .govuk-white-text-colour {

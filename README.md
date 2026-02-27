@@ -73,7 +73,7 @@ import { hasFlowStateGuard } from '@hmcts/opal-frontend-common/guards/has-flow-s
 Import global styles through the exported style entrypoint:
 
 ```scss
-@import '@hmcts/opal-frontend-common/styles';
+@use '@hmcts/opal-frontend-common/styles';
 ```
 
 Do not deep-import from `dist/`, `fesm2022/`, `types/`, or internal source folders.
