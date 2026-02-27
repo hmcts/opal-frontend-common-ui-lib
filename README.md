@@ -12,11 +12,11 @@ This is an [Angular Library](https://angular.dev/tools/libraries).
 - [Getting Started](#getting-started)
 - [Development server](#development-server)
 - [Build](#build)
+- [Using This Library](#using-this-library-in-an-angular-application-eg-opal-frontend)
 - [Switching Between Local and Published Versions](#switching-between-local-and-published-versions)
 - [Running unit tests](#running-unit-tests)
 - [Angular code scaffolding](#angular-code-scaffolding)
 - [Commonly Used Commands](#commonly-used-commands)
-- [Using This Library](#using-this-library-in-an-angular-application-eg-opal-frontend)
 - [Publishing the Library](#publishing-the-library)
 
 ## Getting Started
@@ -25,7 +25,7 @@ This is an [Angular Library](https://angular.dev/tools/libraries).
 
 Running the application requires the following tools to be installed in your environment:
 
-- [Node.js](https://nodejs.org/) v23.7.0 or later
+- [Node.js](https://nodejs.org/) v18 or later
 
 - [yarn](https://yarnpkg.com/) v4
 
@@ -41,7 +41,42 @@ yarn
 
 ## Build
 
-Run `yarn ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run `yarn build` to build the project. The build artifacts will be stored in the `dist/` directory.
+
+## Development server
+
+Run `yarn start` to serve the local harness app via Angular dev server.
+
+## Using This Library in an Angular Application (e.g. opal-frontend)
+
+Install in the consuming application:
+
+```bash
+yarn add @hmcts/opal-frontend-common
+```
+
+Import from the package root only for the root public API:
+
+```ts
+import { HEADER_LINKS, routing, type HeadingLevel } from '@hmcts/opal-frontend-common';
+```
+
+Import components/services/guards/validators from explicit subpaths:
+
+```ts
+import { GovukTextInputComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-text-input';
+import { GovukTagComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-tag';
+import { DateService } from '@hmcts/opal-frontend-common/services/date-service';
+import { hasFlowStateGuard } from '@hmcts/opal-frontend-common/guards/has-flow-state';
+```
+
+Import global styles through the exported style entrypoint:
+
+```scss
+@use '@hmcts/opal-frontend-common/styles';
+```
+
+Do not deep-import from `dist/`, `fesm2022/`, `types/`, or internal source folders.
 
 ## Switching Between Local and Published Versions
 
@@ -58,17 +93,19 @@ To use a published version of this library during development in another project
 
 To use a local version of this library during development in another project:
 
-1. Build this library:
+1. Build and pack this library:
 
    ```bash
-   yarn build
+   yarn pack:local
    ```
 
-2. In your consuming project (e.g. `opal-frontend`), ensure you have set an environment variable pointing to the local build:
+   This generates a local `.tgz` artifact in this repository root (e.g. `hmcts-opal-frontend-common-X.Y.Z.tgz`).
+
+2. In your consuming project (e.g. `opal-frontend`), ensure you have set an environment variable pointing to this repository root:
 
    ```bash
    # In your shell config file (.zshrc, .bash_profile, or .bashrc)
-   export COMMON_UI_LIB_PATH="[INSERT PATH TO COMMON UI LIB FOLDER]"
+   export COMMON_UI_LIB_PATH="[INSERT PATH TO COMMON UI LIB REPOSITORY ROOT]"
    ```
 
 3. In the consuming project (e.g. `opal-frontend`), run:
@@ -77,7 +114,7 @@ To use a local version of this library during development in another project:
    yarn import:local:common-ui-lib
    ```
 
-   This will remove the published version and install the local build using the path provided.
+   This will remove the published version and install the locally packed `.tgz` artifact from the path provided.
 
 4. To switch back to the published version:
    ```bash
@@ -148,6 +185,15 @@ The following commands are available in the `package.json`:
 
 - `yarn build`  
   Builds the Angular library and outputs to the `dist/` folder.
+
+- `yarn exports:check`  
+  Validates that source `exports` and local `tsconfig` path aliases stay in sync.
+
+- `yarn pack:check`  
+  Validates the publish surface using `npm pack --dry-run`.
+
+- `yarn pack:local`  
+  Builds and packages the library into a root-level `.tgz` file for local consumer testing.
 
 - `yarn test`  
   Executes unit tests via Vitest.
