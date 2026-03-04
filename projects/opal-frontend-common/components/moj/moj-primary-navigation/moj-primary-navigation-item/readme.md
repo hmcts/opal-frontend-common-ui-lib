@@ -1,5 +1,3 @@
----
-
 # MOJ Primary Navigation Item Component
 
 This Angular component represents an individual item in the MOJ primary navigation, typically used to create navigation links inside a primary navigation bar.
@@ -77,7 +75,5 @@ ng test
 ## Contributing
 
 Feel free to submit issues or pull requests to improve this component.
-
----
 
 This `README.md` explains how to use the `moj-primary-navigation-item` component to create individual navigation links in the MOJ primary navigation bar.

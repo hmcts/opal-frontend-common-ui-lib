@@ -8,17 +8,15 @@ import {
   Output,
   inject,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'opal-lib-moj-primary-navigation',
-  imports: [],
   templateUrl: './moj-primary-navigation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MojPrimaryNavigationComponent implements OnInit, OnDestroy {
-  private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly ngUnsubscribe = new Subject<void>();
 
