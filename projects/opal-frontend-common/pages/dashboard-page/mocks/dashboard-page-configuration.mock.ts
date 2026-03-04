@@ -24,6 +24,7 @@ export const DASHBOARD_PAGE_CONFIGURATION_MOCK: IDashboardPageConfiguration = {
   ],
   groups: [
     {
+      id: 'group1',
       title: 'Group 1',
       links: [
         {
@@ -47,6 +48,7 @@ export const DASHBOARD_PAGE_CONFIGURATION_MOCK: IDashboardPageConfiguration = {
       ],
     },
     {
+      id: 'group2',
       title: 'Group 2',
       links: [
         {

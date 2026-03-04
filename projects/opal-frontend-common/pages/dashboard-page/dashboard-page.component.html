@@ -1,32 +1,28 @@
 <div class="govuk-grid-column-two-thirds">
   <h1 class="govuk-heading-l">{{ dashboardConfig.title }}</h1>
-  @if (dashboardConfig.highlights.length > 0) {
+  @if (visibleHighlights.length > 0) {
     <ul class="govuk-list">
-      @for (highlight of dashboardConfig.highlights; track highlight.text) {
-        @if (permissionIds().includes(highlight.permissionId)) {
-          <li>
-            @if (highlight.style) {
-              <opal-lib-moj-inset-text [id]="highlight.id" [classes]="highlight.style">
-                <ng-container *ngTemplateOutlet="dashboardPageLink; context: { highlight: highlight }"></ng-container>
-              </opal-lib-moj-inset-text>
-            } @else {
+      @for (highlight of visibleHighlights; track highlight.id) {
+        <li>
+          @if (highlight.style) {
+            <opal-lib-moj-inset-text [id]="highlight.id" [classes]="highlight.style">
               <ng-container *ngTemplateOutlet="dashboardPageLink; context: { highlight: highlight }"></ng-container>
-            }
-          </li>
-        }
+            </opal-lib-moj-inset-text>
+          } @else {
+            <ng-container *ngTemplateOutlet="dashboardPageLink; context: { highlight: highlight }"></ng-container>
+          }
+        </li>
       }
     </ul>
   }
-  @if (dashboardConfig.groups.length > 0) {
-    @for (group of dashboardConfig.groups; track group.title) {
+  @if (visibleGroups.length > 0) {
+    @for (group of visibleGroups; track group.id) {
       <h2 class="govuk-heading-m">{{ group.title }}</h2>
       <ul class="govuk-list">
-        @for (link of group.links; track link.text) {
-          @if (permissionIds().includes(link.permissionId)) {
-            <li>
-              <ng-container *ngTemplateOutlet="dashboardPageLink; context: { highlight: link }"></ng-container>
-            </li>
-          }
+        @for (link of group.links; track link.id) {
+          <li>
+            <ng-container *ngTemplateOutlet="dashboardPageLink; context: { highlight: link }"></ng-container>
+          </li>
         }
       </ul>
     }
@@ -38,7 +34,7 @@
     class="govuk-link govuk-link--no-visited-state"
     [routerLink]="highlight.routerLink"
     [id]="highlight.id"
-    [target]="highlight.newTab ? '_blank' : undefined"
+    [target]="highlight.newTab ? '_blank' : '_self'"
     [attr.rel]="highlight.newTab ? 'noopener noreferrer' : null"
     [fragment]="highlight.fragment"
     >{{ highlight.text }}</a

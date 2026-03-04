@@ -38,6 +38,7 @@ describe('DashboardPage', () => {
     ],
     groups: [
       {
+        id: 'group-operational-reports',
         title: 'Operational reports',
         links: [
           {
@@ -125,6 +126,27 @@ describe('DashboardPage', () => {
     expect(fixture.nativeElement.querySelector('#link-new-tab')).toBeFalsy();
   });
 
+  it('should not render an empty highlights section when no highlight permissions are available', async () => {
+    await renderWithPermissions([201]);
+
+    const dashboardLists = fixture.nativeElement.querySelectorAll('ul.govuk-list');
+
+    expect(fixture.nativeElement.querySelector('#highlight-styled')).toBeFalsy();
+    expect(fixture.nativeElement.querySelector('#highlight-plain')).toBeFalsy();
+    expect(fixture.nativeElement.querySelector('#link-allowed')).toBeTruthy();
+    expect(dashboardLists).toHaveLength(1);
+  });
+
+  it('should not render an empty group section when no group links are permitted', async () => {
+    await renderWithPermissions([101]);
+
+    const dashboardLists = fixture.nativeElement.querySelectorAll('ul.govuk-list');
+
+    expect(fixture.nativeElement.querySelector('#highlight-styled')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('h2.govuk-heading-m')).toBeFalsy();
+    expect(dashboardLists).toHaveLength(1);
+  });
+
   it('should wrap styled highlights in inset text', async () => {
     await renderWithPermissions([101]);
 
@@ -161,5 +183,89 @@ describe('DashboardPage', () => {
     expect(link.getAttribute('target')).toBe('_blank');
     expect(link.getAttribute('rel')).toBe('noopener noreferrer');
     expect(link.getAttribute('href')).toContain('#payment');
+  });
+
+  it('should use safe same-tab target and no rel attributes for non-new-tab links', async () => {
+    await renderWithPermissions([101, 201]);
+
+    const highlightLink = fixture.nativeElement.querySelector('#highlight-styled');
+    const groupLink = fixture.nativeElement.querySelector('#link-allowed');
+
+    expect(highlightLink.getAttribute('target')).toBe('_self');
+    expect(highlightLink.getAttribute('rel')).toBeNull();
+    expect(groupLink.getAttribute('target')).toBe('_self');
+    expect(groupLink.getAttribute('rel')).toBeNull();
+  });
+
+  it('should render duplicate labels safely when item ids are unique', async () => {
+    const duplicateTextDashboardConfig: IDashboardPageConfiguration = {
+      title: 'Dashboard',
+      highlights: [
+        {
+          id: 'duplicate-highlight-1',
+          text: 'Duplicate label',
+          routerLink: ['/reports', '0', 'summary-list'],
+          fragment: null,
+          permissionId: 101,
+          newTab: false,
+          style: '',
+        },
+        {
+          id: 'duplicate-highlight-2',
+          text: 'Duplicate label',
+          routerLink: ['/reports', '1', 'summary-list'],
+          fragment: null,
+          permissionId: 102,
+          newTab: false,
+          style: '',
+        },
+      ],
+      groups: [
+        {
+          id: 'duplicate-group-1',
+          title: 'Duplicate group title',
+          links: [
+            {
+              id: 'duplicate-link-1',
+              text: 'Duplicate link label',
+              routerLink: ['/reports', '2', 'summary-list'],
+              fragment: null,
+              permissionId: 201,
+              newTab: false,
+              style: '',
+            },
+          ],
+        },
+        {
+          id: 'duplicate-group-2',
+          title: 'Duplicate group title',
+          links: [
+            {
+              id: 'duplicate-link-2',
+              text: 'Duplicate link label',
+              routerLink: ['/reports', '3', 'summary-list'],
+              fragment: null,
+              permissionId: 202,
+              newTab: false,
+              style: '',
+            },
+          ],
+        },
+      ],
+    };
+
+    getUniquePermissionsMock.mockReturnValue([101, 102, 201, 202]);
+    fixture.componentRef.setInput('dashboardConfig', duplicateTextDashboardConfig);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const duplicateGroupTitles = fixture.nativeElement.querySelectorAll('h2.govuk-heading-m');
+
+    expect(duplicateGroupTitles).toHaveLength(2);
+    expect(fixture.nativeElement.querySelector('#duplicate-highlight-1')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('#duplicate-highlight-2')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('#duplicate-link-1')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('#duplicate-link-2')).toBeTruthy();
   });
 });

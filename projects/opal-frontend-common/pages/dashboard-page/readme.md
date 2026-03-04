@@ -38,6 +38,7 @@ export class ReportsDashboardContainerComponent {
     ],
     groups: [
       {
+        id: 'reports-group-operational',
         title: 'Operational reports',
         links: [
           {
@@ -73,6 +74,12 @@ Each highlight/link supports:
 - `permissionId`: Numeric permission id used for visibility filtering.
 - `newTab`: Opens link in a new tab when `true`.
 - `style`: Optional class string for styled highlights.
+
+Each group supports:
+
+- `id`: Unique key used for rendering/tracking.
+- `title`: Group heading text.
+- `links`: Group link entries.
 
 ## Behaviour
 
