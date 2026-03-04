@@ -1,0 +1,14 @@
+<div class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox {{ extraClasses }}">
+  <input
+    #selectAllInput
+    type="checkbox"
+    class="govuk-checkboxes__input"
+    [id]="inputId"
+    [checked]="selectAllChecked"
+    [attr.aria-label]="ariaLabel"
+    (change)="toggleSelectAll($event)"
+  />
+  <label class="govuk-label govuk-checkboxes__label" [for]="inputId">
+    <span class="govuk-visually-hidden">{{ ariaLabel }}</span>
+  </label>
+</div>

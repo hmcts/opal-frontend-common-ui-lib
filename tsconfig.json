@@ -282,6 +282,9 @@
       "@hmcts/opal-frontend-common/components/moj/moj-header": [
         "./dist/opal-frontend-common/components/moj/moj-header"
       ],
+      "@hmcts/opal-frontend-common/components/moj/moj-multi-select": [
+        "./dist/opal-frontend-common/components/moj/moj-multi-select"
+      ],
       "@hmcts/opal-frontend-common/components/moj/moj-header/interfaces": [
         "./dist/opal-frontend-common/components/moj/moj-header/interfaces"
       ],

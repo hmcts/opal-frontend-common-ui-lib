@@ -294,6 +294,15 @@
     "./components/moj/moj-header/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-header-interfaces.mjs"
     },
+    "./components/moj/moj-multi-select/moj-multi-select-checkbox-body": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-multi-select-moj-multi-select-checkbox-body.mjs"
+    },
+    "./components/moj/moj-multi-select/moj-multi-select-checkbox-head": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-multi-select-moj-multi-select-checkbox-head.mjs"
+    },
+    "./components/moj/moj-multi-select": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-multi-select.mjs"
+    },
     "./components/moj/moj-notification-badge": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-notification-badge.mjs"
     },
