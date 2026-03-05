@@ -4,6 +4,16 @@
   "lib": {
     "entryFile": "public-api.ts"
   },
-  "allowedNonPeerDependencies": ["."],
+  "allowedNonPeerDependencies": [
+    "@microsoft/applicationinsights-web",
+    "@ministryofjustice/frontend",
+    "accessible-autocomplete",
+    "fast-sort",
+    "govuk-frontend",
+    "home-office-kit",
+    "launchdarkly-js-client-sdk",
+    "luxon",
+    "tslib"
+  ],
   "assets": ["./styles/**/*.*"]
 }
