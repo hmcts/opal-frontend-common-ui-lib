@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostBinding, Input, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -17,6 +17,8 @@ export class MojPrimaryNavigationItemComponent {
   @Input({ required: true }) public primaryNavigationItemText!: string;
   @Input({ required: true }) public activeItemFragment!: string;
   @Input({ required: false }) public isLastItem: boolean = false;
+  @Input({ required: false }) public useFragmentNavigation: boolean = true;
+  @Output() public navigationItemSelected = new EventEmitter<string>();
 
   @HostBinding('class') hostClass = 'moj-primary-navigation__item';
   @HostBinding('id') hostId = `${this.primaryNavigationItemId}`;
@@ -29,6 +31,12 @@ export class MojPrimaryNavigationItemComponent {
    */
   public handleItemClick(event: Event, item: string): void {
     event.preventDefault();
+
+    if (!this.useFragmentNavigation) {
+      this.navigationItemSelected.emit(item);
+      return;
+    }
+
     // Basically we want to mimic the behaviour of the GDS tabs component, as this is how these will be used.
     this.router.navigate(['./'], { relativeTo: this.route, fragment: item });
   }
