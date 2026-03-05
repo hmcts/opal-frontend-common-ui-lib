@@ -19,27 +19,42 @@ export class DashboardPage {
   public readonly globalStore = inject(GlobalStore);
   @Input({ required: true }) public dashboardConfig!: IDashboardPageConfiguration;
 
+  /**
+   * Computes the unique permission ids for the current user from the global store.
+   */
   public readonly permissionIds = computed(() =>
     this.permissionService.getUniquePermissions(this.globalStore.userState()),
   );
 
   /**
+   * Returns whether a dashboard link is visible for the current user.
+   * Empty permission arrays are treated as unrestricted links.
+   * @param linkPermissionIds - Permission ids configured for the link.
+   */
+  private hasLinkPermission(linkPermissionIds: number[]): boolean {
+    if (linkPermissionIds.length === 0) {
+      return true;
+    }
+
+    const userPermissionIds = this.permissionIds();
+    return linkPermissionIds.some((permissionId) => userPermissionIds.includes(permissionId));
+  }
+
+  /**
    * Returns highlights that the current user is permitted to view.
    */
   public get visibleHighlights(): IDashboardPageConfigurationLink[] {
-    const permissionIds = this.permissionIds();
-    return this.dashboardConfig.highlights.filter((highlight) => permissionIds.includes(highlight.permissionId));
+    return this.dashboardConfig.highlights.filter((highlight) => this.hasLinkPermission(highlight.permissionIds));
   }
 
   /**
    * Returns groups with links filtered by permissions, excluding empty groups.
    */
   public get visibleGroups(): IDashboardPageConfigurationLinkGroup[] {
-    const permissionIds = this.permissionIds();
     return this.dashboardConfig.groups
       .map((group) => ({
         ...group,
-        links: group.links.filter((link) => permissionIds.includes(link.permissionId)),
+        links: group.links.filter((link) => this.hasLinkPermission(link.permissionIds)),
       }))
       .filter((group) => group.links.length > 0);
   }

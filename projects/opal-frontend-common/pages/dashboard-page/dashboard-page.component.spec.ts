@@ -22,7 +22,7 @@ describe('DashboardPage', () => {
         text: 'Styled highlight',
         routerLink: ['/reports', '0', 'summary-list'],
         fragment: null,
-        permissionId: 101,
+        permissionIds: [101],
         newTab: false,
         style: 'govuk-lighter-blue-background-colour',
       },
@@ -31,9 +31,9 @@ describe('DashboardPage', () => {
         text: 'Plain highlight',
         routerLink: ['/reports', '1', 'summary-list'],
         fragment: 'reports-fragment',
-        permissionId: 102,
+        permissionIds: [102],
         newTab: true,
-        style: '',
+        style: null,
       },
     ],
     groups: [
@@ -46,18 +46,18 @@ describe('DashboardPage', () => {
             text: 'Allowed link',
             routerLink: ['/reports', '2', 'summary-list'],
             fragment: null,
-            permissionId: 201,
+            permissionIds: [201],
             newTab: false,
-            style: '',
+            style: null,
           },
           {
             id: 'link-new-tab',
             text: 'New tab link',
             routerLink: ['/reports', '3', 'summary-list'],
             fragment: 'payment',
-            permissionId: 202,
+            permissionIds: [202],
             newTab: true,
-            style: '',
+            style: null,
           },
         ],
       },
@@ -124,6 +124,70 @@ describe('DashboardPage', () => {
     expect(fixture.nativeElement.querySelector('#link-allowed')).toBeTruthy();
     expect(fixture.nativeElement.querySelector('#highlight-plain')).toBeFalsy();
     expect(fixture.nativeElement.querySelector('#link-new-tab')).toBeFalsy();
+  });
+
+  it('should render links when any configured permission id matches', async () => {
+    const multiPermissionDashboardConfig: IDashboardPageConfiguration = {
+      ...dashboardConfig,
+      highlights: [
+        {
+          ...dashboardConfig.highlights[0],
+          permissionIds: [999, 101],
+        },
+      ],
+      groups: [
+        {
+          ...dashboardConfig.groups[0],
+          links: [
+            {
+              ...dashboardConfig.groups[0].links[0],
+              permissionIds: [888, 201],
+            },
+          ],
+        },
+      ],
+    };
+
+    getUniquePermissionsMock.mockReturnValue([101, 201]);
+    fixture.componentRef.setInput('dashboardConfig', multiPermissionDashboardConfig);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('#highlight-styled')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('#link-allowed')).toBeTruthy();
+  });
+
+  it('should render unrestricted links when permissionIds is an empty array', async () => {
+    const unrestrictedDashboardConfig: IDashboardPageConfiguration = {
+      ...dashboardConfig,
+      highlights: [
+        {
+          ...dashboardConfig.highlights[0],
+          permissionIds: [],
+        },
+      ],
+      groups: [
+        {
+          ...dashboardConfig.groups[0],
+          links: [
+            {
+              ...dashboardConfig.groups[0].links[0],
+              permissionIds: [],
+            },
+          ],
+        },
+      ],
+    };
+
+    getUniquePermissionsMock.mockReturnValue([]);
+    fixture.componentRef.setInput('dashboardConfig', unrestrictedDashboardConfig);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('#highlight-styled')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector('#link-allowed')).toBeTruthy();
   });
 
   it('should not render an empty highlights section when no highlight permissions are available', async () => {
@@ -206,18 +270,18 @@ describe('DashboardPage', () => {
           text: 'Duplicate label',
           routerLink: ['/reports', '0', 'summary-list'],
           fragment: null,
-          permissionId: 101,
+          permissionIds: [101],
           newTab: false,
-          style: '',
+          style: null,
         },
         {
           id: 'duplicate-highlight-2',
           text: 'Duplicate label',
           routerLink: ['/reports', '1', 'summary-list'],
           fragment: null,
-          permissionId: 102,
+          permissionIds: [102],
           newTab: false,
-          style: '',
+          style: null,
         },
       ],
       groups: [
@@ -230,9 +294,9 @@ describe('DashboardPage', () => {
               text: 'Duplicate link label',
               routerLink: ['/reports', '2', 'summary-list'],
               fragment: null,
-              permissionId: 201,
+              permissionIds: [201],
               newTab: false,
-              style: '',
+              style: null,
             },
           ],
         },
@@ -245,9 +309,9 @@ describe('DashboardPage', () => {
               text: 'Duplicate link label',
               routerLink: ['/reports', '3', 'summary-list'],
               fragment: null,
-              permissionId: 202,
+              permissionIds: [202],
               newTab: false,
-              style: '',
+              style: null,
             },
           ],
         },

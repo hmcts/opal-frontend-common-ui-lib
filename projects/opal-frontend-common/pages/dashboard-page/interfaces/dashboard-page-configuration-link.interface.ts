@@ -3,7 +3,7 @@ export interface IDashboardPageConfigurationLink {
   text: string;
   routerLink: string[];
   fragment: string | null;
-  permissionId: number;
+  permissionIds: number[];
   newTab: boolean;
-  style: string;
+  style: string | null;
 }

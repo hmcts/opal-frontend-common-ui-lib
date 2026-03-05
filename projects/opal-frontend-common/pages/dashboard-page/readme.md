@@ -31,7 +31,7 @@ export class ReportsDashboardContainerComponent {
         text: 'View all your reports',
         routerLink: ['/reports', '0', 'summary-list'],
         fragment: null,
-        permissionId: 101,
+        permissionIds: [101],
         newTab: false,
         style: 'guidance-panel-blue',
       },
@@ -46,9 +46,9 @@ export class ReportsDashboardContainerComponent {
             text: 'Operational reports (by enforcement)',
             routerLink: ['/reports', '1', 'summary-list'],
             fragment: null,
-            permissionId: 102,
+            permissionIds: [102],
             newTab: false,
-            style: '',
+            style: null,
           },
         ],
       },
@@ -71,9 +71,9 @@ Each highlight/link supports:
 - `text`: Link text.
 - `routerLink`: Angular router link commands.
 - `fragment`: Optional URL fragment.
-- `permissionId`: Numeric permission id used for visibility filtering.
+- `permissionIds`: Array of numeric permission ids used for visibility filtering (any matching id grants visibility; empty array means unrestricted).
 - `newTab`: Opens link in a new tab when `true`.
-- `style`: Optional class string for styled highlights.
+- `style`: Optional class string for styled highlights (`null` for no style).
 
 Each group supports:
 
