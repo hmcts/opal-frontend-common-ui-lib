@@ -13,7 +13,8 @@ export class GovukCancelLinkComponent {
   /**
    * Handles the button click event.
    */
-  public handleClick(): void {
+  public handleClick(event?: Event): void {
+    event?.preventDefault();
     this.linkClickEvent.emit(true);
   }
 }
