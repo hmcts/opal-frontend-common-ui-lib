@@ -1,0 +1,5 @@
+{
+  "sideEffects": false,
+  "module": "../../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-pages-dashboard-page-interfaces.mjs",
+  "typings": "../../../../../dist/opal-frontend-common/pages/dashboard-page/interfaces/index.d.ts"
+}

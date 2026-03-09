@@ -47,7 +47,8 @@ body {
 }
 
 .govuk-width-container,
-.moj-header__container {
+.moj-header__container,
+.moj-primary-navigation__container {
   @include govuk-width-container(1028px);
 }
 
@@ -102,6 +103,11 @@ opal-lib-govuk-footer {
 
 .govuk-blue-text-colour {
   color: govuk-colour('blue');
+}
+
+.guidance-panel-blue {
+  border-left-color: govuk-colour('blue');
+  background-color: #eaf4f9;
 }
 
 .govuk-dark-blue-text-colour {
