@@ -282,9 +282,6 @@
       "@hmcts/opal-frontend-common/components/moj/moj-header": [
         "./dist/opal-frontend-common/components/moj/moj-header"
       ],
-      "@hmcts/opal-frontend-common/components/moj/moj-multi-select": [
-        "./dist/opal-frontend-common/components/moj/moj-multi-select"
-      ],
       "@hmcts/opal-frontend-common/components/moj/moj-header/interfaces": [
         "./dist/opal-frontend-common/components/moj/moj-header/interfaces"
       ],
@@ -314,6 +311,9 @@
       ],
       "@hmcts/opal-fronted-common/directives/capitalisation": ["./dist/opal-frontend-common/directives/capitalisation"],
       "@hmcts/opal-fronted-common/directives/govuk-button": ["./dist/opal-frontend-common/directives/govuk-button"],
+      "@hmcts/opal-frontend-common/directives/moj-multi-select": [
+        "./dist/opal-frontend-common/directives/moj-multi-select"
+      ],
       "@hmcts/opal-frontend-common/constants": ["./dist/opal-frontend-common/constants"],
       "@hmcts/opal-frontend-common/guards/account": ["./dist/opal-frontend-common/guards/account"],
       "@hmcts/opal-frontend-common/guards/auth": ["./dist/opal-frontend-common/guards/auth"],
