@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.63",
+  "version": "0.0.65",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -294,6 +294,9 @@
     "./components/moj/moj-header/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-header-interfaces.mjs"
     },
+    "./components/moj/moj-inset-text": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-inset-text.mjs"
+    },
     "./components/moj/moj-notification-badge": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-notification-badge.mjs"
     },
@@ -368,6 +371,12 @@
     },
     "./interceptors/http-error/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-interceptors-http-error-interfaces.mjs"
+    },
+    "./pages/dashboard-page": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-pages-dashboard-page.mjs"
+    },
+    "./pages/dashboard-page/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-pages-dashboard-page-interfaces.mjs"
     },
     "./pages/routing": {
       "import": "./fesm2022/hmcts-opal-frontend-common-pages.mjs"

@@ -1,69 +1,68 @@
 # MOJ Primary Navigation Component
 
-This Angular component provides a Ministry of Justice (MOJ)-styled primary navigation bar, typically used for the main navigation links of a web application.
-
-## Table of Contents
-
-- [Installation](#installation)
-- [Usage](#usage)
-- [Inputs](#inputs)
-- [Outputs](#outputs)
-- [Methods](#methods)
-- [Testing](#testing)
-- [Contributing](#contributing)
+Container component for OPAL primary navigation items.
 
 ## Installation
 
 ```typescript
-import { MojPrimaryNavigationComponent } from '@components/moj/moj-primary-navigation/moj-primary-navigation.component';
-```
-
-## Usage
-
-You can use the primary navigation component in your template as follows:
-
-```html
-<opal-libmoj-primary-navigation [navigationItems]="navItems"></opal-libmoj-primary-navigation>
-```
-
-### Example in HTML:
-
-```html
-<nav class="moj-primary-navigation">
-  <ul class="moj-primary-navigation__list">
-    <li *ngFor="let item of navigationItems" class="moj-primary-navigation__item">
-      <a class="moj-primary-navigation__link" href="{{ item.link }}">{{ item.label }}</a>
-    </li>
-  </ul>
-</nav>
+import { MojPrimaryNavigationComponent } from '@hmcts/opal-frontend-common/components/moj/moj-primary-navigation';
 ```
 
 ## Inputs
 
-| Input             | Type    | Description                                                    |
-| ----------------- | ------- | -------------------------------------------------------------- |
-| `navigationItems` | `Array` | Array of navigation items, each containing `label` and `link`. |
+| Input                   | Type      | Required | Default | Description                                                                                        |
+| ----------------------- | --------- | -------- | ------- | -------------------------------------------------------------------------------------------------- |
+| `primaryNavigationId`   | `string`  | Yes      | N/A     | DOM id applied to the navigation wrapper.                                                          |
+| `useFragmentNavigation` | `boolean` | No       | `true`  | When `true`, active item follows URL fragment updates. When `false`, fragment updates are ignored. |
 
 ## Outputs
 
-There are no custom outputs for this component.
+| Output                   | Type                   | Description                                  |
+| ------------------------ | ---------------------- | -------------------------------------------- |
+| `activeItemFragment`     | `EventEmitter<string>` | Emits current fragment in fragment mode.     |
+| `navigationItemSelected` | `EventEmitter<string>` | Emits selected item key in path-driven mode. |
 
-## Methods
+## Usage
 
-There are no custom methods for this component.
+### Fragment mode (default, backward compatible)
+
+```html
+<opal-lib-moj-primary-navigation primaryNavigationId="fines-primary-nav" (activeItemFragment)="active = $event">
+  <li
+    opal-lib-moj-primary-navigation-item
+    primaryNavigationItemId="search-link"
+    primaryNavigationItemFragment="search"
+    [activeItemFragment]="active"
+    primaryNavigationItemText="Search"
+  ></li>
+</opal-lib-moj-primary-navigation>
+```
+
+### Path-driven mode (for route-based top-level nav)
+
+```html
+<opal-lib-moj-primary-navigation
+  primaryNavigationId="fines-primary-nav"
+  [useFragmentNavigation]="false"
+  (navigationItemSelected)="onPrimaryNavSelected($event)"
+>
+  <li
+    opal-lib-moj-primary-navigation-item
+    primaryNavigationItemId="reports-link"
+    primaryNavigationItemFragment="reports"
+    [activeItemFragment]="activePrimaryItem"
+    primaryNavigationItemText="Reports"
+  ></li>
+</opal-lib-moj-primary-navigation>
+```
+
+```typescript
+onPrimaryNavSelected(item: string): void {
+  this.activePrimaryItem = item;
+  this.router.navigate(['/fines/dashboard', item]);
+}
+```
 
 ## Testing
 
-Unit tests for this component can be found in the `moj-primary-navigation.component.spec.ts` file. To run the tests, use:
-
-```bash
-ng test
-```
-
-## Contributing
-
-Feel free to submit issues or pull requests to improve this component.
-
----
-
-This `README.md` provides guidance on how to use and configure the `moj-primary-navigation` component to display a primary navigation bar for MOJ applications.
+Unit tests are in `moj-primary-navigation.component.spec.ts`.
