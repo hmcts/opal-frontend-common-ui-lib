@@ -27,7 +27,12 @@ interface IRow {
 @Component({
   selector: 'app-multi-select-example',
   standalone: true,
-  imports: [ReactiveFormsModule, GovukCheckboxesItemComponent, MojMultiSelectHeadDirective, MojMultiSelectBodyDirective],
+  imports: [
+    ReactiveFormsModule,
+    GovukCheckboxesItemComponent,
+    MojMultiSelectHeadDirective,
+    MojMultiSelectBodyDirective,
+  ],
   templateUrl: './multi-select-example.component.html',
 })
 export class MultiSelectExampleComponent {
@@ -79,17 +84,17 @@ export class MultiSelectExampleComponent {
 ></opal-lib-govuk-checkboxes-item>
 
 @for (row of rows(); track row.id; let i = $index) {
-  <opal-lib-govuk-checkboxes-item
-    opalLibMojMultiSelectBody
-    [control]="rowControls[row.id]"
-    [inputId]="'row-' + row.id"
-    [inputName]="'row-' + row.id"
-    [labelText]="row.name"
-    [rowId]="row.id"
-    [rowIndex]="i"
-    [ariaLabel]="'Select row ' + row.name"
-    (selectionChange)="onRowSelectionChange($event)"
-  ></opal-lib-govuk-checkboxes-item>
+<opal-lib-govuk-checkboxes-item
+  opalLibMojMultiSelectBody
+  [control]="rowControls[row.id]"
+  [inputId]="'row-' + row.id"
+  [inputName]="'row-' + row.id"
+  [labelText]="row.name"
+  [rowId]="row.id"
+  [rowIndex]="i"
+  [ariaLabel]="'Select row ' + row.name"
+  (selectionChange)="onRowSelectionChange($event)"
+></opal-lib-govuk-checkboxes-item>
 }
 ```
 
@@ -99,3 +104,75 @@ export class MultiSelectExampleComponent {
 - `MojMultiSelectBodyDirective`
 - `MultiSelectRowIdentifier`
 - Multi-select selection utilities
+
+## Directive inputs
+
+### `MojMultiSelectHeadDirective` (`opalLibMojMultiSelectHead`)
+
+| Input                    | Type      | Required | Default             | Description                                                        |
+| ------------------------ | --------- | -------- | ------------------- | ------------------------------------------------------------------ |
+| `extraClasses`           | `string`  | No       | `''`                | Additional CSS classes applied to the host checkboxes item.        |
+| `selectAllIndeterminate` | `boolean` | No       | `false`             | Sets the native checkbox `indeterminate` state for partial select. |
+| `ariaLabel`              | `string`  | No       | `'Select all rows'` | Accessible label applied to the nested checkbox input.             |
+
+### `MojMultiSelectBodyDirective` (`opalLibMojMultiSelectBody`)
+
+| Input          | Type                       | Required | Default | Description                                                                          |
+| -------------- | -------------------------- | -------- | ------- | ------------------------------------------------------------------------------------ |
+| `rowId`        | `MultiSelectRowIdentifier` | Yes      | -       | Unique row identifier emitted in selection events and used for selection state.      |
+| `rowIndex`     | `number`                   | No       | `0`     | Zero-based index used to build the default aria label (`Select row {index + 1}`).    |
+| `ariaLabel`    | `string`                   | No       | `''`    | Custom accessible label. If empty, the default label derived from `rowIndex` is set. |
+| `extraClasses` | `string`                   | No       | `''`    | Additional CSS classes applied to the host checkboxes item.                          |
+
+## Utility methods
+
+- `MultiSelectRowIdResolver<TRow, TRowId>`: Function type used to derive a stable row id from a row object and its index.
+- `isMultiSelectRowSelected(row, index, selectedRowIds, getRowId)`: Returns `true` when the resolved id for a single row exists in `selectedRowIds`.
+- `areAllMultiSelectRowsSelected(rows, selectedRowIds, getRowId)`: Returns `true` when `rows` is not empty and every row id is present in `selectedRowIds`.
+- `areSomeMultiSelectRowsSelected(rows, selectedRowIds, getRowId)`: Returns `true` only for partial selection (at least one selected, but not all). Returns `false` for empty `rows`.
+- `toggleMultiSelectRow(selectedRowIds, rowId, checked)`: Returns a new `Set` with one row id added (`checked = true`) or removed (`checked = false`).
+- `toggleAllMultiSelectRows(rows, selectedRowIds, getRowId, checked)`: Returns a new `Set` with all visible row ids added or removed based on `checked`, while preserving unrelated ids already in the set.
+
+### Utility method inputs
+
+#### `isMultiSelectRowSelected(row, index, selectedRowIds, getRowId)`
+
+| Input            | Type                                     | Description                                          |
+| ---------------- | ---------------------------------------- | ---------------------------------------------------- |
+| `row`            | `TRow`                                   | Current row object to test.                          |
+| `index`          | `number`                                 | Row index passed to the resolver.                    |
+| `selectedRowIds` | `ReadonlySet<TRowId>`                    | Current selected ids set.                            |
+| `getRowId`       | `MultiSelectRowIdResolver<TRow, TRowId>` | Function that resolves an id from `row` and `index`. |
+
+#### `areAllMultiSelectRowsSelected(rows, selectedRowIds, getRowId)`
+
+| Input            | Type                                     | Description                                                           |
+| ---------------- | ---------------------------------------- | --------------------------------------------------------------------- |
+| `rows`           | `readonly TRow[]`                        | Visible rows to evaluate.                                             |
+| `selectedRowIds` | `ReadonlySet<TRowId>`                    | Current selected ids set.                                             |
+| `getRowId`       | `MultiSelectRowIdResolver<TRow, TRowId>` | Function that resolves row ids used when checking all-selected state. |
+
+#### `areSomeMultiSelectRowsSelected(rows, selectedRowIds, getRowId)`
+
+| Input            | Type                                     | Description                                                         |
+| ---------------- | ---------------------------------------- | ------------------------------------------------------------------- |
+| `rows`           | `readonly TRow[]`                        | Visible rows to evaluate for partial selection.                     |
+| `selectedRowIds` | `ReadonlySet<TRowId>`                    | Current selected ids set.                                           |
+| `getRowId`       | `MultiSelectRowIdResolver<TRow, TRowId>` | Function that resolves row ids used for selected count calculation. |
+
+#### `toggleMultiSelectRow(selectedRowIds, rowId, checked)`
+
+| Input            | Type                  | Description                                       |
+| ---------------- | --------------------- | ------------------------------------------------- |
+| `selectedRowIds` | `ReadonlySet<TRowId>` | Current selected ids set.                         |
+| `rowId`          | `TRowId`              | Row id to add or remove.                          |
+| `checked`        | `boolean`             | `true` to add `rowId`; `false` to remove `rowId`. |
+
+#### `toggleAllMultiSelectRows(rows, selectedRowIds, getRowId, checked)`
+
+| Input            | Type                                     | Description                                                               |
+| ---------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
+| `rows`           | `readonly TRow[]`                        | Visible rows to toggle.                                                   |
+| `selectedRowIds` | `ReadonlySet<TRowId>`                    | Current selected ids set.                                                 |
+| `getRowId`       | `MultiSelectRowIdResolver<TRow, TRowId>` | Function that resolves row ids from each row and index.                   |
+| `checked`        | `boolean`                                | `true` to add all visible row ids; `false` to remove all visible row ids. |

@@ -19,6 +19,10 @@ import { getCheckboxInputFromHost, getDefaultBodyAriaLabel } from './utils/moj-m
     'opal-lib-govuk-checkboxes-item[opalLibMojMultiSelectBody], [opal-lib-govuk-checkboxes-item][opalLibMojMultiSelectBody]',
 })
 export class MojMultiSelectBodyDirective implements OnInit, OnChanges {
+  private readonly hostElementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly baseClasses =
+    'govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox body-checkbox';
+
   @Input({ required: true }) rowId!: MultiSelectRowIdentifier;
   @Input() rowIndex: number = 0;
   @Input() ariaLabel: string = '';
@@ -26,8 +30,15 @@ export class MojMultiSelectBodyDirective implements OnInit, OnChanges {
 
   @Output() selectionChange = new EventEmitter<{ rowId: MultiSelectRowIdentifier; checked: boolean }>();
 
-  private readonly hostElementRef = inject<ElementRef<HTMLElement>>(ElementRef);
-  private readonly baseClasses = 'govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox body-checkbox';
+  private syncInputState(): void {
+    const checkboxInput = getCheckboxInputFromHost(this.hostElementRef.nativeElement);
+
+    if (!checkboxInput) {
+      return;
+    }
+
+    checkboxInput.setAttribute('aria-label', this.rowAriaLabel);
+  }
 
   @HostBinding('class')
   public get classes(): string {
@@ -57,15 +68,5 @@ export class MojMultiSelectBodyDirective implements OnInit, OnChanges {
     }
 
     this.selectionChange.emit({ rowId: this.rowId, checked: target.checked });
-  }
-
-  private syncInputState(): void {
-    const checkboxInput = getCheckboxInputFromHost(this.hostElementRef.nativeElement);
-
-    if (!checkboxInput) {
-      return;
-    }
-
-    checkboxInput.setAttribute('aria-label', this.rowAriaLabel);
   }
 }

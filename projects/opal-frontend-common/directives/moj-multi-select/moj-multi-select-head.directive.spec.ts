@@ -6,6 +6,7 @@ import { GovukCheckboxesItemComponent } from '../../components/govuk/govuk-check
 import { MojMultiSelectHeadDirective } from './moj-multi-select-head.directive';
 
 @Component({
+  standalone: true,
   imports: [GovukCheckboxesItemComponent, MojMultiSelectHeadDirective],
   template: `
     <opal-lib-govuk-checkboxes-item
@@ -40,10 +41,11 @@ describe('MojMultiSelectHeadDirective', () => {
 
     fixture = TestBed.createComponent(HeadHostComponent);
     hostComponent = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should add moj multi-select classes to host', () => {
+    fixture.detectChanges();
+
     const hostElement = fixture.nativeElement.querySelector('opal-lib-govuk-checkboxes-item') as HTMLElement;
 
     expect(hostElement.classList.contains('govuk-checkboxes--small')).toBe(true);
@@ -62,10 +64,12 @@ describe('MojMultiSelectHeadDirective', () => {
   });
 
   it('should emit toggleAll when checkbox changes', () => {
+    fixture.detectChanges();
+
     const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
 
     input.checked = true;
-    input.dispatchEvent(new Event('change'));
+    input.dispatchEvent(new Event('change', { bubbles: true }));
 
     expect(hostComponent.onToggleAll).toHaveBeenCalledWith(true);
   });

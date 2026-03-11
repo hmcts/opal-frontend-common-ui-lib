@@ -6,6 +6,7 @@ import { GovukCheckboxesItemComponent } from '../../components/govuk/govuk-check
 import { MojMultiSelectBodyDirective } from './moj-multi-select-body.directive';
 
 @Component({
+  standalone: true,
   imports: [GovukCheckboxesItemComponent, MojMultiSelectBodyDirective],
   template: `
     <opal-lib-govuk-checkboxes-item
@@ -42,10 +43,11 @@ describe('MojMultiSelectBodyDirective', () => {
 
     fixture = TestBed.createComponent(BodyHostComponent);
     hostComponent = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should add moj body classes to host', () => {
+    fixture.detectChanges();
+
     const hostElement = fixture.nativeElement.querySelector('opal-lib-govuk-checkboxes-item') as HTMLElement;
 
     expect(hostElement.classList.contains('moj-multi-select__checkbox')).toBe(true);
@@ -63,10 +65,12 @@ describe('MojMultiSelectBodyDirective', () => {
   });
 
   it('should emit row id and checked state when checkbox changes', () => {
+    fixture.detectChanges();
+
     const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
 
     input.checked = true;
-    input.dispatchEvent(new Event('change'));
+    input.dispatchEvent(new Event('change', { bubbles: true }));
 
     expect(hostComponent.onSelectionChange).toHaveBeenCalledWith({ rowId: 'row-a', checked: true });
   });

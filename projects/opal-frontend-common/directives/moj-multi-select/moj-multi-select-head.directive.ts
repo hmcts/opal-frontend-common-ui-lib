@@ -18,14 +18,25 @@ import { getCheckboxInputFromHost } from './utils/moj-multi-select-directive.uti
     'opal-lib-govuk-checkboxes-item[opalLibMojMultiSelectHead], [opal-lib-govuk-checkboxes-item][opalLibMojMultiSelectHead]',
 })
 export class MojMultiSelectHeadDirective implements OnInit, OnChanges {
+  private readonly hostElementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly baseClasses = 'govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox';
+
   @Input() extraClasses: string = '';
   @Input() selectAllIndeterminate: boolean = false;
   @Input() ariaLabel: string = 'Select all rows';
 
   @Output() toggleAll = new EventEmitter<boolean>();
 
-  private readonly hostElementRef = inject<ElementRef<HTMLElement>>(ElementRef);
-  private readonly baseClasses = 'govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox';
+  private syncInputState(): void {
+    const checkboxInput = getCheckboxInputFromHost(this.hostElementRef.nativeElement);
+
+    if (!checkboxInput) {
+      return;
+    }
+
+    checkboxInput.indeterminate = this.selectAllIndeterminate;
+    checkboxInput.setAttribute('aria-label', this.ariaLabel);
+  }
 
   @HostBinding('class')
   public get classes(): string {
@@ -51,16 +62,5 @@ export class MojMultiSelectHeadDirective implements OnInit, OnChanges {
     }
 
     this.toggleAll.emit(target.checked);
-  }
-
-  private syncInputState(): void {
-    const checkboxInput = getCheckboxInputFromHost(this.hostElementRef.nativeElement);
-
-    if (!checkboxInput) {
-      return;
-    }
-
-    checkboxInput.indeterminate = this.selectAllIndeterminate;
-    checkboxInput.setAttribute('aria-label', this.ariaLabel);
   }
 }
