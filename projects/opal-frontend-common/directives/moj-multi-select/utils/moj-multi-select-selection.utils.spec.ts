@@ -42,6 +42,10 @@ describe('moj-multi-select-selection.utils', () => {
     expect(areSomeMultiSelectRowsSelected(rows, new Set<string>(['A', 'B', 'C']), getRowId)).toBe(false);
   });
 
+  it('should return false for partial selection when rows are empty', () => {
+    expect(areSomeMultiSelectRowsSelected([], new Set<string>(['A']), getRowId)).toBe(false);
+  });
+
   it('should toggle a single row selection', () => {
     const selectedRowIds = new Set<string>(['A']);
 

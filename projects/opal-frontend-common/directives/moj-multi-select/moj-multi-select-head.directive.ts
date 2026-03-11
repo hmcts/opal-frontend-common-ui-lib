@@ -19,7 +19,7 @@ import { getCheckboxInputFromHost } from './utils/moj-multi-select-directive.uti
 })
 export class MojMultiSelectHeadDirective implements OnInit, OnChanges {
   private readonly hostElementRef = inject<ElementRef<HTMLElement>>(ElementRef);
-  private readonly baseClasses = 'govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox';
+  private readonly baseClasses = 'govuk-checkboxes__item moj-multi-select__checkbox';
 
   @Input() extraClasses: string = '';
   @Input() selectAllIndeterminate: boolean = false;
@@ -27,6 +27,10 @@ export class MojMultiSelectHeadDirective implements OnInit, OnChanges {
 
   @Output() toggleAll = new EventEmitter<boolean>();
 
+  /**
+   * Synchronises the nested checkbox UI state with directive inputs.
+   * Updates indeterminate and aria-label when the input element is present.
+   */
   private syncInputState(): void {
     const checkboxInput = getCheckboxInputFromHost(this.hostElementRef.nativeElement);
 
@@ -39,14 +43,25 @@ export class MojMultiSelectHeadDirective implements OnInit, OnChanges {
   }
 
   @HostBinding('class')
+  /**
+   * Returns the host CSS classes for the select-all checkbox item.
+   */
   public get classes(): string {
     return `${this.baseClasses} ${this.extraClasses}`.trim();
   }
 
+  /**
+   * Applies the initial checkbox aria and indeterminate state after init.
+   */
   public ngOnInit(): void {
     this.syncInputState();
   }
 
+  /**
+   * Re-syncs checkbox state when relevant inputs change.
+   *
+   * @param changes - Angular change map for current input updates.
+   */
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['selectAllIndeterminate'] || changes['ariaLabel']) {
       this.syncInputState();
@@ -54,6 +69,11 @@ export class MojMultiSelectHeadDirective implements OnInit, OnChanges {
   }
 
   @HostListener('change', ['$event'])
+  /**
+   * Emits the latest select-all checked state when the host checkbox changes.
+   *
+   * @param event - Native change event from the checkbox.
+   */
   public onCheckboxChange(event: Event): void {
     const target = event.target;
 

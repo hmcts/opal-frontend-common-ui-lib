@@ -9,7 +9,7 @@ Import the directives and helper utilities from the secondary entrypoint:
 ```typescript
 import { Component, computed, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { GovukCheckboxesItemComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-checkboxes/govuk-checkboxes-item';
+import { GovukCheckboxesItemComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-checkboxes';
 import {
   MojMultiSelectBodyDirective,
   MojMultiSelectHeadDirective,
@@ -72,29 +72,32 @@ export class MultiSelectExampleComponent {
 ```
 
 ```html
-<opal-lib-govuk-checkboxes-item
+<div
+  class="govuk-checkboxes--small"
+  opal-lib-govuk-checkboxes-item
   opalLibMojMultiSelectHead
   inputId="select-all"
   inputName="select-all"
-  labelText="Select all"
+  labelText=" "
   [control]="selectAllControl"
   [selectAllIndeterminate]="someSelected()"
   [ariaLabel]="'Select all rows'"
   (toggleAll)="onToggleAll($event)"
-></opal-lib-govuk-checkboxes-item>
+></div>
 
-@for (row of rows(); track row.id; let i = $index) {
-<opal-lib-govuk-checkboxes-item
-  opalLibMojMultiSelectBody
-  [control]="rowControls[row.id]"
-  [inputId]="'row-' + row.id"
-  [inputName]="'row-' + row.id"
-  [labelText]="row.name"
-  [rowId]="row.id"
-  [rowIndex]="i"
-  [ariaLabel]="'Select row ' + row.name"
-  (selectionChange)="onRowSelectionChange($event)"
-></opal-lib-govuk-checkboxes-item>
+@for (row of rows(); track row.id) {
+  <div
+    class="govuk-checkboxes--small"
+    opal-lib-govuk-checkboxes-item
+    opalLibMojMultiSelectBody
+    [control]="rowControls[row.id]"
+    [inputId]="'row-' + row.id"
+    [inputName]="'row-' + row.id"
+    labelText=" "
+    [rowId]="row.id"
+    [ariaLabel]="'Select row ' + row.name"
+    (selectionChange)="onRowSelectionChange($event)"
+  ></div>
 }
 ```
 
@@ -120,8 +123,7 @@ export class MultiSelectExampleComponent {
 | Input          | Type                       | Required | Default | Description                                                                          |
 | -------------- | -------------------------- | -------- | ------- | ------------------------------------------------------------------------------------ |
 | `rowId`        | `MultiSelectRowIdentifier` | Yes      | -       | Unique row identifier emitted in selection events and used for selection state.      |
-| `rowIndex`     | `number`                   | No       | `0`     | Zero-based index used to build the default aria label (`Select row {index + 1}`).    |
-| `ariaLabel`    | `string`                   | No       | `''`    | Custom accessible label. If empty, the default label derived from `rowIndex` is set. |
+| `ariaLabel`    | `string`                   | No       | `''`    | Optional custom accessible label. If empty, the visible checkbox label is preserved. |
 | `extraClasses` | `string`                   | No       | `''`    | Additional CSS classes applied to the host checkboxes item.                          |
 
 ## Utility methods

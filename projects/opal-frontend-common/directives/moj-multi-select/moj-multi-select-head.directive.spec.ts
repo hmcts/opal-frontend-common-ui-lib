@@ -2,24 +2,31 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl } from '@angular/forms';
 import { describe, beforeEach, it, expect, vi } from 'vitest';
+import { GovukCheckboxesComponent } from '../../components/govuk/govuk-checkboxes/govuk-checkboxes.component';
 import { GovukCheckboxesItemComponent } from '../../components/govuk/govuk-checkboxes/govuk-checkboxes-item/govuk-checkboxes-item.component';
 import { MojMultiSelectHeadDirective } from './moj-multi-select-head.directive';
 
 @Component({
   standalone: true,
-  imports: [GovukCheckboxesItemComponent, MojMultiSelectHeadDirective],
+  imports: [GovukCheckboxesComponent, GovukCheckboxesItemComponent, MojMultiSelectHeadDirective],
   template: `
-    <opal-lib-govuk-checkboxes-item
-      opalLibMojMultiSelectHead
-      [control]="control"
-      inputId="select-all"
-      inputName="select-all"
-      labelText="Select all"
-      [selectAllIndeterminate]="selectAllIndeterminate"
-      [extraClasses]="extraClasses"
-      [ariaLabel]="ariaLabel"
-      (toggleAll)="onToggleAll($event)"
-    ></opal-lib-govuk-checkboxes-item>
+    <opal-lib-govuk-checkboxes
+      fieldSetId="test-select-all"
+      legendText="Select all rows"
+      checkboxClasses="govuk-checkboxes--small"
+    >
+      <opal-lib-govuk-checkboxes-item
+        opalLibMojMultiSelectHead
+        [control]="control"
+        inputId="select-all"
+        inputName="select-all"
+        labelText="Select all"
+        [selectAllIndeterminate]="selectAllIndeterminate"
+        [extraClasses]="extraClasses"
+        [ariaLabel]="ariaLabel"
+        (toggleAll)="onToggleAll($event)"
+      ></opal-lib-govuk-checkboxes-item>
+    </opal-lib-govuk-checkboxes>
   `,
 })
 class HeadHostComponent {
@@ -48,7 +55,6 @@ describe('MojMultiSelectHeadDirective', () => {
 
     const hostElement = fixture.nativeElement.querySelector('opal-lib-govuk-checkboxes-item') as HTMLElement;
 
-    expect(hostElement.classList.contains('govuk-checkboxes--small')).toBe(true);
     expect(hostElement.classList.contains('moj-multi-select__checkbox')).toBe(true);
   });
 
@@ -74,6 +80,16 @@ describe('MojMultiSelectHeadDirective', () => {
     expect(hostComponent.onToggleAll).toHaveBeenCalledWith(true);
   });
 
+  it('should not emit toggleAll when change event target is not an input', () => {
+    fixture.detectChanges();
+
+    const hostElement = fixture.nativeElement.querySelector('opal-lib-govuk-checkboxes-item') as HTMLElement;
+
+    hostElement.dispatchEvent(new Event('change', { bubbles: true }));
+
+    expect(hostComponent.onToggleAll).not.toHaveBeenCalled();
+  });
+
   it('should apply extra classes', () => {
     hostComponent.extraClasses = 'custom-class';
     fixture.detectChanges();
@@ -81,5 +97,38 @@ describe('MojMultiSelectHeadDirective', () => {
     const hostElement = fixture.nativeElement.querySelector('opal-lib-govuk-checkboxes-item') as HTMLElement;
 
     expect(hostElement.classList.contains('custom-class')).toBe(true);
+  });
+});
+
+@Component({
+  standalone: true,
+  imports: [MojMultiSelectHeadDirective],
+  template: `
+    <div
+      opal-lib-govuk-checkboxes-item
+      opalLibMojMultiSelectHead
+      [selectAllIndeterminate]="selectAllIndeterminate"
+      [ariaLabel]="ariaLabel"
+    ></div>
+  `,
+})
+class HeadHostWithoutCheckboxComponent {
+  public selectAllIndeterminate = true;
+  public ariaLabel = 'Select all rows';
+}
+
+describe('MojMultiSelectHeadDirective without nested checkbox', () => {
+  let fixture: ComponentFixture<HeadHostWithoutCheckboxComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [HeadHostWithoutCheckboxComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(HeadHostWithoutCheckboxComponent);
+  });
+
+  it('should not throw when host element has no checkbox input', () => {
+    expect(() => fixture.detectChanges()).not.toThrow();
   });
 });

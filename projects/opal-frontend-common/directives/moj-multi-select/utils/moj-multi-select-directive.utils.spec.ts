@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getCheckboxInputFromHost, getDefaultBodyAriaLabel } from './moj-multi-select-directive.utils';
+import { getCheckboxInputFromHost } from './moj-multi-select-directive.utils';
 
 describe('moj-multi-select-directive.utils', () => {
   it('should return the checkbox input from the host element', () => {
@@ -22,10 +22,5 @@ describe('moj-multi-select-directive.utils', () => {
     hostElement.innerHTML = '<input type="text" />';
 
     expect(getCheckboxInputFromHost(hostElement)).toBeNull();
-  });
-
-  it('should build the default body aria label from the row index', () => {
-    expect(getDefaultBodyAriaLabel(0)).toBe('Select row 1');
-    expect(getDefaultBodyAriaLabel(4)).toBe('Select row 5');
   });
 });
