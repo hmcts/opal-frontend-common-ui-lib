@@ -285,6 +285,9 @@
       "@hmcts/opal-frontend-common/components/moj/moj-header/interfaces": [
         "./dist/opal-frontend-common/components/moj/moj-header/interfaces"
       ],
+      "@hmcts/opal-frontend-common/components/moj/moj-inset-text": [
+        "./dist/opal-frontend-common/components/moj/moj-inset-text"
+      ],
       "@hmcts/opal-frontend-common/components/moj/moj-notification-badge": [
         "./dist/opal-frontend-common/components/moj/moj-notification-badge"
       ],
@@ -338,6 +341,10 @@
       ],
       "@hmcts/opal-frontend-common/interceptors/http-error/interfaces": [
         "./dist/opal-frontend-common/interceptors/http-error/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/pages/dashboard-page": ["./dist/opal-frontend-common/pages/dashboard-page"],
+      "@hmcts/opal-frontend-common/pages/dashboard-page/interfaces": [
+        "./dist/opal-frontend-common/pages/dashboard-page/interfaces"
       ],
       "@hmcts/opal-frontend-common/pages/routing": ["./dist/opal-frontend-common/pages"],
       "@hmcts/opal-frontend-common/pages/routing/interfaces": ["./dist/opal-frontend-common/pages/routing/interfaces"],
