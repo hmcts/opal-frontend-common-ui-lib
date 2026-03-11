@@ -9,7 +9,7 @@ Import the directives and helper utilities from the secondary entrypoint:
 ```typescript
 import { Component, computed, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { GovukCheckboxesItemComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-checkboxes';
+import { GovukCheckboxesComponent, GovukCheckboxesItemComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-checkboxes';
 import {
   MojMultiSelectBodyDirective,
   MojMultiSelectHeadDirective,
@@ -29,6 +29,7 @@ interface IRow {
   standalone: true,
   imports: [
     ReactiveFormsModule,
+    GovukCheckboxesComponent,
     GovukCheckboxesItemComponent,
     MojMultiSelectHeadDirective,
     MojMultiSelectBodyDirective,
@@ -62,6 +63,10 @@ export class MultiSelectExampleComponent {
     this.rows().forEach((row) => this.rowControls[row.id]?.setValue(checked, { emitEvent: false }));
   }
 
+  public someVisibleRowsSelected(): boolean {
+    return this.someSelected();
+  }
+
   public onRowSelectionChange(event: { rowId: string; checked: boolean }): void {
     const next = toggleMultiSelectRow(this.selectedRowIds(), event.rowId, event.checked);
     this.selectedRowIds.set(next);
@@ -72,18 +77,20 @@ export class MultiSelectExampleComponent {
 ```
 
 ```html
-<div
-  class="govuk-checkboxes--small"
-  opal-lib-govuk-checkboxes-item
-  opalLibMojMultiSelectHead
-  inputId="select-all"
-  inputName="select-all"
-  labelText=" "
-  [control]="selectAllControl"
-  [selectAllIndeterminate]="someSelected()"
-  [ariaLabel]="'Select all rows'"
-  (toggleAll)="onToggleAll($event)"
-></div>
+<opal-lib-govuk-checkboxes fieldSetId="defendants-select-all-group" checkboxClasses="" legendText="">
+  <div
+    class="govuk-checkboxes--small"
+    opal-lib-govuk-checkboxes-item
+    opalLibMojMultiSelectHead
+    [control]="selectAllControl"
+    inputId="defendants-select-all-checkbox"
+    inputName="defendants-select-all-checkbox"
+    labelText=" "
+    ariaLabel="Select all defendants"
+    [selectAllIndeterminate]="someVisibleRowsSelected()"
+    (toggleAll)="onToggleAll($event)"
+  ></div>
+</opal-lib-govuk-checkboxes>
 
 @for (row of rows(); track row.id) {
   <div
