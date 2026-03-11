@@ -11,7 +11,10 @@ export class GovukCancelLinkComponent {
   @Output() linkClickEvent = new EventEmitter<boolean>();
 
   /**
-   * Handles the button click event.
+   * Handles the click event on the cancel link.
+   * Prevents the default action and emits a link click event.
+   *
+   * @param event - Optional DOM event that triggered the click
    */
   public handleClick(event?: Event): void {
     event?.preventDefault();
