@@ -8,4 +8,5 @@ import { MojAlertType } from '../constants/alert-types.constant';
 })
 export class MojAlertIconComponent {
   @Input({ required: true }) type: MojAlertType = 'information';
+  @Input({ required: false }) applyColour: boolean = false;
 }
