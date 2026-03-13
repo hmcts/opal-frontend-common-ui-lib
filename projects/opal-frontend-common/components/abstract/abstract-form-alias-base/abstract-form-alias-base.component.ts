@@ -276,8 +276,10 @@ export abstract class AbstractFormAliasBaseComponent extends AbstractFormBaseCom
    *
    * @param index - The index of the alias to remove.
    * @param formArrayName - The name of the form array.
+   * @param event - The event object from the click event, used to prevent default behavior.
    */
-  public removeAlias(index: number, formArrayName: string): void {
+  public removeAlias(index: number, formArrayName: string, event?: Event): void {
+    event?.preventDefault();
     this.aliasControls = this.removeFormAliasControls(index, formArrayName, this.aliasControls, this.aliasFields);
   }
 
