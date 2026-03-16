@@ -115,3 +115,8 @@ opal-lib-govuk-footer {
 .govuk-white-text-colour {
   color: govuk-colour('white');
 }
+
+.govuk-link {
+  color: govuk-colour('blue');
+  cursor: pointer;
+}
