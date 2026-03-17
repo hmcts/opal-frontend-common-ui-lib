@@ -1,5 +1,3 @@
----
-
 # GOV.UK Inset Text Component
 
 This Angular component renders inset text styled according to GOV.UK standards, used to highlight important information within a bordered box.
@@ -25,7 +23,7 @@ import { GovukInsetTextComponent } from '@components/govuk/govuk-inset-text/govu
 You can use the inset text component in your template as follows:
 
 ```html
-<opal-lib-govuk-inset-text [insetTextId]="'important-info'">
+<opal-lib-govuk-inset-text [insetTextId]="'important-info'" [classes]="'guidance-panel-blue'">
   <p>This is important information that stands out.</p>
 </opal-lib-govuk-inset-text>
 ```
@@ -33,7 +31,7 @@ You can use the inset text component in your template as follows:
 ### Example in HTML:
 
 ```html
-<div class="govuk-inset-text" [id]="insetTextId">
+<div class="govuk-inset-text" [id]="insetTextId" [ngClass]="classes ? classes : null">
   <ng-content></ng-content>
 </div>
 ```
@@ -44,7 +42,8 @@ This component is used to display content inside a GOV.UK-styled inset box, typi
 
 | Input         | Type     | Description                                            |
 | ------------- | -------- | ------------------------------------------------------ |
-| `insetTextId` | `string` | The unique ID for the inset text container (optional). |
+| `insetTextId` | `string`         | The unique ID for the inset text container (optional). |
+| `classes`     | `string \| null` | Optional classes to append to the `govuk-inset-text` element. |
 
 ## Outputs
 
