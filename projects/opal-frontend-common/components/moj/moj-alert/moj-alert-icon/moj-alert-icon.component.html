@@ -1,6 +1,6 @@
 <svg
   [opalLibMojAlertSortIcon]="type"
-  class="moj-alert__icon"
+  [class]="'moj-alert__icon' + (applyColour ? ' moj-alert--' + type : '')"
   role="presentation"
   focusable="false"
   xmlns="http://www.w3.org/2000/svg"

@@ -324,6 +324,9 @@
     "./directives/govuk-button": {
       "import": "./fesm2022/hmcts-opal-frontend-common-directives-govuk-button.mjs"
     },
+    "./directives/moj-multi-select": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-directives-moj-multi-select.mjs"
+    },
     "./constants": {
       "import": "./fesm2022/hmcts-opal-frontend-common-constants.mjs"
     },
