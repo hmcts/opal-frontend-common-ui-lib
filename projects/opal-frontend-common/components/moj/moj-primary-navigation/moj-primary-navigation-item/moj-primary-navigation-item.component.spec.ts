@@ -64,4 +64,29 @@ describe('MojPrimaryNavigationItemComponent', () => {
       fragment: component.primaryNavigationItemFragment,
     });
   });
+
+  it('should emit the selected item in path-driven mode', () => {
+    const event = new Event('click');
+    const navigateSpy = vi.spyOn(router, 'navigate');
+    const selectedSpy = vi.spyOn(component.navigationItemSelected, 'emit');
+    component.useFragmentNavigation = false;
+
+    component.handleItemClick(event, component.primaryNavigationItemFragment);
+
+    expect(navigateSpy).not.toHaveBeenCalled();
+    expect(selectedSpy).toHaveBeenCalledWith(component.primaryNavigationItemFragment);
+  });
+
+  it('should only emit once when Enter keyup is followed by click in path-driven mode', () => {
+    const selectedSpy = vi.spyOn(component.navigationItemSelected, 'emit');
+    component.useFragmentNavigation = false;
+    fixture.detectChanges();
+
+    const element = fixture.nativeElement.querySelector('.moj-primary-navigation__link');
+    element.dispatchEvent(new KeyboardEvent('keyup', { key: 'Enter' }));
+    element.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+
+    expect(selectedSpy).toHaveBeenCalledTimes(1);
+    expect(selectedSpy).toHaveBeenCalledWith(component.primaryNavigationItemFragment);
+  });
 });

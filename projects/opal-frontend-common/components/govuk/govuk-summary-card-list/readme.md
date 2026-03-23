@@ -1,5 +1,3 @@
----
-
 # GOV.UK Summary Card List Component
 
 This Angular component is used to render a list of summary cards, each card providing a summary of key information with GOV.UK styling.
@@ -25,7 +23,7 @@ import { GovukSummaryCardListComponent } from '@components/govuk/govuk-summary-c
 You can use the summary card list component in your template as follows:
 
 ```html
-<opal-lib-govuk-summary-card-list 
+<opal-lib-govuk-summary-card-list
   summaryCardListId="summaryCard"
   cardTitle="Summary Card"
   [contentHidden]="false"
@@ -42,23 +40,23 @@ You can use the summary card list component in your template as follows:
 <ul class="govuk-summary-card-list">
   <li *ngFor="let card of cards" class="govuk-summary-card">
     <!-- Card content here -->
-    <opal-lib-govuk-summary-card 
+    <opal-lib-govuk-summary-card
       [summaryCardListId]="card.id"
       [cardTitle]="card.title"
       [contentHidden]="false"
       [headingLevel]="2"
     >
-    <ng-container actions>
-      <li
-        opal-lib-govuk-summary-card-action
-        [actionText]="isDetailsHidden ? 'Show details' : 'Hide details'"
-        actionRoute="showHideDetails"
-        (clickEvent)="summaryListActionClick($event)"
-      ></li>
-    </ng-container>
-    <ng-container content>
-      <p>Summary content...</p>
-    </ng-container>
+      <ng-container actions>
+        <li
+          opal-lib-govuk-summary-card-action
+          [actionText]="isDetailsHidden ? 'Show details' : 'Hide details'"
+          actionRoute="showHideDetails"
+          (clickEvent)="summaryListActionClick($event)"
+        ></li>
+      </ng-container>
+      <ng-container content>
+        <p>Summary content...</p>
+      </ng-container>
     </opal-lib-govuk-summary-card>
   </li>
 </ul>
@@ -66,12 +64,13 @@ You can use the summary card list component in your template as follows:
 
 ## Inputs
 
-| Input               | Type      | Description                                                                                       |
-| ------------------- | --------- | ------------------------------------------------------------------------------------------------- |
-| `summaryCardListId` | `String`  | An string to be used as an id for the wrapping HTML element.                                      |
-| `cardTitle`         | `String`  | An string to be used as the heading text on the card.                                             |
-| `contentHidden`     | `Boolean` | A boolean which dictates whether the content of the card should be hidden.                        |
-| `headingLevel`      | `Number`  | A number between 1 and 6 which dictates the heading level for the title. Default is 2 (H2)        |
+| Input               | Type      | Description                                                                                |
+| ------------------- | --------- | ------------------------------------------------------------------------------------------ |
+| `summaryCardListId` | `String`  | An string to be used as an id for the wrapping HTML element.                               |
+| `cardTitle`         | `String`  | An string to be used as the heading text on the card.                                      |
+| `contentHidden`     | `Boolean` | A boolean which dictates whether the content of the card should be hidden.                 |
+| `headingLevel`      | `Number`  | A number between 1 and 6 which dictates the heading level for the title. Default is 2 (H2) |
+| `class`             | `String`  | A string to add classes into the class (optional)                                          |
 
 ## Outputs
 
@@ -92,7 +91,5 @@ ng test
 ## Contributing
 
 Feel free to submit issues or pull requests to improve this component.
-
----
 
 This `README.md` provides guidance on how to use the `govuk-summary-card-list` component to display a list of summary cards with key information.
