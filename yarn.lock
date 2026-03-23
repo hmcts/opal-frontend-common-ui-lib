@@ -755,7 +755,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.27.1, @babel/code-frame@npm:^7.28.6, @babel/code-frame@npm:^7.29.0":
+"@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.28.6, @babel/code-frame@npm:^7.29.0":
   version: 7.29.0
   resolution: "@babel/code-frame@npm:7.29.0"
   dependencies:
@@ -9150,8 +9150,8 @@ __metadata:
   linkType: hard
 
 "ng-packagr@npm:^21.0.0":
-  version: 21.2.0
-  resolution: "ng-packagr@npm:21.2.0"
+  version: 21.2.1
+  resolution: "ng-packagr@npm:21.2.1"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@rollup/plugin-json": "npm:^6.1.0"
@@ -9171,7 +9171,7 @@ __metadata:
     piscina: "npm:^5.0.0"
     postcss: "npm:^8.4.47"
     rollup: "npm:^4.24.0"
-    rollup-plugin-dts: "npm:^6.2.0"
+    rollup-plugin-dts: "npm:^6.4.0"
     rxjs: "npm:^7.8.1"
     sass: "npm:^1.81.0"
     tinyglobby: "npm:^0.2.12"
@@ -9188,7 +9188,7 @@ __metadata:
       optional: true
   bin:
     ng-packagr: src/cli/main.js
-  checksum: 10/b57563505b0eddcfc05dd215b99bde5623e940ddee355253518a7d9643beebf7fc3d80b950b4dc11b99f7b3e58097d3f17870d9313ec2d156132388cc2fffeb4
+  checksum: 10/0ed79e3b1c826ec76c8b524f150bfe140c730f05f3bb97e37146b96a7425c7003105b6b9241deae73d4b9e132bf2eea435ae6fbfc077c644c1cc7926e1c4acd7
   languageName: node
   linkType: hard
 
@@ -10324,19 +10324,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup-plugin-dts@npm:^6.2.0":
-  version: 6.3.0
-  resolution: "rollup-plugin-dts@npm:6.3.0"
+"rollup-plugin-dts@npm:^6.4.0":
+  version: 6.4.1
+  resolution: "rollup-plugin-dts@npm:6.4.1"
   dependencies:
-    "@babel/code-frame": "npm:^7.27.1"
+    "@babel/code-frame": "npm:^7.29.0"
+    "@jridgewell/remapping": "npm:^2.3.5"
+    "@jridgewell/sourcemap-codec": "npm:^1.5.5"
+    convert-source-map: "npm:^2.0.0"
     magic-string: "npm:^0.30.21"
   peerDependencies:
     rollup: ^3.29.4 || ^4
-    typescript: ^4.5 || ^5.0
+    typescript: ^4.5 || ^5.0 || ^6.0
   dependenciesMeta:
     "@babel/code-frame":
       optional: true
-  checksum: 10/1b2b25126eee0c4e7f59d82ee5850b0c5779a1a0bb77d677798e20a3d29dba76d1a19a73300ed5b20aab02f6888ecc4209a95b07f6cc9c1b80af14bdcbeda5b9
+  checksum: 10/a18685fde4c59339cacb47e084ff589b39fc680d186b496b83197370295002f748066e3c9c62ced2eca1af0bca77d3096bb24905c40c0478a6d845d63531293d
   languageName: node
   linkType: hard
 
