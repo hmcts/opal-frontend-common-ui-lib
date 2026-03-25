@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { IAbstractTableFilterOption } from '@hmcts/opal-frontend-common/components/abstract/abstract-table-filter/interfaces';
 import { MojFilterPanelOptionFormGroupItemComponent } from './moj-filter-panel-option-form-group-item.component';
-import { IAbstractTableFilterOption } from 'projects/opal-frontend-common/components/abstract/abstract-table-filter/interfaces/abstract-table-filter.interface';
 import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('MojFilterPanelOptionFormGroupItemComponent', () => {
