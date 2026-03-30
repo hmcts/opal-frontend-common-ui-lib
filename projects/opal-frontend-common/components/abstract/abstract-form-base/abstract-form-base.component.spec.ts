@@ -889,7 +889,7 @@ describe('AbstractFormBaseComponent', () => {
     // Spy on focus after appending to the DOM
     vi.spyOn(errorSummaryElement, 'focus');
 
-    const scrollSpy = vi.spyOn(component['utilsService'], 'scrollToTop');
+    const scrollSpy = vi.spyOn(component['utilsService'], 'scrollToTop').mockImplementation(() => undefined);
 
     component['focusAndScrollToErrorSummary']();
 
@@ -923,7 +923,7 @@ describe('AbstractFormBaseComponent', () => {
     document.body.appendChild(errorSummary);
     vi.spyOn(errorSummary, 'focus');
 
-    const scrollSpy = vi.spyOn(component['utilsService'], 'scrollToTop');
+    const scrollSpy = vi.spyOn(component['utilsService'], 'scrollToTop').mockImplementation(() => undefined);
 
     component.handleFormSubmit(new SubmitEvent('submit'));
 

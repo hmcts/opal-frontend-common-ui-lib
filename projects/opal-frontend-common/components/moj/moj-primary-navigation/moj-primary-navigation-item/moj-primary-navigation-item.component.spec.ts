@@ -55,7 +55,7 @@ describe('MojPrimaryNavigationItemComponent', () => {
 
   it('should navigate to the correct route with fragment', () => {
     const event = new Event('click');
-    const navigateSpy = vi.spyOn(router, 'navigate');
+    const navigateSpy = vi.spyOn(router, 'navigate').mockResolvedValue(true);
 
     component.handleItemClick(event, component.primaryNavigationItemFragment);
 
@@ -67,7 +67,7 @@ describe('MojPrimaryNavigationItemComponent', () => {
 
   it('should emit the selected item in path-driven mode', () => {
     const event = new Event('click');
-    const navigateSpy = vi.spyOn(router, 'navigate');
+    const navigateSpy = vi.spyOn(router, 'navigate').mockResolvedValue(true);
     const selectedSpy = vi.spyOn(component.navigationItemSelected, 'emit');
     component.useFragmentNavigation = false;
 
