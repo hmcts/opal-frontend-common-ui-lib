@@ -75,7 +75,9 @@ describe('UtilsService', () => {
   });
 
   it('should scroll to the top of the page', () => {
-    const viewportScrollerSpy = vi.spyOn(service['viewportScroller'], 'scrollToPosition');
+    const viewportScrollerSpy = vi
+      .spyOn(service['viewportScroller'], 'scrollToPosition')
+      .mockImplementation(() => undefined);
     service.scrollToTop();
     expect(viewportScrollerSpy).toHaveBeenCalledWith([0, 0]);
   });

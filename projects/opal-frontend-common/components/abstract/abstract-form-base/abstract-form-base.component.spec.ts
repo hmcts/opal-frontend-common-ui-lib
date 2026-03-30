@@ -674,7 +674,7 @@ describe('AbstractFormBaseComponent', () => {
       throw new Error('component returned null');
     }
 
-    const routerSpy = vi.spyOn(component['router'], 'navigate');
+    const routerSpy = vi.spyOn(component['router'], 'navigate').mockResolvedValue(true);
     component['handleRoute']('test');
     expect(routerSpy).toHaveBeenCalledWith(['test'], { relativeTo: component['activatedRoute'].parent });
   });
@@ -684,7 +684,7 @@ describe('AbstractFormBaseComponent', () => {
       throw new Error('component returned null');
     }
 
-    const routerSpy = vi.spyOn(component['router'], 'navigate');
+    const routerSpy = vi.spyOn(component['router'], 'navigate').mockResolvedValue(true);
     component['handleRoute']('test', { nonRelative: true });
     expect(routerSpy).toHaveBeenCalledWith(['test'], {});
   });
@@ -694,7 +694,7 @@ describe('AbstractFormBaseComponent', () => {
       throw new Error('component returned null');
     }
 
-    const routerSpy = vi.spyOn(component['router'], 'navigate');
+    const routerSpy = vi.spyOn(component['router'], 'navigate').mockResolvedValue(true);
     const event = {
       preventDefault: vi.fn().mockName('event.preventDefault'),
     } as unknown as Event;
@@ -709,7 +709,7 @@ describe('AbstractFormBaseComponent', () => {
       throw new Error('component returned null');
     }
 
-    const routerSpy = vi.spyOn(component['router'], 'navigate');
+    const routerSpy = vi.spyOn(component['router'], 'navigate').mockResolvedValue(true);
     const event = {
       preventDefault: vi.fn().mockName('event.preventDefault'),
     } as unknown as Event;
@@ -728,7 +728,7 @@ describe('AbstractFormBaseComponent', () => {
       throw new Error('component returned null');
     }
 
-    const routerSpy = vi.spyOn(component['router'], 'navigate');
+    const routerSpy = vi.spyOn(component['router'], 'navigate').mockResolvedValue(true);
     const fragment = 'section-header';
 
     component['handleRoute']('test', { fragment });
@@ -889,7 +889,7 @@ describe('AbstractFormBaseComponent', () => {
     // Spy on focus after appending to the DOM
     vi.spyOn(errorSummaryElement, 'focus');
 
-    const scrollSpy = vi.spyOn(component['utilsService'], 'scrollToTop');
+    const scrollSpy = vi.spyOn(component['utilsService'], 'scrollToTop').mockImplementation(() => undefined);
 
     component['focusAndScrollToErrorSummary']();
 
@@ -923,7 +923,7 @@ describe('AbstractFormBaseComponent', () => {
     document.body.appendChild(errorSummary);
     vi.spyOn(errorSummary, 'focus');
 
-    const scrollSpy = vi.spyOn(component['utilsService'], 'scrollToTop');
+    const scrollSpy = vi.spyOn(component['utilsService'], 'scrollToTop').mockImplementation(() => undefined);
 
     component.handleFormSubmit(new SubmitEvent('submit'));
 

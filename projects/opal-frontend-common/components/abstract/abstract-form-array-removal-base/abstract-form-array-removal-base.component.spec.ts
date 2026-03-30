@@ -119,7 +119,7 @@ describe('AbstractFormArrayRemovalBase', () => {
       throw new Error('component returned null');
     }
 
-    const routerSpy = vi.spyOn(component['router'], 'navigate');
+    const routerSpy = vi.spyOn(component['router'], 'navigate').mockResolvedValue(true);
     component.handleRoute('test');
     expect(routerSpy).toHaveBeenCalledWith(['test'], { relativeTo: component['activatedRoute'].parent });
   });
@@ -129,7 +129,7 @@ describe('AbstractFormArrayRemovalBase', () => {
       throw new Error('component returned null');
     }
 
-    const routerSpy = vi.spyOn(component['router'], 'navigate');
+    const routerSpy = vi.spyOn(component['router'], 'navigate').mockResolvedValue(true);
     component.handleRoute('test', true);
     expect(routerSpy).toHaveBeenCalledWith(['test']);
   });
@@ -139,7 +139,7 @@ describe('AbstractFormArrayRemovalBase', () => {
       throw new Error('component returned null');
     }
 
-    const routerSpy = vi.spyOn(component['router'], 'navigate');
+    const routerSpy = vi.spyOn(component['router'], 'navigate').mockResolvedValue(true);
     const event = {
       preventDefault: vi.fn().mockName('event.preventDefault'),
     } as unknown as Event;

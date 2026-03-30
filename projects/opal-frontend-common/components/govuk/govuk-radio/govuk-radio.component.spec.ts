@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GovukRadioComponent } from './govuk-radio.component';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { vi, expect, afterAll, beforeEach, describe, it } from 'vitest';
+import { vi, expect, afterAll, afterEach, beforeEach, describe, it } from 'vitest';
 
 @Component({
   template: `<opal-lib-govuk-radio
@@ -44,6 +44,16 @@ describe('GovukRadioComponent', () => {
 
     fixture = TestBed.createComponent(TestHostComponent);
     component = fixture.componentInstance;
+    vi.spyOn(
+      GovukRadioComponent.prototype as unknown as {
+        loadGovukFrontend: () => Promise<unknown>;
+      },
+      'loadGovukFrontend',
+    ).mockResolvedValue({ initAll: vi.fn() });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   afterAll(() => {
@@ -232,7 +242,7 @@ describe('GovukRadioComponent', () => {
 
     // Simulate a govuk-frontend module where the Radios constructor exists but throws.
     const initAllSpy = vi.fn();
-    const warnSpy = vi.spyOn(console, 'warn');
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
 
     const radioComponent = debugElement.componentInstance as GovukRadioComponent;
     const loadSpy = vi
@@ -385,7 +395,7 @@ describe('GovukRadioComponent', () => {
       )
       .mockReturnValue(Promise.reject(new Error('boom')));
 
-    const errorSpy = vi.spyOn(console, 'error');
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
 
     radioComponent['initOuterRadios']();
 
@@ -411,7 +421,7 @@ describe('GovukRadioComponent', () => {
 
     delete radios.dataset['opalGovukRadiosInitialised'];
 
-    const warnSpy = vi.spyOn(console, 'warn');
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
 
     const radioComponent = debugElement.componentInstance as GovukRadioComponent;
     const loadSpy = vi
