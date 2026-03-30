@@ -22,7 +22,7 @@ describe('AccessDeniedComponent', () => {
   });
 
   it('should navigate to / on go back button click', () => {
-    const routerSpy = vi.spyOn(component['router'], 'navigate');
+    const routerSpy = vi.spyOn(component['router'], 'navigate').mockResolvedValue(true);
     component.handleGoBackButtonClick();
     expect(routerSpy).toHaveBeenCalledWith(['/']);
   });
