@@ -486,6 +486,25 @@ describe('AbstractFormAliasBaseComponent', () => {
     expect(component.aliasControls.length).toBe(0);
   });
 
+  it('should call preventDefault when removing an alias with an event', () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    const index = 0;
+    const event = {
+      preventDefault: vi.fn(),
+    } as unknown as Event;
+
+    component.addAlias(index, 'aliases');
+    expect(component.aliasControls.length).toBe(1);
+
+    component.removeAlias(index, 'aliases', event);
+
+    expect(event.preventDefault).toHaveBeenCalledTimes(1);
+    expect(component.aliasControls.length).toBe(0);
+  });
+
   it('should set up the aliases for the company details form', () => {
     if (!component) {
       throw new Error('component returned null');

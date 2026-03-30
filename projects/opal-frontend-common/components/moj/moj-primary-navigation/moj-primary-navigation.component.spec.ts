@@ -109,7 +109,7 @@ describe('MojPrimaryNavigationComponent', () => {
   it('should emit selected item in path-driven mode and avoid fragment navigation', () => {
     const pathFixture = TestBed.createComponent(TestHostComponent);
     const pathComponent = pathFixture.componentInstance;
-    const navigateSpy = vi.spyOn(router, 'navigate');
+    const navigateSpy = vi.spyOn(router, 'navigate').mockResolvedValue(true);
     pathComponent.useFragmentNavigation = false;
     pathFixture.detectChanges();
 

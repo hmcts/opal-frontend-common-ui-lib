@@ -20,6 +20,8 @@ describe('SignInComponent', () => {
 
     fixture = TestBed.createComponent(SignInComponent);
     component = fixture.componentInstance;
+    mockDocumentLocation.location.href = '';
+    Object.defineProperty(component, 'document', { value: mockDocumentLocation });
 
     fixture.detectChanges();
   });
@@ -39,9 +41,7 @@ describe('SignInComponent', () => {
   it('should handleStubSignInFormSubmit', () => {
     const formData: ISignInStubForm = { email: 'test' };
     const url = `${SSO_ENDPOINTS.login}?email=${formData.email}`;
-    const spy = vi.spyOn(component, 'handleStubSignInFormSubmit').mockImplementation(() => {
-      mockDocumentLocation.location.href = url;
-    });
+    const spy = vi.spyOn(component, 'handleStubSignInFormSubmit');
     component.handleStubSignInFormSubmit(formData);
     expect(spy).toHaveBeenCalled();
     expect(mockDocumentLocation.location.href).toBe(url);

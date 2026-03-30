@@ -48,7 +48,7 @@ describe('GovukTabsListItemComponent', () => {
 
   it('should navigate to the correct route with fragment', () => {
     const event = new Event('click');
-    const navigateSpy = vi.spyOn(router, 'navigate');
+    const navigateSpy = vi.spyOn(router, 'navigate').mockResolvedValue(true);
 
     component.handleItemClick(event, component.tabItemFragment);
 
