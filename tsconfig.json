@@ -32,8 +32,8 @@
       "@hmcts/opal-frontend-common/components/abstract/abstract-form-array-parent-base": [
         "./dist/opal-frontend-common/components/abstract/abstract-form-array-parent-base"
       ],
-      "@hmcts/opal-frontend-common/components/abstract/abstract-nested-form-array-base": [
-        "./dist/opal-frontend-common/components/abstract/abstract-nested-form-array-base"
+      "@hmcts/opal-frontend-common/components/abstract/abstract-nested-form-base": [
+        "./dist/opal-frontend-common/components/abstract/abstract-nested-form-base"
       ],
       "@hmcts/opal-frontend-common/components/abstract/abstract-form-array-removal-base": [
         "./dist/opal-frontend-common/components/abstract/abstract-form-array-removal-base"
@@ -113,9 +113,6 @@
       "@hmcts/opal-frontend-common/components/custom/custom-page-header": [
         "./dist/opal-frontend-common/components/custom/custom-page-header"
       ],
-      "@hmcts/opal-frontend-common/components/custom/custom-page-header/custom-page-header-action-button": [
-        "./dist/opal-frontend-common/components/custom/custom-page-header/custom-page-header-action-button"
-      ],
       "@hmcts/opal-frontend-common/components/custom/custom-horizontal-scroll-pane": [
         "./dist/opal-frontend-common/components/custom/custom-horizontal-scroll-pane"
       ],
@@ -179,14 +176,17 @@
       "@hmcts/opal-frontend-common/components/govuk/govuk-heading-with-caption": [
         "./dist/opal-frontend-common/components/govuk/govuk-heading-with-caption"
       ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-heading-with-caption/types": [
+        "./dist/opal-frontend-common/components/govuk/govuk-heading-with-caption/types"
+      ],
       "@hmcts/opal-frontend-common/components/govuk/govuk-inset-text": [
         "./dist/opal-frontend-common/components/govuk/govuk-inset-text"
       ],
       "@hmcts/opal-frontend-common/components/govuk/govuk-list": [
         "./dist/opal-frontend-common/components/govuk/govuk-list"
       ],
-      "@hmcts/opal-frontend-common/components/govuk/govuk-list-link": [
-        "./dist/opal-frontend-common/components/govuk/govuk-list-link"
+      "@hmcts/opal-frontend-common/components/govuk/govuk-list/govuk-list-link": [
+        "./dist/opal-frontend-common/components/govuk/govuk-list/govuk-list-link"
       ],
       "@hmcts/opal-frontend-common/components/govuk/govuk-notification-banner": [
         "./dist/opal-frontend-common/components/govuk/govuk-notification-banner"
@@ -238,6 +238,9 @@
       ],
       "@hmcts/opal-frontend-common/components/govuk/govuk-text-input": [
         "./dist/opal-frontend-common/components/govuk/govuk-text-input"
+      ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-text-input-prefix-suffix": [
+        "./dist/opal-frontend-common/components/govuk/govuk-text-input-prefix-suffix"
       ],
       "@hmcts/opal-frontend-common/components/govuk/helpers": ["./dist/opal-frontend-common/components/govuk/helpers"],
       "@hmcts/opal-frontend-common/components/hod/hod-loading-spinner": [
@@ -311,8 +314,8 @@
       "@hmcts/opal-frontend-common/components/moj/moj-timeline": [
         "./dist/opal-frontend-common/components/moj/moj-timeline"
       ],
-      "@hmcts/opal-fronted-common/directives/capitalisation": ["./dist/opal-frontend-common/directives/capitalisation"],
-      "@hmcts/opal-fronted-common/directives/govuk-button": ["./dist/opal-frontend-common/directives/govuk-button"],
+      "@hmcts/opal-frontend-common/directives/capitalisation": ["./dist/opal-frontend-common/directives/capitalisation"],
+      "@hmcts/opal-frontend-common/directives/govuk-button": ["./dist/opal-frontend-common/directives/govuk-button"],
       "@hmcts/opal-frontend-common/directives/moj-multi-select": [
         "./dist/opal-frontend-common/directives/moj-multi-select"
       ],
@@ -345,6 +348,7 @@
       "@hmcts/opal-frontend-common/pages/dashboard-page/interfaces": [
         "./dist/opal-frontend-common/pages/dashboard-page/interfaces"
       ],
+      "@hmcts/opal-frontend-common/pages": ["./dist/opal-frontend-common/pages"],
       "@hmcts/opal-frontend-common/pages/routing": ["./dist/opal-frontend-common/pages"],
       "@hmcts/opal-frontend-common/pages/routing/interfaces": ["./dist/opal-frontend-common/pages/routing/interfaces"],
       "@hmcts/opal-frontend-common/pages/routing/constants": ["./dist/opal-frontend-common/pages/routing/constants"],
@@ -404,6 +408,9 @@
       ],
       "@hmcts/opal-frontend-common/services/transformation-service": [
         "./dist/opal-frontend-common/services/transformation-service"
+      ],
+      "@hmcts/opal-frontend-common/services/transformation-service/constants": [
+        "./dist/opal-frontend-common/services/transformation-service/constants"
       ],
       "@hmcts/opal-frontend-common/services/transformation-service/interfaces": [
         "./dist/opal-frontend-common/services/transformation-service/interfaces"

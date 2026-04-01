@@ -147,8 +147,8 @@ This component uses GOV.UK pagination markup with a MoJ pagination wrapper.
 Ensure your global styles include:
 
 ```scss
-@import 'govuk-frontend/dist/govuk/all.scss';
-@import '@ministryofjustice/frontend/moj/all.scss';
+@use 'govuk-frontend/dist/govuk/index';
+@use '@ministryofjustice/frontend/moj/all';
 ```
 
 ## Testing
