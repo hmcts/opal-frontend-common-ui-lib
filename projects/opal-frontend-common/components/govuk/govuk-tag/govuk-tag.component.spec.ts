@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukTagComponent } from './govuk-tag.component';
 import { Component } from '@angular/core';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 @Component({
   template: `<opal-lib-govuk-tag tagId="test" tagClasses="test-class">Test</opal-lib-govuk-tag>`,
   imports: [GovukTagComponent],
@@ -33,8 +34,7 @@ describe('GovukTagComponent', () => {
 
   it('should add the id', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const element = fixture.nativeElement.querySelector('#test');
@@ -44,8 +44,7 @@ describe('GovukTagComponent', () => {
 
   it('should add the class', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const element = fixture.nativeElement.querySelector('.test-class');
@@ -55,11 +54,10 @@ describe('GovukTagComponent', () => {
 
   it('should render into  ng-content', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const element = fixture.nativeElement.querySelector('#test');
-    expect(element.innerText).toBe('Test');
+    expect(element.textContent?.trim()).toBe('Test');
   });
 });

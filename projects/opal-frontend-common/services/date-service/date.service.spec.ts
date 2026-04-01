@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { DateService } from './date.service';
 import { DateTime } from 'luxon';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('DateServiceService', () => {
   let service: DateService;
@@ -82,7 +83,7 @@ describe('DateServiceService', () => {
   it('should correctly calculate age based on dateOfBirth', () => {
     // Mock the current date to a fixed date
     const fixedDate = DateTime.fromISO('2024-08-19');
-    spyOn(DateTime, 'now').and.returnValue(fixedDate as DateTime<true>);
+    vi.spyOn(DateTime, 'now').mockReturnValue(fixedDate as DateTime<true>);
 
     const dateOfBirth = DateTime.fromISO('1990-08-19');
     const age = service.calculateAge(dateOfBirth);
@@ -93,7 +94,7 @@ describe('DateServiceService', () => {
   it('should correctly calculate age based on dateOfBirth string', () => {
     // Mock the current date to a fixed date
     const fixedDate = DateTime.fromISO('2024-08-19');
-    spyOn(DateTime, 'now').and.returnValue(fixedDate as DateTime<true>);
+    vi.spyOn(DateTime, 'now').mockReturnValue(fixedDate as DateTime<true>);
 
     const dateOfBirth = '19/08/1990';
     const age = service.calculateAge(dateOfBirth);
@@ -104,7 +105,7 @@ describe('DateServiceService', () => {
   it('should correctly calculate age for a dateOfBirth in the future', () => {
     // Mock the current date to a fixed date
     const fixedDate = DateTime.fromISO('2024-08-19');
-    spyOn(DateTime, 'now').and.returnValue(fixedDate as DateTime<true>);
+    vi.spyOn(DateTime, 'now').mockReturnValue(fixedDate as DateTime<true>);
 
     const dateOfBirth = DateTime.fromISO('2025-08-19');
     const age = service.calculateAge(dateOfBirth);
@@ -115,7 +116,7 @@ describe('DateServiceService', () => {
   it('should correctly calculate age for a dateOfBirth in the future string', () => {
     // Mock the current date to a fixed date
     const fixedDate = DateTime.fromISO('2024-08-19');
-    spyOn(DateTime, 'now').and.returnValue(fixedDate as DateTime<true>);
+    vi.spyOn(DateTime, 'now').mockReturnValue(fixedDate as DateTime<true>);
 
     const dateOfBirth = '19/08/2025';
     const age = service.calculateAge(dateOfBirth);
@@ -201,7 +202,7 @@ describe('DateServiceService', () => {
   it('should return the current date and time', () => {
     const result = service.getDateNow();
     const currentDate = DateTime.now();
-    expect(result.hasSame(currentDate, 'minute')).toBeTrue();
+    expect(result.hasSame(currentDate, 'minute')).toBe(true);
   });
 
   it('should add duration to a date', () => {
@@ -282,42 +283,42 @@ describe('DateServiceService', () => {
 
   it('should return true if the date is in the past', () => {
     const pastDate = DateTime.now().minus({ days: 1 }).toFormat('dd/MM/yyyy');
-    expect(service.isDateInThePast(pastDate)).toBeTrue();
+    expect(service.isDateInThePast(pastDate)).toBe(true);
   });
 
   it('should return false if the date is today', () => {
     const today = DateTime.now().toFormat('dd/MM/yyyy');
-    expect(service.isDateInThePast(today)).toBeTrue();
+    expect(service.isDateInThePast(today)).toBe(false);
   });
 
   it('should return false if the date is in the future', () => {
     const futureDate = DateTime.now().plus({ days: 1 }).toFormat('dd/MM/yyyy');
-    expect(service.isDateInThePast(futureDate)).toBeFalse();
+    expect(service.isDateInThePast(futureDate)).toBe(false);
   });
 
   it('should return true if the date is in the future', () => {
     const futureDate = DateTime.now().plus({ days: 1 }).toFormat('dd/MM/yyyy');
-    expect(service.isDateInTheFuture(futureDate)).toBeTrue();
+    expect(service.isDateInTheFuture(futureDate)).toBe(true);
   });
 
   it('should return false if the date is today', () => {
     const today = DateTime.now().toFormat('dd/MM/yyyy');
-    expect(service.isDateInTheFuture(today)).toBeFalse();
+    expect(service.isDateInTheFuture(today)).toBe(false);
   });
 
   it('should return false if the date is in the past', () => {
     const pastDate = DateTime.now().minus({ days: 1 }).toFormat('dd/MM/yyyy');
-    expect(service.isDateInTheFuture(pastDate)).toBeFalse();
+    expect(service.isDateInTheFuture(pastDate)).toBe(false);
   });
 
   it('should return true if the date is more than the specified years in the future', () => {
     const futureDate = DateTime.now().plus({ years: 5 }).toFormat('dd/MM/yyyy');
-    expect(service.isDateInTheFuture(futureDate, 3)).toBeTrue();
+    expect(service.isDateInTheFuture(futureDate, 3)).toBe(true);
   });
 
   it('should return false if the date is less than the specified years in the future', () => {
     const futureDate = DateTime.now().plus({ years: 2 }).toFormat('dd/MM/yyyy');
-    expect(service.isDateInTheFuture(futureDate, 3)).toBeFalse();
+    expect(service.isDateInTheFuture(futureDate, 3)).toBe(false);
   });
 
   it('should return a Date object from a valid formatted string', () => {
@@ -436,7 +437,7 @@ describe('DateServiceService', () => {
   it('should handle dates around daylight saving time changes', () => {
     const dstDateIso = DateTime.fromISO('2023-03-14').toString();
     const todayIso = DateTime.fromISO('2023-03-15').toString();
-    spyOn(service, 'getDateNow').and.returnValue(DateTime.fromISO(todayIso));
+    vi.spyOn(service, 'getDateNow').mockReturnValue(DateTime.fromISO(todayIso));
 
     const result = service.getDaysAgo(dstDateIso);
     expect(result).toBe(1);
@@ -444,7 +445,7 @@ describe('DateServiceService', () => {
 
   it('should return correct formatted date range for given past and future days', () => {
     // Mock getDateNow to return a fixed date
-    spyOn(service, 'getDateNow').and.returnValue(DateTime.fromISO('2024-05-20'));
+    vi.spyOn(service, 'getDateNow').mockReturnValue(DateTime.fromISO('2024-05-20'));
 
     const pastDays = 5;
     const futureDays = 3;
@@ -458,7 +459,7 @@ describe('DateServiceService', () => {
 
   it('should return correct formatted date range for given past and future days when inputs are missing', () => {
     // Mock getDateNow to return a fixed date
-    spyOn(service, 'getDateNow').and.returnValue(DateTime.fromISO('2024-05-20'));
+    vi.spyOn(service, 'getDateNow').mockReturnValue(DateTime.fromISO('2024-05-20'));
 
     const result = service.getDateRange();
 
@@ -468,7 +469,7 @@ describe('DateServiceService', () => {
 
   it('should throw an error if dateFrom or dateTo are invalid', () => {
     // Mock getDateNow to return an invalid DateTime
-    spyOn(service, 'getDateNow').and.returnValue(DateTime.invalid('Invalid date'));
+    vi.spyOn(service, 'getDateNow').mockReturnValue(DateTime.invalid('Invalid date'));
 
     expect(() => {
       service.getDateRange(1, 1, 'yyyy-MM-dd');
@@ -484,8 +485,8 @@ describe('DateServiceService', () => {
   it('should return a date object with the correct age properties for an adult', () => {
     const fixedNow = DateTime.fromISO('2024-05-20');
     // Stub both the service clock and Luxon's global clock used by calculateAge
-    spyOn(service, 'getDateNow').and.returnValue(fixedNow);
-    spyOn(DateTime, 'now').and.returnValue(fixedNow as DateTime<true>);
+    vi.spyOn(service, 'getDateNow').mockReturnValue(fixedNow);
+    vi.spyOn(DateTime, 'now').mockReturnValue(fixedNow as DateTime<true>);
 
     // Create a DOB that is exactly 34 years before the fixed date (same month/day)
     const dateOfBirth = fixedNow.minus({ years: 34 }).toFormat('dd/MM/yyyy');
@@ -500,8 +501,8 @@ describe('DateServiceService', () => {
   it('should return a date object with the correct age properties for an youth', () => {
     const fixedNow = DateTime.fromISO('2024-05-20');
     // Stub both the service clock and Luxon's global clock used by calculateAge
-    spyOn(service, 'getDateNow').and.returnValue(fixedNow);
-    spyOn(DateTime, 'now').and.returnValue(fixedNow as DateTime<true>);
+    vi.spyOn(service, 'getDateNow').mockReturnValue(fixedNow);
+    vi.spyOn(DateTime, 'now').mockReturnValue(fixedNow as DateTime<true>);
 
     // Create a DOB that is exactly 15 years before the fixed date (same month/day)
     const dateOfBirth = fixedNow.minus({ years: 15 }).toFormat('dd/MM/yyyy');

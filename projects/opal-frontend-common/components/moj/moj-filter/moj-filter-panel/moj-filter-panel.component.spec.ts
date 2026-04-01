@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojFilterPanelComponent } from './moj-filter-panel.component';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 @Component({
   template: `

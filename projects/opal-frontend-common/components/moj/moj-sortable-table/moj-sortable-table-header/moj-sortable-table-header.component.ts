@@ -18,7 +18,7 @@ export class MojSortableTableHeaderComponent {
     return this.sortDirection;
   }
 
-  @HostBinding('scope') hostScope = 'col';
+  @HostBinding('attr.scope') hostScope = 'col';
 
   @HostBinding('class') get hostClass(): string {
     return 'govuk-table__header';

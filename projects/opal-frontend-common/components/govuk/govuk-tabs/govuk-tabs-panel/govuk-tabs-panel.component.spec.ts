@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GovukTabsPanelComponent } from './govuk-tabs-panel.component';
 import { Component } from '@angular/core';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 @Component({
   template: `<opal-lib-govuk-tabs-panel id="test-panel">Hello World</opal-lib-govuk-tabs-panel>`,
@@ -45,17 +46,15 @@ describe('GovukTabsPanelComponent', () => {
 
   it('should render into list ng-content', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
     const element = fixture.nativeElement.querySelector('#test-panel');
-    expect(element.innerText).toContain('Hello World');
+    expect(element.textContent ?? '').toContain('Hello World');
   });
 
   it('should link the panel to the default tab id', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
     const element = fixture.nativeElement.querySelector('#test-panel');
     expect(element.getAttribute('aria-labelledby')).toBe('tab-test-panel');
@@ -63,8 +62,7 @@ describe('GovukTabsPanelComponent', () => {
 
   it('should render as a block element', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const element = fixture.nativeElement.querySelector('#test-panel') as HTMLElement;
@@ -91,8 +89,7 @@ describe('GovukTabsPanelComponent with custom tab id', () => {
 
   it('should use the provided tabItemId for aria-labelledby', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const element = fixture.nativeElement.querySelector('#custom-panel');
@@ -119,8 +116,7 @@ describe('GovukTabsPanelComponent without id', () => {
 
   it('should not set aria-labelledby when no id is present', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const element = fixture.nativeElement.querySelector('opal-lib-govuk-tabs-panel');

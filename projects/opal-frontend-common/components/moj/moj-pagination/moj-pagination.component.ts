@@ -3,7 +3,6 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Out
 @Component({
   selector: 'opal-lib-moj-pagination',
   templateUrl: './moj-pagination.component.html',
-  styleUrl: './moj-pagination.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MojPaginationComponent implements OnChanges {
@@ -142,6 +141,9 @@ export class MojPaginationComponent implements OnChanges {
   public onPageChanged(event: Event, page: number): void {
     if (event) {
       event.preventDefault();
+    }
+    if (page === this.currentPage) {
+      return;
     }
     this.changePage.emit(page);
   }

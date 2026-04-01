@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import {
   Router,
   ActivatedRouteSnapshot,
@@ -19,8 +20,8 @@ describe('hasFlowStateGuard', () => {
         {
           provide: Router,
           useValue: {
-            createUrlTree: jasmine.createSpy('createUrlTree'),
-            navigate: jasmine.createSpy('navigate'),
+            createUrlTree: vi.fn(),
+            navigate: vi.fn(),
           },
         },
       ],
@@ -28,7 +29,7 @@ describe('hasFlowStateGuard', () => {
 
     router = TestBed.inject(Router);
     mockUrlTree = TestBed.inject(Router).createUrlTree(['/redirect']);
-    (router.createUrlTree as jasmine.Spy).and.returnValue(mockUrlTree);
+    (router.createUrlTree as Mock).mockReturnValue(mockUrlTree);
   });
 
   function mockActivatedRouteSnapshot(
@@ -56,9 +57,9 @@ describe('hasFlowStateGuard', () => {
   }
 
   it('should return true when checkCondition returns true', () => {
-    const getState = jasmine.createSpy('getState').and.returnValue({ key: 'value' });
-    const checkCondition = jasmine.createSpy('checkCondition').and.returnValue(true);
-    const getNavigationPath = jasmine.createSpy('getNavigationPath').and.returnValue('/redirect');
+    const getState = vi.fn().mockReturnValue({ key: 'value' });
+    const checkCondition = vi.fn().mockReturnValue(true);
+    const getNavigationPath = vi.fn().mockReturnValue('/redirect');
 
     const guard = hasFlowStateGuard(getState, checkCondition, getNavigationPath);
 
@@ -73,9 +74,9 @@ describe('hasFlowStateGuard', () => {
   });
 
   it('should return a UrlTree when checkCondition returns false', () => {
-    const getState = jasmine.createSpy('getState').and.returnValue({ key: 'value' });
-    const checkCondition = jasmine.createSpy('checkCondition').and.returnValue(false);
-    const getNavigationPath = jasmine.createSpy('getNavigationPath').and.returnValue('/redirect');
+    const getState = vi.fn().mockReturnValue({ key: 'value' });
+    const checkCondition = vi.fn().mockReturnValue(false);
+    const getNavigationPath = vi.fn().mockReturnValue('/redirect');
 
     const guard = hasFlowStateGuard(getState, checkCondition, getNavigationPath);
 
@@ -94,9 +95,9 @@ describe('hasFlowStateGuard', () => {
   });
 
   it('should return a UrlTree when checkCondition returns false with undefined queryParams and fragment', () => {
-    const getState = jasmine.createSpy('getState').and.returnValue({ key: 'value' });
-    const checkCondition = jasmine.createSpy('checkCondition').and.returnValue(false);
-    const getNavigationPath = jasmine.createSpy('getNavigationPath').and.returnValue('/redirect');
+    const getState = vi.fn().mockReturnValue({ key: 'value' });
+    const checkCondition = vi.fn().mockReturnValue(false);
+    const getNavigationPath = vi.fn().mockReturnValue('/redirect');
 
     const guard = hasFlowStateGuard(getState, checkCondition, getNavigationPath);
 

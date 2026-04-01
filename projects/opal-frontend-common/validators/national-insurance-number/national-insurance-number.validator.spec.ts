@@ -1,5 +1,6 @@
 import { FormControl } from '@angular/forms';
 import { nationalInsuranceNumberValidator } from './national-insurance-number.validator';
+import { describe, it, expect } from 'vitest';
 
 describe('nationalInsuranceNumberValidator', () => {
   it('should return invalid NINO for a valid NINO with spaces', () => {

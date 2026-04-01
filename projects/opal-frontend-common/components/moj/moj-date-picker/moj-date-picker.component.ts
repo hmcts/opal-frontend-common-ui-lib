@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,7 +14,7 @@ import { addGdsBodyClass } from '@hmcts/opal-frontend-common/components/govuk/he
 
 @Component({
   selector: 'opal-lib-moj-date-picker',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './moj-date-picker.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -76,6 +75,16 @@ export class MojDatePickerComponent implements OnInit {
   }
 
   /**
+   * Dynamically imports the Ministry of Justice frontend date picker module.
+   *
+   * @returns A promise that resolves to the imported module containing all MOJ components.
+   * @private
+   */
+  private loadDatePickerModule(): Promise<typeof import('@ministryofjustice/frontend/moj/all.mjs')> {
+    return import('@ministryofjustice/frontend/moj/all.mjs');
+  }
+
+  /**
    * Sets the date value and emits the updated value through the `dateChange` event.
    *
    * @param value - The new date value to set.
@@ -94,7 +103,7 @@ export class MojDatePickerComponent implements OnInit {
    * Configures the date picker functionality using the moj library.
    */
   public configureDatePicker(): void {
-    import('@ministryofjustice/frontend/moj/all').then((datePicker) => {
+    this.loadDatePickerModule().then((datePicker) => {
       addGdsBodyClass();
       datePicker.initAll();
     });

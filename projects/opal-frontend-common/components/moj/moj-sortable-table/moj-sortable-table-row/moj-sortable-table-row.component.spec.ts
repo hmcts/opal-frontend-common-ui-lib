@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojSortableTableRowComponent } from './moj-sortable-table-row.component';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('MojSortableTableRowComponent;', () => {
   let component: MojSortableTableRowComponent;

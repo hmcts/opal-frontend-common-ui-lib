@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojBadgeComponent } from './moj.badge.component';
 import { Component } from '@angular/core';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 @Component({
   template: `<opal-lib-moj-badge badgeId="test" badgeClasses="test-class">Test</opal-lib-moj-badge>`,
@@ -37,6 +38,6 @@ describe('MojBadgeComponent', () => {
 
   it('should render into ng-content', () => {
     const element = fixture.nativeElement.querySelector('#test');
-    expect(element.innerText).toBe('Test');
+    expect(element.textContent?.trim()).toBe('Test');
   });
 });

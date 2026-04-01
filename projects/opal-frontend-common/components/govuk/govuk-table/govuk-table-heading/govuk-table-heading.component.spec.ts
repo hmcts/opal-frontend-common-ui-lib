@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { GovukTableHeadingComponent } from './govuk-table-heading.component';
 import { Component } from '@angular/core';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 @Component({
   template: `<th opal-lib-govuk-table-heading>Test Column</th>`,
@@ -29,8 +30,7 @@ describe('GovukTableHeadingComponent', () => {
 
   it('should have the scope attribute set to "col"', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const thElement = fixture.debugElement.query(By.css('th'));
@@ -39,8 +39,7 @@ describe('GovukTableHeadingComponent', () => {
 
   it('should have the correct host class', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const thElement = fixture.debugElement.query(By.css('th'));

@@ -1,9 +1,8 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'opal-lib-govuk-checkboxes',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './govuk-checkboxes.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

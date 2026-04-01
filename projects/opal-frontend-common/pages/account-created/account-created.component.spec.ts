@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AccountCreated } from './account-created.component';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('AccountCreated', () => {
   let component: AccountCreated;

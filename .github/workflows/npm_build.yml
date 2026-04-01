@@ -24,6 +24,11 @@ jobs:
         with:
           node-version: '24.x'
 
+      - name: Enable Corepack
+        run: |
+          corepack enable
+          corepack prepare yarn@4.12.0 --activate
+
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
@@ -33,13 +38,20 @@ jobs:
       - name: Audit vulnerabilities (known issues check)
         run: yarn audit:check
 
+      - name: Validate export/path sync
+        run: yarn exports:check
+
       - name: Build library
         run: yarn build
 
+      - name: Validate publish surface
+        run: yarn pack:check
+
       - name: Run unit tests
-        run: yarn test --watch=false --code-coverage
+        run: yarn test:coverage
 
       - name: Analyze with SonarCloud
+        if: ${{ github.actor != 'dependabot[bot]' }}
         uses: SonarSource/sonarqube-scan-action@v7.0.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -66,6 +78,11 @@ jobs:
         with:
           node-version: '24.x'
 
+      - name: Enable Corepack (Release)
+        run: |
+          corepack enable
+          corepack prepare yarn@4.12.0 --activate
+
       - name: Ensure npm version (Trusted Publishing)
         run: |
           npm --version
@@ -74,8 +91,14 @@ jobs:
       - name: Install dependencies (Release)
         run: yarn install --frozen-lockfile
 
+      - name: Validate export/path sync (Release)
+        run: yarn exports:check
+
       - name: Build library (Release)
         run: yarn build
+
+      - name: Validate publish surface (Release)
+        run: yarn pack:check
 
       - name: Publish version (OIDC via npm)
         working-directory: dist/opal-frontend-common

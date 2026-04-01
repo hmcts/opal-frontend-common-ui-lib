@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojButtonMenuItemComponent } from './moj-button-menu-item.component';
 import { Component } from '@angular/core';
 import { MojButtonMenuComponent } from '../moj-button-menu.component';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 @Component({
   template: `<opal-lib-moj-button-menu menuButtonTitle="More actions">
     <opal-lib-moj-button-menu-item itemText="'Test Item'"> </opal-lib-moj-button-menu-item>
@@ -50,8 +51,8 @@ describe('MojButtonMenuItemComponent isolated', () => {
   });
 
   it('should prevent default and emit actionClick when handleClick is called', () => {
-    const fakeEvent = { preventDefault: jasmine.createSpy('preventDefault') } as unknown as Event;
-    spyOn(component.actionClick, 'emit');
+    const fakeEvent = { preventDefault: vi.fn() } as unknown as Event;
+    vi.spyOn(component.actionClick, 'emit');
     component.handleClick(fakeEvent);
     expect(fakeEvent.preventDefault).toHaveBeenCalled();
     expect(component.actionClick.emit).toHaveBeenCalled();

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MojAlertTextComponent } from './moj-alert-content-text.component';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('MojAlertTextComponent', () => {
   let component: MojAlertTextComponent;

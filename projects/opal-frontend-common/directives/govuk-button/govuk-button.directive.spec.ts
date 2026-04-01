@@ -1,3 +1,4 @@
+import { describe, beforeEach, it, expect } from 'vitest';
 import { GovukButtonDirective } from './govuk-button.directive';
 
 describe('GovukButtonDirective', () => {
@@ -38,11 +39,10 @@ describe('GovukButtonDirective', () => {
     expect(directive.dataModule).toEqual('govuk-button');
   });
 
-  it('should emit buttonClickEvent on handleButtonClick()', (done) => {
+  it('should emit buttonClickEvent on handleButtonClick()', async () => {
     directive.buttonId = 'btn'; // Required input to instantiate properly
     directive.buttonClickEvent.subscribe((value) => {
-      expect(value).toBeTrue();
-      done();
+      expect(value).toBe(true);
     });
     directive.handleButtonClick();
   });

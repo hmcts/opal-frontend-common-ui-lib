@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GovukButtonComponent } from './govuk-button.component';
+import { describe, beforeEach, afterAll, it, expect, vi } from 'vitest';
 
 describe('GovukButtonComponent', () => {
   let component: GovukButtonComponent | null;
@@ -26,11 +27,10 @@ describe('GovukButtonComponent', () => {
 
   it('should handle the button click', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
-    spyOn(component.buttonClickEvent, 'emit');
+    vi.spyOn(component.buttonClickEvent, 'emit');
 
     component.handleButtonClick();
 

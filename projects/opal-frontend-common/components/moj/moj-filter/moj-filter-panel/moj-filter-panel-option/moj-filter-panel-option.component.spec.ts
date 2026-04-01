@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojFilterPanelOptionComponent } from './moj-filter-panel-option.component';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('MojFilterPanelOptionComponent', () => {
   let component: MojFilterPanelOptionComponent;
@@ -20,13 +21,13 @@ describe('MojFilterPanelOptionComponent', () => {
   });
 
   it('should emit applyFilters event when no event is provided', () => {
-    spyOn(component.applyFilters, 'emit');
+    vi.spyOn(component.applyFilters, 'emit');
     component.onApplyFilters();
     expect(component.applyFilters.emit).toHaveBeenCalled();
   });
 
   it('should call event.preventDefault if event is provided', () => {
-    spyOn(component.applyFilters, 'emit');
+    vi.spyOn(component.applyFilters, 'emit');
 
     component.onApplyFilters();
 

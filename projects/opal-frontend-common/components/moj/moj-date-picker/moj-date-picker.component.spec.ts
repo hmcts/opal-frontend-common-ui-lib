@@ -1,11 +1,17 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojDatePickerComponent } from './moj-date-picker.component';
 import { FormControl } from '@angular/forms';
+import { vi, describe, beforeEach, it, expect } from 'vitest';
+
+type DatePickerModuleLoaderHost = {
+  loadDatePickerModule: () => Promise<{ initAll: () => void }>;
+};
 
 describe('MojDatePickerComponent', () => {
   let component: MojDatePickerComponent;
   let fixture: ComponentFixture<MojDatePickerComponent>;
   let formControl: FormControl;
+  let initAllSpy: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -14,6 +20,10 @@ describe('MojDatePickerComponent', () => {
 
     fixture = TestBed.createComponent(MojDatePickerComponent);
     component = fixture.componentInstance;
+    initAllSpy = vi.fn();
+    (component as unknown as DatePickerModuleLoaderHost).loadDatePickerModule = vi
+      .fn()
+      .mockResolvedValue({ initAll: initAllSpy });
 
     formControl = new FormControl(null);
 
@@ -29,22 +39,15 @@ describe('MojDatePickerComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call initAll on date picker library', waitForAsync(() => {
-    const initAllSpy = jasmine.createSpy('initAll');
-    spyOn(component, 'configureDatePicker').and.callFake(() => {
-      return Promise.resolve({
-        initAll: initAllSpy,
-      }).then((library) => {
-        library.initAll();
-        expect(initAllSpy).toHaveBeenCalled();
-      });
-    });
-
+  it('should call initAll on date picker library', async () => {
+    initAllSpy.mockClear();
     component.configureDatePicker();
-  }));
+    await Promise.resolve();
+    expect(initAllSpy).toHaveBeenCalledTimes(1);
+  });
 
   it('should update selectedDate and emit dateChange event when changeDate is called', () => {
-    spyOn(component.dateChange, 'emit');
+    vi.spyOn(component.dateChange, 'emit');
     const newDate = '01/01/2024';
 
     component['setDateValue'](newDate);
@@ -53,7 +56,7 @@ describe('MojDatePickerComponent', () => {
   });
 
   it('should update selectedDate and emit dateChange event when changeDate is called - incorrect date', () => {
-    spyOn(component.dateChange, 'emit');
+    vi.spyOn(component.dateChange, 'emit');
     const newDate = '32/13/2024';
 
     component['setDateValue'](newDate);

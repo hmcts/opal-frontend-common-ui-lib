@@ -2,6 +2,7 @@ import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukAccordionComponent, GovukAccordionSection } from './govuk-accordion.component';
+import { describe, beforeEach, afterAll, it, expect, vi } from 'vitest';
 
 @Component({
   template: `
@@ -11,7 +12,8 @@ import { GovukAccordionComponent, GovukAccordionSection } from './govuk-accordio
   imports: [GovukAccordionComponent],
 })
 class AccordionTemplateHostComponent {
-  @ViewChild('contentTemplate', { static: true }) contentTemplate!: TemplateRef<unknown>;
+  @ViewChild('contentTemplate', { static: true })
+  contentTemplate!: TemplateRef<unknown>;
   public sections: GovukAccordionSection[] = [];
 }
 
@@ -48,67 +50,67 @@ describe('GovukAccordionComponent', () => {
 
     expect(firstButton.getAttribute('aria-expanded')).toBe('false');
     expect(firstButton.getAttribute('aria-controls')).toBe('test-accordion-section-1-content');
-    expect(firstContent.hasAttribute('hidden')).toBeTrue();
+    expect(firstContent.hasAttribute('hidden')).toBe(true);
 
     firstButton.click();
     fixture.detectChanges();
 
     expect(firstButton.getAttribute('aria-expanded')).toBe('true');
-    expect(firstContent.hasAttribute('hidden')).toBeFalse();
+    expect(firstContent.hasAttribute('hidden')).toBe(false);
   });
 
   it('should emit expand and collapse when toggling a section by index', () => {
-    const expandSpy = spyOn(component.expand, 'emit');
-    const collapseSpy = spyOn(component.collapse, 'emit');
+    const expandSpy = vi.spyOn(component.expand, 'emit');
+    const collapseSpy = vi.spyOn(component.collapse, 'emit');
 
     component.toggleSectionByIndex(0);
     fixture.detectChanges();
 
-    expect(component.isExpanded(0)).toBeTrue();
+    expect(component.isExpanded(0)).toBe(true);
     expect(expandSpy).toHaveBeenCalledWith('test-accordion-section-1');
 
     component.toggleSectionByIndex(0);
     fixture.detectChanges();
 
-    expect(component.isExpanded(0)).toBeFalse();
+    expect(component.isExpanded(0)).toBe(false);
     expect(collapseSpy).toHaveBeenCalledWith('test-accordion-section-1');
   });
 
   it('should expand and collapse all sections', () => {
-    const expandSpy = spyOn(component.expand, 'emit');
-    const collapseSpy = spyOn(component.collapse, 'emit');
+    const expandSpy = vi.spyOn(component.expand, 'emit');
+    const collapseSpy = vi.spyOn(component.collapse, 'emit');
 
     component.expandAllSections();
 
-    expect(component.isExpanded(0)).toBeTrue();
-    expect(component.isExpanded(1)).toBeTrue();
-    expect(expandSpy.calls.allArgs()).toEqual([['test-accordion-section-1'], ['test-accordion-section-2']]);
+    expect(component.isExpanded(0)).toBe(true);
+    expect(component.isExpanded(1)).toBe(true);
+    expect(vi.mocked(expandSpy).mock.calls).toEqual([['test-accordion-section-1'], ['test-accordion-section-2']]);
 
     component.collapseAllSections();
 
-    expect(component.isExpanded(0)).toBeFalse();
-    expect(component.isExpanded(1)).toBeFalse();
-    expect(collapseSpy.calls.allArgs()).toEqual([['test-accordion-section-1'], ['test-accordion-section-2']]);
+    expect(component.isExpanded(0)).toBe(false);
+    expect(component.isExpanded(1)).toBe(false);
+    expect(vi.mocked(collapseSpy).mock.calls).toEqual([['test-accordion-section-1'], ['test-accordion-section-2']]);
   });
 
   it('should ignore toggleSection when the id is not found', () => {
-    const expandSpy = spyOn(component.expand, 'emit');
-    const collapseSpy = spyOn(component.collapse, 'emit');
+    const expandSpy = vi.spyOn(component.expand, 'emit');
+    const collapseSpy = vi.spyOn(component.collapse, 'emit');
 
     component.toggleSection('missing-section');
 
-    expect(component.isExpanded(0)).toBeFalse();
-    expect(component.isExpanded(1)).toBeTrue();
+    expect(component.isExpanded(0)).toBe(false);
+    expect(component.isExpanded(1)).toBe(true);
     expect(expandSpy).not.toHaveBeenCalled();
     expect(collapseSpy).not.toHaveBeenCalled();
   });
 
   it('should toggle the matching section when using toggleSection', () => {
-    const expandSpy = spyOn(component.expand, 'emit');
+    const expandSpy = vi.spyOn(component.expand, 'emit');
 
     component.toggleSection('test-accordion-section-1');
 
-    expect(component.isExpanded(0)).toBeTrue();
+    expect(component.isExpanded(0)).toBe(true);
     expect(expandSpy).toHaveBeenCalledWith('test-accordion-section-1');
   });
 
@@ -130,11 +132,11 @@ describe('GovukAccordionComponent', () => {
     fixture.detectChanges();
 
     expect(component.sections).toEqual([]);
-    expect(component.isExpanded(0)).toBeFalse();
+    expect(component.isExpanded(0)).toBe(false);
   });
 
   it('should return false when checking an out-of-range expanded state', () => {
-    expect(component.isExpanded(5)).toBeFalse();
+    expect(component.isExpanded(5)).toBe(false);
   });
 });
 
@@ -149,13 +151,12 @@ describe('GovukAccordionComponent with template content', () => {
 
     fixture = TestBed.createComponent(AccordionTemplateHostComponent);
     hostComponent = fixture.componentInstance;
-    fixture.detectChanges();
     hostComponent.sections = [{ heading: 'Template section', content: hostComponent.contentTemplate, expanded: true }];
     fixture.detectChanges();
   });
 
   it('should render template content when provided', () => {
     const content = fixture.nativeElement.querySelector('.govuk-accordion__section-content') as HTMLElement;
-    expect(content.innerText).toContain('Template content');
+    expect(content.textContent ?? '').toContain('Template content');
   });
 });

@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukSummaryCardListComponent } from './govuk-summary-card-list.component';
 import { Component } from '@angular/core';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 @Component({
   template: `<opal-lib-govuk-summary-card-list summaryCardListId="test" cardTitle="Testing Summary Card List"
@@ -38,23 +39,22 @@ describe('GovukSummaryCardListComponent', () => {
 
   it('should render card title and content correctly', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const element = fixture.nativeElement;
 
     // Check the card title
-    const cardTitle = element.querySelector('.govuk-summary-card__title').innerText;
+    const cardTitle = element.querySelector('.govuk-summary-card__title')?.textContent?.trim();
     expect(cardTitle).toBe('Testing Summary Card List');
 
     // Check for the presence of the li element with the word 'Test'
     const liElement = element.querySelector('.govuk-summary-card__actions li');
     expect(liElement).toBeTruthy();
-    expect(liElement.innerText).toBe('Test');
+    expect(liElement?.textContent?.trim()).toBe('Test');
 
     // Check the content
-    const content = element.querySelector('.govuk-summary-card__content p').innerText;
+    const content = element.querySelector('.govuk-summary-card__content p')?.textContent?.trim();
     expect(content).toBe('Hello World');
 
     // Check the id

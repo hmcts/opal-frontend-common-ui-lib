@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'opal-lib-govuk-pagination',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './govuk-pagination.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

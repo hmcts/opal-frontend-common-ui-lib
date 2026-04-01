@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MojPaginationComponent } from './moj-pagination.component';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('MojPaginationComponent', () => {
   let component: MojPaginationComponent;
@@ -57,23 +58,35 @@ describe('MojPaginationComponent', () => {
   });
 
   it('should emit changePage with the new page number', () => {
-    spyOn(component.changePage, 'emit');
+    vi.spyOn(component.changePage, 'emit');
     const mockEvent = new Event('click');
     component.onPageChanged(mockEvent, 3);
     expect(component.changePage.emit).toHaveBeenCalledWith(3);
   });
 
+  it('should not emit changePage when selecting the current page', () => {
+    vi.spyOn(component.changePage, 'emit');
+    component.currentPage = 2;
+    const mockEvent = new Event('click');
+    component.onPageChanged(mockEvent, 2);
+    expect(component.changePage.emit).not.toHaveBeenCalled();
+  });
+
   it('should prevent default event behaviour', () => {
-    const mockEvent = jasmine.createSpyObj('event', ['preventDefault']);
+    const mockEvent = {
+      preventDefault: vi.fn().mockName('event.preventDefault'),
+    } as unknown as Event;
     component.onPageChanged(mockEvent, 2);
     expect(mockEvent.preventDefault).toHaveBeenCalled();
   });
 
   it('should recalculate pages when inputs change', () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    spyOn<any>(component, 'calculatePages');
+    const componentWithPrivates = component as unknown as {
+      calculatePages: () => void;
+    };
+    vi.spyOn(componentWithPrivates, 'calculatePages');
     component.ngOnChanges();
-    expect(component['calculatePages']).toHaveBeenCalled();
+    expect(componentWithPrivates.calculatePages).toHaveBeenCalled();
   });
 
   it('should do nothing if limit <= 0', () => {
@@ -119,5 +132,43 @@ describe('MojPaginationComponent', () => {
   it('should not add last page if same as first', () => {
     const result = component['elipseSkippedPages']([1], 1);
     expect(result).toEqual([1]);
+  });
+
+  it('should render GOV.UK pagination markup inside the MoJ wrapper', () => {
+    fixture.componentRef.setInput('id', 'pagination');
+    fixture.componentRef.setInput('currentPage', 2);
+    fixture.componentRef.setInput('limit', 10);
+    fixture.componentRef.setInput('total', 50);
+    fixture.detectChanges();
+
+    const wrapper = fixture.nativeElement.querySelector('.moj-pagination');
+    expect(wrapper).toBeTruthy();
+
+    const nav = wrapper.querySelector('nav.govuk-pagination');
+    expect(nav).toBeTruthy();
+    expect(nav.classList.contains('moj-pagination__pagination')).toBe(true);
+
+    const list = wrapper.querySelector('.govuk-pagination__list');
+    expect(list).toBeTruthy();
+
+    const results = wrapper.querySelector('.moj-pagination__results');
+    expect(results).toBeTruthy();
+  });
+
+  it('should render results without pagination controls when only one page is required', () => {
+    fixture.componentRef.setInput('id', 'pagination');
+    fixture.componentRef.setInput('currentPage', 1);
+    fixture.componentRef.setInput('limit', 100);
+    fixture.componentRef.setInput('total', 20);
+    fixture.detectChanges();
+
+    const wrapper = fixture.nativeElement.querySelector('.moj-pagination');
+    expect(wrapper).toBeTruthy();
+
+    const nav = wrapper.querySelector('nav.govuk-pagination');
+    expect(nav).toBeNull();
+
+    const results = wrapper.querySelector('.moj-pagination__results');
+    expect(results.textContent?.trim()).toBe('Showing 1 to 20 of 20 total results');
   });
 });

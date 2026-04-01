@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { GovukHeaderNavigationItemComponent } from './govuk-header-navigation-item/govuk-header-navigation-item.component';
 import { provideRouter } from '@angular/router';
 import { GOVUK_HEADER_LINKS_MOCK } from './mocks/govuk-header-links.mock';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 @Component({
   template: `<opal-lib-govuk-header [headerLinks]="headerLinks">
@@ -46,31 +47,28 @@ describe('GovukHeaderComponent', () => {
 
   it('should render into organisationName ng-content', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const element = fixture.nativeElement.querySelector('.govuk-header__logotype-text');
-    expect(element.innerText).toBe('Test Organisation');
+    expect(element.textContent?.trim()).toBe('Test Organisation');
   });
 
   it('should render into serviceName ng-content', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const element = fixture.nativeElement.querySelector('.govuk-header__service-name');
-    expect(element.innerText).toBe('Test Service');
+    expect(element.textContent?.trim()).toBe('Test Service');
   });
 
   it('should render into linkText ng-content', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const element = fixture.nativeElement.querySelector('opal-lib-govuk-header-navigation-item');
-    expect(element.innerText).toBe('Test Link');
+    expect(element.textContent?.trim()).toBe('Test Link');
   });
 });

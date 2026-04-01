@@ -4,6 +4,7 @@ import { AbstractNestedFormBaseComponent } from './abstract-nested-form-base.com
 import { IAbstractFormBaseFieldErrors } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-base/interfaces';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
+import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 class TestAbstractNestedFormBaseComponent extends AbstractNestedFormBaseComponent {
   public override form: FormGroup = new FormGroup({});
@@ -50,8 +51,7 @@ describe('AbstractNestedFormBaseComponent', () => {
 
   it('addControlsToNestedFormGroup should add controls into the default target (this.form)', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const source = new FormGroup({ x: new FormControl('x'), y: new FormControl('y') });
@@ -66,8 +66,7 @@ describe('AbstractNestedFormBaseComponent', () => {
 
   it('removeControlsFromNestedFormGroup should remove only the specified controls', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const source = new FormGroup({
@@ -86,8 +85,7 @@ describe('AbstractNestedFormBaseComponent', () => {
 
   it('removeControlsFromNestedFormGroup should default target to this.form', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     // Add some controls to the component.form
@@ -111,76 +109,70 @@ describe('AbstractNestedFormBaseComponent', () => {
   describe('hasValue (in abstract)', () => {
     it('returns false for null and undefined', () => {
       if (!component) {
-        fail('component returned null');
-        return;
+        throw new Error('component returned null');
       }
-      expect(component.testHasValue(null)).toBeFalse();
+      expect(component.testHasValue(null)).toBe(false);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      expect(component.testHasValue(undefined as any)).toBeFalse();
+      expect(component.testHasValue(undefined as any)).toBe(false);
     });
 
     it('returns false for empty or whitespace-only strings', () => {
       if (!component) {
-        fail('component returned null');
-        return;
+        throw new Error('component returned null');
       }
-      expect(component.testHasValue('')).toBeFalse();
-      expect(component.testHasValue('   ')).toBeFalse();
-      expect(component.testHasValue('\n\t')).toBeFalse();
+      expect(component.testHasValue('')).toBe(false);
+      expect(component.testHasValue('   ')).toBe(false);
+      expect(component.testHasValue('\n\t')).toBe(false);
     });
 
     it('returns true for non-empty strings', () => {
       if (!component) {
-        fail('component returned null');
-        return;
+        throw new Error('component returned null');
       }
-      expect(component.testHasValue('x')).toBeTrue();
-      expect(component.testHasValue('  x  ')).toBeTrue();
+      expect(component.testHasValue('x')).toBe(true);
+      expect(component.testHasValue('  x  ')).toBe(true);
     });
 
     it('returns true for non-string values', () => {
       if (!component) {
-        fail('component returned null');
-        return;
+        throw new Error('component returned null');
       }
-      expect(component.testHasValue(0)).toBeTrue();
-      expect(component.testHasValue(false)).toBeTrue();
-      expect(component.testHasValue({})).toBeTrue();
-      expect(component.testHasValue([])).toBeTrue();
+      expect(component.testHasValue(0)).toBe(true);
+      expect(component.testHasValue(false)).toBe(true);
+      expect(component.testHasValue({})).toBe(true);
+      expect(component.testHasValue([])).toBe(true);
       const d = new Date();
-      expect(component.testHasValue(d)).toBeTrue();
+      expect(component.testHasValue(d)).toBe(true);
     });
   });
 
   it('setValidatorPresence should add/remove a single validator and update validity', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     // early-return branch when control is null
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect(component['setValidatorPresence'](null as unknown as any, Validators.required, true)).toBeFalse();
+    expect(component['setValidatorPresence'](null as unknown as any, Validators.required, true)).toBe(false);
 
     const c = new FormControl<string | null>(null);
 
     // add required
     const nowPresent = component['setValidatorPresence'](c, Validators.required, true);
-    expect(nowPresent).toBeTrue();
+    expect(nowPresent).toBe(true);
     c.updateValueAndValidity({ onlySelf: true });
-    expect(c.hasError('required')).toBeTrue();
+    expect(c.hasError('required')).toBe(true);
 
     // remove required
     const nowAbsent = component['setValidatorPresence'](c, Validators.required, false);
-    expect(nowAbsent).toBeFalse();
+    expect(nowAbsent).toBe(false);
     c.updateValueAndValidity({ onlySelf: true });
-    expect(c.hasError('required')).toBeFalse();
+    expect(c.hasError('required')).toBe(false);
   });
 
   it('setValidatorPresence should add/remove multiple validators at once', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const c = new FormControl<string | null>('AB', []);
@@ -191,8 +183,8 @@ describe('AbstractNestedFormBaseComponent', () => {
     c.updateValueAndValidity({ onlySelf: true });
 
     // 'AB' fails minlength but passes pattern
-    expect(c.hasError('minlength')).toBeTrue();
-    expect(c.hasError('pattern')).toBeFalse();
+    expect(c.hasError('minlength')).toBe(true);
+    expect(c.hasError('pattern')).toBe(false);
 
     // remove both validators
     component['setValidatorPresence'](c, validators, false);
@@ -203,8 +195,7 @@ describe('AbstractNestedFormBaseComponent', () => {
 
   it('resetAndValidateControls should clear values and errors and update validity', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const c1 = new FormControl<string | null>('x', Validators.required);
@@ -215,19 +206,18 @@ describe('AbstractNestedFormBaseComponent', () => {
 
     expect(c1.value).toBeNull();
     // custom error should be cleared, but required should be re-applied by updateValueAndValidity
-    expect(c1.hasError('required')).toBeTrue();
-    expect(c1.errors).not.toEqual(jasmine.objectContaining({ custom: true }));
-    expect(c1.valid).toBeFalse(); // required + null
+    expect(c1.hasError('required')).toBe(true);
+    expect(c1.errors).not.toEqual(expect.objectContaining({ custom: true }));
+    expect(c1.valid).toBe(false); // required + null
 
     expect(c2.value).toBeNull();
     expect(c2.errors).toBeNull();
-    expect(c2.valid).toBeTrue();
+    expect(c2.valid).toBe(true);
   });
 
   it('resetAndValidateControls should safely ignore null entries and still process others', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const c1 = new FormControl<string | null>('x', Validators.required);
@@ -242,19 +232,18 @@ describe('AbstractNestedFormBaseComponent', () => {
 
     // c1 processed
     expect(c1.value).toBeNull();
-    expect(c1.hasError('required')).toBeTrue();
-    expect(c1.errors).not.toEqual(jasmine.objectContaining({ custom: true }));
+    expect(c1.hasError('required')).toBe(true);
+    expect(c1.errors).not.toEqual(expect.objectContaining({ custom: true }));
 
     // c2 processed
     expect(c2.value).toBeNull();
     expect(c2.errors).toBeNull();
-    expect(c2.valid).toBeTrue();
+    expect(c2.valid).toBe(true);
   });
 
   it('resetAndValidateFormGroup should reset value/touched/pristine and update validity', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const g = new FormGroup({
@@ -266,20 +255,19 @@ describe('AbstractNestedFormBaseComponent', () => {
     component['resetAndValidateFormGroup'](g);
 
     expect(g.value).toEqual({ a: null });
-    expect(g.touched).toBeFalse();
-    expect(g.pristine).toBeTrue();
-    expect(g.valid).toBeFalse();
+    expect(g.touched).toBe(false);
+    expect(g.pristine).toBe(true);
+    expect(g.valid).toBe(false);
   });
 
   it('subscribeValidation should call handler on any source control change and unsubscribe on destroy', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const a = new FormControl<string | null>(null);
     const b = new FormControl<string | null>(null);
-    const handler = jasmine.createSpy('handler');
+    const handler = vi.fn();
 
     component['subscribeValidation'](handler, a, b);
 
@@ -296,10 +284,9 @@ describe('AbstractNestedFormBaseComponent', () => {
 
   it('subscribeValidation should no-op when no controls provided', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
-    const handler = jasmine.createSpy('handler');
+    const handler = vi.fn();
     component['subscribeValidation'](handler /* no controls */);
     // nothing to trigger; ensure no calls and no throw
     expect(handler).not.toHaveBeenCalled();
@@ -307,8 +294,7 @@ describe('AbstractNestedFormBaseComponent', () => {
 
   it('ngOnDestroy should unregister field errors and clear nested form controls when the form has a parent', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     // Prepare field errors with a child entry that will be unregistered

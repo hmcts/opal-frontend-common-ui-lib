@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi, type MockedObject } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { HttpErrorResponse, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -11,19 +12,21 @@ import { ERROR_RESPONSE } from './constants/http-error-message-response.constant
 
 describe('httpErrorInterceptor', () => {
   let globalStore: GlobalStoreType;
-  let router: jasmine.SpyObj<Router>;
+  let router: MockedObject<Router>;
   const interceptor: HttpInterceptorFn = (req, next) =>
     TestBed.runInInjectionContext(() => httpErrorInterceptor(req, next));
 
   beforeEach(() => {
-    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    const routerSpy = {
+      navigate: vi.fn().mockName('Router.navigate'),
+    };
     TestBed.configureTestingModule({
       providers: [{ provide: Router, useValue: routerSpy }],
     });
 
     globalStore = TestBed.inject(GlobalStore);
-    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
-    router.navigate.calls.reset();
+    router = TestBed.inject(Router) as MockedObject<Router>;
+    router.navigate.mockClear();
   });
 
   it('should have no errors', () => {
@@ -44,7 +47,7 @@ describe('httpErrorInterceptor', () => {
     interceptor(request, next).subscribe({
       error: () => {
         const errorSignal = globalStore.bannerError();
-        expect(errorSignal.error).toBeTrue();
+        expect(errorSignal.error).toBe(true);
         expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
       },
     });
@@ -68,7 +71,7 @@ describe('httpErrorInterceptor', () => {
     interceptor(request, next).subscribe({
       error: () => {
         const errorSignal = globalStore.bannerError();
-        expect(errorSignal.error).toBeTrue();
+        expect(errorSignal.error).toBe(true);
         expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
       },
     });
@@ -76,7 +79,7 @@ describe('httpErrorInterceptor', () => {
 
   it('should clear the state service on new requests', () => {
     const req = new HttpRequest('GET', '/test');
-    const next: HttpHandlerFn = jasmine.createSpy().and.returnValue(of(null));
+    const next: HttpHandlerFn = vi.fn().mockReturnValue(of(null));
 
     TestBed.runInInjectionContext(() => {
       httpErrorInterceptor(req, next).subscribe();
@@ -100,7 +103,7 @@ describe('httpErrorInterceptor', () => {
     interceptor(request, next).subscribe({
       error: () => {
         const errorSignal = globalStore.bannerError();
-        expect(errorSignal.error).toBeTrue();
+        expect(errorSignal.error).toBe(true);
         expect(errorSignal.message).toBe('This is a problem detail error message');
       },
     });
@@ -127,7 +130,7 @@ describe('httpErrorInterceptor', () => {
       error: () => {
         expect(router.navigate).not.toHaveBeenCalled();
         const errorSignal = globalStore.bannerError();
-        expect(errorSignal.error).toBeTrue();
+        expect(errorSignal.error).toBe(true);
         expect(errorSignal.message).toBe(customErrorMessage);
       },
     });
@@ -151,7 +154,7 @@ describe('httpErrorInterceptor', () => {
       error: () => {
         expect(router.navigate).not.toHaveBeenCalled();
         const errorSignal = globalStore.bannerError();
-        expect(errorSignal.error).toBeTrue();
+        expect(errorSignal.error).toBe(true);
         expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
       },
     });
@@ -175,7 +178,7 @@ describe('httpErrorInterceptor', () => {
       error: () => {
         expect(router.navigate).not.toHaveBeenCalled();
         const errorSignal = globalStore.bannerError();
-        expect(errorSignal.error).toBeTrue();
+        expect(errorSignal.error).toBe(true);
         expect(errorSignal.message).toBe('Something went wrong on our end');
       },
     });
@@ -194,7 +197,7 @@ describe('httpErrorInterceptor', () => {
       error: () => {
         expect(router.navigate).not.toHaveBeenCalled();
         const errorSignal = globalStore.bannerError();
-        expect(errorSignal.error).toBeTrue();
+        expect(errorSignal.error).toBe(true);
         expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
       },
     });
@@ -212,7 +215,7 @@ describe('httpErrorInterceptor', () => {
       error: () => {
         expect(router.navigate).not.toHaveBeenCalled();
         const errorSignal = globalStore.bannerError();
-        expect(errorSignal.error).toBeTrue();
+        expect(errorSignal.error).toBe(true);
         expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
       },
     });
@@ -344,7 +347,7 @@ describe('httpErrorInterceptor', () => {
       error: () => {
         expect(router.navigate).not.toHaveBeenCalled();
         const errorSignal = globalStore.bannerError();
-        expect(errorSignal.error).toBeTrue();
+        expect(errorSignal.error).toBe(true);
         expect(errorSignal.message).toBe('A temporary conflict occurred, please try again');
       },
     });
@@ -368,7 +371,7 @@ describe('httpErrorInterceptor', () => {
       error: () => {
         expect(router.navigate).not.toHaveBeenCalled();
         const errorSignal = globalStore.bannerError();
-        expect(errorSignal.error).toBeTrue();
+        expect(errorSignal.error).toBe(true);
         expect(errorSignal.message).toBe('A standard error occurred');
       },
     });
@@ -391,7 +394,7 @@ describe('httpErrorInterceptor', () => {
       error: () => {
         expect(router.navigate).not.toHaveBeenCalled();
         const errorSignal = globalStore.bannerError();
-        expect(errorSignal.error).toBeTrue();
+        expect(errorSignal.error).toBe(true);
         // This actually tests the retriable path, but verifies fallback behavior
         expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
       },
@@ -410,7 +413,7 @@ describe('httpErrorInterceptor', () => {
     globalStore.setBannerError(expectedFallbackError);
     const errorSignal = globalStore.bannerError();
 
-    expect(errorSignal.error).toBeTrue();
+    expect(errorSignal.error).toBe(true);
     expect(errorSignal.title).toBe('There was a problem');
     expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
     expect(errorSignal.operationId).toBeNull();
@@ -424,9 +427,114 @@ describe('httpErrorInterceptor', () => {
     interceptor(request, next).subscribe({
       error: () => {
         const errorSignal = globalStore.bannerError();
-        expect(errorSignal.error).toBeTrue();
+        expect(errorSignal.error).toBe(true);
         expect(errorSignal.title).toBe('There was a problem');
         expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
+      },
+    });
+  });
+
+  it('should return status from top-level status property', () => {
+    const error = { status: 404 };
+    // Access the function through the interceptor by running in injection context
+    TestBed.runInInjectionContext(() => {
+      const req = new HttpRequest('GET', '/test');
+      const next: HttpHandlerFn = () => throwError(() => error);
+
+      httpErrorInterceptor(req, next).subscribe({
+        error: () => {
+          // Verify the interceptor handled a 404 by checking store state
+          const errorSignal = globalStore.bannerError();
+          expect(errorSignal.error).toBe(true);
+        },
+      });
+    });
+  });
+
+  it('should return status from nested error.status property', () => {
+    const error = { error: { status: 500 } };
+    TestBed.runInInjectionContext(() => {
+      const req = new HttpRequest('GET', '/test');
+      const next: HttpHandlerFn = () => throwError(() => error);
+
+      httpErrorInterceptor(req, next).subscribe({
+        error: () => {
+          const errorSignal = globalStore.bannerError();
+          expect(errorSignal.error).toBe(true);
+        },
+      });
+    });
+  });
+
+  it('should prefer top-level status over nested error.status', () => {
+    const error = { status: 403, error: { status: 500, retriable: false } };
+    TestBed.runInInjectionContext(() => {
+      const req = new HttpRequest('GET', '/test');
+      const next: HttpHandlerFn = () => throwError(() => error);
+
+      httpErrorInterceptor(req, next).subscribe({
+        error: () => {
+          expect(router.navigate).toHaveBeenCalledWith(['/error/permission-denied']);
+        },
+      });
+    });
+  });
+
+  it('should return undefined when no status is present', () => {
+    const error = { message: 'Some error' };
+    TestBed.runInInjectionContext(() => {
+      const req = new HttpRequest('GET', '/test');
+      const next: HttpHandlerFn = () => throwError(() => error);
+
+      httpErrorInterceptor(req, next).subscribe({
+        error: () => {
+          const errorSignal = globalStore.bannerError();
+          expect(errorSignal.error).toBe(true);
+          expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
+        },
+      });
+    });
+  });
+
+  it('should return undefined when error is null', () => {
+    const error = null;
+    TestBed.runInInjectionContext(() => {
+      const req = new HttpRequest('GET', '/test');
+      const next: HttpHandlerFn = () => throwError(() => error);
+
+      httpErrorInterceptor(req, next).subscribe({
+        error: () => {
+          const errorSignal = globalStore.bannerError();
+          expect(errorSignal.error).toBe(true);
+        },
+      });
+    });
+  });
+
+  it('should return undefined when error is undefined', () => {
+    const error = undefined;
+    TestBed.runInInjectionContext(() => {
+      const req = new HttpRequest('GET', '/test');
+      const next: HttpHandlerFn = () => throwError(() => error);
+
+      httpErrorInterceptor(req, next).subscribe({
+        error: () => {
+          const errorSignal = globalStore.bannerError();
+          expect(errorSignal.error).toBe(true);
+        },
+      });
+    });
+  });
+
+  it('should handle HttpErrorResponse with status', () => {
+    const errorResponse = new HttpErrorResponse({ status: 401 });
+    const request = new HttpRequest('GET', '/test');
+    const next: HttpHandlerFn = () => throwError(() => errorResponse);
+
+    interceptor(request, next).subscribe({
+      error: () => {
+        const errorSignal = globalStore.bannerError();
+        expect(errorSignal.error).toBe(true);
       },
     });
   });

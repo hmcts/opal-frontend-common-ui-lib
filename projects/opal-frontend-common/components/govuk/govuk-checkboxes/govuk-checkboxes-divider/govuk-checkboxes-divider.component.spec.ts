@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukCheckboxesDividerComponent } from './govuk-checkboxes-divider.component';
 import { Component } from '@angular/core';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 @Component({
   template: `<opal-lib-govuk-checkboxes-divider> Hello World</opal-lib-govuk-checkboxes-divider>`,
@@ -35,10 +36,9 @@ describe('GovukCheckboxesDividerComponent', () => {
 
   it('should project the ng-content', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
     const element = fixture.nativeElement.querySelector('.govuk-checkboxes__divider');
-    expect(element.innerText).toBe('Hello World');
+    expect(element.textContent?.trim()).toBe('Hello World');
   });
 });

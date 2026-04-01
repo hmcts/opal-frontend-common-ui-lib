@@ -1,24 +1,30 @@
+import type { MockedObject } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { DateFormatPipe } from './date-format.pipe';
 import { DateService } from '@hmcts/opal-frontend-common/services/date-service';
 
 describe('DateFormatPipe', () => {
   let pipe: DateFormatPipe;
-  let dateServiceSpy: jasmine.SpyObj<DateService>;
+  let dateServiceSpy: MockedObject<DateService>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         DateFormatPipe,
-        { provide: DateService, useValue: jasmine.createSpyObj('DateService', ['getFromFormatToFormat']) },
+        {
+          provide: DateService,
+          useValue: {
+            getFromFormatToFormat: vi.fn().mockName('DateService.getFromFormatToFormat'),
+          },
+        },
       ],
     });
     pipe = TestBed.inject(DateFormatPipe);
-    dateServiceSpy = TestBed.inject(DateService) as jasmine.SpyObj<DateService>;
+    dateServiceSpy = TestBed.inject(DateService) as MockedObject<DateService>;
   });
 
   it('should format a valid date using the given formats', () => {
-    dateServiceSpy.getFromFormatToFormat.and.returnValue('1 Jan 2024');
+    dateServiceSpy.getFromFormatToFormat.mockReturnValue('1 Jan 2024');
 
     const result = pipe.transform('2024-01-01', 'yyyy-MM-dd', 'd MMM yyyy');
 
@@ -39,7 +45,7 @@ describe('DateFormatPipe', () => {
   });
 
   it('should return empty string if formatting fails', () => {
-    dateServiceSpy.getFromFormatToFormat.and.returnValue('');
+    dateServiceSpy.getFromFormatToFormat.mockReturnValue('');
     const result = pipe.transform('invalid-date', 'yyyy-MM-dd', 'd MMM yyyy');
     expect(result).toBe('');
   });

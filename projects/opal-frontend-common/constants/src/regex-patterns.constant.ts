@@ -9,3 +9,4 @@ export const DRIVING_LICENCE_NUMBER_PATTERN = /^[A-Za-z]{5}\d{6}[A-Za-z]{2}[A-Za
 export const EMAIL_ADDRESS_PATTERN = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 export const TIME_FORMAT_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/;
 export const TWO_DECIMAL_PLACES_PATTERN = /^\d+(\.\d{0,2})?$/;
+export const ACCOUNT_NUMBER_PATTERN = /^\d{8}([A-Z])?$/;

@@ -1,11 +1,10 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, HostBinding, ChangeDetectionStrategy } from '@angular/core';
 import { IAbstractTableFilterOption } from '@hmcts/opal-frontend-common/components/abstract/abstract-table-filter/interfaces';
 
 @Component({
   selector: 'opal-lib-moj-filter-panel-options-form-group-item, [opal-lib-moj-filter-panel-options-form-group-item]',
   templateUrl: './moj-filter-panel-option-form-group-item.component.html',
-  imports: [CommonModule],
+  imports: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MojFilterPanelOptionFormGroupItemComponent {

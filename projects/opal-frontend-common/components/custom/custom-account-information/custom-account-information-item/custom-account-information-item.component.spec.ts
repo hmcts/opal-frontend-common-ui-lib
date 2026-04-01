@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CustomAccountInformationItemComponent } from './custom-account-information-item.component';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('CustomAccountInformationItemComponent', () => {
   let component: CustomAccountInformationItemComponent;
@@ -28,7 +29,7 @@ describe('CustomAccountInformationItemComponent', () => {
   });
 
   it('should update the host class when itemClasses changes', () => {
-    component.itemClasses = 'custom-class';
+    fixture.componentRef.setInput('itemClasses', 'custom-class');
     fixture.detectChanges();
     const hostEl: HTMLElement = fixture.nativeElement;
     expect(hostEl.classList).toContain('custom-class');

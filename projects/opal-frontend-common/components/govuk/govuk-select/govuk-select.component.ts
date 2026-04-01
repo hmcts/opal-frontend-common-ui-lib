@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { IGovUkSelectOptions } from './interfaces/govuk-select-options.interface';
 
 @Component({
   selector: 'opal-lib-govuk-select',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './govuk-select.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

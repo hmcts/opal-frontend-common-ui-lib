@@ -1,5 +1,5 @@
 import { SortableValuesType } from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/types';
-import { IAbstractTableData } from '../interfaces/abstract-sortable-table.interfaces';
+import { IAbstractTableData } from '../interfaces/abstract-sortable-table.interface';
 
 export const MOCK_ABSTRACT_TABLE_DATA: IAbstractTableData<SortableValuesType>[] = [
   {

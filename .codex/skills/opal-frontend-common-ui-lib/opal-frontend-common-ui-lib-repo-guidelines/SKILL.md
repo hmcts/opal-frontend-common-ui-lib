@@ -18,9 +18,13 @@ Use these rules to keep work aligned with opal-frontend-common-ui-lib structure,
 - Use Yarn for all tasks.
 - `yarn start` serves the example harness via the Angular dev server for local smoke tests.
 - `yarn watch` rebuilds the library in development watch mode.
-- `yarn build` runs `yarn clean`, builds the production bundle, and copies `README.md` into `dist/`.
-- `yarn test` executes the Karma/Jasmine suite once; prefer `yarn test:coverage` for a coverage report in `coverage/`.
+- `yarn build` runs `yarn clean`, builds the production bundle, and copies `README.md` and `LICENSE` into `dist/`.
+- `yarn test` runs the Vitest-based unit test suite once (Angular 21 unit-test builder).
+- `yarn test:coverage` runs tests with coverage reporting via Vitest (output in `coverage/`).
 - `yarn lint` runs Prettier checks followed by Angular ESLint; apply `yarn prettier:fix` to reformat automatically.
+- `yarn exports:check` validates that source `exports` and `tsconfig` path aliases are synchronized.
+- `yarn pack:check` validates publish tarball shape and export target presence via `npm pack --dry-run`.
+- `yarn pack:local` builds and creates a root-level local `.tgz` package for consumer app testing.
 
 ## Coding Style & Naming Conventions
 - Respect `.editorconfig` (UTF-8, spaces, 2-space indent).
@@ -29,9 +33,8 @@ Use these rules to keep work aligned with opal-frontend-common-ui-lib structure,
 - Keep the public surface curated through `public-api.ts`, and follow member ordering enforced by ESLint when adding class fields or methods.
 
 ## Testing Guidelines
-- Author Jasmine specs beside their subjects using the `*.spec.ts` suffix.
-- Karma is configured via `karma.conf.js`.
-- Run `yarn test:coverage` before raising PRs and review generated reports to protect shared utilities, guards, and interceptors.
+- Author Vitest unit tests beside their subjects using the `*.spec.ts` suffix.
+- Run `yarn test:coverage` before raising PRs and review Vitest coverage reports to protect shared utilities, guards, and interceptors.
 - For complex features, add harness components within `components/*/testing` folders to exercise interactions end-to-end.
 
 ## Design System References

@@ -12,6 +12,7 @@ import { LAUNCH_DARKLY_CHANGE_FLAGS_MOCK } from '@hmcts/opal-frontend-common/ser
 import { IOpalUserState } from '@hmcts/opal-frontend-common/services/opal-user-service/interfaces';
 import { OPAL_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/services/opal-user-service/mocks';
 import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constants';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('GlobalStore', () => {
   let store: GlobalStoreType;
@@ -21,11 +22,11 @@ describe('GlobalStore', () => {
   });
 
   it('should initialise with the default state', () => {
-    expect(store.authenticated()).toBeFalse();
+    expect(store.authenticated()).toBe(false);
     expect(store.bannerError()).toEqual({ ...GLOBAL_ERROR_STATE });
     expect(store.featureFlags()).toEqual({});
     expect(store.userState()).toEqual({} as IOpalUserState);
-    expect(store.ssoEnabled()).toBeFalse();
+    expect(store.ssoEnabled()).toBe(false);
     expect(store.launchDarklyConfig()).toEqual({} as ITransferStateLaunchDarklyConfig);
     expect(store.tokenExpiry()).toEqual({} as ISessionTokenExpiry);
     expect(store.userStateCacheExpirationMilliseconds()).toBe(1800000);
@@ -33,7 +34,7 @@ describe('GlobalStore', () => {
 
   it('should update authenticated state', () => {
     store.setAuthenticated(true);
-    expect(store.authenticated()).toBeTrue();
+    expect(store.authenticated()).toBe(true);
   });
 
   it('should update banner error state', () => {
@@ -62,7 +63,7 @@ describe('GlobalStore', () => {
 
   it('should update SSO enabled state', () => {
     store.setSsoEnabled(true);
-    expect(store.ssoEnabled()).toBeTrue();
+    expect(store.ssoEnabled()).toBe(true);
   });
 
   it('should update LaunchDarkly config', () => {

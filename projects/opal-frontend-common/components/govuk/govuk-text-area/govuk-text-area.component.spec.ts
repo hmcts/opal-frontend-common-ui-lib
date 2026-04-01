@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, AbstractControl } from '@angular/forms';
 import { GovukTextAreaComponent } from './govuk-text-area.component';
 import { By } from '@angular/platform-browser';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 describe('GovukTextAreaComponent', () => {
   let component: GovukTextAreaComponent | null;
@@ -40,8 +41,7 @@ describe('GovukTextAreaComponent', () => {
 
   it('should set the control correctly', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const control: FormControl = new FormControl();
@@ -51,8 +51,7 @@ describe('GovukTextAreaComponent', () => {
 
   it('should calculate the remaining character count correctly', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     const control: AbstractControl = new FormControl('Hello, World!');
@@ -62,8 +61,7 @@ describe('GovukTextAreaComponent', () => {
 
   it('should update remainingCharacterCount when form control value changes', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
     component.maxCharacterLimit = 100;
 
@@ -77,8 +75,7 @@ describe('GovukTextAreaComponent', () => {
 
   it('should handle null and undefined values in valueChanges subscription', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
     component.maxCharacterLimit = 100;
 
@@ -98,13 +95,12 @@ describe('GovukTextAreaComponent', () => {
 
   it('should set aria-describedby with hint only', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
-    component.hintText = 'Hint text';
-    component.errors = null;
-    component.characterCountEnabled = false;
+    fixture.componentRef.setInput('hintText', 'Hint text');
+    fixture.componentRef.setInput('errors', null);
+    fixture.componentRef.setInput('characterCountEnabled', false);
     fixture.detectChanges();
 
     const textarea = fixture.debugElement.query(By.css('#test')).nativeElement;
@@ -113,13 +109,12 @@ describe('GovukTextAreaComponent', () => {
 
   it('should set aria-describedby with error only', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
-    component.hintText = '';
-    component.errors = 'Error message';
-    component.characterCountEnabled = false;
+    fixture.componentRef.setInput('hintText', '');
+    fixture.componentRef.setInput('errors', 'Error message');
+    fixture.componentRef.setInput('characterCountEnabled', false);
     fixture.detectChanges();
 
     const textarea = fixture.debugElement.query(By.css('#test')).nativeElement;
@@ -128,13 +123,12 @@ describe('GovukTextAreaComponent', () => {
 
   it('should set aria-describedby with hint, error, and character count', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
-    component.hintText = 'Hint text';
-    component.errors = 'Error message';
-    component.characterCountEnabled = true;
+    fixture.componentRef.setInput('hintText', 'Hint text');
+    fixture.componentRef.setInput('errors', 'Error message');
+    fixture.componentRef.setInput('characterCountEnabled', true);
     fixture.detectChanges();
 
     const textarea = fixture.debugElement.query(By.css('#test')).nativeElement;
@@ -143,13 +137,12 @@ describe('GovukTextAreaComponent', () => {
 
   it('should set aria-describedby with character count only', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
-    component.hintText = '';
-    component.errors = null;
-    component.characterCountEnabled = true;
+    fixture.componentRef.setInput('hintText', '');
+    fixture.componentRef.setInput('errors', null);
+    fixture.componentRef.setInput('characterCountEnabled', true);
     fixture.detectChanges();
 
     const textarea = fixture.debugElement.query(By.css('#test')).nativeElement;
@@ -158,13 +151,12 @@ describe('GovukTextAreaComponent', () => {
 
   it('should not set aria-describedby when hint, error, and character count are missing', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
-    component.hintText = '';
-    component.errors = null;
-    component.characterCountEnabled = false;
+    fixture.componentRef.setInput('hintText', '');
+    fixture.componentRef.setInput('errors', null);
+    fixture.componentRef.setInput('characterCountEnabled', false);
     fixture.detectChanges();
 
     const textarea = fixture.debugElement.query(By.css('#test')).nativeElement;

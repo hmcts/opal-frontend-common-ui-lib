@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojAlertDismissComponent } from './moj-alert-dismiss.component';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('MojAlertDismissComponent', () => {
   let component: MojAlertDismissComponent;
@@ -44,7 +45,7 @@ describe('MojAlertDismissComponent', () => {
 
   it('should prevent default and stop propagation when dismissAlert is called with an event', () => {
     const fakeEvent = {
-      preventDefault: jasmine.createSpy('preventDefault'),
+      preventDefault: vi.fn(),
     } as unknown as MouseEvent;
 
     let wasEmitted = false;

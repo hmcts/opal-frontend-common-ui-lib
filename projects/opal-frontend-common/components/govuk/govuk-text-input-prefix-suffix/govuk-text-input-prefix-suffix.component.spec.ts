@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { ChangeDetectorRef } from '@angular/core';
 import { GovukTextInputPrefixSuffixComponent } from './govuk-text-input-prefix-suffix.component';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 describe('GovukTextInputPrefixSuffixComponent', () => {
   let component: GovukTextInputPrefixSuffixComponent | null;
@@ -41,8 +42,7 @@ describe('GovukTextInputPrefixSuffixComponent', () => {
 
   it('should have extra label classes', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const elem = fixture.debugElement.query(By.css('.govuk-label.govuk-label--l')).nativeElement;
@@ -51,8 +51,7 @@ describe('GovukTextInputPrefixSuffixComponent', () => {
 
   it('should have labelText', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const elem = fixture.debugElement.query(By.css('.govuk-label.govuk-label--l')).nativeElement;
@@ -61,8 +60,7 @@ describe('GovukTextInputPrefixSuffixComponent', () => {
 
   it('should have extra input classes', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
     const labelClass = 'govuk-input--width-20';
@@ -79,8 +77,7 @@ describe('GovukTextInputPrefixSuffixComponent', () => {
 
   it('should have a prefix and suffix attached to the input', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
     component.prefixText = '£';
@@ -99,8 +96,7 @@ describe('GovukTextInputPrefixSuffixComponent', () => {
 
   it('should format value to two decimal places on blur', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
     // Arrange
@@ -116,8 +112,7 @@ describe('GovukTextInputPrefixSuffixComponent', () => {
 
   it('should not format value if it is already formatted to two decimal places on blur', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
     // Arrange
@@ -133,8 +128,7 @@ describe('GovukTextInputPrefixSuffixComponent', () => {
 
   it('should not format value if it is not a number on blur', () => {
     if (!component) {
-      fail('component returned null');
-      return;
+      throw new Error('component returned null');
     }
 
     // Arrange
@@ -150,8 +144,7 @@ describe('GovukTextInputPrefixSuffixComponent', () => {
 
   it('should set aria-describedby with error only', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
     fixture.componentRef.setInput('errors', 'Error message');
@@ -163,8 +156,7 @@ describe('GovukTextInputPrefixSuffixComponent', () => {
 
   it('should not set aria-describedby when error is missing', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
 
     fixture.componentRef.setInput('errors', null);

@@ -3,6 +3,7 @@ import { SortService } from './sort.service';
 import { SORT_OBJECT_INPUT_MOCK } from './mocks/sort-service-object-input-mock';
 import { ISortServiceValues } from '@hmcts/opal-frontend-common/services/sort-service/interfaces';
 import { SortableValuesType } from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/types';
+import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('SortService', () => {
   let service: SortService;

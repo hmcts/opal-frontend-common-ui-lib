@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukTableBodyRowDataComponent } from './govuk-table-body-row-data.component';
+import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 describe('GovukTableBodyRowDataComponent', () => {
   let component: GovukTableBodyRowDataComponent | null;
@@ -31,8 +32,7 @@ describe('GovukTableBodyRowDataComponent', () => {
 
   it('should have the correct host class', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
     const hostElement: HTMLElement = fixture.nativeElement;
@@ -41,8 +41,7 @@ describe('GovukTableBodyRowDataComponent', () => {
 
   it('should set the host id to the key input', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
     fixture.detectChanges();
     const hostElement: HTMLElement = fixture.nativeElement;

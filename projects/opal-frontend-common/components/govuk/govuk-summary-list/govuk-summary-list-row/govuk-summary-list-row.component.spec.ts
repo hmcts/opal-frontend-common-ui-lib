@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { GovukSummaryListRowComponent } from './govuk-summary-list-row.component';
 import { Component } from '@angular/core';
+import { describe, beforeEach, afterAll, it, expect, vi } from 'vitest';
 
 @Component({
   template: `<div
@@ -36,8 +37,6 @@ describe('GovukSummaryListRowComponent', () => {
     fixtureGSLRC = TestBed.createComponent(GovukSummaryListRowComponent);
     component = fixture.componentInstance;
     componentGSLRC = fixtureGSLRC.componentInstance;
-
-    fixture.detectChanges();
   });
 
   afterAll(() => {
@@ -55,31 +54,31 @@ describe('GovukSummaryListRowComponent', () => {
 
   it('should render into the name ng-content', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
+    fixture.detectChanges();
     const element = fixture.nativeElement.querySelector('#testRowTestKey');
 
-    expect(element.innerText).toBe('Tim');
+    expect(element.textContent?.trim()).toBe('Tim');
   });
 
   it('should render into the value ng-content', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
 
+    fixture.detectChanges();
     const element = fixture.nativeElement.querySelector('#testRowTestValue > .govuk-body');
 
-    expect(element.innerText).toBe('Hello');
+    expect(element.textContent?.trim()).toBe('Hello');
   });
 
   it('should not render into the action ng-content', () => {
     if (!fixture) {
-      fail('fixture returned null');
-      return;
+      throw new Error('fixture returned null');
     }
+    fixture.detectChanges();
     const element = fixture.nativeElement.querySelector('#testRowTestActions');
 
     expect(element).toBeFalsy();
@@ -87,24 +86,22 @@ describe('GovukSummaryListRowComponent', () => {
 
   it('should render into the action ng-content', () => {
     if (!component || !fixture) {
-      fail('component or fixture returned null');
-      return;
+      throw new Error('component or fixture returned null');
     }
     component.action = true;
     fixture.detectChanges();
 
     const element = fixture.nativeElement.querySelector('#testRowTestActions .govuk-link');
 
-    expect(element.innerText).toBe('Change name');
+    expect(element?.textContent?.trim()).toBe('Change name');
   });
 
   it('should emit actionClick event when handleActionClick is called', () => {
     if (!componentGSLRC) {
-      fail('componentGSLRC returned null');
-      return;
+      throw new Error('componentGSLRC returned null');
     }
     const event = new Event('click');
-    spyOn(componentGSLRC.actionClick, 'emit');
+    vi.spyOn(componentGSLRC.actionClick, 'emit');
 
     componentGSLRC.handleActionClick(event);
 
@@ -113,11 +110,10 @@ describe('GovukSummaryListRowComponent', () => {
 
   it('should prevent default behavior when handleActionClick is called', () => {
     if (!componentGSLRC) {
-      fail('componentGSLRC returned null');
-      return;
+      throw new Error('componentGSLRC returned null');
     }
     const event = new Event('click');
-    spyOn(event, 'preventDefault');
+    vi.spyOn(event, 'preventDefault');
 
     componentGSLRC.handleActionClick(event);
 
@@ -126,8 +122,7 @@ describe('GovukSummaryListRowComponent', () => {
 
   it('should set the host values onInit', () => {
     if (!componentGSLRC || !fixtureGSLRC) {
-      fail('componentGSLRC or fixtureGSLRCreturned null');
-      return;
+      throw new Error('componentGSLRC or fixtureGSLRCreturned null');
     }
 
     componentGSLRC.summaryListId = 'test';

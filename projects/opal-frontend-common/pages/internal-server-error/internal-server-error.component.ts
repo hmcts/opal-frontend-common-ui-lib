@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { CommonModule, Location } from '@angular/common';
+import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'opal-lib-internal-server-error',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './internal-server-error.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

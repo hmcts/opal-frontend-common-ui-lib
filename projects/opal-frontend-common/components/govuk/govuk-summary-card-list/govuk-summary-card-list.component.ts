@@ -12,6 +12,11 @@ export class GovukSummaryCardListComponent implements OnInit {
   @Input({ required: false }) cardTitle!: string;
   @Input({ required: false }) contentHidden!: boolean;
   @Input({ required: false }) headingLevel: HeadingLevel = 2;
+  @Input({ required: false }) classes!: string;
+
+  public get class(): string {
+    return `govuk-summary-card ${this.classes || ''}`;
+  }
 
   public id!: string;
 

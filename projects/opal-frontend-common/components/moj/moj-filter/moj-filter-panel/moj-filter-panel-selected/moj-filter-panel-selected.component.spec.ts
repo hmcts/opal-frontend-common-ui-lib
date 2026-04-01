@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MojFilterPanelSelectedComponent } from './moj-filter-panel-selected.component';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 
 describe('MojFilterPanelSelectedComponent', () => {
   let component: MojFilterPanelSelectedComponent;
@@ -20,14 +21,14 @@ describe('MojFilterPanelSelectedComponent', () => {
   });
 
   it('should emit clearFilters when clearTag is called without an event', () => {
-    spyOn(component.clearFilters, 'emit');
+    vi.spyOn(component.clearFilters, 'emit');
     component.clearTag();
     expect(component.clearFilters.emit).toHaveBeenCalled();
   });
 
   it('should call preventDefault and emit clearFilters when clearTag is called with an event', () => {
-    const fakeEvent = { preventDefault: jasmine.createSpy('preventDefault') } as unknown as Event;
-    spyOn(component.clearFilters, 'emit');
+    const fakeEvent = { preventDefault: vi.fn() } as unknown as Event;
+    vi.spyOn(component.clearFilters, 'emit');
     component.clearTag(fakeEvent);
     expect(fakeEvent.preventDefault).toHaveBeenCalled();
     expect(component.clearFilters.emit).toHaveBeenCalled();
