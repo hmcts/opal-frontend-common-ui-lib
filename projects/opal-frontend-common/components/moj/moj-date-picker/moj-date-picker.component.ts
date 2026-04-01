@@ -4,6 +4,7 @@ import {
   EventEmitter,
   Input,
   OnInit,
+  OnDestroy,
   Output,
   afterNextRender,
   inject,
@@ -18,9 +19,11 @@ import { addGdsBodyClass } from '@hmcts/opal-frontend-common/components/govuk/he
   templateUrl: './moj-date-picker.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MojDatePickerComponent implements OnInit {
+export class MojDatePickerComponent implements OnInit, OnDestroy {
   private readonly dateService = inject(DateService);
   private _control!: FormControl;
+  private readonly nextRenderRef: ReturnType<typeof afterNextRender>;
+  private isDestroyed = false;
 
   public disabledDatesConcatenated!: string;
 
@@ -61,7 +64,9 @@ export class MojDatePickerComponent implements OnInit {
   }
 
   constructor() {
-    afterNextRender(() => {
+    this.nextRenderRef = afterNextRender(() => {
+      if (this.isDestroyed) return;
+
       // Only trigger the render of the component in the browser
       this.configureDatePicker();
     });
@@ -103,7 +108,11 @@ export class MojDatePickerComponent implements OnInit {
    * Configures the date picker functionality using the moj library.
    */
   public configureDatePicker(): void {
+    if (this.isDestroyed) return;
+
     this.loadDatePickerModule().then((datePicker) => {
+      if (this.isDestroyed) return;
+
       addGdsBodyClass();
       datePicker.initAll();
     });
@@ -111,5 +120,10 @@ export class MojDatePickerComponent implements OnInit {
 
   public ngOnInit(): void {
     this.concatenateDisabledDates();
+  }
+
+  public ngOnDestroy(): void {
+    this.isDestroyed = true;
+    this.nextRenderRef.destroy();
   }
 }

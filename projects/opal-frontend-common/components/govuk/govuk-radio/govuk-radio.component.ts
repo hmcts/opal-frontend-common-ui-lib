@@ -1,4 +1,12 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, ElementRef, inject, Input } from '@angular/core';
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  Input,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -8,8 +16,10 @@ import { ReactiveFormsModule } from '@angular/forms';
   templateUrl: './govuk-radio.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GovukRadioComponent {
+export class GovukRadioComponent implements OnDestroy {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
+  private readonly nextRenderRef: ReturnType<typeof afterNextRender>;
+  private isDestroyed = false;
 
   @Input({ required: true }) fieldSetId!: string;
   @Input({ required: false }) legendText!: string;
@@ -37,7 +47,9 @@ export class GovukRadioComponent {
   }
 
   constructor() {
-    afterNextRender(() => {
+    this.nextRenderRef = afterNextRender(() => {
+      if (this.isDestroyed) return;
+
       // Only trigger the render of the component in the browser
       this.initOuterRadios();
     });
@@ -48,6 +60,8 @@ export class GovukRadioComponent {
    * Side effects: dynamically imports govuk-frontend, mutates dataset, logs warnings on fallback.
    */
   private initOuterRadios(): void {
+    if (this.isDestroyed) return;
+
     const host = this.elementRef.nativeElement;
     const rootRadios = host.querySelector('.govuk-radios') as HTMLElement | null;
     if (!rootRadios) return;
@@ -58,6 +72,8 @@ export class GovukRadioComponent {
     this.loadGovukFrontend()
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .then((module: any) => {
+        if (this.isDestroyed) return;
+
         // Prefer Radios constructor for a scoped init
         const Radios = module.Radios ?? module.radios ?? module.default?.Radios;
         if (typeof Radios === 'function') {
@@ -67,6 +83,7 @@ export class GovukRadioComponent {
             new Radios(rootRadios);
             return;
           } catch (e) {
+            if (this.isDestroyed) return;
             console.warn('Govuk Radios constructor failed for rootRadios, falling back to initAll', e);
           }
         }
@@ -81,6 +98,7 @@ export class GovukRadioComponent {
         console.warn('govuk-frontend radios init not found for rootRadios', module);
       })
       .catch((err) => {
+        if (this.isDestroyed) return;
         console.error('Failed to import govuk-frontend for rootRadios init', err);
       });
   }
@@ -92,5 +110,10 @@ export class GovukRadioComponent {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected loadGovukFrontend(): Promise<any> {
     return import('govuk-frontend');
+  }
+
+  public ngOnDestroy(): void {
+    this.isDestroyed = true;
+    this.nextRenderRef.destroy();
   }
 }

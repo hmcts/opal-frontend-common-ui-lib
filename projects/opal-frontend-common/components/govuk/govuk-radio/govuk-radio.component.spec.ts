@@ -441,4 +441,42 @@ describe('GovukRadioComponent', () => {
     expect(warnSpy).toHaveBeenCalledWith('govuk-frontend radios init not found for rootRadios', expect.anything());
     expect(radios.dataset['opalGovukRadiosInitialised']).toBe('true');
   });
+
+  it('should not initialise radios after the component is destroyed', async () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    fixture.detectChanges();
+    const debugElement = fixture.debugElement.query(By.directive(GovukRadioComponent));
+    const host = debugElement.nativeElement as HTMLElement;
+    const radios = host.querySelector('.govuk-radios') as HTMLElement;
+    if (!radios) {
+      throw new Error('radios element missing');
+    }
+
+    delete radios.dataset['opalGovukRadiosInitialised'];
+
+    let resolveModule!: (value: { initAll: () => void }) => void;
+    const initAllSpy = vi.fn();
+    const radioComponent = debugElement.componentInstance as GovukRadioComponent;
+    vi.spyOn(
+      radioComponent as unknown as {
+        loadGovukFrontend: () => Promise<unknown>;
+      },
+      'loadGovukFrontend',
+    ).mockReturnValue(
+      new Promise((resolve) => {
+        resolveModule = resolve;
+      }),
+    );
+
+    radioComponent['initOuterRadios']();
+    radioComponent.ngOnDestroy();
+    resolveModule({ initAll: initAllSpy as unknown as () => void });
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    expect(initAllSpy).not.toHaveBeenCalled();
+  });
 });

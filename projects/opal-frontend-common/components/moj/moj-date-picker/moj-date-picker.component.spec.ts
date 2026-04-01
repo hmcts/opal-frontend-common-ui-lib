@@ -46,6 +46,25 @@ describe('MojDatePickerComponent', () => {
     expect(initAllSpy).toHaveBeenCalledTimes(1);
   });
 
+  it('should not call initAll after the component is destroyed', async () => {
+    let resolveModule!: (value: { initAll: () => void }) => void;
+    initAllSpy.mockClear();
+
+    (component as unknown as DatePickerModuleLoaderHost).loadDatePickerModule = vi.fn().mockReturnValue(
+      new Promise((resolve) => {
+        resolveModule = resolve;
+      }),
+    );
+
+    component.configureDatePicker();
+    component.ngOnDestroy();
+    resolveModule({ initAll: initAllSpy as unknown as () => void });
+
+    await Promise.resolve();
+
+    expect(initAllSpy).not.toHaveBeenCalled();
+  });
+
   it('should update selectedDate and emit dateChange event when changeDate is called', () => {
     vi.spyOn(component.dateChange, 'emit');
     const newDate = '01/01/2024';
