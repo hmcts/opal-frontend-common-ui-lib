@@ -25,6 +25,7 @@
     "mrmlnc.vscode-scss",
     "pflannery.vscode-versionlens",
     "deque-systems.vscode-axe-linter",
-    "sonarsource.sonarlint-vscode"
+    "sonarsource.sonarlint-vscode",
+    "vitest.explorer",
   ]
 }
