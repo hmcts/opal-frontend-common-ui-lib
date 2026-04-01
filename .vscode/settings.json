@@ -1,5 +1,6 @@
 {
     "editor.formatOnSave": true,
+    "vitest.rootConfig": "vitest.vscode.config.ts",
     "sonarlint.connectedMode.project": {
         "connectionId": "HMCTS SonarQube",
         "projectKey": "hmcts_opal-frontend-common-ui-lib"

@@ -8,6 +8,9 @@ description: Automated review rules for opal-frontend-common-ui-lib PRs. Use whe
 ## Overview
 Apply these rules when reviewing changes in opal-frontend-common-ui-lib; focus on P0/P1 blockers and use the required comment format.
 
+## Related skills
+- For changes that touch Vitest config, Angular test setup, or VS Code Vitest Explorer support, also use [`opal-vitest-guard`](../opal-vitest-guard/SKILL.md).
+
 ## How to use
 - Apply these rules to changes in this PR only.
 - Prefer specific, line-anchored comments with a short rationale and a concrete fix.
