@@ -61,10 +61,7 @@ describe('MojDatePickerComponent', () => {
   it('should not configure the date picker from the render hook after the component is destroyed', () => {
     const rawFixture = TestBed.createComponent(MojDatePickerComponent);
     const rawComponent = rawFixture.componentInstance;
-    const configureDatePickerSpy = vi.spyOn(
-      rawComponent as unknown as DatePickerRenderHookHost,
-      'configureDatePicker',
-    );
+    const configureDatePickerSpy = vi.spyOn(rawComponent as unknown as DatePickerRenderHookHost, 'configureDatePicker');
 
     rawComponent.ngOnDestroy();
     (rawComponent as unknown as DatePickerRenderHookHost).handleAfterNextRender();

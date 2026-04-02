@@ -261,10 +261,7 @@ describe('GovukRadioComponent', () => {
   it('should not initialise radios from the render hook after the component is destroyed', () => {
     const rawFixture = TestBed.createComponent(GovukRadioComponent);
     const rawComponent = rawFixture.componentInstance;
-    const initOuterRadiosSpy = vi.spyOn(
-      rawComponent as unknown as GovukRadioRenderHookHost,
-      'initOuterRadios',
-    );
+    const initOuterRadiosSpy = vi.spyOn(rawComponent as unknown as GovukRadioRenderHookHost, 'initOuterRadios');
 
     rawComponent.ngOnDestroy();
     (rawComponent as unknown as GovukRadioRenderHookHost).handleAfterNextRender();
