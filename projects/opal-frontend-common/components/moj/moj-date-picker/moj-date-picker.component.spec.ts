@@ -86,10 +86,12 @@ describe('MojDatePickerComponent', () => {
   });
 
   it('should load the date picker module via loadDatePickerModule', async () => {
-    const rawFixture = TestBed.createComponent(MojDatePickerComponent);
-    const rawComponent = rawFixture.componentInstance;
+    vi.restoreAllMocks();
 
-    const module = await (rawComponent as unknown as DatePickerModuleLoaderHost).loadDatePickerModule();
+    const loadDatePickerModule = MojDatePickerComponent.prototype as unknown as {
+      loadDatePickerModule: () => Promise<{ initAll: () => void }>;
+    };
+    const module = await loadDatePickerModule.loadDatePickerModule.call(component);
 
     expect(typeof module.initAll).toBe('function');
   });
