@@ -38,14 +38,21 @@ jobs:
       - name: Audit vulnerabilities (known issues check)
         run: yarn audit:check
 
+      - name: Validate export/path sync
+        run: yarn exports:check
+
       - name: Build library
         run: yarn build
+
+      - name: Validate publish surface
+        run: yarn pack:check
 
       - name: Run unit tests
         run: yarn test:coverage
 
       - name: Analyze with SonarCloud
-        uses: SonarSource/sonarqube-scan-action@v7.0.0
+        if: ${{ github.actor != 'dependabot[bot]' }}
+        uses: SonarSource/sonarqube-scan-action@v7.1.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
@@ -84,8 +91,14 @@ jobs:
       - name: Install dependencies (Release)
         run: yarn install --frozen-lockfile
 
+      - name: Validate export/path sync (Release)
+        run: yarn exports:check
+
       - name: Build library (Release)
         run: yarn build
+
+      - name: Validate publish surface (Release)
+        run: yarn pack:check
 
       - name: Publish version (OIDC via npm)
         working-directory: dist/opal-frontend-common

@@ -5,10 +5,12 @@ import { Component } from '@angular/core';
 import { describe, beforeEach, afterAll, it, expect } from 'vitest';
 
 @Component({
-  template: `<opal-lib-govuk-inset-text insetTextId="test">Hello World</opal-lib-govuk-inset-text>`,
+  template: `<opal-lib-govuk-inset-text insetTextId="test" [classes]="classes">Hello World</opal-lib-govuk-inset-text>`,
   imports: [GovukInsetTextComponent],
 })
-class TestHostComponent {}
+class TestHostComponent {
+  public classes: string | null = 'custom-inset-class';
+}
 
 describe('GovukInsetTextComponent', () => {
   let component: TestHostComponent | null;
@@ -41,5 +43,14 @@ describe('GovukInsetTextComponent', () => {
 
     const element = fixture.nativeElement.querySelector('#test');
     expect(element.textContent?.trim()).toBe('Hello World');
+  });
+
+  it('should apply additional classes when provided', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    const element = fixture.nativeElement.querySelector('#test');
+    expect(element.classList.contains('custom-inset-class')).toBe(true);
   });
 });
