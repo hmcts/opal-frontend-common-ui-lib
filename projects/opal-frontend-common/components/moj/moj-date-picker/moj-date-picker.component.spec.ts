@@ -46,6 +46,26 @@ describe('MojDatePickerComponent', () => {
     expect(initAllSpy).toHaveBeenCalledTimes(1);
   });
 
+  it('should build describedBy from hint and error', () => {
+    component.hintText = 'Hint text';
+    component.errors = 'Error message';
+
+    expect(component.describedBy).toBe('datePickerId-hint datePickerId-error-message');
+  });
+
+  it('should not call loadDatePickerModule after the component is destroyed', () => {
+    const rawFixture = TestBed.createComponent(MojDatePickerComponent);
+    const rawComponent = rawFixture.componentInstance;
+    const loadDatePickerModuleSpy = vi.fn().mockResolvedValue({ initAll: initAllSpy });
+
+    (rawComponent as unknown as DatePickerModuleLoaderHost).loadDatePickerModule = loadDatePickerModuleSpy;
+
+    rawComponent.ngOnDestroy();
+    rawComponent.configureDatePicker();
+
+    expect(loadDatePickerModuleSpy).not.toHaveBeenCalled();
+  });
+
   it('should not call initAll after the component is destroyed', async () => {
     let resolveModule!: (value: { initAll: () => void }) => void;
     initAllSpy.mockClear();
@@ -63,6 +83,15 @@ describe('MojDatePickerComponent', () => {
     await Promise.resolve();
 
     expect(initAllSpy).not.toHaveBeenCalled();
+  });
+
+  it('should load the date picker module via loadDatePickerModule', async () => {
+    const rawFixture = TestBed.createComponent(MojDatePickerComponent);
+    const rawComponent = rawFixture.componentInstance;
+
+    const module = await (rawComponent as unknown as DatePickerModuleLoaderHost).loadDatePickerModule();
+
+    expect(typeof module.initAll).toBe('function');
   });
 
   it('should update selectedDate and emit dateChange event when changeDate is called', () => {
