@@ -471,9 +471,11 @@ describe('GovukRadioComponent', () => {
     const radioComponent = rawFixture.componentInstance as GovukRadioComponent;
     const loadSpy = vi.fn().mockResolvedValue({ initAll: vi.fn() });
 
-    (radioComponent as unknown as {
-      loadGovukFrontend: () => Promise<unknown>;
-    }).loadGovukFrontend = loadSpy;
+    (
+      radioComponent as unknown as {
+        loadGovukFrontend: () => Promise<unknown>;
+      }
+    ).loadGovukFrontend = loadSpy;
 
     radioComponent.ngOnDestroy();
     radioComponent['initOuterRadios']();
