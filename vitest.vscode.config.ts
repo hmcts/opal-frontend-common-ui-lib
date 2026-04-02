@@ -24,6 +24,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    disableConsoleIntercept: true,
     include: vscodeTestInclude,
     setupFiles: ['projects/opal-frontend-common/test-setup.vscode.ts'],
     exclude: testExclude,
