@@ -35,6 +35,11 @@ type GovukFrontendLoader = {
   loadGovukFrontend: () => Promise<unknown>;
 };
 
+type GovukRadioRenderHookHost = {
+  handleAfterNextRender: () => void;
+  initOuterRadios: () => void;
+};
+
 const flush = () => new Promise<void>((resolve) => setTimeout(resolve, 0));
 
 describe('GovukRadioComponent', () => {
@@ -253,6 +258,31 @@ describe('GovukRadioComponent', () => {
     expect(radios.dataset['opalGovukRadiosInitialised']).toBe('true');
   });
 
+  it('should not initialise radios from the render hook after the component is destroyed', () => {
+    const rawFixture = TestBed.createComponent(GovukRadioComponent);
+    const rawComponent = rawFixture.componentInstance;
+    const initOuterRadiosSpy = vi.spyOn(
+      rawComponent as unknown as GovukRadioRenderHookHost,
+      'initOuterRadios',
+    );
+
+    rawComponent.ngOnDestroy();
+    (rawComponent as unknown as GovukRadioRenderHookHost).handleAfterNextRender();
+
+    expect(initOuterRadiosSpy).not.toHaveBeenCalled();
+  });
+
+  it('should not call loadGovukFrontend when initOuterRadios runs after destroy', () => {
+    const rawFixture = TestBed.createComponent(GovukRadioComponent);
+    const rawComponent = rawFixture.componentInstance as GovukRadioComponent;
+    createFakeRadioHost(rawComponent);
+
+    rawComponent.ngOnDestroy();
+    rawComponent['initOuterRadios']();
+
+    expect(loadGovukFrontendSpy).not.toHaveBeenCalled();
+  });
+
   it('should fall back when radios constructor fails', async () => {
     const initAllSpy = vi.fn();
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
@@ -313,6 +343,48 @@ describe('GovukRadioComponent', () => {
     expect(radios.dataset['opalGovukRadiosInitialised']).toBe('true');
   });
 
+  it('should load govuk-frontend via loadGovukFrontend', async () => {
+    const rawFixture = TestBed.createComponent(GovukRadioComponent);
+    const radioComponent = rawFixture.componentInstance;
+    radioComponent.ngOnDestroy();
+
+    vi.restoreAllMocks();
+    const importedModule = (await (radioComponent as unknown as GovukFrontendLoader).loadGovukFrontend()) as {
+      initAll?: () => void;
+      default?: {
+        initAll?: () => void;
+      };
+    };
+
+    expect(typeof importedModule.initAll === 'function' || typeof importedModule.default?.initAll === 'function').toBe(
+      true,
+    );
+  });
+
+  it('should not warn when radios construction fails after the component is destroyed', async () => {
+    const rawFixture = TestBed.createComponent(GovukRadioComponent);
+    const radioComponent = rawFixture.componentInstance as GovukRadioComponent;
+    createFakeRadioHost(radioComponent);
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const initAllSpy = vi.fn();
+
+    const DestroyingRadios = function () {
+      radioComponent.ngOnDestroy();
+      throw new Error('ctor failed');
+    };
+
+    loadGovukFrontendSpy.mockResolvedValueOnce({ Radios: DestroyingRadios, initAll: initAllSpy });
+
+    radioComponent['initOuterRadios']();
+    await flush();
+
+    expect(warnSpy).not.toHaveBeenCalledWith(
+      'Govuk Radios constructor failed for rootRadios, falling back to initAll',
+      expect.anything(),
+    );
+    expect(initAllSpy).not.toHaveBeenCalled();
+  });
+
   it('should log an error when import fails', async () => {
     const rawFixture = TestBed.createComponent(GovukRadioComponent);
     const radioComponent = rawFixture.componentInstance as GovukRadioComponent;
@@ -341,6 +413,27 @@ describe('GovukRadioComponent', () => {
 
     expect(warnSpy).toHaveBeenCalledWith('govuk-frontend radios init not found for rootRadios', expect.anything());
     radioComponent.ngOnDestroy();
+  });
+
+  it('should not log an error when import fails after the component is destroyed', async () => {
+    const rawFixture = TestBed.createComponent(GovukRadioComponent);
+    const radioComponent = rawFixture.componentInstance as GovukRadioComponent;
+    createFakeRadioHost(radioComponent);
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+    let rejectModule: ((reason?: unknown) => void) | undefined;
+    loadGovukFrontendSpy.mockReturnValueOnce(
+      new Promise((_, reject) => {
+        rejectModule = reject;
+      }),
+    );
+
+    radioComponent['initOuterRadios']();
+    radioComponent.ngOnDestroy();
+    rejectModule?.(new Error('boom'));
+    await flush();
+
+    expect(errorSpy).not.toHaveBeenCalled();
   });
 
   it('should not initialise radios after the component is destroyed', async () => {

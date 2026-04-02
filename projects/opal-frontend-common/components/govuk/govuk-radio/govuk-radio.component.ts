@@ -48,11 +48,18 @@ export class GovukRadioComponent implements OnDestroy {
 
   constructor() {
     this.nextRenderRef = afterNextRender(() => {
-      if (this.isDestroyed) return;
-
-      // Only trigger the render of the component in the browser
-      this.initOuterRadios();
+      this.handleAfterNextRender();
     });
+  }
+
+  /**
+   * Runs the post-render radios initialization unless the component has already been destroyed.
+   */
+  private handleAfterNextRender(): void {
+    if (this.isDestroyed) return;
+
+    // Only trigger the render of the component in the browser
+    this.initOuterRadios();
   }
 
   /**

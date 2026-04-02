@@ -7,6 +7,11 @@ type DatePickerModuleLoaderHost = {
   loadDatePickerModule: () => Promise<{ initAll: () => void }>;
 };
 
+type DatePickerRenderHookHost = {
+  handleAfterNextRender: () => void;
+  configureDatePicker: () => void;
+};
+
 describe('MojDatePickerComponent', () => {
   let component: MojDatePickerComponent;
   let fixture: ComponentFixture<MojDatePickerComponent>;
@@ -51,6 +56,20 @@ describe('MojDatePickerComponent', () => {
     component.errors = 'Error message';
 
     expect(component.describedBy).toBe('datePickerId-hint datePickerId-error-message');
+  });
+
+  it('should not configure the date picker from the render hook after the component is destroyed', () => {
+    const rawFixture = TestBed.createComponent(MojDatePickerComponent);
+    const rawComponent = rawFixture.componentInstance;
+    const configureDatePickerSpy = vi.spyOn(
+      rawComponent as unknown as DatePickerRenderHookHost,
+      'configureDatePicker',
+    );
+
+    rawComponent.ngOnDestroy();
+    (rawComponent as unknown as DatePickerRenderHookHost).handleAfterNextRender();
+
+    expect(configureDatePickerSpy).not.toHaveBeenCalled();
   });
 
   it('should not call loadDatePickerModule after the component is destroyed', () => {

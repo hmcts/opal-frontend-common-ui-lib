@@ -65,11 +65,18 @@ export class MojDatePickerComponent implements OnInit, OnDestroy {
 
   constructor() {
     this.nextRenderRef = afterNextRender(() => {
-      if (this.isDestroyed) return;
-
-      // Only trigger the render of the component in the browser
-      this.configureDatePicker();
+      this.handleAfterNextRender();
     });
+  }
+
+  /**
+   * Runs the post-render date picker setup unless the component has already been destroyed.
+   */
+  private handleAfterNextRender(): void {
+    if (this.isDestroyed) return;
+
+    // Only trigger the render of the component in the browser
+    this.configureDatePicker();
   }
 
   /**
