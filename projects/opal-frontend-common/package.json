@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.69",
+  "version": "0.0.70",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -108,6 +108,9 @@
     },
     "./components/abstract/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-interfaces.mjs"
+    },
+    "./components/abstract/abstract-account-summary-base": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-account-summary-base.mjs"
     },
     "./components/alphagov/alphagov-accessible-autocomplete": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-alphagov-alphagov-accessible-autocomplete.mjs"
