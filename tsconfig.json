@@ -445,8 +445,8 @@
       "@hmcts/opal-frontend-common/validators/national-insurance-number": [
         "./dist/opal-frontend-common/validators/national-insurance-number"
       ],
-      "@hmcts/opal-frontend-common/validators/negative-value": [
-        "./dist/opal-frontend-common/validators/negative-value"
+      "@hmcts/opal-frontend-common/validators/non-negative-value": [
+        "./dist/opal-frontend-common/validators/non-negative-value"
       ],
       "@hmcts/opal-frontend-common/validators/optional-max-length": [
         "./dist/opal-frontend-common/validators/optional-max-length"
@@ -464,7 +464,7 @@
         "./dist/opal-frontend-common/validators/pattern-validator"
       ],
       "@hmcts/opal-frontend-common/validators/valid-value": ["./dist/opal-frontend-common/validators/valid-value"],
-      "@hmcts/opal-frontend-common/validators/zero-value": ["./dist/opal-frontend-common/validators/zero-value"],
+      "@hmcts/opal-frontend-common/validators/non-zero-value": ["./dist/opal-frontend-common/validators/non-zero-value"],
 
       "@hmcts/opal-frontend-common/types": ["./dist/opal-frontend-common/types"]
     },

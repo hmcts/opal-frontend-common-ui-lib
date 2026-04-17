@@ -6,7 +6,7 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
  *
  * @returns A ValidatorFn that returns `{ negativeValue: true }` when the parsed value is negative, otherwise null.
  */
-export function negativeValueValidator(): ValidatorFn {
+export function nonNegativeValueValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     if (control.value === null || control.value === undefined || control.value === '') {
       return null;

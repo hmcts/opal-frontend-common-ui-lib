@@ -6,7 +6,7 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
  *
  * @returns A ValidatorFn that returns `{ zeroValue: true }` when the parsed value is zero, otherwise null.
  */
-export function zeroValueValidator(): ValidatorFn {
+export function nonZeroValueValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     if (control.value === null || control.value === undefined || control.value === '') {
       return null;

@@ -553,8 +553,8 @@
     "./validators/national-insurance-number": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-national-insurance-number.mjs"
     },
-    "./validators/negative-value": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-validators-negative-value.mjs"
+    "./validators/non-negative-value": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-validators-non-negative-value.mjs"
     },
     "./validators/optional-max-length": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-optional-max-length.mjs"
@@ -577,8 +577,8 @@
     "./validators/valid-value": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-valid-value.mjs"
     },
-    "./validators/zero-value": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-validators-zero-value.mjs"
+    "./validators/non-zero-value": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-validators-non-zero-value.mjs"
     },
     "./styles": {
       "sass": "./styles/styles.scss",
