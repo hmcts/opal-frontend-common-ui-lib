@@ -1,14 +1,18 @@
 import { Pipe, PipeTransform, inject } from '@angular/core';
 import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service';
 
+type MonetaryFormat = 'default' | 'remove-negative-symbol';
+
 @Pipe({
   name: 'monetary',
   standalone: true,
 })
 export class MonetaryPipe implements PipeTransform {
-  private readonly utilsService = inject(UtilsService);
+  private readonly utilsService: UtilsService = inject(UtilsService);
 
-  transform(value: number | string): string {
-    return this.utilsService.convertToMonetaryString(value);
+  transform(value: number | string, format: MonetaryFormat = 'default'): string {
+    const monetaryValue = this.utilsService.convertToMonetaryString(value);
+
+    return format === 'remove-negative-symbol' ? monetaryValue.replace(/^-/, '') : monetaryValue;
   }
 }

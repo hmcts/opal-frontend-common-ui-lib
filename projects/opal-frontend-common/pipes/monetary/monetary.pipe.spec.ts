@@ -60,6 +60,15 @@ describe('MonetaryPipe', () => {
     expect(result).toBe('-£50.00');
   });
 
+  it('should remove the negative sign when requested', () => {
+    utilsService.convertToMonetaryString.mockReturnValue('-£3,000.00');
+
+    const result = pipe.transform(-3000, true);
+
+    expect(utilsService.convertToMonetaryString).toHaveBeenCalledWith(-3000);
+    expect(result).toBe('£3,000.00');
+  });
+
   it('should handle large values', () => {
     utilsService.convertToMonetaryString.mockReturnValue('£1,234,567.89');
 
