@@ -12,3 +12,5 @@ export const EMAIL_ADDRESS_PATTERN = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z
 export const TIME_FORMAT_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/;
 export const TWO_DECIMAL_PLACES_PATTERN = /^\d+(\.\d{0,2})?$/;
 export const ACCOUNT_NUMBER_PATTERN = /^\d{8}([A-Z])?$/;
+export const SINGLE_ASCII_CHARACTERS = /^[\x20-\x7E]*$/;
+export const SINGLE_ASCII_CHARACTERS_WITH_POUND = /^[\x20-\x7E£]*$/;
