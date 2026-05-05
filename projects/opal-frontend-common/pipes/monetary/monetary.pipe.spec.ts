@@ -1,4 +1,4 @@
-import type { MockedObject } from 'vitest';
+import { beforeEach, describe, expect, it, vi, type MockedObject } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { MonetaryPipe } from './monetary.pipe';
 import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service';
@@ -58,6 +58,15 @@ describe('MonetaryPipe', () => {
 
     expect(utilsService.convertToMonetaryString).toHaveBeenCalledWith(-50);
     expect(result).toBe('-£50.00');
+  });
+
+  it('should remove the minus symbol when requested', () => {
+    utilsService.convertToMonetaryString.mockReturnValue('-£3,000.00');
+
+    const result = pipe.transform(-3000, 'remove-minus-symbol');
+
+    expect(utilsService.convertToMonetaryString).toHaveBeenCalledWith(-3000);
+    expect(result).toBe('£3,000.00');
   });
 
   it('should handle large values', () => {
