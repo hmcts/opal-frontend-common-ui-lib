@@ -6,8 +6,11 @@ export const LETTERS_WITH_SPACES_DOT_PATTERN = /^[a-zA-Z\s.]*$/;
 export const LETTERS_SPACES_HYPHENS_APOSTROPHES_DOT_PATTERN = /^[a-zA-Z\s'.-]*$/;
 export const SPECIAL_CHARACTERS_PATTERN = /^[a-zA-Z0-9 ]*$/;
 export const NUMERIC_PATTERN = /^\d*$/;
-export const DRIVING_LICENCE_NUMBER_PATTERN = /^[A-Za-z]{5}\d{6}[A-Za-z]{2}[A-Za-z0-9]{3}$/;
+export const DRIVING_LICENCE_NUMBER_PATTERN =
+  /^[A-Za-z](?:[A-Za-z]{4}|[A-Za-z]{3}9|[A-Za-z]{2}99|[A-Za-z]999|9999)\d{6}[A-Za-z9]{2}[A-Za-z0-9]{3}$/;
 export const EMAIL_ADDRESS_PATTERN = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 export const TIME_FORMAT_PATTERN = /^([01]\d|2[0-3]):[0-5]\d$/;
 export const TWO_DECIMAL_PLACES_PATTERN = /^\d+(\.\d{0,2})?$/;
 export const ACCOUNT_NUMBER_PATTERN = /^\d{8}([A-Z])?$/;
+export const SINGLE_ASCII_CHARACTERS = /^[\x20-\x7E]*$/;
+export const SINGLE_ASCII_CHARACTERS_WITH_POUND = /^[\x20-\x7E£]*$/;
