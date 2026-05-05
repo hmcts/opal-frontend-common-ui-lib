@@ -7,6 +7,14 @@ type MonetaryFormat = 'default' | 'remove-minus-symbol';
   name: 'monetary',
   standalone: true,
 })
+
+/**
+ * Converts a numeric or string value into a monetary string.
+ *
+ * @param value The value to format as currency.
+ * @param format The output format. Use `remove-minus-symbol` to strip a leading minus sign.
+ * @returns The formatted monetary value.
+ */
 export class MonetaryPipe implements PipeTransform {
   private readonly utilsService: UtilsService = inject(UtilsService);
 
