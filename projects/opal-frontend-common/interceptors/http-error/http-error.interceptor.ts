@@ -7,6 +7,7 @@ import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constants';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
 import { GENERIC_HTTP_ERROR_MESSAGE } from './constants/http-error-message.constant';
+import { GENERIC_HTTP_ERROR_TITLE } from './constants/http-error-title.constant';
 import { IErrorResponse } from './interfaces/http-error-retrievable-error-response.interface';
 import { ERROR_RESPONSE } from './constants/http-error-message-response.constant';
 /**
@@ -53,7 +54,7 @@ function handleRetriableError(error: unknown, globalStore: GlobalStoreType): voi
   globalStore.setBannerError({
     ...GLOBAL_ERROR_STATE,
     error: true,
-    title: errorResponse?.title || ERROR_RESPONSE.title,
+    title: errorResponse?.title || GENERIC_HTTP_ERROR_TITLE,
     message: errorMessage,
     operationId: errorResponse?.operation_id || ERROR_RESPONSE.operation_id,
   });
@@ -148,7 +149,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
           globalStore.setBannerError({
             ...GLOBAL_ERROR_STATE,
             error: true,
-            title: 'There was a problem',
+            title: GENERIC_HTTP_ERROR_TITLE,
             message: GENERIC_HTTP_ERROR_MESSAGE,
             operationId: ERROR_RESPONSE.operation_id,
           });
