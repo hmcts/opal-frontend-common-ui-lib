@@ -54,7 +54,7 @@
     "jsdom": "^29.0.0",
     "ng-packagr": "^21.0.0",
     "typescript": "~6.0.0",
-    "typescript-eslint": "8.59.2",
+    "typescript-eslint": "8.59.3",
     "vitest": "^4.0.0"
   },
   "resolutions": {
