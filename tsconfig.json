@@ -398,15 +398,6 @@
       "@hmcts/opal-frontend-common/services/session-service/mocks": [
         "./dist/opal-frontend-common/services/session-service/mocks"
       ],
-      "@hmcts/opal-frontend-common/services/user-state-service": [
-        "./dist/opal-frontend-common/services/user-state-service"
-      ],
-      "@hmcts/opal-frontend-common/services/user-state-service/interfaces": [
-        "./dist/opal-frontend-common/services/user-state-service/interfaces"
-      ],
-      "@hmcts/opal-frontend-common/services/user-state-service/constants": [
-        "./dist/opal-frontend-common/services/user-state-service/constants"
-      ],
       "@hmcts/opal-frontend-common/services/sort-service": ["./dist/opal-frontend-common/services/sort-service"],
       "@hmcts/opal-frontend-common/services/sort-service/interfaces": [
         "./dist/opal-frontend-common/services/sort-service/interfaces"
