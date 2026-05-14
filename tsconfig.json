@@ -334,6 +334,7 @@
       "@hmcts/opal-frontend-common/guards/can-deactivate/types": [
         "./dist/opal-frontend-common/guards/can-deactivate/types"
       ],
+      "@hmcts/opal-frontend-common/guards/feature-flag": ["./dist/opal-frontend-common/guards/feature-flag"],
       "@hmcts/opal-frontend-common/guards/has-flow-state": ["./dist/opal-frontend-common/guards/has-flow-state"],
       "@hmcts/opal-frontend-common/guards/has-url-state-match": [
         "./dist/opal-frontend-common/guards/has-url-state-match"
@@ -464,7 +465,9 @@
         "./dist/opal-frontend-common/validators/pattern-validator"
       ],
       "@hmcts/opal-frontend-common/validators/valid-value": ["./dist/opal-frontend-common/validators/valid-value"],
-      "@hmcts/opal-frontend-common/validators/non-zero-value": ["./dist/opal-frontend-common/validators/non-zero-value"],
+      "@hmcts/opal-frontend-common/validators/non-zero-value": [
+        "./dist/opal-frontend-common/validators/non-zero-value"
+      ],
 
       "@hmcts/opal-frontend-common/types": ["./dist/opal-frontend-common/types"]
     },
