@@ -10,6 +10,13 @@ const isFeatureFlagPopulated = (featureFlags: LDFlagSet | undefined, flagKey: st
 const isFeatureFlagEnabled = (featureFlags: LDFlagSet | undefined, flagKey: string): boolean =>
   featureFlags?.[flagKey] === true;
 
+/**
+ * Creates a route guard that checks if a specific feature flag is enabled before allowing access.
+ *
+ * @param flagKey - The key of the feature flag to check
+ * @returns A CanActivateFn that returns true if the feature flag is enabled, false otherwise
+ *
+ */
 export function featureFlagGuard(flagKey: string): CanActivateFn {
   return async () => {
     const globalStore = inject(GlobalStore);
