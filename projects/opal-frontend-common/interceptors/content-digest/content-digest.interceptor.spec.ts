@@ -1,5 +1,6 @@
 import { HttpEvent, HttpEventType, HttpHandlerFn, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { firstValueFrom, Observable, of } from 'rxjs';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { contentDigestInterceptor } from './content-digest.interceptor';
 
 async function computeSha256Digest(body: unknown): Promise<string> {
@@ -87,8 +88,8 @@ describe('contentDigestInterceptor (requests)', () => {
     const result = await firstValueFrom(
       callInterceptor(new HttpRequest('GET', '/test'), (outReq) => {
         expect(outReq.headers.get('Want-Content-Digest')).toBe('sha-256');
-        expect(outReq.headers.has('Content-Digest')).toBeFalse();
-        expect(outReq.body == null).toBeTrue();
+        expect(outReq.headers.has('Content-Digest')).toBe(false);
+        expect(outReq.body == null).toBe(true);
         return of(response);
       }),
     );
@@ -104,7 +105,7 @@ describe('contentDigestInterceptor (requests)', () => {
     await firstValueFrom(
       callInterceptor(new HttpRequest('POST', '/upload', payload), (outReq) => {
         expect(outReq.headers.get('Want-Content-Digest')).toBe('sha-256');
-        expect(outReq.headers.has('Content-Digest')).toBeFalse();
+        expect(outReq.headers.has('Content-Digest')).toBe(false);
         expect(outReq.body).toBe(payload);
         return of(response);
       }),
@@ -184,7 +185,7 @@ describe('contentDigestInterceptor (response validation)', () => {
     });
     const initialRequest = new HttpRequest('POST', '/test', body);
 
-    await expectAsync(firstValueFrom(callInterceptor(initialRequest, () => of(response)))).toBeRejectedWithError(
+    await expect(firstValueFrom(callInterceptor(initialRequest, () => of(response)))).rejects.toThrow(
       'Response content digest mismatch detected.',
     );
   });
@@ -200,7 +201,7 @@ describe('contentDigestInterceptor (response validation)', () => {
     });
     const initialRequest = new HttpRequest('POST', '/test', body);
 
-    await expectAsync(firstValueFrom(callInterceptor(initialRequest, () => of(response)))).toBeRejectedWithError(
+    await expect(firstValueFrom(callInterceptor(initialRequest, () => of(response)))).rejects.toThrow(
       'Malformed Content-Digest header: missing sha-256 entry.',
     );
   });
@@ -246,15 +247,14 @@ describe('contentDigestInterceptor (response validation)', () => {
     });
     const initialRequest = new HttpRequest('POST', '/test', {});
 
-    await expectAsync(firstValueFrom(callInterceptor(initialRequest, () => of(response)))).toBeRejectedWithError(
-      TypeError,
-      'Unable to serialize JSON response body for digest verification.',
-    );
+    const promise = firstValueFrom(callInterceptor(initialRequest, () => of(response)));
+
+    await expect(promise).rejects.toThrow(TypeError);
+    await expect(promise).rejects.toThrow('Unable to serialize JSON response body for digest verification.');
   });
 });
 
 describe('contentDigestInterceptor (environment fallbacks)', () => {
-  let cryptoSpy: jasmine.Spy<() => Crypto | undefined> | undefined;
   let restoreBtoa: (() => void) | undefined;
   let restoreBuffer: (() => void) | undefined;
 
@@ -301,8 +301,7 @@ describe('contentDigestInterceptor (environment fallbacks)', () => {
   }
 
   afterEach(() => {
-    cryptoSpy?.and.callThrough();
-    cryptoSpy = undefined;
+    vi.restoreAllMocks();
 
     restoreBtoa?.();
     restoreBtoa = undefined;
@@ -312,12 +311,10 @@ describe('contentDigestInterceptor (environment fallbacks)', () => {
   });
 
   it('throws when the Web Crypto API is not available', async () => {
-    cryptoSpy = spyOnProperty(globalThis as Window & typeof globalThis, 'crypto', 'get').and.returnValue(
-      undefined as unknown as Crypto,
-    );
+    vi.spyOn(globalThis as Window & typeof globalThis, 'crypto', 'get').mockReturnValue(undefined as unknown as Crypto);
     const request = new HttpRequest('POST', '/test', { value: 1 });
 
-    await expectAsync(
+    await expect(
       firstValueFrom(
         callInterceptor(request, () =>
           of(
@@ -328,17 +325,17 @@ describe('contentDigestInterceptor (environment fallbacks)', () => {
           ),
         ),
       ),
-    ).toBeRejectedWithError('Web Crypto API is not available.');
+    ).rejects.toThrow('Web Crypto API is not available.');
   });
 
   it('falls back to Buffer when btoa is missing', async () => {
     restoreBtoa = overrideBtoa(undefined);
-    const toStringSpy = jasmine.createSpy('toString').and.callFake((encoding: string) => {
+    const toStringSpy = vi.fn((encoding: string) => {
       expect(encoding).toBe('base64');
       return 'buffer-digest';
     });
-    const fromSpy = jasmine.createSpy('from').and.callFake((input: Uint8Array) => {
-      expect(input instanceof Uint8Array).toBeTrue();
+    const fromSpy = vi.fn((input: Uint8Array) => {
+      expect(input instanceof Uint8Array).toBe(true);
       return { toString: toStringSpy };
     });
     restoreBuffer = overrideBuffer({ from: fromSpy });
@@ -367,7 +364,7 @@ describe('contentDigestInterceptor (environment fallbacks)', () => {
 
     const request = new HttpRequest('POST', '/test', { missing: true });
 
-    await expectAsync(
+    await expect(
       firstValueFrom(
         callInterceptor(request, () =>
           of(
@@ -378,6 +375,6 @@ describe('contentDigestInterceptor (environment fallbacks)', () => {
           ),
         ),
       ),
-    ).toBeRejectedWithError('Base64 encoding is not supported in this environment.');
+    ).rejects.toThrow('Base64 encoding is not supported in this environment.');
   });
 });
