@@ -6,6 +6,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    disableConsoleIntercept: true,
     setupFiles: ['projects/opal-frontend-common/test-setup.ts'],
     exclude: testExclude,
     coverage: {

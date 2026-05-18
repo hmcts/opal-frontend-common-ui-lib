@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.69",
+  "version": "0.0.77",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -108,6 +108,9 @@
     },
     "./components/abstract/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-interfaces.mjs"
+    },
+    "./components/abstract/abstract-account-summary-base": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-account-summary-base.mjs"
     },
     "./components/alphagov/alphagov-accessible-autocomplete": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-alphagov-alphagov-accessible-autocomplete.mjs"
@@ -553,6 +556,9 @@
     "./validators/national-insurance-number": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-national-insurance-number.mjs"
     },
+    "./validators/non-negative-value": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-validators-non-negative-value.mjs"
+    },
     "./validators/optional-max-length": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-optional-max-length.mjs"
     },
@@ -573,6 +579,9 @@
     },
     "./validators/valid-value": {
       "import": "./fesm2022/hmcts-opal-frontend-common-validators-valid-value.mjs"
+    },
+    "./validators/non-zero-value": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-validators-non-zero-value.mjs"
     },
     "./styles": {
       "sass": "./styles/styles.scss",

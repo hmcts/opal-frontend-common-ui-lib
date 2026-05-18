@@ -7,6 +7,7 @@ import { of, throwError } from 'rxjs';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
 import { GENERIC_HTTP_ERROR_MESSAGE } from './constants/http-error-message.constant';
+import { GENERIC_HTTP_ERROR_TITLE } from './constants/http-error-title.constant';
 import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constants';
 import { ERROR_RESPONSE } from './constants/http-error-message-response.constant';
 
@@ -198,6 +199,25 @@ describe('httpErrorInterceptor', () => {
         expect(router.navigate).not.toHaveBeenCalled();
         const errorSignal = globalStore.bannerError();
         expect(errorSignal.error).toBe(true);
+        expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
+      },
+    });
+  });
+
+  it('should set generic title and message when retriable response body is empty', () => {
+    const errorResponse = new HttpErrorResponse({
+      status: 500,
+      error: null,
+    });
+    const request = new HttpRequest('GET', '/test');
+    const next: HttpHandlerFn = () => throwError(() => errorResponse);
+
+    interceptor(request, next).subscribe({
+      error: () => {
+        expect(router.navigate).not.toHaveBeenCalled();
+        const errorSignal = globalStore.bannerError();
+        expect(errorSignal.error).toBe(true);
+        expect(errorSignal.title).toBe(GENERIC_HTTP_ERROR_TITLE);
         expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
       },
     });
@@ -405,7 +425,7 @@ describe('httpErrorInterceptor', () => {
     const expectedFallbackError = {
       ...GLOBAL_ERROR_STATE,
       error: true,
-      title: 'There was a problem',
+      title: GENERIC_HTTP_ERROR_TITLE,
       message: GENERIC_HTTP_ERROR_MESSAGE,
       operationId: null,
     };
@@ -414,7 +434,7 @@ describe('httpErrorInterceptor', () => {
     const errorSignal = globalStore.bannerError();
 
     expect(errorSignal.error).toBe(true);
-    expect(errorSignal.title).toBe('There was a problem');
+    expect(errorSignal.title).toBe(GENERIC_HTTP_ERROR_TITLE);
     expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
     expect(errorSignal.operationId).toBeNull();
   });
@@ -428,7 +448,7 @@ describe('httpErrorInterceptor', () => {
       error: () => {
         const errorSignal = globalStore.bannerError();
         expect(errorSignal.error).toBe(true);
-        expect(errorSignal.title).toBe('There was a problem');
+        expect(errorSignal.title).toBe(GENERIC_HTTP_ERROR_TITLE);
         expect(errorSignal.message).toBe(GENERIC_HTTP_ERROR_MESSAGE);
       },
     });

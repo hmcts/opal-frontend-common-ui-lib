@@ -17,6 +17,9 @@
     "experimentalDecorators": true,
     "paths": {
       "@hmcts/opal-frontend-common": ["./dist/opal-frontend-common/public-api"],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-account-summary-base": [
+        "./dist/opal-frontend-common/components/abstract/abstract-account-summary-base"
+      ],
       "@hmcts/opal-frontend-common/components/abstract/abstract-form-alias-base": [
         "./dist/opal-frontend-common/components/abstract/abstract-form-alias-base"
       ],
@@ -314,7 +317,9 @@
       "@hmcts/opal-frontend-common/components/moj/moj-timeline": [
         "./dist/opal-frontend-common/components/moj/moj-timeline"
       ],
-      "@hmcts/opal-frontend-common/directives/capitalisation": ["./dist/opal-frontend-common/directives/capitalisation"],
+      "@hmcts/opal-frontend-common/directives/capitalisation": [
+        "./dist/opal-frontend-common/directives/capitalisation"
+      ],
       "@hmcts/opal-frontend-common/directives/govuk-button": ["./dist/opal-frontend-common/directives/govuk-button"],
       "@hmcts/opal-frontend-common/directives/moj-multi-select": [
         "./dist/opal-frontend-common/directives/moj-multi-select"
@@ -443,6 +448,9 @@
       "@hmcts/opal-frontend-common/validators/national-insurance-number": [
         "./dist/opal-frontend-common/validators/national-insurance-number"
       ],
+      "@hmcts/opal-frontend-common/validators/non-negative-value": [
+        "./dist/opal-frontend-common/validators/non-negative-value"
+      ],
       "@hmcts/opal-frontend-common/validators/optional-max-length": [
         "./dist/opal-frontend-common/validators/optional-max-length"
       ],
@@ -459,6 +467,7 @@
         "./dist/opal-frontend-common/validators/pattern-validator"
       ],
       "@hmcts/opal-frontend-common/validators/valid-value": ["./dist/opal-frontend-common/validators/valid-value"],
+      "@hmcts/opal-frontend-common/validators/non-zero-value": ["./dist/opal-frontend-common/validators/non-zero-value"],
 
       "@hmcts/opal-frontend-common/types": ["./dist/opal-frontend-common/types"]
     },

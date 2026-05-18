@@ -1,0 +1,5 @@
+{
+  "sideEffects": false,
+  "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-validators-non-negative-value.mjs",
+  "typings": "../../../../dist/opal-frontend-common/validators/non-negative-value/index.d.ts"
+}
