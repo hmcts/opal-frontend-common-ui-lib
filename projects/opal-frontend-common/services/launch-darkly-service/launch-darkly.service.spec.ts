@@ -56,6 +56,15 @@ describe('LaunchDarklyService', () => {
     expect(service['ldClient']).toBeDefined();
   });
 
+  it('should not recreate the LaunchDarkly client if it has already been initialized', () => {
+    service.initializeLaunchDarklyClient();
+    const ldClient = service['ldClient'];
+
+    service.initializeLaunchDarklyClient();
+
+    expect(service['ldClient']).toBe(ldClient);
+  });
+
   it('should not initialize LaunchDarkly client if no client id', () => {
     globalStore.setLaunchDarklyConfig({
       enabled: true,
