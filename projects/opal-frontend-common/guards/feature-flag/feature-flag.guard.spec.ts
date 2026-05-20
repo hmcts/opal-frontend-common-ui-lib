@@ -1,24 +1,27 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { PAGES_ROUTING_PATHS as COMMON_PAGES_ROUTING_PATHS } from '@hmcts/opal-frontend-common/pages/routing/constants';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { LaunchDarklyService } from '@hmcts/opal-frontend-common/services/launch-darkly-service';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { featureFlagGuard } from './feature-flag.guard';
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
+import { featureFlagGuard, featureFlagRedirectGuard, resolveFeatureFlagGuard } from './feature-flag.guard';
 
-describe('featureFlagGuard', () => {
+describe('feature flag guards', () => {
   let featureFlagsMock: ReturnType<typeof vi.fn>;
   let initializeLaunchDarklyClientMock: ReturnType<typeof vi.fn>;
   let initializeLaunchDarklyFlagsMock: ReturnType<typeof vi.fn>;
+  let createUrlTreeMock: Mock;
 
-  const runGuard = (flagKey: string) =>
-    TestBed.runInInjectionContext(() =>
-      featureFlagGuard(flagKey)({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot),
-    );
+  const runCanActivateGuard = (guard: CanActivateFn) =>
+    TestBed.runInInjectionContext(() => guard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot));
+
+  const runGuard = (flagKey: string) => runCanActivateGuard(featureFlagGuard(flagKey));
 
   beforeEach(() => {
     featureFlagsMock = vi.fn().mockReturnValue({ 'release-1a': true });
     initializeLaunchDarklyClientMock = vi.fn();
     initializeLaunchDarklyFlagsMock = vi.fn().mockResolvedValue(undefined);
+    createUrlTreeMock = vi.fn();
 
     TestBed.configureTestingModule({
       providers: [
@@ -33,6 +36,12 @@ describe('featureFlagGuard', () => {
           useValue: {
             initializeLaunchDarklyClient: initializeLaunchDarklyClientMock,
             initializeLaunchDarklyFlags: initializeLaunchDarklyFlagsMock,
+          },
+        },
+        {
+          provide: Router,
+          useValue: {
+            createUrlTree: createUrlTreeMock,
           },
         },
       ],
@@ -112,5 +121,42 @@ describe('featureFlagGuard', () => {
     expect(result).toBe(true);
     expect(initializeLaunchDarklyFlagsMock).not.toHaveBeenCalled();
     expect(initializeLaunchDarklyClientMock).not.toHaveBeenCalled();
+  });
+
+  it('should resolve the feature flag guard result to a boolean', async () => {
+    const result = await TestBed.runInInjectionContext(() =>
+      resolveFeatureFlagGuard('release-1a', {} as ActivatedRouteSnapshot, {} as RouterStateSnapshot),
+    );
+
+    expect(result).toBe(true);
+  });
+
+  it('should return true from the redirect guard when the requested feature flag is enabled', async () => {
+    const result = await runCanActivateGuard(featureFlagRedirectGuard('release-1a'));
+
+    expect(result).toBe(true);
+    expect(createUrlTreeMock).not.toHaveBeenCalled();
+  });
+
+  it('should redirect to access denied from the redirect guard when the requested feature flag is disabled', async () => {
+    const expectedUrlTree = new UrlTree();
+    featureFlagsMock.mockReturnValue({ 'release-1a': false });
+    createUrlTreeMock.mockReturnValue(expectedUrlTree);
+
+    const result = await runCanActivateGuard(featureFlagRedirectGuard('release-1a'));
+
+    expect(result).toBe(expectedUrlTree);
+    expect(createUrlTreeMock).toHaveBeenCalledWith([`/${COMMON_PAGES_ROUTING_PATHS.children.accessDenied}`]);
+  });
+
+  it('should redirect to the provided path from the redirect guard when the requested feature flag is disabled', async () => {
+    const expectedUrlTree = new UrlTree();
+    featureFlagsMock.mockReturnValue({ 'release-1a': false });
+    createUrlTreeMock.mockReturnValue(expectedUrlTree);
+
+    const result = await runCanActivateGuard(featureFlagRedirectGuard('release-1a', '/custom-denied'));
+
+    expect(result).toBe(expectedUrlTree);
+    expect(createUrlTreeMock).toHaveBeenCalledWith(['/custom-denied']);
   });
 });
