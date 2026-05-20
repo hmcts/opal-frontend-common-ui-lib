@@ -28,6 +28,14 @@ export function featureFlagGuard(flagKey: string): CanActivateFn {
 
     try {
       await launchDarklyService.initializeLaunchDarklyFlags();
+
+      if (isFeatureFlagPopulated(globalStore.featureFlags(), flagKey)) {
+        return isFeatureFlagEnabled(globalStore.featureFlags(), flagKey);
+      }
+
+      launchDarklyService.initializeLaunchDarklyClient();
+      await launchDarklyService.initializeLaunchDarklyFlags();
+
       return isFeatureFlagEnabled(globalStore.featureFlags(), flagKey);
     } catch (error) {
       console.warn(`Feature flag "${flagKey}" could not be resolved. Access denied by featureFlagGuard.`, error);

@@ -7,6 +7,7 @@ import { featureFlagGuard } from './feature-flag.guard';
 
 describe('featureFlagGuard', () => {
   let featureFlagsMock: ReturnType<typeof vi.fn>;
+  let initializeLaunchDarklyClientMock: ReturnType<typeof vi.fn>;
   let initializeLaunchDarklyFlagsMock: ReturnType<typeof vi.fn>;
 
   const runGuard = (flagKey: string) =>
@@ -16,6 +17,7 @@ describe('featureFlagGuard', () => {
 
   beforeEach(() => {
     featureFlagsMock = vi.fn().mockReturnValue({ 'release-1a': true });
+    initializeLaunchDarklyClientMock = vi.fn();
     initializeLaunchDarklyFlagsMock = vi.fn().mockResolvedValue(undefined);
 
     TestBed.configureTestingModule({
@@ -29,6 +31,7 @@ describe('featureFlagGuard', () => {
         {
           provide: LaunchDarklyService,
           useValue: {
+            initializeLaunchDarklyClient: initializeLaunchDarklyClientMock,
             initializeLaunchDarklyFlags: initializeLaunchDarklyFlagsMock,
           },
         },
@@ -41,6 +44,7 @@ describe('featureFlagGuard', () => {
 
     expect(result).toBe(true);
     expect(initializeLaunchDarklyFlagsMock).not.toHaveBeenCalled();
+    expect(initializeLaunchDarklyClientMock).not.toHaveBeenCalled();
   });
 
   it('should return false when the requested feature flag is disabled', async () => {
@@ -50,6 +54,7 @@ describe('featureFlagGuard', () => {
 
     expect(result).toBe(false);
     expect(initializeLaunchDarklyFlagsMock).not.toHaveBeenCalled();
+    expect(initializeLaunchDarklyClientMock).not.toHaveBeenCalled();
   });
 
   it('should initialize LaunchDarkly flags when the requested feature flag is missing', async () => {
@@ -59,6 +64,17 @@ describe('featureFlagGuard', () => {
 
     expect(result).toBe(true);
     expect(initializeLaunchDarklyFlagsMock).toHaveBeenCalledTimes(1);
+    expect(initializeLaunchDarklyClientMock).not.toHaveBeenCalled();
+  });
+
+  it('should initialize the LaunchDarkly client and retry flags when the requested feature flag remains missing', async () => {
+    featureFlagsMock.mockReturnValueOnce({}).mockReturnValueOnce({}).mockReturnValue({ 'release-1a': true });
+
+    const result = await runGuard('release-1a');
+
+    expect(result).toBe(true);
+    expect(initializeLaunchDarklyFlagsMock).toHaveBeenCalledTimes(2);
+    expect(initializeLaunchDarklyClientMock).toHaveBeenCalledTimes(1);
   });
 
   it('should return false when the requested feature flag is still missing after LaunchDarkly initializes', async () => {
@@ -67,16 +83,25 @@ describe('featureFlagGuard', () => {
     const result = await runGuard('release-1a');
 
     expect(result).toBe(false);
-    expect(initializeLaunchDarklyFlagsMock).toHaveBeenCalledTimes(1);
+    expect(initializeLaunchDarklyFlagsMock).toHaveBeenCalledTimes(2);
+    expect(initializeLaunchDarklyClientMock).toHaveBeenCalledTimes(1);
   });
 
   it('should return false when LaunchDarkly initialization fails', async () => {
+    const consoleWarnMock = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     featureFlagsMock.mockReturnValue({});
-    initializeLaunchDarklyFlagsMock.mockRejectedValue(new Error('LaunchDarkly failed'));
+    const error = new Error('LaunchDarkly failed');
+    initializeLaunchDarklyFlagsMock.mockRejectedValue(error);
 
     const result = await runGuard('release-1a');
 
     expect(result).toBe(false);
+    expect(initializeLaunchDarklyClientMock).not.toHaveBeenCalled();
+    expect(consoleWarnMock).toHaveBeenCalledWith(
+      'Feature flag "release-1a" could not be resolved. Access denied by featureFlagGuard.',
+      error,
+    );
+    consoleWarnMock.mockRestore();
   });
 
   it('should check the feature flag key passed to the guard', async () => {
@@ -86,5 +111,6 @@ describe('featureFlagGuard', () => {
 
     expect(result).toBe(true);
     expect(initializeLaunchDarklyFlagsMock).not.toHaveBeenCalled();
+    expect(initializeLaunchDarklyClientMock).not.toHaveBeenCalled();
   });
 });
