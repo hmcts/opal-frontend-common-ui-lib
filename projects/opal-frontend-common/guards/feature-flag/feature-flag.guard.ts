@@ -2,25 +2,20 @@ import { inject } from '@angular/core';
 import {
   type ActivatedRouteSnapshot,
   type CanActivateFn,
-  type GuardResult,
-  type MaybeAsync,
   Router,
   type RouterStateSnapshot,
 } from '@angular/router';
+import { resolveGuardResult } from '@hmcts/opal-frontend-common/guards/helpers';
 import { PAGES_ROUTING_PATHS as COMMON_PAGES_ROUTING_PATHS } from '@hmcts/opal-frontend-common/pages/routing/constants';
 import { LDFlagSet } from 'launchdarkly-js-client-sdk';
 import { LaunchDarklyService } from '@hmcts/opal-frontend-common/services/launch-darkly-service';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
-import { firstValueFrom, isObservable } from 'rxjs';
 
 const isFeatureFlagPopulated = (featureFlags: LDFlagSet | undefined, flagKey: string): boolean =>
   featureFlags?.[flagKey] !== undefined;
 
 const isFeatureFlagEnabled = (featureFlags: LDFlagSet | undefined, flagKey: string): boolean =>
   featureFlags?.[flagKey] === true;
-
-const resolveGuardResult = (result: MaybeAsync<GuardResult>): Promise<GuardResult> =>
-  isObservable(result) ? firstValueFrom(result) : Promise.resolve(result);
 
 /**
  * Resolves a feature flag route guard to a boolean result.
