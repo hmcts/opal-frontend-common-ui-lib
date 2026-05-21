@@ -1,10 +1,5 @@
 import { inject } from '@angular/core';
-import {
-  type ActivatedRouteSnapshot,
-  type CanActivateFn,
-  Router,
-  type RouterStateSnapshot,
-} from '@angular/router';
+import { type ActivatedRouteSnapshot, type CanActivateFn, Router, type RouterStateSnapshot } from '@angular/router';
 import { resolveGuardResult } from '@hmcts/opal-frontend-common/guards/helpers';
 import { PAGES_ROUTING_PATHS as COMMON_PAGES_ROUTING_PATHS } from '@hmcts/opal-frontend-common/pages/routing/constants';
 import { LDFlagSet } from 'launchdarkly-js-client-sdk';
