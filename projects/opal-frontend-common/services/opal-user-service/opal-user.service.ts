@@ -4,38 +4,24 @@ import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { IOpalUserState } from './interfaces/opal-user-state.interface';
 import { map, Observable, tap } from 'rxjs';
 import { OPAL_USER_PATHS } from './constants/opal-user-paths.constant';
-import { IOpalUserBusinessUnitUser } from './interfaces/opal-user-business-unit-user.interface';
-
-type IOpalUserStateResponseStatus = 'ACTIVE' | 'PENDING' | 'SUSPENDED' | 'DEACTIVATED';
-
-interface IOpalUserStateResponseDomain {
-  business_unit_users: IOpalUserBusinessUnitUser[];
-}
-
-interface IOpalUserStateResponse {
-  user_id: number;
-  username: string;
-  name: string;
-  status: IOpalUserStateResponseStatus | null;
-  version: number | null;
-  cache_name: string | null;
-  domains: Record<string, IOpalUserStateResponseDomain | undefined>;
-}
+import { OPAL_USER_STATE_RESPONSE_STATUS } from './constants/opal-user-state-response-status.constant';
+import { IOpalUserStateResponse } from './interfaces/opal-user-state-response.interface';
+import type { OpalUserStateResponseStatus } from './interfaces/opal-user-state-response-status.type';
 
 @Injectable({ providedIn: 'root' })
 export class OpalUserService {
   private readonly http = inject(HttpClient);
   private readonly globalStore = inject(GlobalStore);
 
-  private toOpalUserStatus(status: IOpalUserStateResponseStatus | null): string | null {
+  private toOpalUserStatus(status: OpalUserStateResponseStatus | null): string | null {
     switch (status) {
-      case 'ACTIVE':
+      case OPAL_USER_STATE_RESPONSE_STATUS.active:
         return 'active';
-      case 'PENDING':
+      case OPAL_USER_STATE_RESPONSE_STATUS.pending:
         return 'created';
-      case 'SUSPENDED':
+      case OPAL_USER_STATE_RESPONSE_STATUS.suspended:
         return 'suspended';
-      case 'DEACTIVATED':
+      case OPAL_USER_STATE_RESPONSE_STATUS.deactivated:
         return 'deactivated';
       default:
         return null;

@@ -6,76 +6,30 @@ import { IOpalUserState } from './interfaces/opal-user-state.interface';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
 import { OPAL_USER_PATHS } from './constants/opal-user-paths.constant';
-import { IOpalUserBusinessUnitUser } from './interfaces/opal-user-business-unit-user.interface';
+import { OPAL_USER_STATE_RESPONSE_STATUS } from './constants/opal-user-state-response-status.constant';
+import { IOpalUserStateResponse } from './interfaces/opal-user-state-response.interface';
+import { OPAL_USER_STATE_MOCK } from './mocks/opal-user-state.mock';
+import {
+  ALTERNATIVE_USER_STATE_DOMAIN,
+  USER_STATE_DOMAIN,
+  USER_STATE_MOCK,
+} from './mocks/opal-user-state-response.mock';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-interface IOpalUserStateResponse {
-  user_id: number;
-  username: string;
-  name: string;
-  status: 'ACTIVE' | 'PENDING' | 'SUSPENDED' | 'DEACTIVATED' | null;
-  version: number | null;
-  cache_name: string | null;
-  domains: Record<string, { business_unit_users: IOpalUserBusinessUnitUser[] } | undefined>;
-}
-
-const USER_STATE_DOMAIN = 'configured-domain';
-const ALTERNATIVE_USER_STATE_DOMAIN = 'alternative-domain';
-
-const USER_STATE_MOCK: IOpalUserStateResponse = {
-  user_id: 50000000,
-  username: 'timmyTest@HMCTS.NET',
-  name: 'Timmy Test',
-  status: 'ACTIVE',
-  version: 1,
-  cache_name: 'user_state_test-user-id',
-  domains: {
-    [USER_STATE_DOMAIN]: {
-      business_unit_users: [
-        {
-          business_unit_user_id: 'L017KG',
-          business_unit_id: 17,
-          permissions: [
-            {
-              permission_id: 54,
-              permission_name: 'Account Enquiry',
-            },
-          ],
-        },
-      ],
-    },
-    [ALTERNATIVE_USER_STATE_DOMAIN]: {
-      business_unit_users: [
-        {
-          business_unit_user_id: 'C017KG',
-          business_unit_id: 17,
-          permissions: [
-            {
-              permission_id: 88,
-              permission_name: 'Confiscation Permission',
-            },
-          ],
-        },
-      ],
-    },
-  },
-};
-
-const OPAL_USER_STATE_MOCK: IOpalUserState = {
-  user_id: USER_STATE_MOCK.user_id,
-  username: USER_STATE_MOCK.username,
-  name: USER_STATE_MOCK.name,
-  status: 'active',
-  version: USER_STATE_MOCK.version,
-  business_unit_users: USER_STATE_MOCK.domains[USER_STATE_DOMAIN]?.business_unit_users ?? [],
-};
+const USER_STATE_STATUS_MAPPING_CASES = [
+  [OPAL_USER_STATE_RESPONSE_STATUS.active, 'active'],
+  [OPAL_USER_STATE_RESPONSE_STATUS.pending, 'created'],
+  [OPAL_USER_STATE_RESPONSE_STATUS.suspended, 'suspended'],
+  [OPAL_USER_STATE_RESPONSE_STATUS.deactivated, 'deactivated'],
+  [null, null],
+] as const;
 
 describe('OpalUserService', () => {
   let service: OpalUserService;
   let httpMock: HttpTestingController;
   let globalStore: GlobalStoreType;
 
-  function setupTestBed(userStateDomain?: string): void {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
     });
@@ -85,14 +39,7 @@ describe('OpalUserService', () => {
     globalStore = TestBed.inject(GlobalStore);
 
     service.clearUserStateCache();
-
-    if (userStateDomain) {
-      globalStore.setUserStateDomain(userStateDomain);
-    }
-  }
-
-  beforeEach(() => {
-    setupTestBed(USER_STATE_DOMAIN);
+    globalStore.setUserStateDomain(USER_STATE_DOMAIN);
   });
 
   afterEach(() => {
@@ -161,7 +108,14 @@ describe('OpalUserService', () => {
 
   it('should error when no user-state domain is configured', () => {
     TestBed.resetTestingModule();
-    setupTestBed();
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+    });
+
+    service = TestBed.inject(OpalUserService);
+    httpMock = TestBed.inject(HttpTestingController);
+    globalStore = TestBed.inject(GlobalStore);
+    service.clearUserStateCache();
 
     service.getLoggedInUserState().subscribe({
       next: () => expect.fail('Expected missing user-state domain to throw'),
@@ -188,13 +142,7 @@ describe('OpalUserService', () => {
     req.flush(USER_STATE_MOCK);
   });
 
-  it.each([
-    ['ACTIVE', 'active'],
-    ['PENDING', 'created'],
-    ['SUSPENDED', 'suspended'],
-    ['DEACTIVATED', 'deactivated'],
-    [null, null],
-  ] as const)('should map the user state status %s to %s', (apiStatus, expectedStatus) => {
+  it.each(USER_STATE_STATUS_MAPPING_CASES)('should map the user state status %s to %s', (apiStatus, expectedStatus) => {
     service.getLoggedInUserState().subscribe((response) => {
       expect(response.status).toBe(expectedStatus);
       expect(globalStore.userState().status).toBe(expectedStatus);
