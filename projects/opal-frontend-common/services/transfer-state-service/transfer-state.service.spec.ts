@@ -24,8 +24,6 @@ describe('TransferStateService', () => {
 
     globalStore = TestBed.inject(GlobalStore);
     service = TestBed.inject(TransferStateService);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (service as any).storedServerTransferState = TRANSFER_STATE_MOCK;
   });
 
   it('should be created', () => {
@@ -62,5 +60,41 @@ describe('TransferStateService', () => {
     expect(globalStore.userStateCacheExpirationMilliseconds()).toEqual(
       service['storedServerTransferState'].userStateCacheExpirationMilliseconds,
     );
+  });
+
+  it('should initialize user state domain', () => {
+    service.initializeUserStateDomain();
+
+    expect(globalStore.userStateDomain()).toEqual(service['storedServerTransferState'].userStateDomain);
+  });
+
+  it('should throw when the server transfer state is missing the user state domain', () => {
+    globalStore.setUserStateDomain('previous-domain');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (service as any).storedServerTransferState = {
+      ...TRANSFER_STATE_MOCK,
+      userStateDomain: undefined,
+    };
+
+    expect(() => service.initializeUserStateDomain()).toThrow(
+      'User state domain is required in server transfer state.',
+    );
+
+    expect(globalStore.userStateDomain()).toBe('previous-domain');
+  });
+
+  it('should throw when the server transfer state user state domain is blank', () => {
+    globalStore.setUserStateDomain('previous-domain');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (service as any).storedServerTransferState = {
+      ...TRANSFER_STATE_MOCK,
+      userStateDomain: '   ',
+    };
+
+    expect(() => service.initializeUserStateDomain()).toThrow(
+      'User state domain is required in server transfer state.',
+    );
+
+    expect(globalStore.userStateDomain()).toBe('previous-domain');
   });
 });

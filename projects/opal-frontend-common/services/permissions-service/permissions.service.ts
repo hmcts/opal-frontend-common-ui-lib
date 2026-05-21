@@ -8,25 +8,22 @@ import {
   providedIn: 'root',
 })
 export class PermissionsService {
-  private storedUniquePermissionIds: number[] = [];
-
   /**
    * Retrieves the unique permission IDs associated with the user.
-   * If the unique permission IDs have not been stored yet, it calculates them based on the user's roles and permissions.
    * @returns An array of unique permission IDs.
    */
   public getUniquePermissions(userState: IOpalUserState | null): number[] {
     const roles = userState ? userState['business_unit_users'] : null;
 
-    if (!this.storedUniquePermissionIds.length && roles) {
-      const permissionIds = roles.flatMap((role) => {
-        return role.permissions.map(({ permission_id: permissionId }) => permissionId);
-      });
-
-      this.storedUniquePermissionIds = [...new Set(permissionIds)];
+    if (!roles) {
+      return [];
     }
 
-    return this.storedUniquePermissionIds;
+    const permissionIds = roles.flatMap((role) => {
+      return role.permissions.map(({ permission_id: permissionId }) => permissionId);
+    });
+
+    return [...new Set(permissionIds)];
   }
 
   /**
