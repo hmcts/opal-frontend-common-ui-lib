@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.76",
+  "version": "0.0.78",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -492,15 +492,6 @@
     },
     "./services/session-service/mocks": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-session-service-mocks.mjs"
-    },
-    "./services/user-state-service": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-services-user-state-service.mjs"
-    },
-    "./services/user-state-service/interfaces": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-services-user-state-service-interfaces.mjs"
-    },
-    "./services/user-state-service/constants": {
-      "import": "./fesm2022/hmcts-opal-frontend-common-services-user-state-service-constants.mjs"
     },
     "./services/sort-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-sort-service.mjs"
