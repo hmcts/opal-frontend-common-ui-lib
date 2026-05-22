@@ -20,6 +20,7 @@ export const GlobalStore = signalStore(
     appInsightsConfig: {} as ITransferStateAppInsightsConfig,
     tokenExpiry: {} as ISessionTokenExpiry,
     userStateCacheExpirationMilliseconds: 1800000,
+    userStateDomain: undefined as string | undefined,
   })),
   withMethods((store) => ({
     setAuthenticated: (authenticated: boolean) => {
@@ -51,6 +52,9 @@ export const GlobalStore = signalStore(
     },
     setUserStateCacheExpirationMilliseconds: (milliseconds: number) => {
       patchState(store, { userStateCacheExpirationMilliseconds: milliseconds });
+    },
+    setUserStateDomain: (domain: string) => {
+      patchState(store, { userStateDomain: domain });
     },
   })),
 );

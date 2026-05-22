@@ -29,6 +29,10 @@ export class TransferStateService {
       }
     } else {
       // server side: store server transfer state
+      if (this.serverTransferState) {
+        this.storedServerTransferState = this.serverTransferState;
+      }
+
       this.transferState.set(storeKeyTransferState, this.serverTransferState);
     }
   }
@@ -70,5 +74,17 @@ export class TransferStateService {
     this.globalStore.setUserStateCacheExpirationMilliseconds(
       this.storedServerTransferState?.userStateCacheExpirationMilliseconds,
     );
+  }
+
+  /**
+   * Initializes the user-state domain used to select permissions from the domain-scoped user-state response.
+   */
+  public initializeUserStateDomain(): void {
+    const userStateDomain = this.storedServerTransferState?.userStateDomain;
+    if (typeof userStateDomain !== 'string' || !userStateDomain.trim()) {
+      throw new Error('User state domain is required in server transfer state.');
+    }
+
+    this.globalStore.setUserStateDomain(userStateDomain.trim());
   }
 }

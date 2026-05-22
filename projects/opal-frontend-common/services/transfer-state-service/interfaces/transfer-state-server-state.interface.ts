@@ -6,4 +6,5 @@ export interface ITransferStateServerState {
   ssoEnabled: boolean;
   appInsightsConfig: ITransferStateAppInsightsConfig;
   userStateCacheExpirationMilliseconds: number;
+  userStateDomain: string;
 }
