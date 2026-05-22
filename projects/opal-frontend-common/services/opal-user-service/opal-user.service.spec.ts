@@ -8,21 +8,11 @@ import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types
 import { OPAL_USER_PATHS } from './constants/opal-user-paths.constant';
 import { OPAL_USER_STATE_RESPONSE_STATUS } from './constants/opal-user-state-response-status.constant';
 import { IOpalUserStateResponse } from './interfaces/opal-user-state-response.interface';
+import { ALTERNATIVE_USER_STATE_DOMAIN_MOCK } from './mocks/alternative-user-state-domain.mock';
 import { OPAL_USER_STATE_MOCK } from './mocks/opal-user-state.mock';
-import {
-  ALTERNATIVE_USER_STATE_DOMAIN,
-  USER_STATE_DOMAIN,
-  USER_STATE_MOCK,
-} from './mocks/opal-user-state-response.mock';
+import { USER_STATE_MOCK } from './mocks/opal-user-state-response.mock';
+import { USER_STATE_DOMAIN_MOCK } from './mocks/user-state-domain.mock';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-
-const USER_STATE_STATUS_MAPPING_CASES = [
-  [OPAL_USER_STATE_RESPONSE_STATUS.active, 'active'],
-  [OPAL_USER_STATE_RESPONSE_STATUS.pending, 'created'],
-  [OPAL_USER_STATE_RESPONSE_STATUS.suspended, 'suspended'],
-  [OPAL_USER_STATE_RESPONSE_STATUS.deactivated, 'deactivated'],
-  [null, null],
-] as const;
 
 describe('OpalUserService', () => {
   let service: OpalUserService;
@@ -39,7 +29,7 @@ describe('OpalUserService', () => {
     globalStore = TestBed.inject(GlobalStore);
 
     service.clearUserStateCache();
-    globalStore.setUserStateDomain(USER_STATE_DOMAIN);
+    globalStore.setUserStateDomain(USER_STATE_DOMAIN_MOCK);
   });
 
   afterEach(() => {
@@ -82,7 +72,7 @@ describe('OpalUserService', () => {
     service.getLoggedInUserState().subscribe({
       next: () => expect.fail('Expected missing configured user-state domain to throw'),
       error: (error: Error) => {
-        expect(error.message).toBe(`User state response does not include required domain '${USER_STATE_DOMAIN}'.`);
+        expect(error.message).toBe(`User state response does not include required domain '${USER_STATE_DOMAIN_MOCK}'.`);
       },
     });
 
@@ -91,14 +81,14 @@ describe('OpalUserService', () => {
   });
 
   it('should map business_unit_users from the configured user-state domain', () => {
-    globalStore.setUserStateDomain(ALTERNATIVE_USER_STATE_DOMAIN);
+    globalStore.setUserStateDomain(ALTERNATIVE_USER_STATE_DOMAIN_MOCK);
 
     service.getLoggedInUserState().subscribe((response) => {
       expect(response.business_unit_users).toEqual(
-        USER_STATE_MOCK.domains[ALTERNATIVE_USER_STATE_DOMAIN]?.business_unit_users,
+        USER_STATE_MOCK.domains[ALTERNATIVE_USER_STATE_DOMAIN_MOCK]?.business_unit_users,
       );
       expect(globalStore.userState().business_unit_users).toEqual(
-        USER_STATE_MOCK.domains[ALTERNATIVE_USER_STATE_DOMAIN]?.business_unit_users,
+        USER_STATE_MOCK.domains[ALTERNATIVE_USER_STATE_DOMAIN_MOCK]?.business_unit_users,
       );
     });
 
@@ -142,16 +132,32 @@ describe('OpalUserService', () => {
     req.flush(USER_STATE_MOCK);
   });
 
-  it.each(USER_STATE_STATUS_MAPPING_CASES)('should map the user state status %s to %s', (apiStatus, expectedStatus) => {
+  it.each(Object.entries(OPAL_USER_STATE_RESPONSE_STATUS))(
+    'should map the user state status %s to %s',
+    (apiStatus, expectedStatus) => {
+      service.getLoggedInUserState().subscribe((response) => {
+        expect(response.status).toBe(expectedStatus);
+        expect(globalStore.userState().status).toBe(expectedStatus);
+      });
+
+      const req = httpMock.expectOne(OPAL_USER_PATHS.loggedInUserState);
+      req.flush({
+        ...USER_STATE_MOCK,
+        status: apiStatus,
+      });
+    },
+  );
+
+  it('should map a null user state status to null', () => {
     service.getLoggedInUserState().subscribe((response) => {
-      expect(response.status).toBe(expectedStatus);
-      expect(globalStore.userState().status).toBe(expectedStatus);
+      expect(response.status).toBeNull();
+      expect(globalStore.userState().status).toBeNull();
     });
 
     const req = httpMock.expectOne(OPAL_USER_PATHS.loggedInUserState);
     req.flush({
       ...USER_STATE_MOCK,
-      status: apiStatus,
+      status: null,
     });
   });
 

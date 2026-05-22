@@ -7,25 +7,15 @@ import { OPAL_USER_PATHS } from './constants/opal-user-paths.constant';
 import { OPAL_USER_STATE_RESPONSE_STATUS } from './constants/opal-user-state-response-status.constant';
 import { IOpalUserStateResponse } from './interfaces/opal-user-state-response.interface';
 import type { OpalUserStateResponseStatus } from './interfaces/opal-user-state-response-status.type';
+import type { OpalUserStateStatus } from './interfaces/opal-user-state-status.type';
 
 @Injectable({ providedIn: 'root' })
 export class OpalUserService {
   private readonly http = inject(HttpClient);
   private readonly globalStore = inject(GlobalStore);
 
-  private toOpalUserStatus(status: OpalUserStateResponseStatus | null): string | null {
-    switch (status) {
-      case OPAL_USER_STATE_RESPONSE_STATUS.active:
-        return 'active';
-      case OPAL_USER_STATE_RESPONSE_STATUS.pending:
-        return 'created';
-      case OPAL_USER_STATE_RESPONSE_STATUS.suspended:
-        return 'suspended';
-      case OPAL_USER_STATE_RESPONSE_STATUS.deactivated:
-        return 'deactivated';
-      default:
-        return null;
-    }
+  private toOpalUserStatus(status: OpalUserStateResponseStatus | null): OpalUserStateStatus | null {
+    return status ? OPAL_USER_STATE_RESPONSE_STATUS[status] : null;
   }
 
   private getUserStateDomain(): string {
