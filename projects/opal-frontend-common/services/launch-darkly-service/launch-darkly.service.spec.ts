@@ -115,7 +115,6 @@ describe('LaunchDarklyService', () => {
   });
 
   it('should call closeLaunchDarklyClient on ngOnDestroy', () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.spyOn(
       service as unknown as {
         closeLaunchDarklyClient: () => void;
@@ -127,7 +126,6 @@ describe('LaunchDarklyService', () => {
   });
 
   it('should initialize LaunchDarkly flags when ldClient is not defined', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.spyOn(
       service as unknown as {
         setLaunchDarklyFlags: () => void;
@@ -150,7 +148,6 @@ describe('LaunchDarklyService', () => {
     service.initializeLaunchDarklyClient();
 
     vi.spyOn(service['ldClient'], 'waitForInitialization').mockReturnValue(Promise.resolve());
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.spyOn(
       service as unknown as {
         setLaunchDarklyFlags: () => void;
