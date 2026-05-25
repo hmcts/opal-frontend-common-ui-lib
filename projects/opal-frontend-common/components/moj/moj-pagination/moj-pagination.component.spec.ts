@@ -80,6 +80,14 @@ describe('MojPaginationComponent', () => {
     expect(mockEvent.preventDefault).toHaveBeenCalled();
   });
 
+  it('should emit changePage when no event is provided', () => {
+    vi.spyOn(component.changePage, 'emit');
+
+    component.onPageChanged(undefined as unknown as Event, 3);
+
+    expect(component.changePage.emit).toHaveBeenCalledWith(3);
+  });
+
   it('should recalculate pages when inputs change', () => {
     const componentWithPrivates = component as unknown as {
       calculatePages: () => void;

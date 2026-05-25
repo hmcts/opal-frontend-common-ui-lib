@@ -94,6 +94,13 @@ describe('MojPrimaryNavigationComponent', () => {
     expect(component.emittedFragments).toEqual(['accounts']);
   });
 
+  it('should ignore empty fragment updates in fragment mode', () => {
+    fragmentSubject.next(null);
+    fixture.detectChanges();
+
+    expect(component.emittedFragments).toEqual([]);
+  });
+
   it('should not emit fragment updates in path-driven mode', () => {
     const pathFixture = TestBed.createComponent(TestHostComponent);
     const pathComponent = pathFixture.componentInstance;
@@ -176,5 +183,24 @@ describe('MojPrimaryNavigationComponent', () => {
     pathFixture.detectChanges();
 
     expect(pathComponent.emittedFragments).toEqual(['individuals']);
+  });
+
+  it('should not emit current snapshot fragment when fragment mode is re-enabled without a fragment', () => {
+    const pathFixture = TestBed.createComponent(TestHostComponent);
+    const pathComponent = pathFixture.componentInstance;
+    pathComponent.useFragmentNavigation = false;
+    routeSnapshotFragment = null;
+    pathFixture.detectChanges();
+
+    const primaryNavigationDebugElement = pathFixture.debugElement.query(By.directive(MojPrimaryNavigationComponent));
+    const primaryNavigationComponent = primaryNavigationDebugElement.componentInstance as MojPrimaryNavigationComponent;
+
+    primaryNavigationComponent.useFragmentNavigation = true;
+    primaryNavigationComponent.ngOnChanges({
+      useFragmentNavigation: new SimpleChange(false, true, false),
+    });
+    pathFixture.detectChanges();
+
+    expect(pathComponent.emittedFragments).toEqual([]);
   });
 });

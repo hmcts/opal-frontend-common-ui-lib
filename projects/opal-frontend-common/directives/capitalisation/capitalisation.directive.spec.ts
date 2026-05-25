@@ -61,6 +61,16 @@ describe('CapitalisationDirective', () => {
     expect(upperCaseAllLetters).not.toHaveBeenCalled();
     expect(testComponent.control.value).toBe('');
   });
+
+  it('should not update the control when the value is already uppercase', () => {
+    const setValueSpy = vi.spyOn(testComponent.control, 'setValue');
+
+    testComponent.control.setValue('TEST');
+
+    expect(upperCaseAllLetters).toHaveBeenCalledWith('TEST');
+    expect(setValueSpy).toHaveBeenCalledTimes(1);
+    expect(testComponent.control.value).toBe('TEST');
+  });
 });
 
 describe('CapitalisationDirective when used without form control binding', () => {

@@ -521,6 +521,18 @@ describe('AbstractFormAliasBaseComponent', () => {
     expect(component.aliasControls.length).toBe(1);
   });
 
+  it('should leave alias controls unchanged when there are no aliases to set up', () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    component.aliasControls = [];
+
+    component['setupAliasFormControls']([], 'aliases');
+
+    expect(component.aliasControls).toEqual([]);
+  });
+
   it('should unsubscribe from addAliasListener on ngOnDestroy', () => {
     if (!component) {
       throw new Error('component returned null');

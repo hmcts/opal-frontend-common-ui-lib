@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
 import { AbstractFormBaseComponent } from './abstract-form-base.component';
 import { FormArray, FormControl, FormGroup, FormRecord, ValidatorFn, Validators } from '@angular/forms';
 import { IAbstractFormBaseFieldError } from './interfaces/abstract-form-base-field-error.interface';
@@ -35,6 +36,12 @@ class TestAbstractFormBaseComponent extends AbstractFormBaseComponent {
   }
 }
 
+@Component({
+  selector: 'opal-lib-test-abstract-form-base-without-form',
+  template: '',
+})
+class TestAbstractFormBaseWithoutFormComponent extends AbstractFormBaseComponent {}
+
 describe('AbstractFormBaseComponent', () => {
   beforeAll(() => {
     if (!HTMLElement.prototype.scrollIntoView) {
@@ -52,7 +59,7 @@ describe('AbstractFormBaseComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestAbstractFormBaseComponent],
+      imports: [TestAbstractFormBaseComponent, TestAbstractFormBaseWithoutFormComponent],
       providers: [
         {
           provide: ActivatedRoute,
@@ -1610,6 +1617,72 @@ describe('AbstractFormBaseComponent', () => {
     expect(nestedInput.focus).toHaveBeenCalled();
 
     document.body.removeChild(fieldElement);
+  });
+
+  it('should ignore setInputValue when the control path does not exist', () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    expect(() => {
+      if (!component) {
+        throw new Error('component returned null');
+      }
+      component['setInputValue']('Test', 'missingControl');
+    }).not.toThrow();
+    expect(component.form.get('missingControl')).toBeNull();
+  });
+
+  it('should keep a single high priority date input error unchanged', () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    component.formErrors = [{ fieldId: 'dayOfMonth', message: 'Enter a day', priority: 1, type: 'required' }];
+
+    expect(component['handleDateInputFormErrors']()).toEqual([
+      { fieldId: 'dayOfMonth', message: 'Enter a day', priority: 1, type: 'required' },
+    ]);
+  });
+
+  it('should remove a control without trying to clear missing control errors', () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    component.form.addControl('temporary', new FormControl(null));
+    component.formControlErrorMessages = {};
+
+    component['removeControl']('temporary');
+
+    expect(component.form.get('temporary')).toBeNull();
+    expect(component.formControlErrorMessages).toEqual({});
+  });
+
+  it('should not require a form during ngOnInit', () => {
+    const noFormFixture = TestBed.createComponent(TestAbstractFormBaseWithoutFormComponent);
+
+    expect(() => noFormFixture.detectChanges()).not.toThrow();
+  });
+
+  it('should skip focusing the error summary when it is not in the document', () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    component.formControlErrorMessages = {};
+    component.formErrorSummaryMessage = [];
+    component.formErrors = [];
+    component['fieldErrors'] = {
+      court: {
+        required: { message: 'Select a court', priority: 1 },
+      },
+    };
+    const scrollToTopSpy = vi.spyOn(component['utilsService'], 'scrollToTop');
+
+    component.handleFormSubmit({ submitter: null } as unknown as SubmitEvent);
+
+    expect(scrollToTopSpy).not.toHaveBeenCalled();
   });
 
   // it('should not throw an error if no matching elements are found', () => {

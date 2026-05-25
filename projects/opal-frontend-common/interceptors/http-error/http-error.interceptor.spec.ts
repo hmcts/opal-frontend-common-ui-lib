@@ -10,6 +10,7 @@ import { GENERIC_HTTP_ERROR_MESSAGE } from './constants/http-error-message.const
 import { GENERIC_HTTP_ERROR_TITLE } from './constants/http-error-title.constant';
 import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constants';
 import { ERROR_RESPONSE } from './constants/http-error-message-response.constant';
+import { AppInsightsService } from '@hmcts/opal-frontend-common/services/app-insights-service';
 
 describe('httpErrorInterceptor', () => {
   let globalStore: GlobalStoreType;
@@ -329,7 +330,7 @@ describe('httpErrorInterceptor', () => {
   });
 
   it('should use status from error object if HTTP status is missing', () => {
-    const errorResponse = new HttpErrorResponse({
+    const errorResponse = {
       error: {
         type: 'https://hmcts.gov.uk/problems/concurrency-conflict',
         title: 'Concurrency Conflict',
@@ -338,7 +339,7 @@ describe('httpErrorInterceptor', () => {
         operation_id: 'OP-409',
         retriable: false,
       },
-    });
+    };
     const request = new HttpRequest('POST', '/test', {});
     const next: HttpHandlerFn = () => throwError(() => errorResponse);
 
@@ -557,5 +558,47 @@ describe('httpErrorInterceptor', () => {
         expect(errorSignal.error).toBe(true);
       },
     });
+  });
+
+  it('should skip browser-specific error handling when globalThis is unavailable', () => {
+    const errorResponse = new HttpErrorResponse({
+      status: 500,
+      error: {
+        title: 'Server Error',
+        detail: 'Server failed',
+        retriable: true,
+      },
+    });
+    const request = new HttpRequest('GET', '/test');
+    const next: HttpHandlerFn = () => throwError(() => errorResponse);
+    const appInsightsService = TestBed.inject(AppInsightsService);
+    const logExceptionSpy = vi.spyOn(appInsightsService, 'logException');
+    const result$ = interceptor(request, next);
+    const root = globalThis;
+    const originalGlobalThisDescriptor = Object.getOwnPropertyDescriptor(root, 'globalThis');
+    let capturedError: unknown;
+    let capturedBannerError: ReturnType<GlobalStoreType['bannerError']> | undefined;
+
+    Object.defineProperty(root, 'globalThis', {
+      configurable: true,
+      value: undefined,
+    });
+
+    try {
+      result$.subscribe({
+        error: (error) => {
+          capturedError = error;
+          capturedBannerError = globalStore.bannerError();
+        },
+      });
+    } finally {
+      if (originalGlobalThisDescriptor) {
+        Object.defineProperty(root, 'globalThis', originalGlobalThisDescriptor);
+      }
+    }
+
+    expect(capturedError).toBe(errorResponse);
+    expect(capturedBannerError).toEqual(GLOBAL_ERROR_STATE);
+    expect(logExceptionSpy).toHaveBeenCalledWith(errorResponse);
   });
 });

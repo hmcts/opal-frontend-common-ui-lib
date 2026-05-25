@@ -54,6 +54,15 @@ describe('AppInsightsService', () => {
     expect(mockEnvelope.tags).toEqual({ 'ai.cloud.role': 'opal-frontend' });
   });
 
+  it('should leave telemetry tags unchanged when Application Insights is disabled', () => {
+    globalStore.setAppInsightsConfig({ ...TRANSFER_STATE_APP_INSIGHTS_CONFIG_MOCK, enabled: false });
+    const mockEnvelope: ITelemetryItem = { name: 'Test Event', tags: {} };
+
+    service['telemetryInitializer'](mockEnvelope);
+
+    expect(mockEnvelope.tags).toEqual({});
+  });
+
   it('should track a page view', async () => {
     const pageName = 'Test Page';
     const pageUrl = '/test-url';

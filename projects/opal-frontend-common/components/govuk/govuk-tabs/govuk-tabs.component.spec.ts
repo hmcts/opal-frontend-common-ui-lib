@@ -85,6 +85,15 @@ describe('GovukTabsComponent', () => {
     expect(emitSpy).toHaveBeenCalledWith('companies');
   });
 
+  it('should not emit activeTabFragmentChange when fragment is missing', () => {
+    const tabsComponent = fixture?.debugElement.children[0].componentInstance as GovukTabsComponent;
+    const emitSpy = vi.spyOn(tabsComponent.activeTabFragmentChange, 'emit');
+
+    fragment$.next(null);
+
+    expect(emitSpy).not.toHaveBeenCalled();
+  });
+
   it('should apply the govuk-frontend-supported class on the root element', () => {
     if (!fixture) {
       throw new Error('fixture returned null');

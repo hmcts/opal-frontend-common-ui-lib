@@ -196,6 +196,39 @@ describe('AlphagovAccessibleAutocompleteComponent', () => {
     (globalThis as any).MutationObserver = originalMutationObserver;
   });
 
+  it('should return early when observing describedby and the input is missing', () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    component.autocompleteContainer.nativeElement.innerHTML = '';
+
+    expect(() => {
+      if (!component) {
+        throw new Error('component returned null');
+      }
+      component['observeDescribedBy']();
+    }).not.toThrow();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect((component as any).describedByObserver).toBeNull();
+  });
+
+  it('should observe describedby when the input is present', () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    const input = document.createElement('input');
+    input.id = component.autoCompleteId;
+    component.autocompleteContainer.nativeElement.innerHTML = '';
+    component.autocompleteContainer.nativeElement.appendChild(input);
+
+    component['observeDescribedBy']();
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect((component as any).describedByObserver).not.toBeNull();
+  });
+
   it('should observe and apply describedby when the input is rendered later', () => {
     if (!component) {
       throw new Error('component returned null');
@@ -237,6 +270,45 @@ describe('AlphagovAccessibleAutocompleteComponent', () => {
 
     const input = component.autocompleteContainer.nativeElement.querySelector(`#${autoCompleteId}`) as HTMLInputElement;
     expect(input.getAttribute('aria-describedby')).toEqual(`${component.inputId}-hint`);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).MutationObserver = originalMutationObserver;
+  });
+
+  it('should keep observing when mutations occur before the input is rendered', () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const originalMutationObserver = (globalThis as any).MutationObserver;
+    const disconnectSpy = vi.fn();
+
+    class FakeMutationObserver {
+      private readonly callback: MutationCallback;
+
+      constructor(callback: MutationCallback) {
+        this.callback = callback;
+      }
+
+      observe(): void {
+        this.callback([], this as unknown as MutationObserver);
+      }
+
+      disconnect(): void {
+        disconnectSpy();
+      }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).MutationObserver = FakeMutationObserver;
+
+    component.autocompleteContainer.nativeElement.innerHTML = '';
+    component['waitForInputAndApply']();
+
+    expect(disconnectSpy).not.toHaveBeenCalled();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect((component as any).describedByObserver).toBeNull();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (globalThis as any).MutationObserver = originalMutationObserver;
@@ -327,6 +399,52 @@ describe('AlphagovAccessibleAutocompleteComponent', () => {
     expect(component['_control'].dirty).not.toBe(true);
 
     expect(component['_control'].valid).not.toBe(true);
+    expect(component['changeDetector'].detectChanges).toHaveBeenCalled();
+  });
+
+  it('should clear the control when a selected name does not match an item', () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    vi.spyOn(component['changeDetector'], 'detectChanges');
+    component['_control'].setValue(ALPHAGOV_ACCESSIBLE_AUTOCOMPLETE_ITEMS_MOCK[0].value);
+
+    component['handleOnConfirm']('missing item');
+
+    expect(component['_control'].value).toBeNull();
+    expect(component['_control'].dirty).toBe(true);
+    expect(component['changeDetector'].detectChanges).toHaveBeenCalled();
+  });
+
+  it('should keep the control pristine when confirming the already selected item', () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    const selectedItem = ALPHAGOV_ACCESSIBLE_AUTOCOMPLETE_ITEMS_MOCK[0];
+    vi.spyOn(component['changeDetector'], 'detectChanges');
+    component['_control'].setValue(selectedItem.value);
+    component['_control'].markAsPristine();
+
+    component['handleOnConfirm'](selectedItem.name);
+
+    expect(component['_control'].value).toBe(selectedItem.value);
+    expect(component['_control'].touched).toBe(true);
+    expect(component['_control'].pristine).toBe(true);
+    expect(component['changeDetector'].detectChanges).toHaveBeenCalled();
+  });
+
+  it('should select an item after skipping earlier non-matching autocomplete items', () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    vi.spyOn(component['changeDetector'], 'detectChanges');
+
+    component['handleOnConfirm']('Germany');
+
+    expect(component['_control'].value).toBe('Germany');
     expect(component['changeDetector'].detectChanges).toHaveBeenCalled();
   });
 
