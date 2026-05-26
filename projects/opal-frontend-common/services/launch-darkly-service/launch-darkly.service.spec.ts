@@ -56,6 +56,15 @@ describe('LaunchDarklyService', () => {
     expect(service['ldClient']).toBeDefined();
   });
 
+  it('should not recreate the LaunchDarkly client if it has already been initialized', () => {
+    service.initializeLaunchDarklyClient();
+    const ldClient = service['ldClient'];
+
+    service.initializeLaunchDarklyClient();
+
+    expect(service['ldClient']).toBe(ldClient);
+  });
+
   it('should not initialize LaunchDarkly client if no client id', () => {
     globalStore.setLaunchDarklyConfig({
       enabled: true,
@@ -106,7 +115,6 @@ describe('LaunchDarklyService', () => {
   });
 
   it('should call closeLaunchDarklyClient on ngOnDestroy', () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.spyOn(
       service as unknown as {
         closeLaunchDarklyClient: () => void;
@@ -118,7 +126,6 @@ describe('LaunchDarklyService', () => {
   });
 
   it('should initialize LaunchDarkly flags when ldClient is not defined', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.spyOn(
       service as unknown as {
         setLaunchDarklyFlags: () => void;
@@ -141,7 +148,6 @@ describe('LaunchDarklyService', () => {
     service.initializeLaunchDarklyClient();
 
     vi.spyOn(service['ldClient'], 'waitForInitialization').mockReturnValue(Promise.resolve());
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     vi.spyOn(
       service as unknown as {
         setLaunchDarklyFlags: () => void;

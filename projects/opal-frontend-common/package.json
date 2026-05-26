@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.77",
+  "version": "0.0.80",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -381,6 +381,9 @@
     },
     "./guards/can-deactivate/types": {
       "import": "./fesm2022/hmcts-opal-frontend-common-guards-can-deactivate-types.mjs"
+    },
+    "./guards/feature-flag": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-guards-feature-flag.mjs"
     },
     "./guards/has-flow-state": {
       "import": "./fesm2022/hmcts-opal-frontend-common-guards-has-flow-state.mjs"

@@ -7,4 +7,5 @@ export const TRANSFER_STATE_MOCK: ITransferStateServerState = {
   ssoEnabled: true,
   appInsightsConfig: TRANSFER_STATE_APP_INSIGHTS_CONFIG_MOCK,
   userStateCacheExpirationMilliseconds: 1800000,
+  userStateDomain: 'configured-domain',
 };

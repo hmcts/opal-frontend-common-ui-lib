@@ -39,6 +39,13 @@ export class AppInitializerService {
   }
 
   /**
+   * Initializes the user-state domain used for permission lookup.
+   */
+  private initializeUserStateDomain(): void {
+    this.transferStateService.initializeUserStateDomain();
+  }
+
+  /**
    * Initializes the application.
    * This method calls the necessary initialization functions.
    */
@@ -47,6 +54,7 @@ export class AppInitializerService {
     this.initializeLaunchDarkly();
     this.initializeAppInsights();
     this.initializeUserStateCacheExpirationMilliseconds();
+    this.initializeUserStateDomain();
     await this.appInsightsService.initialize();
   }
 }

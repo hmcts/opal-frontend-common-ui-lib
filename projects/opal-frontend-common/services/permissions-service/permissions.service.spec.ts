@@ -16,8 +16,30 @@ describe('PermissionsService', () => {
   });
 
   it('should return unique permission IDs', () => {
-    service.getUniquePermissions(OPAL_USER_STATE_MOCK);
-    expect(service['storedUniquePermissionIds']).toEqual([54, 41]);
+    const unique = service.getUniquePermissions(OPAL_USER_STATE_MOCK);
+    expect(unique).toEqual([54, 41]);
+  });
+
+  it('should recalculate unique permission IDs for each user state', () => {
+    const firstUnique = service.getUniquePermissions(OPAL_USER_STATE_MOCK);
+    const secondUnique = service.getUniquePermissions({
+      ...OPAL_USER_STATE_MOCK,
+      business_unit_users: [
+        {
+          business_unit_user_id: 'L017KG',
+          business_unit_id: 17,
+          permissions: [
+            {
+              permission_id: 99,
+              permission_name: 'Updated permission',
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(firstUnique).toEqual([54, 41]);
+    expect(secondUnique).toEqual([99]);
   });
 
   it('should return permission access - hasBusinessUnitPermissionAccess', () => {

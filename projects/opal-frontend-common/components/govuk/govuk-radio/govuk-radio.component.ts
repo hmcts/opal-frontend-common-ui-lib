@@ -86,7 +86,6 @@ export class GovukRadioComponent implements OnDestroy {
         if (typeof Radios === 'function') {
           try {
             // scoped init for just this root
-            // eslint-disable-next-line no-new
             new Radios(rootRadios);
             return;
           } catch (e) {

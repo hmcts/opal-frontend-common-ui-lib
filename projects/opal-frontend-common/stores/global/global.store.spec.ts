@@ -30,6 +30,7 @@ describe('GlobalStore', () => {
     expect(store.launchDarklyConfig()).toEqual({} as ITransferStateLaunchDarklyConfig);
     expect(store.tokenExpiry()).toEqual({} as ISessionTokenExpiry);
     expect(store.userStateCacheExpirationMilliseconds()).toBe(1800000);
+    expect(store.userStateDomain()).toBeUndefined();
   });
 
   it('should update authenticated state', () => {
@@ -93,5 +94,10 @@ describe('GlobalStore', () => {
     const expirationMilliseconds = 45 * 60 * 1000; // Convert minutes to milliseconds
     store.setUserStateCacheExpirationMilliseconds(expirationMilliseconds);
     expect(store.userStateCacheExpirationMilliseconds()).toBe(expirationMilliseconds);
+  });
+
+  it('should update user state domain', () => {
+    store.setUserStateDomain('confiscation');
+    expect(store.userStateDomain()).toBe('confiscation');
   });
 });

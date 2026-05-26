@@ -75,6 +75,10 @@ export class LaunchDarklyService implements OnDestroy {
    * If a stored LaunchDarkly client ID exists, it initializes the client with the ID and anonymous mode enabled.
    */
   public initializeLaunchDarklyClient(): void {
+    if (this.ldClient) {
+      return;
+    }
+
     if (this.globalStore.launchDarklyConfig()) {
       const { enabled, clientId } = this.globalStore.launchDarklyConfig();
 
