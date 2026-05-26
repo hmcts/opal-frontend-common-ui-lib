@@ -224,6 +224,18 @@ describe('AbstractFormArrayBaseComponent', () => {
     expect(component['formControlErrorMessages']['field2_0']).toBeUndefined();
   });
 
+  it('should not remove form array control errors when the indexed control is missing', () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    component.formControlErrorMessages = { field_0: 'Existing error' };
+
+    component['removeFormArrayControlsErrors'](1, [], ['field']);
+
+    expect(component.formControlErrorMessages).toEqual({ field_0: 'Existing error' });
+  });
+
   it('should return null when control has no errors', () => {
     if (!component) {
       throw new Error('component returned null');

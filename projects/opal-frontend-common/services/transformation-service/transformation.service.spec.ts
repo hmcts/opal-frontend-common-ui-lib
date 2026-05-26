@@ -109,6 +109,22 @@ describe('TransformationService', () => {
       const result = service['applyTransformation'](value, transformItem);
       expect(result).toBe('14:30');
     });
+
+    it('should return the original time value when no time offset transform is enabled', () => {
+      const value = '14:30';
+      const transformItem: ITransformItem = {
+        ...TRANSFORM_ITEM_DEFAULTS,
+        key: 'timeKey',
+        transformType: 'time',
+        timeConfig: {
+          addOffset: false,
+          removeOffset: false,
+        },
+      };
+
+      const result = service['applyTransformation'](value, transformItem);
+      expect(result).toBe(value);
+    });
   });
 
   describe('transformObjectValues', () => {
@@ -167,6 +183,25 @@ describe('TransformationService', () => {
         },
       ];
       expect(service.transformObjectValues(input, transformItems)).toEqual({ nested: [{ dateKey: '1991-01-01' }] });
+    });
+
+    it('should leave primitive array values unchanged', () => {
+      const input = { nested: ['keep-me', { dateKey: '01/01/1991' }] };
+      const transformItems: ITransformItem[] = [
+        {
+          ...TRANSFORM_ITEM_DEFAULTS,
+          key: 'dateKey',
+          transformType: 'date',
+          dateConfig: {
+            inputFormat: 'dd/MM/yyyy',
+            outputFormat: 'yyyy-MM-dd',
+          },
+        },
+      ];
+
+      expect(service.transformObjectValues(input, transformItems)).toEqual({
+        nested: ['keep-me', { dateKey: '1991-01-01' }],
+      });
     });
   });
 

@@ -138,6 +138,23 @@ describe('LaunchDarklyService', () => {
     expect(service['setLaunchDarklyFlags']).not.toHaveBeenCalled();
   });
 
+  it('should not set LaunchDarkly flags when ldClient is not defined', () => {
+    vi.spyOn(service['globalStore'], 'setFeatureFlags');
+
+    service['setLaunchDarklyFlags']();
+
+    expect(service['globalStore'].setFeatureFlags).not.toHaveBeenCalled();
+  });
+
+  it('should not initialize LaunchDarkly client when config is missing', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    globalStore.setLaunchDarklyConfig(null as any);
+
+    service.initializeLaunchDarklyClient();
+
+    expect(service['ldClient']).not.toBeDefined();
+  });
+
   it('should initialize LaunchDarkly flags when ldClient is defined', async () => {
     globalStore.setLaunchDarklyConfig({
       enabled: true,

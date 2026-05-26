@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { MojSortableTableHeaderSortIconDirective } from './moj-sortable-table-header-sort-icon.directive';
 import { MOJ_SORTABLE_TABLE_HEADER_SORT_ICONS } from './constants/moj-sortable-table-header-sort-icons.constant';
 import { describe, beforeEach, it, expect } from 'vitest';
@@ -58,16 +59,18 @@ describe('MojSortableTableHeaderSortIconDirective', () => {
     component.sortDirection = 'ascending';
     fixture.detectChanges();
 
-    // At this point, one path (descending icon) is rendered
     expect(fixture.nativeElement.querySelectorAll('path').length).toBe(1);
 
-    // Create new component fixture to avoid ExpressionChanged error
-    const fixture2 = TestBed.createComponent(TestHostComponent);
-    const component2 = fixture2.componentInstance;
-    component2.sortDirection = 'none';
-    fixture2.detectChanges();
+    const svg = fixture.nativeElement.querySelector('svg') as SVGSVGElement;
+    svg.appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
 
-    const paths = fixture2.nativeElement.querySelectorAll('path');
+    const directive = fixture.debugElement
+      .query(By.directive(MojSortableTableHeaderSortIconDirective))
+      .injector.get(MojSortableTableHeaderSortIconDirective);
+    directive.sortDirection = 'none';
+    directive.ngOnChanges();
+
+    const paths = fixture.nativeElement.querySelectorAll('path');
     expect(paths.length).toBe(2);
     expect(paths[0].getAttribute('d')).toBe(MOJ_SORTABLE_TABLE_HEADER_SORT_ICONS.none[0]);
     expect(paths[1].getAttribute('d')).toBe(MOJ_SORTABLE_TABLE_HEADER_SORT_ICONS.none[1]);

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { FormControl } from '@angular/forms';
 import { describe, beforeEach, it, expect, vi } from 'vitest';
 import { GovukCheckboxesComponent } from '../../components/govuk/govuk-checkboxes/govuk-checkboxes.component';
@@ -98,6 +99,19 @@ describe('MojMultiSelectBodyDirective', () => {
 
     expect(hostElement.classList.contains('custom-class')).toBe(true);
     expect(input.getAttribute('aria-label')).toBe('Select defendant A');
+  });
+
+  it('should not sync input state when ariaLabel has not changed', () => {
+    fixture.detectChanges();
+    const directive = fixture.debugElement
+      .query(By.directive(MojMultiSelectBodyDirective))
+      .injector.get(MojMultiSelectBodyDirective);
+    const directiveWithPrivates = directive as unknown as { syncInputState: () => void };
+    const syncInputStateSpy = vi.spyOn(directiveWithPrivates, 'syncInputState');
+
+    directive.ngOnChanges({});
+
+    expect(syncInputStateSpy).not.toHaveBeenCalled();
   });
 });
 

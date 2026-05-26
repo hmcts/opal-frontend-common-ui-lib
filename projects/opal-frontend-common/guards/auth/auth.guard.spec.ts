@@ -94,10 +94,17 @@ describe('authGuard', () => {
   });
 
   describe('REDIRECT_TO_SSO', () => {
-    it('should trigger the redirect logic (coverage only)', () => {
-      const redirectToSso = TestBed.inject(REDIRECT_TO_SSO);
+    it('should trigger the default redirect logic', () => {
+      TestBed.resetTestingModule();
 
-      expect(() => redirectToSso()).not.toThrow();
+      const redirectToSso = TestBed.inject(REDIRECT_TO_SSO);
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+      try {
+        expect(() => redirectToSso()).not.toThrow();
+      } finally {
+        consoleErrorSpy.mockRestore();
+      }
     });
   });
 });

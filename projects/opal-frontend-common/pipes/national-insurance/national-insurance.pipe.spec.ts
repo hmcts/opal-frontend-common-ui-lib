@@ -1,5 +1,15 @@
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { describe, beforeEach, it, expect } from 'vitest';
 import { NationalInsurancePipe } from './national-insurance.pipe';
+
+@Component({
+  template: `{{ value | nationalInsurance }}`,
+  imports: [NationalInsurancePipe],
+})
+class TestHostComponent {
+  value = '';
+}
 
 describe('NationalInsurancePipe', () => {
   let pipe: NationalInsurancePipe;
@@ -28,5 +38,13 @@ describe('NationalInsurancePipe', () => {
     expect(pipe.transform('')).toBe('');
     expect(pipe.transform(null as unknown as string)).toBe('');
     expect(pipe.transform(undefined as unknown as string)).toBe('');
+  });
+
+  it('should render through an Angular template', () => {
+    const fixture: ComponentFixture<TestHostComponent> = TestBed.createComponent(TestHostComponent);
+    fixture.componentInstance.value = 'qq123456c';
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent.trim()).toBe('QQ 12 34 56 C');
   });
 });
