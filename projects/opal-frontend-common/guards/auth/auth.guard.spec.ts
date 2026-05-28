@@ -1,4 +1,6 @@
+import { DOCUMENT } from '@angular/common';
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { PLATFORM_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { CanActivateFn, Router, UrlSegment, UrlSegmentGroup, UrlTree } from '@angular/router';
 import { authGuard, REDIRECT_TO_SSO } from './auth.guard';
@@ -8,6 +10,7 @@ import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { runAuthGuardWithContext } from '../helpers/run-auth-guard-with-context';
 import { getGuardWithDummyUrl } from '../helpers/get-guard-with-dummy-url';
+import { SSO_ENDPOINTS } from '@hmcts/opal-frontend-common/services/auth-service/constants';
 
 describe('authGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) =>
@@ -94,17 +97,47 @@ describe('authGuard', () => {
   });
 
   describe('REDIRECT_TO_SSO', () => {
-    it('should trigger the default redirect logic', () => {
+    const setupDefaultRedirectToSso = ({
+      platformId,
+      document,
+    }: {
+      platformId: 'browser' | 'server';
+      document: { location: { href: string } };
+    }) => {
       TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        providers: [
+          { provide: PLATFORM_ID, useValue: platformId },
+          { provide: DOCUMENT, useValue: document },
+        ],
+      });
 
-      const redirectToSso = TestBed.inject(REDIRECT_TO_SSO);
-      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+      return TestBed.inject(REDIRECT_TO_SSO);
+    };
+
+    it('should set the injected document location href to the SSO login endpoint on the browser platform', () => {
+      const document = { location: { href: '' } };
+
+      const redirectToSso = setupDefaultRedirectToSso({ platformId: 'browser', document });
+
+      redirectToSso();
+
+      expect(document.location.href).toBe(SSO_ENDPOINTS.login);
+    });
+
+    it('should not throw or set the injected document location href on the server platform', () => {
+      const document = { location: { href: '' } };
+      vi.stubGlobal('location', undefined);
+
+      const redirectToSso = setupDefaultRedirectToSso({ platformId: 'server', document });
 
       try {
         expect(() => redirectToSso()).not.toThrow();
       } finally {
-        consoleErrorSpy.mockRestore();
+        vi.unstubAllGlobals();
       }
+
+      expect(document.location.href).toBe('');
     });
   });
 });

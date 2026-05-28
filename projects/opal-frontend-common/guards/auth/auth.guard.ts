@@ -1,5 +1,6 @@
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { CanActivateFn, Router } from '@angular/router';
-import { inject, InjectionToken } from '@angular/core';
+import { inject, InjectionToken, PLATFORM_ID } from '@angular/core';
 import { map, catchError, of } from 'rxjs';
 import { PAGES_ROUTING_PATHS } from '@hmcts/opal-frontend-common/pages/routing/constants';
 import { AuthService } from '@hmcts/opal-frontend-common/services/auth-service';
@@ -9,8 +10,15 @@ import { SSO_ENDPOINTS } from '@hmcts/opal-frontend-common/services/auth-service
 
 export const REDIRECT_TO_SSO = new InjectionToken<() => void>('redirectToSsoLogin', {
   providedIn: 'root',
-  factory: () => () => {
-    globalThis.location.href = SSO_ENDPOINTS.login;
+  factory: () => {
+    const document = inject(DOCUMENT);
+    const platformId = inject(PLATFORM_ID);
+
+    return () => {
+      if (isPlatformBrowser(platformId)) {
+        document.location.href = SSO_ENDPOINTS.login;
+      }
+    };
   },
 });
 
