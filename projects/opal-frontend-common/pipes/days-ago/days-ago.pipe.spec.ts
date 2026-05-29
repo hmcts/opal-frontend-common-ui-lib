@@ -1,6 +1,15 @@
-// New unit test file: daysAgo.pipe.spec.ts
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { describe, it, expect } from 'vitest';
 import { DaysAgoPipe } from './days-ago.pipe';
+
+@Component({
+  template: `{{ value | daysAgo }}`,
+  imports: [DaysAgoPipe],
+})
+class TestHostComponent {
+  value = 0;
+}
 
 describe('DaysAgoPipe', () => {
   const pipe = new DaysAgoPipe();
@@ -31,5 +40,13 @@ describe('DaysAgoPipe', () => {
 
   it('should return "Infinity days ago" for Infinity', () => {
     expect(pipe.transform(Number.POSITIVE_INFINITY)).toBe('Infinity days ago');
+  });
+
+  it('should render through an Angular template', () => {
+    const fixture: ComponentFixture<TestHostComponent> = TestBed.createComponent(TestHostComponent);
+    fixture.componentInstance.value = -2;
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent.trim()).toBe('In 2 days');
   });
 });

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { MojAlertPathDirective } from './moj-alert-path.directive';
 import { MojAlertType } from '../../constants/alert-types.constant';
 import { MOJ_ALERT_ICON_PATHS } from '../moj-alert-path-directive/constants/alert-icon-path.constant';
@@ -81,13 +82,16 @@ describe('MoJAlertPathDirective', () => {
 
     expect(fixture.nativeElement.querySelectorAll('path').length).toBe(1);
 
-    // Create new component fixture to avoid ExpressionChanged error
-    const fixture2 = TestBed.createComponent(TestHostComponent);
-    const component2 = fixture2.componentInstance;
-    component2.type = 'success';
-    fixture2.detectChanges();
+    const svg = fixture.nativeElement.querySelector('svg') as SVGSVGElement;
+    svg.appendChild(document.createElementNS('http://www.w3.org/2000/svg', 'path'));
 
-    const paths = fixture2.nativeElement.querySelectorAll('path');
+    const directive = fixture.debugElement
+      .query(By.directive(MojAlertPathDirective))
+      .injector.get(MojAlertPathDirective);
+    directive.type = 'success';
+    directive.ngOnChanges();
+
+    const paths = fixture.nativeElement.querySelectorAll('path');
     expect(paths.length).toBe(1);
     expect(paths[0].getAttribute('d')).toBe(MOJ_ALERT_ICON_PATHS.success);
   });

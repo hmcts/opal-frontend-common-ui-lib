@@ -13,7 +13,7 @@ export const GlobalStore = signalStore(
   withState(() => ({
     authenticated: false,
     bannerError: { ...GLOBAL_ERROR_STATE },
-    featureFlags: {} as LDFlagSet,
+    featureFlags: {},
     userState: {} as IOpalUserState,
     ssoEnabled: false,
     launchDarklyConfig: {} as ITransferStateLaunchDarklyConfig,

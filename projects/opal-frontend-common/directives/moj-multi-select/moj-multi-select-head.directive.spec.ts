@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { FormControl } from '@angular/forms';
 import { describe, beforeEach, it, expect, vi } from 'vitest';
 import { GovukCheckboxesComponent } from '../../components/govuk/govuk-checkboxes/govuk-checkboxes.component';
@@ -97,6 +98,39 @@ describe('MojMultiSelectHeadDirective', () => {
     const hostElement = fixture.nativeElement.querySelector('opal-lib-govuk-checkboxes-item') as HTMLElement;
 
     expect(hostElement.classList.contains('custom-class')).toBe(true);
+  });
+
+  it('should sync input state when only ariaLabel changes', () => {
+    fixture.detectChanges();
+    const directive = fixture.debugElement
+      .query(By.directive(MojMultiSelectHeadDirective))
+      .injector.get(MojMultiSelectHeadDirective);
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+
+    directive.ariaLabel = 'Select every row';
+    directive.ngOnChanges({
+      ariaLabel: {
+        currentValue: 'Select every row',
+        previousValue: 'Select all rows',
+        firstChange: false,
+        isFirstChange: () => false,
+      },
+    });
+
+    expect(input.getAttribute('aria-label')).toBe('Select every row');
+  });
+
+  it('should not sync input state when relevant inputs have not changed', () => {
+    fixture.detectChanges();
+    const directive = fixture.debugElement
+      .query(By.directive(MojMultiSelectHeadDirective))
+      .injector.get(MojMultiSelectHeadDirective);
+    const directiveWithPrivates = directive as unknown as { syncInputState: () => void };
+    const syncInputStateSpy = vi.spyOn(directiveWithPrivates, 'syncInputState');
+
+    directive.ngOnChanges({});
+
+    expect(syncInputStateSpy).not.toHaveBeenCalled();
   });
 });
 

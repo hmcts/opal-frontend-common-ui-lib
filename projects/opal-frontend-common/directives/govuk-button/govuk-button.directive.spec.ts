@@ -1,5 +1,26 @@
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { describe, beforeEach, it, expect } from 'vitest';
 import { GovukButtonDirective } from './govuk-button.directive';
+
+@Component({
+  template: `
+    <button
+      opalLibGovukButton
+      buttonId="host-button"
+      buttonClasses="extra-class"
+      type="button"
+      (buttonClickEvent)="clicked = $event"
+    >
+      Action
+    </button>
+  `,
+  imports: [GovukButtonDirective],
+})
+class TestHostComponent {
+  clicked = false;
+}
 
 describe('GovukButtonDirective', () => {
   let directive: GovukButtonDirective;
@@ -45,5 +66,24 @@ describe('GovukButtonDirective', () => {
       expect(value).toBe(true);
     });
     directive.handleButtonClick();
+  });
+
+  it('should bind host attributes and emit from a template', () => {
+    const fixture: ComponentFixture<TestHostComponent> = TestBed.createComponent(TestHostComponent);
+    fixture.detectChanges();
+
+    const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    expect(button.id).toBe('host-button');
+    expect(button.type).toBe('button');
+    expect(button.classList.contains('govuk-button')).toBe(true);
+    expect(button.classList.contains('extra-class')).toBe(true);
+    expect(button.getAttribute('data-module')).toBe('govuk-button');
+
+    const hostDirective = fixture.debugElement
+      .query(By.directive(GovukButtonDirective))
+      .injector.get(GovukButtonDirective);
+    hostDirective.handleButtonClick();
+
+    expect(fixture.componentInstance.clicked).toBe(true);
   });
 });
