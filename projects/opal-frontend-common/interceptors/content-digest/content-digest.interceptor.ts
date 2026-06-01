@@ -2,9 +2,9 @@ import { HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest, HttpResponse 
 import { from, of } from 'rxjs';
 import { map, mergeMap, switchMap } from 'rxjs/operators';
 import { WebCryptoLikeType } from './types/content-digest-web-crypto-like.type';
-import { CONTENT_DIGEST_SHA256_REGEX } from './constants/context-digest-sha256-regex.constant';
+import { CONTENT_DIGEST_SHA512_REGEX } from './constants/context-digest-sha512-regex.constant';
 
-async function sha256Base64(bytes: Uint8Array): Promise<string> {
+async function sha512Base64(bytes: Uint8Array): Promise<string> {
   // Use whichever Web Crypto implementation is available (browser or server-side).
   const cryptoApi = (globalThis as { crypto?: WebCryptoLikeType }).crypto;
   if (!cryptoApi?.subtle) {
@@ -12,7 +12,7 @@ async function sha256Base64(bytes: Uint8Array): Promise<string> {
   }
 
   const data = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
-  const hash = await cryptoApi.subtle.digest('SHA-256', data);
+  const hash = await cryptoApi.subtle.digest('SHA-512', data);
   const hashArray = new Uint8Array(hash);
   if (typeof btoa === 'function') {
     // Browser path: convert hash bytes to a base64 string.
@@ -75,7 +75,7 @@ function validateResponseContentDigest(event: HttpEvent<unknown>) {
     return of(event);
   }
 
-  const expectedDigest = extractSha256Digest(digestHeader);
+  const expectedDigest = extractSha512Digest(digestHeader);
   const normalizedBody = event.body ?? null;
   const bodyString = typeof normalizedBody === 'string' ? normalizedBody : JSON.stringify(normalizedBody);
   if (typeof bodyString !== 'string') {
@@ -83,7 +83,7 @@ function validateResponseContentDigest(event: HttpEvent<unknown>) {
   }
 
   const bytes = new TextEncoder().encode(bodyString);
-  return from(sha256Base64(bytes)).pipe(
+  return from(sha512Base64(bytes)).pipe(
     map((actualDigest) => {
       if (actualDigest !== expectedDigest) {
         throw new Error('Response content digest mismatch detected.');
@@ -93,23 +93,23 @@ function validateResponseContentDigest(event: HttpEvent<unknown>) {
   );
 }
 
-function extractSha256Digest(headerValue: string): string {
+function extractSha512Digest(headerValue: string): string {
   const candidates = headerValue
     .split(',')
     .map((value) => value.trim())
     .filter(Boolean);
   for (const candidate of candidates) {
-    const match = CONTENT_DIGEST_SHA256_REGEX.exec(candidate);
+    const match = CONTENT_DIGEST_SHA512_REGEX.exec(candidate);
     if (match) {
       return match[1];
     }
   }
 
-  throw new Error('Malformed Content-Digest header: missing sha-256 entry.');
+  throw new Error('Malformed Content-Digest header: missing sha-512 entry.');
 }
 
 export const contentDigestInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn) => {
-  const wantDigestHeader = { 'Want-Content-Digest': 'sha-256' };
+  const wantDigestHeader = { 'Want-Content-Digest': 'sha-512' };
   const responseValidator = mergeMap((event: HttpEvent<unknown>) => validateResponseContentDigest(event));
   if (!shouldDigestJsonRequest(req)) {
     // Always request digests from the server even when we skip hashing.
@@ -118,11 +118,11 @@ export const contentDigestInterceptor: HttpInterceptorFn = (req: HttpRequest<unk
 
   const bodyString = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
   const bytes = new TextEncoder().encode(bodyString);
-  return from(sha256Base64(bytes)).pipe(
+  return from(sha512Base64(bytes)).pipe(
     switchMap((digest) => {
       const setHeaders: Record<string, string> = {
-        'Content-Digest': `sha-256=:${digest}:`,
-        'Want-Content-Digest': 'sha-256',
+        'Content-Digest': `sha-512=:${digest}:`,
+        'Want-Content-Digest': 'sha-512',
       };
       if (!req.headers.has('Content-Type')) {
         setHeaders['Content-Type'] = 'application/json';

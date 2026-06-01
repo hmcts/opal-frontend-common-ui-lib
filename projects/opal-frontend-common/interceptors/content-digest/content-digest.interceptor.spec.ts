@@ -3,7 +3,7 @@ import { firstValueFrom, Observable, of } from 'rxjs';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { contentDigestInterceptor } from './content-digest.interceptor';
 
-async function computeSha256Digest(body: unknown): Promise<string> {
+async function computeSha512Digest(body: unknown): Promise<string> {
   const bodyString = typeof body === 'string' ? body : JSON.stringify(body);
   if (typeof bodyString !== 'string') {
     throw new TypeError('Tests require serializable JSON input.');
@@ -16,7 +16,7 @@ async function computeSha256Digest(body: unknown): Promise<string> {
     throw new Error('Web Crypto API is not available during tests.');
   }
 
-  const digest = await cryptoApi.subtle.digest('SHA-256', bytes);
+  const digest = await cryptoApi.subtle.digest('SHA-512', bytes);
   const digestBytes = new Uint8Array(digest);
 
   if (typeof btoa === 'function') {
@@ -47,14 +47,14 @@ function callInterceptor(
 describe('contentDigestInterceptor (requests)', () => {
   it('hashes JSON object bodies and sets digest headers', async () => {
     const body = { message: 'opal' };
-    const expectedDigest = await computeSha256Digest(body);
+    const expectedDigest = await computeSha512Digest(body);
     const response = new HttpResponse({ body: null });
 
     await firstValueFrom(
       callInterceptor(new HttpRequest('POST', '/test', body), (outReq) => {
         expect(outReq.body).toBe(JSON.stringify(body));
-        expect(outReq.headers.get('Content-Digest')).toBe(`sha-256=:${expectedDigest}:`);
-        expect(outReq.headers.get('Want-Content-Digest')).toBe('sha-256');
+        expect(outReq.headers.get('Content-Digest')).toBe(`sha-512=:${expectedDigest}:`);
+        expect(outReq.headers.get('Want-Content-Digest')).toBe('sha-512');
         expect(outReq.headers.get('Content-Type')).toBe('application/json');
         return of(response);
       }),
@@ -63,7 +63,7 @@ describe('contentDigestInterceptor (requests)', () => {
 
   it('hashes JSON string bodies when the content type is declared', async () => {
     const body = '{"raw":true}';
-    const expectedDigest = await computeSha256Digest(body);
+    const expectedDigest = await computeSha512Digest(body);
     const request = new HttpRequest('PUT', '/test', body, {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     });
@@ -72,7 +72,7 @@ describe('contentDigestInterceptor (requests)', () => {
     await firstValueFrom(
       callInterceptor(request, (outReq) => {
         expect(outReq.body).toBe(body);
-        expect(outReq.headers.get('Content-Digest')).toBe(`sha-256=:${expectedDigest}:`);
+        expect(outReq.headers.get('Content-Digest')).toBe(`sha-512=:${expectedDigest}:`);
         expect(outReq.headers.get('Content-Type')).toBe('application/json');
         return of(response);
       }),
@@ -87,7 +87,7 @@ describe('contentDigestInterceptor (requests)', () => {
 
     const result = await firstValueFrom(
       callInterceptor(new HttpRequest('GET', '/test'), (outReq) => {
-        expect(outReq.headers.get('Want-Content-Digest')).toBe('sha-256');
+        expect(outReq.headers.get('Want-Content-Digest')).toBe('sha-512');
         expect(outReq.headers.has('Content-Digest')).toBe(false);
         expect(outReq.body == null).toBe(true);
         return of(response);
@@ -104,7 +104,7 @@ describe('contentDigestInterceptor (requests)', () => {
 
     await firstValueFrom(
       callInterceptor(new HttpRequest('POST', '/upload', payload), (outReq) => {
-        expect(outReq.headers.get('Want-Content-Digest')).toBe('sha-256');
+        expect(outReq.headers.get('Want-Content-Digest')).toBe('sha-512');
         expect(outReq.headers.has('Content-Digest')).toBe(false);
         expect(outReq.body).toBe(payload);
         return of(response);
@@ -125,12 +125,12 @@ describe('contentDigestInterceptor (response validation)', () => {
 
   it('passes through JSON responses when the digest matches', async () => {
     const body = { success: true };
-    const digest = await computeSha256Digest(body);
+    const digest = await computeSha512Digest(body);
     const response = new HttpResponse({
       body,
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Content-Digest': `sha-256=:${digest}:`,
+        'Content-Digest': `sha-512=:${digest}:`,
       }),
     });
     const initialRequest = new HttpRequest('POST', '/test', body);
@@ -141,12 +141,12 @@ describe('contentDigestInterceptor (response validation)', () => {
   });
 
   it('validates digest when the JSON body is undefined', async () => {
-    const digest = await computeSha256Digest(null);
+    const digest = await computeSha512Digest(null);
     const response = new HttpResponse({
       body: undefined,
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Content-Digest': `sha-256=:${digest}:`,
+        'Content-Digest': `sha-512=:${digest}:`,
       }),
     });
     const initialRequest = new HttpRequest('POST', '/test', {});
@@ -158,12 +158,12 @@ describe('contentDigestInterceptor (response validation)', () => {
 
   it('validates digest when the JSON body is already a string', async () => {
     const body = '{"raw":true}';
-    const digest = await computeSha256Digest(body);
+    const digest = await computeSha512Digest(body);
     const response = new HttpResponse({
       body,
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Content-Digest': `sha-256=:${digest}:`,
+        'Content-Digest': `sha-512=:${digest}:`,
       }),
     });
     const initialRequest = new HttpRequest('POST', '/test', {});
@@ -175,12 +175,12 @@ describe('contentDigestInterceptor (response validation)', () => {
 
   it('throws when the response digest does not match the payload', async () => {
     const body = { name: 'opal' };
-    const digest = await computeSha256Digest({ name: 'expected' });
+    const digest = await computeSha512Digest({ name: 'expected' });
     const response = new HttpResponse({
       body,
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Content-Digest': `sha-256=:${digest}:`,
+        'Content-Digest': `sha-512=:${digest}:`,
       }),
     });
     const initialRequest = new HttpRequest('POST', '/test', body);
@@ -196,13 +196,13 @@ describe('contentDigestInterceptor (response validation)', () => {
       body,
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Content-Digest': 'sha-256=abc',
+        'Content-Digest': 'sha-512=abc',
       }),
     });
     const initialRequest = new HttpRequest('POST', '/test', body);
 
     await expect(firstValueFrom(callInterceptor(initialRequest, () => of(response)))).rejects.toThrow(
-      'Malformed Content-Digest header: missing sha-256 entry.',
+      'Malformed Content-Digest header: missing sha-512 entry.',
     );
   });
 
@@ -227,7 +227,7 @@ describe('contentDigestInterceptor (response validation)', () => {
       body,
       headers: new HttpHeaders({
         'Content-Type': 'text/html',
-        'Content-Digest': 'sha-256=:not-checked:',
+        'Content-Digest': 'sha-512=:not-checked:',
       }),
     });
     const initialRequest = new HttpRequest('POST', '/test', body);
@@ -242,7 +242,7 @@ describe('contentDigestInterceptor (response validation)', () => {
       body: Symbol('unserializable') as unknown,
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Content-Digest': 'sha-256=:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=:',
+        'Content-Digest': 'sha-512=:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=:',
       }),
     });
     const initialRequest = new HttpRequest('POST', '/test', {});
@@ -344,7 +344,7 @@ describe('contentDigestInterceptor (environment fallbacks)', () => {
 
     await firstValueFrom(
       callInterceptor(request, (outReq) => {
-        expect(outReq.headers.get('Content-Digest')).toBe('sha-256=:buffer-digest:');
+        expect(outReq.headers.get('Content-Digest')).toBe('sha-512=:buffer-digest:');
         return of(
           new HttpResponse({
             body: null,
