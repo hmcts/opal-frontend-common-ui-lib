@@ -8354,12 +8354,12 @@ __metadata:
   linkType: hard
 
 "launchdarkly-js-client-sdk@npm:^3.5.0":
-  version: 3.9.2
-  resolution: "launchdarkly-js-client-sdk@npm:3.9.2"
+  version: 3.9.3
+  resolution: "launchdarkly-js-client-sdk@npm:3.9.3"
   dependencies:
     escape-string-regexp: "npm:^4.0.0"
     launchdarkly-js-sdk-common: "npm:5.8.1"
-  checksum: 10/324d39943bf44892d36fa7ef916ca56a353fee6a0670a50a509ec137ff3028abfa266e134ca55361cd5382246f77a43f14f138915a18b2d67af59d828f43828e
+  checksum: 10/62c31fabf23e6f86192aedc9a22eaf70654c8bc2e75497c3f3dc3b01119f83789d8669e6dc8bcda856eb31ee01ebbc07d61f64e6485f99585ad59e6d075c5500
   languageName: node
   linkType: hard
 
