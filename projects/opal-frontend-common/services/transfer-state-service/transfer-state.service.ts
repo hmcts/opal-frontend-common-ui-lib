@@ -87,4 +87,17 @@ export class TransferStateService {
 
     this.globalStore.setUserStateDomain(userStateDomain.trim());
   }
+
+  /**
+   * Initializes feature flag override config and applies release flags when override mode is enabled.
+   */
+  public initializeFeatureFlagConfig(): void {
+    const featureFlagConfig = this.storedServerTransferState?.featureFlagConfig;
+
+    this.globalStore.setFeatureFlagConfig(featureFlagConfig);
+
+    if (featureFlagConfig?.override) {
+      this.globalStore.setFeatureFlags(featureFlagConfig.releases);
+    }
+  }
 }

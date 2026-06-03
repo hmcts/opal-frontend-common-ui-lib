@@ -3,11 +3,13 @@ import { LDFlagSet } from 'launchdarkly-js-client-sdk';
 import {
   ITransferStateLaunchDarklyConfig,
   ITransferStateAppInsightsConfig,
+  ITransferStateFeatureFlagConfig,
 } from '@hmcts/opal-frontend-common/services/transfer-state-service/interfaces';
 import { ISessionTokenExpiry } from '@hmcts/opal-frontend-common/services/session-service/interfaces';
 import { IGlobalErrorState } from '@hmcts/opal-frontend-common/stores/global/interfaces';
 import { IOpalUserState } from '@hmcts/opal-frontend-common/services/opal-user-service/interfaces';
 import { GLOBAL_ERROR_STATE } from '@hmcts/opal-frontend-common/stores/global/constants';
+
 export const GlobalStore = signalStore(
   { providedIn: 'root' },
   withState(() => ({
@@ -21,6 +23,7 @@ export const GlobalStore = signalStore(
     tokenExpiry: {} as ISessionTokenExpiry,
     userStateCacheExpirationMilliseconds: 1800000,
     userStateDomain: undefined as string | undefined,
+    featureFlagConfig: {} as ITransferStateFeatureFlagConfig,
   })),
   withMethods((store) => ({
     setAuthenticated: (authenticated: boolean) => {
@@ -55,6 +58,9 @@ export const GlobalStore = signalStore(
     },
     setUserStateDomain: (domain: string) => {
       patchState(store, { userStateDomain: domain });
+    },
+    setFeatureFlagConfig: (config: ITransferStateFeatureFlagConfig) => {
+      patchState(store, { featureFlagConfig: config });
     },
   })),
 );

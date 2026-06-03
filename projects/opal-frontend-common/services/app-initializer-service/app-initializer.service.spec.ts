@@ -39,11 +39,18 @@ describe('AppInitializerService', () => {
     expect(service['transferStateService'].initializeUserStateDomain).toHaveBeenCalled();
   });
 
+  it('should initialize feature flag config', () => {
+    vi.spyOn(service['transferStateService'], 'initializeFeatureFlagConfig').mockImplementation(() => undefined);
+    service['initializeFeatureFlagConfig']();
+    expect(service['transferStateService'].initializeFeatureFlagConfig).toHaveBeenCalled();
+  });
+
   it('should initialize the SSO enabled and LaunchDarkly', async () => {
     vi.spyOn(service['transferStateService'], 'initializeLaunchDarklyConfig');
     vi.spyOn(service['transferStateService'], 'initializeSsoEnabled');
     vi.spyOn(service['transferStateService'], 'initializeUserStateDomain').mockImplementation(() => undefined);
     vi.spyOn(service['appInsightsService'], 'initialize').mockResolvedValue();
+    vi.spyOn(service['transferStateService'], 'initializeFeatureFlagConfig').mockImplementation(() => undefined);
 
     await service.initializeApp();
 
@@ -51,5 +58,6 @@ describe('AppInitializerService', () => {
     expect(service['transferStateService'].initializeSsoEnabled).toHaveBeenCalled();
     expect(service['transferStateService'].initializeUserStateDomain).toHaveBeenCalled();
     expect(service['appInsightsService'].initialize).toHaveBeenCalled();
+    expect(service['transferStateService'].initializeFeatureFlagConfig).toHaveBeenCalled();
   });
 });

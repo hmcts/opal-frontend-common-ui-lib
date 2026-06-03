@@ -2,7 +2,10 @@ import { TestBed } from '@angular/core/testing';
 import { GlobalStoreType } from './types/global-store.type';
 import { GlobalStore } from './global.store';
 import { ISessionTokenExpiry } from '@hmcts/opal-frontend-common/services/session-service/interfaces';
-import { ITransferStateLaunchDarklyConfig } from '@hmcts/opal-frontend-common/services/transfer-state-service/interfaces';
+import {
+  ITransferStateFeatureFlagConfig,
+  ITransferStateLaunchDarklyConfig,
+} from '@hmcts/opal-frontend-common/services/transfer-state-service/interfaces';
 import { SESSION_TOKEN_EXPIRY_MOCK } from '@hmcts/opal-frontend-common/services/session-service/mocks';
 import {
   TRANSFER_STATE_APP_INSIGHTS_CONFIG_MOCK,
@@ -31,6 +34,7 @@ describe('GlobalStore', () => {
     expect(store.tokenExpiry()).toEqual({} as ISessionTokenExpiry);
     expect(store.userStateCacheExpirationMilliseconds()).toBe(1800000);
     expect(store.userStateDomain()).toBeUndefined();
+    expect(store.featureFlagConfig()).toEqual({} as ITransferStateFeatureFlagConfig);
   });
 
   it('should update authenticated state', () => {
@@ -99,5 +103,18 @@ describe('GlobalStore', () => {
   it('should update user state domain', () => {
     store.setUserStateDomain('confiscation');
     expect(store.userStateDomain()).toBe('confiscation');
+  });
+
+  it('should update feature flag config', () => {
+    const config: ITransferStateFeatureFlagConfig = {
+      override: true,
+      releases: {
+        'release-1a': true,
+      },
+    };
+
+    store.setFeatureFlagConfig(config);
+
+    expect(store.featureFlagConfig()).toEqual(config);
   });
 });

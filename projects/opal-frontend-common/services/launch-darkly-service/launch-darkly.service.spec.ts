@@ -249,4 +249,50 @@ describe('LaunchDarklyService', () => {
 
     expect(service['globalStore'].setFeatureFlags).toHaveBeenCalledWith(expectedUpdatedFlags);
   });
+
+  it('should not initialize LaunchDarkly client when feature flag override is enabled', () => {
+    globalStore.setFeatureFlagConfig({
+      override: true,
+      releases: {
+        'release-1a': true,
+      },
+    });
+
+    service['initializeLaunchDarklyClient']();
+
+    expect(service['ldClient']).not.toBeDefined();
+  });
+
+  it('should not initialize LaunchDarkly flags when feature flag override is enabled', async () => {
+    globalStore.setFeatureFlagConfig({
+      override: true,
+      releases: {
+        'release-1a': true,
+      },
+    });
+    vi.spyOn(
+      service as unknown as {
+        setLaunchDarklyFlags: () => void;
+      },
+      'setLaunchDarklyFlags',
+    );
+
+    await service.initializeLaunchDarklyFlags();
+
+    expect(service['setLaunchDarklyFlags']).not.toHaveBeenCalled();
+  });
+
+  it('should not initialize LaunchDarkly change listener when feature flag override is enabled', () => {
+    globalStore.setFeatureFlagConfig({
+      override: true,
+      releases: {
+        'release-1a': true,
+      },
+    });
+    service.initializeLaunchDarklyClient();
+
+    expect(service['ldClient']).not.toBeDefined();
+
+    service.initializeLaunchDarklyChangeListener();
+  });
 });
