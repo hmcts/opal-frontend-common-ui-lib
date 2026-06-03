@@ -10,6 +10,14 @@ export class LaunchDarklyService implements OnDestroy {
   private ldClient!: LDClient;
 
   /**
+   * Checks if the feature flag override is enabled in the global store's feature flag configuration.
+   * @returns A boolean indicating whether the feature flag override is enabled or not.
+   */
+  private isFeatureFlagOverrideEnabled(): boolean {
+    return this.globalStore.featureFlagConfig()?.override === true;
+  }
+
+  /**
    * Sets the LaunchDarkly flags by updating the featureFlags in the state service.
    */
   private setLaunchDarklyFlags() {
@@ -45,6 +53,10 @@ export class LaunchDarklyService implements OnDestroy {
    * This method listens for changes in feature flags and updates the state accordingly.
    */
   public initializeLaunchDarklyChangeListener() {
+    if (this.isFeatureFlagOverrideEnabled()) {
+      return;
+    }
+
     if (this.ldClient && this.globalStore.launchDarklyConfig().stream) {
       this.ldClient.on('change', (flags: LDFlagChangeset) => {
         const updatedFlags = { ...this.globalStore.featureFlags(), ...this.formatChangeFlags(flags) };
@@ -60,6 +72,10 @@ export class LaunchDarklyService implements OnDestroy {
    * @returns A promise that resolves when the flags are set.
    */
   public async initializeLaunchDarklyFlags(): Promise<void> {
+    if (this.isFeatureFlagOverrideEnabled()) {
+      return;
+    }
+
     if (this.ldClient) {
       return this.ldClient
         .waitForInitialization(5)
@@ -75,6 +91,10 @@ export class LaunchDarklyService implements OnDestroy {
    * If a stored LaunchDarkly client ID exists, it initializes the client with the ID and anonymous mode enabled.
    */
   public initializeLaunchDarklyClient(): void {
+    if (this.isFeatureFlagOverrideEnabled()) {
+      return;
+    }
+
     if (this.ldClient) {
       return;
     }

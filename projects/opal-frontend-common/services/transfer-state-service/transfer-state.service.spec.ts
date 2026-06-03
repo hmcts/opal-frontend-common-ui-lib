@@ -145,4 +145,16 @@ describe('TransferStateService', () => {
 
     expect(globalStore.userStateDomain()).toBe('previous-domain');
   });
+
+  it('should initialize feature flag config', () => {
+    service.initializeFeatureFlagConfig();
+
+    expect(globalStore.featureFlagConfig()).toEqual(service['storedServerTransferState'].featureFlagConfig);
+  });
+
+  it('should initialize feature flags from release config when override is enabled', () => {
+    service.initializeFeatureFlagConfig();
+
+    expect(globalStore.featureFlags()).toEqual(service['storedServerTransferState'].featureFlagConfig.releases);
+  });
 });

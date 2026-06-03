@@ -46,6 +46,13 @@ export class AppInitializerService {
   }
 
   /**
+   * Initializes the feature flag override configuration.
+   */
+  private initializeFeatureFlagConfig(): void {
+    this.transferStateService.initializeFeatureFlagConfig();
+  }
+
+  /**
    * Initializes the application.
    * This method calls the necessary initialization functions.
    */
@@ -55,6 +62,7 @@ export class AppInitializerService {
     this.initializeAppInsights();
     this.initializeUserStateCacheExpirationMilliseconds();
     this.initializeUserStateDomain();
+    this.initializeFeatureFlagConfig();
     await this.appInsightsService.initialize();
   }
 }
