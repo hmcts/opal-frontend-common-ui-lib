@@ -56,11 +56,11 @@
     "jsdom": "^29.0.0",
     "ng-packagr": "^21.0.0",
     "typescript": "~6.0.0",
-    "typescript-eslint": "8.60.0",
+    "typescript-eslint": "8.60.1",
     "vitest": "^4.0.0"
   },
   "resolutions": {
     "http-proxy-middleware": "^4.0.0"
   },
-  "packageManager": "yarn@4.15.0"
+  "packageManager": "yarn@4.16.0"
 }
