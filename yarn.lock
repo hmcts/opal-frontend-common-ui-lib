@@ -9190,8 +9190,8 @@ __metadata:
   linkType: hard
 
 "ng-packagr@npm:^21.0.0":
-  version: 21.2.3
-  resolution: "ng-packagr@npm:21.2.3"
+  version: 21.2.5
+  resolution: "ng-packagr@npm:21.2.5"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@rollup/plugin-json": "npm:^6.1.0"
@@ -9228,7 +9228,7 @@ __metadata:
       optional: true
   bin:
     ng-packagr: src/cli/main.js
-  checksum: 10/a837afb4dc231e7cdfd3f5ff4f6d8349a02466d44b908c3b736ff7ce1760f3db6754e056f96f7fbeb843ec9beddedeeac641d5bc0af867b1b14ac93fe6d970c6
+  checksum: 10/30cfc1d0e371b586ced9d399d176a0f47613d1aeb1e89954d656f437ff362476912ffd265458afa0e107b9834e5c2c49c31690d5fbeb7272e3e0960bbb054152
   languageName: node
   linkType: hard
 
