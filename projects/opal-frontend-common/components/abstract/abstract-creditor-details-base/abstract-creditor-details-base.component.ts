@@ -77,18 +77,46 @@ export abstract class AbstractCreditorDetailsBaseComponent<THeader, TTab extends
     return typeof permission === 'number' && super.hasBusinessUnitPermission(permission, this.getBusinessUnitId());
   }
 
+  /**
+   * Looks up the numeric permission ID for the supplied permission key.
+   * @param permissionKey The application-specific permission key.
+   * @returns The permission ID, or undefined when the key is not mapped.
+   */
   protected abstract getPermission(permissionKey: string): number | undefined;
 
+  /**
+   * Compares a returned account version against the current account version state.
+   * @param version The version returned by a creditor details request.
+   */
   protected abstract compareVersion(version: string | null): void;
 
+  /**
+   * Gets the active account business unit ID used for permission checks.
+   * @returns The active account business unit ID.
+   */
   protected abstract getBusinessUnitId(): number;
 
+  /**
+   * Gets the account ID to use when refreshing the current creditor summary.
+   * @returns The account ID for the refresh request.
+   */
   protected abstract getRefreshAccountId(): number;
 
+  /**
+   * Updates the consuming account store's version mismatch flag.
+   * @param value Whether the current account data has a version mismatch.
+   */
   protected abstract setHasVersionMismatch(value: boolean): void;
 
+  /**
+   * Updates the consuming account store's success message.
+   * @param message The success message to store, or null to clear it.
+   */
   protected abstract setSuccessMessage(message: string | null): void;
 
+  /**
+   * Clears the consuming account store's success message.
+   */
   protected abstract clearSuccessMessage(): void;
 
   /**
