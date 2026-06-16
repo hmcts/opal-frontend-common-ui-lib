@@ -7,6 +7,7 @@ import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { AbstractCreditorDetailsBaseComponent } from './abstract-creditor-details-base.component';
 import { PermissionsService } from '@hmcts/opal-frontend-common/services/permissions-service';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
+import { ITransformItem } from '@hmcts/opal-frontend-common/services/transformation-service/interfaces';
 
 interface TestHeader {
   version: string | null;
@@ -22,6 +23,7 @@ const routeHeaderData: TestHeader = { version: '1', name: 'Route header' };
 const transformedRouteHeaderData: TestHeader = { version: '1', name: 'Transformed route header' };
 const refreshedHeaderData: TestHeader = { version: '2', name: 'Refreshed header' };
 const transformedRefreshedHeaderData: TestHeader = { version: '2', name: 'Transformed refreshed header' };
+const transformItemsConfig: ITransformItem[] = [];
 const latestBannerMessage = 'Latest account data loaded';
 const defaultActiveTab = 'at-a-glance';
 
@@ -32,25 +34,29 @@ const defaultActiveTab = 'at-a-glance';
 class TestAbstractCreditorDetailsBaseComponent extends AbstractCreditorDetailsBaseComponent<TestHeader, TestTabData> {
   protected override readonly headerDataRouteKey = 'testHeaderData';
   protected override readonly defaultActiveTab = defaultActiveTab;
+  protected override readonly transformItemsConfig = transformItemsConfig;
   protected override readonly latestBannerMessage = latestBannerMessage;
 
-  public readonly finesPermissions: Record<string, number> = {
+  public override readonly finesPermissions: Record<string, number> = {
     'account-maintenance': 101,
   };
 
-  public readonly clearSuccessMessageMock = vi.fn();
-  public readonly compareVersionMock = vi.fn();
-  public readonly getBusinessUnitIdMock = vi.fn(() => 77);
-  public readonly getRefreshAccountIdMock = vi.fn(() => 456);
-  public readonly setHasVersionMismatchMock = vi.fn();
-  public readonly setSuccessMessageMock = vi.fn();
+  public override readonly accountStore = {
+    account_id: vi.fn(() => 456),
+    business_unit_id: vi.fn(() => '77'),
+    clearSuccessMessage: vi.fn(),
+    compareVersion: vi.fn(),
+    setHasVersionMismatch: vi.fn(),
+    setSuccessMessage: vi.fn(),
+  };
+
   public readonly storeTransformCalls: Array<{ accountId: number; header: TestHeader }> = [];
   public readonly getHeaderDataMock = vi.fn((accountId: number) => {
     void accountId;
     return of(refreshedHeaderData);
   });
   public readonly setupTabDataStreamMock = vi.fn();
-  public readonly transformPayloadMock = vi.fn((payload: unknown): unknown => {
+  public readonly transformPayloadMock = vi.fn((payload: unknown, _transformItemsConfig: ITransformItem[]): unknown => {
     if (payload === routeHeaderData) {
       return transformedRouteHeaderData;
     }
@@ -74,36 +80,8 @@ class TestAbstractCreditorDetailsBaseComponent extends AbstractCreditorDetailsBa
     this.storeTransformCalls.push({ accountId, header });
   }
 
-  protected override getPermission(permissionKey: string): number | undefined {
-    return this.finesPermissions[permissionKey];
-  }
-
-  protected override compareVersion(version: string | null): void {
-    this.compareVersionMock(version);
-  }
-
-  protected override getBusinessUnitId(): number {
-    return this.getBusinessUnitIdMock();
-  }
-
-  protected override getRefreshAccountId(): number {
-    return this.getRefreshAccountIdMock();
-  }
-
-  protected override setHasVersionMismatch(value: boolean): void {
-    this.setHasVersionMismatchMock(value);
-  }
-
-  protected override setSuccessMessage(message: string | null): void {
-    this.setSuccessMessageMock(message);
-  }
-
-  protected override clearSuccessMessage(): void {
-    this.clearSuccessMessageMock();
-  }
-
-  protected override transformPayload<T>(payload: T): T {
-    return this.transformPayloadMock(payload) as T;
+  protected override transformPayload<T>(payload: T, transformItemsConfig: ITransformItem[]): T {
+    return this.transformPayloadMock(payload, transformItemsConfig) as T;
   }
 
   public callGetHeaderDataFromRoute(): void {
@@ -192,7 +170,7 @@ describe('AbstractCreditorDetailsBaseComponent', () => {
     expect(component.activeTab).toBe('account-tab');
     expect(component.storeTransformCalls).toEqual([{ accountId: 123, header: transformedRouteHeaderData }]);
     expect(component.setupTabDataStreamMock).toHaveBeenCalledTimes(1);
-    expect(component.transformPayloadMock).toHaveBeenCalledWith(routeHeaderData);
+    expect(component.transformPayloadMock).toHaveBeenCalledWith(routeHeaderData, transformItemsConfig);
   });
 
   it('should default the active tab to at-a-glance when the route has no fragment', () => {
@@ -219,8 +197,8 @@ describe('AbstractCreditorDetailsBaseComponent', () => {
       expect(result).toEqual(tabData);
     });
 
-    expect(component.transformPayloadMock).toHaveBeenCalledWith(tabData);
-    expect(component.compareVersionMock).toHaveBeenCalledWith(tabData.version);
+    expect(component.transformPayloadMock).toHaveBeenCalledWith(tabData, transformItemsConfig);
+    expect(component.accountStore.compareVersion).toHaveBeenCalledWith(tabData.version);
   });
 
   it('should delegate direct tab transforms to the supplied payload transformer', () => {
@@ -233,7 +211,7 @@ describe('AbstractCreditorDetailsBaseComponent', () => {
     const result = component.callTransformTabData(tabData);
 
     expect(result).toEqual(tabData);
-    expect(component.transformPayloadMock).toHaveBeenCalledWith(tabData);
+    expect(component.transformPayloadMock).toHaveBeenCalledWith(tabData, transformItemsConfig);
   });
 
   it('should refresh header data and set the latest banner message', () => {
@@ -243,10 +221,10 @@ describe('AbstractCreditorDetailsBaseComponent', () => {
 
     component.refreshPage();
 
-    expect(component.setHasVersionMismatchMock).toHaveBeenCalledWith(false);
+    expect(component.accountStore.setHasVersionMismatch).toHaveBeenCalledWith(false);
     expect(component.getHeaderDataMock).toHaveBeenCalledWith(456);
     expect(component.storeTransformCalls).toContainEqual({ accountId: 456, header: refreshedHeaderData });
-    expect(component.setSuccessMessageMock).toHaveBeenCalledWith(latestBannerMessage);
+    expect(component.accountStore.setSuccessMessage).toHaveBeenCalledWith(latestBannerMessage);
     expect(component.accountData).toEqual(transformedRefreshedHeaderData);
   });
 
@@ -281,7 +259,7 @@ describe('AbstractCreditorDetailsBaseComponent', () => {
 
     component.ngOnDestroy();
 
-    expect(component.clearSuccessMessageMock).toHaveBeenCalled();
-    expect(component.setHasVersionMismatchMock).toHaveBeenCalledWith(false);
+    expect(component.accountStore.clearSuccessMessage).toHaveBeenCalled();
+    expect(component.accountStore.setHasVersionMismatch).toHaveBeenCalledWith(false);
   });
 });

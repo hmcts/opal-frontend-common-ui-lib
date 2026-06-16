@@ -2,6 +2,16 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { AbstractAccountSummaryBaseComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-account-summary-base';
+import { ITransformItem } from '@hmcts/opal-frontend-common/services/transformation-service/interfaces';
+
+interface CreditorDetailsAccountStore {
+  account_id(): number | string | null | undefined;
+  business_unit_id(): number | string | null | undefined;
+  clearSuccessMessage(): void;
+  compareVersion(version: string | null): void;
+  setHasVersionMismatch(value: boolean): void;
+  setSuccessMessage(message: string | null): void;
+}
 
 @Component({
   template: '',
@@ -12,7 +22,11 @@ export abstract class AbstractCreditorDetailsBaseComponent<THeader, TTab extends
 {
   protected abstract readonly headerDataRouteKey: string;
   protected abstract readonly defaultActiveTab: string;
+  protected abstract readonly transformItemsConfig: ITransformItem[];
   protected abstract readonly latestBannerMessage: string;
+
+  public abstract readonly accountStore: CreditorDetailsAccountStore;
+  public abstract readonly finesPermissions: Record<string, number>;
 
   public accountId: number = Number(this.activatedRoute.snapshot.paramMap.get('accountId'));
 
@@ -22,7 +36,7 @@ export abstract class AbstractCreditorDetailsBaseComponent<THeader, TTab extends
    * @returns The tab data observable with the caller's concrete tab type preserved.
    */
   protected fetchTabDataTyped<T extends TTab>(serviceCall: Observable<T>): Observable<T> {
-    return this.fetchTabData(serviceCall, (version) => this.compareVersion(version)) as Observable<T>;
+    return this.fetchTabData(serviceCall, (version) => this.accountStore.compareVersion(version)) as Observable<T>;
   }
 
   /**
@@ -42,7 +56,7 @@ export abstract class AbstractCreditorDetailsBaseComponent<THeader, TTab extends
    * @returns The transformed creditor heading data for display.
    */
   protected override transformHeaderForView(header: THeader): THeader {
-    return this.transformPayload(header);
+    return this.transformPayload(header, this.transformItemsConfig);
   }
 
   /**
@@ -51,17 +65,17 @@ export abstract class AbstractCreditorDetailsBaseComponent<THeader, TTab extends
    * @returns The transformed tab data with the original tab type preserved.
    */
   protected override transformTabData<T extends TTab>(data: T): T {
-    return this.transformPayload(data);
+    return this.transformPayload(data, this.transformItemsConfig);
   }
 
   /**
    * Refreshes the current creditor summary page and updates store state after the latest header is loaded.
    */
   public override refreshPage(): void {
-    this.setHasVersionMismatch(false);
+    this.accountStore.setHasVersionMismatch(false);
 
-    super.refreshPage(this.getRefreshAccountId(), (header) => {
-      this.setSuccessMessage(this.latestBannerMessage);
+    super.refreshPage(Number(this.accountStore.account_id()), (header) => {
+      this.accountStore.setSuccessMessage(this.latestBannerMessage);
       this.accountData = header;
     });
   }
@@ -72,66 +86,28 @@ export abstract class AbstractCreditorDetailsBaseComponent<THeader, TTab extends
    * @returns True when the user has the permission for the account business unit.
    */
   public hasBusinessUnitPermissionKey(permissionKey: string): boolean {
-    const permission = this.getPermission(permissionKey);
+    const permission = this.finesPermissions[permissionKey];
 
-    return typeof permission === 'number' && super.hasBusinessUnitPermission(permission, this.getBusinessUnitId());
+    return (
+      typeof permission === 'number' &&
+      super.hasBusinessUnitPermission(permission, Number(this.accountStore.business_unit_id()!))
+    );
   }
-
-  /**
-   * Looks up the numeric permission ID for the supplied permission key.
-   * @param permissionKey The application-specific permission key.
-   * @returns The permission ID, or undefined when the key is not mapped.
-   */
-  protected abstract getPermission(permissionKey: string): number | undefined;
-
-  /**
-   * Compares a returned account version against the current account version state.
-   * @param version The version returned by a creditor details request.
-   */
-  protected abstract compareVersion(version: string | null): void;
-
-  /**
-   * Gets the active account business unit ID used for permission checks.
-   * @returns The active account business unit ID.
-   */
-  protected abstract getBusinessUnitId(): number;
-
-  /**
-   * Gets the account ID to use when refreshing the current creditor summary.
-   * @returns The account ID for the refresh request.
-   */
-  protected abstract getRefreshAccountId(): number;
-
-  /**
-   * Updates the consuming account store's version mismatch flag.
-   * @param value Whether the current account data has a version mismatch.
-   */
-  protected abstract setHasVersionMismatch(value: boolean): void;
-
-  /**
-   * Updates the consuming account store's success message.
-   * @param message The success message to store, or null to clear it.
-   */
-  protected abstract setSuccessMessage(message: string | null): void;
-
-  /**
-   * Clears the consuming account store's success message.
-   */
-  protected abstract clearSuccessMessage(): void;
 
   /**
    * Transforms payload data using the consuming application's transformation service and configuration.
    * @param payload The payload to transform.
+   * @param transformItemsConfig The consuming application's transform configuration.
    * @returns The transformed payload.
    */
-  protected abstract transformPayload<T>(payload: T): T;
+  protected abstract transformPayload<T>(payload: T, transformItemsConfig: ITransformItem[]): T;
 
   /**
    * Clears transient account summary store flags before the component is destroyed.
    */
   public override ngOnDestroy(): void {
-    this.clearSuccessMessage();
-    this.setHasVersionMismatch(false);
+    this.accountStore.clearSuccessMessage();
+    this.accountStore.setHasVersionMismatch(false);
     super.ngOnDestroy();
   }
 }
