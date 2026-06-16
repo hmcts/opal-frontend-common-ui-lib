@@ -20,6 +20,9 @@
       "@hmcts/opal-frontend-common/components/abstract/abstract-account-summary-base": [
         "./dist/opal-frontend-common/components/abstract/abstract-account-summary-base"
       ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-creditor-details-base": [
+        "./dist/opal-frontend-common/components/abstract/abstract-creditor-details-base"
+      ],
       "@hmcts/opal-frontend-common/components/abstract/abstract-form-alias-base": [
         "./dist/opal-frontend-common/components/abstract/abstract-form-alias-base"
       ],
