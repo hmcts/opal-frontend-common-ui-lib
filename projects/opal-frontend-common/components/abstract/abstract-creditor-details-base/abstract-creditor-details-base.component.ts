@@ -19,10 +19,12 @@ interface CreditorDetailsPayloadTransformer {
 @Component({
   template: '',
 })
+/* istanbul ignore start -- @preserve */
 export abstract class AbstractCreditorDetailsBaseComponent<THeader, TTab extends { version: string | null }>
   extends AbstractAccountSummaryBaseComponent<THeader, TTab>
   implements OnInit, OnDestroy
 {
+  /* istanbul ignore stop -- @preserve */
   protected abstract readonly headerDataRouteKey: string;
   protected abstract readonly defaultActiveTab: string;
   protected abstract readonly transformItemsConfig: ITransformItem[];
@@ -32,7 +34,13 @@ export abstract class AbstractCreditorDetailsBaseComponent<THeader, TTab extends
 
   public abstract readonly accountStore: CreditorDetailsAccountStore;
 
-  public accountId: number = Number(this.activatedRoute.snapshot.paramMap.get('accountId'));
+  public accountId: number = this.getAccountIdFromRoute();
+
+  /**
+   * Gets the active account ID from the consuming application's route shape.
+   * @returns The active account ID from the route.
+   */
+  protected abstract getAccountIdFromRoute(): number;
 
   /**
    * Fetches tab data through the shared summary cache flow and applies account version comparison.

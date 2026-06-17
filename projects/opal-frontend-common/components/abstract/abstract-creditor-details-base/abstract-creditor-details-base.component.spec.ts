@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, ActivatedRouteSnapshot, convertToParamMap, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { AbstractAccountSummaryBaseComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-account-summary-base';
 import { AbstractCreditorDetailsBaseComponent } from './abstract-creditor-details-base.component';
 import { PermissionsService } from '@hmcts/opal-frontend-common/services/permissions-service';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
@@ -75,6 +76,10 @@ class TestAbstractCreditorDetailsBaseComponent extends AbstractCreditorDetailsBa
     return payload;
   });
 
+  protected override getAccountIdFromRoute(): number {
+    return Number(this.activatedRoute.snapshot.paramMap.get('creditorAccountId'));
+  }
+
   protected override setupTabDataStream(): void {
     this.setupTabDataStreamMock();
   }
@@ -118,7 +123,7 @@ describe('AbstractCreditorDetailsBaseComponent', () => {
           testHeaderData: routeHeaderData,
         },
         fragment: 'account-tab',
-        paramMap: convertToParamMap({ accountId: '123' }),
+        paramMap: convertToParamMap({ creditorAccountId: '123' }),
       } as unknown as ActivatedRouteSnapshot,
     };
 
@@ -160,6 +165,18 @@ describe('AbstractCreditorDetailsBaseComponent', () => {
 
     expect(component).toBeTruthy();
     expect(component.accountId).toBe(123);
+  });
+
+  it('should extend the shared account summary base component', () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    expect(component).toBeInstanceOf(AbstractCreditorDetailsBaseComponent);
+    expect(component).toBeInstanceOf(AbstractAccountSummaryBaseComponent);
+    expect(Object.getPrototypeOf(AbstractCreditorDetailsBaseComponent.prototype)).toBe(
+      AbstractAccountSummaryBaseComponent.prototype,
+    );
   });
 
   it('should initialize header data, store state and active tab from route data', () => {
