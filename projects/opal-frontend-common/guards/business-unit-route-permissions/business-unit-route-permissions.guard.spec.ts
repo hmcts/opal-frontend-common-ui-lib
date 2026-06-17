@@ -20,7 +20,7 @@ import { OpalUserService } from '@hmcts/opal-frontend-common/services/opal-user-
 })
 class TestRouteComponent {}
 
-function createRoute(routePermissionId?: number[] | number, accessDeniedPath?: string): ActivatedRouteSnapshot {
+function createRoute(routePermissionId?: unknown, accessDeniedPath?: string): ActivatedRouteSnapshot {
   const route = new ActivatedRouteSnapshot();
   route.data = {
     ...(routePermissionId === undefined ? {} : { routePermissionId }),
@@ -136,6 +136,36 @@ describe('businessUnitRoutePermissionsGuard', () => {
     expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledWith(77, 123, userState.business_unit_users);
   });
 
+  it('should allow access when the route declares a single permission id', async () => {
+    const route = createRoute(77);
+
+    const result = await runGuard(route);
+
+    expect(result).toBe(true);
+    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledWith(77, 123, userState.business_unit_users);
+  });
+
+  it('should ignore invalid permission ids declared alongside valid route permissions', async () => {
+    const route = createRoute([77, 'invalid-permission-id', null]);
+
+    const result = await runGuard(route);
+
+    expect(result).toBe(true);
+    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledTimes(1);
+    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledWith(77, 123, userState.business_unit_users);
+  });
+
+  it('should allow access when any declared route permission exists in the resolved business unit', async () => {
+    hasBusinessUnitPermissionAccessMock.mockReturnValueOnce(false).mockReturnValueOnce(true);
+    const route = createRoute([55, 77]);
+
+    const result = await runGuard(route);
+
+    expect(result).toBe(true);
+    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledWith(55, 123, userState.business_unit_users);
+    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledWith(77, 123, userState.business_unit_users);
+  });
+
   it('should allow access when the business unit resolver returns an observable', async () => {
     resolveBusinessUnitIdMock.mockReturnValue(of(123));
     const route = createRoute([77]);
@@ -179,6 +209,28 @@ describe('businessUnitRoutePermissionsGuard', () => {
     expect(router.serializeUrl(result as UrlTree)).toBe('/custom-denied');
   });
 
+  it('should redirect when the resolver returns an invalid business unit id', async () => {
+    resolveBusinessUnitIdMock.mockResolvedValueOnce(0);
+    const route = createRoute([77], '/custom-denied');
+
+    const result = await runGuard(route);
+
+    expect(result).toBeInstanceOf(UrlTree);
+    expect(hasBusinessUnitPermissionAccessMock).not.toHaveBeenCalled();
+    expect(router.serializeUrl(result as UrlTree)).toBe('/custom-denied');
+  });
+
+  it('should redirect when the resolver returns a non-finite business unit id', async () => {
+    resolveBusinessUnitIdMock.mockResolvedValueOnce(Infinity);
+    const route = createRoute([77], '/custom-denied');
+
+    const result = await runGuard(route);
+
+    expect(result).toBeInstanceOf(UrlTree);
+    expect(hasBusinessUnitPermissionAccessMock).not.toHaveBeenCalled();
+    expect(router.serializeUrl(result as UrlTree)).toBe('/custom-denied');
+  });
+
   it('should redirect when the user has no business unit roles', async () => {
     getLoggedInUserStateMock.mockReturnValue(of({ business_unit_users: [] }));
     const route = createRoute([77]);
@@ -189,5 +241,30 @@ describe('businessUnitRoutePermissionsGuard', () => {
     expect(resolveBusinessUnitIdMock).not.toHaveBeenCalled();
     expect(hasBusinessUnitPermissionAccessMock).not.toHaveBeenCalled();
     expect(router.serializeUrl(result as UrlTree)).toBe('/access-denied');
+  });
+
+  it('should redirect when user state cannot be loaded', async () => {
+    getLoggedInUserStateMock.mockImplementationOnce(() => {
+      throw new Error('User state failed');
+    });
+    const route = createRoute([77], '/custom-denied');
+
+    const result = await runGuard(route);
+
+    expect(result).toBeInstanceOf(UrlTree);
+    expect(resolveBusinessUnitIdMock).not.toHaveBeenCalled();
+    expect(hasBusinessUnitPermissionAccessMock).not.toHaveBeenCalled();
+    expect(router.serializeUrl(result as UrlTree)).toBe('/custom-denied');
+  });
+
+  it('should redirect when the business unit resolver fails', async () => {
+    resolveBusinessUnitIdMock.mockRejectedValueOnce(new Error('Resolver failed'));
+    const route = createRoute([77], '/custom-denied');
+
+    const result = await runGuard(route);
+
+    expect(result).toBeInstanceOf(UrlTree);
+    expect(hasBusinessUnitPermissionAccessMock).not.toHaveBeenCalled();
+    expect(router.serializeUrl(result as UrlTree)).toBe('/custom-denied');
   });
 });
