@@ -327,6 +327,9 @@
       "@hmcts/opal-frontend-common/constants": ["./dist/opal-frontend-common/constants"],
       "@hmcts/opal-frontend-common/guards/account": ["./dist/opal-frontend-common/guards/account"],
       "@hmcts/opal-frontend-common/guards/auth": ["./dist/opal-frontend-common/guards/auth"],
+      "@hmcts/opal-frontend-common/guards/business-unit-route-permissions": [
+        "./dist/opal-frontend-common/guards/business-unit-route-permissions"
+      ],
       "@hmcts/opal-frontend-common/guards/can-deactivate": ["./dist/opal-frontend-common/guards/can-deactivate"],
       "@hmcts/opal-frontend-common/guards/can-deactivate/interfaces": [
         "./dist/opal-frontend-common/guards/can-deactivate/interfaces"

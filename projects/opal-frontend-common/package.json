@@ -373,6 +373,9 @@
     "./guards/account": {
       "import": "./fesm2022/hmcts-opal-frontend-common-guards-account.mjs"
     },
+    "./guards/business-unit-route-permissions": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-guards-business-unit-route-permissions.mjs"
+    },
     "./guards/can-deactivate": {
       "import": "./fesm2022/hmcts-opal-frontend-common-guards-can-deactivate.mjs"
     },
