@@ -200,7 +200,11 @@ describe('businessUnitRoutePermissionsGuard', () => {
 
   it('should redirect from the current route when a relative access denied path has no parent route', async () => {
     hasBusinessUnitPermissionAccessMock.mockReturnValue(false);
-    const route = createRoute([77], 'custom-denied');
+    const route = router.routerState.snapshot.root;
+    route.data = {
+      routePermissionId: [77],
+      accessDeniedPath: 'custom-denied',
+    };
 
     const result = await runGuard(route);
 
