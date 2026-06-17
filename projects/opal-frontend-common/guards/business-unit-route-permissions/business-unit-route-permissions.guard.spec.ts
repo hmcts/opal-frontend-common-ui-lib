@@ -198,6 +198,16 @@ describe('businessUnitRoutePermissionsGuard', () => {
     );
   });
 
+  it('should redirect from the current route when a relative access denied path has no parent route', async () => {
+    hasBusinessUnitPermissionAccessMock.mockReturnValue(false);
+    const route = createRoute([77], 'custom-denied');
+
+    const result = await runGuard(route);
+
+    expect(result).toBeInstanceOf(UrlTree);
+    expect(router.serializeUrl(result as UrlTree)).toBe('/custom-denied');
+  });
+
   it('should redirect when the resolver cannot determine the business unit', async () => {
     resolveBusinessUnitIdMock.mockResolvedValueOnce(null);
     const route = createRoute([77], '/custom-denied');
@@ -233,6 +243,18 @@ describe('businessUnitRoutePermissionsGuard', () => {
 
   it('should redirect when the user has no business unit roles', async () => {
     getLoggedInUserStateMock.mockReturnValue(of({ business_unit_users: [] }));
+    const route = createRoute([77]);
+
+    const result = await runGuard(route);
+
+    expect(result).toBeInstanceOf(UrlTree);
+    expect(resolveBusinessUnitIdMock).not.toHaveBeenCalled();
+    expect(hasBusinessUnitPermissionAccessMock).not.toHaveBeenCalled();
+    expect(router.serializeUrl(result as UrlTree)).toBe('/access-denied');
+  });
+
+  it('should redirect when the user state has no business unit users', async () => {
+    getLoggedInUserStateMock.mockReturnValue(of({}));
     const route = createRoute([77]);
 
     const result = await runGuard(route);
