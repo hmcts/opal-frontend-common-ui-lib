@@ -37,7 +37,13 @@ class TestAbstractCreditorDetailsBaseComponent extends AbstractCreditorDetailsBa
   protected override readonly transformItemsConfig = transformItemsConfig;
   protected override readonly latestBannerMessage = latestBannerMessage;
 
-  public override readonly finesPermissions: Record<string, number> = {
+  protected override readonly payloadTransformer = {
+    transformPayload: <T extends { [key: string]: any }>(payload: T, transformItemsConfig: ITransformItem[]): T => {
+      return this.transformPayloadMock(payload, transformItemsConfig) as T;
+    },
+  };
+
+  protected override readonly permissions: Record<string, number> = {
     'account-maintenance': 101,
   };
 
@@ -78,10 +84,6 @@ class TestAbstractCreditorDetailsBaseComponent extends AbstractCreditorDetailsBa
 
   protected override transformHeaderForStore(accountId: number, header: TestHeader): void {
     this.storeTransformCalls.push({ accountId, header });
-  }
-
-  protected override transformPayload<T>(payload: T, transformItemsConfig: ITransformItem[]): T {
-    return this.transformPayloadMock(payload, transformItemsConfig) as T;
   }
 
   public callGetHeaderDataFromRoute(): void {

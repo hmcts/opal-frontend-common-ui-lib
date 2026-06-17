@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-
 import { AbstractAccountSummaryBaseComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-account-summary-base';
 import { ITransformItem } from '@hmcts/opal-frontend-common/services/transformation-service/interfaces';
 
@@ -11,6 +10,10 @@ interface CreditorDetailsAccountStore {
   compareVersion(version: string | null): void;
   setHasVersionMismatch(value: boolean): void;
   setSuccessMessage(message: string | null): void;
+}
+
+interface CreditorDetailsPayloadTransformer {
+  transformPayload<T extends { [key: string]: any }>(payload: T, transformItemsConfig: ITransformItem[]): T;
 }
 
 @Component({
@@ -24,9 +27,10 @@ export abstract class AbstractCreditorDetailsBaseComponent<THeader, TTab extends
   protected abstract readonly defaultActiveTab: string;
   protected abstract readonly transformItemsConfig: ITransformItem[];
   protected abstract readonly latestBannerMessage: string;
+  protected abstract readonly permissions: Record<string, number>;
+  protected abstract readonly payloadTransformer: CreditorDetailsPayloadTransformer;
 
   public abstract readonly accountStore: CreditorDetailsAccountStore;
-  public abstract readonly finesPermissions: Record<string, number>;
 
   public accountId: number = Number(this.activatedRoute.snapshot.paramMap.get('accountId'));
 
@@ -56,7 +60,7 @@ export abstract class AbstractCreditorDetailsBaseComponent<THeader, TTab extends
    * @returns The transformed creditor heading data for display.
    */
   protected override transformHeaderForView(header: THeader): THeader {
-    return this.transformPayload(header, this.transformItemsConfig);
+    return this.transformPayload(header);
   }
 
   /**
@@ -65,7 +69,7 @@ export abstract class AbstractCreditorDetailsBaseComponent<THeader, TTab extends
    * @returns The transformed tab data with the original tab type preserved.
    */
   protected override transformTabData<T extends TTab>(data: T): T {
-    return this.transformPayload(data, this.transformItemsConfig);
+    return this.transformPayload(data);
   }
 
   /**
@@ -86,7 +90,7 @@ export abstract class AbstractCreditorDetailsBaseComponent<THeader, TTab extends
    * @returns True when the user has the permission for the account business unit.
    */
   public hasBusinessUnitPermissionKey(permissionKey: string): boolean {
-    const permission = this.finesPermissions[permissionKey];
+    const permission = this.permissions[permissionKey];
 
     return (
       typeof permission === 'number' &&
@@ -96,11 +100,13 @@ export abstract class AbstractCreditorDetailsBaseComponent<THeader, TTab extends
 
   /**
    * Transforms payload data using the consuming application's transformation service and configuration.
-   * @param payload The payload to transform.
-   * @param transformItemsConfig The consuming application's transform configuration.
+   * @param payload The payload to transform using the configured payload transformer.
    * @returns The transformed payload.
    */
-  protected abstract transformPayload<T>(payload: T, transformItemsConfig: ITransformItem[]): T;
+  protected transformPayload<T>(payload: T): T {
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    return this.payloadTransformer.transformPayload(payload as { [key: string]: any }, this.transformItemsConfig) as T;
+  }
 
   /**
    * Clears transient account summary store flags before the component is destroyed.
