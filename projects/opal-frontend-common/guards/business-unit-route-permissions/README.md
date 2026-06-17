@@ -69,7 +69,7 @@ export const routes: Routes = [
     loadComponent: () => import('./payment-terms-amend.component').then((c) => c.PaymentTermsAmendComponent),
     data: {
       routePermissionId: [77],
-      accessDeniedPath: 'payment-terms/denied/permission',
+      accessDeniedPath: '/payment-terms/denied/permission',
     },
   },
 ];
