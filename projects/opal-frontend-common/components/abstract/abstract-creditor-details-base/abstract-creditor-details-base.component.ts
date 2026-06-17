@@ -13,7 +13,7 @@ interface CreditorDetailsAccountStore {
 }
 
 interface CreditorDetailsPayloadTransformer {
-  transformPayload<T extends { [key: string]: any }>(payload: T, transformItemsConfig: ITransformItem[]): T;
+  transformPayload<T extends { [key: string]: unknown }>(payload: T, transformItemsConfig: ITransformItem[]): T;
 }
 
 @Component({
@@ -52,6 +52,16 @@ export abstract class AbstractCreditorDetailsBaseComponent<THeader, TTab extends
     this.accountData = this.transformHeaderForView(headingData);
     this.transformHeaderForStore(this.accountId, this.accountData);
     this.activeTab = this.activatedRoute.snapshot.fragment || this.defaultActiveTab;
+  }
+
+  /**
+   * Transforms payload data using the consuming application's transformation service and configuration.
+   * @param payload The payload to transform using the configured payload transformer.
+   * @returns The transformed payload.
+   */
+  protected transformPayload<T>(payload: T): T {
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    return this.payloadTransformer.transformPayload(payload as { [key: string]: any }, this.transformItemsConfig) as T;
   }
 
   /**
@@ -96,16 +106,6 @@ export abstract class AbstractCreditorDetailsBaseComponent<THeader, TTab extends
       typeof permission === 'number' &&
       super.hasBusinessUnitPermission(permission, Number(this.accountStore.business_unit_id()!))
     );
-  }
-
-  /**
-   * Transforms payload data using the consuming application's transformation service and configuration.
-   * @param payload The payload to transform using the configured payload transformer.
-   * @returns The transformed payload.
-   */
-  protected transformPayload<T>(payload: T): T {
-    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    return this.payloadTransformer.transformPayload(payload as { [key: string]: any }, this.transformItemsConfig) as T;
   }
 
   /**

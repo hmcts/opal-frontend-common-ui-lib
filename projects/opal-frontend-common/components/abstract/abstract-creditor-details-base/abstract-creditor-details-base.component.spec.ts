@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, ActivatedRouteSnapshot, convertToParamMap, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { afterAll, beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { AbstractCreditorDetailsBaseComponent } from './abstract-creditor-details-base.component';
 import { PermissionsService } from '@hmcts/opal-frontend-common/services/permissions-service';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
@@ -38,7 +37,7 @@ class TestAbstractCreditorDetailsBaseComponent extends AbstractCreditorDetailsBa
   protected override readonly latestBannerMessage = latestBannerMessage;
 
   protected override readonly payloadTransformer = {
-    transformPayload: <T extends { [key: string]: any }>(payload: T, transformItemsConfig: ITransformItem[]): T => {
+    transformPayload: <T extends { [key: string]: unknown }>(payload: T, transformItemsConfig: ITransformItem[]): T => {
       return this.transformPayloadMock(payload, transformItemsConfig) as T;
     },
   };
@@ -62,7 +61,9 @@ class TestAbstractCreditorDetailsBaseComponent extends AbstractCreditorDetailsBa
     return of(refreshedHeaderData);
   });
   public readonly setupTabDataStreamMock = vi.fn();
-  public readonly transformPayloadMock = vi.fn((payload: unknown, _transformItemsConfig: ITransformItem[]): unknown => {
+  public readonly transformPayloadMock = vi.fn((payload: unknown, transformItemsConfig: ITransformItem[]): unknown => {
+    void transformItemsConfig;
+
     if (payload === routeHeaderData) {
       return transformedRouteHeaderData;
     }
