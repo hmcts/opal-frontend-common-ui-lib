@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import {
   ActivatedRouteSnapshot,
@@ -12,6 +13,12 @@ import { of } from 'rxjs';
 import { businessUnitRoutePermissionsGuard, BUSINESS_UNIT_ID_RESOLVER } from './business-unit-route-permissions.guard';
 import { PermissionsService } from '@hmcts/opal-frontend-common/services/permissions-service';
 import { OpalUserService } from '@hmcts/opal-frontend-common/services/opal-user-service';
+
+@Component({
+  template: '',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+class TestRouteComponent {}
 
 function createRoute(routePermissionId?: number[] | number, accessDeniedPath?: string): ActivatedRouteSnapshot {
   const route = new ActivatedRouteSnapshot();
@@ -44,6 +51,7 @@ describe('businessUnitRoutePermissionsGuard', () => {
       children: [
         {
           path: 'payment-terms/amend',
+          component: TestRouteComponent,
           data: {
             routePermissionId: [77],
             accessDeniedPath: 'payment-terms/denied/permission',
@@ -51,6 +59,7 @@ describe('businessUnitRoutePermissionsGuard', () => {
         },
         {
           path: 'payment-terms/denied/:type',
+          component: TestRouteComponent,
         },
       ],
     },
