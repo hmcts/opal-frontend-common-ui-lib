@@ -1,4 +1,4 @@
-import { DateService } from '../../date-service/date.service';
+import { DateService } from '@hmcts/opal-frontend-common/services/date-service';
 import { IHistoryDetails } from '../interfaces/history-details.interface';
 import { IHistoryDetailsDateFormat } from '../interfaces/history-details-date-format.interface';
 import { IHistoryDetailsFragment } from '../interfaces/history-details-fragment.interface';
