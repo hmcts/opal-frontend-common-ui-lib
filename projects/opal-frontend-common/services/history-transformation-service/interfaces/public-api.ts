@@ -1,0 +1,7 @@
+export * from './history-details-date-format.interface';
+export * from './history-details-fragment.interface';
+export * from './history-details-link.interface';
+export * from './history-details-part.interface';
+export * from './history-transformation-service-config.interface';
+export * from './history-details.interface';
+export * from './history-fragment-options.interface';
