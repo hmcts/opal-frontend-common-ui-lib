@@ -23,6 +23,6 @@ Consumers provide `IHistoryTransformationConfig`:
 
 The output is `IHistoryDetails`, split into `line1` and optional `line2` parts. Each part contains fragments with text, bold and hyphen flags, and optional link metadata.
 
-## Defaults
+## Constants
 
-Default alias prefixes, date format, empty values, and parser patterns are exported from the package constants. Keep each constant in its own file so constants, mocks, and interfaces have one exported symbol per file.
+The package exports parser-pattern constants only. Consumers are expected to define their own alias prefixes, date formats, and empty-value handling in their domain config.

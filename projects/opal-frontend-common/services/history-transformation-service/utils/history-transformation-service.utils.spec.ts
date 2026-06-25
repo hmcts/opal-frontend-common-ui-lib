@@ -1,6 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { HISTORY_DETAILS_DEFAULT_ALIAS_PATH_PREFIXES } from '../constants/history-details-default-alias-path-prefixes.constant';
-import { HISTORY_DETAILS_DEFAULT_DATE_FORMAT } from '../constants/history-details-default-date-format.constant';
 import { HISTORY_FALLBACK_DETAILS_MOCK } from '../mocks/history-fallback-details.mock';
 import { HISTORY_FALLBACK_ITEM_MOCK } from '../mocks/history-fallback-item.mock';
 import { HISTORY_NOTE_DETAILS_MOCK } from '../mocks/history-note-details.mock';
@@ -25,6 +23,13 @@ import {
   transformHistoryDetails,
   transformHistoryItems,
 } from './history-transformation-service.utils';
+
+const HISTORY_TEST_ALIAS_PATH_PREFIXES = ['', 'details.', 'data.', 'payload.'];
+const HISTORY_TEST_DATE_FORMAT = {
+  input: 'yyyy-MM-dd',
+  output: 'dd/MM/yyyy',
+};
+const HISTORY_TEST_EMPTY_VALUES: readonly unknown[] = [null, undefined, ''];
 
 describe('history details transformation utils', () => {
   it('should transform a raw item through the configured transformer', () => {
@@ -105,7 +110,8 @@ describe('history details transformation utils', () => {
     const result = getHistoryString(
       { details: { nested: { value: 'Nested text' } } },
       ['details.nested.value'],
-      HISTORY_DETAILS_DEFAULT_ALIAS_PATH_PREFIXES,
+      HISTORY_TEST_ALIAS_PATH_PREFIXES,
+      HISTORY_TEST_EMPTY_VALUES,
     );
 
     expect(result).toBe('Nested text');
@@ -115,7 +121,8 @@ describe('history details transformation utils', () => {
     const result = getHistoryString(
       { details: { noteText: { text: 'Nested note text' } } },
       ['details.noteText'],
-      HISTORY_DETAILS_DEFAULT_ALIAS_PATH_PREFIXES,
+      HISTORY_TEST_ALIAS_PATH_PREFIXES,
+      HISTORY_TEST_EMPTY_VALUES,
     );
 
     expect(result).toBeNull();
@@ -125,7 +132,8 @@ describe('history details transformation utils', () => {
     const result = getHistoryValue(
       { details: { description: null } },
       ['missing', 'description'],
-      HISTORY_DETAILS_DEFAULT_ALIAS_PATH_PREFIXES,
+      HISTORY_TEST_ALIAS_PATH_PREFIXES,
+      HISTORY_TEST_EMPTY_VALUES,
     );
 
     expect(result).toBeNull();
@@ -150,17 +158,17 @@ describe('history details transformation utils', () => {
   });
 
   it('should format configured dates, ISO dates and invalid dates', () => {
-    expect(formatHistoryDate(null, HISTORY_DETAILS_DEFAULT_DATE_FORMAT)).toBeNull();
-    expect(formatHistoryDate('2025-11-10', HISTORY_DETAILS_DEFAULT_DATE_FORMAT)).toBe('10/11/2025');
-    expect(formatHistoryDate('2025-11-10T13:30:00Z', HISTORY_DETAILS_DEFAULT_DATE_FORMAT)).toBe('10/11/2025');
-    expect(formatHistoryDate('not a date', HISTORY_DETAILS_DEFAULT_DATE_FORMAT)).toBe('not a date');
+    expect(formatHistoryDate(null, HISTORY_TEST_DATE_FORMAT)).toBeNull();
+    expect(formatHistoryDate('2025-11-10', HISTORY_TEST_DATE_FORMAT)).toBe('10/11/2025');
+    expect(formatHistoryDate('2025-11-10T13:30:00Z', HISTORY_TEST_DATE_FORMAT)).toBe('10/11/2025');
+    expect(formatHistoryDate('not a date', HISTORY_TEST_DATE_FORMAT)).toBe('not a date');
   });
 
   it('should format money values for empty, numeric, prefixed, numeric text and unknown text values', () => {
-    expect(formatHistoryMoney(null, '£')).toBeNull();
-    expect(formatHistoryMoney(15, '£')).toBe('£15.00');
-    expect(formatHistoryMoney('£15.00', '£')).toBe('£15.00');
-    expect(formatHistoryMoney('15', '£')).toBe('£15.00');
-    expect(formatHistoryMoney('unknown', '£')).toBe('unknown');
+    expect(formatHistoryMoney(null, '£', HISTORY_TEST_EMPTY_VALUES)).toBeNull();
+    expect(formatHistoryMoney(15, '£', HISTORY_TEST_EMPTY_VALUES)).toBe('£15.00');
+    expect(formatHistoryMoney('£15.00', '£', HISTORY_TEST_EMPTY_VALUES)).toBe('£15.00');
+    expect(formatHistoryMoney('15', '£', HISTORY_TEST_EMPTY_VALUES)).toBe('£15.00');
+    expect(formatHistoryMoney('unknown', '£', HISTORY_TEST_EMPTY_VALUES)).toBe('unknown');
   });
 });

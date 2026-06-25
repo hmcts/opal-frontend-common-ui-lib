@@ -7,7 +7,6 @@ import { IHistoryDetailsPart } from '../interfaces/history-details-part.interfac
 import { IHistoryTransformationConfig } from '../interfaces/history-transformation-service-config.interface';
 import { IHistoryFragmentOptions } from '../interfaces/history-fragment-options.interface';
 import { THistoryDetailsRawItem } from '../types/history-details-raw-item.type';
-import { HISTORY_DETAILS_DEFAULT_EMPTY_VALUES } from '../constants/history-details-default-empty-values.constant';
 import { HISTORY_DETAILS_PATTERNS } from '../constants/history-details-patterns.constant';
 
 const HISTORY_DETAILS_DATE_SERVICE = new DateService();
@@ -161,7 +160,7 @@ export function getHistoryString(
   item: THistoryDetailsRawItem,
   aliases: string[],
   aliasPathPrefixes: string[],
-  emptyValues: readonly unknown[] = HISTORY_DETAILS_DEFAULT_EMPTY_VALUES,
+  emptyValues: readonly unknown[],
 ): string | null {
   const value = getHistoryValue(item, aliases, aliasPathPrefixes, emptyValues);
 
@@ -185,7 +184,7 @@ export function getHistoryValue(
   item: THistoryDetailsRawItem,
   aliases: string[],
   aliasPathPrefixes: string[],
-  emptyValues: readonly unknown[] = HISTORY_DETAILS_DEFAULT_EMPTY_VALUES,
+  emptyValues: readonly unknown[],
 ): unknown {
   for (const alias of aliases) {
     for (const path of getHistoryAliasPaths(alias, aliasPathPrefixes)) {
@@ -244,10 +243,7 @@ export function isHistoryRecord(value: unknown): value is Record<string, unknown
  * @param emptyValues - Values that should be treated as empty.
  * @returns True when the value is empty.
  */
-export function isHistoryEmptyValue(
-  value: unknown,
-  emptyValues: readonly unknown[] = HISTORY_DETAILS_DEFAULT_EMPTY_VALUES,
-): boolean {
+export function isHistoryEmptyValue(value: unknown, emptyValues: readonly unknown[]): boolean {
   return emptyValues.includes(value);
 }
 
@@ -330,7 +326,7 @@ export function formatHistoryDate(value: string | null, dateFormat: IHistoryDeta
 export function formatHistoryMoney(
   value: unknown,
   currencyPrefix: string,
-  emptyValues: readonly unknown[] = HISTORY_DETAILS_DEFAULT_EMPTY_VALUES,
+  emptyValues: readonly unknown[],
 ): string | null {
   if (isHistoryEmptyValue(value, emptyValues)) {
     return null;
