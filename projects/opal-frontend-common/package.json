@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.84",
+  "version": "0.0.85",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -459,6 +459,9 @@
     },
     "./services/app-initializer-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-app-initializer-service.mjs"
+    },
+    "./services/history-transformation-service": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-history-transformation-service.mjs"
     },
     "./services/transfer-state-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-transfer-state-service.mjs"
