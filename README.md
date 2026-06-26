@@ -129,8 +129,20 @@ Once any changes have been approved and merged into the main branch, you'll need
 
 1. Increment the version number in both the library's root `package.json` and in `/projects/opal-frontend-common/package.json`.
 2. Commit and push those changes to the main branch.
-3. On GitHub, create a new [release](https://github.com/hmcts/opal-frontend-common-ui-lib/releases) and use the updated version number as a tag.
-4. When the release workflow completes, the library will be published.
+3. Create and push the version tag from the updated main branch:
+
+   ```bash
+   git checkout main
+   git pull
+   git tag vX.Y.Z
+   git push origin vX.Y.Z
+   ```
+
+4. On GitHub, draft a new [release](https://github.com/hmcts/opal-frontend-common-ui-lib/releases) and select the existing `vX.Y.Z` tag from the tag dropdown.
+5. Do not create the tag in the GitHub release form. The tag must already exist so the npm trusted publishing provenance includes the `refs/tags/vX.Y.Z` source repository ref.
+6. When the release workflow completes, the library will be published.
+
+If a publish fails before npm accepts the package version, delete the failed GitHub release and remote tag, then push the existing local tag again before recreating the release from that existing tag. Do not rerun a failed release workflow if the provenance was generated without a tag ref.
 
 After this new version of the library is published, any consuming application should remove the local or outdated version of the library and then install the published version by running:
 
