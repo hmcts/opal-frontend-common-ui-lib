@@ -5,8 +5,9 @@
    ==========================================================================
    These imports include external styles used across the application.
 */
-@use '@ministryofjustice/frontend/moj/all' as moj;
+@use '@ministryofjustice/frontend/moj/base' as mojBase;
 @use 'govuk-frontend/dist/govuk/index' as *;
+@use '@ministryofjustice/frontend/moj/all' as moj;
 @use './custom/_custom-section_break.scss';
 @use './custom/custom-scrollable-panes';
 
