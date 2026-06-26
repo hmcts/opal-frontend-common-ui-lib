@@ -1,21 +1,33 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { InternalServerErrorComponent } from './internal-server-error.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, convertToParamMap, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { describe, beforeEach, it, expect } from 'vitest';
 
 describe('InternalServerErrorComponent', () => {
   let component: InternalServerErrorComponent;
   let fixture: ComponentFixture<InternalServerErrorComponent>;
+  let queryParamOperationId: string | null;
   let navigationState: { operationId?: string } | undefined;
   let persistedState: { operationId?: string } | undefined;
 
   beforeEach(async () => {
+    queryParamOperationId = null;
     navigationState = { operationId: 'OP-500' };
     persistedState = {};
     await TestBed.configureTestingModule({
       imports: [InternalServerErrorComponent],
       providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              get queryParamMap() {
+                return convertToParamMap(queryParamOperationId ? { operationId: queryParamOperationId } : {});
+              },
+            },
+          },
+        },
         {
           provide: Router,
           useValue: {
@@ -44,6 +56,16 @@ describe('InternalServerErrorComponent', () => {
   it('should display an operation id from navigation state when provided', () => {
     const errorCodeElement = fixture.nativeElement.querySelector('[data-testid="error-code"]');
     expect(errorCodeElement.textContent.trim()).toBe('Error code: OP-500.');
+  });
+
+  it('should display an operation id from query params when provided', () => {
+    queryParamOperationId = 'QUERY-123';
+    fixture = TestBed.createComponent(InternalServerErrorComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    const errorCodeElement = fixture.nativeElement.querySelector('[data-testid="error-code"]');
+    expect(errorCodeElement.textContent.trim()).toBe('Error code: QUERY-123.');
   });
 
   it('should fall back to persisted state when navigation state is unavailable', () => {
