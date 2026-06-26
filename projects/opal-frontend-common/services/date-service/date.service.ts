@@ -126,7 +126,7 @@ export class DateService {
    * @param value - The string value in ISO format.
    * @returns A DateTime object representing the given value.
    */
-  public getFromIso(value: string): DateTime {
+  public getFromIso(value: string): DateTime<true> | DateTime<false> {
     return DateTime.fromISO(value);
   }
 
