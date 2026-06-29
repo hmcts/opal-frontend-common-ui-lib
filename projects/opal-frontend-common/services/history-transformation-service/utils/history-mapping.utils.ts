@@ -60,7 +60,7 @@ export function getHistoryMappingRows<TRow>(
   keys: readonly string[],
   mapItemToRow: (item: THistoryDetailsRawItem, index: number) => TRow,
 ): TRow[] {
-  return (getHistoryMappingItemsEntry(source, keys)?.items ?? []).map(mapItemToRow);
+  return (getHistoryMappingItemsEntry(source, keys)?.items ?? []).map((item, index) => mapItemToRow(item, index));
 }
 
 /**
