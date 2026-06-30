@@ -5,3 +5,7 @@ export * from './history-details-part.interface';
 export * from './history-transformation-service-config.interface';
 export * from './history-details.interface';
 export * from './history-fragment-options.interface';
+export * from './history-mapping-details-text-options.interface';
+export * from './history-mapping-fragment-prefix-options.interface';
+export * from './history-mapping-items-entry.interface';
+export * from './history-mapping-number-options.interface';
