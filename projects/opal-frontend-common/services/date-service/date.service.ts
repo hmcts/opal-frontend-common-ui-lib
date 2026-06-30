@@ -106,7 +106,7 @@ export class DateService {
    * @param format - The format string to apply to the DateTime value.
    * @returns The formatted string representation of the DateTime value.
    */
-  public toFormat(value: DateTime<true> | DateTime<false>, format: string): string {
+  public toFormat(value: DateTime, format: string): string {
     return value.toFormat(format);
   }
 
