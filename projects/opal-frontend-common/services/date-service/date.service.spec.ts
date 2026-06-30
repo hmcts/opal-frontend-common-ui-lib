@@ -205,6 +205,18 @@ describe('DateServiceService', () => {
     expectTypeOf(service.getFromIso).returns.toEqualTypeOf<DateTimeMaybeValid>();
   });
 
+  it('should accept DateTime values with unknown validity when formatting', () => {
+    expectTypeOf(service.toFormat).parameter(0).toEqualTypeOf<DateTime>();
+  });
+
+  it('should format the current DateTime value returned by getDateNow', () => {
+    const currentDate = service.getDateNow();
+
+    const result = service.toFormat(currentDate, 'dd/MM/yyyy');
+
+    expect(result).toBe(currentDate.toFormat('dd/MM/yyyy'));
+  });
+
   it('should return the current date and time', () => {
     const result = service.getDateNow();
     const currentDate = DateTime.now();
