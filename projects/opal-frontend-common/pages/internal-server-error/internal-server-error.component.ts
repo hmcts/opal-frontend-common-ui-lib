@@ -17,7 +17,9 @@ export class InternalServerErrorComponent {
     const queryParamOperationId = this.activatedRoute.snapshot.queryParamMap.get('operationId');
     const navigationState = this.router.currentNavigation()?.extras?.state as { operationId?: string } | undefined;
     const persistedState = this.location.getState() as { operationId?: string } | undefined;
-    const operationId = queryParamOperationId ?? navigationState?.operationId ?? persistedState?.operationId;
-    return operationId && operationId.trim().length > 0 ? operationId : 'Unavailable';
+    const operationId = [queryParamOperationId, navigationState?.operationId, persistedState?.operationId].find((id) =>
+      id?.trim(),
+    );
+    return operationId?.trim() ?? 'Unavailable';
   });
 }

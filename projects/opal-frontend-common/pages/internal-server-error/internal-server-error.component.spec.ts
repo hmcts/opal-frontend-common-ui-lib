@@ -23,7 +23,11 @@ describe('InternalServerErrorComponent', () => {
           useValue: {
             snapshot: {
               get queryParamMap() {
-                return convertToParamMap(queryParamOperationId ? { operationId: queryParamOperationId } : {});
+                if (queryParamOperationId === null) {
+                  return convertToParamMap({});
+                }
+
+                return convertToParamMap({ operationId: queryParamOperationId });
               },
             },
           },
@@ -66,6 +70,16 @@ describe('InternalServerErrorComponent', () => {
 
     const errorCodeElement = fixture.nativeElement.querySelector('[data-testid="error-code"]');
     expect(errorCodeElement.textContent.trim()).toBe('Error code: QUERY-123.');
+  });
+
+  it('should ignore blank query params and fall back to navigation state', () => {
+    queryParamOperationId = '   ';
+    fixture = TestBed.createComponent(InternalServerErrorComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    const errorCodeElement = fixture.nativeElement.querySelector('[data-testid="error-code"]');
+    expect(errorCodeElement.textContent.trim()).toBe('Error code: OP-500.');
   });
 
   it('should fall back to persisted state when navigation state is unavailable', () => {
