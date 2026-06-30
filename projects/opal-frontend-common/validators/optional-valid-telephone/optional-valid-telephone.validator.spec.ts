@@ -38,6 +38,13 @@ describe('optionalPhoneNumberValidator', () => {
     expect(result).toEqual({ phoneNumberPattern: { value: '123 456 7890' } });
   });
 
+  it('should return null for valid phone number with a configured 10 digit length', () => {
+    const control = new FormControl('123 456 7890');
+    const validator = optionalPhoneNumberValidator([10, 11]);
+    const result = validator(control);
+    expect(result).toBeNull();
+  });
+
   it('should return error for more than 11 digits', () => {
     const control = new FormControl('123 456 789 012');
     const validator = optionalPhoneNumberValidator();

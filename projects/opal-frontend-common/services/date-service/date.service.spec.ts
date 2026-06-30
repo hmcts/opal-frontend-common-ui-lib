@@ -2,7 +2,9 @@ import { TestBed } from '@angular/core/testing';
 
 import { DateService } from './date.service';
 import { DateTime } from 'luxon';
-import { describe, beforeEach, it, expect, vi } from 'vitest';
+import { describe, beforeEach, it, expect, expectTypeOf, vi } from 'vitest';
+
+type DateTimeMaybeValid = DateTime<true> | DateTime<false>;
 
 describe('DateServiceService', () => {
   let service: DateService;
@@ -197,6 +199,10 @@ describe('DateServiceService', () => {
     expect(result.hour).toBe(10);
     expect(result.minute).toBe(0);
     expect(result.second).toBe(0);
+  });
+
+  it('should expose ISO parsed dates as maybe-valid DateTime values', () => {
+    expectTypeOf(service.getFromIso).returns.toEqualTypeOf<DateTimeMaybeValid>();
   });
 
   it('should return the current date and time', () => {
