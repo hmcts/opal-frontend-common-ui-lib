@@ -11,6 +11,10 @@ import { THistoryDetailsRawItem } from '../types/history-details-raw-item.type';
 
 const HISTORY_MAPPING_DATE_SERVICE = new DateService();
 const HISTORY_MAPPING_DEFAULT_FIELD_PATH_SEPARATOR = '.';
+const HISTORY_MAPPING_DEFAULT_NUMBER_OPTIONS: IHistoryMappingNumberOptions = {
+  fieldPathSeparator: null,
+  numberSanitisePattern: null,
+};
 
 /**
  * Checks whether a value can be mapped as a raw history item.
@@ -124,7 +128,7 @@ export function getHistoryMappingString(
 export function getHistoryMappingNumber(
   item: THistoryDetailsRawItem,
   paths: readonly string[],
-  options: IHistoryMappingNumberOptions = {},
+  options: IHistoryMappingNumberOptions = HISTORY_MAPPING_DEFAULT_NUMBER_OPTIONS,
 ): number | null {
   const fieldPathSeparator = options.fieldPathSeparator ?? HISTORY_MAPPING_DEFAULT_FIELD_PATH_SEPARATOR;
 
@@ -136,7 +140,14 @@ export function getHistoryMappingNumber(
     }
 
     if (typeof value === 'string') {
-      const parsed = Number(options.numberSanitisePattern ? value.replace(options.numberSanitisePattern, '') : value);
+      const sanitisedValue = options.numberSanitisePattern ? value.replace(options.numberSanitisePattern, '') : value;
+      const trimmedValue = sanitisedValue.trim();
+
+      if (!trimmedValue) {
+        continue;
+      }
+
+      const parsed = Number(trimmedValue);
 
       if (Number.isFinite(parsed)) {
         return parsed;

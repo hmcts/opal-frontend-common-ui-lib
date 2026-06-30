@@ -33,6 +33,8 @@ const rows = getHistoryMappingRows(response, ['historyItems', 'history_items'], 
     details,
     detailsText: getHistoryMappingDetailsText(details, {
       detailsLineSeparator: ' ',
+      fragmentEmptyPrefix: null,
+      fragmentJoiner: null,
       fragmentSpacePrefix: ' ',
       hyphenPrefix: ' - ',
       partSeparator: ' | ',

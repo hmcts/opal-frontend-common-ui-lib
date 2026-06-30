@@ -86,11 +86,22 @@ describe('history mapping utils', () => {
   it('should get the first finite number from history item paths', () => {
     expect(
       getHistoryMappingNumber(HISTORY_MAPPING_TEST_ITEM, ['missing', 'amount'], {
+        fieldPathSeparator: null,
         numberSanitisePattern: /[£,]/g,
       }),
     ).toBe(-25);
     expect(getHistoryMappingNumber(HISTORY_MAPPING_TEST_ITEM, ['timestamp'])).toBe(1234567890);
     expect(getHistoryMappingNumber({ amount: 'unknown' }, ['amount'])).toBeNull();
+    expect(
+      getHistoryMappingNumber(
+        { amount: '£', whitespaceAmount: '   ', fallbackAmount: '12.50' },
+        ['amount', 'whitespaceAmount', 'fallbackAmount'],
+        {
+          fieldPathSeparator: null,
+          numberSanitisePattern: /[£,]/g,
+        },
+      ),
+    ).toBe(12.5);
   });
 
   it('should parse configured dates, ISO dates and numeric timestamps for history sorting', () => {
@@ -130,6 +141,7 @@ describe('history mapping utils', () => {
     expect(getHistoryMappingFragmentPrefix({ hyphen: false }, 0, HISTORY_MAPPING_TEST_DETAILS_TEXT_OPTIONS)).toBe('');
     expect(
       getHistoryMappingFragmentPrefix({ hyphen: false }, 0, {
+        fragmentEmptyPrefix: null,
         fragmentSpacePrefix: ' ',
         hyphenPrefix: ' - ',
       }),
@@ -158,7 +170,7 @@ describe('history mapping utils', () => {
     ).toBe('Payment reversed - Account 123 | Reason added Second line');
   });
 
-  it('should use fallback details text options when optional values are omitted', () => {
+  it('should use fallback details text options when nullable values are not provided', () => {
     expect(
       getHistoryMappingDetailsText(
         {
@@ -174,6 +186,8 @@ describe('history mapping utils', () => {
         },
         {
           detailsLineSeparator: ' ',
+          fragmentEmptyPrefix: null,
+          fragmentJoiner: null,
           fragmentSpacePrefix: ' ',
           hyphenPrefix: ' - ',
           partSeparator: ' | ',

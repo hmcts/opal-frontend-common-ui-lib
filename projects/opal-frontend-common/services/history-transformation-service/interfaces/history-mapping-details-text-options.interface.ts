@@ -2,6 +2,6 @@ import { IHistoryMappingFragmentPrefixOptions } from './history-mapping-fragment
 
 export interface IHistoryMappingDetailsTextOptions extends IHistoryMappingFragmentPrefixOptions {
   detailsLineSeparator: string;
-  fragmentJoiner?: string;
+  fragmentJoiner: string | null;
   partSeparator: string;
 }

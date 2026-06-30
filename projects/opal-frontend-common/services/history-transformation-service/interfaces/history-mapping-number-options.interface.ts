@@ -1,4 +1,4 @@
 export interface IHistoryMappingNumberOptions {
-  fieldPathSeparator?: string;
-  numberSanitisePattern?: RegExp;
+  fieldPathSeparator: string | null;
+  numberSanitisePattern: RegExp | null;
 }

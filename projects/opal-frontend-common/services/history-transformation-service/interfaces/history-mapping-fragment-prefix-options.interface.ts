@@ -1,5 +1,5 @@
 export interface IHistoryMappingFragmentPrefixOptions {
-  fragmentEmptyPrefix?: string;
+  fragmentEmptyPrefix: string | null;
   fragmentSpacePrefix: string;
   hyphenPrefix: string;
 }
