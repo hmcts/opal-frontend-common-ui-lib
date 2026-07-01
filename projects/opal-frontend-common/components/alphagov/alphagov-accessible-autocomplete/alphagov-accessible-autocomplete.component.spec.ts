@@ -435,6 +435,90 @@ describe('AlphagovAccessibleAutocompleteComponent', () => {
     expect(component['changeDetector'].detectChanges).toHaveBeenCalled();
   });
 
+  it('should clear the visible input on focus when the control has a configured clear-on-focus value', () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    const selectedItem = ALPHAGOV_ACCESSIBLE_AUTOCOMPLETE_ITEMS_MOCK[0];
+    const input = document.createElement('input');
+    input.id = component.autoCompleteId;
+    input.value = selectedItem.name;
+    component.autocompleteContainer.nativeElement.innerHTML = '';
+    component.autocompleteContainer.nativeElement.appendChild(input);
+    component.clearInputOnFocusValues = [selectedItem.value];
+    component['_control'].setValue(selectedItem.value);
+
+    component['observeClearInputOnFocus']();
+    input.dispatchEvent(new Event('focusin', { bubbles: true }));
+
+    expect(input.value).toBe('');
+    expect(component['_control'].value).toBe(selectedItem.value);
+  });
+
+  it('should keep the configured clear-on-focus value when the user leaves without choosing a new item', () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    const selectedItem = ALPHAGOV_ACCESSIBLE_AUTOCOMPLETE_ITEMS_MOCK[0];
+    const input = document.createElement('input');
+    input.id = component.autoCompleteId;
+    input.value = '';
+    const menu = document.createElement('ul');
+    menu.classList.add('autocomplete__menu', 'autocomplete__menu--visible');
+    component.autocompleteContainer.nativeElement.innerHTML = '';
+    component.autocompleteContainer.nativeElement.appendChild(input);
+    component.autocompleteContainer.nativeElement.appendChild(menu);
+    component.clearInputOnFocusValues = [selectedItem.value];
+    component['_control'].setValue(selectedItem.value);
+    vi.spyOn(document, 'querySelector').mockReturnValue(input);
+    vi.spyOn(component['changeDetector'], 'detectChanges');
+    vi.spyOn(component as unknown as { configureAutoComplete: () => void }, 'configureAutoComplete').mockImplementation(
+      () => undefined,
+    );
+
+    component['handleOnConfirm'](undefined);
+
+    expect(component['_control'].value).toBe(selectedItem.value);
+    expect(component.autocompleteContainer.nativeElement.innerHTML).toBe('');
+    expect(component['configureAutoComplete']).toHaveBeenCalled();
+    expect(component['_control'].touched).toBe(true);
+    expect(component['changeDetector'].detectChanges).toHaveBeenCalled();
+  });
+
+  it('should restore the visible input on blur when a configured clear-on-focus value remains selected', () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    vi.useFakeTimers();
+
+    const selectedItem = ALPHAGOV_ACCESSIBLE_AUTOCOMPLETE_ITEMS_MOCK[0];
+    const input = document.createElement('input');
+    input.id = component.autoCompleteId;
+    input.value = '';
+    const menu = document.createElement('ul');
+    menu.classList.add('autocomplete__menu', 'autocomplete__menu--visible');
+    component.autocompleteContainer.nativeElement.innerHTML = '';
+    component.autocompleteContainer.nativeElement.appendChild(input);
+    component.autocompleteContainer.nativeElement.appendChild(menu);
+    component.clearInputOnFocusValues = [selectedItem.value];
+    component['_control'].setValue(selectedItem.value);
+    vi.spyOn(component as unknown as { configureAutoComplete: () => void }, 'configureAutoComplete').mockImplementation(
+      () => undefined,
+    );
+
+    component['observeClearInputOnFocus']();
+    input.dispatchEvent(new Event('focusout', { bubbles: true }));
+    vi.runAllTimers();
+
+    expect(component.autocompleteContainer.nativeElement.innerHTML).toBe('');
+    expect(component['configureAutoComplete']).toHaveBeenCalled();
+
+    vi.useRealTimers();
+  });
+
   it('should select an item after skipping earlier non-matching autocomplete items', () => {
     if (!component) {
       throw new Error('component returned null');

@@ -30,6 +30,8 @@ export class AlphagovAccessibleAutocompleteComponent implements OnInit, OnDestro
   private readonly ngUnsubscribe = new Subject<void>();
   private describedByObserver: MutationObserver | null = null;
   private containerObserver: MutationObserver | null = null;
+  private clearInputOnFocusElement: HTMLElement | null = null;
+  private restoreInputOnBlurTimeout: ReturnType<typeof setTimeout> | null = null;
 
   @Input({ required: true }) labelText!: string;
   @Input({ required: false }) labelClasses!: string;
@@ -39,6 +41,7 @@ export class AlphagovAccessibleAutocompleteComponent implements OnInit, OnDestro
   @Input({ required: false }) hintText!: string;
   @Input({ required: true }) autoCompleteItems: IAlphagovAccessibleAutocompleteItem[] = [];
   @Input() showAllValues = true;
+  @Input() clearInputOnFocusValues: (string | number)[] = [];
   @Input({ required: false }) errors: string | null = null;
 
   @ViewChild('autocomplete') autocompleteContainer!: ElementRef<HTMLElement>;
@@ -56,6 +59,9 @@ export class AlphagovAccessibleAutocompleteComponent implements OnInit, OnDestro
       this.configureAutoComplete();
     });
   }
+
+  private readonly handleInputFocus = () => this.clearVisibleInputForConfiguredValue();
+  private readonly handleInputBlur = (event: FocusEvent) => this.restoreVisibleInputForConfiguredValue(event);
 
   /**
    * Gets the control for the alphagov-accessible-autocomplete component.
@@ -76,8 +82,17 @@ export class AlphagovAccessibleAutocompleteComponent implements OnInit, OnDestro
     // selectedName is populated on selecting an option but is undefined onBlur, so we need to grab the input value directly from the input
     const control = this._control;
     const name = selectedName ?? (document.querySelector(`#${this.autoCompleteId}`) as HTMLInputElement).value;
-    const selectedItem = this.autoCompleteItems.find((item) => item.name === name) ?? null;
     const previousValue = control.value;
+
+    if (!name && this.shouldClearInputOnFocusValue(previousValue)) {
+      control.markAsTouched();
+      this.resetAutocompleteForSelectedValue();
+      control.updateValueAndValidity();
+      this.changeDetector.detectChanges();
+      return;
+    }
+
+    const selectedItem = this.autoCompleteItems.find((item) => item.name === name) ?? null;
     const selectedValue = selectedItem?.value ?? null;
 
     control.setValue(selectedValue);
@@ -102,6 +117,31 @@ export class AlphagovAccessibleAutocompleteComponent implements OnInit, OnDestro
 
   private getDefaultValue() {
     return this.autoCompleteItems.find((item) => item.value === this._control.value)?.name ?? '';
+  }
+
+  /**
+   * Checks whether the supplied value should clear the visible input on focus.
+   *
+   * @param value - The current form control value.
+   * @returns True if the visible input should clear for this value.
+   */
+  private shouldClearInputOnFocusValue(value: string | number | null): boolean {
+    if (value === null || value === undefined) {
+      return false;
+    }
+
+    return this.clearInputOnFocusValues.some((clearValue) => clearValue.toString() === value.toString());
+  }
+
+  /**
+   * Rebuilds the autocomplete so its internal query and menu state match the preserved form value.
+   */
+  private resetAutocompleteForSelectedValue(): void {
+    this.removeClearInputOnFocusListeners();
+    this.describedByObserver?.disconnect();
+    this.containerObserver?.disconnect();
+    this.autocompleteContainer.nativeElement.innerHTML = '';
+    this.configureAutoComplete();
   }
 
   /**
@@ -212,12 +252,92 @@ export class AlphagovAccessibleAutocompleteComponent implements OnInit, OnDestro
   }
 
   /**
+   * Clears the visible input when a configured value is selected, so show-all dropdowns remain discoverable.
+   */
+  private clearVisibleInputForConfiguredValue(): void {
+    const input = this.getVisibleInput();
+    const defaultValue = this.getDefaultValue();
+
+    if (this.restoreInputOnBlurTimeout) {
+      clearTimeout(this.restoreInputOnBlurTimeout);
+      this.restoreInputOnBlurTimeout = null;
+    }
+
+    if (!input || !defaultValue || !this.shouldClearInputOnFocusValue(this._control.value)) {
+      return;
+    }
+
+    if (input.value === defaultValue) {
+      input.value = '';
+    }
+  }
+
+  /**
+   * Restores the selected label if the user leaves a configured clear-on-focus value unchanged.
+   *
+   * @param event - The focusout event from the autocomplete container.
+   */
+  private restoreVisibleInputForConfiguredValue(event?: FocusEvent): void {
+    const relatedTarget = event?.relatedTarget;
+
+    if (relatedTarget instanceof Node && this.autocompleteContainer.nativeElement.contains(relatedTarget)) {
+      return;
+    }
+
+    if (this.restoreInputOnBlurTimeout) {
+      clearTimeout(this.restoreInputOnBlurTimeout);
+    }
+
+    this.restoreInputOnBlurTimeout = setTimeout(() => {
+      const input = this.getVisibleInput();
+      const defaultValue = this.getDefaultValue();
+
+      if (!input || input.value || !defaultValue || !this.shouldClearInputOnFocusValue(this._control.value)) {
+        this.restoreInputOnBlurTimeout = null;
+        return;
+      }
+
+      this.resetAutocompleteForSelectedValue();
+      this.restoreInputOnBlurTimeout = null;
+    });
+  }
+
+  /**
+   * Removes focus/mouse listeners from the currently tracked autocomplete container.
+   */
+  private removeClearInputOnFocusListeners(): void {
+    this.clearInputOnFocusElement?.removeEventListener('focusin', this.handleInputFocus);
+    this.clearInputOnFocusElement?.removeEventListener('focusout', this.handleInputBlur);
+    this.clearInputOnFocusElement?.removeEventListener('mousedown', this.handleInputFocus, true);
+    this.clearInputOnFocusElement = null;
+  }
+
+  /**
+   * Wires focus/mouse behaviour once the visible input has been rendered.
+   */
+  private observeClearInputOnFocus(): void {
+    const input = this.getVisibleInput();
+    const container = this.autocompleteContainer.nativeElement;
+
+    if (!input || this.clearInputOnFocusValues.length === 0 || this.clearInputOnFocusElement === container) {
+      return;
+    }
+
+    this.removeClearInputOnFocusListeners();
+    this.clearInputOnFocusElement = container;
+    container.addEventListener('focusin', this.handleInputFocus);
+    container.addEventListener('focusout', this.handleInputBlur);
+    container.addEventListener('mousedown', this.handleInputFocus, true);
+  }
+
+  /**
    * Waits for the visible input to appear, then applies describedby and observers.
    */
   private waitForInputAndApply(): void {
     const input = this.getVisibleInput();
     if (input) {
       this.observeDescribedBy();
+      this.observeClearInputOnFocus();
       return;
     }
 
@@ -230,6 +350,7 @@ export class AlphagovAccessibleAutocompleteComponent implements OnInit, OnDestro
       if (this.getVisibleInput()) {
         this.containerObserver?.disconnect();
         this.observeDescribedBy();
+        this.observeClearInputOnFocus();
       }
     });
 
@@ -274,5 +395,9 @@ export class AlphagovAccessibleAutocompleteComponent implements OnInit, OnDestro
     this.ngUnsubscribe.complete();
     this.describedByObserver?.disconnect();
     this.containerObserver?.disconnect();
+    if (this.restoreInputOnBlurTimeout) {
+      clearTimeout(this.restoreInputOnBlurTimeout);
+    }
+    this.removeClearInputOnFocusListeners();
   }
 }

@@ -36,24 +36,26 @@ You can use the accessible autocomplete component in your template as follows:
   [hintText]="'Start typing the country name'"
   [errors]="formControl.errors?.message"
   [autoCompleteItems]="countries"
+  [clearInputOnFocusValues]="['all']"
   [control]="formControl"
 ></opal-lib-alphagov-accessible-autocomplete>
 ```
 
 ## Inputs
 
-| Input               | Type                                    | Default                | Description                                                             |
-| ------------------- | --------------------------------------- | ---------------------- | ----------------------------------------------------------------------- |
-| `control`           | `FormControl \| AbstractControl`        | —                      | The reactive form control tied to the hidden input field.               |
-| `labelText`         | `string`                                | `'Search'`             | The label for the autocomplete input field.                             |
-| `labelClasses`      | `string`                                | `''`                   | Optional CSS classes for styling the label.                             |
-| `inputId`           | `string`                                | `'autocomplete-input'` | The ID for the hidden input field and autocomplete container.           |
-| `inputName`         | `string`                                | `''`                   | The name attribute for the hidden input element.                        |
-| `inputClasses`      | `string`                                | `''`                   | Optional classes applied to the autocomplete container.                 |
-| `hintText`          | `string`                                | `''`                   | Optional hint text displayed under the label.                           |
-| `errors`            | `string \| null`                        | `null`                 | Error message shown if validation fails.                                |
-| `autoCompleteItems` | `IAlphagovAccessibleAutocompleteItem[]` | `[]`                   | The list of items to populate the autocomplete, with `{ name, value }`. |
-| `showAllValues`     | `boolean`                               | `true`                 | Whether to show all available options in the dropdown.                  |
+| Input                     | Type                                    | Default                | Description                                                                                            |
+| ------------------------- | --------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------ |
+| `control`                 | `FormControl \| AbstractControl`        | —                      | The reactive form control tied to the hidden input field.                                              |
+| `labelText`               | `string`                                | `'Search'`             | The label for the autocomplete input field.                                                            |
+| `labelClasses`            | `string`                                | `''`                   | Optional CSS classes for styling the label.                                                            |
+| `inputId`                 | `string`                                | `'autocomplete-input'` | The ID for the hidden input field and autocomplete container.                                          |
+| `inputName`               | `string`                                | `''`                   | The name attribute for the hidden input element.                                                       |
+| `inputClasses`            | `string`                                | `''`                   | Optional classes applied to the autocomplete container.                                                |
+| `hintText`                | `string`                                | `''`                   | Optional hint text displayed under the label.                                                          |
+| `errors`                  | `string \| null`                        | `null`                 | Error message shown if validation fails.                                                               |
+| `autoCompleteItems`       | `IAlphagovAccessibleAutocompleteItem[]` | `[]`                   | The list of items to populate the autocomplete, with `{ name, value }`.                                |
+| `showAllValues`           | `boolean`                               | `true`                 | Whether to show all available options in the dropdown.                                                 |
+| `clearInputOnFocusValues` | `(string \| number)[]`                  | `[]`                   | Control values that clear the visible input on focus while preserving the selected form control value. |
 
 ## Outputs
 
