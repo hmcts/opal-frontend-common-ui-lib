@@ -17,7 +17,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -65,7 +65,7 @@ jobs:
       id-token: write
     steps:
       - name: Checkout repository (Release)
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.release.target_commitish }}
 
