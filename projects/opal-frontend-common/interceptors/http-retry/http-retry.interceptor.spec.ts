@@ -7,10 +7,10 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import { catchError, defer, lastValueFrom, of, throwError } from 'rxjs';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { MAX_HTTP_RETRY_COUNT } from './constants/http-retry-limits.constant';
 import { HTTP_RETRY_POLICY } from './constants/http-retry-policy-token.constant';
-import { httpRetryInterceptor, withHttpRetry } from './http-retry.interceptor';
+import { httpRetryInterceptor, withHttpRetry, withoutHttpRetry } from './http-retry.interceptor';
 
 describe('httpRetryInterceptor', () => {
   const interceptor: HttpInterceptorFn = (req, next) => httpRetryInterceptor(req, next);
@@ -19,7 +19,11 @@ describe('httpRetryInterceptor', () => {
     return new HttpErrorResponse({ status });
   }
 
-  function getAttemptingHandler(attempt: (attemptNumber: number) => HttpResponse<unknown> | HttpErrorResponse): {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  function getAttemptingHandler(attempt: (attemptNumber: number) => HttpResponse<unknown> | unknown): {
     next: HttpHandlerFn;
     attempts: () => number;
   } {
@@ -28,7 +32,7 @@ describe('httpRetryInterceptor', () => {
       defer(() => {
         attempts += 1;
         const result = attempt(attempts);
-        return result instanceof HttpErrorResponse ? throwError(() => result) : of(result);
+        return result instanceof HttpResponse ? of(result) : throwError(() => result);
       });
 
     return {
@@ -59,6 +63,19 @@ describe('httpRetryInterceptor', () => {
     await expect(lastValueFrom(interceptor(request, next))).resolves.toBe(successResponse);
 
     expect(attempts()).toBe(2);
+  });
+
+  it('should not retry when retry is disabled on an existing context', async () => {
+    const errorResponse = getTransientError();
+    const retryContext = withHttpRetry({ retryCount: 2, delayMs: 0, maxDelayMs: 0 });
+    const request = new HttpRequest('GET', '/test', {
+      context: withoutHttpRetry(retryContext),
+    });
+    const { next, attempts } = getAttemptingHandler(() => errorResponse);
+
+    await expect(lastValueFrom(interceptor(request, next))).rejects.toBe(errorResponse);
+
+    expect(attempts()).toBe(1);
   });
 
   it('should retry before an outer error handler handles a failure', async () => {
@@ -127,10 +144,68 @@ describe('httpRetryInterceptor', () => {
     expect(attempts()).toBe(1);
   });
 
+  it('should retry custom allowed transient statuses and ignore duplicate custom statuses', async () => {
+    const successResponse = new HttpResponse({ status: 200, body: { success: true } });
+    const request = new HttpRequest('GET', '/test', {
+      context: withHttpRetry({
+        retryCount: 2,
+        delayMs: 0,
+        maxDelayMs: 0,
+        retryableStatusCodes: [502, 502, 500],
+      }),
+    });
+    const { next, attempts } = getAttemptingHandler((attemptNumber) =>
+      attemptNumber === 2 ? successResponse : getTransientError(502),
+    );
+
+    await expect(lastValueFrom(interceptor(request, next))).resolves.toBe(successResponse);
+
+    expect(attempts()).toBe(2);
+  });
+
   it('should not retry statuses outside the common transient allow-list', async () => {
     const errorResponse = new HttpErrorResponse({ status: 500 });
     const request = new HttpRequest('GET', '/test', {
       context: withHttpRetry({ retryCount: 2, delayMs: 0, maxDelayMs: 0, retryableStatusCodes: [500] }),
+    });
+    const { next, attempts } = getAttemptingHandler(() => errorResponse);
+
+    await expect(lastValueFrom(interceptor(request, next))).rejects.toBe(errorResponse);
+
+    expect(attempts()).toBe(1);
+  });
+
+  it('should not retry when the error status cannot be resolved', async () => {
+    const malformedError = { status: '504' };
+    const request = new HttpRequest('GET', '/test', {
+      context: withHttpRetry({ retryCount: 2, delayMs: 0, maxDelayMs: 0 }),
+    });
+    const { next, attempts } = getAttemptingHandler(() => malformedError);
+
+    await expect(lastValueFrom(interceptor(request, next))).rejects.toBe(malformedError);
+
+    expect(attempts()).toBe(1);
+  });
+
+  it('should retry errors with a nested retryable status', async () => {
+    const successResponse = new HttpResponse({ status: 200, body: { success: true } });
+    const nestedTransientError = { error: { status: 503 } };
+    const request = new HttpRequest('GET', '/test', {
+      context: withHttpRetry({ retryCount: 2, delayMs: 0, maxDelayMs: 0 }),
+    });
+    const { next, attempts } = getAttemptingHandler((attemptNumber) =>
+      attemptNumber === 2 ? successResponse : nestedTransientError,
+    );
+
+    await expect(lastValueFrom(interceptor(request, next))).resolves.toBe(successResponse);
+
+    expect(attempts()).toBe(2);
+  });
+
+  it('should not retry non-object errors', async () => {
+    const errorResponse = 'Gateway timeout';
+    const request = new HttpRequest('GET', '/test', {
+      context: withHttpRetry({ retryCount: 2, delayMs: 0, maxDelayMs: 0 }),
     });
     const { next, attempts } = getAttemptingHandler(() => errorResponse);
 
@@ -166,6 +241,46 @@ describe('httpRetryInterceptor', () => {
     await expect(lastValueFrom(interceptor(request, next))).rejects.toBe(errorResponse);
 
     expect(attempts()).toBe(MAX_HTTP_RETRY_COUNT + 1);
+  });
+
+  it('should clamp negative retry counts to zero', async () => {
+    const errorResponse = getTransientError();
+    const request = new HttpRequest('GET', '/test', {
+      context: withHttpRetry({ retryCount: -1, delayMs: 0, maxDelayMs: 0 }),
+    });
+    const { next, attempts } = getAttemptingHandler(() => errorResponse);
+
+    await expect(lastValueFrom(interceptor(request, next))).rejects.toBe(errorResponse);
+
+    expect(attempts()).toBe(1);
+  });
+
+  it('should use bounded retry delays with backoff', async () => {
+    vi.useFakeTimers();
+    const successResponse = new HttpResponse({ status: 200, body: { success: true } });
+    const request = new HttpRequest('GET', '/test', {
+      context: withHttpRetry({ retryCount: 2, delayMs: 10, backoffMultiplier: 3, maxDelayMs: 25 }),
+    });
+    const { next, attempts } = getAttemptingHandler((attemptNumber) =>
+      attemptNumber === 3 ? successResponse : getTransientError(),
+    );
+
+    const result = lastValueFrom(interceptor(request, next));
+
+    expect(attempts()).toBe(1);
+
+    await vi.advanceTimersByTimeAsync(9);
+    expect(attempts()).toBe(1);
+
+    await vi.advanceTimersByTimeAsync(1);
+    expect(attempts()).toBe(2);
+
+    await vi.advanceTimersByTimeAsync(24);
+    expect(attempts()).toBe(2);
+
+    await vi.advanceTimersByTimeAsync(1);
+    await expect(result).resolves.toBe(successResponse);
+    expect(attempts()).toBe(3);
   });
 
   it('should support direct HTTP_RETRY_POLICY context usage', async () => {
