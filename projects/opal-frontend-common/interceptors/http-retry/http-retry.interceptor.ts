@@ -6,32 +6,28 @@ import {
   MAX_HTTP_RETRY_DELAY_MS,
 } from './constants/http-retry-limits.constant';
 import { HTTP_RETRY_POLICY } from './constants/http-retry-policy-token.constant';
-import { DEFAULT_HTTP_RETRY_POLICY, HTTP_RETRY_DISABLED_POLICY } from './constants/http-retry-policy.constant';
 import {
   HTTP_NON_RETRYABLE_STATUS_CODES,
   HTTP_RETRYABLE_STATUS_CODES,
 } from './constants/http-retry-status-codes.constant';
 import type { IHttpRetryPolicy, IHttpRetryPolicyOptions } from './interfaces/http-retry-policy.interface';
 
-export function withHttpRetry(policy: IHttpRetryPolicyOptions = {}, context = new HttpContext()): HttpContext {
-  return context.set(HTTP_RETRY_POLICY, normalizeHttpRetryPolicy({ ...DEFAULT_HTTP_RETRY_POLICY, ...policy }));
+export function withHttpRetry(policy: IHttpRetryPolicyOptions, context = new HttpContext()): HttpContext {
+  return context.set(HTTP_RETRY_POLICY, normalizeHttpRetryPolicy(policy));
 }
 
 export function withoutHttpRetry(context = new HttpContext()): HttpContext {
-  return context.set(HTTP_RETRY_POLICY, HTTP_RETRY_DISABLED_POLICY);
+  return context.set(HTTP_RETRY_POLICY, { retryCount: 0 });
 }
 
-function normalizeHttpRetryPolicy(policy: IHttpRetryPolicyOptions): IHttpRetryPolicy {
+function normalizeHttpRetryPolicy(policy: IHttpRetryPolicyOptions = {}): IHttpRetryPolicy {
+  const delayMs = getBoundedInteger(policy.delayMs, 0, MAX_HTTP_RETRY_DELAY_MS);
+
   return {
-    retryCount: getBoundedInteger(policy.retryCount, DEFAULT_HTTP_RETRY_POLICY.retryCount, MAX_HTTP_RETRY_COUNT),
-    delayMs: getBoundedInteger(policy.delayMs, DEFAULT_HTTP_RETRY_POLICY.delayMs, MAX_HTTP_RETRY_DELAY_MS),
-    backoffMultiplier: getBoundedNumber(
-      policy.backoffMultiplier,
-      DEFAULT_HTTP_RETRY_POLICY.backoffMultiplier,
-      1,
-      MAX_HTTP_RETRY_BACKOFF_MULTIPLIER,
-    ),
-    maxDelayMs: getBoundedInteger(policy.maxDelayMs, DEFAULT_HTTP_RETRY_POLICY.maxDelayMs, MAX_HTTP_RETRY_DELAY_MS),
+    retryCount: getBoundedInteger(policy.retryCount, 0, MAX_HTTP_RETRY_COUNT),
+    delayMs,
+    backoffMultiplier: getBoundedNumber(policy.backoffMultiplier, 1, 1, MAX_HTTP_RETRY_BACKOFF_MULTIPLIER),
+    maxDelayMs: getBoundedInteger(policy.maxDelayMs, delayMs, MAX_HTTP_RETRY_DELAY_MS),
     retryableStatusCodes: getRetryableStatusCodes(policy.retryableStatusCodes),
   };
 }

@@ -1,4 +1,11 @@
-import { HttpErrorResponse, HttpHandlerFn, HttpInterceptorFn, HttpRequest, HttpResponse } from '@angular/common/http';
+import {
+  HttpContext,
+  HttpErrorResponse,
+  HttpHandlerFn,
+  HttpInterceptorFn,
+  HttpRequest,
+  HttpResponse,
+} from '@angular/common/http';
 import { catchError, defer, lastValueFrom, of, throwError } from 'rxjs';
 import { describe, expect, it } from 'vitest';
 import { MAX_HTTP_RETRY_COUNT } from './constants/http-retry-limits.constant';
@@ -164,7 +171,7 @@ describe('httpRetryInterceptor', () => {
   it('should support direct HTTP_RETRY_POLICY context usage', async () => {
     const successResponse = new HttpResponse({ status: 200, body: { success: true } });
     const request = new HttpRequest('GET', '/test', {
-      context: withHttpRetry().set(HTTP_RETRY_POLICY, { retryCount: 1, delayMs: 0, maxDelayMs: 0 }),
+      context: new HttpContext().set(HTTP_RETRY_POLICY, { retryCount: 1, delayMs: 0, maxDelayMs: 0 }),
     });
     const { next, attempts } = getAttemptingHandler((attemptNumber) =>
       attemptNumber === 2 ? successResponse : getTransientError(),
