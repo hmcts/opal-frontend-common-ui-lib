@@ -1,0 +1,1 @@
+export const MAX_HTTP_RETRY_DELAY_MS = 30000;

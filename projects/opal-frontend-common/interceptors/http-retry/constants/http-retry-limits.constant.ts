@@ -1,3 +1,0 @@
-export const MAX_HTTP_RETRY_COUNT = 2;
-export const MAX_HTTP_RETRY_DELAY_MS = 30000;
-export const MAX_HTTP_RETRY_BACKOFF_MULTIPLIER = 10;
