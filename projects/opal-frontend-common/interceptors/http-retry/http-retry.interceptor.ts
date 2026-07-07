@@ -1,6 +1,6 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { of, retry, throwError, timer } from 'rxjs';
-import { HTTP_RETRY_POLICY } from './constants/http-retry-policy-token.constant';
+import { HTTP_RETRY_POLICY } from './http-retry-policy-token.constant';
 import { canRetryRequest, getRetryDelayMs, isRetryableError, normalizeHttpRetryPolicy } from './utils/http-retry.utils';
 
 /**

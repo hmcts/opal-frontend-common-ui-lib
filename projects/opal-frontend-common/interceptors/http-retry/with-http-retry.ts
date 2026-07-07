@@ -1,5 +1,5 @@
 import { HttpContext } from '@angular/common/http';
-import { HTTP_RETRY_POLICY } from './constants/http-retry-policy-token.constant';
+import { HTTP_RETRY_POLICY } from './http-retry-policy-token.constant';
 import { normalizeHttpRetryPolicy } from './utils/http-retry.utils';
 import type { IHttpRetryPolicyOptions } from './interfaces/http-retry-policy.interface';
 

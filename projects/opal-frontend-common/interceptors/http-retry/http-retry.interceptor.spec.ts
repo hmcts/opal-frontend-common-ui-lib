@@ -9,7 +9,7 @@ import {
 import { catchError, defer, lastValueFrom, of, throwError } from 'rxjs';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { MAX_HTTP_RETRY_COUNT } from './constants/http-retry-count.constant';
-import { HTTP_RETRY_POLICY } from './constants/http-retry-policy-token.constant';
+import { HTTP_RETRY_POLICY } from './http-retry-policy-token.constant';
 import { httpRetryInterceptor } from './http-retry.interceptor';
 import { withHttpRetry } from './with-http-retry';
 import { withoutHttpRetry } from './without-http-retry';
