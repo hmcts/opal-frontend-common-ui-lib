@@ -1,4 +1,4 @@
 import { HttpContextToken } from '@angular/common/http';
-import type { IHttpRetryPolicyOptions } from '@hmcts/opal-frontend-common/interceptors/http-retry/interfaces';
+import type { IHttpRetryPolicyOptions } from '../interfaces/http-retry-policy.interface';
 
 export const HTTP_RETRY_POLICY = new HttpContextToken<IHttpRetryPolicyOptions>(() => ({}));

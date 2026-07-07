@@ -204,6 +204,18 @@ describe('httpRetryInterceptor', () => {
     expect(attempts()).toBe(2);
   });
 
+  it('should not retry errors with a non-numeric nested status', async () => {
+    const malformedNestedError = { error: { status: '503' } };
+    const request = new HttpRequest('GET', '/test', {
+      context: withHttpRetry({ retryCount: 2, delayMs: 0, maxDelayMs: 0 }),
+    });
+    const { next, attempts } = getAttemptingHandler(() => malformedNestedError);
+
+    await expect(lastValueFrom(interceptor(request, next))).rejects.toBe(malformedNestedError);
+
+    expect(attempts()).toBe(1);
+  });
+
   it('should not retry non-object errors', async () => {
     const errorResponse = 'Gateway timeout';
     const request = new HttpRequest('GET', '/test', {

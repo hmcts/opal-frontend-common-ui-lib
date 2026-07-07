@@ -3,6 +3,9 @@ import { of, retry, throwError, timer } from 'rxjs';
 import { HTTP_RETRY_POLICY } from './constants/http-retry-policy-token.constant';
 import { canRetryRequest, getRetryDelayMs, isRetryableError, normalizeHttpRetryPolicy } from './utils/http-retry.utils';
 
+/**
+ * Retries opted-in GET requests when they fail with configured transient HTTP errors.
+ */
 export const httpRetryInterceptor: HttpInterceptorFn = (req, next) => {
   const retryPolicy = normalizeHttpRetryPolicy(req.context.get(HTTP_RETRY_POLICY));
 
