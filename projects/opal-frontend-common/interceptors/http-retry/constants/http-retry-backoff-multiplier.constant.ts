@@ -1,0 +1,1 @@
+export const MAX_HTTP_RETRY_BACKOFF_MULTIPLIER = 10;

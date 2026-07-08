@@ -359,6 +359,13 @@
       "@hmcts/opal-frontend-common/interceptors/http-error/interfaces": [
         "./dist/opal-frontend-common/interceptors/http-error/interfaces"
       ],
+      "@hmcts/opal-frontend-common/interceptors/http-retry": ["./dist/opal-frontend-common/interceptors/http-retry"],
+      "@hmcts/opal-frontend-common/interceptors/http-retry/constants": [
+        "./dist/opal-frontend-common/interceptors/http-retry/constants"
+      ],
+      "@hmcts/opal-frontend-common/interceptors/http-retry/interfaces": [
+        "./dist/opal-frontend-common/interceptors/http-retry/interfaces"
+      ],
       "@hmcts/opal-frontend-common/pages/dashboard-page": ["./dist/opal-frontend-common/pages/dashboard-page"],
       "@hmcts/opal-frontend-common/pages/dashboard-page/interfaces": [
         "./dist/opal-frontend-common/pages/dashboard-page/interfaces"
