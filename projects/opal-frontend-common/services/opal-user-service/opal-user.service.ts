@@ -2,7 +2,7 @@ import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { IOpalUserState } from './interfaces/opal-user-state.interface';
-import { catchError, finalize, map, Observable, of, shareReplay, tap, throwError } from 'rxjs';
+import { catchError, filter, finalize, map, Observable, of, shareReplay, tap, throwError } from 'rxjs';
 import { OPAL_USER_PATHS } from './constants/opal-user-paths.constant';
 import { OPAL_USER_STATE_RESPONSE_STATUS } from './constants/opal-user-state-response-status.constant';
 import { IOpalUserStateResponse } from './interfaces/opal-user-state-response.interface';
@@ -16,6 +16,7 @@ export class OpalUserService {
   private readonly http = inject(HttpClient);
   private readonly globalStore = inject(GlobalStore);
   private inFlightUserState$?: Observable<IOpalUserState>;
+  private userStateRequestGeneration = 0;
   private userStateCacheExpiresAtMilliseconds = 0;
 
   private toOpalUserStatus(status: OpalUserStateResponseStatus | null): OpalUserStateStatus | null {
@@ -92,6 +93,7 @@ export class OpalUserService {
   }
 
   private clearLocalUserStateCache(): void {
+    this.userStateRequestGeneration += 1;
     this.userStateCacheExpiresAtMilliseconds = 0;
     this.inFlightUserState$ = undefined;
   }
@@ -114,24 +116,33 @@ export class OpalUserService {
       return this.inFlightUserState$;
     }
 
+    const requestGeneration = this.userStateRequestGeneration;
+
     this.inFlightUserState$ = this.http
       .get<IOpalUserStateResponse>(OPAL_USER_PATHS.loggedInUserState, { observe: 'response' })
       .pipe(
         map((response) => ({
           userState: this.toOpalUserState(this.getUserStateResponseBody(response)),
           userStateCacheTtlMilliseconds: this.getUserStateCacheTtlMilliseconds(response),
+          requestGeneration,
         })),
+        filter(({ requestGeneration }) => requestGeneration === this.userStateRequestGeneration),
         tap(({ userState, userStateCacheTtlMilliseconds }) => {
           this.globalStore.setUserState(userState);
           this.userStateCacheExpiresAtMilliseconds = Date.now() + userStateCacheTtlMilliseconds;
         }),
         map(({ userState }) => userState),
         catchError((error: unknown) => {
-          this.userStateCacheExpiresAtMilliseconds = 0;
+          if (requestGeneration === this.userStateRequestGeneration) {
+            this.userStateCacheExpiresAtMilliseconds = 0;
+          }
+
           return throwError(() => error);
         }),
         finalize(() => {
-          this.inFlightUserState$ = undefined;
+          if (requestGeneration === this.userStateRequestGeneration) {
+            this.inFlightUserState$ = undefined;
+          }
         }),
         shareReplay(1),
       );

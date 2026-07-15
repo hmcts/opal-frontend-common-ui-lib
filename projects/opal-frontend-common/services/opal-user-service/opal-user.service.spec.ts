@@ -100,6 +100,31 @@ describe('OpalUserService', () => {
     expect(responses).toEqual([OPAL_USER_STATE_MOCK, OPAL_USER_STATE_MOCK]);
   });
 
+  it('should ignore an in-flight user state response after the cache is cleared', () => {
+    const responses: IOpalUserState[] = [];
+
+    service.getLoggedInUserState().subscribe((response) => responses.push(response));
+    const staleReq = httpMock.expectOne(OPAL_USER_PATHS.loggedInUserState);
+
+    service.clearUserStateCache();
+
+    service.getLoggedInUserState().subscribe((response) => responses.push(response));
+    const freshReq = httpMock.expectOne(OPAL_USER_PATHS.loggedInUserState);
+
+    staleReq.flush(USER_STATE_MOCK);
+
+    expect(globalStore.userState()).toEqual({} as IOpalUserState);
+    expect(responses).toEqual([]);
+
+    service.getLoggedInUserState().subscribe((response) => responses.push(response));
+    httpMock.expectNone(OPAL_USER_PATHS.loggedInUserState);
+
+    freshReq.flush(USER_STATE_MOCK);
+
+    expect(globalStore.userState()).toEqual(OPAL_USER_STATE_MOCK);
+    expect(responses).toEqual([OPAL_USER_STATE_MOCK, OPAL_USER_STATE_MOCK]);
+  });
+
   it('should bypass a valid cached user state when refreshUserState is called', () => {
     vi.spyOn(Date, 'now').mockReturnValue(1_000);
 
