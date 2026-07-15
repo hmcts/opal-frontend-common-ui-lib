@@ -161,6 +161,24 @@ describe('OpalUserService', () => {
     req.flush(USER_STATE_MOCK);
   });
 
+  it('should expire the local cache immediately when the response TTL header is zero', () => {
+    vi.spyOn(Date, 'now').mockReturnValue(1_000);
+
+    service.getLoggedInUserState().subscribe((response) => {
+      expect(response).toEqual(OPAL_USER_STATE_MOCK);
+    });
+
+    let req = httpMock.expectOne(OPAL_USER_PATHS.loggedInUserState);
+    req.flush(USER_STATE_MOCK, { headers: { [USER_STATE_CACHE_TTL_HEADER]: '0' } });
+
+    service.getLoggedInUserState().subscribe((response) => {
+      expect(response).toEqual(OPAL_USER_STATE_MOCK);
+    });
+
+    req = httpMock.expectOne(OPAL_USER_PATHS.loggedInUserState);
+    req.flush(USER_STATE_MOCK);
+  });
+
   it.each([
     ['missing', undefined],
     ['invalid', 'invalid'],

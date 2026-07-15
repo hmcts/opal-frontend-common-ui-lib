@@ -76,9 +76,15 @@ export class OpalUserService {
 
   private getUserStateCacheTtlMilliseconds(response: HttpResponse<IOpalUserStateResponse>): number {
     const configuredTtlMilliseconds = this.globalStore.userStateCacheExpirationMilliseconds();
-    const responseTtlMilliseconds = Number(response.headers.get(USER_STATE_CACHE_TTL_HEADER));
+    const responseTtlHeader = response.headers.get(USER_STATE_CACHE_TTL_HEADER);
 
-    if (Number.isFinite(responseTtlMilliseconds) && responseTtlMilliseconds > 0) {
+    if (responseTtlHeader === null) {
+      return configuredTtlMilliseconds;
+    }
+
+    const responseTtlMilliseconds = Number(responseTtlHeader);
+
+    if (Number.isFinite(responseTtlMilliseconds) && responseTtlMilliseconds >= 0) {
       return Math.min(responseTtlMilliseconds, configuredTtlMilliseconds);
     }
 
