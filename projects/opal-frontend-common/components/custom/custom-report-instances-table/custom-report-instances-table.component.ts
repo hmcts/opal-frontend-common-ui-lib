@@ -10,6 +10,7 @@ import {
   MojSortableTableRowDataComponent,
   MojSortableTableStatusComponent,
 } from '@hmcts/opal-frontend-common/components/moj/moj-sortable-table';
+import { CUSTOM_REPORT_INSTANCES_TABLE_COLUMN } from './constants/custom-report-instances-table-column.constant';
 import { CUSTOM_REPORT_INSTANCES_TABLE_SORT_DEFAULT } from './constants/custom-report-instances-table-sort-default.constant';
 import { ICustomReportInstancesTableAction } from './interfaces/custom-report-instances-table-action.interface';
 import { ICustomReportInstancesTableData } from './interfaces/custom-report-instances-table-data.interface';
@@ -41,6 +42,8 @@ export class CustomReportInstancesTableComponent extends AbstractSortableTablePa
 
   @Output() public instanceSelected = new EventEmitter<ICustomReportInstancesTableData>();
   @Output() public actionSelected = new EventEmitter<ICustomReportInstancesTableAction>();
+
+  public readonly tableColumns = CUSTOM_REPORT_INSTANCES_TABLE_COLUMN;
 
   @Input({ required: false }) set existingSortState(existingSortState: ICustomReportInstancesTableSort | null) {
     this.abstractExistingSortState = existingSortState ?? CUSTOM_REPORT_INSTANCES_TABLE_SORT_DEFAULT;
