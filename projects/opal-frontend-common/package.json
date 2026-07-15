@@ -154,6 +154,9 @@
     "./components/custom/custom-horizontal-scroll-pane": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-horizontal-scroll-pane.mjs"
     },
+    "./components/custom/custom-report-instances-table": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-report-instances-table.mjs"
+    },
     "./components/custom/custom-scrollable-panes": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-scrollable-panes.mjs"
     },
@@ -501,6 +504,9 @@
     },
     "./services/date-service/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-date-service-interfaces.mjs"
+    },
+    "./services/report-service": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-report-service.mjs"
     },
     "./services/permissions-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-permissions-service.mjs"
