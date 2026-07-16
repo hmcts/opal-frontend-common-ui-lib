@@ -36,6 +36,12 @@ describe('AbstractReportInstancesTableBaseComponent', () => {
     expect(component.paginatedTableDataComputed()).toHaveLength(25);
   });
 
+  it('should handle empty report table data', () => {
+    component.tableData = [];
+
+    expect(component.paginatedTableDataComputed()).toEqual([]);
+  });
+
   it('should return the second page of report table data', () => {
     component.tableData = Array.from({ length: 26 }, (_, index) => ({
       Title: `Report ${index + 1}`,
@@ -56,5 +62,17 @@ describe('AbstractReportInstancesTableBaseComponent', () => {
 
     expect(component.itemsPerPageSignal()).toBe(10);
     expect(component.paginatedTableDataComputed()).toHaveLength(10);
+  });
+
+  it('should update paginated report table data when page size changes after data is set', () => {
+    component.tableData = Array.from({ length: 26 }, (_, index) => ({
+      Title: `Report ${index + 1}`,
+      instanceId: `${index + 1}`,
+    }));
+
+    component.itemsPerPage = 5;
+
+    expect(component.itemsPerPageSignal()).toBe(5);
+    expect(component.paginatedTableDataComputed()).toHaveLength(5);
   });
 });
