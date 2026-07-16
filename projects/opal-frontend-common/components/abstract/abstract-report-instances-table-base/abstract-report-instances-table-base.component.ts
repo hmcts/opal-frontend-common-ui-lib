@@ -12,6 +12,10 @@ export abstract class AbstractReportInstancesTableBaseComponent<
     this.onApplyFilters();
   }
 
+  @Input() set itemsPerPage(itemsPerPage: number) {
+    this.itemsPerPageSignal.set(itemsPerPage);
+  }
+
   public override itemsPerPageSignal = signal(25);
   public override paginatedTableDataComputed = computed(() => {
     const data = this.sortedTableDataSignal() as TTableData[];

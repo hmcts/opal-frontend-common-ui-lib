@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.91",
+  "version": "0.0.92",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -99,6 +99,15 @@
     },
     "./components/abstract/abstract-report-summary-list-base": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-report-summary-list-base.mjs"
+    },
+    "./components/abstract/abstract-report-summary-list-base/constants": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-report-summary-list-base-constants.mjs"
+    },
+    "./components/abstract/abstract-report-summary-list-base/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-report-summary-list-base-interfaces.mjs"
+    },
+    "./components/abstract/abstract-report-summary-list-base/types": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-report-summary-list-base-types.mjs"
     },
     "./components/abstract/abstract-tab-data": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-tab-data.mjs"

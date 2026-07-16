@@ -74,6 +74,15 @@
       "@hmcts/opal-frontend-common/components/abstract/abstract-report-summary-list-base": [
         "./dist/opal-frontend-common/components/abstract/abstract-report-summary-list-base"
       ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-report-summary-list-base/constants": [
+        "./dist/opal-frontend-common/components/abstract/abstract-report-summary-list-base/constants"
+      ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-report-summary-list-base/interfaces": [
+        "./dist/opal-frontend-common/components/abstract/abstract-report-summary-list-base/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-report-summary-list-base/types": [
+        "./dist/opal-frontend-common/components/abstract/abstract-report-summary-list-base/types"
+      ],
       "@hmcts/opal-frontend-common/components/abstract/abstract-tab-data": [
         "./dist/opal-frontend-common/components/abstract/abstract-tab-data"
       ],

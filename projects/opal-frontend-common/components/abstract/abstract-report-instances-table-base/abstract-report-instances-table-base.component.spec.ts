@@ -46,4 +46,15 @@ describe('AbstractReportInstancesTableBaseComponent', () => {
 
     expect(component.paginatedTableDataComputed()).toEqual([{ Title: 'Report 26', instanceId: '26' }]);
   });
+
+  it('should allow consumers to override the report page size', () => {
+    component.itemsPerPage = 10;
+    component.tableData = Array.from({ length: 26 }, (_, index) => ({
+      Title: `Report ${index + 1}`,
+      instanceId: `${index + 1}`,
+    }));
+
+    expect(component.itemsPerPageSignal()).toBe(10);
+    expect(component.paginatedTableDataComputed()).toHaveLength(10);
+  });
 });

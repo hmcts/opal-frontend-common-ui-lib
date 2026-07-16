@@ -5,16 +5,58 @@ import { DateTime } from 'luxon';
 import { describe, beforeEach, expect, it, vi } from 'vitest';
 import { AbstractReportSummaryListBaseComponent } from './abstract-report-summary-list-base.component';
 import {
-  ABSTRACT_REPORT_SUMMARY_LIST_ALL_BUSINESS_UNITS,
   ABSTRACT_REPORT_SUMMARY_LIST_CUSTOM_DAYS,
   ABSTRACT_REPORT_SUMMARY_LIST_DATE_RANGE,
 } from './constants/abstract-report-summary-list-filter-state.constant';
-import { IAbstractReportSummaryListFilterForm } from './interfaces/abstract-report-summary-list-filter-form.interface';
+import { IAbstractReportSummaryListDateValidationMessages } from './interfaces/abstract-report-summary-list-date-validation-messages.interface';
 import { IAbstractReportSummaryListFilterState } from './interfaces/abstract-report-summary-list-filter-state.interface';
 import { AbstractReportSummaryListDateFilter } from './types/abstract-report-summary-list-date-filter.type';
 
+type TestReportSummaryListFilterForm = FormGroup<{
+  businessUnit: FormControl<string | null>;
+  dateFilter: FormControl<AbstractReportSummaryListDateFilter | null>;
+  days: FormControl<string | null>;
+  dateFrom: FormControl<string | null>;
+  dateTo: FormControl<string | null>;
+}>;
+
+interface TestReportSummaryListFilterFormValues extends IAbstractReportSummaryListFilterState {
+  businessUnit: string;
+}
+
 @Component({ template: '' })
-class TestReportSummaryListBaseComponent extends AbstractReportSummaryListBaseComponent {
+class TestReportSummaryListBaseComponent extends AbstractReportSummaryListBaseComponent<TestReportSummaryListFilterForm> {
+  protected readonly dateValidationMessages: IAbstractReportSummaryListDateValidationMessages = {
+    customDaysRequired: 'Enter number of days',
+    dateRangeRequired: 'You must enter at least 1 of date from or date to',
+    invalidDate: 'Date must be in the format DD/MM/YYYY',
+    futureDate: 'Date cannot be in the future',
+    dateFromAfterDateTo: 'The Date from cannot be after the Date to',
+  };
+
+  protected getFiltersFromForm(filtersForm: TestReportSummaryListFilterForm): IAbstractReportSummaryListFilterState {
+    return {
+      dateFilter: filtersForm.controls.dateFilter.value ?? this.dateFilterLast7Days,
+      days: filtersForm.controls.days.value ?? '',
+      dateFrom: filtersForm.controls.dateFrom.value ?? '',
+      dateTo: filtersForm.controls.dateTo.value ?? '',
+    };
+  }
+
+  protected clearInactiveDateFilterFields(
+    filtersForm: TestReportSummaryListFilterForm,
+    dateFilter: AbstractReportSummaryListDateFilter | null,
+  ): void {
+    if (dateFilter !== this.dateFilterCustomDays) {
+      filtersForm.controls.days.setValue('', { emitEvent: false });
+    }
+
+    if (dateFilter !== this.dateFilterDateRange) {
+      filtersForm.controls.dateFrom.setValue('', { emitEvent: false });
+      filtersForm.controls.dateTo.setValue('', { emitEvent: false });
+    }
+  }
+
   public getDefaultQuery() {
     return this.getDefaultReportQuery();
   }
@@ -23,12 +65,12 @@ class TestReportSummaryListBaseComponent extends AbstractReportSummaryListBaseCo
     return this.getReportQueryFromFilters(filters);
   }
 
-  public getFilters(filtersForm: IAbstractReportSummaryListFilterForm) {
+  public getFilters(filtersForm: TestReportSummaryListFilterForm) {
     return this.getFiltersFromForm(filtersForm);
   }
 
   public clearInactiveFields(
-    filtersForm: IAbstractReportSummaryListFilterForm,
+    filtersForm: TestReportSummaryListFilterForm,
     dateFilter: AbstractReportSummaryListDateFilter | null,
   ) {
     this.clearInactiveDateFilterFields(filtersForm, dateFilter);
@@ -56,7 +98,7 @@ describe('AbstractReportSummaryListBaseComponent', () => {
     component = fixture.componentInstance;
   });
 
-  const createFiltersForm = (values: IAbstractReportSummaryListFilterState): IAbstractReportSummaryListFilterForm =>
+  const createFiltersForm = (values: TestReportSummaryListFilterFormValues): TestReportSummaryListFilterForm =>
     new FormGroup({
       businessUnit: new FormControl<string | null>(values.businessUnit),
       dateFilter: new FormControl<AbstractReportSummaryListDateFilter | null>(values.dateFilter),
@@ -71,7 +113,6 @@ describe('AbstractReportSummaryListBaseComponent', () => {
     expect(component.getDefaultQuery()).toEqual({
       fromDate: '2026-07-10',
       toDate: '2026-07-16',
-      businessUnit: null,
     });
   });
 
@@ -80,7 +121,6 @@ describe('AbstractReportSummaryListBaseComponent', () => {
 
     expect(
       component.getQueryFromFilters({
-        businessUnit: '67',
         dateFilter: ABSTRACT_REPORT_SUMMARY_LIST_CUSTOM_DAYS,
         days: '3',
         dateFrom: '',
@@ -89,14 +129,12 @@ describe('AbstractReportSummaryListBaseComponent', () => {
     ).toEqual({
       fromDate: '2026-07-14',
       toDate: '2026-07-16',
-      businessUnit: '67',
     });
   });
 
   it('should build a date range query from filters', () => {
     expect(
       component.getQueryFromFilters({
-        businessUnit: ABSTRACT_REPORT_SUMMARY_LIST_ALL_BUSINESS_UNITS,
         dateFilter: ABSTRACT_REPORT_SUMMARY_LIST_DATE_RANGE,
         days: '',
         dateFrom: '01/07/2026',
@@ -105,7 +143,6 @@ describe('AbstractReportSummaryListBaseComponent', () => {
     ).toEqual({
       fromDate: '2026-07-01',
       toDate: '2026-07-16',
-      businessUnit: null,
     });
   });
 
@@ -119,7 +156,6 @@ describe('AbstractReportSummaryListBaseComponent', () => {
     });
 
     expect(component.getFilters(filtersForm)).toEqual({
-      businessUnit: '67',
       dateFilter: ABSTRACT_REPORT_SUMMARY_LIST_CUSTOM_DAYS,
       days: '5',
       dateFrom: '',
@@ -148,7 +184,6 @@ describe('AbstractReportSummaryListBaseComponent', () => {
 
     expect(
       component.getDateFieldErrors({
-        businessUnit: ABSTRACT_REPORT_SUMMARY_LIST_ALL_BUSINESS_UNITS,
         dateFilter: ABSTRACT_REPORT_SUMMARY_LIST_DATE_RANGE,
         days: '',
         dateFrom: '17/07/2026',

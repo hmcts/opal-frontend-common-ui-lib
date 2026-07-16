@@ -1,6 +1,123 @@
-# AbstractReportInstancesTableBaseComponent
+# Abstract Report Instances Table Base Component
 
-Reusable base behaviour for report instances tables.
+This Angular component serves as a small foundational base class for report instances tables. It extends
+`AbstractSortableTablePaginationComponent` and provides report-table data input wiring, typed paginated data, and a
+default report page size.
 
-This abstract class provides the shared table data input and report pagination size while allowing consuming
-applications to own their concrete table templates, columns, links, and actions.
+It does not provide shared table markup, columns, links, actions, status display, or report-specific row mapping.
+Consuming applications remain responsible for the concrete table template and report action behaviour.
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Properties](#properties)
+- [Inputs](#inputs)
+- [Methods](#methods)
+- [Interfaces](#interfaces)
+- [Ownership Model](#ownership-model)
+- [Testing](#testing)
+- [Contributing](#contributing)
+
+## Installation
+
+To use the `AbstractReportInstancesTableBaseComponent` in your project, extend it in a concrete report table component:
+
+```typescript
+import { AbstractReportInstancesTableBaseComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-report-instances-table-base';
+```
+
+## Usage
+
+This component is designed to be extended by report table components that need the existing sortable-table pagination
+behaviour with a report-specific `tableData` input.
+
+### Example Usage:
+
+```typescript
+import { Component } from '@angular/core';
+import { IAbstractTableData } from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/interfaces';
+import { SortableValuesType } from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/types';
+import { AbstractReportInstancesTableBaseComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-report-instances-table-base';
+
+interface ReportRow extends IAbstractTableData<SortableValuesType> {
+  Title: string;
+  instanceId: string;
+}
+
+@Component({
+  selector: 'app-report-table',
+  templateUrl: './report-table.component.html',
+})
+export class ReportTableComponent extends AbstractReportInstancesTableBaseComponent<ReportRow> {}
+```
+
+### Example Template Usage:
+
+```html
+<app-report-table [tableData]="rows" [itemsPerPage]="10"></app-report-table>
+```
+
+## Properties
+
+The component provides typed report table pagination properties:
+
+| Property                     | Type                | Description                                                |
+| ---------------------------- | ------------------- | ---------------------------------------------------------- |
+| `itemsPerPageSignal`         | `WritableSignal<number>` | Page size used by inherited pagination. Defaults to `25`. |
+| `paginatedTableDataComputed` | `Signal<TTableData[]>`   | Current page of sorted report table data.                 |
+
+## Inputs
+
+| Input          | Type           | Description                                                               |
+| -------------- | -------------- | ------------------------------------------------------------------------- |
+| `tableData`    | `TTableData[]` | Required report rows. Updates inherited table state and reapplies filters. |
+| `itemsPerPage` | `number`       | Optional page size override. Defaults to `25` when not supplied.           |
+
+## Methods
+
+This class relies on inherited sorting and pagination methods from `AbstractSortableTablePaginationComponent`.
+Consumers should use the inherited API for sorting, filtering, and page changes.
+
+## Interfaces
+
+The generic row type must satisfy the inherited sortable table data contract:
+
+1. **Table Data Contracts**:
+   - `TTableData extends IAbstractTableData<SortableValuesType>`: concrete report row shape
+   - `IAbstractTableData<SortableValuesType>`: base sortable table row contract
+   - `SortableValuesType`: supported values for sortable table cells
+
+## Ownership Model
+
+**Shared by this base class:**
+
+- Required report table data input
+- Forwarding table data into inherited sortable table state
+- Reapplying inherited filters when table data changes
+- Typed paginated table data
+- Default report page size with an optional override
+
+**Owned by the consuming application:**
+
+- Concrete table template
+- Column labels and sort keys
+- Row links and action behaviour
+- Status/action display
+- Report-specific row mapping
+
+## Testing
+
+Unit tests should cover:
+
+- Setting report table data through the `tableData` input
+- Default page size behaviour
+- Page size override behaviour through `itemsPerPage`
+- Paginated data returned for subsequent pages
+- Consumer row typing through the generic `TTableData`
+
+## Contributing
+
+Keep this base limited to wiring that is stable across report instances tables. Do not add shared report table markup,
+column definitions, routing, download actions, or journey-specific behaviour unless the report table experience has been
+standardised across consuming applications.

@@ -2,7 +2,6 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { DateService } from '@hmcts/opal-frontend-common/services/date-service';
 import { IAbstractFormBaseFormErrorSummaryMessage } from '@hmcts/opal-frontend-common/components/abstract/interfaces';
 import {
-  ABSTRACT_REPORT_SUMMARY_LIST_ALL_BUSINESS_UNITS,
   ABSTRACT_REPORT_SUMMARY_LIST_CUSTOM_DAYS,
   ABSTRACT_REPORT_SUMMARY_LIST_DATE_RANGE,
   ABSTRACT_REPORT_SUMMARY_LIST_FILTER_STATE,
@@ -13,7 +12,7 @@ import {
   ABSTRACT_REPORT_SUMMARY_LIST_STATUS_DISPLAY,
 } from './constants/abstract-report-summary-list-status.constant';
 import { IAbstractReportSummaryListDateFieldIds } from './interfaces/abstract-report-summary-list-date-field-ids.interface';
-import { IAbstractReportSummaryListFilterForm } from './interfaces/abstract-report-summary-list-filter-form.interface';
+import { IAbstractReportSummaryListDateValidationMessages } from './interfaces/abstract-report-summary-list-date-validation-messages.interface';
 import { IAbstractReportSummaryListFilterState } from './interfaces/abstract-report-summary-list-filter-state.interface';
 import { IAbstractReportSummaryListQueryState } from './interfaces/abstract-report-summary-list-query-state.interface';
 import { AbstractReportSummaryListDateFilter } from './types/abstract-report-summary-list-date-filter.type';
@@ -22,9 +21,10 @@ const DATE_FORMAT = 'dd/MM/yyyy';
 const API_DATE_FORMAT = 'yyyy-MM-dd';
 
 @Component({ template: '' })
-export abstract class AbstractReportSummaryListBaseComponent {
+export abstract class AbstractReportSummaryListBaseComponent<TFilterForm = unknown> {
   protected readonly dateService = inject(DateService);
   protected readonly fieldErrors = signal<Record<string, string>>({});
+  protected abstract readonly dateValidationMessages: IAbstractReportSummaryListDateValidationMessages;
 
   public readonly dateFilterLast7Days = ABSTRACT_REPORT_SUMMARY_LIST_LAST_7_DAYS;
   public readonly dateFilterCustomDays = ABSTRACT_REPORT_SUMMARY_LIST_CUSTOM_DAYS;
@@ -40,7 +40,7 @@ export abstract class AbstractReportSummaryListBaseComponent {
    * Builds the default report query for the last 7 days.
    *
    * @param dateService - The date service used to calculate and format the date range.
-   * @returns A report query state with a last 7 days date range and no business unit filter.
+   * @returns A report query state with a last 7 days date range.
    */
   public static getDefaultReportQuery(dateService: DateService): IAbstractReportSummaryListQueryState {
     const dateRange = dateService.getDateRange(6, 0, API_DATE_FORMAT);
@@ -48,7 +48,6 @@ export abstract class AbstractReportSummaryListBaseComponent {
     return {
       fromDate: dateRange.from,
       toDate: dateRange.to,
-      businessUnit: null,
     };
   }
 
@@ -63,11 +62,6 @@ export abstract class AbstractReportSummaryListBaseComponent {
     filters: IAbstractReportSummaryListFilterState,
     dateService: DateService,
   ): IAbstractReportSummaryListQueryState {
-    const businessUnit =
-      filters.businessUnit && filters.businessUnit !== ABSTRACT_REPORT_SUMMARY_LIST_ALL_BUSINESS_UNITS
-        ? filters.businessUnit
-        : null;
-
     if (filters.dateFilter === ABSTRACT_REPORT_SUMMARY_LIST_CUSTOM_DAYS) {
       const days = Number(filters.days);
       const dateRange = dateService.getDateRange(days - 1, 0, API_DATE_FORMAT);
@@ -75,7 +69,6 @@ export abstract class AbstractReportSummaryListBaseComponent {
       return {
         fromDate: dateRange.from,
         toDate: dateRange.to,
-        businessUnit,
       };
     }
 
@@ -85,14 +78,10 @@ export abstract class AbstractReportSummaryListBaseComponent {
           ? dateService.getFromFormatToFormat(filters.dateFrom, DATE_FORMAT, API_DATE_FORMAT)
           : null,
         toDate: filters.dateTo ? dateService.getFromFormatToFormat(filters.dateTo, DATE_FORMAT, API_DATE_FORMAT) : null,
-        businessUnit,
       };
     }
 
-    return {
-      ...AbstractReportSummaryListBaseComponent.getDefaultReportQuery(dateService),
-      businessUnit,
-    };
+    return AbstractReportSummaryListBaseComponent.getDefaultReportQuery(dateService);
   }
 
   /**
@@ -136,7 +125,7 @@ export abstract class AbstractReportSummaryListBaseComponent {
   /**
    * Builds the default report query for the current component instance.
    *
-   * @returns A report query state with a last 7 days date range and no business unit filter.
+   * @returns A report query state with a last 7 days date range.
    */
   protected getDefaultReportQuery(): IAbstractReportSummaryListQueryState {
     return AbstractReportSummaryListBaseComponent.getDefaultReportQuery(this.dateService);
@@ -155,42 +144,23 @@ export abstract class AbstractReportSummaryListBaseComponent {
   }
 
   /**
-   * Reads a report filter form into a normalized filter state object.
+   * Reads the consuming application's report filter form into a normalized filter state object.
    *
-   * @param filtersForm - The report filter form to read from.
+   * @param filtersForm - The consuming application's report filter form to read from.
    * @returns A normalized report filter state.
    */
-  protected getFiltersFromForm(
-    filtersForm: IAbstractReportSummaryListFilterForm,
-  ): IAbstractReportSummaryListFilterState {
-    return {
-      businessUnit: filtersForm.controls.businessUnit.value ?? ABSTRACT_REPORT_SUMMARY_LIST_FILTER_STATE.businessUnit,
-      dateFilter: filtersForm.controls.dateFilter.value ?? ABSTRACT_REPORT_SUMMARY_LIST_LAST_7_DAYS,
-      days: filtersForm.controls.days.value ?? '',
-      dateFrom: filtersForm.controls.dateFrom.value ?? '',
-      dateTo: filtersForm.controls.dateTo.value ?? '',
-    };
-  }
+  protected abstract getFiltersFromForm(filtersForm: TFilterForm): IAbstractReportSummaryListFilterState;
 
   /**
-   * Clears report date form fields that do not apply to the selected date filter.
+   * Clears consuming application form fields that do not apply to the selected date filter.
    *
-   * @param filtersForm - The report filter form to update.
+   * @param filtersForm - The consuming application's report filter form to update.
    * @param dateFilter - The selected date filter.
    */
-  protected clearInactiveDateFilterFields(
-    filtersForm: IAbstractReportSummaryListFilterForm,
+  protected abstract clearInactiveDateFilterFields(
+    filtersForm: TFilterForm,
     dateFilter: AbstractReportSummaryListDateFilter | null,
-  ): void {
-    if (dateFilter !== ABSTRACT_REPORT_SUMMARY_LIST_CUSTOM_DAYS) {
-      filtersForm.controls.days.setValue('', { emitEvent: false });
-    }
-
-    if (dateFilter !== ABSTRACT_REPORT_SUMMARY_LIST_DATE_RANGE) {
-      filtersForm.controls.dateFrom.setValue('', { emitEvent: false });
-      filtersForm.controls.dateTo.setValue('', { emitEvent: false });
-    }
-  }
+  ): void;
 
   /**
    * Builds validation messages for the active report date filter fields.
@@ -226,7 +196,7 @@ export abstract class AbstractReportSummaryListBaseComponent {
     fieldIds: IAbstractReportSummaryListDateFieldIds,
   ): Record<string, string> {
     if (!filters.days || Number.isNaN(Number(filters.days)) || Number(filters.days) < 1) {
-      return { [fieldIds.days]: 'Enter number of days' };
+      return { [fieldIds.days]: this.dateValidationMessages.customDaysRequired };
     }
 
     return {};
@@ -266,7 +236,7 @@ export abstract class AbstractReportSummaryListBaseComponent {
     fieldIds: IAbstractReportSummaryListDateFieldIds,
   ): void {
     if (!filters.dateFrom && !filters.dateTo) {
-      errors[fieldIds.dateFrom] = 'You must enter at least 1 of date from or date to';
+      errors[fieldIds.dateFrom] = this.dateValidationMessages.dateRangeRequired;
     }
   }
 
@@ -283,11 +253,11 @@ export abstract class AbstractReportSummaryListBaseComponent {
     fieldIds: IAbstractReportSummaryListDateFieldIds,
   ): void {
     if (filters.dateFrom && this.isReportDateInvalid(filters.dateFrom)) {
-      errors[fieldIds.dateFrom] = 'Date must be in the format DD/MM/YYYY';
+      errors[fieldIds.dateFrom] = this.dateValidationMessages.invalidDate;
     }
 
     if (filters.dateTo && this.isReportDateInvalid(filters.dateTo)) {
-      errors[fieldIds.dateTo] = 'Date must be in the format DD/MM/YYYY';
+      errors[fieldIds.dateTo] = this.dateValidationMessages.invalidDate;
     }
   }
 
@@ -304,11 +274,11 @@ export abstract class AbstractReportSummaryListBaseComponent {
     fieldIds: IAbstractReportSummaryListDateFieldIds,
   ): void {
     if (!errors[fieldIds.dateFrom] && filters.dateFrom && this.isReportDateInFuture(filters.dateFrom)) {
-      errors[fieldIds.dateFrom] = 'Date cannot be in the future';
+      errors[fieldIds.dateFrom] = this.dateValidationMessages.futureDate;
     }
 
     if (!errors[fieldIds.dateTo] && filters.dateTo && this.isReportDateInFuture(filters.dateTo)) {
-      errors[fieldIds.dateTo] = 'Date cannot be in the future';
+      errors[fieldIds.dateTo] = this.dateValidationMessages.futureDate;
     }
   }
 
@@ -329,7 +299,7 @@ export abstract class AbstractReportSummaryListBaseComponent {
     }
 
     if (this.isReportDateFromAfterDateTo(filters.dateFrom, filters.dateTo)) {
-      errors[fieldIds.dateFrom] = 'The Date from cannot be after the Date to';
+      errors[fieldIds.dateFrom] = this.dateValidationMessages.dateFromAfterDateTo;
     }
   }
 
