@@ -68,6 +68,12 @@
       "@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table-pagination": [
         "./dist/opal-frontend-common/components/abstract/abstract-sortable-table-pagination"
       ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-report-instances-table-base": [
+        "./dist/opal-frontend-common/components/abstract/abstract-report-instances-table-base"
+      ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-report-summary-list-base": [
+        "./dist/opal-frontend-common/components/abstract/abstract-report-summary-list-base"
+      ],
       "@hmcts/opal-frontend-common/components/abstract/abstract-tab-data": [
         "./dist/opal-frontend-common/components/abstract/abstract-tab-data"
       ],
@@ -121,9 +127,6 @@
       ],
       "@hmcts/opal-frontend-common/components/custom/custom-horizontal-scroll-pane": [
         "./dist/opal-frontend-common/components/custom/custom-horizontal-scroll-pane"
-      ],
-      "@hmcts/opal-frontend-common/components/custom/custom-report-instances-table": [
-        "./dist/opal-frontend-common/components/custom/custom-report-instances-table"
       ],
       "@hmcts/opal-frontend-common/components/custom/custom-scrollable-panes": [
         "./dist/opal-frontend-common/components/custom/custom-scrollable-panes"
@@ -402,7 +405,6 @@
       "@hmcts/opal-frontend-common/services/date-service/interfaces": [
         "./dist/opal-frontend-common/services/date-service/interfaces"
       ],
-      "@hmcts/opal-frontend-common/services/report-service": ["./dist/opal-frontend-common/services/report-service"],
       "@hmcts/opal-frontend-common/services/launch-darkly-service": [
         "./dist/opal-frontend-common/services/launch-darkly-service"
       ],

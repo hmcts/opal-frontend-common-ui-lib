@@ -1,5 +1,0 @@
-{
-  "sideEffects": false,
-  "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-custom-custom-report-instances-table.mjs",
-  "typings": "../../../../dist/opal-frontend-common/components/custom/custom-report-instances-table/index.d.ts"
-}

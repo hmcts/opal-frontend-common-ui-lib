@@ -1,0 +1,5 @@
+{
+  "sideEffects": false,
+  "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-report-summary-list-base.mjs",
+  "typings": "../../../../dist/opal-frontend-common/components/abstract/abstract-report-summary-list-base/index.d.ts"
+}
