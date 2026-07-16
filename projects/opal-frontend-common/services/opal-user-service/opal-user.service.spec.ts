@@ -125,6 +125,32 @@ describe('OpalUserService', () => {
     expect(responses).toEqual([OPAL_USER_STATE_MOCK, OPAL_USER_STATE_MOCK]);
   });
 
+  it('should not clear a newer cache expiry when a stale in-flight user state request fails', () => {
+    vi.spyOn(Date, 'now').mockReturnValue(1_000);
+
+    service.getLoggedInUserState().subscribe({
+      next: () => expect.fail('Expected stale request to be filtered before emitting'),
+      error: () => undefined,
+    });
+    const staleReq = httpMock.expectOne(OPAL_USER_PATHS.loggedInUserState);
+
+    service.clearUserStateCache();
+
+    service.getLoggedInUserState().subscribe((response) => {
+      expect(response).toEqual(OPAL_USER_STATE_MOCK);
+    });
+    const freshReq = httpMock.expectOne(OPAL_USER_PATHS.loggedInUserState);
+    freshReq.flush(USER_STATE_MOCK);
+
+    staleReq.flush('Server error', { status: 500, statusText: 'Internal Server Error' });
+
+    service.getLoggedInUserState().subscribe((response) => {
+      expect(response).toEqual(OPAL_USER_STATE_MOCK);
+    });
+
+    httpMock.expectNone(OPAL_USER_PATHS.loggedInUserState);
+  });
+
   it('should bypass a valid cached user state when refreshUserState is called', () => {
     vi.spyOn(Date, 'now').mockReturnValue(1_000);
 
@@ -256,6 +282,19 @@ describe('OpalUserService', () => {
 
     const req = httpMock.expectOne(OPAL_USER_PATHS.loggedInUserState);
     req.flush(userStateWithoutConfiguredDomain);
+  });
+
+  it('should error when the user-state response body is empty', () => {
+    service.getLoggedInUserState().subscribe({
+      next: () => expect.fail('Expected empty user-state response body to throw'),
+      error: (error: Error) => {
+        expect(error.message).toBe('User state response body is required.');
+        expect(globalStore.userState()).toEqual({} as IOpalUserState);
+      },
+    });
+
+    const req = httpMock.expectOne(OPAL_USER_PATHS.loggedInUserState);
+    req.flush(null);
   });
 
   it('should map business_unit_users from the configured user-state domain', () => {
