@@ -152,7 +152,11 @@ export abstract class AbstractReportSummaryListBaseComponent<TFilterForm = unkno
   protected getReportQueryFromFilters(
     filters: IAbstractReportSummaryListFilterState,
   ): IAbstractReportSummaryListQueryState {
-    return AbstractReportSummaryListBaseComponent.getReportQueryFromFilters(filters, this.dateService, this.dateFormats);
+    return AbstractReportSummaryListBaseComponent.getReportQueryFromFilters(
+      filters,
+      this.dateService,
+      this.dateFormats,
+    );
   }
 
   /**
