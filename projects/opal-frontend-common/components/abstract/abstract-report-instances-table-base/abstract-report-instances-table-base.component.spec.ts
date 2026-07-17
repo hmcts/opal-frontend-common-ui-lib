@@ -73,6 +73,7 @@ describe('AbstractReportInstancesTableBaseComponent', () => {
 
     component.onPageChange(3);
     component.itemsPerPageSignal.set(25);
+    fixture.detectChanges();
 
     expect(component.currentPageSignal()).toBe(2);
     expect(component.paginatedTableDataComputed()).toHaveLength(1);
