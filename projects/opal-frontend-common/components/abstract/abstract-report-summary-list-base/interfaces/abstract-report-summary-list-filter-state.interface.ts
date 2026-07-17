@@ -1,5 +1,7 @@
+import type { AbstractReportSummaryListDateFilter } from '@hmcts/opal-frontend-common/components/abstract/abstract-report-summary-list-base/types';
+
 export interface IAbstractReportSummaryListFilterState {
-  dateFilter: 'last7Days' | 'customDays' | 'dateRange';
+  dateFilter: AbstractReportSummaryListDateFilter;
   days: string;
   dateFrom: string;
   dateTo: string;

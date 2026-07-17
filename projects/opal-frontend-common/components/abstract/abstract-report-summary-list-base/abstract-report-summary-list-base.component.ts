@@ -12,19 +12,23 @@ import {
   ABSTRACT_REPORT_SUMMARY_LIST_STATUS_DISPLAY,
 } from './constants/abstract-report-summary-list-status.constant';
 import { IAbstractReportSummaryListDateFieldIds } from './interfaces/abstract-report-summary-list-date-field-ids.interface';
+import { IAbstractReportSummaryListDateFormats } from './interfaces/abstract-report-summary-list-date-formats.interface';
 import { IAbstractReportSummaryListDateValidationMessages } from './interfaces/abstract-report-summary-list-date-validation-messages.interface';
 import { IAbstractReportSummaryListFilterState } from './interfaces/abstract-report-summary-list-filter-state.interface';
 import { IAbstractReportSummaryListQueryState } from './interfaces/abstract-report-summary-list-query-state.interface';
 import { AbstractReportSummaryListDateFilter } from './types/abstract-report-summary-list-date-filter.type';
 
-const DATE_FORMAT = 'dd/MM/yyyy';
-const API_DATE_FORMAT = 'yyyy-MM-dd';
+const ABSTRACT_REPORT_SUMMARY_LIST_DATE_FORMATS: IAbstractReportSummaryListDateFormats = {
+  input: 'dd/MM/yyyy',
+  output: 'yyyy-MM-dd',
+};
 
 @Component({ template: '' })
 export abstract class AbstractReportSummaryListBaseComponent<TFilterForm = unknown> {
   protected readonly dateService = inject(DateService);
   protected readonly fieldErrors = signal<Record<string, string>>({});
   protected abstract readonly dateValidationMessages: IAbstractReportSummaryListDateValidationMessages;
+  protected readonly dateFormats: IAbstractReportSummaryListDateFormats = ABSTRACT_REPORT_SUMMARY_LIST_DATE_FORMATS;
 
   public readonly dateFilterLast7Days = ABSTRACT_REPORT_SUMMARY_LIST_LAST_7_DAYS;
   public readonly dateFilterCustomDays = ABSTRACT_REPORT_SUMMARY_LIST_CUSTOM_DAYS;
@@ -40,10 +44,14 @@ export abstract class AbstractReportSummaryListBaseComponent<TFilterForm = unkno
    * Builds the default report query for the last 7 days.
    *
    * @param dateService - The date service used to calculate and format the date range.
+   * @param dateFormats - The input and output date formats used by the consuming application.
    * @returns A report query state with a last 7 days date range.
    */
-  public static getDefaultReportQuery(dateService: DateService): IAbstractReportSummaryListQueryState {
-    const dateRange = dateService.getDateRange(6, 0, API_DATE_FORMAT);
+  public static getDefaultReportQuery(
+    dateService: DateService,
+    dateFormats: IAbstractReportSummaryListDateFormats = ABSTRACT_REPORT_SUMMARY_LIST_DATE_FORMATS,
+  ): IAbstractReportSummaryListQueryState {
+    const dateRange = dateService.getDateRange(6, 0, dateFormats.output);
 
     return {
       fromDate: dateRange.from,
@@ -56,15 +64,17 @@ export abstract class AbstractReportSummaryListBaseComponent<TFilterForm = unkno
    *
    * @param filters - The selected report filter state.
    * @param dateService - The date service used to calculate and format date values.
+   * @param dateFormats - The input and output date formats used by the consuming application.
    * @returns A report query state suitable for report instance API requests.
    */
   public static getReportQueryFromFilters(
     filters: IAbstractReportSummaryListFilterState,
     dateService: DateService,
+    dateFormats: IAbstractReportSummaryListDateFormats = ABSTRACT_REPORT_SUMMARY_LIST_DATE_FORMATS,
   ): IAbstractReportSummaryListQueryState {
     if (filters.dateFilter === ABSTRACT_REPORT_SUMMARY_LIST_CUSTOM_DAYS) {
       const days = Number(filters.days);
-      const dateRange = dateService.getDateRange(days - 1, 0, API_DATE_FORMAT);
+      const dateRange = dateService.getDateRange(days - 1, 0, dateFormats.output);
 
       return {
         fromDate: dateRange.from,
@@ -75,13 +85,15 @@ export abstract class AbstractReportSummaryListBaseComponent<TFilterForm = unkno
     if (filters.dateFilter === ABSTRACT_REPORT_SUMMARY_LIST_DATE_RANGE) {
       return {
         fromDate: filters.dateFrom
-          ? dateService.getFromFormatToFormat(filters.dateFrom, DATE_FORMAT, API_DATE_FORMAT)
+          ? dateService.getFromFormatToFormat(filters.dateFrom, dateFormats.input, dateFormats.output)
           : null,
-        toDate: filters.dateTo ? dateService.getFromFormatToFormat(filters.dateTo, DATE_FORMAT, API_DATE_FORMAT) : null,
+        toDate: filters.dateTo
+          ? dateService.getFromFormatToFormat(filters.dateTo, dateFormats.input, dateFormats.output)
+          : null,
       };
     }
 
-    return AbstractReportSummaryListBaseComponent.getDefaultReportQuery(dateService);
+    return AbstractReportSummaryListBaseComponent.getDefaultReportQuery(dateService, dateFormats);
   }
 
   /**
@@ -128,7 +140,7 @@ export abstract class AbstractReportSummaryListBaseComponent<TFilterForm = unkno
    * @returns A report query state with a last 7 days date range.
    */
   protected getDefaultReportQuery(): IAbstractReportSummaryListQueryState {
-    return AbstractReportSummaryListBaseComponent.getDefaultReportQuery(this.dateService);
+    return AbstractReportSummaryListBaseComponent.getDefaultReportQuery(this.dateService, this.dateFormats);
   }
 
   /**
@@ -140,7 +152,7 @@ export abstract class AbstractReportSummaryListBaseComponent<TFilterForm = unkno
   protected getReportQueryFromFilters(
     filters: IAbstractReportSummaryListFilterState,
   ): IAbstractReportSummaryListQueryState {
-    return AbstractReportSummaryListBaseComponent.getReportQueryFromFilters(filters, this.dateService);
+    return AbstractReportSummaryListBaseComponent.getReportQueryFromFilters(filters, this.dateService, this.dateFormats);
   }
 
   /**
@@ -312,7 +324,7 @@ export abstract class AbstractReportSummaryListBaseComponent<TFilterForm = unkno
    * @returns True when the date value is invalid, otherwise false.
    */
   protected isReportDateInvalid(value: string): boolean {
-    return !this.dateService.isValidDate(value, DATE_FORMAT);
+    return !this.dateService.isValidDate(value, this.dateFormats.input);
   }
 
   /**
@@ -323,8 +335,8 @@ export abstract class AbstractReportSummaryListBaseComponent<TFilterForm = unkno
    */
   protected isReportDateInFuture(value: string): boolean {
     return (
-      this.dateService.isValidDate(value, DATE_FORMAT) &&
-      this.dateService.isDateInTheFuture(value, undefined, DATE_FORMAT)
+      this.dateService.isValidDate(value, this.dateFormats.input) &&
+      this.dateService.isDateInTheFuture(value, undefined, this.dateFormats.input)
     );
   }
 
@@ -336,8 +348,8 @@ export abstract class AbstractReportSummaryListBaseComponent<TFilterForm = unkno
    * @returns True when both dates are valid and date from is after date to, otherwise false.
    */
   protected isReportDateFromAfterDateTo(dateFrom: string, dateTo: string): boolean {
-    const from = this.dateService.getFromFormat(dateFrom, DATE_FORMAT).startOf('day');
-    const to = this.dateService.getFromFormat(dateTo, DATE_FORMAT).startOf('day');
+    const from = this.dateService.getFromFormat(dateFrom, this.dateFormats.input).startOf('day');
+    const to = this.dateService.getFromFormat(dateTo, this.dateFormats.input).startOf('day');
     return from.isValid && to.isValid && from > to;
   }
 

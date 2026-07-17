@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup } from '@angular/forms';
 import { DateTime } from 'luxon';
 import { describe, afterEach, beforeEach, expect, it, vi } from 'vitest';
+import { DateService } from '@hmcts/opal-frontend-common/services/date-service';
 import { AbstractReportSummaryListBaseComponent } from './abstract-report-summary-list-base.component';
 import {
   ABSTRACT_REPORT_SUMMARY_LIST_CUSTOM_DAYS,
@@ -90,13 +91,21 @@ class TestReportSummaryListBaseComponent extends AbstractReportSummaryListBaseCo
   }
 }
 
+@Component({ template: '' })
+class TestCustomDateFormatReportSummaryListBaseComponent extends TestReportSummaryListBaseComponent {
+  protected override readonly dateFormats = {
+    input: 'yyyy/MM/dd',
+    output: 'dd-MM-yyyy',
+  };
+}
+
 describe('AbstractReportSummaryListBaseComponent', () => {
   let component: TestReportSummaryListBaseComponent;
   let fixture: ComponentFixture<TestReportSummaryListBaseComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestReportSummaryListBaseComponent],
+      imports: [TestReportSummaryListBaseComponent, TestCustomDateFormatReportSummaryListBaseComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestReportSummaryListBaseComponent);
@@ -166,6 +175,67 @@ describe('AbstractReportSummaryListBaseComponent', () => {
     ).toEqual({
       fromDate: null,
       toDate: '2026-07-16',
+    });
+  });
+
+  it('should build an open date range query from a date from only', () => {
+    expect(
+      component.getQueryFromFilters({
+        dateFilter: ABSTRACT_REPORT_SUMMARY_LIST_DATE_RANGE,
+        days: '',
+        dateFrom: '01/07/2026',
+        dateTo: '',
+      }),
+    ).toEqual({
+      fromDate: '2026-07-01',
+      toDate: null,
+    });
+  });
+
+  it('should build date queries with custom date formats', () => {
+    const customFixture = TestBed.createComponent(TestCustomDateFormatReportSummaryListBaseComponent);
+    const customComponent = customFixture.componentInstance;
+
+    vi.spyOn(DateTime, 'now').mockReturnValue(DateTime.fromISO('2026-07-16') as DateTime<true>);
+
+    expect(customComponent.getDefaultQuery()).toEqual({
+      fromDate: '10-07-2026',
+      toDate: '16-07-2026',
+    });
+
+    expect(
+      customComponent.getQueryFromFilters({
+        dateFilter: ABSTRACT_REPORT_SUMMARY_LIST_DATE_RANGE,
+        days: '',
+        dateFrom: '2026/07/01',
+        dateTo: '2026/07/16',
+      }),
+    ).toEqual({
+      fromDate: '01-07-2026',
+      toDate: '16-07-2026',
+    });
+  });
+
+  it('should build static date queries with custom date formats', () => {
+    const dateService = TestBed.inject(DateService);
+
+    expect(
+      AbstractReportSummaryListBaseComponent.getReportQueryFromFilters(
+        {
+          dateFilter: ABSTRACT_REPORT_SUMMARY_LIST_DATE_RANGE,
+          days: '',
+          dateFrom: '2026/07/01',
+          dateTo: '2026/07/16',
+        },
+        dateService,
+        {
+          input: 'yyyy/MM/dd',
+          output: 'dd-MM-yyyy',
+        },
+      ),
+    ).toEqual({
+      fromDate: '01-07-2026',
+      toDate: '16-07-2026',
     });
   });
 
@@ -250,6 +320,17 @@ describe('AbstractReportSummaryListBaseComponent', () => {
       component.getDateFieldErrors({
         dateFilter: ABSTRACT_REPORT_SUMMARY_LIST_CUSTOM_DAYS,
         days: '0',
+        dateFrom: '',
+        dateTo: '',
+      }),
+    ).toEqual({
+      days: 'Enter number of days',
+    });
+
+    expect(
+      component.getDateFieldErrors({
+        dateFilter: ABSTRACT_REPORT_SUMMARY_LIST_CUSTOM_DAYS,
+        days: '-1',
         dateFrom: '',
         dateTo: '',
       }),

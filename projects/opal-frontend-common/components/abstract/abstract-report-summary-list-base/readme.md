@@ -35,6 +35,7 @@ import {
   ABSTRACT_REPORT_SUMMARY_LIST_DATE_RANGE,
 } from '@hmcts/opal-frontend-common/components/abstract/abstract-report-summary-list-base/constants';
 import {
+  IAbstractReportSummaryListDateFormats,
   IAbstractReportSummaryListDateValidationMessages,
   IAbstractReportSummaryListFilterState,
 } from '@hmcts/opal-frontend-common/components/abstract/abstract-report-summary-list-base/interfaces';
@@ -65,11 +66,18 @@ type ReportFiltersForm = FormGroup<{
   dateTo: FormControl<string | null>;
 }>;
 
+const REPORT_DATE_FORMATS: IAbstractReportSummaryListDateFormats = {
+  input: 'dd/MM/yyyy',
+  output: 'yyyy-MM-dd',
+};
+
 @Component({
   selector: 'app-report-summary',
   templateUrl: './report-summary.component.html',
 })
 export class ReportSummaryComponent extends AbstractReportSummaryListBaseComponent<ReportFiltersForm> {
+  protected override readonly dateFormats = REPORT_DATE_FORMATS;
+
   public readonly filtersForm: ReportFiltersForm = new FormGroup({
     dateFilter: new FormControl<AbstractReportSummaryListDateFilter | null>(this.dateFilterLast7Days),
     days: new FormControl<string | null>(''),
@@ -121,6 +129,7 @@ The component provides public and protected properties for report date-filter ma
 | `dateFilterDateRange`       | `string`                                          | Constant value for the date range date filter.                |
 | `dateFilter`                | `WritableSignal<AbstractReportSummaryListDateFilter>` | Current selected date filter.                             |
 | `errorSummaryMessages`      | `Signal<IAbstractFormBaseFormErrorSummaryMessage[]>`  | Error summary messages derived from the field error map.   |
+| `dateFormats`               | `IAbstractReportSummaryListDateFormats`               | Consumer-overridable input and output date formats.        |
 | `dateValidationMessages`    | `IAbstractReportSummaryListDateValidationMessages`    | Consumer-defined validation messages for date fields.      |
 
 ## Methods
@@ -129,8 +138,8 @@ The component provides public and protected properties for report date-filter ma
 
 | Method                             | Parameters                                                                    | Description                                                                 |
 | ---------------------------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| `getDefaultReportQuery()`          | `dateService: DateService`                                                    | Builds a date query for the last 7 days.                                    |
-| `getReportQueryFromFilters()`      | `filters: IAbstractReportSummaryListFilterState, dateService: DateService`    | Converts date-filter state into a report date query.                        |
+| `getDefaultReportQuery()`          | `dateService: DateService, dateFormats?: IAbstractReportSummaryListDateFormats` | Builds a date query for the last 7 days.                                  |
+| `getReportQueryFromFilters()`      | `filters: IAbstractReportSummaryListFilterState, dateService: DateService, dateFormats?: IAbstractReportSummaryListDateFormats` | Converts date-filter state into a report date query. |
 | `getReportInstanceDisplayStatus()` | `status: string, records?: number \| null, displayName?: string \| null`      | Converts a report instance status into display text.                        |
 | `toReportDisplayStatus()`          | `status: string`                                                              | Converts a status code into title-case display text.                        |
 
@@ -164,6 +173,7 @@ The component uses several interfaces and types for type safety and structure:
 
 2. **Validation Contracts**:
    - `IAbstractReportSummaryListDateFieldIds`: Consumer-provided field ids for date validation messages
+   - `IAbstractReportSummaryListDateFormats`: Consumer-provided input and output date formats
    - `IAbstractReportSummaryListDateValidationMessages`: Consumer-provided validation copy
 
 ## Ownership Model
@@ -181,6 +191,7 @@ The component uses several interfaces and types for type safety and structure:
 - Concrete form controls and control names
 - Mapping from the concrete form to `IAbstractReportSummaryListFilterState`
 - Application-specific filters, such as business unit
+- Input and output date formats where they differ from the default `dd/MM/yyyy` to `yyyy-MM-dd` contract
 - Validation message copy
 - Routing, API calls, report metadata, page layout, and table markup
 
