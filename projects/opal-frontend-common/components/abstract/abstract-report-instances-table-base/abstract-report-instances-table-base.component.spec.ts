@@ -26,35 +26,7 @@ describe('AbstractReportInstancesTableBaseComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should set report table data and use the report page size', () => {
-    component.tableData = Array.from({ length: 26 }, (_, index) => ({
-      Title: `Report ${index + 1}`,
-      instanceId: `${index + 1}`,
-    }));
-
-    expect(component.itemsPerPageSignal()).toBe(25);
-    expect(component.paginatedTableDataComputed()).toHaveLength(25);
-  });
-
-  it('should handle empty report table data', () => {
-    component.tableData = [];
-
-    expect(component.paginatedTableDataComputed()).toEqual([]);
-  });
-
-  it('should return the second page of report table data', () => {
-    component.tableData = Array.from({ length: 26 }, (_, index) => ({
-      Title: `Report ${index + 1}`,
-      instanceId: `${index + 1}`,
-    }));
-
-    component.onPageChange(2);
-
-    expect(component.paginatedTableDataComputed()).toEqual([{ Title: 'Report 26', instanceId: '26' }]);
-  });
-
-  it('should allow consumers to override the report page size', () => {
-    component.itemsPerPage = 10;
+  it('should set report table data and use the inherited page size', () => {
     component.tableData = Array.from({ length: 26 }, (_, index) => ({
       Title: `Report ${index + 1}`,
       instanceId: `${index + 1}`,
@@ -64,15 +36,45 @@ describe('AbstractReportInstancesTableBaseComponent', () => {
     expect(component.paginatedTableDataComputed()).toHaveLength(10);
   });
 
-  it('should update paginated report table data when page size changes after data is set', () => {
+  it('should handle empty report table data', () => {
+    component.tableData = [];
+
+    expect(component.paginatedTableDataComputed()).toEqual([]);
+  });
+
+  it('should return the second page of report table data', () => {
+    const tableData = Array.from({ length: 26 }, (_, index) => ({
+      Title: `Report ${index + 1}`,
+      instanceId: `${index + 1}`,
+    }));
+    component.tableData = tableData;
+
+    component.onPageChange(2);
+
+    expect(component.paginatedTableDataComputed()).toEqual(tableData.slice(10, 20));
+  });
+
+  it('should allow consumers to override the inherited page size', () => {
+    component.itemsPerPageSignal.set(5);
     component.tableData = Array.from({ length: 26 }, (_, index) => ({
       Title: `Report ${index + 1}`,
       instanceId: `${index + 1}`,
     }));
 
-    component.itemsPerPage = 5;
-
     expect(component.itemsPerPageSignal()).toBe(5);
     expect(component.paginatedTableDataComputed()).toHaveLength(5);
+  });
+
+  it('should keep the current page valid when the inherited page size changes', () => {
+    component.tableData = Array.from({ length: 26 }, (_, index) => ({
+      Title: `Report ${index + 1}`,
+      instanceId: `${index + 1}`,
+    }));
+
+    component.onPageChange(3);
+    component.itemsPerPageSignal.set(25);
+
+    expect(component.currentPageSignal()).toBe(2);
+    expect(component.paginatedTableDataComputed()).toHaveLength(1);
   });
 });

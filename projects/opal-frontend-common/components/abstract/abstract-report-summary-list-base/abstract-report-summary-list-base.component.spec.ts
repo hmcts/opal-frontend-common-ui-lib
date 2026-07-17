@@ -267,6 +267,28 @@ describe('AbstractReportSummaryListBaseComponent', () => {
     ).toEqual({
       days: 'Enter number of days',
     });
+
+    expect(
+      component.getDateFieldErrors({
+        dateFilter: ABSTRACT_REPORT_SUMMARY_LIST_CUSTOM_DAYS,
+        days: '1.5',
+        dateFrom: '',
+        dateTo: '',
+      }),
+    ).toEqual({
+      days: 'Enter number of days',
+    });
+
+    expect(
+      component.getDateFieldErrors({
+        dateFilter: ABSTRACT_REPORT_SUMMARY_LIST_CUSTOM_DAYS,
+        days: 'Infinity',
+        dateFrom: '',
+        dateTo: '',
+      }),
+    ).toEqual({
+      days: 'Enter number of days',
+    });
   });
 
   it('should not build custom days field errors for valid days', () => {

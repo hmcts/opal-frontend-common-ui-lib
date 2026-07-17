@@ -1,8 +1,7 @@
 # Abstract Report Instances Table Base Component
 
 This Angular component serves as a small foundational base class for report instances tables. It extends
-`AbstractSortableTablePaginationComponent` and provides report-table data input wiring, typed paginated data, and a
-default report page size.
+`AbstractSortableTablePaginationComponent` and provides report-table data input wiring and typed paginated data.
 
 It does not provide shared table markup, columns, links, actions, status display, or report-specific row mapping.
 Consuming applications remain responsible for the concrete table template and report action behaviour.
@@ -32,6 +31,9 @@ import { AbstractReportInstancesTableBaseComponent } from '@hmcts/opal-frontend-
 This component is designed to be extended by report table components that need the existing sortable-table pagination
 behaviour with a report-specific `tableData` input.
 
+If a consuming application needs a page size other than the inherited default, set `itemsPerPageSignal` in the
+concrete component constructor.
+
 ### Example Usage:
 
 ```typescript
@@ -55,24 +57,23 @@ export class ReportTableComponent extends AbstractReportInstancesTableBaseCompon
 ### Example Template Usage:
 
 ```html
-<app-report-table [tableData]="rows" [itemsPerPage]="10"></app-report-table>
+<app-report-table [tableData]="rows"></app-report-table>
 ```
 
 ## Properties
 
 The component provides typed report table pagination properties:
 
-| Property                     | Type                | Description                                                |
-| ---------------------------- | ------------------- | ---------------------------------------------------------- |
-| `itemsPerPageSignal`         | `WritableSignal<number>` | Page size used by inherited pagination. Defaults to `25`. |
-| `paginatedTableDataComputed` | `Signal<TTableData[]>`   | Current page of sorted report table data.                 |
+| Property                    | Type                    | Description                                         |
+| --------------------------- | ----------------------- | --------------------------------------------------- |
+| `itemsPerPageSignal`        | `WritableSignal<number>` | Page size used by inherited pagination. Defaults to `10`. |
+| `paginatedTableDataComputed` | `Signal<TTableData[]>`   | Current page of sorted report table data.          |
 
 ## Inputs
 
-| Input          | Type           | Description                                                               |
-| -------------- | -------------- | ------------------------------------------------------------------------- |
-| `tableData`    | `TTableData[]` | Required report rows. Updates inherited table state and reapplies filters. |
-| `itemsPerPage` | `number`       | Optional page size override. Defaults to `25` when not supplied.           |
+| Input       | Type           | Description                                                               |
+| ----------- | -------------- | ------------------------------------------------------------------------- |
+| `tableData` | `TTableData[]` | Required report rows. Updates inherited table state and reapplies filters. |
 
 ## Methods
 
@@ -96,7 +97,6 @@ The generic row type must satisfy the inherited sortable table data contract:
 - Forwarding table data into inherited sortable table state
 - Reapplying inherited filters when table data changes
 - Typed paginated table data
-- Default report page size with an optional override
 
 **Owned by the consuming application:**
 
@@ -105,14 +105,15 @@ The generic row type must satisfy the inherited sortable table data contract:
 - Row links and action behaviour
 - Status/action display
 - Report-specific row mapping
+- Page size policy
 
 ## Testing
 
 Unit tests should cover:
 
 - Setting report table data through the `tableData` input
-- Default page size behaviour
-- Page size override behaviour through `itemsPerPage`
+- Default inherited page size behaviour
+- Consumer-defined page size behaviour through `itemsPerPageSignal`
 - Paginated data returned for subsequent pages
 - Consumer row typing through the generic `TTableData`
 

@@ -195,7 +195,9 @@ export abstract class AbstractReportSummaryListBaseComponent<TFilterForm = unkno
     filters: IAbstractReportSummaryListFilterState,
     fieldIds: IAbstractReportSummaryListDateFieldIds,
   ): Record<string, string> {
-    if (!filters.days || Number.isNaN(Number(filters.days)) || Number(filters.days) < 1) {
+    const days = Number(filters.days);
+
+    if (!filters.days || !Number.isFinite(days) || !Number.isInteger(days) || days < 1) {
       return { [fieldIds.days]: this.dateValidationMessages.customDaysRequired };
     }
 

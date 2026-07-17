@@ -107,6 +107,29 @@ describe('AbstractSortableTablePaginationComponent', () => {
     expect(paginated).toEqual(MOCK_ABSTRACT_TABLE_DATA.slice(0, 2));
   });
 
+  it('should clamp the current page when the page size shrinks', () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    const tableData = Array.from({ length: 5 }, (_, index) => ({
+      imposition: `Imposition ${index + 1}`,
+      creditor: 'major',
+      amountImposed: index + 1,
+      amountPaid: index,
+      balanceRemaining: index + 1,
+    }));
+
+    component.sortedTableDataSignal.set(tableData);
+    component.itemsPerPageSignal.set(2);
+    component.currentPageSignal.set(3);
+    component.itemsPerPageSignal.set(4);
+    fixture?.detectChanges();
+
+    expect(component.currentPageSignal()).toBe(2);
+    expect(component.paginatedTableDataComputed()).toEqual(tableData.slice(4, 5));
+  });
+
   it('should reset current page to 1 on filter application', () => {
     if (!component) {
       throw new Error('component returned null');
