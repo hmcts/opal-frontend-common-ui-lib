@@ -396,6 +396,26 @@ describe('AbstractReportSummaryListBaseComponent', () => {
     });
   });
 
+  it('should allow open-ended date ranges without requiring both dates', () => {
+    expect(
+      component.getDateFieldErrors({
+        dateFilter: ABSTRACT_REPORT_SUMMARY_LIST_DATE_RANGE,
+        days: '',
+        dateFrom: '15/07/2026',
+        dateTo: '',
+      }),
+    ).toEqual({});
+
+    expect(
+      component.getDateFieldErrors({
+        dateFilter: ABSTRACT_REPORT_SUMMARY_LIST_DATE_RANGE,
+        days: '',
+        dateFrom: '',
+        dateTo: '16/07/2026',
+      }),
+    ).toEqual({});
+  });
+
   it('should build date range field errors for invalid dates', () => {
     expect(
       component.getDateFieldErrors({

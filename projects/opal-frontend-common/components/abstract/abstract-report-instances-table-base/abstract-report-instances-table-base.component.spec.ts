@@ -65,6 +65,20 @@ describe('AbstractReportInstancesTableBaseComponent', () => {
     expect(component.paginatedTableDataComputed()).toHaveLength(5);
   });
 
+  it('should keep the current page unchanged when a page size change still leaves it valid', () => {
+    component.tableData = Array.from({ length: 26 }, (_, index) => ({
+      Title: `Report ${index + 1}`,
+      instanceId: `${index + 1}`,
+    }));
+
+    component.onPageChange(2);
+    component.itemsPerPageSignal.set(25);
+    fixture.detectChanges();
+
+    expect(component.currentPageSignal()).toBe(2);
+    expect(component.paginatedTableDataComputed()).toHaveLength(1);
+  });
+
   it('should keep the current page valid when the inherited page size changes', () => {
     component.tableData = Array.from({ length: 26 }, (_, index) => ({
       Title: `Report ${index + 1}`,
