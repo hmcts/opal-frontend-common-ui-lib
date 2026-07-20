@@ -24,8 +24,9 @@ describe('CustomAccountInformationItemComponent', () => {
   it('should apply the default host class', () => {
     fixture.detectChanges();
     const hostEl: HTMLElement = fixture.nativeElement;
-    expect(component.itemClasses).toBe('govuk-grid-column-one-third');
+    expect(component.itemClasses).toBe('govuk-grid-column-one-third govuk-!-padding-left-0');
     expect(hostEl.classList).toContain('govuk-grid-column-one-third');
+    expect(hostEl.classList).toContain('govuk-!-padding-left-0');
   });
 
   it('should update the host class when itemClasses changes', () => {
