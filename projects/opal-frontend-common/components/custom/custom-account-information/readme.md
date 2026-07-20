@@ -67,7 +67,8 @@ Example of one-quarter layout:
 </div>
 ```
 
-This component uses a default class from GDS layout to ensure the correct layout for content within it uses 'govuk-grid-row'.
+This component projects account information items without adding layout classes. Set item layout classes on each
+`opal-lib-custom-account-information-item` using `itemClasses`.
 
 ## Inputs
 
