@@ -48,19 +48,19 @@ Example of one-quarter layout:
 
 ```html
 <div opal-lib-custom-account-information>
-  <opal-lib-custom-account-information-item itemClasses="govuk-grid-column-one-quarter">
+  <opal-lib-custom-account-information-item itemClasses="govuk-grid-column-one-quarter govuk-!-padding-left-0">
     <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
     <p opal-lib-custom-account-information-item-value>Dave Smith</p>
   </opal-lib-custom-account-information-item>
-  <opal-lib-custom-account-information-itemg itemClasses="govuk-grid-column-one-quarter">
-    <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
-    <p opal-lib-custom-account-information-item-value>John Doe</p>
-  </opal-lib-custom-account-information-itemg>
-  <opal-lib-custom-account-information-item itemClasses="govuk-grid-column-one-quarter">
+  <opal-lib-custom-account-information-item itemClasses="govuk-grid-column-one-quarter govuk-!-padding-left-0">
     <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
     <p opal-lib-custom-account-information-item-value>John Doe</p>
   </opal-lib-custom-account-information-item>
-  <opal-lib-custom-account-information-item itemClasses="govuk-grid-column-one-quarter">
+  <opal-lib-custom-account-information-item itemClasses="govuk-grid-column-one-quarter govuk-!-padding-left-0">
+    <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
+    <p opal-lib-custom-account-information-item-value>John Doe</p>
+  </opal-lib-custom-account-information-item>
+  <opal-lib-custom-account-information-item itemClasses="govuk-grid-column-one-quarter govuk-!-padding-left-0">
     <h3 opal-lib-custom-account-information-item-label>Account Name:</h3>
     <p opal-lib-custom-account-information-item-value>John Doe</p>
   </opal-lib-custom-account-information-item>
