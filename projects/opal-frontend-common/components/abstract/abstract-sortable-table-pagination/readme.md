@@ -169,6 +169,8 @@ Computed properties reactively calculate their values based on signals and other
 - **`onSortChange(event: { key: string; sortType: 'ascending' | 'descending' })`**:
   Updates the sort state for the table and resets the pagination to the first page. This ensures that the user always starts from the beginning of the dataset when a new sorting order is applied.
 
+The component also keeps the current page within range when the page size changes, so consumers can update `itemsPerPageSignal` without leaving the table on an empty page.
+
 ### Examples
 
 - **Change Page**:

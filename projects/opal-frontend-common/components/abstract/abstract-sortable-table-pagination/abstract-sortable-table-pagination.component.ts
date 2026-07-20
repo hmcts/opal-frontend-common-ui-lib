@@ -1,10 +1,21 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
 import { AbstractSortableTableComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table';
 
 @Component({
   template: '',
 })
 export abstract class AbstractSortableTablePaginationComponent extends AbstractSortableTableComponent {
+  /**
+   * Keeps the current page within the available range when the data set or page size changes.
+   */
+  private readonly clampCurrentPageEffect = effect(() => {
+    const totalPages = Math.max(1, Math.ceil(this.sortedTableDataSignal().length / this.itemsPerPageSignal()));
+
+    if (this.currentPageSignal() > totalPages) {
+      this.currentPageSignal.set(totalPages);
+    }
+  });
+
   // Signal for the current page. Used to calculate the start and end indices for pagination.
   public currentPageSignal = signal(1);
 
