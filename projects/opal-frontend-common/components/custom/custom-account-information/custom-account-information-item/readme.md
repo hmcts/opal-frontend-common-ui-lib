@@ -25,7 +25,7 @@ import { CustomAccountInformationItemValueComponent } from '@hmcts/opal-frontend
 
 You can use the custom account information item component in your template as follows:
 
-By default the item will be set to use 'govuk-grid-column-one-third':
+By default the item will use `govuk-grid-column-one-third govuk-!-padding-left-0`:
 
 ```html
 <opal-lib-custom-account-information-item>
@@ -34,10 +34,11 @@ By default the item will be set to use 'govuk-grid-column-one-third':
 </opal-lib-custom-account-information-item>
 ```
 
-You can input into the itemClasses string with another govuk-grid-column class as required:
+You can set `itemClasses` to use another GOV.UK grid-column class as required. Include any spacing utility
+classes needed by the layout:
 
 ```html
-<opal-lib-custom-account-information-item itemClasses="govuk-grid-column-one-fourth">
+<opal-lib-custom-account-information-item itemClasses="govuk-grid-column-one-quarter govuk-!-padding-left-0">
   <h3 opal-lib-custom-account-information-item-label>Account name:</h3>
   <p opal-lib-custom-account-information-item-value>Dave Smith</p>
 </opal-lib-custom-account-information-item>
@@ -45,9 +46,9 @@ You can input into the itemClasses string with another govuk-grid-column class a
 
 ## Inputs
 
-| Input         | Type     | Default                       | Description                                                    |
-| ------------- | -------- | ----------------------------- | -------------------------------------------------------------- |
-| `itemClasses` | `string` | `govuk-grid-column-one-third` | Sets the grid layout of the item using gds grid-column classes |
+| Input         | Type     | Default                                              | Description                                                       |
+| ------------- | -------- | ---------------------------------------------------- | ----------------------------------------------------------------- |
+| `itemClasses` | `string` | `govuk-grid-column-one-third govuk-!-padding-left-0` | Sets the grid layout and spacing of the item using GOV.UK classes |
 
 ## Outputs
 
