@@ -30,4 +30,9 @@ describe('MojHeaderNavigationItemComponent', () => {
     expect(eventMock.preventDefault).toHaveBeenCalled();
     expect(component.actionClick.emit).toHaveBeenCalledWith(true);
   });
+
+  it('should not set a redundant listitem role on the navigation item', () => {
+    const listItem = fixture.nativeElement.querySelector('li');
+    expect(listItem.getAttribute('role')).toBeNull();
+  });
 });

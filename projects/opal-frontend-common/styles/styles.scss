@@ -6,14 +6,12 @@
    These imports include external styles used across the application.
 */
 @use '@ministryofjustice/frontend/moj/base' as mojBase;
+@use 'accessible-autocomplete/dist/accessible-autocomplete.min.css';
 @use 'govuk-frontend/dist/govuk/index' as *;
 @use '@ministryofjustice/frontend/moj/all' as moj;
 @use './custom/_custom-section_break.scss';
 @use './custom/custom-scrollable-panes';
-
-/* Keep @import until home-office-kit migrates to Sass modules. */
-@import 'accessible-autocomplete/dist/accessible-autocomplete.min.css';
-@import 'home-office-kit/sass/_loadingSpinner.scss';
+@use './custom/home-office-loading-spinner';
 
 html,
 body {
