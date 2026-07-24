@@ -11,23 +11,12 @@
     border-top-color: govuk.govuk-colour('blue');
     width: 80px;
     height: 80px;
-    -webkit-animation: hods-loading-spinner-animation 2s linear infinite;
     animation: hods-loading-spinner-animation 2s linear infinite;
   }
 
   &__content {
     @include govuk.govuk-responsive-padding(4, 'top');
     text-align: center;
-  }
-}
-
-@-webkit-keyframes hods-loading-spinner-animation {
-  0% {
-    -webkit-transform: rotate(0deg);
-  }
-
-  100% {
-    -webkit-transform: rotate(360deg);
   }
 }
 
