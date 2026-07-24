@@ -29,9 +29,9 @@ export abstract class AbstractSortableTableComponent extends AbstractTableFilter
     const filtered = this.filteredTableDataSignal();
     const currentSort = this.sortStateSignal();
 
-    const activeSortKey = Object.keys(currentSort).find((k) => currentSort[k] !== 'none');
+    const hasActiveSortKey = Object.keys(currentSort).some((k) => currentSort[k] !== 'none');
 
-    if (!activeSortKey) {
+    if (!hasActiveSortKey) {
       // No sort applied – use filtered data directly
       this.sortedTableDataSignal.set([...filtered]);
     }
