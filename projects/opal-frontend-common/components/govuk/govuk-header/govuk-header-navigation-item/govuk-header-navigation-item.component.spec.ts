@@ -41,4 +41,13 @@ describe('GovukHeaderNavigationItemComponent', () => {
     expect(eventMock.preventDefault).toHaveBeenCalled();
     expect(component.actionClick.emit).toHaveBeenCalledWith(true);
   });
+
+  it('should not set a redundant link role on the anchor', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    const anchor = fixture.nativeElement.querySelector('a');
+    expect(anchor.getAttribute('role')).toBeNull();
+  });
 });

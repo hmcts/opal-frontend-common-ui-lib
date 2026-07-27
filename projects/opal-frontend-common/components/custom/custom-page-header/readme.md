@@ -47,6 +47,10 @@ You can use the custom page header component in your template as follows:
 </opal-lib-custom-page-header>
 ```
 
+The `pageHeaderHeading` content is projected into a `govuk-grid-column-one-half` column. The `pageHeaderButtons`
+content is projected into a second `govuk-grid-column-one-half govuk-!-margin-top-5` column and wrapped in a
+right-aligned MOJ button group.
+
 ## Inputs
 
 There are no input fields for this component.
