@@ -144,16 +144,16 @@ describe('GovukTextInputComponent', () => {
     expect(input.getAttribute('aria-describedby')).toBeNull();
   });
 
-  it('should set autocomplete to false by default', () => {
+  it('should disable autocomplete by default', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
     }
 
     const input = fixture.debugElement.query(By.css('#test')).nativeElement;
-    expect(input.getAttribute('autocomplete')).toBe('false');
+    expect(input.getAttribute('autocomplete')).toBe('off');
   });
 
-  it('should set autocomplete to false when autoComplete is false', () => {
+  it('should disable autocomplete when autoComplete is false', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
     }
@@ -162,10 +162,10 @@ describe('GovukTextInputComponent', () => {
     fixture.detectChanges();
 
     const input = fixture.debugElement.query(By.css('#test')).nativeElement;
-    expect(input.getAttribute('autocomplete')).toBe('false');
+    expect(input.getAttribute('autocomplete')).toBe('off');
   });
 
-  it('should set autocomplete to true when autoComplete is true', () => {
+  it('should enable autocomplete when autoComplete is true', () => {
     if (!fixture) {
       throw new Error('fixture returned null');
     }
@@ -174,6 +174,32 @@ describe('GovukTextInputComponent', () => {
     fixture.detectChanges();
 
     const input = fixture.debugElement.query(By.css('#test')).nativeElement;
-    expect(input.getAttribute('autocomplete')).toBe('true');
+    expect(input.getAttribute('autocomplete')).toBe('on');
+  });
+
+  it('should set autocomplete to autoCompleteValue when autoComplete is true', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    fixture.componentRef.setInput('autoComplete', true);
+    fixture.componentRef.setInput('autoCompleteValue', 'email');
+    fixture.detectChanges();
+
+    const input = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(input.getAttribute('autocomplete')).toBe('email');
+  });
+
+  it('should set autocomplete to autoCompleteValue when autoComplete is false', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    fixture.componentRef.setInput('autoComplete', false);
+    fixture.componentRef.setInput('autoCompleteValue', 'email');
+    fixture.detectChanges();
+
+    const input = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(input.getAttribute('autocomplete')).toBe('email');
   });
 });
