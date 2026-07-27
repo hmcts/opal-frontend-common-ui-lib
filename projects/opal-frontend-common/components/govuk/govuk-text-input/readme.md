@@ -27,6 +27,7 @@ You can use the text input component in your template as follows:
   [inputId]="'name'"
   [labelText]="'Full name'"
   [hintText]="'Enter your full name.'"
+  [autoComplete]="true"
   [inputType]="'text'"
 ></opal-lib-govuk-text-input>
 ```
@@ -43,12 +44,13 @@ You can use the text input component in your template as follows:
 
 ## Inputs
 
-| Input       | Type     | Description                                              |
-| ----------- | -------- | -------------------------------------------------------- |
-| `inputId`   | `string` | The ID for the text input element.                       |
-| `labelText` | `string` | The label for the text input.                            |
-| `hintText`  | `string` | Optional hint text displayed below the label.            |
-| `inputType` | `string` | The type attribute of the input (e.g., 'text', 'email'). |
+| Input          | Type      | Description                                                                            |
+| -------------- | --------- | -------------------------------------------------------------------------------------- |
+| `inputId`      | `string`  | The ID for the text input element.                                                     |
+| `labelText`    | `string`  | The label for the text input.                                                          |
+| `hintText`     | `string`  | Optional hint text displayed below the label.                                          |
+| `autoComplete` | `boolean` | Enables native browser autocomplete when set to `true`. Defaults to `false`.           |
+| `inputType`    | `string`  | The type attribute of the input (e.g., 'text', 'email').                               |
 
 ## Outputs
 

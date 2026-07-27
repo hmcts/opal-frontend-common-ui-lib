@@ -143,4 +143,37 @@ describe('GovukTextInputComponent', () => {
     const input = fixture.debugElement.query(By.css('#test')).nativeElement;
     expect(input.getAttribute('aria-describedby')).toBeNull();
   });
+
+  it('should disable autocomplete by default', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    const input = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(input.getAttribute('autocomplete')).toBe('off');
+  });
+
+  it('should disable autocomplete when autoComplete is false', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    fixture.componentRef.setInput('autoComplete', false);
+    fixture.detectChanges();
+
+    const input = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(input.getAttribute('autocomplete')).toBe('off');
+  });
+
+  it('should enable autocomplete when autoComplete is true', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    fixture.componentRef.setInput('autoComplete', true);
+    fixture.detectChanges();
+
+    const input = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(input.getAttribute('autocomplete')).toBe('on');
+  });
 });
