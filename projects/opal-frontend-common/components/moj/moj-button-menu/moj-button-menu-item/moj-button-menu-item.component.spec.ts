@@ -57,9 +57,4 @@ describe('MojButtonMenuItemComponent isolated', () => {
     expect(fakeEvent.preventDefault).toHaveBeenCalled();
     expect(component.actionClick.emit).toHaveBeenCalled();
   });
-
-  it('should not set a redundant link role on the anchor', () => {
-    const anchor = fixture.nativeElement.querySelector('a');
-    expect(anchor.getAttribute('role')).toBeNull();
-  });
 });

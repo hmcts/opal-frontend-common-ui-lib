@@ -39,7 +39,10 @@
     </div>
     <div class="moj-header__content">
       <nav class="moj-header__navigation" aria-label="Account navigation">
-        <ul class="moj-header__navigation-list">
+        <!--PO-322
+  For accessibility we need to add a role to prevent any accessibility issues
+-->
+        <ul class="moj-header__navigation-list" role="list">
           <ng-content></ng-content>
         </ul>
       </nav>
