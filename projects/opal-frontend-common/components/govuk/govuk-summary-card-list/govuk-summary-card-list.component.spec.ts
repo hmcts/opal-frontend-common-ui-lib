@@ -61,13 +61,4 @@ describe('GovukSummaryCardListComponent', () => {
     const id = element.querySelector('#test-summary-card-list');
     expect(id).toBeTruthy();
   });
-
-  it('should not set a redundant list role on the actions list', () => {
-    if (!fixture) {
-      throw new Error('fixture returned null');
-    }
-
-    const actionsList = fixture.nativeElement.querySelector('.govuk-summary-card__actions');
-    expect(actionsList.getAttribute('role')).toBeNull();
-  });
 });

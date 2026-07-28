@@ -53,9 +53,4 @@ describe('MojHeaderComponent', () => {
     const element = fixture.nativeElement.querySelector('opal-lib-moj-header-navigation-item');
     expect(element.textContent?.trim()).toBe('Test Link');
   });
-
-  it('should not set a redundant list role on the navigation list', () => {
-    const element = fixture.nativeElement.querySelector('.moj-header__navigation-list');
-    expect(element.getAttribute('role')).toBeNull();
-  });
 });

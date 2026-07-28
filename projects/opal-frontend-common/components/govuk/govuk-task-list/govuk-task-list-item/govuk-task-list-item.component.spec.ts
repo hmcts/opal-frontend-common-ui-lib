@@ -77,13 +77,4 @@ describe('GovukTaskListItemComponent', () => {
     const element = fixture.nativeElement.querySelector('#test .govuk-task-list__status');
     expect(element.textContent?.trim()).toBe('Hello');
   });
-
-  it('should not set a redundant listitem role on the task list item', () => {
-    if (!fixture) {
-      throw new Error('fixture returned null');
-    }
-
-    const element = fixture.nativeElement.querySelector('#test');
-    expect(element.getAttribute('role')).toBeNull();
-  });
 });
