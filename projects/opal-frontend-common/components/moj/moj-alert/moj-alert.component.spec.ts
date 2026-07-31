@@ -55,6 +55,26 @@ describe('MojAlertComponent', () => {
     expect(element.getAttribute('aria-label')).toBe('warning : Close Alert');
   });
 
+  it.each([
+    ['error', 'alert'],
+    ['warning', 'alert'],
+    ['success', 'status'],
+    ['information', 'status'],
+  ] as const)('should set role to %s for type %s', (type, expectedRole) => {
+    component.type = type;
+    fixture.detectChanges();
+    const element: HTMLElement = fixture.nativeElement;
+    expect(element.getAttribute('role')).toBe(expectedRole);
+  });
+
+  it('should remove the role when the alert is not visible', () => {
+    component.isVisible = false;
+    component.type = 'warning';
+    fixture.detectChanges();
+    const element: HTMLElement = fixture.nativeElement;
+    expect(element.hasAttribute('role')).toBe(false);
+  });
+
   it('should set the data-module attribute to "moj-alert"', () => {
     fixture.detectChanges();
     const element: HTMLElement | null = fixture.nativeElement;
