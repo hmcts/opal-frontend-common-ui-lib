@@ -24,6 +24,14 @@ export class MojAlertComponent {
   get computedAriaLabel(): string {
     return `${this.type} : ${this.ariaLabel}`;
   }
+  @HostBinding('attr.role')
+  get computedRole(): 'alert' | 'status' | null {
+    if (!this.isVisible) {
+      return null;
+    }
+
+    return this.type === 'error' || this.type === 'warning' ? 'alert' : 'status';
+  }
   @HostBinding('attr.data-module') dataModule = 'moj-alert';
 
   /**
