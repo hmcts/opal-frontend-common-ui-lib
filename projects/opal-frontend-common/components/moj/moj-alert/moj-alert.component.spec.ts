@@ -60,7 +60,7 @@ describe('MojAlertComponent', () => {
     ['warning', 'alert'],
     ['success', 'status'],
     ['information', 'status'],
-  ] as const)('should set role to %s for type %s', (type, expectedRole) => {
+  ] as const)('should set alert type of %s to role=%s', (type, expectedRole) => {
     component.type = type;
     fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
