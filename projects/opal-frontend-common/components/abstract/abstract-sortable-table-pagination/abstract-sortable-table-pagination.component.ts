@@ -1,10 +1,13 @@
-import { Component, computed, effect, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { AbstractSortableTableComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table';
+import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service';
 
 @Component({
   template: '',
 })
 export abstract class AbstractSortableTablePaginationComponent extends AbstractSortableTableComponent {
+  private readonly paginationFocusUtilsService = inject(UtilsService);
+
   /**
    * Keeps the current page within the available range when the data set or page size changes.
    */
@@ -74,12 +77,20 @@ export abstract class AbstractSortableTablePaginationComponent extends AbstractS
 
   /**
    * Handles the event when the page is changed.
+   * Moves focus to the top of the main content after committing a different page.
    *
    * @param newPage - The new page number to set. If the provided page number is out of range,
    * it will be clamped between 1 and the total number of pages.
    */
   public onPageChange(newPage: number): void {
     const totalPages = Math.ceil(this.displayTableDataSignal().length / this.itemsPerPageSignal());
-    this.currentPageSignal.set(Math.max(1, Math.min(newPage, totalPages)));
+    const nextPage = Math.max(1, Math.min(newPage, totalPages));
+
+    if (nextPage === this.currentPageSignal()) {
+      return;
+    }
+
+    this.currentPageSignal.set(nextPage);
+    this.paginationFocusUtilsService.focusAndScrollToTop();
   }
 }

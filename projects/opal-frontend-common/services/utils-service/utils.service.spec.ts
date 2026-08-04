@@ -82,6 +82,26 @@ describe('UtilsService', () => {
     expect(viewportScrollerSpy).toHaveBeenCalledWith([0, 0]);
   });
 
+  it('should focus the main content and scroll to the top of the page', () => {
+    const mainContent = document.createElement('main');
+    mainContent.id = 'main-content';
+    document.body.appendChild(mainContent);
+    const focusSpy = vi.spyOn(mainContent, 'focus');
+    const viewportScrollerSpy = vi
+      .spyOn(service['viewportScroller'], 'scrollToPosition')
+      .mockImplementation(() => undefined);
+
+    service.focusAndScrollToTop();
+
+    expect(mainContent.getAttribute('tabindex')).toBe('-1');
+    expect(focusSpy).toHaveBeenCalledWith({ preventScroll: true });
+    expect(viewportScrollerSpy).toHaveBeenCalledWith([0, 0]);
+
+    mainContent.dispatchEvent(new FocusEvent('blur'));
+    expect(mainContent.hasAttribute('tabindex')).toBe(false);
+    mainContent.remove();
+  });
+
   it('should check if form values are provided', () => {
     const form = { name: 'John', age: 30 };
     const result = service.checkFormValues(form);
