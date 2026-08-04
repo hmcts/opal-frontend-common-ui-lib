@@ -6,6 +6,7 @@ import { HeadingLevel } from '@hmcts/opal-frontend-common/types';
   selector: 'opal-lib-govuk-heading-with-caption',
   imports: [CommonModule],
   templateUrl: './govuk-heading-with-caption.component.html',
+  styleUrl: './govuk-heading-with-caption.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GovukHeadingWithCaptionComponent {
