@@ -3,6 +3,7 @@ import { Component, ChangeDetectorRef } from '@angular/core';
 import { AbstractSortableTablePaginationComponent } from './abstract-sortable-table-pagination.component';
 import { MOCK_ABSTRACT_TABLE_DATA } from '../abstract-sortable-table/mocks/abstract-sortable-table-data.mock';
 import { describe, beforeEach, vi, afterAll, it, expect } from 'vitest';
+import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service';
 
 @Component({
   template: '', // Minimal template for the test component
@@ -19,6 +20,9 @@ class TestComponent extends AbstractSortableTablePaginationComponent {
 describe('AbstractSortableTablePaginationComponent', () => {
   let component: TestComponent | null;
   let fixture: ComponentFixture<TestComponent> | null;
+  const utilsServiceMock = {
+    focusAndScrollToTop: vi.fn(),
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -30,11 +34,16 @@ describe('AbstractSortableTablePaginationComponent', () => {
             detectChanges: vi.fn(), // Mock detectChanges
           },
         },
+        {
+          provide: UtilsService,
+          useValue: utilsServiceMock,
+        },
       ],
     }).compileComponents();
   });
 
   beforeEach(() => {
+    vi.clearAllMocks();
     fixture = TestBed.createComponent(TestComponent); // Create the TestComponent
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -69,6 +78,7 @@ describe('AbstractSortableTablePaginationComponent', () => {
 
     component.onPageChange(2);
     expect(component.currentPageSignal()).toBe(2);
+    expect(utilsServiceMock.focusAndScrollToTop).toHaveBeenCalledOnce();
   });
 
   it('should reset current page to 1 on sort change', () => {
@@ -92,6 +102,16 @@ describe('AbstractSortableTablePaginationComponent', () => {
     component.onPageChange(999);
     const expectedMaxPage = Math.ceil(component.sortedTableDataSignal().length / component.itemsPerPageSignal());
     expect(component.currentPageSignal()).toBe(expectedMaxPage);
+  });
+
+  it('should not move focus when the page does not change', () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    component.onPageChange(1);
+
+    expect(utilsServiceMock.focusAndScrollToTop).not.toHaveBeenCalled();
   });
 
   it('should update paginated output when items per page changes', () => {

@@ -83,7 +83,9 @@ Before (legacy MoJ markup):
 
 ```html
 <nav class="moj-pagination moj-pagination-alignment">
-  <ul class="moj-pagination__list">...</ul>
+  <ul class="moj-pagination__list">
+    ...
+  </ul>
   <p class="moj-pagination__results">Showing 11 to 20 of 200 results</p>
 </nav>
 ```
@@ -130,6 +132,7 @@ Examples:
 
 - Adds `aria-current="page"` to the active page
 - Includes visually hidden "page" text in navigation links
+- Announces committed page changes, such as "Page 2 loaded", through a visually hidden status region
 - All navigation is keyboard-friendly
 
 ## Results Summary
