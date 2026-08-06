@@ -50,6 +50,18 @@ describe('GovukTable1Component', () => {
     component.caption = 'Test caption';
     fixture.detectChanges();
     expect(component.caption).toBe('Test caption');
+
+    const captionElement = fixture.nativeElement.querySelector('caption');
+    expect(captionElement).toBeTruthy();
+    expect(captionElement?.textContent?.trim()).toBe('Test caption');
+  });
+
+  it('should not render a caption by default', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    expect(fixture.nativeElement.querySelector('caption')).toBeNull();
   });
 
   it('should apply captionClasses to the caption element', () => {
