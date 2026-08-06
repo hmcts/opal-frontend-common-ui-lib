@@ -9063,8 +9063,8 @@ __metadata:
   linkType: hard
 
 "ng-packagr@npm:^22.0.0":
-  version: 22.1.0
-  resolution: "ng-packagr@npm:22.1.0"
+  version: 22.1.1
+  resolution: "ng-packagr@npm:22.1.1"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@rollup/plugin-json": "npm:^6.1.0"
@@ -9083,7 +9083,7 @@ __metadata:
     piscina: "npm:^5.0.0"
     postcss: "npm:^8.4.47"
     rollup: "npm:^4.24.0"
-    rollup-plugin-dts: "npm:^6.4.0"
+    rollup-plugin-dts: "npm:~6.4.1"
     rxjs: "npm:^7.8.1"
     sass: "npm:^1.81.0"
     tinyglobby: "npm:^0.2.12"
@@ -9100,7 +9100,7 @@ __metadata:
       optional: true
   bin:
     ng-packagr: src/cli/main.js
-  checksum: 10/39129c9e20c5e05ba2a387b09eaa7e5aee12eb55dac0fa5feb1009ebada6ef861e5a84b10b913ae2f362f78afd998a95d2ca6795200bd08a0978fdfb03ddc3e6
+  checksum: 10/7c88ab3d582a0bcf4d91a6713567b1c9fe05b1019325e359ee4fcd6c008870a45cc40f10a48c2af1b7cb7e65e7de1d935e041a2cb1fc0c8e671628741cbe953d
   languageName: node
   linkType: hard
 
@@ -10190,7 +10190,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup-plugin-dts@npm:^6.4.0":
+"rollup-plugin-dts@npm:~6.4.1":
   version: 6.4.1
   resolution: "rollup-plugin-dts@npm:6.4.1"
   dependencies:
