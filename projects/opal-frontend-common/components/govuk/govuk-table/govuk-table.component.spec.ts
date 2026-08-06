@@ -47,10 +47,8 @@ describe('GovukTable1Component', () => {
     if (!component || !fixture) {
       throw new Error('component or fixture returned null');
     }
-    component.caption = 'Test caption';
+    fixture.componentRef.setInput('caption', 'Test caption');
     fixture.detectChanges();
-    expect(component.caption).toBe('Test caption');
-
     const captionElement = fixture.nativeElement.querySelector('caption');
     expect(captionElement).toBeTruthy();
     expect(captionElement?.textContent?.trim()).toBe('Test caption');
