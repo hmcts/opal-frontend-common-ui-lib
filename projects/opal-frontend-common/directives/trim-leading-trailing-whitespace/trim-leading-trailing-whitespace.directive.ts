@@ -6,11 +6,11 @@ import { AbstractControl } from '@angular/forms';
   standalone: true,
 })
 export class TrimLeadingTrailingWhitespaceDirective {
-  @Input('opalLibTrimLeadingTrailingWhitespace') control!: AbstractControl | null;
+  @Input('opalLibTrimLeadingTrailingWhitespace') control!: AbstractControl;
 
   @HostListener('focusout')
   onFocusOut(): void {
-    const value = this.control?.value;
+    const value = this.control.value;
 
     if (typeof value !== 'string') {
       return;
@@ -22,6 +22,6 @@ export class TrimLeadingTrailingWhitespaceDirective {
       return;
     }
 
-    this.control?.setValue(trimmedValue);
+    this.control.setValue(trimmedValue);
   }
 }
