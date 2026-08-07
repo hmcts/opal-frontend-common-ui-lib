@@ -15,10 +15,7 @@ This Angular component provides a GOV.UK-styled table with optional caption supp
 ## Installation
 
 ```typescript
-import { GovukTableComponent } from '@components/govuk/govuk-table/govuk-table.component';
-import { GovukTableHeadingComponent } from '@components/govuk/govuk-table/govuk-table-heading/govuk-table-heading.component';
-import { GovukTableBodyRowComponent } from '@components/govuk/govuk-table/govuk-table-body-row/govuk-table-body-row.component';
-import { GovukTableBodyRowDataComponent } from '@components/govuk/govuk-table/govuk-table-body-row/govuk-table-body-row-data/govuk-table-body-row-data.component';
+import { GovukTableBodyRowComponent, GovukTableBodyRowDataComponent, GovukTableComponent, GovukTableHeadingComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-table';
 ```
 
 ## Usage
