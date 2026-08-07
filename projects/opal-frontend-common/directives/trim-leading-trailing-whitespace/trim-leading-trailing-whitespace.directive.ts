@@ -10,6 +10,7 @@ export class TrimLeadingTrailingWhitespaceDirective {
 
   @HostListener('focusout')
   onFocusOut(): void {
+    if (!this.control) return;
     const value = this.control.value;
 
     if (typeof value !== 'string') {
