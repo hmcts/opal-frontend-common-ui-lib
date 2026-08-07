@@ -18,6 +18,17 @@ class WrappedTestComponent {
   control = new FormControl<string | null>(null);
 }
 
+@Component({
+  template: `
+    <div [opalLibTrimLeadingTrailingWhitespace]="control!"></div>
+  `,
+  standalone: true,
+  imports: [TrimLeadingTrailingWhitespaceDirective],
+})
+class MissingControlTestComponent {
+  control?: FormControl<string | null>;
+}
+
 describe('TrimLeadingTrailingWhitespaceDirective', () => {
   let fixture: ComponentFixture<WrappedTestComponent>;
   let testComponent: WrappedTestComponent;
@@ -94,5 +105,27 @@ describe('TrimLeadingTrailingWhitespaceDirective', () => {
 
     expect(setValueSpy).not.toHaveBeenCalled();
     expect(testComponent.control.value).toBe('test');
+  });
+});
+
+describe('TrimLeadingTrailingWhitespaceDirective with a missing control', () => {
+  let fixture: ComponentFixture<MissingControlTestComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [MissingControlTestComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(MissingControlTestComponent);
+    fixture.detectChanges();
+  });
+
+  it('should not throw on focusout', () => {
+    const host = fixture.debugElement.query(By.css('div')).nativeElement as HTMLDivElement;
+
+    expect(() => {
+      host.dispatchEvent(new Event('focusout', { bubbles: true }));
+      fixture.detectChanges();
+    }).not.toThrow();
   });
 });
