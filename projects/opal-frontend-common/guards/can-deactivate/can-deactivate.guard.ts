@@ -6,7 +6,5 @@ export const canDeactivateGuard: CanDeactivateFn<ICanDeactivateCanComponentDeact
 ) => {
   return component.canDeactivate()
     ? true
-    : confirm(
-        'WARNING: You have unsaved changes. Press Cancel to go back and save these changes, or OK to lose these changes.',
-      );
+    : confirm('WARNING: Are you sure you want to cancel? Any information you entered will be lost.');
 };
