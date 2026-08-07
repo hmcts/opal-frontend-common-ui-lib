@@ -76,7 +76,7 @@ Use the table component with projected header cells in the `head` slot and body 
 Unit tests for this component can be found in the `govuk-table.component.spec.ts` file. To run the tests, use:
 
 ```bash
-ng test
+yarn test
 ```
 
 ## Contributing
