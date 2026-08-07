@@ -19,9 +19,7 @@ class WrappedTestComponent {
 }
 
 @Component({
-  template: `
-    <div [opalLibTrimLeadingTrailingWhitespace]="control!"></div>
-  `,
+  template: ` <div [opalLibTrimLeadingTrailingWhitespace]="control!"></div> `,
   standalone: true,
   imports: [TrimLeadingTrailingWhitespaceDirective],
 })
