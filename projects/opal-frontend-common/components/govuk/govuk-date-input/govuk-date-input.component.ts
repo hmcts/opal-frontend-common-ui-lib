@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { FormGroup, AbstractControl, ReactiveFormsModule } from '@angular/forms';
-import { IGovUkDateInput } from './interfaces/govuk-date-input.interface';
+import { IGovUkDateInput, IGovUkDateInputAutoCompleteValue } from './interfaces/govuk-date-input.interface';
 
 @Component({
   selector: 'opal-lib-govuk-date-input',
@@ -22,7 +22,7 @@ export class GovukDateInputComponent {
   @Input({ required: false }) errorMonth: string | null = null;
   @Input({ required: false }) errorYear: string | null = null;
   @Input({ required: false }) autoComplete: boolean = false;
-  @Input({ required: false }) autoCompleteValue: IGovUkDateInput | null = null;
+  @Input({ required: false }) autoCompleteValue: IGovUkDateInputAutoCompleteValue | null = null;
 
   @Input({ required: true }) dateInputs!: IGovUkDateInput;
   @Input({ required: true }) set group(abstractControl: AbstractControl | null) {

@@ -33,7 +33,7 @@ You can use the date input component in your template as follows:
   [errorMonth]="'Enter a valid month'"
   [errorYear]="'Enter a valid year'"
   [autoComplete]="true"
-  [autoCompleteValue]="{ day: '01', month: '06', year: '2001' }"
+  [autoCompleteValue]="{ day: 'bday-day', month: 'bday-month', year: 'bday-year' }"
   [dateInputs]="{
     day: { inputId: 'day', inputName: 'day', inputLabel: 'Day', inputClasses: 'govuk-input--width-2' },
     month: { inputId: 'month', inputName: 'month', inputLabel: 'Month', inputClasses: 'govuk-input--width-2' },
@@ -78,7 +78,7 @@ You can use the date input component in your template as follows:
 | `errorMonth`        | `string`                                         | Error message for the month input field.                                           |
 | `errorYear`         | `string`                                         | Error message for the year input field.                                            |
 | `autoComplete`      | `boolean`                                        | Sets autocomplete to `on` for all date fields when `true`; defaults to `false`.    |
-| `autoCompleteValue` | `IGovUkDateInput \| null`       | Optional day, month, and year tokens that take precedence; defaults to `null`.      |
+| `autoCompleteValue` | `IGovUkDateInputAutoCompleteValue \| null`       | Optional day, month, and year tokens that take precedence; defaults to `null`.     |
 | `dateInputs`        | `object`                                         | Configuration object for the day, month, and year input fields.                    |
 
 ## Outputs

@@ -3,8 +3,15 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GovukDateInputComponent } from './govuk-date-input.component';
 import { FormControl, FormGroup } from '@angular/forms';
 import { GOVUK_DATE_INPUTS_MOCK } from './mocks/govuk-date-inputs.mock';
+import { IGovUkDateInputAutoCompleteValue } from './interfaces/govuk-date-input.interface';
 import { By } from '@angular/platform-browser';
 import { describe, beforeEach, afterAll, it, expect } from 'vitest';
+
+const GOVUK_DATE_INPUT_AUTOCOMPLETE_VALUE: IGovUkDateInputAutoCompleteValue = {
+  day: 'bday-day',
+  month: 'bday-month',
+  year: 'bday-year',
+};
 
 describe('GovukDateInputComponent', () => {
   let component: GovukDateInputComponent | null;
@@ -201,11 +208,7 @@ describe('GovukDateInputComponent', () => {
     }
 
     fixture.componentRef.setInput('autoComplete', true);
-    fixture.componentRef.setInput('autoCompleteValue', {
-      day: 'bday-day',
-      month: 'bday-month',
-      year: 'bday-year',
-    });
+    fixture.componentRef.setInput('autoCompleteValue', GOVUK_DATE_INPUT_AUTOCOMPLETE_VALUE);
     fixture.detectChanges();
 
     const inputs = fixture.debugElement.queryAll(By.css('.govuk-date-input__input'));
@@ -222,11 +225,7 @@ describe('GovukDateInputComponent', () => {
     }
 
     fixture.componentRef.setInput('autoComplete', false);
-    fixture.componentRef.setInput('autoCompleteValue', {
-      day: 'bday-day',
-      month: 'bday-month',
-      year: 'bday-year',
-    });
+    fixture.componentRef.setInput('autoCompleteValue', GOVUK_DATE_INPUT_AUTOCOMPLETE_VALUE);
     fixture.detectChanges();
 
     const inputs = fixture.debugElement.queryAll(By.css('.govuk-date-input__input'));
