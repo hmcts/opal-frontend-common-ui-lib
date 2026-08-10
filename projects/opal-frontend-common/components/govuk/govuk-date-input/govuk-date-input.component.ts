@@ -21,6 +21,8 @@ export class GovukDateInputComponent {
   @Input({ required: false }) errorDay: string | null = null;
   @Input({ required: false }) errorMonth: string | null = null;
   @Input({ required: false }) errorYear: string | null = null;
+  @Input({ required: false }) autoComplete: boolean = false;
+  @Input({ required: false }) autoCompleteValue: IGovUkDateInput | null = null;
 
   @Input({ required: true }) dateInputs!: IGovUkDateInput;
   @Input({ required: true }) set group(abstractControl: AbstractControl | null) {
