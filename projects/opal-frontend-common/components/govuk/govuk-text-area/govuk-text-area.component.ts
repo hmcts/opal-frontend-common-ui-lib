@@ -24,6 +24,8 @@ export class GovukTextAreaComponent {
   @Input({ required: false }) hintText!: string;
   @Input({ required: false }) inputMode: string = 'text';
   @Input({ required: false }) errors: string | null = null;
+  @Input({ required: false }) autoComplete: boolean = false;
+  @Input({ required: false }) autoCompleteValue: string | null = null;
   @Input({ required: false }) rows: number = 5;
   @Input({ required: false }) characterCountEnabled: boolean = false;
   @Input({ required: false }) maxCharacterLimit: number = 500;
