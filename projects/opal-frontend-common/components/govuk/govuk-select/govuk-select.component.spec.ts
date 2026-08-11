@@ -134,4 +134,63 @@ describe('GovukSelectComponent', () => {
 
     expect(fixture.debugElement.query(By.css('#court')).nativeElement.value).toBe(GOVUK_SELECT_OPTIONS_MOCK[2].value);
   });
+
+  it('should disable autocomplete by default', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    const select = fixture.debugElement.query(By.css('#court')).nativeElement;
+    expect(select.getAttribute('autocomplete')).toBe('off');
+  });
+
+  it('should disable autocomplete when autoComplete is false', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    fixture.componentRef.setInput('autoComplete', false);
+    fixture.detectChanges();
+
+    const select = fixture.debugElement.query(By.css('#court')).nativeElement;
+    expect(select.getAttribute('autocomplete')).toBe('off');
+  });
+
+  it('should enable autocomplete when autoComplete is true', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    fixture.componentRef.setInput('autoComplete', true);
+    fixture.detectChanges();
+
+    const select = fixture.debugElement.query(By.css('#court')).nativeElement;
+    expect(select.getAttribute('autocomplete')).toBe('on');
+  });
+
+  it('should set autocomplete to autoCompleteValue when autoComplete is true', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    fixture.componentRef.setInput('autoComplete', true);
+    fixture.componentRef.setInput('autoCompleteValue', 'country-name');
+    fixture.detectChanges();
+
+    const select = fixture.debugElement.query(By.css('#court')).nativeElement;
+    expect(select.getAttribute('autocomplete')).toBe('country-name');
+  });
+
+  it('should set autocomplete to autoCompleteValue when autoComplete is false', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    fixture.componentRef.setInput('autoComplete', false);
+    fixture.componentRef.setInput('autoCompleteValue', 'country-name');
+    fixture.detectChanges();
+
+    const select = fixture.debugElement.query(By.css('#court')).nativeElement;
+    expect(select.getAttribute('autocomplete')).toBe('country-name');
+  });
 });
