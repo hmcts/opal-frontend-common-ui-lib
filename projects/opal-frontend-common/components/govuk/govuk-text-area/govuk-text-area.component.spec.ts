@@ -162,4 +162,63 @@ describe('GovukTextAreaComponent', () => {
     const textarea = fixture.debugElement.query(By.css('#test')).nativeElement;
     expect(textarea.getAttribute('aria-describedby')).toBeNull();
   });
+
+  it('should disable autocomplete by default', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    const textarea = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(textarea.getAttribute('autocomplete')).toBe('off');
+  });
+
+  it('should disable autocomplete when autoComplete is false', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    fixture.componentRef.setInput('autoComplete', false);
+    fixture.detectChanges();
+
+    const textarea = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(textarea.getAttribute('autocomplete')).toBe('off');
+  });
+
+  it('should enable autocomplete when autoComplete is true', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    fixture.componentRef.setInput('autoComplete', true);
+    fixture.detectChanges();
+
+    const textarea = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(textarea.getAttribute('autocomplete')).toBe('on');
+  });
+
+  it('should set autocomplete to autoCompleteValue when autoComplete is true', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    fixture.componentRef.setInput('autoComplete', true);
+    fixture.componentRef.setInput('autoCompleteValue', 'street-address');
+    fixture.detectChanges();
+
+    const textarea = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(textarea.getAttribute('autocomplete')).toBe('street-address');
+  });
+
+  it('should set autocomplete to autoCompleteValue when autoComplete is false', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    fixture.componentRef.setInput('autoComplete', false);
+    fixture.componentRef.setInput('autoCompleteValue', 'street-address');
+    fixture.detectChanges();
+
+    const textarea = fixture.debugElement.query(By.css('#test')).nativeElement;
+    expect(textarea.getAttribute('autocomplete')).toBe('street-address');
+  });
 });

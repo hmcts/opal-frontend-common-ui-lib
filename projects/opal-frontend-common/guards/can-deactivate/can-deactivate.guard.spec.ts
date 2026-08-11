@@ -41,7 +41,7 @@ describe('canDeactivateGuard', () => {
     expect(result).toBe(false);
     expect(mockComponent.canDeactivate).toHaveBeenCalled();
     expect(window.confirm).toHaveBeenCalledWith(
-      'WARNING: You have unsaved changes. Press Cancel to go back and save these changes, or OK to lose these changes.',
+      'WARNING: Are you sure you want to cancel? Any information you entered will be lost.',
     );
   });
 
@@ -57,7 +57,7 @@ describe('canDeactivateGuard', () => {
     expect(result).toBe(true);
     expect(mockComponent.canDeactivate).toHaveBeenCalled();
     expect(window.confirm).toHaveBeenCalledWith(
-      'WARNING: You have unsaved changes. Press Cancel to go back and save these changes, or OK to lose these changes.',
+      'WARNING: Are you sure you want to cancel? Any information you entered will be lost.',
     );
   });
 });
