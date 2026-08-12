@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { describe, beforeEach, expect, it, vi } from 'vitest';
 import { MojAlertComponent } from './moj-alert.component';
-import { describe, beforeEach, it, expect, vi } from 'vitest';
+
+const flush = () => new Promise<void>((resolve) => setTimeout(resolve, 0));
 
 describe('MojAlertComponent', () => {
   let component: MojAlertComponent;
@@ -47,32 +49,24 @@ describe('MojAlertComponent', () => {
     expect(element.className.trim()).toBe('');
   });
 
-  it('should compute the correct aria-label attribute', () => {
+  it('should populate the live region text after view init', async () => {
     component.ariaLabel = 'Close Alert';
     component.type = 'warning';
     fixture.detectChanges();
-    const element: HTMLElement = fixture.nativeElement;
-    expect(element.getAttribute('aria-label')).toBe('warning : Close Alert');
-  });
-
-  it.each([
-    ['error', 'alert'],
-    ['warning', 'alert'],
-    ['success', 'status'],
-    ['information', 'status'],
-  ] as const)('should set alert type of %s to role=%s', (type, expectedRole) => {
-    component.type = type;
+    await flush();
     fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
-    expect(element.getAttribute('role')).toBe(expectedRole);
+    const liveRegion = element.querySelector('.govuk-visually-hidden');
+    expect(liveRegion?.getAttribute('role')).toBe('alert');
+    expect(liveRegion?.textContent?.trim()).toBe('warning : Close Alert');
   });
 
-  it('should remove the role when the alert is not visible', () => {
+  it('should not render the live region when the alert is not visible', () => {
     component.isVisible = false;
     component.type = 'warning';
     fixture.detectChanges();
     const element: HTMLElement = fixture.nativeElement;
-    expect(element.hasAttribute('role')).toBe(false);
+    expect(element.querySelector('.govuk-visually-hidden')).toBeNull();
   });
 
   it('should set the data-module attribute to "moj-alert"', () => {

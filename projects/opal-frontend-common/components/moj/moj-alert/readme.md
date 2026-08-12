@@ -37,6 +37,10 @@ You can use the alert component in your template as follows:
   <opal-lib-moj-alert type="success" ariaLabel="hello" [showDismiss]="true" (dismissed)="handleDismissedAlert()></opal-lib-moj-alert>
 ```
 
+The alert is announced to screen readers after it renders on the page. It does not use `tabindex` or move keyboard focus, so it remains non-interactive while still being announced.
+
+For urgent alerts, the component uses an assertive live region. For non-urgent alerts, it uses a polite live region.
+
 You can add optional attachments in your template as follows:
 ```html
    <div opal-lib-moj-alert ariaLabel="Your session will expire" type="warning">
@@ -88,7 +92,9 @@ You additionally have to specify the select tag for each content projected compo
 
 ## Methods
 
-There are no custom methods for this component.
+There are no public custom methods for this component.
+
+Internally, the component schedules a post-render announcement update so the screen reader message is populated after page load without triggering Angular change detection errors.
 
 ## Testing
 
