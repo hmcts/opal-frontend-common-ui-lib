@@ -25,9 +25,9 @@ export class MojAlertComponent implements AfterViewInit, OnDestroy {
   @Input({ required: false }) showDismiss!: boolean;
   @Output() dismissed = new EventEmitter<void>();
 
+  private announcementTimeoutId?: ReturnType<typeof setTimeout>;
   public isVisible: boolean = true;
   public announcementText: string = '';
-  private announcementTimeoutId?: ReturnType<typeof setTimeout>;
 
   @HostBinding('class')
   get hostClass(): string {
