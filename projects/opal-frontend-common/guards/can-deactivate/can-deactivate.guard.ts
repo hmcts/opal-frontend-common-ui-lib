@@ -6,5 +6,5 @@ export const canDeactivateGuard: CanDeactivateFn<ICanDeactivateCanComponentDeact
 ) => {
   return component.canDeactivate()
     ? true
-    : confirm('WARNING: Are you sure you want to cancel? Any information you entered will be lost.');
+    : confirm('WARNING: Are you sure you want to leave this page? Any information you entered will be lost.');
 };
