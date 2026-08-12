@@ -3,8 +3,15 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GovukDateInputComponent } from './govuk-date-input.component';
 import { FormControl, FormGroup } from '@angular/forms';
 import { GOVUK_DATE_INPUTS_MOCK } from './mocks/govuk-date-inputs.mock';
+import { IGovUkDateInputAutoCompleteValue } from './interfaces/govuk-date-input.interface';
 import { By } from '@angular/platform-browser';
 import { describe, beforeEach, afterAll, it, expect } from 'vitest';
+
+const GOVUK_DATE_INPUT_AUTOCOMPLETE_VALUE: IGovUkDateInputAutoCompleteValue = {
+  day: 'bday-day',
+  month: 'bday-month',
+  year: 'bday-year',
+};
 
 describe('GovukDateInputComponent', () => {
   let component: GovukDateInputComponent | null;
@@ -160,5 +167,72 @@ describe('GovukDateInputComponent', () => {
 
     const fieldset = fixture.debugElement.query(By.css('#dateOfBirth')).nativeElement;
     expect(fieldset.getAttribute('aria-describedby')).toBeNull();
+  });
+
+  it('should disable autocomplete by default', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    const inputs = fixture.debugElement.queryAll(By.css('.govuk-date-input__input'));
+    expect(inputs.map((input) => input.nativeElement.getAttribute('autocomplete'))).toEqual(['off', 'off', 'off']);
+  });
+
+  it('should disable autocomplete when autoComplete is false', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    fixture.componentRef.setInput('autoComplete', false);
+    fixture.detectChanges();
+
+    const inputs = fixture.debugElement.queryAll(By.css('.govuk-date-input__input'));
+    expect(inputs.map((input) => input.nativeElement.getAttribute('autocomplete'))).toEqual(['off', 'off', 'off']);
+  });
+
+  it('should enable autocomplete when autoComplete is true', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    fixture.componentRef.setInput('autoComplete', true);
+    fixture.detectChanges();
+
+    const inputs = fixture.debugElement.queryAll(By.css('.govuk-date-input__input'));
+    expect(inputs.map((input) => input.nativeElement.getAttribute('autocomplete'))).toEqual(['on', 'on', 'on']);
+  });
+
+  it('should set autocomplete to each autoCompleteValue when autoComplete is true', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    fixture.componentRef.setInput('autoComplete', true);
+    fixture.componentRef.setInput('autoCompleteValue', GOVUK_DATE_INPUT_AUTOCOMPLETE_VALUE);
+    fixture.detectChanges();
+
+    const inputs = fixture.debugElement.queryAll(By.css('.govuk-date-input__input'));
+    expect(inputs.map((input) => input.nativeElement.getAttribute('autocomplete'))).toEqual([
+      'bday-day',
+      'bday-month',
+      'bday-year',
+    ]);
+  });
+
+  it('should set autocomplete to each autoCompleteValue when autoComplete is false', () => {
+    if (!fixture) {
+      throw new Error('fixture returned null');
+    }
+
+    fixture.componentRef.setInput('autoComplete', false);
+    fixture.componentRef.setInput('autoCompleteValue', GOVUK_DATE_INPUT_AUTOCOMPLETE_VALUE);
+    fixture.detectChanges();
+
+    const inputs = fixture.debugElement.queryAll(By.css('.govuk-date-input__input'));
+    expect(inputs.map((input) => input.nativeElement.getAttribute('autocomplete'))).toEqual([
+      'bday-day',
+      'bday-month',
+      'bday-year',
+    ]);
   });
 });

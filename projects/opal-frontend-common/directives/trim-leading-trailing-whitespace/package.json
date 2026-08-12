@@ -1,0 +1,5 @@
+{
+  "sideEffects": false,
+  "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-directives-trim-leading-trailing-whitespace.mjs",
+  "typings": "../../../../dist/opal-frontend-common/directives/trim-leading-trailing-whitespace/index.d.ts"
+}

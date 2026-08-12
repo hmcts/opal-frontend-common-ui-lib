@@ -28,6 +28,8 @@ You can use the text input with prefix/suffix in your template as follows:
 <opal-lib-govuk-text-input-prefix-suffix
   [inputId]="'amount'"
   [labelText]="'Amount'"
+  [autoComplete]="true"
+  [autoCompleteValue]="'tel-national'"
   [prefix]="'£'"
   [suffix]="'per month'"
 ></opal-lib-govuk-text-input-prefix-suffix>
@@ -48,12 +50,14 @@ You can use the text input with prefix/suffix in your template as follows:
 
 ## Inputs
 
-| Input       | Type     | Description                               |
-| ----------- | -------- | ----------------------------------------- |
-| `inputId`   | `string` | The ID for the text input element.        |
-| `labelText` | `string` | The label for the text input.             |
-| `prefix`    | `string` | Optional prefix (e.g., currency symbol).  |
-| `suffix`    | `string` | Optional suffix (e.g., 'per month', '%'). |
+| Input               | Type             | Description                                                                        |
+| ------------------- | ---------------- | ---------------------------------------------------------------------------------- |
+| `inputId`           | `string`         | The ID for the text input element.                                                 |
+| `labelText`         | `string`         | The label for the text input.                                                      |
+| `autoComplete`      | `boolean`        | Sets autocomplete to `on` when `true`; defaults to `false`.                        |
+| `autoCompleteValue` | `string \| null` | Optional autocomplete token that takes precedence; defaults to `null`.             |
+| `prefix`            | `string`         | Optional prefix (e.g., currency symbol).                                           |
+| `suffix`            | `string`         | Optional suffix (e.g., 'per month', '%').                                          |
 
 ## Outputs
 
