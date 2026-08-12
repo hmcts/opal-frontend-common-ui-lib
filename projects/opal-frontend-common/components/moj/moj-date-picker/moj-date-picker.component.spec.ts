@@ -173,4 +173,43 @@ describe('MojDatePickerComponent', () => {
     const input = fixture.nativeElement.querySelector('#datePickerId');
     expect(input.getAttribute('aria-describedby')).toBeNull();
   });
+
+  it('should disable autocomplete by default', () => {
+    const input = fixture.nativeElement.querySelector('#datePickerId');
+    expect(input.getAttribute('autocomplete')).toBe('off');
+  });
+
+  it('should disable autocomplete when autoComplete is false', () => {
+    fixture.componentRef.setInput('autoComplete', false);
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('#datePickerId');
+    expect(input.getAttribute('autocomplete')).toBe('off');
+  });
+
+  it('should enable autocomplete when autoComplete is true', () => {
+    fixture.componentRef.setInput('autoComplete', true);
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('#datePickerId');
+    expect(input.getAttribute('autocomplete')).toBe('on');
+  });
+
+  it('should set autocomplete to autoCompleteValue when autoComplete is true', () => {
+    fixture.componentRef.setInput('autoComplete', true);
+    fixture.componentRef.setInput('autoCompleteValue', 'bday');
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('#datePickerId');
+    expect(input.getAttribute('autocomplete')).toBe('bday');
+  });
+
+  it('should set autocomplete to autoCompleteValue when autoComplete is false', () => {
+    fixture.componentRef.setInput('autoComplete', false);
+    fixture.componentRef.setInput('autoCompleteValue', 'bday');
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('#datePickerId');
+    expect(input.getAttribute('autocomplete')).toBe('bday');
+  });
 });

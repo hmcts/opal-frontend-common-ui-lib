@@ -339,6 +339,9 @@
         "./dist/opal-frontend-common/directives/capitalisation"
       ],
       "@hmcts/opal-frontend-common/directives/govuk-button": ["./dist/opal-frontend-common/directives/govuk-button"],
+      "@hmcts/opal-frontend-common/directives/trim-leading-trailing-whitespace": [
+        "./dist/opal-frontend-common/directives/trim-leading-trailing-whitespace"
+      ],
       "@hmcts/opal-frontend-common/directives/moj-multi-select": [
         "./dist/opal-frontend-common/directives/moj-multi-select"
       ],

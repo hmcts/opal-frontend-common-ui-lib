@@ -16,6 +16,7 @@
     class="govuk-select {{ selectClasses }}"
     [id]="selectId"
     [name]="selectName"
+    [attr.autocomplete]="autoCompleteValue ? autoCompleteValue : autoComplete ? 'on' : 'off'"
     [attr.aria-describedby]="describedBy"
     [formControl]="getControl"
   >

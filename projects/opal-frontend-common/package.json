@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.97",
+  "version": "0.0.98",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -378,6 +378,9 @@
     },
     "./directives/govuk-button": {
       "import": "./fesm2022/hmcts-opal-frontend-common-directives-govuk-button.mjs"
+    },
+    "./directives/trim-leading-trailing-whitespace": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-directives-trim-leading-trailing-whitespace.mjs"
     },
     "./directives/moj-multi-select": {
       "import": "./fesm2022/hmcts-opal-frontend-common-directives-moj-multi-select.mjs"
