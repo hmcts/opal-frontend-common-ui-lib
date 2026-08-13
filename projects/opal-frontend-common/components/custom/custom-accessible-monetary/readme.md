@@ -40,8 +40,8 @@ You can use the custom accessible monetary component in your template as follows
 ```
 
 For negative amounts, the component shows the formatted monetary value visually and provides a visually hidden
-`minus ...` version for assistive technology. When `format="remove-minus-symbol"` is used, the minus sign is removed
-from both the visual and visually hidden output.
+`minus ...` version for assistive technology. When `format="remove-minus-symbol"` is used, the component removes the
+minus sign and renders the monetary value without additional accessibility markup.
 
 ## Inputs
 
