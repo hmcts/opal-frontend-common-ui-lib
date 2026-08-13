@@ -95,4 +95,39 @@ describe('MonetaryPipe', () => {
     expect(utilsService.convertToMonetaryString).toHaveBeenCalledWith('100');
     expect(result).toBe('£100.00');
   });
+
+  it('should return an empty string for null values', () => {
+    const result = pipe.transform(null);
+
+    expect(utilsService.convertToMonetaryString).not.toHaveBeenCalled();
+    expect(result).toBe('');
+  });
+
+  it('should return an empty string for undefined values', () => {
+    const result = pipe.transform(undefined);
+
+    expect(utilsService.convertToMonetaryString).not.toHaveBeenCalled();
+    expect(result).toBe('');
+  });
+
+  it('should return an empty string for empty string values', () => {
+    const result = pipe.transform('');
+
+    expect(utilsService.convertToMonetaryString).not.toHaveBeenCalled();
+    expect(result).toBe('');
+  });
+
+  it('should preserve preformatted monetary strings', () => {
+    const result = pipe.transform('-£3.00');
+
+    expect(utilsService.convertToMonetaryString).not.toHaveBeenCalled();
+    expect(result).toBe('-£3.00');
+  });
+
+  it('should remove the minus symbol from preformatted monetary strings when requested', () => {
+    const result = pipe.transform('-£3.00', 'remove-minus-symbol');
+
+    expect(utilsService.convertToMonetaryString).not.toHaveBeenCalled();
+    expect(result).toBe('£3.00');
+  });
 });
