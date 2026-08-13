@@ -16,7 +16,15 @@ for negative amounts.
 ## Installation
 
 ```typescript
+import { Component } from '@angular/core';
 import { CustomAccessibleMonetaryComponent } from '@hmcts/opal-frontend-common/components/custom/custom-accessible-monetary';
+
+@Component({
+  selector: 'app-payment-summary',
+  imports: [CustomAccessibleMonetaryComponent],
+  templateUrl: './payment-summary.component.html',
+})
+export class PaymentSummaryComponent {}
 ```
 
 ## Usage
@@ -26,21 +34,21 @@ You can use the custom accessible monetary component in your template as follows
 ```html
 <opal-lib-custom-accessible-monetary [value]="-17"></opal-lib-custom-accessible-monetary>
 <opal-lib-custom-accessible-monetary
-  [value]="paymentSummary.imposedAmount"
+  [value]="-17"
   format="remove-minus-symbol"
 ></opal-lib-custom-accessible-monetary>
 ```
 
-For negative amounts, the component shows the formatted monetary value visually and provides a hidden
+For negative amounts, the component shows the formatted monetary value visually and provides a visually hidden
 `minus ...` version for assistive technology. When `format="remove-minus-symbol"` is used, the minus sign is removed
-from both the visual and accessible output.
+from both the visual and visually hidden output.
 
 ## Inputs
 
 | Input    | Type                                           | Required | Description                                                      |
 | -------- | ---------------------------------------------- | -------- | ---------------------------------------------------------------- |
-| `value`  | `number \| string \| null \| undefined`        | Yes      | The monetary value to render. Supports preformatted currency strings. |
-| `format` | `'default' \| 'remove-minus-symbol'` | No       | Controls whether a leading minus sign is preserved or removed.   |
+| `value`  | `number \| string \| null \| undefined` | Yes      | The monetary value to render. Supports preformatted currency strings.        |
+| `format` | `'default' \| 'remove-minus-symbol'`    | No       | Controls whether a leading minus sign is preserved or removed. Defaults to `'default'`. |
 
 ## Outputs
 
@@ -48,7 +56,7 @@ There are no custom outputs for this component.
 
 ## Methods
 
-This component exposes derived getters for its formatted value and accessible rendering state.
+This component has no consumer-facing methods. Its derived getters are implementation details.
 
 ## Testing
 
