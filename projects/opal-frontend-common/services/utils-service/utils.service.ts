@@ -1,4 +1,4 @@
-import { ViewportScroller } from '@angular/common';
+import { formatCurrency, ViewportScroller } from '@angular/common';
 import { inject, Injectable } from '@angular/core';
 
 @Injectable({
@@ -6,10 +6,6 @@ import { inject, Injectable } from '@angular/core';
 })
 export class UtilsService {
   private readonly viewportScroller = inject(ViewportScroller);
-  private readonly monetaryFormatter = new Intl.NumberFormat('en-GB', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
 
   /**
    * Converts the first letter of a string to uppercase.
@@ -35,16 +31,13 @@ export class UtilsService {
    * @returns The monetary string representation of the number.
    */
   public convertToMonetaryString(amount: number | string): string {
-    let negativeValue = false;
     if (typeof amount === 'string') {
       amount = Number.parseFloat(amount);
     }
-    if (amount < 0) {
-      negativeValue = true;
-      amount = Math.abs(amount);
-    }
 
-    return `${negativeValue ? '-' : ''}£${this.monetaryFormatter.format(amount)}`;
+    const normalizedAmount = amount === 0 ? 0 : amount;
+
+    return formatCurrency(normalizedAmount, 'en-GB', '£', 'GBP', '1.2-2');
   }
 
   /**

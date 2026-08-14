@@ -56,6 +56,12 @@ describe('UtilsService', () => {
     expect(result).toEqual('-£1,234.50');
   });
 
+  it('should normalise negative zero to a zero monetary string', () => {
+    const amount = -0;
+    const result = service.convertToMonetaryString(amount);
+    expect(result).toEqual('£0.00');
+  });
+
   it('should format the sort code correctly', () => {
     const value = 123456;
     const result = service.formatSortCode(value);
