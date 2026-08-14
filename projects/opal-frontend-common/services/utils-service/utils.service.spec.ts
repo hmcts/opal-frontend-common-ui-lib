@@ -44,6 +44,18 @@ describe('UtilsService', () => {
     expect(result).toEqual('-£10.50');
   });
 
+  it('should add thousands grouping to a large number monetary string', () => {
+    const amount = 1234.5;
+    const result = service.convertToMonetaryString(amount);
+    expect(result).toEqual('£1,234.50');
+  });
+
+  it('should add thousands grouping to a large negative number monetary string', () => {
+    const amount = -1234.5;
+    const result = service.convertToMonetaryString(amount);
+    expect(result).toEqual('-£1,234.50');
+  });
+
   it('should format the sort code correctly', () => {
     const value = 123456;
     const result = service.formatSortCode(value);

@@ -6,6 +6,10 @@ import { inject, Injectable } from '@angular/core';
 })
 export class UtilsService {
   private readonly viewportScroller = inject(ViewportScroller);
+  private readonly monetaryFormatter = new Intl.NumberFormat('en-GB', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 
   /**
    * Converts the first letter of a string to uppercase.
@@ -39,7 +43,8 @@ export class UtilsService {
       negativeValue = true;
       amount = Math.abs(amount);
     }
-    return `${negativeValue ? '-' : ''}£${amount.toFixed(2)}`;
+
+    return `${negativeValue ? '-' : ''}£${this.monetaryFormatter.format(amount)}`;
   }
 
   /**
