@@ -18,7 +18,15 @@ type MonetaryFormat = 'default' | 'remove-minus-symbol';
 export class MonetaryPipe implements PipeTransform {
   private readonly utilsService: UtilsService = inject(UtilsService);
 
-  transform(value: number | string, format: MonetaryFormat = 'default'): string {
+  transform(value: number | string | null | undefined, format: MonetaryFormat = 'default'): string {
+    if (value === null || value === undefined || value === '') {
+      return '';
+    }
+
+    if (typeof value === 'string' && value.includes('£')) {
+      return format === 'remove-minus-symbol' && value.startsWith('-') ? value.slice(1) : value;
+    }
+
     const monetaryValue = this.utilsService.convertToMonetaryString(value);
 
     return format === 'remove-minus-symbol' ? monetaryValue.replace(/^-/, '') : monetaryValue;

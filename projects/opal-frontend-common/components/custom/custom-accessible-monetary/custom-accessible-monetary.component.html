@@ -1,0 +1,6 @@
+@if (hasAccessibleNegativeValue) {
+  <span aria-hidden="true">{{ formattedValue }}</span>
+  <span class="govuk-visually-hidden">{{ accessibleValue }}</span>
+} @else {
+  {{ formattedValue }}
+}
