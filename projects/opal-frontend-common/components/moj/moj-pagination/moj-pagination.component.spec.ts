@@ -93,35 +93,8 @@ describe('MojPaginationComponent', () => {
       calculatePages: () => void;
     };
     vi.spyOn(componentWithPrivates, 'calculatePages');
-    component.ngOnChanges({});
+    component.ngOnChanges();
     expect(componentWithPrivates.calculatePages).toHaveBeenCalled();
-  });
-
-  it('should render an empty status region before the current page changes', () => {
-    fixture.componentRef.setInput('id', 'pagination');
-    fixture.componentRef.setInput('currentPage', 1);
-    fixture.componentRef.setInput('limit', 10);
-    fixture.componentRef.setInput('total', 50);
-    fixture.detectChanges();
-
-    const status = fixture.nativeElement.querySelector('[role="status"]');
-    expect(status).toBeTruthy();
-    expect(status.classList.contains('govuk-visually-hidden')).toBe(true);
-    expect(status.textContent?.trim()).toBe('');
-  });
-
-  it('should announce when the committed current page changes', () => {
-    fixture.componentRef.setInput('id', 'pagination');
-    fixture.componentRef.setInput('currentPage', 1);
-    fixture.componentRef.setInput('limit', 10);
-    fixture.componentRef.setInput('total', 50);
-    fixture.detectChanges();
-
-    fixture.componentRef.setInput('currentPage', 2);
-    fixture.detectChanges();
-
-    const status = fixture.nativeElement.querySelector('[role="status"]');
-    expect(status.textContent?.trim()).toBe('Page 2 loaded');
   });
 
   it('should do nothing if limit <= 0', () => {

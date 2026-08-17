@@ -95,6 +95,7 @@ describe('UtilsService', () => {
 
     expect(mainContent.getAttribute('tabindex')).toBe('-1');
     expect(focusSpy).toHaveBeenCalledWith({ preventScroll: true });
+    expect(document.activeElement).toBe(mainContent);
     expect(viewportScrollerSpy).toHaveBeenCalledWith([0, 0]);
 
     mainContent.dispatchEvent(new FocusEvent('blur'));

@@ -1,13 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  signal,
-  SimpleChanges,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, signal } from '@angular/core';
 
 @Component({
   selector: 'opal-lib-moj-pagination',
@@ -24,7 +15,6 @@ export class MojPaginationComponent implements OnChanges {
   @Output() changePage = new EventEmitter<number>();
 
   public readonly elipsedPages = signal<(number | string)[]>([]);
-  public readonly pageChangeAnnouncement = signal('');
   public readonly ELIPSIS = '…';
 
   /**
@@ -160,16 +150,10 @@ export class MojPaginationComponent implements OnChanges {
 
   /**
    * Lifecycle hook that is called when any data-bound property of the component changes.
-   * Recalculates the pagination state and announces committed page changes after initialisation.
+   * Recalculates the pagination state.
    *
-   * @param changes - The changed input properties.
    */
-  public ngOnChanges(changes: SimpleChanges): void {
+  public ngOnChanges(): void {
     this.calculatePages();
-
-    const currentPageChange = changes['currentPage'];
-    if (currentPageChange && !currentPageChange.firstChange) {
-      this.pageChangeAnnouncement.set(`Page ${currentPageChange.currentValue} loaded`);
-    }
   }
 }

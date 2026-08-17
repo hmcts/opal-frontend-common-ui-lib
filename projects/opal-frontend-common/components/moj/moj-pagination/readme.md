@@ -132,7 +132,6 @@ Examples:
 
 - Adds `aria-current="page"` to the active page
 - Includes visually hidden "page" text in navigation links
-- Announces committed page changes, such as "Page 2 loaded", through a visually hidden status region
 - All navigation is keyboard-friendly
 
 ## Results Summary

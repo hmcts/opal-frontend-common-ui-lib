@@ -7,6 +7,7 @@ This Angular component extends the functionality of the `AbstractTableFilterComp
 - [Installation](#installation)
 - [Usage](#usage)
 - [Inputs](#inputs)
+- [Focus Behaviour](#focus-behaviour)
 - [Methods](#methods)
 - [Interfaces](#interfaces)
 - [Mocks](#mocks)
@@ -50,9 +51,15 @@ fetchData(): void {
 
 ### Example Usage:
 
-#### Pagination Component
+#### Connecting a Pagination Control
 
-The `app-govuk-pagination` component renders pagination controls. Ensure that the bindings (`currentPage`, `limit`, and `total`) are correctly connected to the signals in your component. The `changePage` event updates the `currentPageSignal` signal to reflect the new page.
+`AbstractSortableTablePaginationComponent` does not render or depend on a particular pagination control. The consuming
+component must connect a pagination control to the inherited page state and `onPageChange()` handler.
+
+The example below uses `MojPaginationComponent`, which is the pagination control currently used by OPAL Frontend. Its
+`currentPage`, `limit`, and `total` inputs are connected to the table state, while its `changePage` event calls the
+abstract class's `onPageChange()` method. This updates the announcement and `currentPageSignal` before moving focus after
+the new rows render.
 
 ```typescript
 @Component({
@@ -64,7 +71,7 @@ The `app-govuk-pagination` component renders pagination controls. Ensure that th
     MojSortableTableHeaderComponent,
     MojSortableTableRowComponent,
     MojSortableTableRowDataComponent,
-    GovukPaginationComponent,
+    MojPaginationComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -94,6 +101,8 @@ export class SortableTablePaginationComponent extends AbstractSortableTablePagin
 ```
 
 ```html
+<p role="status" aria-atomic="true" class="govuk-visually-hidden">{{ pageChangeAnnouncement() }}</p>
+
 <opal-lib-moj-sortable-table>
   <ng-container head>
     <th
@@ -114,22 +123,29 @@ export class SortableTablePaginationComponent extends AbstractSortableTablePagin
     </th>
   </ng-container>
   <ng-container row>
-    @for (row of paginatedTableDataComputed(); track row.name) {
+    @for (row of paginatedTableDataComputed(); track row['name']) {
     <tr opal-lib-moj-sortable-table-row>
-      <td opal-lib-moj-sortable-table-row-data id="name">{{ row.name }}</td>
-      <td opal-lib-moj-sortable-table-row-data id="defendant">{{ row.age }}</td>
+      <td #paginationFocusTarget opal-lib-moj-sortable-table-row-data id="name">{{ row['name'] }}</td>
+      <td opal-lib-moj-sortable-table-row-data id="defendant">{{ row['age'] }}</td>
     </tr>
     }
   </ng-container>
 </opal-lib-moj-sortable-table>
 @if (sortedTableDataSignal()!.length > paginatedTableDataComputed().length) {
-<opal-lib-govuk-pagination
+<opal-lib-moj-pagination
+  id="sortable-table-pagination"
   [currentPage]="currentPageSignal()"
   [limit]="itemsPerPageSignal()"
   [total]="sortedTableDataSignal().length"
   (changePage)="onPageChange($event)"
-></opal-lib-govuk-pagination>
+></opal-lib-moj-pagination>
 }
+```
+
+When the table wrapper itself is consumed by another component, the optional title can be supplied as an input:
+
+```html
+<app-sortable-table-pagination paginationPageTitle="Search results"></app-sortable-table-pagination>
 ```
 
 ## Inputs
@@ -138,11 +154,18 @@ The following signals and computed properties are available to manage table data
 
 ### Signals
 
-| Input                   | Type                           | Description                                                 |
-| ----------------------- | ------------------------------ | ----------------------------------------------------------- |
-| `currentPageSignal`     | `signal<number>`               | Tracks the current page in the pagination.                  |
-| `itemsPerPageSignal`    | `signal<number>`               | Specifies the number of items per page.                     |
-| `sortedTableDataSignal` | `signal<IAbstractTableData[]>` | Holds the sorted dataset for the table, updated reactively. |
+| Input                    | Type                           | Description                                                         |
+| ------------------------ | ------------------------------ | ------------------------------------------------------------------- |
+| `currentPageSignal`      | `signal<number>`               | Tracks the current page in the pagination.                          |
+| `itemsPerPageSignal`     | `signal<number>`               | Specifies the number of items per page.                             |
+| `sortedTableDataSignal`  | `signal<IAbstractTableData[]>` | Holds the sorted dataset for the table, updated reactively.         |
+| `pageChangeAnnouncement` | `signal<string>`               | Exposes announcement text for the consuming template's live region. |
+
+### Component Inputs
+
+| Input                 | Type     | Required | Description                                                               |
+| --------------------- | -------- | -------- | ------------------------------------------------------------------------- |
+| `paginationPageTitle` | `string` | No       | Title included in the page-change announcement exposed by the base class. |
 
 ### Computed Properties
 
@@ -159,13 +182,37 @@ Computed properties reactively calculate their values based on signals and other
 
 > **Note**: Signals (`currentPageSignal`, `itemsPerPageSignal`, `sortedTableDataSignal`) are Angular reactive properties that trigger re-computation of dependent computed properties like `paginatedTableDataComputed` whenever they are updated.
 
+## Focus Behaviour
+
+After a different page is committed and its rows have rendered, the component moves focus to the first element marked
+with the `#paginationFocusTarget` template reference. Normal browser focus behaviour also scrolls that element into view.
+
+The marker is optional and does not add an element to the rendered DOM. It can therefore be added to an existing element,
+such as the first cell rendered for each page, without changing the table structure:
+
+```html
+<td #paginationFocusTarget opal-lib-moj-sortable-table-row-data>{{ row['name'] }}</td>
+```
+
+If the marked element is not already programmatically focusable, the component temporarily adds `tabindex="-1"` and
+removes it when the element loses focus. If no `#paginationFocusTarget` is supplied, the component falls back to focusing
+the `#main-content` landmark and scrolling to the top of the page through `UtilsService.focusAndScrollToTop()`.
+
+The base class exposes `pageChangeAnnouncement`, which the consuming template should render in a visually hidden status
+region as shown in the usage example. After `onPageChange()` commits a different page, it contains
+"{page title}, page X of Y" when `paginationPageTitle` is supplied, or "Page X of Y" otherwise. Its initial value is empty,
+so it does not announce the initial page when the component first renders. The total page count is derived from
+`sortedTableDataSignal()`, ensuring it describes the filtered and sorted rows currently being paginated rather than the
+unfiltered source data. The pagination control itself is not responsible for this announcement.
+
 ## Methods
 
 `AbstractSortableTablePaginationComponent` introduces additional methods for managing pagination while retaining sorting logic.
 
 ### Common Methods:
 
-- **`onPageChange(newPage: number)`**: Updates the current page and recalculates the table data to be displayed.
+- **`onPageChange(newPage: number)`**: Updates the announcement and current page, waits for the new rows to render, and
+  then applies the focus behaviour described above. Selecting the current page again does not announce or move focus.
 - **`onSortChange(event: { key: string; sortType: 'ascending' | 'descending' })`**:
   Updates the sort state for the table and resets the pagination to the first page. This ensures that the user always starts from the beginning of the dataset when a new sorting order is applied.
 
@@ -212,7 +259,7 @@ These mocks can be used in unit tests to validate table sorting and pagination b
 Unit tests for this component can be found in the `abstract-sortable-table-pagination.component.spec.ts` file. To run the tests, use:
 
 ```bash
-ng test
+yarn test
 ```
 
 ### Testing Scenarios
