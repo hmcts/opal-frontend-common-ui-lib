@@ -87,6 +87,16 @@ describe('UtilsService', () => {
   });
 
   it.each([
+    ['1.', '£1.00'],
+    ['1,234.', '£1,234.00'],
+    ['-1.', '-£1.00'],
+    ['-1,234.', '-£1,234.00'],
+  ])('should support a trailing decimal point in numeric string %s', (amount, expectedResult) => {
+    const result = service.convertToMonetaryString(amount);
+    expect(result).toEqual(expectedResult);
+  });
+
+  it.each([
     '',
     '   ',
     'not-a-number',
@@ -97,7 +107,9 @@ describe('UtilsService', () => {
     '1e3',
     '+100',
     '.50',
-    '1.',
+    '.',
+    '-.',
+    '1..',
     '1 234',
     '- 123',
     '1,2,3',
@@ -106,6 +118,7 @@ describe('UtilsService', () => {
     '1234,567',
     ',123',
     '123,',
+    '1,23.',
     '1,234.5,0',
   ])('should return an empty string for invalid numeric string %j', (amount) => {
     const result = service.convertToMonetaryString(amount);

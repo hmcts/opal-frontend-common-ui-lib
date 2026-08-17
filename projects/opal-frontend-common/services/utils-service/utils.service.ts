@@ -2,7 +2,8 @@ import { formatCurrency, ViewportScroller } from '@angular/common';
 import { inject, Injectable } from '@angular/core';
 
 // Matches decimal strings with an optional leading minus and either no commas or correctly grouped thousands.
-const DECIMAL_OR_GROUPED_NUMBER_PATTERN = /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/;
+// The optional decimal point may have no fractional digits to preserve accepted values such as "1.".
+const DECIMAL_OR_GROUPED_NUMBER_PATTERN = /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d*)?$/;
 
 @Injectable({
   providedIn: 'root',
