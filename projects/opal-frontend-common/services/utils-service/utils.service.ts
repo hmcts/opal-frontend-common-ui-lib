@@ -1,6 +1,9 @@
 import { formatCurrency, ViewportScroller } from '@angular/common';
 import { inject, Injectable } from '@angular/core';
 
+// Matches decimal strings with an optional leading minus and either no commas or correctly grouped thousands.
+const DECIMAL_OR_GROUPED_NUMBER_PATTERN = /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/;
+
 @Injectable({
   providedIn: 'root',
 })
@@ -26,15 +29,16 @@ export class UtilsService {
   }
 
   /**
-   * Converts a number to a monetary string representation.
-   * @param amount - The number to convert.
-   * @returns The monetary string representation of the number.
+   * Converts a finite number or decimal string to a GBP monetary string.
+   * String values may use a leading minus, correctly positioned thousands separators, and surrounding whitespace.
+   * @param amount - The numeric value to convert.
+   * @returns The formatted monetary value, or an empty string when the input is invalid.
    */
   public convertToMonetaryString(amount: number | string): string {
     if (typeof amount === 'string') {
       const trimmedAmount = amount.trim();
 
-      if (trimmedAmount === '') {
+      if (!DECIMAL_OR_GROUPED_NUMBER_PATTERN.test(trimmedAmount)) {
         return '';
       }
 
