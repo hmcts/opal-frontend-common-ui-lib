@@ -150,8 +150,7 @@ export class MojPaginationComponent implements OnChanges {
 
   /**
    * Lifecycle hook that is called when any data-bound property of the component changes.
-   * Recalculates the pagination state.
-   *
+   * Invokes the `calculatePages` method to update the pagination state based on the new input values.
    */
   public ngOnChanges(): void {
     this.calculatePages();
