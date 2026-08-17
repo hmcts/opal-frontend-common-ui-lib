@@ -32,7 +32,17 @@ export class UtilsService {
    */
   public convertToMonetaryString(amount: number | string): string {
     if (typeof amount === 'string') {
-      amount = Number.parseFloat(amount);
+      const trimmedAmount = amount.trim();
+
+      if (trimmedAmount === '') {
+        return '';
+      }
+
+      amount = Number(trimmedAmount.replaceAll(',', ''));
+    }
+
+    if (!Number.isFinite(amount)) {
+      return '';
     }
 
     const normalizedAmount = amount === 0 ? 0 : amount;

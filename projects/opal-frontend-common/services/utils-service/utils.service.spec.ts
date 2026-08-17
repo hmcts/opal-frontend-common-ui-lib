@@ -62,6 +62,36 @@ describe('UtilsService', () => {
     expect(result).toEqual('£0.00');
   });
 
+  it('should return an empty string for whitespace-only string values', () => {
+    const amount = '   ';
+    const result = service.convertToMonetaryString(amount);
+    expect(result).toEqual('');
+  });
+
+  it('should return an empty string for malformed string values', () => {
+    const amount = 'not-a-number';
+    const result = service.convertToMonetaryString(amount);
+    expect(result).toEqual('');
+  });
+
+  it('should return an empty string for non-finite numeric values', () => {
+    const amount = Number.POSITIVE_INFINITY;
+    const result = service.convertToMonetaryString(amount);
+    expect(result).toEqual('');
+  });
+
+  it('should return an empty string for non-finite string values', () => {
+    const amount = 'Infinity';
+    const result = service.convertToMonetaryString(amount);
+    expect(result).toEqual('');
+  });
+
+  it('should support grouped numeric strings', () => {
+    const amount = '-1,234.50';
+    const result = service.convertToMonetaryString(amount);
+    expect(result).toEqual('-£1,234.50');
+  });
+
   it('should format the sort code correctly', () => {
     const value = 123456;
     const result = service.formatSortCode(value);
