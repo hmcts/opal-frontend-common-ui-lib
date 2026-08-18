@@ -21,7 +21,7 @@ export abstract class AbstractSortableTablePaginationComponent extends AbstractS
   private readonly injector = inject(Injector);
   private readonly paginationFocusUtilsService = inject(UtilsService);
   @ViewChildren('paginationFocusTarget', { read: ElementRef })
-  private paginationFocusTargets!: QueryList<ElementRef<HTMLElement>>;
+  private readonly paginationFocusTargets!: QueryList<ElementRef<HTMLElement>>;
 
   /**
    * Keeps the current page within the available range when the data set or page size changes.
