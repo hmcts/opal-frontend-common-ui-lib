@@ -162,4 +162,105 @@ describe('CustomDeferredLiveRegionAnnouncement', () => {
     expect(getOutput().textContent?.trim()).toBe('');
     expect(vi.getTimerCount()).toBe(0);
   });
+
+  it('should use the default announcement delay', async () => {
+    initialiseComponent(MESSAGE);
+
+    await vi.advanceTimersByTimeAsync(99);
+    fixture.detectChanges();
+
+    expect(getOutput().textContent?.trim()).toBe('');
+
+    await vi.advanceTimersByTimeAsync(1);
+    fixture.detectChanges();
+
+    expect(getOutput().textContent?.trim()).toBe(MESSAGE);
+  });
+
+  it('should use a custom announcement delay', async () => {
+    fixture.componentRef.setInput('message', MESSAGE);
+    fixture.componentRef.setInput('announcementDelayMs', 200);
+    fixture.detectChanges();
+
+    await vi.advanceTimersByTimeAsync(199);
+    fixture.detectChanges();
+
+    expect(getOutput().textContent?.trim()).toBe('');
+
+    await vi.advanceTimersByTimeAsync(1);
+    fixture.detectChanges();
+
+    expect(getOutput().textContent?.trim()).toBe(MESSAGE);
+  });
+
+  it('should allow an announcement delay of zero', async () => {
+    fixture.componentRef.setInput('message', MESSAGE);
+    fixture.componentRef.setInput('announcementDelayMs', 0);
+    fixture.detectChanges();
+
+    expect(getOutput().textContent?.trim()).toBe('');
+
+    await vi.advanceTimersByTimeAsync(0);
+    fixture.detectChanges();
+
+    expect(getOutput().textContent?.trim()).toBe(MESSAGE);
+  });
+
+  it.each([
+    ['negative', -1],
+    ['Infinity', Infinity],
+    ['NaN', NaN],
+  ])('should throw when the announcement delay is %s', (_description, announcementDelayMs) => {
+    expect(() => {
+      fixture.componentRef.setInput('announcementDelayMs', announcementDelayMs);
+    }).toThrow('announcementDelayMs must be a non-negative finite number.');
+  });
+
+  it('should cancel and reschedule a pending announcement when the delay changes', async () => {
+    fixture.componentRef.setInput('message', MESSAGE);
+    fixture.componentRef.setInput('announcementDelayMs', 200);
+    fixture.detectChanges();
+
+    await vi.advanceTimersByTimeAsync(50);
+    fixture.detectChanges();
+
+    fixture.componentRef.setInput('announcementDelayMs', 100);
+    fixture.detectChanges();
+
+    // The live region should remain empty while the new delay is pending.
+    expect(getOutput().textContent?.trim()).toBe('');
+
+    await vi.advanceTimersByTimeAsync(99);
+    fixture.detectChanges();
+
+    expect(getOutput().textContent?.trim()).toBe('');
+
+    await vi.advanceTimersByTimeAsync(1);
+    fixture.detectChanges();
+
+    expect(getOutput().textContent?.trim()).toBe(MESSAGE);
+  });
+
+  it('should not reannounce an existing message when the delay changes', async () => {
+    fixture.componentRef.setInput('message', MESSAGE);
+    fixture.componentRef.setInput('announcementDelayMs', 100);
+    fixture.detectChanges();
+
+    await vi.advanceTimersByTimeAsync(100);
+    fixture.detectChanges();
+
+    expect(getOutput().textContent?.trim()).toBe(MESSAGE);
+    expect(vi.getTimerCount()).toBe(0);
+
+    fixture.componentRef.setInput('announcementDelayMs', 200);
+    fixture.detectChanges();
+
+    expect(getOutput().textContent?.trim()).toBe(MESSAGE);
+    expect(vi.getTimerCount()).toBe(0);
+
+    await vi.advanceTimersByTimeAsync(200);
+    fixture.detectChanges();
+
+    expect(getOutput().textContent?.trim()).toBe(MESSAGE);
+  });
 });
