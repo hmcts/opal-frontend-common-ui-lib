@@ -117,6 +117,24 @@ describe('MonetaryPipe', () => {
     expect(result).toBe('');
   });
 
+  it('should return an empty string for whitespace-only string values', () => {
+    utilsService.convertToMonetaryString.mockReturnValue('');
+
+    const result = pipe.transform('   ');
+
+    expect(utilsService.convertToMonetaryString).toHaveBeenCalledWith('   ');
+    expect(result).toBe('');
+  });
+
+  it('should return an empty string for malformed string values', () => {
+    utilsService.convertToMonetaryString.mockReturnValue('');
+
+    const result = pipe.transform('not-a-number');
+
+    expect(utilsService.convertToMonetaryString).toHaveBeenCalledWith('not-a-number');
+    expect(result).toBe('');
+  });
+
   it('should preserve preformatted monetary strings', () => {
     const result = pipe.transform('-£3.00');
 
