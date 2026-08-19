@@ -1,4 +1,4 @@
-import { formatCurrency, ViewportScroller } from '@angular/common';
+import { DOCUMENT, formatCurrency, ViewportScroller } from '@angular/common';
 import { inject, Injectable } from '@angular/core';
 
 // Matches decimal strings with an optional leading minus and either no commas or correctly grouped thousands.
@@ -9,6 +9,7 @@ const DECIMAL_OR_GROUPED_NUMBER_PATTERN = /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d*
   providedIn: 'root',
 })
 export class UtilsService {
+  private readonly document = inject(DOCUMENT);
   private readonly viewportScroller = inject(ViewportScroller);
 
   /**
@@ -81,6 +82,27 @@ export class UtilsService {
    */
   public scrollToTop(): void {
     this.viewportScroller.scrollToPosition([0, 0]);
+  }
+
+  /**
+   * Moves focus to the main content landmark and scrolls the viewport to the top of the page.
+   * A temporary tabindex allows the normally non-focusable landmark to receive programmatic focus.
+   */
+  public focusAndScrollToTop(): void {
+    const mainContent = this.document.getElementById('main-content');
+
+    if (mainContent) {
+      const hasTabindex = mainContent.hasAttribute('tabindex');
+
+      if (!hasTabindex) {
+        mainContent.setAttribute('tabindex', '-1');
+        mainContent.addEventListener('blur', () => mainContent.removeAttribute('tabindex'), { once: true });
+      }
+
+      mainContent.focus({ preventScroll: true });
+    }
+
+    this.scrollToTop();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
