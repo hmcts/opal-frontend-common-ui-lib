@@ -47,4 +47,12 @@ describe('CustomAccessibleMonetaryComponent', () => {
     expect(fixture.nativeElement.querySelector('[aria-hidden="true"]')?.textContent.trim()).toBe('-£3.00');
     expect(fixture.nativeElement.querySelector('.govuk-visually-hidden')?.textContent.trim()).toBe('minus £3.00');
   });
+
+  it('should render numeric strings with a trailing decimal point', () => {
+    fixture.componentRef.setInput('value', '-1,234.');
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('[aria-hidden="true"]')?.textContent.trim()).toBe('-£1,234.00');
+    expect(fixture.nativeElement.querySelector('.govuk-visually-hidden')?.textContent.trim()).toBe('minus £1,234.00');
+  });
 });
