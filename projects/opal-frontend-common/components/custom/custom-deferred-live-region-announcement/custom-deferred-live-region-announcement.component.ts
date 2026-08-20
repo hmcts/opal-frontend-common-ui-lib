@@ -25,7 +25,6 @@ export class CustomDeferredLiveRegionAnnouncement implements OnChanges, OnDestro
   private readonly injector = inject(Injector);
   private timeoutId: ReturnType<typeof setTimeout> | null = null;
   private browserRendered = false;
-  private renderScheduled = false;
   private _announcementDelayMs = CustomDeferredLiveRegionAnnouncement.DEFAULT_ANNOUNCEMENT_DELAY_MS;
 
   protected readonly renderedMessage = signal('');
@@ -50,21 +49,11 @@ export class CustomDeferredLiveRegionAnnouncement implements OnChanges, OnDestro
   /**
    * Schedules the initial announcement after the first browser render so the
    * live region is present and empty before its content changes.
-   *
-   * Prevents duplicate post-render callbacks with `renderScheduled` and marks
-   * the component as browser-rendered before scheduling the announcement.
    */
   private scheduleInitialAnnouncement(): void {
-    if (this.renderScheduled) {
-      return;
-    }
-
-    this.renderScheduled = true;
-
     afterNextRender(
       () => {
         this.browserRendered = true;
-        this.renderScheduled = false;
         this.scheduleAnnouncement();
       },
       { injector: this.injector },
