@@ -1,7 +1,9 @@
 @if (isVisible) {
-  <span class="govuk-visually-hidden" [attr.role]="announcementRole">
-    {{ announcementText }}
-  </span>
+  <opal-lib-custom-deferred-live-region-announcement
+    [message]="announcementMessage"
+    [role]="announcementRole"
+    [announcementDelayMs]="200"
+  ></opal-lib-custom-deferred-live-region-announcement>
   <ng-content select="[icon]"></ng-content>
   <ng-content select="[content]"></ng-content>
 

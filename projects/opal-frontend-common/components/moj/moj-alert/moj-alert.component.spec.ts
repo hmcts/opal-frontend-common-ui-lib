@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { describe, beforeEach, expect, it, vi } from 'vitest';
+import { describe, beforeEach, it, expect, vi } from 'vitest';
 import { MojAlertComponent } from './moj-alert.component';
-
-const flush = () => new Promise<void>((resolve) => setTimeout(resolve, 0));
+import { CustomDeferredLiveRegionAnnouncement } from '@hmcts/opal-frontend-common/components/custom/custom-deferred-live-region-announcement';
+import { By } from '@angular/platform-browser';
 
 describe('MojAlertComponent', () => {
   let component: MojAlertComponent;
@@ -25,65 +25,104 @@ describe('MojAlertComponent', () => {
   it('should have the correct host class applied when visible and type is information', () => {
     component.isVisible = true;
     component.type = 'information';
+
     fixture.detectChanges();
+
     const element: HTMLElement = fixture.nativeElement;
-    expect(element.className).toContain(`moj-alert`);
-    expect(element.className).toContain(`moj-alert--information`);
+
+    expect(element.className).toContain('moj-alert');
+    expect(element.className).toContain('moj-alert--information');
   });
 
   it('should update host class when type changes', () => {
     component.isVisible = true;
     component.type = 'error';
+
     fixture.detectChanges();
+
     const element: HTMLElement = fixture.nativeElement;
-    expect(element.className).toContain(`moj-alert`);
-    expect(element.className).toContain(`moj-alert--error`);
+
+    expect(element.className).toContain('moj-alert');
+    expect(element.className).toContain('moj-alert--error');
   });
 
   it('should have an empty class when component is not visible', () => {
     component.isVisible = false;
-    // Even if type is set, visibility takes precedence
     component.type = 'warning';
+
     fixture.detectChanges();
+
     const element: HTMLElement = fixture.nativeElement;
+
     expect(element.className.trim()).toBe('');
   });
 
-  it('should populate the live region text after view init', async () => {
-    component.ariaLabel = 'Close Alert';
-    component.type = 'warning';
-    fixture.detectChanges();
-    await flush();
-    fixture.detectChanges();
-    const element: HTMLElement = fixture.nativeElement;
-    const liveRegion = element.querySelector('.govuk-visually-hidden');
-    expect(liveRegion?.getAttribute('role')).toBe('alert');
-    expect(liveRegion?.textContent?.trim()).toBe('warning : Close Alert');
+  it.each([
+    ['information', 'information : Close Alert'],
+    ['success', 'success : Close Alert'],
+    ['warning', 'warning : Close Alert'],
+    ['error', 'error : Close Alert'],
+  ] as const)('should return the correct announcement message for type %s', (type, expectedMessage) => {
+    component.type = type;
+
+    expect(component.announcementMessage).toBe(expectedMessage);
   });
 
-  it('should not render the live region when the alert is not visible', () => {
-    component.isVisible = false;
-    component.type = 'warning';
-    fixture.detectChanges();
-    const element: HTMLElement = fixture.nativeElement;
-    expect(element.querySelector('.govuk-visually-hidden')).toBeNull();
+  it.each([
+    ['error', 'alert'],
+    ['warning', 'alert'],
+    ['success', 'status'],
+    ['information', 'status'],
+  ] as const)('should return the correct announcement role', (type, expectedRole) => {
+    component.type = type;
+
+    expect(component.announcementRole).toBe(expectedRole);
   });
 
   it('should set the data-module attribute to "moj-alert"', () => {
     fixture.detectChanges();
-    const element: HTMLElement | null = fixture.nativeElement;
-    expect(element?.getAttribute('data-module')).toBe('moj-alert');
+
+    const element: HTMLElement = fixture.nativeElement;
+
+    expect(element.getAttribute('data-module')).toBe('moj-alert');
   });
 
-  it('should dismiss the alert when dismiss is called and emit a `dismissed` event', async () => {
-    vi.spyOn(component.dismissed, 'emit');
+  it('should dismiss the alert when dismiss is called and emit a `dismissed` event', () => {
+    const emitSpy = vi.spyOn(component.dismissed, 'emit');
+
     component.isVisible = true;
     component.type = 'information';
-    fixture.detectChanges();
 
     component.dismiss();
 
     expect(component.isVisible).toBe(false);
-    expect(component.dismissed.emit).toHaveBeenCalled();
+    expect(emitSpy).toHaveBeenCalledOnce();
+  });
+
+  it('should pass announcement inputs to the deferred live region', () => {
+    component.ariaLabel = 'Close Alert';
+    component.type = 'warning';
+
+    fixture.detectChanges();
+
+    const liveRegionDebugElement = fixture.debugElement.query(By.directive(CustomDeferredLiveRegionAnnouncement));
+
+    expect(liveRegionDebugElement).toBeTruthy();
+
+    const liveRegion = liveRegionDebugElement.componentInstance as CustomDeferredLiveRegionAnnouncement;
+
+    expect(liveRegion.message).toBe('warning : Close Alert');
+    expect(liveRegion.role).toBe('alert');
+    expect(liveRegion.announcementDelayMs).toBe(200);
+  });
+
+  it('should not render the deferred live region when the alert is not visible', () => {
+    component.isVisible = false;
+
+    fixture.detectChanges();
+
+    const liveRegion = fixture.debugElement.query(By.directive(CustomDeferredLiveRegionAnnouncement));
+
+    expect(liveRegion).toBeNull();
   });
 });
