@@ -83,7 +83,9 @@ Before (legacy MoJ markup):
 
 ```html
 <nav class="moj-pagination moj-pagination-alignment">
-  <ul class="moj-pagination__list">...</ul>
+  <ul class="moj-pagination__list">
+    ...
+  </ul>
   <p class="moj-pagination__results">Showing 11 to 20 of 200 results</p>
 </nav>
 ```

@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.99",
+  "version": "0.0.105",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -139,6 +139,9 @@
     "./components/custom/custom-account-information": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-account-information.mjs"
     },
+    "./components/custom/custom-accessible-monetary": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-accessible-monetary.mjs"
+    },
     "./components/custom/custom-summary-metric-bar": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-summary-metric-bar.mjs"
     },
@@ -162,6 +165,9 @@
     },
     "./components/custom/custom-action-links": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-action-links.mjs"
+    },
+    "./components/custom/custom-deferred-live-region-announcement": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-deferred-live-region-announcement.mjs"
     },
     "./components/custom/custom-page-header": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-page-header.mjs"
