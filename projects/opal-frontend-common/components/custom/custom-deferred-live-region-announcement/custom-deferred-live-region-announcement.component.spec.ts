@@ -160,7 +160,11 @@ describe('CustomDeferredLiveRegionAnnouncement', () => {
     fixture.detectChanges();
 
     expect(getOutput().textContent?.trim()).toBe('');
-    expect(vi.getTimerCount()).toBe(0);
+
+    await vi.advanceTimersByTimeAsync(ANNOUNCEMENT_DELAY_MS);
+    fixture.detectChanges();
+
+    expect(getOutput().textContent?.trim()).toBe('');
   });
 
   it('should use the default announcement delay', async () => {

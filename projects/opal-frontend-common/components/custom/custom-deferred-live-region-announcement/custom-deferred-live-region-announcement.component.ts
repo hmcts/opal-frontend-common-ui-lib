@@ -14,6 +14,7 @@ import {
 @Component({
   selector: 'opal-lib-custom-deferred-live-region-announcement',
   templateUrl: './custom-deferred-live-region-announcement.component.html',
+  styleUrl: './custom-deferred-live-region-announcement.component.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
