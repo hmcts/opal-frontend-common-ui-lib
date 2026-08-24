@@ -1,11 +1,11 @@
 import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 import { MojAlertType } from './constants/alert-types.constant';
-
+import { CustomDeferredLiveRegionAnnouncement } from '@hmcts/opal-frontend-common/components/custom/custom-deferred-live-region-announcement';
 import { MojAlertDismissComponent } from './moj-alert-dismiss/moj-alert-dismiss.component';
 
 @Component({
   selector: 'opal-lib-moj-alert, [opal-lib-moj-alert]',
-  imports: [MojAlertDismissComponent],
+  imports: [MojAlertDismissComponent, CustomDeferredLiveRegionAnnouncement],
   templateUrl: './moj-alert.component.html',
 })
 export class MojAlertComponent {
@@ -20,19 +20,16 @@ export class MojAlertComponent {
   get hostClass(): string {
     return this.isVisible ? `moj-alert moj-alert--${this.type}` : '';
   }
-  @HostBinding('attr.aria-label')
-  get computedAriaLabel(): string {
+
+  @HostBinding('attr.data-module') dataModule = 'moj-alert';
+
+  public get announcementMessage(): string {
     return `${this.type} : ${this.ariaLabel}`;
   }
-  @HostBinding('attr.role')
-  get computedRole(): 'alert' | 'status' | null {
-    if (!this.isVisible) {
-      return null;
-    }
 
+  public get announcementRole(): 'alert' | 'status' {
     return this.type === 'error' || this.type === 'warning' ? 'alert' : 'status';
   }
-  @HostBinding('attr.data-module') dataModule = 'moj-alert';
 
   /**
    * Dismisses the alert component.
