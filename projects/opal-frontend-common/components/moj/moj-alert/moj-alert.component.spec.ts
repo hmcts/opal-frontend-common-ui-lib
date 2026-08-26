@@ -155,4 +155,11 @@ describe('MojAlertComponent', () => {
       );
     },
   );
+
+  it('should trim whitespace from ariaLabel in the announcement message', () => {
+    component.ariaLabel = '  Close Alert  ';
+    component.type = 'warning';
+
+    expect(component.announcementMessage).toBe('warning: Close Alert');
+  });
 });

@@ -47,13 +47,15 @@ export class MojAlertComponent {
    * @throws {Error} If `ariaLabel` is missing, empty, or contains only whitespace.
    */
   public get announcementMessage(): string {
-    if (!this.ariaLabel?.trim()) {
+    const ariaLabel = this.ariaLabel?.trim();
+
+    if (!ariaLabel) {
       throw new Error(
         'MojAlertComponent requires ariaLabel when live announcements are enabled. ' +
           'Provide ariaLabel or set enableLiveAnnouncement to false.',
       );
     }
-    return `${this.type}: ${this.ariaLabel}`;
+    return `${this.type}: ${ariaLabel}`;
   }
 
   public get announcementRole(): 'alert' | 'status' {
