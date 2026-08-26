@@ -1,3 +1,8 @@
 :host {
   display: contents;
 }
+
+:host .govuk-visually-hidden::before,
+:host .govuk-visually-hidden::after {
+  content: none;
+}

@@ -9,9 +9,10 @@ import { MojAlertDismissComponent } from './moj-alert-dismiss/moj-alert-dismiss.
   templateUrl: './moj-alert.component.html',
 })
 export class MojAlertComponent {
-  @Input({ required: true }) ariaLabel!: string;
+  @Input({ required: false }) ariaLabel?: string;
   @Input({ required: true }) type: MojAlertType = 'information';
   @Input({ required: false }) showDismiss!: boolean;
+  @Input({ required: false }) enableLiveAnnouncement = true;
   @Output() dismissed = new EventEmitter<void>();
 
   public isVisible: boolean = true;
@@ -24,7 +25,13 @@ export class MojAlertComponent {
   @HostBinding('attr.data-module') dataModule = 'moj-alert';
 
   public get announcementMessage(): string {
-    return `${this.type} : ${this.ariaLabel}`;
+    if (!this.ariaLabel?.trim()) {
+      throw new Error(
+        'MojAlertComponent requires ariaLabel when live announcements are enabled. ' +
+        'Provide ariaLabel or set enableLiveAnnouncement to false.',
+      );
+    }
+    return `${this.type}: ${this.ariaLabel}`;
   }
 
   public get announcementRole(): 'alert' | 'status' {
