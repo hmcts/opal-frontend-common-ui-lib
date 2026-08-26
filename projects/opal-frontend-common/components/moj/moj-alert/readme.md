@@ -73,6 +73,7 @@ The built-in deferred ARIA live-region announcement is enabled by default. When 
 
 If `enableLiveAnnouncement` is `false`, the component does not create its internal deferred live region and ariaLabel is not required:
 
+```html
 <div
   opal-lib-moj-alert
   type="warning"
@@ -89,6 +90,7 @@ If `enableLiveAnnouncement` is `false`, the component does not create its intern
     </opal-lib-moj-alert-content-text>
   </opal-lib-moj-alert-content>
 </div>
+```
 
 Disabling the built-in announcement does not hide the visible alert content from assistive technologies. It only prevents `MojAlertComponent` from creating its internal deferred live-region announcement.
 
