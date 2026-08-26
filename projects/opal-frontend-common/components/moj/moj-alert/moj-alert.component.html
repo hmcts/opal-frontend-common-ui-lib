@@ -1,9 +1,11 @@
 @if (isVisible) {
-  <opal-lib-custom-deferred-live-region-announcement
-    [message]="announcementMessage"
-    [role]="announcementRole"
-    [announcementDelayMs]="200"
-  ></opal-lib-custom-deferred-live-region-announcement>
+  @if (enableLiveAnnouncement) {
+    <opal-lib-custom-deferred-live-region-announcement
+      [message]="announcementMessage"
+      [role]="announcementRole"
+      [announcementDelayMs]="200"
+    ></opal-lib-custom-deferred-live-region-announcement>
+  }
   <ng-content select="[icon]"></ng-content>
   <ng-content select="[content]"></ng-content>
 

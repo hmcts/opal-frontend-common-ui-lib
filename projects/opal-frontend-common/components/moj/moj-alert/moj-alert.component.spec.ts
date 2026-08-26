@@ -58,10 +58,10 @@ describe('MojAlertComponent', () => {
   });
 
   it.each([
-    ['information', 'information : Close Alert'],
-    ['success', 'success : Close Alert'],
-    ['warning', 'warning : Close Alert'],
-    ['error', 'error : Close Alert'],
+    ['information', 'information: Close Alert'],
+    ['success', 'success: Close Alert'],
+    ['warning', 'warning: Close Alert'],
+    ['error', 'error: Close Alert'],
   ] as const)('should return the correct announcement message for type %s', (type, expectedMessage) => {
     component.type = type;
 
@@ -111,7 +111,7 @@ describe('MojAlertComponent', () => {
 
     const liveRegion = liveRegionDebugElement.componentInstance as CustomDeferredLiveRegionAnnouncement;
 
-    expect(liveRegion.message).toBe('warning : Close Alert');
+    expect(liveRegion.message).toBe('warning: Close Alert');
     expect(liveRegion.role).toBe('alert');
     expect(liveRegion.announcementDelayMs).toBe(200);
   });
@@ -124,5 +124,42 @@ describe('MojAlertComponent', () => {
     const liveRegion = fixture.debugElement.query(By.directive(CustomDeferredLiveRegionAnnouncement));
 
     expect(liveRegion).toBeNull();
+  });
+
+  it('should not render the deferred live region when live announcements are disabled', () => {
+    component.enableLiveAnnouncement = false;
+
+    fixture.detectChanges();
+
+    const liveRegion = fixture.debugElement.query(By.directive(CustomDeferredLiveRegionAnnouncement));
+
+    expect(liveRegion).toBeNull();
+  });
+
+  it('should not require ariaLabel when live announcements are disabled', () => {
+    component.ariaLabel = undefined;
+    component.enableLiveAnnouncement = false;
+
+    expect(() => fixture.detectChanges()).not.toThrow();
+  });
+
+  it.each([undefined, '', '   '])(
+    'should require a non-empty ariaLabel when live announcements are enabled',
+    (ariaLabel) => {
+      component.ariaLabel = ariaLabel;
+      component.enableLiveAnnouncement = true;
+
+      expect(() => fixture.detectChanges()).toThrow(
+        'MojAlertComponent requires ariaLabel when live announcements are enabled. ' +
+          'Provide ariaLabel or set enableLiveAnnouncement to false.',
+      );
+    },
+  );
+
+  it('should trim whitespace from ariaLabel in the announcement message', () => {
+    component.ariaLabel = '  Close Alert  ';
+    component.type = 'warning';
+
+    expect(component.announcementMessage).toBe('warning: Close Alert');
   });
 });

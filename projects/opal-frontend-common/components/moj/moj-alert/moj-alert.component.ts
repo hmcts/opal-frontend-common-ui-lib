@@ -9,11 +9,28 @@ import { MojAlertDismissComponent } from './moj-alert-dismiss/moj-alert-dismiss.
   templateUrl: './moj-alert.component.html',
 })
 export class MojAlertComponent {
-  @Input({ required: true }) ariaLabel!: string;
+  /**
+   * Accessible label used for live announcements.
+   *
+   * Required when `enableLiveAnnouncement` is true.
+   */
+  @Input({ required: false }) ariaLabel?: string;
+  /**
+   * Controls whether the alert creates a live-region announcement.
+   *
+   * Defaults to `true`. When enabled, `ariaLabel` must be provided.
+   */
+  @Input({ required: false }) enableLiveAnnouncement = true;
   @Input({ required: true }) type: MojAlertType = 'information';
   @Input({ required: false }) showDismiss!: boolean;
+
   @Output() dismissed = new EventEmitter<void>();
 
+  /**
+   * Controls the visibility of the alert.
+   *
+   * Defaults to `true` and is set to `false` when the alert is dismissed.
+   */
   public isVisible: boolean = true;
 
   @HostBinding('class')
@@ -23,8 +40,22 @@ export class MojAlertComponent {
 
   @HostBinding('attr.data-module') dataModule = 'moj-alert';
 
+  /**
+   * Returns the message used for the live-region announcement.
+   *
+   * @returns The alert type and accessible label formatted as an announcement message.
+   * @throws {Error} If `ariaLabel` is missing, empty, or contains only whitespace.
+   */
   public get announcementMessage(): string {
-    return `${this.type} : ${this.ariaLabel}`;
+    const ariaLabel = this.ariaLabel?.trim();
+
+    if (!ariaLabel) {
+      throw new Error(
+        'MojAlertComponent requires ariaLabel when live announcements are enabled. ' +
+          'Provide ariaLabel or set enableLiveAnnouncement to false.',
+      );
+    }
+    return `${this.type}: ${ariaLabel}`;
   }
 
   public get announcementRole(): 'alert' | 'status' {
@@ -34,7 +65,7 @@ export class MojAlertComponent {
   /**
    * Dismisses the alert component.
    *
-   * This method emits the dismissed event to it's parent and
+   * This method emits the dismissed event to its parent and
    * sets the component's visibility state to false,
    * effectively hiding the alert from view.
    */
