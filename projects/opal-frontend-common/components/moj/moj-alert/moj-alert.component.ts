@@ -26,6 +26,11 @@ export class MojAlertComponent {
 
   @Output() dismissed = new EventEmitter<void>();
 
+  /**
+   * Controls the visibility of the alert.
+   *
+   * Defaults to `true` and is set to `false` when the alert is dismissed.
+   */
   public isVisible: boolean = true;
 
   @HostBinding('class')
@@ -39,7 +44,7 @@ export class MojAlertComponent {
    * Returns the message used for the live-region announcement.
    *
    * @returns The alert type and accessible label formatted as an announcement message.
-   * @throws {Error} If `ariaLabel`, empty, or contains only whitespace.
+   * @throws {Error} If `ariaLabel` is missing, empty, or contains only whitespace.
    */
   public get announcementMessage(): string {
     if (!this.ariaLabel?.trim()) {
