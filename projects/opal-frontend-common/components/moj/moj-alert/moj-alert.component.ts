@@ -9,10 +9,21 @@ import { MojAlertDismissComponent } from './moj-alert-dismiss/moj-alert-dismiss.
   templateUrl: './moj-alert.component.html',
 })
 export class MojAlertComponent {
+  /**
+   * Accessible label used for live announcements.
+   *
+   * Required when `enableLiveAnnouncement` is true.
+   */
   @Input({ required: false }) ariaLabel?: string;
+  /**
+   * Controls whether the alert creates a live-region announcement.
+   *
+   * Defaults to `true`. When enabled, `ariaLabel` must be provided.
+   */
+  @Input({ required: false }) enableLiveAnnouncement = true;
   @Input({ required: true }) type: MojAlertType = 'information';
   @Input({ required: false }) showDismiss!: boolean;
-  @Input({ required: false }) enableLiveAnnouncement = true;
+
   @Output() dismissed = new EventEmitter<void>();
 
   public isVisible: boolean = true;
@@ -24,6 +35,12 @@ export class MojAlertComponent {
 
   @HostBinding('attr.data-module') dataModule = 'moj-alert';
 
+  /**
+   * Returns the message used for the live-region announcement.
+   *
+   * @returns The alert type and accessible label formatted as an announcement message.
+   * @throws {Error} If `ariaLabel`, empty, or contains only whitespace.
+   */
   public get announcementMessage(): string {
     if (!this.ariaLabel?.trim()) {
       throw new Error(
@@ -41,7 +58,7 @@ export class MojAlertComponent {
   /**
    * Dismisses the alert component.
    *
-   * This method emits the dismissed event to it's parent and
+   * This method emits the dismissed event to its parent and
    * sets the component's visibility state to false,
    * effectively hiding the alert from view.
    */
