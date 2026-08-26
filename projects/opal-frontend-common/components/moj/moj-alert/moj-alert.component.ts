@@ -28,7 +28,7 @@ export class MojAlertComponent {
     if (!this.ariaLabel?.trim()) {
       throw new Error(
         'MojAlertComponent requires ariaLabel when live announcements are enabled. ' +
-        'Provide ariaLabel or set enableLiveAnnouncement to false.',
+          'Provide ariaLabel or set enableLiveAnnouncement to false.',
       );
     }
     return `${this.type}: ${this.ariaLabel}`;

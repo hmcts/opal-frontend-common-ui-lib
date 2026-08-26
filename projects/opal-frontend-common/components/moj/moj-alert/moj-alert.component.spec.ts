@@ -131,9 +131,7 @@ describe('MojAlertComponent', () => {
 
     fixture.detectChanges();
 
-    const liveRegion = fixture.debugElement.query(
-      By.directive(CustomDeferredLiveRegionAnnouncement),
-    );
+    const liveRegion = fixture.debugElement.query(By.directive(CustomDeferredLiveRegionAnnouncement));
 
     expect(liveRegion).toBeNull();
   });
@@ -153,7 +151,7 @@ describe('MojAlertComponent', () => {
 
       expect(() => fixture.detectChanges()).toThrow(
         'MojAlertComponent requires ariaLabel when live announcements are enabled. ' +
-        'Provide ariaLabel or set enableLiveAnnouncement to false.',
+          'Provide ariaLabel or set enableLiveAnnouncement to false.',
       );
     },
   );
