@@ -2442,7 +2442,7 @@ __metadata:
     "@angular/router": "npm:^21.1.3"
     "@eslint/js": "npm:^10.0.0"
     "@microsoft/applicationinsights-web": "npm:^3.3.6"
-    "@ministryofjustice/frontend": "npm:^10.0.0"
+    "@ministryofjustice/frontend": "npm:^11.0.0"
     "@ngrx/signals": "npm:^21.0.0"
     "@types/luxon": "npm:^3.4.2"
     "@vitest/coverage-v8": "npm:^4.0.0"
@@ -3266,13 +3266,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ministryofjustice/frontend@npm:^10.0.0":
-  version: 10.0.1
-  resolution: "@ministryofjustice/frontend@npm:10.0.1"
+"@ministryofjustice/frontend@npm:^11.0.0":
+  version: 11.0.0
+  resolution: "@ministryofjustice/frontend@npm:11.0.0"
   peerDependencies:
     govuk-frontend: ^6.0.0
     moment: 2.30.1
-  checksum: 10/98a796d642a6657644bef0c87926e5f6bdff0aac22b7a7a891c1059e8dcf2222e04b5bfe9bec1063b7a6adb90905f19c7f3eb833af947dc3195086c0a1a5d8e9
+  checksum: 10/0ba6498f1cb1a682e458b6088a9c03b594f40399f3e8e72c0fec9f0084efdea3217598907010efe4c4a47cde048590cf96aedc08e4d702ddc4e478980a60b7e0
   languageName: node
   linkType: hard
 
