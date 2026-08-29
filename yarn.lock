@@ -2443,7 +2443,7 @@ __metadata:
     "@eslint/js": "npm:^10.0.0"
     "@microsoft/applicationinsights-web": "npm:^3.3.6"
     "@ministryofjustice/frontend": "npm:^11.0.0"
-    "@ngrx/signals": "npm:^21.0.0"
+    "@ngrx/signals": "npm:^22.0.0"
     "@types/luxon": "npm:^3.4.2"
     "@vitest/coverage-v8": "npm:^4.0.0"
     accessible-autocomplete: "npm:^3.0.1"
@@ -3565,18 +3565,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ngrx/signals@npm:^21.0.0":
-  version: 21.1.1
-  resolution: "@ngrx/signals@npm:21.1.1"
+"@ngrx/signals@npm:^22.0.0":
+  version: 22.0.0
+  resolution: "@ngrx/signals@npm:22.0.0"
   dependencies:
     tslib: "npm:^2.3.0"
   peerDependencies:
-    "@angular/core": ^21.0.0
+    "@angular/core": ^22.0.0
     rxjs: ^6.5.3 || ^7.4.0
   peerDependenciesMeta:
     rxjs:
       optional: true
-  checksum: 10/e1fdf45c004ec7eb3e91e208b74e6c9d03e9d6e2c1079081dd1d4ebca181e7f9603a339b8de27dbdb7fed13c63d7e8a9d7fed39e6788d946b1e4665f40b256af
+  checksum: 10/12f35ebaabe1e5768f9fd5325c3964ce88077b16ac8d7aec0d17ebcbb2acea3415758a363cc78e3c7b60d384e73f89ea8c9fe7565e0d711eca3a4645aaa8a386
   languageName: node
   linkType: hard
 
