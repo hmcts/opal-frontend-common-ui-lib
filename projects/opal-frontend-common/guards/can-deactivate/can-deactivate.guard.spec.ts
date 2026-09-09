@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { ICanDeactivateCanComponentDeactivate } from './interfaces/can-deactivate-can-component-deactivate.interface';
 import { canDeactivateGuard } from './can-deactivate.guard';
 import { describe, beforeEach, it, vi, expect } from 'vitest';
+import { CAN_DEACTIVATE_WARNING_MESSAGE } from './constants/can-deactivate-warning-message.constant';
 
 describe('canDeactivateGuard', () => {
   let mockComponent: ICanDeactivateCanComponentDeactivate;
@@ -40,9 +41,7 @@ describe('canDeactivateGuard', () => {
 
     expect(result).toBe(false);
     expect(mockComponent.canDeactivate).toHaveBeenCalled();
-    expect(window.confirm).toHaveBeenCalledWith(
-      'WARNING: Are you sure you want to leave this page? Any information you entered will be lost.',
-    );
+    expect(window.confirm).toHaveBeenCalledWith(CAN_DEACTIVATE_WARNING_MESSAGE);
   });
 
   it('should return true if canDeactivate method of component returns false and user clicks OK', () => {
@@ -56,8 +55,6 @@ describe('canDeactivateGuard', () => {
 
     expect(result).toBe(true);
     expect(mockComponent.canDeactivate).toHaveBeenCalled();
-    expect(window.confirm).toHaveBeenCalledWith(
-      'WARNING: Are you sure you want to leave this page? Any information you entered will be lost.',
-    );
+    expect(window.confirm).toHaveBeenCalledWith(CAN_DEACTIVATE_WARNING_MESSAGE);
   });
 });
