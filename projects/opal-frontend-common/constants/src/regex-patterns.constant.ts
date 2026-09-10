@@ -5,6 +5,7 @@ export const ALPHANUMERIC_WITH_HYPHENS_SPACES_APOSTROPHES_COMMAS_DOT_PATTERN = /
 export const LETTERS_WITH_SPACES_PATTERN = /^[a-zA-Z ]*$/;
 export const LETTERS_WITH_SPACES_DOT_PATTERN = /^[a-zA-Z\s.]*$/;
 export const LETTERS_SPACES_HYPHENS_APOSTROPHES_DOT_PATTERN = /^[a-zA-Z\s'.-]*$/;
+export const LETTERS_SPACES_HYPHENS_PATTERN = /^[a-zA-Z -]*$/;
 export const SPECIAL_CHARACTERS_PATTERN = /^[a-zA-Z0-9 ]*$/;
 export const NUMERIC_PATTERN = /^\d*$/;
 export const DRIVING_LICENCE_NUMBER_PATTERN =
