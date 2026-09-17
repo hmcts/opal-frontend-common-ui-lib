@@ -39,6 +39,8 @@ export class AlphagovAccessibleAutocompleteComponent implements OnInit, OnDestro
   @Input({ required: false }) hintText!: string;
   @Input({ required: true }) autoCompleteItems: IAlphagovAccessibleAutocompleteItem[] = [];
   @Input() showAllValues = true;
+  /** Formats suggestion HTML only; option names remain unchanged for input values and matching. */
+  @Input() suggestionTemplate?: (label: string) => string;
   @Input({ required: false }) errors: string | null = null;
 
   @ViewChild('autocomplete') autocompleteContainer!: ElementRef<HTMLElement>;
@@ -116,6 +118,14 @@ export class AlphagovAccessibleAutocompleteComponent implements OnInit, OnDestro
       name: this.autoCompleteId,
       showAllValues: this.showAllValues,
       defaultValue: this.getDefaultValue(),
+      ...(this.suggestionTemplate
+        ? {
+            templates: {
+              inputValue: (label: string) => label,
+              suggestion: this.suggestionTemplate,
+            },
+          }
+        : {}),
       dropdownArrow: ({ className }) => this.renderDropdownArrow(className),
       onConfirm: (selectedName: string) => this.handleOnConfirm(selectedName),
     };
