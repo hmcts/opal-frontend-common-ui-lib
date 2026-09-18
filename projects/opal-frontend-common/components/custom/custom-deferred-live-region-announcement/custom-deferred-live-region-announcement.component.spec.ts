@@ -254,17 +254,26 @@ describe('CustomDeferredLiveRegionAnnouncement', () => {
     fixture.detectChanges();
 
     expect(getOutput().textContent?.trim()).toBe(MESSAGE);
-    expect(vi.getTimerCount()).toBe(0);
 
-    fixture.componentRef.setInput('announcementDelayMs', 200);
-    fixture.detectChanges();
+    // Observe the live region itself: Angular can have unrelated render timers pending.
+    const onMutation = vi.fn();
+    const observer = new MutationObserver(onMutation);
+    observer.observe(getOutput(), { childList: true, characterData: true, subtree: true });
 
-    expect(getOutput().textContent?.trim()).toBe(MESSAGE);
-    expect(vi.getTimerCount()).toBe(0);
+    try {
+      fixture.componentRef.setInput('announcementDelayMs', 200);
+      fixture.detectChanges();
 
-    await vi.advanceTimersByTimeAsync(200);
-    fixture.detectChanges();
+      expect(getOutput().textContent?.trim()).toBe(MESSAGE);
 
-    expect(getOutput().textContent?.trim()).toBe(MESSAGE);
+      await vi.advanceTimersByTimeAsync(200);
+      fixture.detectChanges();
+      await Promise.resolve();
+
+      expect(getOutput().textContent?.trim()).toBe(MESSAGE);
+      expect(onMutation).not.toHaveBeenCalled();
+    } finally {
+      observer.disconnect();
+    }
   });
 });
