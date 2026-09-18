@@ -71,3 +71,14 @@ known-ids.json
 
 # npm pack artifacts
 *.tgz
+
+# Local Superpowers via skills CLI
+/.agents/skills/superpowers
+superpowers/
+.superpowers/
+**/superpowers/
+**/.superpowers/
+/docs/superpowers/specs/
+/docs/superpowers/plans/
+/skills-lock.json
+/.agents/skills/
