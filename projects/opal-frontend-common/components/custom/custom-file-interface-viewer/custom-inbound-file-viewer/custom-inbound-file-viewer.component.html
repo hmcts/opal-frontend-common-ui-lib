@@ -1,0 +1,21 @@
+<div class="govuk-grid-column-two-thirds">
+  <h1 class="govuk-heading-l">Inbound interface files</h1>
+  <form [formGroup]="filtersForm" (ngSubmit)="handleSubmit()" autocomplete="off">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-third">
+        <opal-lib-custom-file-interface-viewer-autocomplete
+          [labelText]="businessUnitAutocompleteLabelText"
+          [labelClasses]="businessUnitAutocompleteLabelClasses"
+          [inputId]="businessUnitAutocompleteInputId"
+          [inputName]="businessUnitAutocompleteInputName"
+          [inputClasses]="businessUnitAutocompleteInputClasses"
+          [hintText]="businessUnitAutocompleteHintText"
+          [autoCompleteItems]="autoCompleteBusinessUnitItems"
+          [control]="businessUnitControl"
+          [showAllValues]="businessUnitAutocompleteShowAllValues"
+          [errors]="businessUnitErrors"
+        ></opal-lib-custom-file-interface-viewer-autocomplete>
+      </div>
+    </div>
+  </form>
+</div>
