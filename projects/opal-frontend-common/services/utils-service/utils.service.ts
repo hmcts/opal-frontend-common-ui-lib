@@ -1,10 +1,15 @@
-import { ViewportScroller } from '@angular/common';
+import { DOCUMENT, formatCurrency, ViewportScroller } from '@angular/common';
 import { inject, Injectable } from '@angular/core';
+
+// Matches decimal strings with an optional leading minus and either no commas or correctly grouped thousands.
+// The optional decimal point may have no fractional digits to preserve accepted values such as "1.".
+const DECIMAL_OR_GROUPED_NUMBER_PATTERN = /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d*)?$/;
 
 @Injectable({
   providedIn: 'root',
 })
 export class UtilsService {
+  private readonly document = inject(DOCUMENT);
   private readonly viewportScroller = inject(ViewportScroller);
 
   /**
@@ -26,20 +31,29 @@ export class UtilsService {
   }
 
   /**
-   * Converts a number to a monetary string representation.
-   * @param amount - The number to convert.
-   * @returns The monetary string representation of the number.
+   * Converts a finite number or decimal string to a GBP monetary string.
+   * String values may use a leading minus, correctly positioned thousands separators, and surrounding whitespace.
+   * @param amount - The numeric value to convert.
+   * @returns The formatted monetary value, or an empty string when the input is invalid.
    */
   public convertToMonetaryString(amount: number | string): string {
-    let negativeValue = false;
     if (typeof amount === 'string') {
-      amount = Number.parseFloat(amount);
+      const trimmedAmount = amount.trim();
+
+      if (!DECIMAL_OR_GROUPED_NUMBER_PATTERN.test(trimmedAmount)) {
+        return '';
+      }
+
+      amount = Number(trimmedAmount.replaceAll(',', ''));
     }
-    if (amount < 0) {
-      negativeValue = true;
-      amount = Math.abs(amount);
+
+    if (!Number.isFinite(amount)) {
+      return '';
     }
-    return `${negativeValue ? '-' : ''}£${amount.toFixed(2)}`;
+
+    const normalizedAmount = amount === 0 ? 0 : amount;
+
+    return formatCurrency(normalizedAmount, 'en-GB', '£', 'GBP', '1.2-2');
   }
 
   /**
@@ -68,6 +82,27 @@ export class UtilsService {
    */
   public scrollToTop(): void {
     this.viewportScroller.scrollToPosition([0, 0]);
+  }
+
+  /**
+   * Moves focus to the main content landmark and scrolls the viewport to the top of the page.
+   * A temporary tabindex allows the normally non-focusable landmark to receive programmatic focus.
+   */
+  public focusAndScrollToTop(): void {
+    const mainContent = this.document.getElementById('main-content');
+
+    if (mainContent) {
+      const hasTabindex = mainContent.hasAttribute('tabindex');
+
+      if (!hasTabindex) {
+        mainContent.setAttribute('tabindex', '-1');
+        mainContent.addEventListener('blur', () => mainContent.removeAttribute('tabindex'), { once: true });
+      }
+
+      mainContent.focus({ preventScroll: true });
+    }
+
+    this.scrollToTop();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

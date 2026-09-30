@@ -14,6 +14,7 @@
       [id]="inputId"
       [name]="inputName"
       type="text"
+      [attr.autocomplete]="autoCompleteValue ? autoCompleteValue : autoComplete ? 'on' : 'off'"
       [formControl]="getControl"
       [attr.aria-describedby]="describedBy"
       (blur)="forceTwoDecimalPoints && onBlurFormatToTwoDecimalPlaces()"

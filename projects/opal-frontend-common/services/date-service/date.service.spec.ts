@@ -1,10 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-
 import { DateService } from './date.service';
 import { DateTime } from 'luxon';
 import { describe, beforeEach, it, expect, expectTypeOf, vi } from 'vitest';
-
-type DateTimeMaybeValid = DateTime<true> | DateTime<false>;
 
 describe('DateServiceService', () => {
   let service: DateService;
@@ -202,7 +199,7 @@ describe('DateServiceService', () => {
   });
 
   it('should expose ISO parsed dates as maybe-valid DateTime values', () => {
-    expectTypeOf(service.getFromIso).returns.toEqualTypeOf<DateTimeMaybeValid>();
+    expectTypeOf(service.getFromIso).returns.toEqualTypeOf<DateTime<boolean>>();
   });
 
   it('should accept DateTime values with unknown validity when formatting', () => {

@@ -24,6 +24,7 @@
     [rows]="rows"
     [formControl]="getControl"
     [inputMode]="inputMode"
+    [attr.autocomplete]="autoCompleteValue ? autoCompleteValue : autoComplete ? 'on' : 'off'"
     [maxlength]="maxCharacterLimit"
     [attr.aria-describedby]="describedBy"
   ></textarea>

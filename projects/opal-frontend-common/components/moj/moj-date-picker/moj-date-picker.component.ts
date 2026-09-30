@@ -38,6 +38,8 @@ export class MojDatePickerComponent implements OnInit, OnDestroy {
   @Input({ required: false }) disabledDates!: string[];
   @Input({ required: false }) disabledDays!: string;
   @Input({ required: false }) errors: string | null = null;
+  @Input({ required: false }) autoComplete: boolean = false;
+  @Input({ required: false }) autoCompleteValue: string | null = null;
   @Output() dateChange = new EventEmitter<string>();
 
   @Input({ required: true }) set control(abstractControl: AbstractControl) {

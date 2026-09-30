@@ -30,6 +30,7 @@
             [name]="dateInputs.day.inputName"
             type="text"
             inputmode="numeric"
+            [attr.autocomplete]="autoCompleteValue?.day ? autoCompleteValue?.day : autoComplete ? 'on' : 'off'"
             formControlName="{{ dateInputs.day.inputId }}"
           />
         </div>
@@ -46,6 +47,7 @@
             [name]="dateInputs.month.inputName"
             type="text"
             inputmode="numeric"
+            [attr.autocomplete]="autoCompleteValue?.month ? autoCompleteValue?.month : autoComplete ? 'on' : 'off'"
             formControlName="{{ dateInputs.month.inputId }}"
           />
         </div>
@@ -62,6 +64,7 @@
             [name]="dateInputs.year.inputName"
             type="text"
             inputmode="numeric"
+            [attr.autocomplete]="autoCompleteValue?.year ? autoCompleteValue?.year : autoComplete ? 'on' : 'off'"
             formControlName="{{ dateInputs.year.inputId }}"
           />
         </div>

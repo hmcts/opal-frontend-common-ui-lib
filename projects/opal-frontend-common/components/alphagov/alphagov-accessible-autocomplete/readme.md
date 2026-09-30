@@ -7,6 +7,7 @@ This Angular component provides an accessible, GOV.UK-styled autocomplete input 
 - [Installation](#installation)
 - [Usage](#usage)
 - [Inputs](#inputs)
+- [Suggestion templates](#suggestion-templates)
 - [Outputs](#outputs)
 - [Accessibility](#accessibility)
 - [Testing](#testing)
@@ -54,6 +55,51 @@ You can use the accessible autocomplete component in your template as follows:
 | `errors`            | `string \| null`                        | `null`                 | Error message shown if validation fails.                                |
 | `autoCompleteItems` | `IAlphagovAccessibleAutocompleteItem[]` | `[]`                   | The list of items to populate the autocomplete, with `{ name, value }`. |
 | `showAllValues`     | `boolean`                               | `true`                 | Whether to show all available options in the dropdown.                  |
+| `suggestionTemplate` | `(label: string) => string` | `undefined` | Optional suggestion HTML renderer; raw names remain unchanged for input display and matching. |
+
+## Suggestion templates
+
+From version `0.0.109`, `AlphagovAccessibleAutocompleteComponent` accepts an optional
+`suggestionTemplate` input of type `(label: string) => string`. This callback formats
+suggestion HTML only. Keep `autoCompleteItems[].name` as the original label: input
+display, filtering, selection, restored values and exact matching on blur continue to
+use that raw label.
+
+For plain-text labels, escape characters at the suggestion-rendering boundary in the
+consuming application:
+
+```ts
+public readonly suggestionTemplate = (label: string): string =>
+  label
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+```
+
+Bind it alongside the existing required inputs:
+
+```html
+<opal-lib-alphagov-accessible-autocomplete
+  [control]="control"
+  labelText="Choose an option"
+  inputId="option"
+  inputName="option"
+  [autoCompleteItems]="options"
+  [suggestionTemplate]="suggestionTemplate"
+></opal-lib-alphagov-accessible-autocomplete>
+```
+
+For example, an option with `name: 'A & B'` produces suggestion HTML `A &amp; B`,
+while both the visible suggestion and the selected input show `A & B`.
+
+Supply the callback before the autocomplete is first rendered and keep its reference
+stable. Changing it after initial rendering does not refresh existing suggestions.
+The callback returns HTML, so escape externally supplied labels as above; Angular
+does not sanitise this callback's output. Omitting the input preserves the existing
+upstream rendering behaviour. Updating the library alone does not opt applications
+into escaped suggestions.
 
 ## Outputs
 

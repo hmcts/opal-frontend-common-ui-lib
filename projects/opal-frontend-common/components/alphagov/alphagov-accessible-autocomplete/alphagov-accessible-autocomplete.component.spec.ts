@@ -71,6 +71,41 @@ describe('AlphagovAccessibleAutocompleteComponent', () => {
     expect(actualProps.defaultValue).toEqual(expectedProps.defaultValue);
   });
 
+  it('should preserve the default suggestion behaviour when no template is supplied', () => {
+    expect(component!['buildAutoCompleteProps']().templates).toBeUndefined();
+  });
+
+  it('should customise suggestions without changing raw input labels or selected values', () => {
+    const label = 'A & B';
+    const suggestionTemplate = (value: string) => value.replaceAll('&', '&amp;');
+    fixture!.componentRef.setInput('suggestionTemplate', suggestionTemplate);
+    component!.autoCompleteItems = [{ value: 'a', name: label }];
+    formControl!.setValue('a');
+
+    const props = component!['buildAutoCompleteProps']();
+
+    expect(props.source).toEqual([label]);
+    expect(props.defaultValue).toBe(label);
+    expect(props.templates?.suggestion(label)).toBe('A &amp; B');
+    expect(props.templates?.inputValue(label)).toBe(label);
+    component!['handleOnConfirm'](label);
+    expect(formControl!.value).toBe('a');
+  });
+
+  it('should match the raw label on blur when a suggestion template is supplied', () => {
+    fixture!.componentRef.setInput('suggestionTemplate', (value: string) => value.replaceAll('&', '&amp;'));
+    component!.autoCompleteItems = [{ value: 'a', name: 'A & B' }];
+    const input = document.createElement('input');
+    input.id = component!.autoCompleteId;
+    input.value = 'A & B';
+    component!.autocompleteContainer.nativeElement.replaceChildren(input);
+
+    component!['handleOnConfirm'](undefined);
+
+    expect(formControl!.value).toBe('a');
+    expect(input.value).toBe('A & B');
+  });
+
   it('should apply describedby to the visible input with hint and error ids', () => {
     if (!component) {
       throw new Error('component returned null');

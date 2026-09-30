@@ -34,6 +34,8 @@ You can use the select component in your template as follows:
   [options]="titleOptions"
   [control]="form.controls['selectOption']"
   [errors]="formControlErrorMessages['fm_personal_details_title']"
+  [autoComplete]="true"
+  [autoCompleteValue]="'honorific-prefix'"
 ></opal-lib-govuk-select>
 ```
 
@@ -50,12 +52,14 @@ You can use the select component in your template as follows:
 
 ## Inputs
 
-| Input         | Type     | Description                                          |
-| ------------- | -------- | ---------------------------------------------------- |
-| `selectId`    | `string` | The ID of the select element.                        |
-| `selectName`  | `string` | The name attribute for the select input.             |
-| `selectOptions`| `Array`  | Array of options where each option has a `label` and `value`. |
-| `labelText`   | `string` | The text displayed in the label for the select input.|
+| Input               | Type             | Description                                                                        |
+| ------------------- | ---------------- | ---------------------------------------------------------------------------------- |
+| `selectId`          | `string`         | The ID of the select element.                                                      |
+| `selectName`        | `string`         | The name attribute for the select input.                                           |
+| `selectOptions`     | `Array`          | Array of options where each option has a `label` and `value`.                       |
+| `labelText`         | `string`         | The text displayed in the label for the select input.                              |
+| `autoComplete`      | `boolean`        | Sets autocomplete to `on` when `true`; defaults to `false`.                        |
+| `autoCompleteValue` | `string \| null` | Optional autocomplete token that takes precedence; defaults to `null`.             |
 
 ## Outputs
 

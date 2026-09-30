@@ -25,7 +25,7 @@
       [name]="inputName"
       type="text"
       [attr.aria-describedby]="describedBy"
-      autocomplete="off"
+      [attr.autocomplete]="autoCompleteValue ? autoCompleteValue : autoComplete ? 'on' : 'off'"
       [formControl]="getControl"
       (change)="setDateValue($any($event).target.value)"
     />

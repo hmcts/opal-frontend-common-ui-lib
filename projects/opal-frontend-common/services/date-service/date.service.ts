@@ -68,7 +68,7 @@ export class DateService {
    * @param format - The format of the string value.
    * @returns A DateTime object representing the parsed value.
    */
-  public getFromFormat(value: string, format: string): DateTime<true> | DateTime<false> {
+  public getFromFormat(value: string, format: string): DateTime<boolean> {
     return DateTime.fromFormat(value, format);
   }
 
@@ -126,7 +126,7 @@ export class DateService {
    * @param value - The string value in ISO format.
    * @returns A DateTime object representing the given value.
    */
-  public getFromIso(value: string): DateTime<true> | DateTime<false> {
+  public getFromIso(value: string): DateTime<boolean> {
     return DateTime.fromISO(value);
   }
 

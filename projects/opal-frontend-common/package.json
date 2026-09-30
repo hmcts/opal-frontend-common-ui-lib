@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.93",
+  "version": "0.0.109",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
     "@angular/forms": "^18.2.0 || ^19.0.0 || ^20.0.0 || ^21.0.0",
     "@angular/platform-browser": "^18.2.0 || ^19.0.0 || ^20.0.0 || ^21.0.0",
     "@angular/router": "^18.2.0 || ^19.0.0 || ^20.0.0 || ^21.0.0",
-    "@ngrx/signals": "^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0",
+    "@ngrx/signals": "^18.0.0 || ^19.0.0 || ^20.0.0 || ^21.0.0 || ^22.0.0",
     "rxjs": "^7.8.0"
   },
   "peerDependenciesMeta": {
@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@microsoft/applicationinsights-web": "^3.3.6",
-    "@ministryofjustice/frontend": "^10.0.0",
+    "@ministryofjustice/frontend": "^11.0.0",
     "accessible-autocomplete": "^3.0.1",
     "fast-sort": "^3.4.1",
     "govuk-frontend": "^6.0.0",
@@ -139,6 +139,9 @@
     "./components/custom/custom-account-information": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-account-information.mjs"
     },
+    "./components/custom/custom-accessible-monetary": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-accessible-monetary.mjs"
+    },
     "./components/custom/custom-summary-metric-bar": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-summary-metric-bar.mjs"
     },
@@ -162,6 +165,9 @@
     },
     "./components/custom/custom-action-links": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-action-links.mjs"
+    },
+    "./components/custom/custom-deferred-live-region-announcement": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-deferred-live-region-announcement.mjs"
     },
     "./components/custom/custom-page-header": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-page-header.mjs"
@@ -378,6 +384,9 @@
     },
     "./directives/govuk-button": {
       "import": "./fesm2022/hmcts-opal-frontend-common-directives-govuk-button.mjs"
+    },
+    "./directives/trim-leading-trailing-whitespace": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-directives-trim-leading-trailing-whitespace.mjs"
     },
     "./directives/moj-multi-select": {
       "import": "./fesm2022/hmcts-opal-frontend-common-directives-moj-multi-select.mjs"

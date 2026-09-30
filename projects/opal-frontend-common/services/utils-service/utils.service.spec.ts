@@ -32,7 +32,7 @@ describe('UtilsService', () => {
     expect(result).toEqual('£10.50');
   });
 
-  it('should convert a number to a monetary string', () => {
+  it('should convert a numeric string to a monetary string', () => {
     const amount = '10.5';
     const result = service.convertToMonetaryString(amount);
     expect(result).toEqual('£10.50');
@@ -42,6 +42,101 @@ describe('UtilsService', () => {
     const amount = -10.5;
     const result = service.convertToMonetaryString(amount);
     expect(result).toEqual('-£10.50');
+  });
+
+  it('should add thousands grouping to a large number monetary string', () => {
+    const amount = 1234.5;
+    const result = service.convertToMonetaryString(amount);
+    expect(result).toEqual('£1,234.50');
+  });
+
+  it('should add thousands grouping to a large negative number monetary string', () => {
+    const amount = -1234.5;
+    const result = service.convertToMonetaryString(amount);
+    expect(result).toEqual('-£1,234.50');
+  });
+
+  it('should normalise negative zero to a zero monetary string', () => {
+    const amount = -0;
+    const result = service.convertToMonetaryString(amount);
+    expect(result).toEqual('£0.00');
+  });
+
+  it('should support grouped numeric strings', () => {
+    const amount = '-1,234,567.50';
+    const result = service.convertToMonetaryString(amount);
+    expect(result).toEqual('-£1,234,567.50');
+  });
+
+  it('should support ungrouped numeric strings with more than three integer digits', () => {
+    const amount = '1234567.50';
+    const result = service.convertToMonetaryString(amount);
+    expect(result).toEqual('£1,234,567.50');
+  });
+
+  it('should ignore surrounding whitespace on valid numeric strings', () => {
+    const amount = '  -1,234.50  ';
+    const result = service.convertToMonetaryString(amount);
+    expect(result).toEqual('-£1,234.50');
+  });
+
+  it('should normalise negative zero supplied as a string', () => {
+    const amount = '-0.00';
+    const result = service.convertToMonetaryString(amount);
+    expect(result).toEqual('£0.00');
+  });
+
+  it.each([
+    ['1.', '£1.00'],
+    ['1,234.', '£1,234.00'],
+    ['-1.', '-£1.00'],
+    ['-1,234.', '-£1,234.00'],
+  ])('should support a trailing decimal point in numeric string %s', (amount, expectedResult) => {
+    const result = service.convertToMonetaryString(amount);
+    expect(result).toEqual(expectedResult);
+  });
+
+  it.each([
+    '',
+    '   ',
+    'not-a-number',
+    'NaN',
+    'Infinity',
+    '0x10',
+    '0b10',
+    '1e3',
+    '+100',
+    '.50',
+    '.',
+    '-.',
+    '1..',
+    '1 234',
+    '- 123',
+    '1,2,3',
+    '1,,234',
+    '12,34',
+    '1234,567',
+    ',123',
+    '123,',
+    '1,23.',
+    '1,234.5,0',
+  ])('should return an empty string for invalid numeric string %j', (amount) => {
+    const result = service.convertToMonetaryString(amount);
+    expect(result).toEqual('');
+  });
+
+  it.each([Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY])(
+    'should return an empty string for non-finite numeric value %s',
+    (amount) => {
+      const result = service.convertToMonetaryString(amount);
+      expect(result).toEqual('');
+    },
+  );
+
+  it('should return an empty string when a valid decimal string exceeds the finite number range', () => {
+    const amount = '1' + '0'.repeat(309);
+    const result = service.convertToMonetaryString(amount);
+    expect(result).toEqual('');
   });
 
   it('should format the sort code correctly', () => {
@@ -80,6 +175,27 @@ describe('UtilsService', () => {
       .mockImplementation(() => undefined);
     service.scrollToTop();
     expect(viewportScrollerSpy).toHaveBeenCalledWith([0, 0]);
+  });
+
+  it('should focus the main content and scroll to the top of the page', () => {
+    const mainContent = document.createElement('main');
+    mainContent.id = 'main-content';
+    document.body.appendChild(mainContent);
+    const focusSpy = vi.spyOn(mainContent, 'focus');
+    const viewportScrollerSpy = vi
+      .spyOn(service['viewportScroller'], 'scrollToPosition')
+      .mockImplementation(() => undefined);
+
+    service.focusAndScrollToTop();
+
+    expect(mainContent.getAttribute('tabindex')).toBe('-1');
+    expect(focusSpy).toHaveBeenCalledWith({ preventScroll: true });
+    expect(document.activeElement).toBe(mainContent);
+    expect(viewportScrollerSpy).toHaveBeenCalledWith([0, 0]);
+
+    mainContent.dispatchEvent(new FocusEvent('blur'));
+    expect(mainContent.hasAttribute('tabindex')).toBe(false);
+    mainContent.remove();
   });
 
   it('should check if form values are provided', () => {

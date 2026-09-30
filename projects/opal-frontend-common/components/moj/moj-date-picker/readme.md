@@ -25,7 +25,12 @@ import { MojDatePickerComponent } from '@components/moj/moj-date-picker/moj-date
 You can use the date picker component in your template as follows:
 
 ```html
-<opal-lib-moj-date-picker [labelText]="'Select a date'" [dateFormat]="'dd/mm/yyyy'"></opal-lib-moj-date-picker>
+<opal-lib-moj-date-picker
+  [labelText]="'Select a date'"
+  [dateFormat]="'dd/mm/yyyy'"
+  [autoComplete]="true"
+  [autoCompleteValue]="'bday'"
+></opal-lib-moj-date-picker>
 ```
 
 ### Example in HTML:
@@ -39,10 +44,12 @@ You can use the date picker component in your template as follows:
 
 ## Inputs
 
-| Input        | Type     | Description                                                    |
-| ------------ | -------- | -------------------------------------------------------------- |
-| `labelText`  | `string` | The label for the date picker.                                 |
-| `dateFormat` | `string` | The format to display and input the date (e.g., 'dd/mm/yyyy'). |
+| Input               | Type             | Description                                                                        |
+| ------------------- | ---------------- | ---------------------------------------------------------------------------------- |
+| `labelText`         | `string`         | The label for the date picker.                                                     |
+| `dateFormat`        | `string`         | The format to display and input the date (e.g., 'dd/mm/yyyy').                     |
+| `autoComplete`      | `boolean`        | Sets autocomplete to `on` when `true`; defaults to `false`.                        |
+| `autoCompleteValue` | `string \| null` | Optional autocomplete token that takes precedence; defaults to `null`.             |
 
 ## Outputs
 

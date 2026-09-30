@@ -3,11 +3,29 @@ import { Component, ChangeDetectorRef } from '@angular/core';
 import { AbstractSortableTablePaginationComponent } from './abstract-sortable-table-pagination.component';
 import { MOCK_ABSTRACT_TABLE_DATA } from '../abstract-sortable-table/mocks/abstract-sortable-table-data.mock';
 import { describe, beforeEach, vi, afterAll, it, expect } from 'vitest';
+import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service';
 
 @Component({
-  template: '', // Minimal template for the test component
+  template: `
+    <p role="status" aria-atomic="true">{{ pageChangeAnnouncement() }}</p>
+    @for (row of paginatedTableDataComputed(); track row['imposition']) {
+      <div #paginationFocusTarget>{{ row['imposition'] }}</div>
+    }
+  `,
 })
 class TestComponent extends AbstractSortableTablePaginationComponent {
+  constructor() {
+    super();
+    this.setTableData(MOCK_ABSTRACT_TABLE_DATA);
+    this.abstractExistingSortState = null;
+    this.itemsPerPageSignal.set(1);
+  }
+}
+
+@Component({
+  template: `<p role="status" aria-atomic="true">{{ pageChangeAnnouncement() }}</p>`,
+})
+class TestComponentWithoutFocusTarget extends AbstractSortableTablePaginationComponent {
   constructor() {
     super();
     this.setTableData(MOCK_ABSTRACT_TABLE_DATA);
@@ -19,10 +37,13 @@ class TestComponent extends AbstractSortableTablePaginationComponent {
 describe('AbstractSortableTablePaginationComponent', () => {
   let component: TestComponent | null;
   let fixture: ComponentFixture<TestComponent> | null;
+  const utilsServiceMock = {
+    focusAndScrollToTop: vi.fn(),
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestComponent],
+      imports: [TestComponent, TestComponentWithoutFocusTarget],
       providers: [
         {
           provide: ChangeDetectorRef,
@@ -30,11 +51,16 @@ describe('AbstractSortableTablePaginationComponent', () => {
             detectChanges: vi.fn(), // Mock detectChanges
           },
         },
+        {
+          provide: UtilsService,
+          useValue: utilsServiceMock,
+        },
       ],
     }).compileComponents();
   });
 
   beforeEach(() => {
+    vi.clearAllMocks();
     fixture = TestBed.createComponent(TestComponent); // Create the TestComponent
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -57,18 +83,88 @@ describe('AbstractSortableTablePaginationComponent', () => {
 
     expect(component.currentPageSignal()).toBe(1);
     expect(component.itemsPerPageSignal()).toBe(1);
+    expect(component.pageChangeAnnouncement()).toBe('');
     expect(component['startIndexComputed']()).toBe(1);
     expect(component['endIndexComputed']()).toBe(1);
     expect(component.paginatedTableDataComputed()).toEqual([MOCK_ABSTRACT_TABLE_DATA[0]]);
   });
 
-  it('should update current page on page change', () => {
+  it('should update the current page and focus the first target from the newly rendered page', async () => {
     if (!component) {
       throw new Error('component returned null');
     }
 
+    const previousFocusTarget = fixture?.nativeElement.querySelector('div') as HTMLDivElement;
     component.onPageChange(2);
+
+    expect(utilsServiceMock.focusAndScrollToTop).not.toHaveBeenCalled();
+
+    fixture?.detectChanges();
+    await fixture?.whenStable();
+
+    const newFocusTarget = fixture?.nativeElement.querySelector('div') as HTMLDivElement;
+    const status = fixture?.nativeElement.querySelector('[role="status"]') as HTMLParagraphElement;
     expect(component.currentPageSignal()).toBe(2);
+    expect(component.pageChangeAnnouncement()).toBe(`Page 2 of ${MOCK_ABSTRACT_TABLE_DATA.length}`);
+    expect(status.textContent?.trim()).toBe(`Page 2 of ${MOCK_ABSTRACT_TABLE_DATA.length}`);
+    expect(newFocusTarget).not.toBe(previousFocusTarget);
+    expect(newFocusTarget.getAttribute('tabindex')).toBe('-1');
+    expect(document.activeElement).toBe(newFocusTarget);
+    expect(utilsServiceMock.focusAndScrollToTop).not.toHaveBeenCalled();
+
+    newFocusTarget.dispatchEvent(new FocusEvent('blur'));
+    expect(newFocusTarget.hasAttribute('tabindex')).toBe(false);
+  });
+
+  it('should include the supplied page title in the page-change announcement', async () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    component.paginationPageTitle = ' Search results ';
+    component.onPageChange(2);
+
+    expect(component.pageChangeAnnouncement()).toBe(`Search results, page 2 of ${MOCK_ABSTRACT_TABLE_DATA.length}`);
+
+    fixture?.detectChanges();
+    await fixture?.whenStable();
+  });
+
+  it('should announce the page count from the filtered and sorted data', async () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    const unfilteredData = Array.from({ length: 100 }, (_, index) => ({
+      ...MOCK_ABSTRACT_TABLE_DATA[0],
+      imposition: `Imposition ${index + 1}`,
+    }));
+    const filteredAndSortedData = unfilteredData.slice(0, 15);
+
+    component.displayTableDataSignal.set(unfilteredData);
+    component.sortedTableDataSignal.set(filteredAndSortedData);
+    component.itemsPerPageSignal.set(10);
+    component.onPageChange(2);
+
+    expect(component.currentPageSignal()).toBe(2);
+    expect(component.pageChangeAnnouncement()).toBe('Page 2 of 2');
+
+    fixture?.detectChanges();
+    await fixture?.whenStable();
+  });
+
+  it('should focus and scroll to main content when the table has no marked focus target', async () => {
+    const fallbackFixture = TestBed.createComponent(TestComponentWithoutFocusTarget);
+    const fallbackComponent = fallbackFixture.componentInstance;
+
+    fallbackFixture.detectChanges();
+    fallbackComponent.onPageChange(2);
+    fallbackFixture.detectChanges();
+    await fallbackFixture.whenStable();
+
+    expect(utilsServiceMock.focusAndScrollToTop).toHaveBeenCalledOnce();
+
+    fallbackFixture.destroy();
   });
 
   it('should reset current page to 1 on sort change', () => {
@@ -81,7 +177,7 @@ describe('AbstractSortableTablePaginationComponent', () => {
     expect(component.currentPageSignal()).toBe(1); // Expect current page to be reset to 1
   });
 
-  it('should clamp current page to bounds', () => {
+  it('should clamp current page to bounds', async () => {
     if (!component) {
       throw new Error('component returned null');
     }
@@ -92,6 +188,20 @@ describe('AbstractSortableTablePaginationComponent', () => {
     component.onPageChange(999);
     const expectedMaxPage = Math.ceil(component.sortedTableDataSignal().length / component.itemsPerPageSignal());
     expect(component.currentPageSignal()).toBe(expectedMaxPage);
+
+    fixture?.detectChanges();
+    await fixture?.whenStable();
+  });
+
+  it('should not move focus when the page does not change', () => {
+    if (!component) {
+      throw new Error('component returned null');
+    }
+
+    component.onPageChange(1);
+
+    expect(component.pageChangeAnnouncement()).toBe('');
+    expect(utilsServiceMock.focusAndScrollToTop).not.toHaveBeenCalled();
   });
 
   it('should update paginated output when items per page changes', () => {

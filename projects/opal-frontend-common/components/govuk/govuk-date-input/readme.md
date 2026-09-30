@@ -32,6 +32,8 @@ You can use the date input component in your template as follows:
   [errorDay]="'Enter a valid day'"
   [errorMonth]="'Enter a valid month'"
   [errorYear]="'Enter a valid year'"
+  [autoComplete]="true"
+  [autoCompleteValue]="{ day: 'bday-day', month: 'bday-month', year: 'bday-year' }"
   [dateInputs]="{
     day: { inputId: 'day', inputName: 'day', inputLabel: 'Day', inputClasses: 'govuk-input--width-2' },
     month: { inputId: 'month', inputName: 'month', inputLabel: 'Month', inputClasses: 'govuk-input--width-2' },
@@ -67,15 +69,17 @@ You can use the date input component in your template as follows:
 
 ## Inputs
 
-| Input        | Type     | Description                                                            |
-| ------------ | -------- | ---------------------------------------------------------------------- |
-| `fieldSetId` | `string` | The ID for the fieldset, used to connect the inputs for accessibility. |
-| `legendText` | `string` | The legend text displayed at the top of the fieldset.                  |
-| `legendHint` | `string` | Optional hint text displayed beneath the legend.                       |
-| `errorDay`   | `string` | Error message for the day input field.                                 |
-| `errorMonth` | `string` | Error message for the month input field.                               |
-| `errorYear`  | `string` | Error message for the year input field.                                |
-| `dateInputs` | `object` | Configuration object for the day, month, and year input fields.        |
+| Input               | Type                                             | Description                                                                        |
+| ------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| `fieldSetId`        | `string`                                         | The ID for the fieldset, used to connect the inputs for accessibility.             |
+| `legendText`        | `string`                                         | The legend text displayed at the top of the fieldset.                              |
+| `legendHint`        | `string`                                         | Optional hint text displayed beneath the legend.                                   |
+| `errorDay`          | `string`                                         | Error message for the day input field.                                             |
+| `errorMonth`        | `string`                                         | Error message for the month input field.                                           |
+| `errorYear`         | `string`                                         | Error message for the year input field.                                            |
+| `autoComplete`      | `boolean`                                        | Sets autocomplete to `on` for all date fields when `true`; defaults to `false`.    |
+| `autoCompleteValue` | `IGovUkDateInputAutoCompleteValue \| null`       | Optional day, month, and year tokens that take precedence; defaults to `null`.     |
+| `dateInputs`        | `object`                                         | Configuration object for the day, month, and year input fields.                    |
 
 ## Outputs
 

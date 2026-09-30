@@ -1,0 +1,5 @@
+{
+  "sideEffects": false,
+  "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-custom-custom-deferred-live-region-announcement.mjs",
+  "typings": "../../../../dist/opal-frontend-common/components/custom/custom-deferred-live-region-announcement/index.d.ts"
+}

@@ -16,6 +16,8 @@ export class GovukTextInputPrefixSuffixComponent {
   @Input({ required: true }) inputName!: string;
   @Input({ required: false }) inputClasses!: string;
   @Input({ required: false }) errors: string | null = null;
+  @Input({ required: false }) autoComplete: boolean = false;
+  @Input({ required: false }) autoCompleteValue: string | null = null;
 
   @Input({ required: false }) prefixText!: string;
   @Input({ required: false }) suffixText!: string;

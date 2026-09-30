@@ -29,6 +29,8 @@ You can use the text area component in your template as follows:
   [textAreaId]="'comments'"
   [labelText]="'Comments'"
   [hintText]="'Please enter your comments here.'"
+  [autoComplete]="true"
+  [autoCompleteValue]="'street-address'"
   [rows]="5"
 ></opal-lib-govuk-text-area>
 ```
@@ -45,12 +47,14 @@ You can use the text area component in your template as follows:
 
 ## Inputs
 
-| Input        | Type     | Description                                   |
-| ------------ | -------- | --------------------------------------------- |
-| `textAreaId` | `string` | The ID for the text area element.             |
-| `labelText`  | `string` | The label for the text area.                  |
-| `hintText`   | `string` | Optional hint text displayed below the label. |
-| `rows`       | `number` | The number of visible rows in the text area.  |
+| Input               | Type             | Description                                                                        |
+| ------------------- | ---------------- | ---------------------------------------------------------------------------------- |
+| `textAreaId`        | `string`         | The ID for the text area element.                                                  |
+| `labelText`         | `string`         | The label for the text area.                                                       |
+| `hintText`          | `string`         | Optional hint text displayed below the label.                                      |
+| `autoComplete`      | `boolean`        | Sets autocomplete to `on` when `true`; defaults to `false`.                        |
+| `autoCompleteValue` | `string \| null` | Optional autocomplete token that takes precedence; defaults to `null`.             |
+| `rows`              | `number`         | The number of visible rows in the text area.                                       |
 
 ## Outputs
 
