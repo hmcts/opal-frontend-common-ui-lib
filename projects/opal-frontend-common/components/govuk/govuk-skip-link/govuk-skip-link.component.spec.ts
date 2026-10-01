@@ -53,4 +53,10 @@ describe('GovukSkipLinkComponent', () => {
     expect(event.defaultPrevented).toBe(true);
     expect(utilsService.focusElementById).toHaveBeenCalledWith('page-content');
   });
+
+  it('should return the current pathname with the target ID as the href', () => {
+    fixture.componentRef.setInput('targetId', 'page-content');
+
+    expect(fixture.componentInstance.href).toBe(`${document.location.pathname}#page-content`);
+  });
 });
