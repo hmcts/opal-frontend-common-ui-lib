@@ -4,14 +4,16 @@ This Angular component provides an accessible, GOV.UK-styled autocomplete input 
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Inputs](#inputs)
-- [Suggestion templates](#suggestion-templates)
-- [Outputs](#outputs)
-- [Accessibility](#accessibility)
-- [Testing](#testing)
-- [Contributing](#contributing)
+- [Alphagov Accessible Autocomplete Component](#alphagov-accessible-autocomplete-component)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Inputs](#inputs)
+  - [Suggestion templates](#suggestion-templates)
+  - [Outputs](#outputs)
+  - [Methods](#methods)
+  - [Testing](#testing)
+  - [Contributing](#contributing)
 
 ---
 
@@ -59,7 +61,7 @@ You can use the accessible autocomplete component in your template as follows:
 
 ## Suggestion templates
 
-From version `0.0.109`, `AlphagovAccessibleAutocompleteComponent` accepts an optional
+From version `0.0.110`, `AlphagovAccessibleAutocompleteComponent` accepts an optional
 `suggestionTemplate` input of type `(label: string) => string`. This callback formats
 suggestion HTML only. Keep `autoCompleteItems[].name` as the original label: input
 display, filtering, selection, restored values and exact matching on blur continue to
