@@ -1,11 +1,10 @@
-<p>Current direction: {{ direction }}</p>
 <form [formGroup]="filtersForm" (ngSubmit)="handleFormSubmit($event)" autocomplete="off">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third">
       <opal-lib-alphagov-accessible-autocomplete [control]="filtersForm.controls.businessUnit"
         labelText="Filter by business unit" labelClasses="govuk-label--s"
         inputId="custom-file-interface-viewer-business-unit" inputName="custom-file-interface-viewer-business-unit"
-        [autoCompleteItems]="businessUnitsAutoComplete" [tabIndex]="0" [showAllValues]="true">
+        [autoCompleteItems]="businessUnits" [tabIndex]="0" [showAllValues]="true">
       </opal-lib-alphagov-accessible-autocomplete>
 
       <opal-lib-govuk-radio fieldSetId="custom-file-interface-viewer-date-filter" legendText="Filter by date"
@@ -58,13 +57,13 @@
 
       <opal-lib-alphagov-accessible-autocomplete [control]="filtersForm.controls.fileType" labelText="Filter by type"
         labelClasses="govuk-label--s" inputId="custom-file-interface-viewer-type"
-        inputName="custom-file-interface-viewer-type" [autoCompleteItems]="fileTypeAutoComplete" [tabIndex]="1"
+        inputName="custom-file-interface-viewer-type" [autoCompleteItems]="sourceList" [tabIndex]="1"
         [showAllValues]="true">
       </opal-lib-alphagov-accessible-autocomplete>
 
       <opal-lib-alphagov-accessible-autocomplete [control]="filtersForm.controls.source" labelText="Filter by source"
         labelClasses="govuk-label--s" inputId="custom-file-interface-viewer-source"
-        inputName="custom-file-interface-viewer-source" [autoCompleteItems]="fileSourceAutoComplete" [tabIndex]="2"
+        inputName="custom-file-interface-viewer-source" [autoCompleteItems]="source" [tabIndex]="2"
         [showAllValues]="true">
       </opal-lib-alphagov-accessible-autocomplete>
 

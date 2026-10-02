@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, Input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AlphagovAccessibleAutocompleteComponent } from '@hmcts/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete';
 import { IAlphagovAccessibleAutocompleteItem } from '@hmcts/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete/interfaces';
@@ -50,10 +50,11 @@ type CustomFileInterfaceViewerFilterForm = FormGroup<{
 export class CustomFileInterfaceViewerFiltersComponent extends AbstractFormBaseComponent {
   protected override fieldErrors: IAbstractFormBaseFieldErrors = {};
 
-  @Input({ required: true }) public direction = '';
-  @Input({ required: true }) public businessUnitsAutoComplete: IAlphagovAccessibleAutocompleteItem[] = [];
-  @Input({ required: true }) public fileSourceAutoComplete: IAlphagovAccessibleAutocompleteItem[] = [];
-  @Input({ required: true }) public fileTypeAutoComplete: IAlphagovAccessibleAutocompleteItem[] = [];
+  @Input({ required: true }) public isInbound: boolean = false;
+  @Input({ required: true }) public businessUnits: IAlphagovAccessibleAutocompleteItem[] = [];
+  @Input({ required: true }) public source: IAlphagovAccessibleAutocompleteItem[] = [];
+  @Input({ required: true }) public sourceList: IAlphagovAccessibleAutocompleteItem[] = [];
+  @Input({ required: true }) public domain: string = '';
 
   public readonly dateFilterCustomDays = CUSTOM_FILE_INTERFACE_VIEWER_DATE_FILTER_CUSTOM_DAYS;
   public readonly dateFilterDateRange = CUSTOM_FILE_INTERFACE_VIEWER_DATE_FILTER_DATE_RANGE;
@@ -76,13 +77,6 @@ export class CustomFileInterfaceViewerFiltersComponent extends AbstractFormBaseC
   public get dateFilter(): CustomFileInterfaceViewerDateFilter | null {
     return this.filtersForm.controls.dateFilter.value;
   }
-
-
-  /*public handleSubmit(): void {
-    this.filtersForm.markAllAsTouched();
-    console.log('Filters submitted:', this.filtersForm.getRawValue());
-  }
-  */
 
   public onDateChange(controlName: CustomFileInterfaceViewerDateControlName, value: string): void {
     this.filtersForm.controls[controlName].setValue(value);

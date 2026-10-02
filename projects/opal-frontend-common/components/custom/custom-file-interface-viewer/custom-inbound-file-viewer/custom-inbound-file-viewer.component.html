@@ -1,9 +1,11 @@
+<p>Current direction: {{ isInbound ? 'inbound' : 'outbound' }}</p>
+<p>Current domain: {{ domain }}</p>
+
 <div class="govuk-grid-column-two-thirds">
   <h1 class="govuk-heading-l">Inbound interface files</h1>
   <div class="govuk-grid-row">
-    <opal-lib-custom-file-interface-viewer-filters [direction]="direction"
-      [businessUnitsAutoComplete]="businessUnitsAutoComplete" [fileSourceAutoComplete]="fileSourceAutoComplete"
-      [fileTypeAutoComplete]="fileTypeAutoComplete" (formSubmit)="formSubmit.emit($event)">
+    <opal-lib-custom-file-interface-viewer-filters [isInbound]="isInbound" [businessUnits]="businessUnits"
+      [domain]="domain" [source]="source" [sourceList]="sourceList" (formSubmit)="formSubmit.emit($event)">
     </opal-lib-custom-file-interface-viewer-filters>
   </div>
 </div>
