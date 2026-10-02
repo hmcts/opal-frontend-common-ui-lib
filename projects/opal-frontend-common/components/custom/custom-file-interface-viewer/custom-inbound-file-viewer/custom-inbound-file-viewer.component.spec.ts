@@ -1,19 +1,31 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { describe, beforeEach, it, expect } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
-import { CustomFileInterfaceViewerAutocompleteComponent } from '../common/custom-file-interface-viewer-autocomplete/custom-file-interface-viewer-autocomplete.component';
+import { CustomFileInterfaceViewerFiltersComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters';
 import {
-  InterfaceFileStatus,
-  InterfaceFileSupportedDomain,
-  InterfaceFileType,
-  InterfaceType,
-} from '../constants/custom-file-interface-viewer-enums.constant';
-import { CustomInboundFileViewerComponent } from './custom-inbound-file-viewer.component';
+  CustomFileInterfaceViewerFileStatus,
+  CustomFileInterfaceViewerFileSupportedDomain,
+  CustomFileInterfaceViewerFileType,
+} from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/constants';
+import {
+  CustomInboundAutocompleteField,
+  CustomInboundFileViewerComponent,
+  CustomInboundFileViewerControl,
+  CustomInboundFileViewerItem,
+} from './custom-inbound-file-viewer.component';
 
 describe('CustomInboundFileViewerComponent', () => {
   let component: CustomInboundFileViewerComponent;
   let fixture: ComponentFixture<CustomInboundFileViewerComponent>;
+  let inboundControl: CustomInboundFileViewerControl;
+  let outboundControl: CustomInboundFileViewerControl;
+  let items: CustomInboundFileViewerItem[];
+
+  const businessUnitsAutoComplete = [{ name: 'Business unit', value: 'business-unit' }];
+  const fileSourceAutoComplete = [{ name: 'Source', value: 'source' }];
+  const fileTypeAutoComplete = [{ name: 'Type', value: 'type' }];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -22,12 +34,34 @@ describe('CustomInboundFileViewerComponent', () => {
 
     fixture = TestBed.createComponent(CustomInboundFileViewerComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('autoCompleteBusinessUnitItems', [
+    inboundControl = new FormControl<string | null>(null);
+    outboundControl = new FormControl<string | null>(null);
+    items = [
       {
-        name: 'Libra',
-        value: 'libra',
+        autoCompleteItems: [{ name: 'Libra', value: 'libra' }],
+        control: inboundControl,
+        id: 'inbound-custom-field',
+        inputId: 'inbound-custom',
+        inputName: 'inboundCustom',
+        labelText: 'Inbound custom',
+        type: 'autocomplete',
       },
-    ]);
+      {
+        autoCompleteItems: [{ name: 'Phoenix', value: 'phoenix' }],
+        control: outboundControl,
+        id: 'outbound-custom-field',
+        inputId: 'outbound-custom',
+        inputName: 'outboundCustom',
+        labelText: 'Outbound custom',
+        type: 'autocomplete',
+        errorMessage: 'Select a valid outbound custom',
+      },
+    ];
+    fixture.componentRef.setInput('businessUnitsAutoComplete', businessUnitsAutoComplete);
+    fixture.componentRef.setInput('direction', 'inbound');
+    fixture.componentRef.setInput('fileSourceAutoComplete', fileSourceAutoComplete);
+    fixture.componentRef.setInput('fileTypeAutoComplete', fileTypeAutoComplete);
+    fixture.componentRef.setInput('items', items);
     fixture.detectChanges();
   });
 
@@ -36,39 +70,42 @@ describe('CustomInboundFileViewerComponent', () => {
   });
 
   it('should expose file interface enums', () => {
-    expect(component.interfaceType).toBe(InterfaceType);
-    expect(component.interfaceFileType).toBe(InterfaceFileType);
-    expect(component.interfaceFileSupportedDomain).toBe(InterfaceFileSupportedDomain);
-    expect(component.interfaceFileStatus).toBe(InterfaceFileStatus);
+    expect(component.interfaceFileType).toBe(CustomFileInterfaceViewerFileType);
+    expect(component.interfaceFileSupportedDomain).toBe(CustomFileInterfaceViewerFileSupportedDomain);
+    expect(component.interfaceFileStatus).toBe(CustomFileInterfaceViewerFileStatus);
   });
 
-  it('should pass the business unit autocomplete inputs to the common autocomplete component', () => {
-    const autocomplete = fixture.debugElement.query(By.directive(CustomFileInterfaceViewerAutocompleteComponent))
-      .componentInstance as CustomFileInterfaceViewerAutocompleteComponent;
+  it('should render the common filters component', () => {
+    const filters = fixture.debugElement.query(By.directive(CustomFileInterfaceViewerFiltersComponent))
+      .componentInstance as CustomFileInterfaceViewerFiltersComponent;
 
-    expect(autocomplete.autoCompleteItems).toEqual([{ name: 'Libra', value: 'libra' }]);
-    expect(autocomplete.control).toBe(component.businessUnitControl);
-    expect(autocomplete.errors).toBeNull();
-    expect(autocomplete.hintText).toBe(component.businessUnitAutocompleteHintText);
-    expect(autocomplete.inputClasses).toBe(component.businessUnitAutocompleteInputClasses);
-    expect(autocomplete.inputId).toBe(component.businessUnitAutocompleteInputId);
-    expect(autocomplete.inputName).toBe(component.businessUnitAutocompleteInputName);
-    expect(autocomplete.labelClasses).toBe(component.businessUnitAutocompleteLabelClasses);
-    expect(autocomplete.labelText).toBe(component.businessUnitAutocompleteLabelText);
-    expect(autocomplete.showAllValues).toBe(component.businessUnitAutocompleteShowAllValues);
+    expect(filters).toBeTruthy();
   });
 
-  it('should allow consuming apps to configure the business unit autocomplete label, input id, and input name', () => {
-    fixture.componentRef.setInput('businessUnitAutocompleteLabelText', 'Choose a business unit');
-    fixture.componentRef.setInput('businessUnitAutocompleteInputId', 'custom-business-unit-id');
-    fixture.componentRef.setInput('businessUnitAutocompleteInputName', 'customBusinessUnitName');
-    fixture.detectChanges();
+  it('should pass filter inputs to the common filters component', () => {
+    const filters = fixture.debugElement.query(By.directive(CustomFileInterfaceViewerFiltersComponent))
+      .componentInstance as CustomFileInterfaceViewerFiltersComponent;
 
-    const autocomplete = fixture.debugElement.query(By.directive(CustomFileInterfaceViewerAutocompleteComponent))
-      .componentInstance as CustomFileInterfaceViewerAutocompleteComponent;
+    expect(filters.businessUnitsAutoComplete).toBe(businessUnitsAutoComplete);
+    expect(filters.direction).toBe('inbound');
+    expect(filters.fileSourceAutoComplete).toBe(fileSourceAutoComplete);
+    expect(filters.fileTypeAutoComplete).toBe(fileTypeAutoComplete);
+  });
 
-    expect(autocomplete.labelText).toBe('Choose a business unit');
-    expect(autocomplete.inputId).toBe('custom-business-unit-id');
-    expect(autocomplete.inputName).toBe('customBusinessUnitName');
+  it('should keep each configured field linked to its own parent form control', () => {
+    inboundControl.setValue('libra');
+    outboundControl.setValue('phoenix');
+
+    const autocompleteItems = items as CustomInboundAutocompleteField[];
+
+    expect(autocompleteItems[0].control.value).toBe('libra');
+    expect(autocompleteItems[1].control.value).toBe('phoenix');
+  });
+
+  it('should use the configured field error message when its control is invalid and touched', () => {
+    outboundControl.setErrors({ invalid: true });
+    outboundControl.markAsTouched();
+
+    expect(component.getAutocompleteErrors(items[1])).toBe('Select a valid outbound custom');
   });
 });

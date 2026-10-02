@@ -1,0 +1,79 @@
+<p>Current direction: {{ direction }}</p>
+<form [formGroup]="filtersForm" (ngSubmit)="handleFormSubmit($event)" autocomplete="off">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+      <opal-lib-alphagov-accessible-autocomplete [control]="filtersForm.controls.businessUnit"
+        labelText="Filter by business unit" labelClasses="govuk-label--s"
+        inputId="custom-file-interface-viewer-business-unit" inputName="custom-file-interface-viewer-business-unit"
+        [autoCompleteItems]="businessUnitsAutoComplete" [tabIndex]="0" [showAllValues]="true">
+      </opal-lib-alphagov-accessible-autocomplete>
+
+      <opal-lib-govuk-radio fieldSetId="custom-file-interface-viewer-date-filter" legendText="Filter by date"
+        legendClasses="govuk-fieldset__legend--s">
+        <div opal-lib-govuk-radios-item labelText="Last 7 days" inputId="custom-file-interface-viewer-last-7-days"
+          inputName=" custom-file-interface-viewer-date-filter" [inputValue]="dateFilterLast7Days"
+          [control]="filtersForm.controls.dateFilter"></div>
+        <div opal-lib-govuk-radios-item labelText="Custom days" inputId="custom-file-interface-viewer-custom-days"
+          inputName="custom-file-interface-viewer-date-filter" [inputValue]="dateFilterCustomDays"
+          ariaControls="custom-file-interface-viewer-custom-days" [control]="filtersForm.controls.dateFilter"></div>
+        @if (dateFilter === dateFilterCustomDays) {
+        <div class="govuk-radios__conditional" id="custom-file-interface-viewer-custom-days">
+          <div class="govuk-form-group" [class.govuk-form-group--error]="!!getFieldError('days')">
+            <label class="govuk-label" for="custom-file-interface-viewer-days">Days</label>
+            @if (getFieldError('days')) {
+            <p id="custom-file-interface-viewer-days-error-message" class="govuk-error-message">
+              <span class="govuk-visually-hidden">Error:</span>
+              {{ getFieldError('days') }}
+            </p>
+            }
+            <input class="govuk-input govuk-input--width-2" id="custom-file-interface-viewer-days"
+              name="custom-file-interface-viewer-days" inputmode="numeric" type="text" formControlName="days"
+              [attr.aria-describedby]="
+                  getFieldError('days')
+                    ? 'custom-file-interface-viewer-days-error-message'
+                    : null
+                " />
+          </div>
+        </div>
+        }
+        <div opal-lib-govuk-radios-item labelText="Date range" inputId="custom-file-interface-viewer-date-range"
+          inputName="custom-file-interface-viewer-date-filter" [inputValue]="dateFilterDateRange"
+          ariaControls="custom-file-interface-viewer-date-range" [control]="filtersForm.controls.dateFilter"></div>
+        @if (dateFilter === dateFilterDateRange) {
+        <div class="govuk-radios__conditional custom-file-interface-viewer-date-range"
+          id="custom-file-interface-viewer-date-range">
+          <opal-lib-moj-date-picker labelText="Enter date from" labelClasses="govuk-label--s"
+            hintText="For example, 31/01/2023" inputId="custom-file-interface-viewer-date-from"
+            inputName="custom-file-interface-viewer-date-from" inputClasses="govuk-input--width-10"
+            [control]="filtersForm.controls.dateFrom" [errors]="getFieldError('dateFrom')"
+            (dateChange)="onDateChange('dateFrom', $event)"></opal-lib-moj-date-picker>
+          <opal-lib-moj-date-picker labelText="Enter date to" labelClasses="govuk-label--s"
+            hintText="For example, 31/01/2023" inputId="custom-file-interface-viewer-date-to"
+            inputName="custom-file-interface-viewer-date-to" inputClasses="govuk-input--width-10"
+            [control]="filtersForm.controls.dateTo" [errors]="getFieldError('dateTo')"
+            (dateChange)="onDateChange('dateTo', $event)"></opal-lib-moj-date-picker>
+        </div>
+        }
+      </opal-lib-govuk-radio>
+
+      <opal-lib-alphagov-accessible-autocomplete [control]="filtersForm.controls.fileType" labelText="Filter by type"
+        labelClasses="govuk-label--s" inputId="custom-file-interface-viewer-type"
+        inputName="custom-file-interface-viewer-type" [autoCompleteItems]="fileTypeAutoComplete" [tabIndex]="1"
+        [showAllValues]="true">
+      </opal-lib-alphagov-accessible-autocomplete>
+
+      <opal-lib-alphagov-accessible-autocomplete [control]="filtersForm.controls.source" labelText="Filter by source"
+        labelClasses="govuk-label--s" inputId="custom-file-interface-viewer-source"
+        inputName="custom-file-interface-viewer-source" [autoCompleteItems]="fileSourceAutoComplete" [tabIndex]="2"
+        [showAllValues]="true">
+      </opal-lib-alphagov-accessible-autocomplete>
+
+      <button class="govuk-button govuk-button--secondary reports-summary-list-refresh-button"
+        id="refresh-reports-button" type="submit" aria-label="Apply filters and refresh" data-module="govuk-button">
+        Refresh
+      </button>
+
+
+    </div>
+  </div>
+</form>

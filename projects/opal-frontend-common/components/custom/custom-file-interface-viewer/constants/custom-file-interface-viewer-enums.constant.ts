@@ -1,4 +1,4 @@
-export enum InterfaceType {
+export enum CustomFileInterfaceViewerFileSource {
   BteckohReport = 'BTECKOH_REPORT',
   CapsReport = 'CAPS_REPORT',
   Opal = 'OPAL',
@@ -15,20 +15,20 @@ export enum InterfaceType {
   VariantBanking = 'VARIANT_BANKING',
 }
 
-export enum InterfaceFileType {
+export enum CustomFileInterfaceViewerFileType {
   Source = 'SOURCE',
   SourceJson = 'SOURCE_JSON',
   TransformedJson = 'TRANSFORMED_JSON',
 }
 
-export enum InterfaceFileSupportedDomain {
+export enum CustomFileInterfaceViewerFileSupportedDomain {
   Fines = 'FINES',
   Confiscation = 'CONFISCATION',
   Maintenance = 'MAINTENANCE',
   FileHandler = 'FILE_HANDLER',
 }
 
-export enum InterfaceFileStatus {
+export enum CustomFileInterfaceViewerFileStatus {
   Duplicate = 'DUPLICATE',
   Ingested = 'INGESTED',
   Success = 'SUCCESS',

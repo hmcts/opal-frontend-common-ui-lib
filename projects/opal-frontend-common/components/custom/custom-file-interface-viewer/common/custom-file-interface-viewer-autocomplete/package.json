@@ -1,5 +1,0 @@
-{
-  "sideEffects": false,
-  "module": "../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-common-custom-file-interface-viewer-autocomplete.mjs",
-  "typings": "../../../../dist/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-autocomplete/index.d.ts"
-}
