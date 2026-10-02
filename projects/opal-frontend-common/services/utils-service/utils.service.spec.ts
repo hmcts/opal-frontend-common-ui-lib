@@ -177,6 +177,40 @@ describe('UtilsService', () => {
     expect(viewportScrollerSpy).toHaveBeenCalledWith([0, 0]);
   });
 
+  it('should focus an element by ID and temporarily make it focusable', () => {
+    const target = document.createElement('main');
+    target.id = 'test-target';
+    document.body.appendChild(target);
+    const focusSpy = vi.spyOn(target, 'focus');
+
+    service.focusElementById('test-target');
+
+    expect(target.getAttribute('tabindex')).toBe('-1');
+    expect(focusSpy).toHaveBeenCalledWith(undefined);
+    expect(document.activeElement).toBe(target);
+
+    target.dispatchEvent(new FocusEvent('blur'));
+    expect(target.hasAttribute('tabindex')).toBe(false);
+    target.remove();
+  });
+
+  it('should preserve an existing tabindex when focusing an element', () => {
+    const target = document.createElement('main');
+    target.id = 'test-target';
+    target.setAttribute('tabindex', '0');
+    document.body.appendChild(target);
+
+    service.focusElementById('test-target');
+    target.dispatchEvent(new FocusEvent('blur'));
+
+    expect(target.getAttribute('tabindex')).toBe('0');
+    target.remove();
+  });
+
+  it('should do nothing when the focus target does not exist', () => {
+    expect(() => service.focusElementById('missing-target')).not.toThrow();
+  });
+
   it('should focus the main content and scroll to the top of the page', () => {
     const mainContent = document.createElement('main');
     mainContent.id = 'main-content';
