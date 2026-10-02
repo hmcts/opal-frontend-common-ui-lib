@@ -169,6 +169,15 @@
     "./components/custom/custom-deferred-live-region-announcement": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-deferred-live-region-announcement.mjs"
     },
+    "./components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-common-custom-file-interface-viewer-filters.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/constants": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-constants.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/custom-inbound-file-viewer": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-custom-inbound-file-viewer.mjs"
+    },
     "./components/custom/custom-page-header": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-page-header.mjs"
     },
@@ -567,6 +576,15 @@
     },
     "./services/opal-user-service/mocks": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-opal-user-service-mocks.mjs"
+    },
+    "./services/opal-file-handling-service": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-opal-file-handling-service.mjs"
+    },
+    "./services/opal-file-handling-service/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-opal-file-handling-service-interfaces.mjs"
+    },
+    "./services/opal-file-handling-service/constants": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-opal-file-handling-service-constants.mjs"
     },
     "./stores/global": {
       "import": "./fesm2022/hmcts-opal-frontend-common-stores-global.mjs"
