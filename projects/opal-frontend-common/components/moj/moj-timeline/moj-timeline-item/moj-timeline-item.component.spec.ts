@@ -37,6 +37,15 @@ describe('MojTimelineItemComponent', () => {
   it('should render timeline title - Test', () => {
     const element = fixture.debugElement.query(By.css('.moj-timeline__title'));
     expect(element.nativeElement.textContent).toContain('Test');
+    expect(element.nativeElement.tagName).toBe('H2');
+  });
+
+  it('should render the timeline title at the configured heading level', () => {
+    fixture.componentRef.setInput('headingLevel', 3);
+    fixture.detectChanges();
+
+    const element = fixture.debugElement.query(By.css('.moj-timeline__title'));
+    expect(element.nativeElement.tagName).toBe('H3');
   });
 
   it('should render timeline user - Test User', () => {

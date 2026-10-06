@@ -1,6 +1,25 @@
 <div class="moj-timeline__item">
   <div class="moj-timeline__header">
+    @switch (headingLevel) {
+    @case (1) {
+    <h1 class="moj-timeline__title"><ng-content select="[title]"></ng-content></h1>
+    }
+    @case (2) {
     <h2 class="moj-timeline__title"><ng-content select="[title]"></ng-content></h2>
+    }
+    @case (3) {
+    <h3 class="moj-timeline__title"><ng-content select="[title]"></ng-content></h3>
+    }
+    @case (4) {
+    <h4 class="moj-timeline__title"><ng-content select="[title]"></ng-content></h4>
+    }
+    @case (5) {
+    <h5 class="moj-timeline__title"><ng-content select="[title]"></ng-content></h5>
+    }
+    @case (6) {
+    <h6 class="moj-timeline__title"><ng-content select="[title]"></ng-content></h6>
+    }
+    }
 
     <p class="moj-timeline__byline">&nbsp;by <ng-content select="[user]"></ng-content></p>
   </div>
