@@ -85,23 +85,35 @@ export class UtilsService {
   }
 
   /**
+   * Moves focus to an element by ID.
+   * A temporary tabindex allows a normally non-focusable element to receive programmatic focus.
+   *
+   * @param elementId - The ID of the element to focus.
+   * @param options - Options passed to the element's focus method.
+   */
+  public focusElementById(elementId: string, options?: FocusOptions): void {
+    const element = this.document.getElementById(elementId);
+
+    if (!element) {
+      return;
+    }
+
+    const hasTabindex = element.hasAttribute('tabindex');
+
+    if (!hasTabindex) {
+      element.setAttribute('tabindex', '-1');
+      element.addEventListener('blur', () => element.removeAttribute('tabindex'), { once: true });
+    }
+
+    element.focus(options);
+  }
+
+  /**
    * Moves focus to the main content landmark and scrolls the viewport to the top of the page.
    * A temporary tabindex allows the normally non-focusable landmark to receive programmatic focus.
    */
   public focusAndScrollToTop(): void {
-    const mainContent = this.document.getElementById('main-content');
-
-    if (mainContent) {
-      const hasTabindex = mainContent.hasAttribute('tabindex');
-
-      if (!hasTabindex) {
-        mainContent.setAttribute('tabindex', '-1');
-        mainContent.addEventListener('blur', () => mainContent.removeAttribute('tabindex'), { once: true });
-      }
-
-      mainContent.focus({ preventScroll: true });
-    }
-
+    this.focusElementById('main-content', { preventScroll: true });
     this.scrollToTop();
   }
 

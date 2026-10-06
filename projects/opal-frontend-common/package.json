@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.110",
+  "version": "0.0.111",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -267,6 +267,9 @@
     },
     "./components/govuk/govuk-select/interfaces": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-select-interfaces.mjs"
+    },
+    "./components/govuk/govuk-skip-link": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-skip-link.mjs"
     },
     "./components/govuk/govuk-summary-card-list": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-govuk-govuk-summary-card-list.mjs"
