@@ -89,4 +89,14 @@ export class CustomFileInterfaceViewerFiltersComponent extends AbstractFormBaseC
   public override ngOnInit(): void {
     super.ngOnInit();
   }
+
+  public handleSubmit(): void {
+    console.log('Filters form submitted with values:', this.filtersForm.value);
+    this.formSubmit.emit({
+      formData: this.filtersForm.value,
+      nestedFlow: false,
+    });
+
+    this.filtersForm.markAsPristine();
+  }
 }

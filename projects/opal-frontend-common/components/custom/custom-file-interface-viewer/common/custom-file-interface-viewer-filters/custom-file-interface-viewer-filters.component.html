@@ -68,7 +68,8 @@
       </opal-lib-alphagov-accessible-autocomplete>
 
       <button class="govuk-button govuk-button--secondary reports-summary-list-refresh-button"
-        id="refresh-reports-button" type="submit" aria-label="Apply filters and refresh" data-module="govuk-button">
+        id="refresh-reports-button" type="submit" aria-label="Apply filters and refresh" data-module="govuk-button"
+        [disabled]="filtersForm.pristine">
         Refresh
       </button>
 
