@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { HeadingLevel } from '@hmcts/opal-frontend-common/types';
 
 @Component({
   selector: 'opal-lib-moj-timeline-item',
-  imports: [],
+  imports: [NgTemplateOutlet],
   templateUrl: './moj-timeline-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
