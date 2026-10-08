@@ -1,12 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MojTimelineItemComponent } from './moj-timeline-item.component';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import type { HeadingLevel } from '@hmcts/opal-frontend-common/types';
 import { describe, beforeEach, it, expect } from 'vitest';
 
 @Component({
-  template: `<opal-lib-moj-timeline-item>
+  template: `<opal-lib-moj-timeline-item [headingLevel]="headingLevel">
     <ng-content title>Test</ng-content>
     <ng-content user>Test User</ng-content>
     <ng-content date>23/07/2024</ng-content>
@@ -14,7 +15,9 @@ import { describe, beforeEach, it, expect } from 'vitest';
   </opal-lib-moj-timeline-item>`,
   imports: [MojTimelineItemComponent],
 })
-class TestHostComponent {}
+class TestHostComponent {
+  @Input() public headingLevel: HeadingLevel = 2;
+}
 
 describe('MojTimelineItemComponent', () => {
   let component: TestHostComponent;
