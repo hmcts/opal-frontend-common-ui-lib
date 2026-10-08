@@ -262,6 +262,25 @@ describe('CapitalisationDirective editing', () => {
       expect(unrelatedInput.selectionDirection).toBe('backward');
     });
 
+    it('defaults to no direction for an incomplete document selection implementation', () => {
+      editingFixture.detectChanges();
+      input = editingFixture.nativeElement.querySelector('input');
+      input.focus();
+      input.value = 'abcd';
+      input.setSelectionRange(1, 3, 'backward');
+      // Exercise the defensive fallback for document implementations that omit selection direction.
+      const direction = vi.spyOn(input, 'selectionDirection', 'get').mockReturnValueOnce(null);
+
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      direction.mockRestore();
+
+      expect(input.value).toBe('ABCD');
+      expect(editingFixture.componentInstance.control.value).toBe('ABCD');
+      expect(input.selectionStart).toBe(1);
+      expect(input.selectionEnd).toBe(3);
+      expect(input.selectionDirection).toBe('none');
+    });
+
     it('uppercases an email input that does not support text selection', () => {
       const emailFixture = TestBed.createComponent(EmailTestComponent);
       emailFixture.detectChanges();

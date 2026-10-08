@@ -17,6 +17,7 @@ export class CapitalisationDirective implements OnInit, OnDestroy {
   /**
    * Captures the focused input or textarea selection before its value is uppercased.
    * Maps offsets through uppercase prefixes to account for expanding characters, such as ß becoming SS.
+   * Defaults missing selection direction to 'none' for document implementations with incomplete selection support.
    *
    * @param value The current control value, which must match the focused input's value.
    * @returns The input and its mapped selection, or null when the value differs or selection is unsupported.
@@ -56,7 +57,7 @@ export class CapitalisationDirective implements OnInit, OnDestroy {
           const selection = this.captureSelection(value);
           this.control.setValue(upper, { emitEvent: false });
 
-          if (selection && selection.input === this.document.activeElement && selection.input.value === upper) {
+          if (selection?.input === this.document.activeElement && selection.input.value === upper) {
             selection.input.setSelectionRange(selection.start, selection.end, selection.direction);
           }
         }
