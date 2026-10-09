@@ -20,11 +20,12 @@
       </a>
 
       @if (headerLinks.serviceLink) {
-        <a [routerLink]="headerLinks.serviceLink" class="moj-header__link moj-header__link--organisation-name">
+        <a
+          [routerLink]="headerLinks.serviceLink"
+          class="moj-header__link moj-header__link--organisation-name moj-header__link--service-name"
+        >
           <ng-content select="[organisationName]"></ng-content>
-        </a>
-
-        <a [routerLink]="headerLinks.serviceLink" class="moj-header__link moj-header__link--service-name">
+          {{ ' ' }}
           <ng-content select="[serviceName]"></ng-content>
         </a>
       } @else {
