@@ -1,6 +1,41 @@
 <div class="moj-timeline__item">
   <div class="moj-timeline__header">
-    <h2 class="moj-timeline__title"><ng-content select="[title]"></ng-content></h2>
+    <ng-template #titleContent>
+      <ng-content select="[title]"></ng-content>
+    </ng-template>
+
+    @switch (headingLevel) {
+      @case (1) {
+        <h1 class="moj-timeline__title">
+          <ng-container [ngTemplateOutlet]="titleContent"></ng-container>
+        </h1>
+      }
+      @case (2) {
+        <h2 class="moj-timeline__title">
+          <ng-container [ngTemplateOutlet]="titleContent"></ng-container>
+        </h2>
+      }
+      @case (3) {
+        <h3 class="moj-timeline__title">
+          <ng-container [ngTemplateOutlet]="titleContent"></ng-container>
+        </h3>
+      }
+      @case (4) {
+        <h4 class="moj-timeline__title">
+          <ng-container [ngTemplateOutlet]="titleContent"></ng-container>
+        </h4>
+      }
+      @case (5) {
+        <h5 class="moj-timeline__title">
+          <ng-container [ngTemplateOutlet]="titleContent"></ng-container>
+        </h5>
+      }
+      @case (6) {
+        <h6 class="moj-timeline__title">
+          <ng-container [ngTemplateOutlet]="titleContent"></ng-container>
+        </h6>
+      }
+    }
 
     <p class="moj-timeline__byline">&nbsp;by <ng-content select="[user]"></ng-content></p>
   </div>

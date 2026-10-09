@@ -1,12 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MojTimelineItemComponent } from './moj-timeline-item.component';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import type { HeadingLevel } from '@hmcts/opal-frontend-common/types';
 import { describe, beforeEach, it, expect } from 'vitest';
 
 @Component({
-  template: `<opal-lib-moj-timeline-item>
+  template: `<opal-lib-moj-timeline-item [headingLevel]="headingLevel">
     <ng-content title>Test</ng-content>
     <ng-content user>Test User</ng-content>
     <ng-content date>23/07/2024</ng-content>
@@ -14,7 +15,9 @@ import { describe, beforeEach, it, expect } from 'vitest';
   </opal-lib-moj-timeline-item>`,
   imports: [MojTimelineItemComponent],
 })
-class TestHostComponent {}
+class TestHostComponent {
+  @Input() public headingLevel: HeadingLevel = 2;
+}
 
 describe('MojTimelineItemComponent', () => {
   let component: TestHostComponent;
@@ -37,6 +40,15 @@ describe('MojTimelineItemComponent', () => {
   it('should render timeline title - Test', () => {
     const element = fixture.debugElement.query(By.css('.moj-timeline__title'));
     expect(element.nativeElement.textContent).toContain('Test');
+    expect(element.nativeElement.tagName).toBe('H2');
+  });
+
+  it('should render the timeline title at the configured heading level', () => {
+    fixture.componentRef.setInput('headingLevel', 3);
+    fixture.detectChanges();
+
+    const element = fixture.debugElement.query(By.css('.moj-timeline__title'));
+    expect(element.nativeElement.tagName).toBe('H3');
   });
 
   it('should render timeline user - Test User', () => {
