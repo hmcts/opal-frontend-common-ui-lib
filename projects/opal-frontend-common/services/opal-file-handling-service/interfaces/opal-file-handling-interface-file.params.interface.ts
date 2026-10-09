@@ -1,5 +1,3 @@
-import { IOpalFileHandlingErrorObject } from './opal-file-handling-error-object.interface';
-
 export interface IOpalFileHandlingInterfaceFileParams {
   source?: string | null;
   target?: string[] | null;
@@ -13,4 +11,3 @@ export interface IOpalFileHandlingInterfaceFileParams {
   from_date?: string | null;
   to_date?: string | null;
 }
-

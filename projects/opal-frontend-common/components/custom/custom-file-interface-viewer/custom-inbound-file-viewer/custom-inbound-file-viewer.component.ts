@@ -1,11 +1,21 @@
-import { ChangeDetectionStrategy, booleanAttribute, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  booleanAttribute,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { IAlphagovAccessibleAutocompleteItem } from '@hmcts/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete/interfaces';
-import { CustomFileInterfaceViewerFiltersComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters';
 import { IAbstractFormBaseForm } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-base/interfaces';
+import { CustomFileInterfaceViewerFiltersComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters';
+import { CustomPageHeaderComponent } from '@hmcts/opal-frontend-common/components/custom/custom-page-header';
 
 @Component({
   selector: 'opal-lib-custom-inbound-file-viewer',
-  imports: [CustomFileInterfaceViewerFiltersComponent],
+  imports: [CustomFileInterfaceViewerFiltersComponent, CustomPageHeaderComponent],
   templateUrl: './custom-inbound-file-viewer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -19,7 +29,10 @@ export class CustomInboundFileViewerComponent implements OnInit, OnDestroy {
   @Output() public formSubmit = new EventEmitter<IAbstractFormBaseForm<unknown>>();
 
   public ngOnInit(): void {
-    console.log('CustomInboundFileViewerComponent initialized with direction:', this.isInbound ? 'inbound' : 'outbound');
+    console.log(
+      'CustomInboundFileViewerComponent initialized with direction:',
+      this.isInbound ? 'inbound' : 'outbound',
+    );
   }
 
   public ngOnDestroy(): void {

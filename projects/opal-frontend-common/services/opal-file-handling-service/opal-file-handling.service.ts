@@ -17,31 +17,7 @@ export class OpalFileHandlingService {
     return path.replace(FILE_ID_PATH_PARAM, encodeURIComponent(fileId.toString()));
   }
 
-  public getInterfaceFilesRefData(params?: IOpalFileHandlingInterfaceFileParams): Observable<IOpalFileHandlingInterfaceFilesRefData> {
-    return this.http.get<IOpalFileHandlingInterfaceFilesRefData>(
-      OPAL_FILE_HANDLING_PATHS.interfaceFilesRefData,
-      { params: this.buildInterfaceFilesParams(params) },
-    );
-  }
-
-  public getInterfaceFile(fileId: number): Observable<IOpalFileHandlingInterfaceFile> {
-    return this.http.get<IOpalFileHandlingInterfaceFile>(
-      this.getPathWithFileId(OPAL_FILE_HANDLING_PATHS.interfaceFile, fileId),
-    );
-  }
-
-  public getInterfaceFileContent(fileId: number): Observable<HttpResponse<Blob>> {
-    return this.http.get(this.getPathWithFileId(OPAL_FILE_HANDLING_PATHS.interfaceFilesContent, fileId), {
-      headers: new HttpHeaders({
-        Accept: INTERFACE_FILE_CONTENT_ACCEPT_HEADER,
-      }),
-      observe: 'response',
-      responseType: 'blob',
-    });
-  }
-
-  private buildInterfaceFilesParams(
-    params?: IOpalFileHandlingInterfaceFileParams,): HttpParams {
+  private buildInterfaceFilesParams(params?: IOpalFileHandlingInterfaceFileParams): HttpParams {
     let httpParams = new HttpParams();
 
     Object.entries(params ?? {}).forEach(([key, value]) => {
@@ -62,5 +38,29 @@ export class OpalFileHandlingService {
     });
 
     return httpParams;
+  }
+
+  public getInterfaceFilesRefData(
+    params?: IOpalFileHandlingInterfaceFileParams,
+  ): Observable<IOpalFileHandlingInterfaceFilesRefData> {
+    return this.http.get<IOpalFileHandlingInterfaceFilesRefData>(OPAL_FILE_HANDLING_PATHS.interfaceFilesRefData, {
+      params: this.buildInterfaceFilesParams(params),
+    });
+  }
+
+  public getInterfaceFile(fileId: number): Observable<IOpalFileHandlingInterfaceFile> {
+    return this.http.get<IOpalFileHandlingInterfaceFile>(
+      this.getPathWithFileId(OPAL_FILE_HANDLING_PATHS.interfaceFile, fileId),
+    );
+  }
+
+  public getInterfaceFileContent(fileId: number): Observable<HttpResponse<Blob>> {
+    return this.http.get(this.getPathWithFileId(OPAL_FILE_HANDLING_PATHS.interfaceFilesContent, fileId), {
+      headers: new HttpHeaders({
+        Accept: INTERFACE_FILE_CONTENT_ACCEPT_HEADER,
+      }),
+      observe: 'response',
+      responseType: 'blob',
+    });
   }
 }

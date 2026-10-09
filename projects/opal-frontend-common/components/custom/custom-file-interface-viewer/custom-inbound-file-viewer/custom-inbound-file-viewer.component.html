@@ -1,11 +1,20 @@
-<p>Current direction: {{ isInbound ? 'inbound' : 'outbound' }}</p>
-<p>Current domain: {{ domain }}</p>
+<div class="govuk-grid-column-full">
+  <p>Current direction: {{ isInbound ? 'inbound' : 'outbound' }}</p>
+  <p>Current domain: {{ domain }}</p>
 
-<div class="govuk-grid-column-two-thirds">
-  <h1 class="govuk-heading-l">Inbound interface files</h1>
-  <div class="govuk-grid-row">
-    <opal-lib-custom-file-interface-viewer-filters [isInbound]="isInbound" [businessUnits]="businessUnits"
-      [domain]="domain" [source]="source" [sourceList]="sourceList" (formSubmit)="formSubmit.emit($event)">
-    </opal-lib-custom-file-interface-viewer-filters>
-  </div>
+  <opal-lib-custom-page-header>
+    <ng-container pageHeaderHeading>
+      <h1 class="govuk-heading-l">Inbound interface files</h1>
+    </ng-container>
+  </opal-lib-custom-page-header>
+
+  <opal-lib-custom-file-interface-viewer-filters
+    [isInbound]="isInbound"
+    [businessUnits]="businessUnits"
+    [domain]="domain"
+    [source]="source"
+    [sourceList]="sourceList"
+    (formSubmit)="formSubmit.emit($event)"
+  >
+  </opal-lib-custom-file-interface-viewer-filters>
 </div>
