@@ -47,22 +47,29 @@ export class CapitalisationDirective implements OnInit, OnDestroy {
     };
   }
 
+  /**
+   * Uppercases a changed control value while preserving the focused input's selection.
+   *
+   * @param value The latest value emitted by the form control.
+   */
+  private capitaliseControlValue(value: unknown): void {
+    if (typeof value === 'string' && value.length > 0) {
+      const upper = this.utilsService.upperCaseAllLetters(value);
+      if (value !== upper) {
+        const selection = this.captureSelection(value);
+        this.control.setValue(upper, { emitEvent: false });
+
+        if (selection?.input === this.document.activeElement && selection.input.value === upper) {
+          selection.input.setSelectionRange(selection.start, selection.end, selection.direction);
+        }
+      }
+    }
+  }
+
   ngOnInit(): void {
     if (!this.control) return;
 
-    this.control.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
-      if (typeof value === 'string' && value.length > 0) {
-        const upper = this.utilsService.upperCaseAllLetters(value);
-        if (value !== upper) {
-          const selection = this.captureSelection(value);
-          this.control.setValue(upper, { emitEvent: false });
-
-          if (selection?.input === this.document.activeElement && selection.input.value === upper) {
-            selection.input.setSelectionRange(selection.start, selection.end, selection.direction);
-          }
-        }
-      }
-    });
+    this.control.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => this.capitaliseControlValue(value));
   }
 
   ngOnDestroy(): void {
