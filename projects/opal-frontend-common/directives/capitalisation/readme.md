@@ -60,6 +60,8 @@ You can apply the directive to any component or element by binding it to an Angu
 
 For example, if a user types `ab12cd`, the form control's value will be transformed to `AB12CD` in real time via the control's value changes.
 
+The directive preserves the cursor position and selection when converting input to uppercase, including edits in the middle of a value and characters that expand when uppercased (for example, `ß` becomes `SS`).
+
 ## Inputs
 
 - `opalLibCapitaliseAllCharacters` – Accepts an `AbstractControl` (such as `FormControl`). The directive subscribes to its value changes and updates it to uppercase.
