@@ -41,12 +41,12 @@ describe('MojHeaderComponent', () => {
 
   it('should render into organisationName ng-content', () => {
     const element = fixture.nativeElement.querySelector('.moj-header__link--organisation-name');
-    expect(element.textContent).toContain('Test Organisation');
+    expect(element.textContent?.trim()).toBe('Test Organisation');
   });
 
   it('should render into serviceName ng-content', () => {
     const element = fixture.nativeElement.querySelector('.moj-header__link--service-name');
-    expect(element.textContent).toContain('Test Service');
+    expect(element.textContent?.trim()).toBe('Test Service');
   });
 
   it('should render into linkText ng-content', () => {
