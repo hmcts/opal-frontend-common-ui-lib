@@ -238,6 +238,9 @@
       "@hmcts/opal-frontend-common/components/govuk/govuk-select/interfaces": [
         "./dist/opal-frontend-common/components/govuk/govuk-select/interfaces"
       ],
+      "@hmcts/opal-frontend-common/components/govuk/govuk-skip-link": [
+        "./dist/opal-frontend-common/components/govuk/govuk-skip-link"
+      ],
       "@hmcts/opal-frontend-common/components/govuk/govuk-summary-card-list": [
         "./dist/opal-frontend-common/components/govuk/govuk-summary-card-list"
       ],

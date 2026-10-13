@@ -15,7 +15,6 @@ This Angular component provides a Ministry of Justice (MOJ)-styled Sortable tabl
 
 First you have to create a new component called wrapper for your sortable table component It should be something like this.This should be seperate from your parent component.
 
-
 ```typescript
     import { CommonModule } from '@angular/common';
     import { Component, Input, OnInit } from '@angular/core';
@@ -204,9 +203,16 @@ Then you need to forge them all together with the table wrapping component in th
 
 ```
 
+The table includes a visually hidden caption by default: `Column headers with buttons are sortable`. To provide a different caption, project an element with the `caption` attribute into the table:
 
+```html
+<opal-lib-moj-sortable-table>
+  <span caption>Cases sorted by date</span>
+  <!-- table headers and rows -->
+</opal-lib-moj-sortable-table>
+```
 
-
+The provided caption replaces the default text.
 
 ## Inputs
 

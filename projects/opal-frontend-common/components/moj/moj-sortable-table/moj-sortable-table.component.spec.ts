@@ -1,7 +1,16 @@
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MojSortableTableComponent } from './moj-sortable-table.component';
 import { describe, beforeEach, it, expect } from 'vitest';
+
+@Component({
+  imports: [MojSortableTableComponent],
+  template: '<opal-lib-moj-sortable-table><span caption>{{ caption }}</span></opal-lib-moj-sortable-table>',
+})
+class TestCaptionSortableTableComponent {
+  public caption = 'Custom sortable table caption';
+}
 
 describe('MojSortableTableComponent', () => {
   let component: MojSortableTableComponent;
@@ -9,7 +18,7 @@ describe('MojSortableTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MojSortableTableComponent],
+      imports: [MojSortableTableComponent, TestCaptionSortableTableComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MojSortableTableComponent);
@@ -29,5 +38,22 @@ describe('MojSortableTableComponent', () => {
     component.tableClasses = 'test-class';
     fixture.detectChanges();
     expect(component.tableClasses).toBe('test-class');
+  });
+
+  it('should render the default visually hidden caption', () => {
+    const caption = fixture.nativeElement.querySelector('caption');
+
+    expect(caption.textContent.trim()).toBe('Column headers with buttons are sortable');
+    expect(caption.querySelector('.govuk-visually-hidden')).toBeTruthy();
+  });
+
+  it('should render a provided caption instead of the default caption', () => {
+    const hostFixture = TestBed.createComponent(TestCaptionSortableTableComponent);
+    hostFixture.detectChanges();
+
+    const caption = hostFixture.nativeElement.querySelector('caption');
+
+    expect(caption.textContent.trim()).toBe('Custom sortable table caption');
+    expect(caption.querySelector('.govuk-visually-hidden')).toBeNull();
   });
 });
