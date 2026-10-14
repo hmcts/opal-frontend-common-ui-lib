@@ -9,7 +9,7 @@
   </opal-lib-custom-page-header>
 
   <opal-lib-custom-file-interface-viewer-filters
-    [isInbound]="isInbound"
+    [isInbound]="true"
     [businessUnits]="businessUnits"
     [domain]="domain"
     [source]="source"
@@ -17,4 +17,21 @@
     (formSubmit)="formSubmit.emit($event)"
   >
   </opal-lib-custom-file-interface-viewer-filters>
+
+  <!-- Inbound Sortable table + Pagination component here -->
+  @if (interfaceFilesRefData !== null) {
+    @if (interfaceFilesRefData.count > 0) {
+      <opal-lib-custom-file-interface-viewer-inbound-table-wrapper
+        [existingSortState]="inboundTableSort"
+        [tableData]="inboundTableData"
+      >
+      </opal-lib-custom-file-interface-viewer-inbound-table-wrapper>
+    } @else {
+      <ng-container *ngTemplateOutlet="noData"> </ng-container>
+    }
+  }
+
+  <ng-template #noData>
+    <p class="govuk-body">There are no inbound interface files to display.</p>
+  </ng-template>
 </div>

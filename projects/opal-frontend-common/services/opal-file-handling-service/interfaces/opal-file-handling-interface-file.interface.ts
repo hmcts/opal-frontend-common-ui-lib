@@ -11,5 +11,6 @@ export interface IOpalFileHandlingInterfaceFile {
   file_store_uuid: string | null;
   checksum: string | null;
   date_and_time: string | null;
+  file_name: string | null;
   errors: IOpalFileHandlingErrorObject[] | null;
 }
