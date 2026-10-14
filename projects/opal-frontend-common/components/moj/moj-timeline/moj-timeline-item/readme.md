@@ -1,14 +1,13 @@
----
-
 # MOJ Timeline Item Component
 
-This Angular component represents an individual item in the MOJ timeline, used to display specific events in a timeline format.
+This Angular component represents an individual event in an MOJ-styled timeline. The event content is supplied through content projection using the `title`, `user`, `date`, and `description` attribute selectors.
 
 ## Table of Contents
 
 - [Installation](#installation)
 - [Usage](#usage)
 - [Inputs](#inputs)
+- [Projected content](#projected-content)
 - [Outputs](#outputs)
 - [Methods](#methods)
 - [Testing](#testing)
@@ -16,33 +15,47 @@ This Angular component represents an individual item in the MOJ timeline, used t
 
 ## Installation
 
+Import the standalone component from the `moj-timeline` entry point:
+
 ```typescript
-import { MojTimelineItemComponent } from '@components/moj/moj-timeline-item/moj-timeline-item.component';
+import { MojTimelineItemComponent } from '@hmcts/opal-frontend-common/components/moj/moj-timeline';
 ```
+
+Add `MojTimelineItemComponent` to the `imports` array of the standalone component that uses it.
 
 ## Usage
 
-You can use the timeline item component in your template as follows:
+Use the component inside an `opal-lib-moj-timeline` element and provide each event field using its corresponding attribute selector:
 
 ```html
-<opal-lib-moj-timeline-item [date]="'2023-01-01'" [description]="'Event description'"></opal-lib-moj-timeline-item>
+<opal-lib-moj-timeline-item [headingLevel]="3">
+  <span title>Application submitted</span>
+  <span user>Alex Smith</span>
+  <span date>23/07/2024</span>
+  <div description>
+    <p>The application was submitted for review.</p>
+  </div>
+</opal-lib-moj-timeline-item>
 ```
 
-### Example in HTML:
-
-```html
-<li class="moj-timeline__item">
-  <div class="moj-timeline__date">{{ date }}</div>
-  <div class="moj-timeline__description">{{ description }}</div>
-</li>
-```
+`headingLevel` controls the heading element used for the title. It defaults to `2`, so the title is rendered as an `h2` when the input is omitted.
 
 ## Inputs
 
-| Input         | Type     | Description                                  |
-| ------------- | -------- | -------------------------------------------- |
-| `date`        | `string` | The date associated with the timeline event. |
-| `description` | `string` | The description of the event.                |
+| Input          | Type           | Default | Description |
+| -------------- | -------------- | ------- | ----------- |
+| `headingLevel` | `HeadingLevel` | `2`     | The heading level used for the projected title. Supported values are `1` through `6`. |
+
+## Projected content
+
+The component does not expose `date`, `user`, `title`, or `description` as Angular inputs. Project content into the matching attribute selector instead:
+
+| Selector        | Description |
+| --------------- | ----------- |
+| `[title]`       | The event title, rendered using the configured heading level. |
+| `[user]`        | The user shown in the event byline. |
+| `[date]`        | The event date. |
+| `[description]` | The event description. This can contain text or other HTML content. |
 
 ## Outputs
 
@@ -54,16 +67,12 @@ There are no custom methods for this component.
 
 ## Testing
 
-Unit tests for this component can be found in the `moj-timeline-item.component.spec.ts` file. To run the tests, use:
+Unit tests for this component can be found in `moj-timeline-item.component.spec.ts`. To run the test suite, use:
 
 ```bash
-ng test
+yarn test
 ```
 
 ## Contributing
 
 Feel free to submit issues or pull requests to improve this component.
-
----
-
-This `README.md` provides instructions on how to use the `moj-timeline-item` component to display individual events within a timeline in an MOJ-styled format.
