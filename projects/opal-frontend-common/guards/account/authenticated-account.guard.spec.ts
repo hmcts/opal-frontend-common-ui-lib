@@ -95,9 +95,10 @@ describe('authenticatedAccountGuard', () => {
   it('redirects an unauthenticated user without requesting user state', async () => {
     checkAuthenticatedMock.mockReturnValue(of(false));
 
-    await runGuard();
+    await expect(runGuard()).resolves.toBeInstanceOf(UrlTree);
 
     expect(createUrlTreeMock).toHaveBeenCalledWith([PAGES_ROUTING_PATHS.children.signIn]);
+    expect(clearUserStateCacheMock).toHaveBeenCalledTimes(1);
     expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
   });
 
@@ -109,16 +110,29 @@ describe('authenticatedAccountGuard', () => {
 
     expect(redirectToSsoLoginMock).toHaveBeenCalledTimes(1);
     expect(createUrlTreeMock).not.toHaveBeenCalled();
+    expect(clearUserStateCacheMock).toHaveBeenCalledTimes(1);
     expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
   });
 
   it('redirects a legacy authentication 401 without requesting user state', async () => {
     checkAuthenticatedMock.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 401 })));
 
-    await runGuard();
+    await expect(runGuard()).resolves.toBeInstanceOf(UrlTree);
 
     expect(createUrlTreeMock).toHaveBeenCalledWith([PAGES_ROUTING_PATHS.children.signIn]);
+    expect(clearUserStateCacheMock).toHaveBeenCalledTimes(1);
     expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
+  });
+
+  it('loads user state after a user authenticates following an unauthenticated navigation', async () => {
+    checkAuthenticatedMock.mockReturnValueOnce(of(false)).mockReturnValueOnce(of(true));
+    getLoggedInUserStateMock.mockReturnValue(of(OPAL_USER_STATE_MOCK));
+
+    await expect(runGuard()).resolves.toBeInstanceOf(UrlTree);
+    await expect(runGuard()).resolves.toBe(true);
+
+    expect(clearUserStateCacheMock).toHaveBeenCalledTimes(1);
+    expect(getLoggedInUserStateMock).toHaveBeenCalledTimes(1);
   });
 
   it('redirects an authentication service failure to the internal-server-error page without requesting user state', async () => {
@@ -127,6 +141,7 @@ describe('authenticatedAccountGuard', () => {
     await runGuard();
 
     expect(createUrlTreeMock).toHaveBeenCalledWith([`/${PAGES_ROUTING_PATHS.children.internalServerError}`]);
+    expect(clearUserStateCacheMock).not.toHaveBeenCalled();
     expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
   });
 

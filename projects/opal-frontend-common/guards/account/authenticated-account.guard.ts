@@ -33,6 +33,8 @@ export const authenticatedAccountGuard: CanActivateFn = () => {
   const redirectToSsoLogin = inject(REDIRECT_TO_SSO);
 
   const redirectToUnauthenticated = () => {
+    opalUserService.clearUserStateCache();
+
     if (globalStore.ssoEnabled()) {
       redirectToSsoLogin();
       return false;
@@ -61,7 +63,6 @@ export const authenticatedAccountGuard: CanActivateFn = () => {
         }),
         catchError((error: unknown) => {
           if (hasHttpStatus(error, 401)) {
-            opalUserService.clearUserStateCache();
             return of(redirectToUnauthenticated());
           }
 
