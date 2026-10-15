@@ -16,8 +16,8 @@ describe('authenticatedAccountGuard', () => {
   let checkAuthenticatedMock: ReturnType<typeof vi.fn>;
   let getLoggedInUserStateMock: ReturnType<typeof vi.fn>;
   let clearUserStateCacheMock: ReturnType<typeof vi.fn>;
-  let navigateMock: ReturnType<typeof vi.fn>;
   let createUrlTreeMock: ReturnType<typeof vi.fn>;
+  let redirectToSsoLoginMock: ReturnType<typeof vi.fn>;
   let globalStore: GlobalStoreType;
 
   const route = new ActivatedRouteSnapshot();
@@ -37,8 +37,8 @@ describe('authenticatedAccountGuard', () => {
     checkAuthenticatedMock = vi.fn();
     getLoggedInUserStateMock = vi.fn();
     clearUserStateCacheMock = vi.fn();
-    navigateMock = vi.fn();
     createUrlTreeMock = vi.fn(() => new UrlTree());
+    redirectToSsoLoginMock = vi.fn();
 
     TestBed.configureTestingModule({
       providers: [
@@ -56,11 +56,10 @@ describe('authenticatedAccountGuard', () => {
         {
           provide: Router,
           useValue: {
-            navigate: navigateMock,
             createUrlTree: createUrlTreeMock,
           },
         },
-        { provide: REDIRECT_TO_SSO, useValue: vi.fn() },
+        { provide: REDIRECT_TO_SSO, useValue: redirectToSsoLoginMock },
       ],
     });
 
@@ -96,18 +95,29 @@ describe('authenticatedAccountGuard', () => {
   it('redirects an unauthenticated user without requesting user state', async () => {
     checkAuthenticatedMock.mockReturnValue(of(false));
 
+    await runGuard();
+
+    expect(createUrlTreeMock).toHaveBeenCalledWith([PAGES_ROUTING_PATHS.children.signIn]);
+    expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
+  });
+
+  it('redirects an unauthenticated SSO user without requesting user state', async () => {
+    globalStore.setSsoEnabled(true);
+    checkAuthenticatedMock.mockReturnValue(of(false));
+
     await expect(runGuard()).resolves.toBe(false);
 
-    expect(navigateMock).toHaveBeenCalledWith([PAGES_ROUTING_PATHS.children.signIn]);
+    expect(redirectToSsoLoginMock).toHaveBeenCalledTimes(1);
+    expect(createUrlTreeMock).not.toHaveBeenCalled();
     expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
   });
 
   it('redirects a legacy authentication 401 without requesting user state', async () => {
     checkAuthenticatedMock.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 401 })));
 
-    await expect(runGuard()).resolves.toBe(false);
+    await runGuard();
 
-    expect(navigateMock).toHaveBeenCalledWith([PAGES_ROUTING_PATHS.children.signIn]);
+    expect(createUrlTreeMock).toHaveBeenCalledWith([PAGES_ROUTING_PATHS.children.signIn]);
     expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
   });
 
@@ -136,7 +146,7 @@ describe('authenticatedAccountGuard', () => {
     await expect(runGuard()).resolves.toBe(false);
 
     expect(clearUserStateCacheMock).toHaveBeenCalledTimes(1);
-    expect(navigateMock).toHaveBeenCalledWith([PAGES_ROUTING_PATHS.children.signIn]);
+    expect(createUrlTreeMock).toHaveBeenCalledWith([PAGES_ROUTING_PATHS.children.signIn]);
   });
 
   it('redirects a user-state service failure to the internal-server-error page', async () => {

@@ -35,11 +35,10 @@ export const authenticatedAccountGuard: CanActivateFn = () => {
   const redirectToUnauthenticated = () => {
     if (globalStore.ssoEnabled()) {
       redirectToSsoLogin();
-    } else {
-      router.navigate([PAGES_ROUTING_PATHS.children.signIn]);
+      return false;
     }
 
-    return false;
+    return router.createUrlTree([PAGES_ROUTING_PATHS.children.signIn]);
   };
 
   const redirectToAccountCreated = () => router.createUrlTree([`/${PAGES_ROUTING_PATHS.children.accountCreated}`]);
