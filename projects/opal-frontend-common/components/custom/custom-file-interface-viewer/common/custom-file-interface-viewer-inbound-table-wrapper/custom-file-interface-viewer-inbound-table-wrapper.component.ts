@@ -50,4 +50,17 @@ export class CustomFileInterfaceViewerInboundTableWrapperComponent
       this.onApplyFilters();
     }
   }
+
+  /**
+   * Handles the click event on an account.
+   * Emits the clicked account id.
+   *
+   * @param {number} account_id - the account id of the clicked account.
+   * @param {Event} event - The optional DOM event that triggered the click.
+   * @returns {void}
+   */
+  public onDownloadClick(file_id: number, event?: Event): void {
+    event?.preventDefault();
+    console.log('Download would occur here...');
+  }
 }

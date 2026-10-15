@@ -82,7 +82,9 @@
           <td opal-lib-moj-sortable-table-row-data id="status">{{ row['Status'] }}</td>
           <td opal-lib-moj-sortable-table-row-data id="actions">
             @if (row['File ID'] !== null) {
-              <a class="govuk-link" [href]="getDownloadHref(row['File ID'])">Download</a>
+              <a class="govuk-link govuk-link--no-visited-state" href="#" (click)="onDownloadClick(row['File ID'])"
+                >Download
+              </a>
             }
           </td>
         </tr>

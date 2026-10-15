@@ -18,7 +18,7 @@ import {
   ICustomFileInterfaceViewerInboundTableWrapperTableData,
 } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-inbound-table-wrapper';
 import { CustomPageHeaderComponent } from '@hmcts/opal-frontend-common/components/custom/custom-page-header';
-import { IOpalFileHandlingInterfaceFilesRefData } from '../../../../services/opal-file-handling-service/interfaces/opal-file-handling-interface-files-ref-data.interface';
+import { IOpalFileHandlingInterfaceFilesRefData } from '@hmcts/opal-frontend-common/services/opal-file-handling-service/interfaces';
 
 @Component({
   selector: 'opal-lib-custom-inbound-file-viewer',
