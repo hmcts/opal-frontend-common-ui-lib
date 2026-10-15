@@ -143,7 +143,7 @@ describe('authenticatedAccountGuard', () => {
     checkAuthenticatedMock.mockReturnValue(of(true));
     getLoggedInUserStateMock.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 401 })));
 
-    await expect(runGuard()).resolves.toBe(false);
+    await expect(runGuard()).resolves.toBeInstanceOf(UrlTree);
 
     expect(clearUserStateCacheMock).toHaveBeenCalledTimes(1);
     expect(createUrlTreeMock).toHaveBeenCalledWith([PAGES_ROUTING_PATHS.children.signIn]);
