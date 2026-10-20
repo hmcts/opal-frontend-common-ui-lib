@@ -8,6 +8,13 @@ import { OpalUserService } from '@hmcts/opal-frontend-common/services/opal-user-
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
 
+/**
+ * Determines whether an unknown HTTP error has the specified response status.
+ *
+ * @param error - The value emitted by the failed HTTP observable.
+ * @param expectedStatus - The HTTP status code to match.
+ * @returns True when the error exposes a numeric status matching {@link expectedStatus}.
+ */
 function hasHttpStatus(error: unknown, expectedStatus: number): boolean {
   return (
     typeof error === 'object' &&
