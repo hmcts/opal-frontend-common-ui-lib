@@ -1,0 +1,78 @@
+<opal-lib-govuk-radio fieldSetId="{{ idPrefix }}-date-filter" [legendText]="legendText" [legendClasses]="legendClasses">
+  <div
+    opal-lib-govuk-radios-item
+    labelText="Last 7 days"
+    inputId="last-7-days"
+    inputName="{{ idPrefix }}-date-filter"
+    [inputValue]="dateFilterLast7Days"
+    [control]="controls.dateFilter"
+  ></div>
+  <div
+    opal-lib-govuk-radios-item
+    labelText="Custom days"
+    inputId="custom-days"
+    inputName="{{ idPrefix }}-date-filter"
+    [inputValue]="dateFilterCustomDays"
+    ariaControls="{{ idPrefix }}-custom-days"
+    [control]="controls.dateFilter"
+  ></div>
+  @if (controls.dateFilter.value === dateFilterCustomDays) {
+    <div class="govuk-radios__conditional" id="{{ idPrefix }}-custom-days">
+      <div class="govuk-form-group" [class.govuk-form-group--error]="!!errors[idPrefix + '-days']">
+        <label class="govuk-label" for="{{ idPrefix }}-days">Days</label>
+        @if (errors[idPrefix + '-days']) {
+          <p id="{{ idPrefix }}-days-error-message" class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span>
+            {{ errors[idPrefix + '-days'] }}
+          </p>
+        }
+        <input
+          class="govuk-input govuk-input--width-2"
+          id="{{ idPrefix }}-days"
+          name="{{ idPrefix }}-days"
+          inputmode="numeric"
+          type="text"
+          [formControl]="controls.days"
+          [attr.aria-describedby]="errors[idPrefix + '-days'] ? idPrefix + '-days-error-message' : null"
+        />
+      </div>
+    </div>
+  }
+  <div
+    opal-lib-govuk-radios-item
+    labelText="Date range"
+    inputId="date-range"
+    inputName="{{ idPrefix }}-date-filter"
+    [inputValue]="dateFilterDateRange"
+    ariaControls="{{ idPrefix }}-date-range"
+    [control]="controls.dateFilter"
+  ></div>
+  @if (controls.dateFilter.value === dateFilterDateRange) {
+    <div class="govuk-radios__conditional" id="{{ idPrefix }}-date-range">
+      <div class="govuk-!-margin-bottom-5">
+        <opal-lib-moj-date-picker
+          labelText="Enter date from"
+          labelClasses="govuk-label--s"
+          [hintText]="dateHintText"
+          inputId="{{ idPrefix }}-date-from"
+          inputName="{{ idPrefix }}-date-from"
+          inputClasses="govuk-input--width-10"
+          [control]="controls.dateFrom"
+          [errors]="errors[idPrefix + '-date-from']"
+          (dateChange)="onDateChange('dateFrom', $event)"
+        ></opal-lib-moj-date-picker>
+      </div>
+      <opal-lib-moj-date-picker
+        labelText="Enter date to"
+        labelClasses="govuk-label--s"
+        [hintText]="dateHintText"
+        inputId="{{ idPrefix }}-date-to"
+        inputName="{{ idPrefix }}-date-to"
+        inputClasses="govuk-input--width-10"
+        [control]="controls.dateTo"
+        [errors]="errors[idPrefix + '-date-to']"
+        (dateChange)="onDateChange('dateTo', $event)"
+      ></opal-lib-moj-date-picker>
+    </div>
+  }
+</opal-lib-govuk-radio>
