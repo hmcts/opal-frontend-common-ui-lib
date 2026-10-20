@@ -1,1 +1,1 @@
-export * from './custom-date-filter-controls.interface';
+export type { ICustomDateFilterControls } from './custom-date-filter-controls.interface';

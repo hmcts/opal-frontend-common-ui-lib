@@ -1,1 +1,1 @@
-export * from './custom-date-filter.utils';
+export { clearInactiveCustomDateFilterFields } from './custom-date-filter.utils';

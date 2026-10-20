@@ -1,1 +1,1 @@
-export * from './custom-date-filter.component';
+export { CustomDateFilterComponent } from './custom-date-filter.component';

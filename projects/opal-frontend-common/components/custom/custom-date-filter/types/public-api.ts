@@ -1,1 +1,1 @@
-export * from './custom-date-filter-option.type';
+export type { CustomDateFilterOption } from './custom-date-filter-option.type';
