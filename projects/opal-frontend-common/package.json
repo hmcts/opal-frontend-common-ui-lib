@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.113",
+  "version": "0.0.114",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -168,6 +168,21 @@
     },
     "./components/custom/custom-deferred-live-region-announcement": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-deferred-live-region-announcement.mjs"
+    },
+    "./components/custom/custom-date-filter": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-date-filter.mjs"
+    },
+    "./components/custom/custom-date-filter/constants": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-date-filter-constants.mjs"
+    },
+    "./components/custom/custom-date-filter/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-date-filter-interfaces.mjs"
+    },
+    "./components/custom/custom-date-filter/types": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-date-filter-types.mjs"
+    },
+    "./components/custom/custom-date-filter/utils": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-date-filter-utils.mjs"
     },
     "./components/custom/custom-page-header": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-page-header.mjs"
