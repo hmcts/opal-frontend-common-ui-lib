@@ -139,14 +139,20 @@
       "@hmcts/opal-frontend-common/components/custom/custom-deferred-live-region-announcement": [
         "./dist/opal-frontend-common/components/custom/custom-deferred-live-region-announcement"
       ],
-      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters": [
-        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters"
+      "@hmcts/opal-frontend-common/components/custom/custom-date-filter": [
+        "./dist/opal-frontend-common/components/custom/custom-date-filter"
       ],
-      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/constants": [
-        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/constants"
+      "@hmcts/opal-frontend-common/components/custom/custom-date-filter/constants": [
+        "./dist/opal-frontend-common/components/custom/custom-date-filter/constants"
       ],
-      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer": [
-        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer"
+      "@hmcts/opal-frontend-common/components/custom/custom-date-filter/interfaces": [
+        "./dist/opal-frontend-common/components/custom/custom-date-filter/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-date-filter/types": [
+        "./dist/opal-frontend-common/components/custom/custom-date-filter/types"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-date-filter/utils": [
+        "./dist/opal-frontend-common/components/custom/custom-date-filter/utils"
       ],
       "@hmcts/opal-frontend-common/components/custom/custom-page-header": [
         "./dist/opal-frontend-common/components/custom/custom-page-header"
