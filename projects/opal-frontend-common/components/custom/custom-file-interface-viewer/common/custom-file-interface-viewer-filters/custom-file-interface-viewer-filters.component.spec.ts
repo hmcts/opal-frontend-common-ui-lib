@@ -233,6 +233,119 @@ describe('CustomFileInterfaceViewerFiltersComponent', () => {
     expect(types).toHaveLength(1);
   });
 
+  it('selects business unit, type and source options that arrive after the dropdowns render', async () => {
+    fixture.componentRef.setInput('businessUnits', []);
+    fixture.componentRef.setInput('source', []);
+    fixture.componentRef.setInput('sourceList', []);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    await vi.dynamicImportSettled();
+
+    expect(fixture.nativeElement.querySelectorAll('.autocomplete__input')).toHaveLength(3);
+
+    fixture.componentRef.setInput('businessUnits', [{ value: '0046', name: 'Camberwell Green' }]);
+    fixture.componentRef.setInput('source', [{ value: 'NATWEST', name: 'NatWest' }]);
+    fixture.componentRef.setInput('sourceList', [{ value: 'TRANSFORMED_JSON', name: 'TRANSFORMED' }]);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    await vi.dynamicImportSettled();
+
+    for (const [id, label] of [
+      ['custom-file-interface-viewer-business-unit-autocomplete', 'Camberwell Green'],
+      ['custom-file-interface-viewer-type-autocomplete', 'TRANSFORMED'],
+      ['custom-file-interface-viewer-source-autocomplete', 'NatWest'],
+    ]) {
+      const input = fixture.nativeElement.querySelector(`#${id}`) as HTMLInputElement;
+      input.value = label;
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      await fixture.whenStable();
+      const option = Array.from(
+        input.closest('opal-lib-alphagov-accessible-autocomplete')!.querySelectorAll<HTMLElement>('[role="option"]'),
+      ).find((element) => element.textContent?.trim() === label);
+      expect(option, `Expected ${id} to offer ${label} after its options arrive`).toBeDefined();
+      option!.click();
+    }
+
+    expect(component.filtersForm.getRawValue()).toEqual({
+      businessUnit: '0046',
+      dateFilter: 'last7Days',
+      days: '',
+      dateFrom: '',
+      dateTo: '',
+      fileType: 'TRANSFORMED_JSON',
+      source: 'NATWEST',
+    });
+  });
+
+  it.each([
+    {
+      inputName: 'businessUnits',
+      controlName: 'businessUnit',
+      inputId: 'custom-file-interface-viewer-business-unit-autocomplete',
+      value: '77',
+      originalLabel: 'Mock business unit',
+      updatedLabel: 'Updated business unit',
+    },
+    {
+      inputName: 'sourceList',
+      controlName: 'fileType',
+      inputId: 'custom-file-interface-viewer-type-autocomplete',
+      value: 'SOURCE',
+      originalLabel: 'RAW',
+      updatedLabel: 'UPDATED TYPE',
+    },
+    {
+      inputName: 'source',
+      controlName: 'source',
+      inputId: 'custom-file-interface-viewer-source-autocomplete',
+      value: 'ALLPAY',
+      originalLabel: 'Allpay',
+      updatedLabel: 'Updated source',
+    },
+  ] as const)(
+    'refreshes a same-length $inputName replacement while preserving selections and other dropdowns',
+    async ({ inputName, controlName, inputId, value, originalLabel, updatedLabel }) => {
+      const control = component.filtersForm.controls[controlName];
+      control.setValue(value);
+      control.markAsDirty();
+      control.markAsTouched();
+      fixture.detectChanges();
+      await fixture.whenStable();
+      await vi.dynamicImportSettled();
+      const previousInputs = Array.from(
+        (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLInputElement>('.autocomplete__input'),
+      );
+      const previousInput = previousInputs.find((input) => input.id === inputId)!;
+
+      expect(previousInput.value).toBe(originalLabel);
+
+      fixture.componentRef.setInput(inputName, [{ value, name: updatedLabel }]);
+      fixture.detectChanges();
+      await fixture.whenStable();
+      await vi.dynamicImportSettled();
+      const updatedInput = fixture.nativeElement.querySelector(`#${inputId}`) as HTMLInputElement;
+
+      expect(updatedInput).not.toBe(previousInput);
+      expect(updatedInput.value).toBe(updatedLabel);
+      for (const input of previousInputs.filter((input) => input.id !== inputId)) {
+        expect(fixture.nativeElement.querySelector(`#${input.id}`)).toBe(input);
+      }
+      expect(component.filtersForm.controls[controlName]).toBe(control);
+      expect(control.value).toBe(value);
+      expect(control.dirty).toBe(true);
+      expect(control.touched).toBe(true);
+
+      updatedInput.value = updatedLabel.slice(0, 5);
+      updatedInput.dispatchEvent(new Event('input', { bubbles: true }));
+      await fixture.whenStable();
+      const options = updatedInput
+        .closest('opal-lib-alphagov-accessible-autocomplete')!
+        .querySelectorAll<HTMLElement>('[role="option"]');
+
+      expect(Array.from(options, (option) => option.textContent?.trim())).toEqual([updatedLabel]);
+    },
+  );
+
   it('shows only the business-unit dropdown for outbound files', () => {
     fixture.componentRef.setInput('isInbound', false);
     fixture.detectChanges();

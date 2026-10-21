@@ -112,13 +112,13 @@ describe('CustomInboundFileViewerComponent', () => {
     setRows([row({ 'File ID': 1002, Title: 'older.xml', 'Date and time': 0 }), row()]);
     fixture.detectChanges();
     expect(
-      Array.from(fixture.nativeElement.querySelectorAll('td#title') as NodeListOf<HTMLElement>).map(
+      Array.from(fixture.nativeElement.querySelectorAll('td[id^="title-"]') as NodeListOf<HTMLElement>).map(
         (cell) => cell.textContent,
       ),
     ).toEqual(['original.dat', 'older.xml']);
-    expect(fixture.nativeElement.querySelector('td#business-unit').textContent).toBe('Camberwell Green');
-    expect(fixture.nativeElement.querySelector('td#date-and-time').textContent).toBe('20 Oct 2026 at 13:00');
-    expect(fixture.nativeElement.querySelector('td#type').textContent).toBe('RAW');
+    expect(fixture.nativeElement.querySelector('td#business-unit-0').textContent).toBe('Camberwell Green');
+    expect(fixture.nativeElement.querySelector('td#date-and-time-0').textContent).toBe('20 Oct 2026 at 13:00');
+    expect(fixture.nativeElement.querySelector('td#type-0').textContent).toBe('RAW');
   });
 
   it.each(['Ready', 'File failed'])('downloads a %s row through the caller-owned URL, anchor and event', (Status) => {

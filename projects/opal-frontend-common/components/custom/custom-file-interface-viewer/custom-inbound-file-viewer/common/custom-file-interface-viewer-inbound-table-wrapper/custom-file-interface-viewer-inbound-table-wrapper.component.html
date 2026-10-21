@@ -67,15 +67,15 @@
     </ng-container>
 
     <ng-container row>
-      @for (row of paginatedTableDataComputed(); track row['File ID']) {
+      @for (row of paginatedTableDataComputed(); track row; let rowIndex = $index) {
         <tr opal-lib-moj-sortable-table-row #paginationFocusTarget>
-          <td opal-lib-moj-sortable-table-row-data id="date-and-time">{{ row.dateTimeDisplay }}</td>
-          <td opal-lib-moj-sortable-table-row-data id="title">{{ row['Title'] }}</td>
-          <td opal-lib-moj-sortable-table-row-data id="type">{{ row['Type'] }}</td>
-          <td opal-lib-moj-sortable-table-row-data id="business-unit">{{ row['Business unit'] }}</td>
-          <td opal-lib-moj-sortable-table-row-data id="source">{{ row['Source'] }}</td>
-          <td opal-lib-moj-sortable-table-row-data id="status">{{ row['Status'] }}</td>
-          <td opal-lib-moj-sortable-table-row-data id="actions">
+          <td opal-lib-moj-sortable-table-row-data [id]="'date-and-time-' + rowIndex">{{ row.dateTimeDisplay }}</td>
+          <td opal-lib-moj-sortable-table-row-data [id]="'title-' + rowIndex">{{ row['Title'] }}</td>
+          <td opal-lib-moj-sortable-table-row-data [id]="'type-' + rowIndex">{{ row['Type'] }}</td>
+          <td opal-lib-moj-sortable-table-row-data [id]="'business-unit-' + rowIndex">{{ row['Business unit'] }}</td>
+          <td opal-lib-moj-sortable-table-row-data [id]="'source-' + rowIndex">{{ row['Source'] }}</td>
+          <td opal-lib-moj-sortable-table-row-data [id]="'status-' + rowIndex">{{ row['Status'] }}</td>
+          <td opal-lib-moj-sortable-table-row-data [id]="'actions-' + rowIndex">
             <ng-container
               [ngTemplateOutlet]="actionTemplate"
               [ngTemplateOutletContext]="{ $implicit: row }"
