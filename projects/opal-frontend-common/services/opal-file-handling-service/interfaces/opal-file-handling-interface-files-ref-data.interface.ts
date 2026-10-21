@@ -1,6 +1,6 @@
 import { IOpalFileHandlingInterfaceFile } from './opal-file-handling-interface-file.interface';
 
 export interface IOpalFileHandlingInterfaceFilesRefData {
-  count: number;
+  number_of_results: number;
   interface_files: IOpalFileHandlingInterfaceFile[] | null;
 }

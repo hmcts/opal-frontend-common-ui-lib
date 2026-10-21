@@ -1,6 +1,11 @@
 <div class="govuk-grid-column-full">
-  <p>Current direction: {{ isInbound ? 'inbound' : 'outbound' }}</p>
-  <p>Current domain: {{ domain }}</p>
+  <a #fileDownloadLink hidden>Download file</a>
+  <div #downloadErrorSummary>
+    <opal-lib-govuk-error-summary
+      [errors]="downloadErrors()"
+      (errorClick)="onDownloadErrorClick($event)"
+    ></opal-lib-govuk-error-summary>
+  </div>
 
   <opal-lib-custom-page-header>
     <ng-container pageHeaderHeading>
@@ -11,27 +16,41 @@
   <opal-lib-custom-file-interface-viewer-filters
     [isInbound]="true"
     [businessUnits]="businessUnits"
-    [domain]="domain"
     [source]="source"
     [sourceList]="sourceList"
+    [refreshFailed]="refreshFailed"
     (formSubmit)="formSubmit.emit($event)"
   >
   </opal-lib-custom-file-interface-viewer-filters>
 
-  <!-- Inbound Sortable table + Pagination component here -->
-  @if (interfaceFilesRefData !== null) {
-    @if (interfaceFilesRefData.count > 0) {
-      <opal-lib-custom-file-interface-viewer-inbound-table-wrapper
-        [existingSortState]="inboundTableSort"
-        [tableData]="inboundTableData"
-      >
-      </opal-lib-custom-file-interface-viewer-inbound-table-wrapper>
-    } @else {
-      <ng-container *ngTemplateOutlet="noData"> </ng-container>
-    }
-  }
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
-  <ng-template #noData>
-    <p class="govuk-body">There are no inbound interface files to display.</p>
+  <div id="inbound-interface-files-results" tabindex="-1">
+    @if (tableData !== null) {
+      @if (tableData.length > 0) {
+        <opal-lib-custom-file-interface-viewer-inbound-table-wrapper
+          [existingSortState]="inboundTableSort"
+          [tableData]="tableData"
+          [actionTemplate]="downloadAction"
+        >
+        </opal-lib-custom-file-interface-viewer-inbound-table-wrapper>
+      } @else {
+        <p class="govuk-body">There are no inbound interface files to display.</p>
+      }
+    }
+  </div>
+
+  <ng-template #downloadAction let-row>
+    @if (canDownload(row)) {
+      <a
+        id="interface-file-download-{{ row['File ID'] }}"
+        class="govuk-link"
+        [href]="getDownloadHref(row['File ID']!)"
+        aria-label="Download {{ row['Title'] || 'interface file ' + row['File ID'] }}"
+        (click)="onDownloadFile(row['File ID']!, $event)"
+      >
+        Download
+      </a>
+    }
   </ng-template>
 </div>

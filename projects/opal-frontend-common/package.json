@@ -184,6 +184,18 @@
     "./components/custom/custom-date-filter/utils": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-date-filter-utils.mjs"
     },
+    "./components/custom/custom-file-interface-viewer/constants": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-constants.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-common-custom-file-interface-viewer-filters.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-inbound-table-wrapper": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-common-custom-file-interface-viewer-inbound-table-wrapper.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/custom-inbound-file-viewer": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-custom-inbound-file-viewer.mjs"
+    },
     "./components/custom/custom-page-header": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-page-header.mjs"
     },
@@ -573,6 +585,9 @@
     },
     "./services/transformation-service/constants": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-transformation-service-constants.mjs"
+    },
+    "./services/file-service": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-file-service.mjs"
     },
     "./services/utils-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-utils-service.mjs"

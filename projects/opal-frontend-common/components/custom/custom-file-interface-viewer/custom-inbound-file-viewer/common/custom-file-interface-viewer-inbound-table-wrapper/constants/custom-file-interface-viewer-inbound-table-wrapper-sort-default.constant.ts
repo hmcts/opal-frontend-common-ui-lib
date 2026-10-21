@@ -1,8 +1,8 @@
-import { ICustomFileInterfaceViewerInboundTableWrapperTableSort } from '../interfaces/custom-file-interface-viewer-inbound-table-wrapper-table-sort.interface';
+import { ICustomFileInterfaceViewerInboundTableWrapperTableSort } from '../types/custom-file-interface-viewer-inbound-table-wrapper-table-sort.type';
 
 export const CUSTOM_FILE_INTERFACE_VIEWER_INBOUND_TABLE_WRAPPER_SORT_DEFAULT: ICustomFileInterfaceViewerInboundTableWrapperTableSort =
   {
-    'Date and time': 'none',
+    'Date and time': 'descending',
     Title: 'none',
     Type: 'none',
     'Business unit': 'none',

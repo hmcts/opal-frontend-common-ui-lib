@@ -1,9 +1,8 @@
 export interface IOpalFileHandlingInterfaceFileParams {
   source?: string | null;
-  target?: string[] | null;
-  not_target?: string[] | null;
-  type?: string | null;
-  not_type?: string[] | null;
+  target?: string | null;
+  not_target?: string | null;
+  type?: string[] | null;
   domain?: string | null;
   status?: string | null;
   not_status?: string[] | null;

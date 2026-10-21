@@ -1,3 +1,0 @@
-export const CUSTOM_FILE_INTERFACE_VIEWER_FILES_ALL_BUSINESS_UNITS = 'All business units';
-export const CUSTOM_FILE_INTERFACE_VIEWER_ALL_FILE_SOURCES = 'All sources';
-export const CUSTOM_FILE_INTERFACE_VIEWER_ALL_FILE_TYPES = 'All types';

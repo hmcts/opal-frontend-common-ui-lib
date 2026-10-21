@@ -1,5 +1,9 @@
-export * from './custom-file-interface-viewer-inbound-table-wrapper.component';
-export * from './constants/custom-file-interface-viewer-inbound-table-wrapper-data-empty.constant';
-export * from './constants/custom-file-interface-viewer-inbound-table-wrapper-sort-default.constant';
-export * from './interfaces/custom-file-interface-viewer-inbound-table-wrapper-table-data.interface';
-export * from './interfaces/custom-file-interface-viewer-inbound-table-wrapper-table-sort.interface';
+export {
+  CustomFileInterfaceViewerInboundTableWrapperComponent,
+  CUSTOM_FILE_INTERFACE_VIEWER_INBOUND_TABLE_WRAPPER_SORT_DEFAULT,
+} from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer';
+export type {
+  ICustomFileInterfaceViewerInboundTableWrapperTableData,
+  ICustomFileInterfaceViewerInboundTableWrapperTableSort,
+  ICustomFileInterfaceViewerInboundTableWrapperActionTemplateContext,
+} from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer';

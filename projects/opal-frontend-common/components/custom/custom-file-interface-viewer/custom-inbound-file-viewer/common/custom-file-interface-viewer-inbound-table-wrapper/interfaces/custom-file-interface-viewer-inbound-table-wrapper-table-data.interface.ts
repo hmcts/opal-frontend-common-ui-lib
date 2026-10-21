@@ -3,7 +3,8 @@ import { SortableValuesType } from '@hmcts/opal-frontend-common/components/abstr
 
 export interface ICustomFileInterfaceViewerInboundTableWrapperTableData extends IAbstractTableData<SortableValuesType> {
   'File ID': number | null;
-  'Date and time': string | null;
+  'Date and time': number | null;
+  dateTimeDisplay: string | null;
   Title: string | null;
   Type: string | null;
   'Business unit': string | null;

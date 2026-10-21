@@ -1,53 +1,44 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  Input,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { takeUntil } from 'rxjs';
 import { AlphagovAccessibleAutocompleteComponent } from '@hmcts/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete';
 import { IAlphagovAccessibleAutocompleteItem } from '@hmcts/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete/interfaces';
-import {
-  GovukRadioComponent,
-  GovukRadiosItemComponent,
-} from '@hmcts/opal-frontend-common/components/govuk/govuk-radio';
-import { MojDatePickerComponent } from '@hmcts/opal-frontend-common/components/moj/moj-date-picker';
+import { CustomDateFilterComponent } from '@hmcts/opal-frontend-common/components/custom/custom-date-filter';
+import type { CustomDateFilterOption } from '@hmcts/opal-frontend-common/components/custom/custom-date-filter/types';
+import { clearInactiveCustomDateFilterFields } from '@hmcts/opal-frontend-common/components/custom/custom-date-filter/utils';
 
-import {
-  CUSTOM_FILE_INTERFACE_VIEWER_ALL_FILE_SOURCES,
-  CUSTOM_FILE_INTERFACE_VIEWER_ALL_FILE_TYPES,
-  CUSTOM_FILE_INTERFACE_VIEWER_FILES_ALL_BUSINESS_UNITS,
-} from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/constants';
-import {
-  CUSTOM_FILE_INTERFACE_VIEWER_DATE_FILTER_CUSTOM_DAYS,
-  CUSTOM_FILE_INTERFACE_VIEWER_DATE_FILTER_DATE_RANGE,
-  CUSTOM_FILE_INTERFACE_VIEWER_DATE_FILTER_LAST_7_DAYS,
-  CUSTOM_FILE_INTERFACE_VIEWER_DATE_FILTER_STATE,
-} from './constants/custom-file-interface-viewer-date-filter.constant';
+import { CUSTOM_FILE_INTERFACE_VIEWER_ALL_BUSINESS_UNITS_OPTION } from './constants/custom-file-interface-viewer-all-business-units-option.constant';
+import { CUSTOM_FILE_INTERFACE_VIEWER_ALL_SOURCES_OPTION } from './constants/custom-file-interface-viewer-all-sources-option.constant';
+import { CUSTOM_FILE_INTERFACE_VIEWER_ALL_TYPES_OPTION } from './constants/custom-file-interface-viewer-all-types-option.constant';
+import { CUSTOM_FILE_INTERFACE_VIEWER_FILTER_FORM_DEFAULTS } from './constants/custom-file-interface-viewer-filter-form-defaults.constant';
+import { CUSTOM_FILE_INTERFACE_VIEWER_FILTER_FIELD_ERRORS } from './constants/custom-file-interface-viewer-filter-field-errors.constant';
+import { CUSTOM_FILE_INTERFACE_VIEWER_DATE_FILTER_FIELD_IDS } from './constants/custom-file-interface-viewer-date-filter-field-ids.constant';
+import { CustomFileInterfaceViewerFilterForm } from './types/custom-file-interface-viewer-filter-form.type';
 import { AbstractFormBaseComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-base';
 import { IAbstractFormBaseFieldErrors } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-base/interfaces';
 import { GovukErrorSummaryComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-error-summary';
 import { DateService } from '@hmcts/opal-frontend-common/services/date-service';
-import { futureDateValidator } from '@hmcts/opal-frontend-common/validators/future-date';
-import { nonZeroValueValidator } from '@hmcts/opal-frontend-common/validators/non-zero-value';
-import { optionalValidDateValidator } from '@hmcts/opal-frontend-common/validators/optional-valid-date';
-import { patternValidator } from '@hmcts/opal-frontend-common/validators/pattern-validator';
-
-type CustomFileInterfaceViewerDateFilter = 'last7Days' | 'customDays' | 'dateRange';
-type CustomFileInterfaceViewerDateControlName = 'dateFrom' | 'dateTo';
-
-type CustomFileInterfaceViewerFilterForm = FormGroup<{
-  businessUnit: FormControl<string | null>;
-  dateFilter: FormControl<CustomFileInterfaceViewerDateFilter | null>;
-  days: FormControl<string | null>;
-  dateFrom: FormControl<string | null>;
-  dateTo: FormControl<string | null>;
-  fileType: FormControl<string | null>;
-  source: FormControl<string | null>;
-}>;
+import {
+  getCustomFileInterfaceViewerDateFilterErrors,
+  setCustomFileInterfaceViewerDateValidators,
+  validateCustomFileInterfaceViewerDateRange,
+} from './utils/custom-file-interface-viewer-filters.utils';
 
 @Component({
   selector: 'opal-lib-custom-file-interface-viewer-filters',
   imports: [
     AlphagovAccessibleAutocompleteComponent,
-    GovukRadioComponent,
-    GovukRadiosItemComponent,
-    MojDatePickerComponent,
+    CustomDateFilterComponent,
     ReactiveFormsModule,
     GovukErrorSummaryComponent,
   ],
@@ -56,194 +47,128 @@ type CustomFileInterfaceViewerFilterForm = FormGroup<{
 })
 export class CustomFileInterfaceViewerFiltersComponent extends AbstractFormBaseComponent implements OnInit {
   private readonly dateService = inject(DateService);
+  private readonly businessUnitOptions = signal<IAlphagovAccessibleAutocompleteItem[]>([]);
+  private readonly sourceOptions = signal<IAlphagovAccessibleAutocompleteItem[]>([]);
+  private readonly typeOptions = signal<IAlphagovAccessibleAutocompleteItem[]>([]);
 
   @ViewChild('errorSummary', { read: ElementRef })
   private readonly errorSummary?: ElementRef<HTMLElement>;
 
-  protected override fieldErrors: IAbstractFormBaseFieldErrors = {
-    days: {
-      required: {
-        message: 'Enter the number of days',
-        priority: 1,
-      },
-      numericalTextPattern: {
-        message: 'Days must be a number',
-        priority: 2,
-      },
-      zeroValue: {
-        message: 'Days must be greater than zero',
-        priority: 3,
-      },
-    },
-    dateFrom: {
-      invalidDateFormat: {
-        message: 'Date from must be in the format DD/MM/YYYY',
-        priority: 1,
-      },
-      invalidDate: {
-        message: 'Date from must be a real date',
-        priority: 2,
-      },
-      invalidFutureDate: {
-        message: 'Date from must be in the past',
-        priority: 3,
-      },
-    },
-    dateTo: {
-      invalidDateFormat: {
-        message: 'Date to must be in the format DD/MM/YYYY',
-        priority: 1,
-      },
-      invalidDate: {
-        message: 'Date to must be a real date',
-        priority: 2,
-      },
-      invalidFutureDate: {
-        message: 'Date to must be in the past',
-        priority: 3,
-      },
-    },
-  };
+  protected override fieldErrors: IAbstractFormBaseFieldErrors = structuredClone(
+    CUSTOM_FILE_INTERFACE_VIEWER_FILTER_FIELD_ERRORS,
+  );
 
   @Input({ required: true }) public isInbound: boolean = false;
-  @Input({ required: true }) public businessUnits: IAlphagovAccessibleAutocompleteItem[] = [];
-  @Input({ required: true }) public source: IAlphagovAccessibleAutocompleteItem[] = [];
-  @Input({ required: true }) public sourceList: IAlphagovAccessibleAutocompleteItem[] = [];
-  @Input({ required: true }) public domain: string = '';
+  @Input() public refreshFailed: boolean = false;
+  /**
+   * Updates the permitted business-unit choices used by the filter.
+   * @param value - Business-unit names and API codes, excluding the All option.
+   */
+  @Input({ required: true }) public set businessUnits(value: IAlphagovAccessibleAutocompleteItem[]) {
+    this.businessUnitOptions.set(value);
+  }
+  /**
+   * Updates the available source choices used by the filter.
+   * @param value - Source names and API values, excluding the All option.
+   */
+  @Input({ required: true }) public set source(value: IAlphagovAccessibleAutocompleteItem[]) {
+    this.sourceOptions.set(value);
+  }
+  /**
+   * Updates the available file-type choices used by the filter.
+   * @param value - File-type names and API values, excluding the All option.
+   */
+  @Input({ required: true }) public set sourceList(value: IAlphagovAccessibleAutocompleteItem[]) {
+    this.typeOptions.set(value);
+  }
 
-  public readonly dateFilterCustomDays = CUSTOM_FILE_INTERFACE_VIEWER_DATE_FILTER_CUSTOM_DAYS;
-  public readonly dateFilterDateRange = CUSTOM_FILE_INTERFACE_VIEWER_DATE_FILTER_DATE_RANGE;
-  public readonly dateFilterLast7Days = CUSTOM_FILE_INTERFACE_VIEWER_DATE_FILTER_LAST_7_DAYS;
+  public readonly businessUnitFilterOptions = computed(() => [
+    CUSTOM_FILE_INTERFACE_VIEWER_ALL_BUSINESS_UNITS_OPTION,
+    ...this.businessUnitOptions(),
+  ]);
+  public readonly sourceFilterOptions = computed(() => [
+    CUSTOM_FILE_INTERFACE_VIEWER_ALL_SOURCES_OPTION,
+    ...this.sourceOptions(),
+  ]);
+  public readonly typeFilterOptions = computed(() => [
+    CUSTOM_FILE_INTERFACE_VIEWER_ALL_TYPES_OPTION,
+    ...this.typeOptions(),
+  ]);
+
+  public readonly dateFilterFieldIds = CUSTOM_FILE_INTERFACE_VIEWER_DATE_FILTER_FIELD_IDS;
+  public dateFilterErrors: Readonly<Record<string, string>> = {};
   public readonly filtersForm: CustomFileInterfaceViewerFilterForm = new FormGroup({
-    businessUnit: new FormControl<string | null>(CUSTOM_FILE_INTERFACE_VIEWER_FILES_ALL_BUSINESS_UNITS),
-    dateFilter: new FormControl<CustomFileInterfaceViewerDateFilter | null>(
-      CUSTOM_FILE_INTERFACE_VIEWER_DATE_FILTER_STATE.dateFilter as CustomFileInterfaceViewerDateFilter,
+    businessUnit: new FormControl<string | null>(CUSTOM_FILE_INTERFACE_VIEWER_FILTER_FORM_DEFAULTS.businessUnit),
+    dateFilter: new FormControl<CustomDateFilterOption | null>(
+      CUSTOM_FILE_INTERFACE_VIEWER_FILTER_FORM_DEFAULTS.dateFilter,
     ),
-    days: new FormControl<string | null>(CUSTOM_FILE_INTERFACE_VIEWER_DATE_FILTER_STATE.days),
-    dateFrom: new FormControl<string | null>(CUSTOM_FILE_INTERFACE_VIEWER_DATE_FILTER_STATE.dateFrom),
-    dateTo: new FormControl<string | null>(CUSTOM_FILE_INTERFACE_VIEWER_DATE_FILTER_STATE.dateTo),
-    fileType: new FormControl<string | null>(CUSTOM_FILE_INTERFACE_VIEWER_ALL_FILE_TYPES),
-    source: new FormControl<string | null>(CUSTOM_FILE_INTERFACE_VIEWER_ALL_FILE_SOURCES),
+    days: new FormControl<string | null>(CUSTOM_FILE_INTERFACE_VIEWER_FILTER_FORM_DEFAULTS.days),
+    dateFrom: new FormControl<string | null>(CUSTOM_FILE_INTERFACE_VIEWER_FILTER_FORM_DEFAULTS.dateFrom),
+    dateTo: new FormControl<string | null>(CUSTOM_FILE_INTERFACE_VIEWER_FILTER_FORM_DEFAULTS.dateTo),
+    fileType: new FormControl<string | null>(CUSTOM_FILE_INTERFACE_VIEWER_FILTER_FORM_DEFAULTS.fileType),
+    source: new FormControl<string | null>(CUSTOM_FILE_INTERFACE_VIEWER_FILTER_FORM_DEFAULTS.source),
   });
 
   public override form: CustomFileInterfaceViewerFilterForm = this.filtersForm;
 
+  /**
+   * Moves focus to the filter error summary after validation messages are rendered.
+   */
   private focusFilterErrorSummary(): void {
     setTimeout(() => {
       this.errorSummary?.nativeElement.querySelector<HTMLElement>('.govuk-error-summary')?.focus();
     });
   }
 
+  /**
+   * Applies date validators for the initial selection and subsequent radio changes.
+   */
   private setupDateFilterValidation(): void {
     const dateFilterControl = this.filtersForm.controls.dateFilter;
-    this.applyDateFilterValidators(dateFilterControl.value);
+    clearInactiveCustomDateFilterFields(this.filtersForm.controls, dateFilterControl.value);
+    setCustomFileInterfaceViewerDateValidators(this.filtersForm.controls);
 
-    dateFilterControl.valueChanges.subscribe((dateFilter) => {
-      this.applyDateFilterValidators(dateFilter);
+    dateFilterControl.valueChanges.pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
+      setCustomFileInterfaceViewerDateValidators(this.filtersForm.controls);
     });
   }
 
-  private applyDateFilterValidators(dateFilter: CustomFileInterfaceViewerDateFilter | null): void {
-    console.log('applyDateFilterValidators starts', dateFilter);
-    const { days, dateFrom, dateTo } = this.filtersForm.controls;
-
-    days.clearValidators();
-    dateFrom.clearValidators();
-    dateTo.clearValidators();
-
-    days.setErrors(null);
-    dateFrom.setErrors(null);
-    dateTo.setErrors(null);
-
-    switch (dateFilter) {
-      case 'customDays':
-        dateFrom.setValue('', { emitEvent: false });
-        dateTo.setValue('', { emitEvent: false });
-        days.setValidators([
-          Validators.required,
-          patternValidator(/^\d+$/, 'numericalTextPattern'),
-          nonZeroValueValidator(),
-        ]);
-        break;
-      case 'dateRange':
-        days.setValue('', { emitEvent: false });
-        dateFrom.setValidators([optionalValidDateValidator(), futureDateValidator()]);
-        dateTo.setValidators([optionalValidDateValidator(), futureDateValidator()]);
-        break;
-      default:
-        days.setValue('', { emitEvent: false });
-        dateFrom.setValue('', { emitEvent: false });
-        dateTo.setValue('', { emitEvent: false });
-        break;
-    }
-
-    days.updateValueAndValidity();
-    dateFrom.updateValueAndValidity();
-    dateTo.updateValueAndValidity();
-    console.log('applyDateFilterValidators ends', dateFilter);
+  /**
+   * Gets the permitted business-unit choices supplied to the filter.
+   * @returns Business-unit choices without the synthetic All option.
+   */
+  public get businessUnits(): IAlphagovAccessibleAutocompleteItem[] {
+    return this.businessUnitOptions();
   }
 
-  private addDateRangeValidationErrors(): void {
-    console.log('addDateRangeValidationErrors starts');
-    const { dateFilter, dateFrom, dateTo } = this.filtersForm.controls;
-
-    if (dateFilter.value !== 'dateRange') {
-      return;
-    }
-    console.log('addDateRangeValidationErrors - main');
-
-    if (!dateFrom.value && !dateTo.value) {
-      console.log('addDateRangeValidationErrors - main no dates');
-      this.addDateRangeFieldError('You must enter at least 1 of date from or date to');
-      return;
-    }
-
-    if (dateFrom.invalid || dateTo.invalid || !dateFrom.value || !dateTo.value) {
-      console.log('addDateRangeValidationErrors - invalid');
-      return;
-    }
-
-    console.log('addDateRangeValidationErrors - convert');
-    const from = this.dateService.getFromFormat(dateFrom.value, 'dd/MM/yyyy').startOf('day');
-    const to = this.dateService.getFromFormat(dateTo.value, 'dd/MM/yyyy').startOf('day');
-
-    if (from.isValid && to.isValid && from > to) {
-      console.log('addDateRangeValidationErrors -The Date from cannot');
-      this.addDateRangeFieldError('The Date from cannot be after the Date to');
-    }
-    console.log('addDateRangeValidationErrors ends');
+  /**
+   * Gets the source choices supplied to the filter.
+   * @returns Source choices without the synthetic All option.
+   */
+  public get source(): IAlphagovAccessibleAutocompleteItem[] {
+    return this.sourceOptions();
   }
 
-  private addDateRangeFieldError(message: string): void {
-    console.log('addDateRangeFieldErrorstarts', message);
-    this.formControlErrorMessages['dateFrom'] = message;
-
-    this.formErrorSummaryMessage.push({
-      fieldId: 'custom-file-interface-viewer-date-from',
-      message,
-    });
-    console.log('addDateRangeFieldError ends', message);
+  /**
+   * Gets the file-type choices supplied to the filter.
+   * @returns File-type choices without the synthetic All option.
+   */
+  public get sourceList(): IAlphagovAccessibleAutocompleteItem[] {
+    return this.typeOptions();
   }
 
-  public get dateFilter(): CustomFileInterfaceViewerDateFilter | null {
-    return this.filtersForm.controls.dateFilter.value;
-  }
-
-  public onDateChange(controlName: CustomFileInterfaceViewerDateControlName, value: string): void {
-    this.filtersForm.controls[controlName].setValue(value);
-  }
-
-  public getFieldError(controlName: string): string | null {
-    console.log('getFieldError triggered for ', controlName);
-    return this.formControlErrorMessages?.[controlName] ?? null;
-  }
-
+  /**
+   * Validates the filters, emits valid form data and marks the applied form pristine.
+   *
+   * @param event - Native form submission event.
+   */
   public override handleFormSubmit(event: SubmitEvent): void {
     void event;
+    validateCustomFileInterfaceViewerDateRange(this.filtersForm.controls, this.dateService);
     this.handleErrorMessages();
-    this.addDateRangeValidationErrors();
+    this.dateFilterErrors = getCustomFileInterfaceViewerDateFilterErrors(this.formControlErrorMessages);
 
-    if (this.form.invalid || this.formErrorSummaryMessage.length) {
+    if (this.form.invalid) {
       this.focusFilterErrorSummary();
       return;
     }
@@ -257,6 +182,9 @@ export class CustomFileInterfaceViewerFiltersComponent extends AbstractFormBaseC
     this.filtersForm.markAsPristine();
   }
 
+  /**
+   * Initializes date validators and the inherited form behavior.
+   */
   override ngOnInit(): void {
     this.setupDateFilterValidation();
     super.ngOnInit();
