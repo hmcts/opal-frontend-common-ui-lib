@@ -160,9 +160,6 @@
       "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters": [
         "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters"
       ],
-      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-inbound-table-wrapper": [
-        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-inbound-table-wrapper"
-      ],
       "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer": [
         "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer"
       ],

@@ -32,12 +32,10 @@ import {
 
 Add `CustomFileInterfaceViewerInboundTableWrapperComponent` to the consuming standalone component's `imports` array.
 
-The existing `@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-inbound-table-wrapper`
-entrypoint re-exports the same component, default sort and types. The implementation and colocated spec live
-[under the inbound viewer](../../custom-inbound-file-viewer/common/custom-file-interface-viewer-inbound-table-wrapper/custom-file-interface-viewer-inbound-table-wrapper.component.ts).
+The implementation and colocated spec live in this directory beneath the inbound viewer.
 
 For the complete inbound page with filters and download links, use
-[CustomInboundFileViewerComponent](../../custom-inbound-file-viewer/readme.md).
+[CustomInboundFileViewerComponent](../../readme.md).
 
 ## Usage
 
@@ -116,7 +114,7 @@ action events belong to the consuming template, as shown in the usage example.
 
 ## Table Data and Actions
 
-The complete row shape is documented in the [inbound viewer README](../../custom-inbound-file-viewer/readme.md#table-data).
+The complete row shape is documented in the [inbound viewer README](../../readme.md#table-data).
 Supply numeric epoch milliseconds for `'Date and time'` and already formatted text for `dateTimeDisplay`.
 The table performs no date parsing, reference-name resolution, status mapping or download-eligibility checks.
 

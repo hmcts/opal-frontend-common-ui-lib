@@ -44,7 +44,7 @@ already provide `HttpClient`, its normal interceptors and the common library sty
 
 The [viewer overview](../readme.md) explains frontend routes, reference data, permissions, request scope and mappings.
 The common [filters](../common/custom-file-interface-viewer-filters/readme.md) and
-[table](../common/custom-file-interface-viewer-inbound-table-wrapper/readme.md) have separate API documentation.
+[table](./common/custom-file-interface-viewer-inbound-table-wrapper/readme.md) have separate API documentation.
 
 ## Inputs
 
