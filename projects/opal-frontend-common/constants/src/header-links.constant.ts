@@ -2,5 +2,6 @@ import { IMojHeaderLinks } from '@hmcts/opal-frontend-common/components/moj/moj-
 
 export const HEADER_LINKS: IMojHeaderLinks = {
   govukLink: 'https://www.gov.uk/',
+  organisationLink: 'setMe',
   serviceLink: '/',
 };
