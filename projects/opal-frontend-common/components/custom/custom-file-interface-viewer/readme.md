@@ -1,6 +1,6 @@
 # Custom File Interface Viewer
 
-The file interface viewer contains the inbound files page and the filter and table components used by that page.
+The file interface viewer contains inbound and outbound pages and their shared filter, table and layout components.
 The frontend supplies filter choices, display-ready rows and an optional action template. The viewer renders the page;
 the consuming application owns API requests, download eligibility, URLs, saving and error handling.
 
@@ -8,9 +8,11 @@ the consuming application owns API requests, download eligibility, URLs, saving 
 
 - [Installation](#installation)
 - [Usage](#usage)
+- [Structure](#structure)
 - [Components and Services](#components-and-services)
 - [Frontend Integration](#frontend-integration)
 - [Inbound Request and Display Mapping](#inbound-request-and-display-mapping)
+- [Outbound Requests and Business Units](#outbound-requests-and-business-units)
 - [Downloads and Errors](#downloads-and-errors)
 - [Migration](#migration)
 - [Testing](#testing)
@@ -48,23 +50,55 @@ example. The optional action template defaults to `null`, leaving Action cells e
 `source` contains source choices such as Allpay. Despite its name, `sourceList` contains file **type** choices such as
 RAW and TRANSFORMED. `businessUnits` contains business-unit names and API codes.
 
+## Structure
+
+```text
+custom-file-interface-viewer/
+  common/
+    custom-file-interface-viewer/               # Shared component, template and spec
+    custom-file-interface-viewer-filters/       # Filter component and its support files
+    custom-file-interface-viewer-table-wrapper/ # Table component, template, spec and table support files
+    directives/
+      custom-file-interface-viewer-base/       # Shared presentational inputs/outputs and its spec
+    interfaces/                                # Shared prepared-row contract
+  constants/                                   # Public filter labels
+  custom-inbound-file-viewer/                  # Wrapper, template, spec and inbound contracts
+  custom-outbound-file-viewer/                 # Wrapper, template, spec and outbound contracts
+```
+
+Every component owns its matching `.component.ts`, `.component.html` and `.component.spec.ts` files. The base directive
+owns its `.directive.ts` and `.directive.spec.ts` files under `common/directives/`. The shared package entrypoint is
+`common/public-api.ts`; the viewer, table, base directive and row/action contracts are imported from that entrypoint.
+The filter keeps its existing dedicated entrypoint, and each direction retains its public wrapper entrypoint.
+
 ## Components and Services
 
 | Component or service                                    | Responsibility                                                                               | Documentation                                                                                                    |
 | ------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `CustomInboundFileViewerComponent`                      | Page heading, filters, separator, results/empty state and supplied row actions.              | [Inbound viewer](./custom-inbound-file-viewer/readme.md)                                                         |
-| `CustomFileInterfaceViewerFiltersComponent`             | Filter controls, validation and submission of raw form values.                               | [Common filters](./common/custom-file-interface-viewer-filters/readme.md)                                        |
-| `CustomFileInterfaceViewerInboundTableWrapperComponent` | Rendering, sorting, 25-row pagination and caller-supplied action templates.                  | [Common table](./custom-inbound-file-viewer/common/custom-file-interface-viewer-inbound-table-wrapper/readme.md) |
+| `CustomInboundFileViewerComponent` | Thin wrapper selecting inbound filters, columns and default sorting. | [Inbound viewer](./custom-inbound-file-viewer/readme.md) |
+| `CustomOutboundFileViewerComponent` | Thin wrapper selecting outbound filters and columns. | [Outbound viewer](./custom-outbound-file-viewer/readme.md) |
+| `CustomFileInterfaceViewerBase<TFile>` | Common presentational inputs, typed action context and submission output. | [Viewer base](./common/directives/custom-file-interface-viewer-base/readme.md) |
+| `CustomFileInterfaceViewerComponent` | Shared heading, filters, results/empty state and supplied row actions. | [Shared viewer](./common/custom-file-interface-viewer/readme.md) |
+| `CustomFileInterfaceViewerFiltersComponent` | Filter controls, validation and submission of raw form values. | [Common filters](./common/custom-file-interface-viewer-filters/readme.md) |
+| `CustomFileInterfaceViewerTableWrapperComponent` | Rendering, sorting, 25-row pagination and caller-supplied action templates. | [Common table](./common/custom-file-interface-viewer-table-wrapper/readme.md) |
 | `OpalFileHandlingService`                               | HTTP calls for the file list, one file's metadata and one file's original content.           | [API service](../../../services/opal-file-handling-service/readme.md)                                            |
 | `FileService`                                           | Generic file content handling and saving through a caller-owned anchor.                      | [File service](../../../services/file-service/readme.md)                                                         |
-| Frontend payload service                                | Permission-based filter choices, API criteria, reference labels and row/date/status mapping. | [Frontend integration](#frontend-integration)                                                                    |
+| Frontend payload service and page helpers                | Permission-based filter choices, API criteria, reference labels and row/date/status mapping. | [Frontend integration](#frontend-integration)                                                                    |
 
-There is no parent component selector named `opal-lib-custom-file-interface-viewer`. Use the inbound component selector
-shown above, or import the common filter/table separately when building another screen.
+The direction-specific wrappers compose `opal-lib-custom-file-interface-viewer`, which owns the shared page markup.
+The inbound and outbound wrappers provide direction-specific convenience APIs. Each routed Finance page uses the shared
+entrypoint directly in its template and supplies its action template, error summary and save anchor. A shared frontend
+base directive handles searches and downloads for both directions.
 
-The current page is specifically the inbound page. It supplies `isInbound=true` to its internal filter component.
+The inbound wrapper supplies `isInbound=true` to the shared viewer; the outbound wrapper supplies `false`.
 The inbound page has no `isInbound`, `domain` or raw `interfaceFilesRefData` input. Domain belongs in the frontend's API
 criteria. The common filters retain their own `isInbound` input to control source and file-type filter visibility.
+
+The wrappers and base directive declare no imperative methods; inputs, outputs and templates provide their shared
+contract. Component lifecycle and handler responsibilities are documented with the
+[filter methods](./common/custom-file-interface-viewer-filters/readme.md#methods),
+[table methods](./common/custom-file-interface-viewer-table-wrapper/readme.md#methods) and
+[date-filter methods](../custom-date-filter/README.md#methods).
 
 ## Frontend Integration
 
@@ -72,11 +106,15 @@ The current implementation in `opal-frontend` is under `src/app/flows/fines/fine
 
 | Frontend file or area                                                              | What it supplies                                                                                                    |
 | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `fines-finance-inbound-files/fines-finance-inbound-files.component.ts` and `.html` | Inputs for the library component, initial request on page entry, Refresh requests, cancellation and computed rows.  |
-| `services/fines-finance-payload.service.ts` and `services/utils`                   | Request construction, permitted business-unit choices and API-to-table mappings using existing report/date helpers. |
-| `constants/fines-finance-inbound-files-*.constant.ts`                              | Source/type choices, initial filters, request scope and display mappings.                                           |
-| `routing/fines-finance.routes.ts`                                                  | Inbound route, View Interface Files permission and business-unit reference-data resolver.                           |
+| `fines-finance-inbound-files` and `fines-finance-outbound-files` | Separate routed pages supplying direction-specific filters and row mappings; templates render the library viewer, actions, error summary and save anchor directly. |
+| `directives/fines-finance-interface-files-base` | Initial and Refresh searches, submitted-filter snapshots, cancellation, permitted business units, computed rows, download eligibility, original-content requests, errors and focus. |
+| `services/fines-finance-interface-files-payload.service.ts` and `services/utils` | Shared permitted business-unit choices, code-to-name lookup, date-filter and row-mapping helpers. |
+| Each file page's `constants` and `utils` | Direction-specific choices, codes, request scope, query and row mapping; outbound response selection. Inbound also owns its filter/mapping `interfaces`. |
+| Finance-level `constants`, `interfaces` and `types` | Shared domain/status/date settings, default filters, filter contract and date/time mapping types. |
+| `routing/fines-finance.routes.ts` | Inbound/outbound routes, View Interface Files permission and business-unit reference-data resolver. |
 | `src/app/flows/fines/routing/fines.routes.ts`                                      | Banking interfaces release flag on the Finance parent route through `canActivate` and `canActivateChild`.           |
+
+Finance owns the routes, navigation links and separate upload page. Shared directives, constants, interfaces and services sit directly under Finance alongside the two file pages. Direction-specific constants, contracts and utilities stay under their owning page. The base directive has no template; each page owns its markup and calls its local query/mapping helpers with `DateService`.
 
 The frontend integration needs the following data and behaviour:
 
@@ -86,22 +124,23 @@ The frontend integration needs the following data and behaviour:
 2. Keep a complete code-to-name lookup for mapping returned rows. That lookup can be broader than the permitted filter
    choices. The list API returns codes, not names.
 3. Supply canonical source and file-type options. The filter adds the three All choices itself, so do not duplicate
-   those options in the supplied arrays.
-4. Build API criteria in the frontend payload service. The filter output contains UI field names and is not an API payload.
+   those options in the supplied arrays. Replacing any option array clears a removed selection to `null`; valid choices,
+   the explicit All value `''` and control interaction state are preserved.
+4. Build API criteria in each frontend page's query helper, reusing shared date/filter helpers. The filter output contains UI field names and is not an API payload.
 5. Fetch the list on page entry. The viewer does not emit an initial search automatically. The frontend's `ngOnInit`
    initiates the initial Last 7 days request. Refresh remains enabled, including when filters are pristine; submitting
    runs validation and forwards valid form values.
 6. Map successful API results to table rows and replace the supplied row array. Keep `tableData=null` before the first
    response and use `[]` for a completed empty response. Handle request failures in the consuming application and retain
    the last successful rows when a request fails. Unchanged criteria can be resubmitted without a failure input.
-7. Cancel superseded or destroyed requests. The existing Finance wrapper cancels the preceding subscription and uses
+7. Cancel superseded or destroyed requests. The shared Finance base directive cancels the preceding subscription and uses
    `takeUntilDestroyed` to prevent an older search from replacing newer results.
 8. Keep authentication, permissions and release-flag checks in the normal frontend routes and services. Passing filter
    options to this component does not enforce backend access control.
 
 ## Inbound Request and Display Mapping
 
-The current Finance payload service always adds this inbound scope:
+The current Finance inbound query helper always adds this scope:
 
 ```typescript
 const inboundScope = {
@@ -151,7 +190,21 @@ Map API metadata before passing it to the viewer:
   Unknown values are retained. `FAILED_SUPERSEDED` is excluded by the standard inbound request.
 
 Pass prepared display rows to `tableData`, rather than raw API records. The viewer renders the supplied status text;
-the consuming action template decides whether any action is available for that row.
+the consuming action template decides whether any action is available for that row. Every displayed column is sortable,
+including the final Action column in both directions. The caller supplies its `Actions` sort label separately from
+the template; Finance supplies `Download` for an eligible row and an empty string otherwise. The library applies no
+status-based eligibility rules.
+
+## Outbound Requests and Business Units
+
+Outbound criteria use `domain: 'FINES'`, `source: 'OPAL'`, `not_target: 'OPAL'` and
+`not_status: ['FAILED_SUPERSEDED']`. Date boundaries use the same shared helper as inbound searches.
+
+The current backend business-unit predicate excludes records without a business unit. Finance therefore omits
+`business_unit_code` for outbound requests and applies the submitted selection to the response, retaining files that
+match the selected code or have null/empty `business_unit_codes`. Inbound requests continue to send their selected
+business-unit code to the API. The shared search lifecycle captures the submitted filters so later edits cannot alter
+which returned outbound files are displayed.
 
 ## Downloads and Errors
 
@@ -194,6 +247,6 @@ migrating. Route and dashboard specs cover release-flag wiring, permissions and 
 
 ## Contributing
 
-Keep domain-specific request and row mappings in the consuming frontend's payload service and utilities. Reuse the
+Keep domain-specific request and row mappings in the consuming frontend's page utilities. Reuse the
 existing date, form and table abstractions. Document public input or action-template changes in the component and
 service READMEs, and update the relevant colocated specs.
