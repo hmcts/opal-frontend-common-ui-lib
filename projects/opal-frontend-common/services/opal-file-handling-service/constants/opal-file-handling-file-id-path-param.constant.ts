@@ -1,0 +1,1 @@
+export const OPAL_FILE_HANDLING_FILE_ID_PATH_PARAM = '{id}';

@@ -1,6 +1,6 @@
 {
   "name": "@hmcts/opal-frontend-common",
-  "version": "0.0.114",
+  "version": "0.0.115",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -183,6 +183,15 @@
     },
     "./components/custom/custom-date-filter/utils": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-date-filter-utils.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/constants": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-constants.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-common-custom-file-interface-viewer-filters.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/custom-inbound-file-viewer": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-custom-inbound-file-viewer.mjs"
     },
     "./components/custom/custom-page-header": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-page-header.mjs"
@@ -574,6 +583,9 @@
     "./services/transformation-service/constants": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-transformation-service-constants.mjs"
     },
+    "./services/file-service": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-file-service.mjs"
+    },
     "./services/utils-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-utils-service.mjs"
     },
@@ -585,6 +597,15 @@
     },
     "./services/opal-user-service/mocks": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-opal-user-service-mocks.mjs"
+    },
+    "./services/opal-file-handling-service": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-opal-file-handling-service.mjs"
+    },
+    "./services/opal-file-handling-service/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-opal-file-handling-service-interfaces.mjs"
+    },
+    "./services/opal-file-handling-service/constants": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-opal-file-handling-service-constants.mjs"
     },
     "./stores/global": {
       "import": "./fesm2022/hmcts-opal-frontend-common-stores-global.mjs"
