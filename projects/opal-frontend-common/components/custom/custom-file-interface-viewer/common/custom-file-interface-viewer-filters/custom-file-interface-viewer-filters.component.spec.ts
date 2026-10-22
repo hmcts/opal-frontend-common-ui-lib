@@ -128,6 +128,72 @@ describe('CustomFileInterfaceViewerFiltersComponent', () => {
     expect(refresh.disabled).toBe(true);
   });
 
+  it.each([
+    { controlName: 'dateFrom', inputId: 'custom-file-interface-viewer-date-from' },
+    { controlName: 'dateTo', inputId: 'custom-file-interface-viewer-date-to' },
+  ] as const)(
+    'enables Refresh after changing an applied $controlName using the calendar',
+    async ({ controlName, inputId }) => {
+      const submit = vi.spyOn(component['formSubmit'], 'emit');
+      fixture.detectChanges();
+      fixture.nativeElement.querySelector('input[type="radio"][value="dateRange"]').click();
+      fixture.detectChanges();
+      for (const [id, value] of [
+        ['custom-file-interface-viewer-date-from', '01/01/2020'],
+        ['custom-file-interface-viewer-date-to', '03/01/2020'],
+      ]) {
+        const input = fixture.nativeElement.querySelector(`#${id}`) as HTMLInputElement;
+        input.value = value;
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+      fixture.detectChanges();
+      await fixture.whenStable();
+      await vi.dynamicImportSettled();
+      const refresh = fixture.nativeElement.querySelector('#refresh-reports-button') as HTMLButtonElement;
+
+      expect(refresh.disabled).toBe(false);
+      refresh.click();
+      fixture.detectChanges();
+
+      expect(submit).toHaveBeenCalledExactlyOnceWith({
+        formData: expect.objectContaining({ dateFilter: 'dateRange', dateFrom: '01/01/2020', dateTo: '03/01/2020' }),
+        nestedFlow: false,
+      });
+      expect(component.filtersForm.pristine).toBe(true);
+      expect(component.filtersForm.controls[controlName].pristine).toBe(true);
+      expect(refresh.disabled).toBe(true);
+
+      const input = fixture.nativeElement.querySelector(`#${inputId}`) as HTMLInputElement;
+      const picker = input.closest('opal-lib-moj-date-picker')!;
+      const toggle = picker.querySelector('.moj-js-datepicker-toggle') as HTMLButtonElement;
+      toggle.click();
+      const day = picker.querySelector('button[data-testid="2/1/2020"]') as HTMLButtonElement;
+      day.click();
+      fixture.detectChanges();
+
+      expect(component.filtersForm.controls[controlName].value).toBe('02/01/2020');
+      expect(component.filtersForm.controls[controlName].dirty).toBe(true);
+      expect(component.filtersForm.dirty).toBe(true);
+      expect(refresh.disabled).toBe(false);
+
+      refresh.click();
+      fixture.detectChanges();
+
+      expect(submit).toHaveBeenCalledTimes(2);
+      expect(submit).toHaveBeenLastCalledWith({
+        formData: expect.objectContaining({
+          dateFilter: 'dateRange',
+          dateFrom: '01/01/2020',
+          dateTo: '03/01/2020',
+          [controlName]: '02/01/2020',
+        }),
+        nestedFlow: false,
+      });
+      expect(component.filtersForm.pristine).toBe(true);
+      expect(refresh.disabled).toBe(true);
+    },
+  );
+
   it('enables retrying pristine criteria after failure and disables Refresh when the failure is cleared', () => {
     fixture.componentRef.setInput('refreshFailed', true);
     const submit = vi.spyOn(component['formSubmit'], 'emit');

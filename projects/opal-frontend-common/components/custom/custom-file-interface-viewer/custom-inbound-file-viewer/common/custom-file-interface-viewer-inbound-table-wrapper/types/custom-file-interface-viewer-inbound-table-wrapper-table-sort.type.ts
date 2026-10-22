@@ -3,8 +3,7 @@ import { SortDirectionType } from '@hmcts/opal-frontend-common/components/abstra
 import { ICustomFileInterfaceViewerInboundTableWrapperTableData } from '../interfaces/custom-file-interface-viewer-inbound-table-wrapper-table-data.interface';
 
 export type ICustomFileInterfaceViewerInboundTableWrapperTableSort = IAbstractSortState & {
-  [K in keyof Omit<
-    ICustomFileInterfaceViewerInboundTableWrapperTableData,
-    'File ID' | 'dateTimeDisplay'
-  >]: SortDirectionType;
+  [
+    K in keyof Omit<ICustomFileInterfaceViewerInboundTableWrapperTableData, 'File ID' | 'dateTimeDisplay'>
+  ]: SortDirectionType;
 };
