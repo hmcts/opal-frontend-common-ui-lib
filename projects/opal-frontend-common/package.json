@@ -190,6 +190,12 @@
     "./components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-common-custom-file-interface-viewer-filters.mjs"
     },
+    "./components/custom/custom-file-interface-viewer/common": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-common.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/custom-outbound-file-viewer": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-custom-outbound-file-viewer.mjs"
+    },
     "./components/custom/custom-file-interface-viewer/custom-inbound-file-viewer": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-custom-inbound-file-viewer.mjs"
     },
