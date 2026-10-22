@@ -39,9 +39,7 @@ export const authenticatedAccountGuard: CanActivateFn = () => {
   const router = inject(Router);
   const redirectToSsoLogin = inject(REDIRECT_TO_SSO);
 
-  const redirectToUnauthenticated = () => {
-    opalUserService.clearUserStateCache();
-
+  const redirectToLogin = () => {
     if (globalStore.ssoEnabled()) {
       redirectToSsoLogin();
       return false;
@@ -50,9 +48,23 @@ export const authenticatedAccountGuard: CanActivateFn = () => {
     return router.createUrlTree([PAGES_ROUTING_PATHS.children.signIn]);
   };
 
+  const redirectToUnauthenticated = () => {
+    opalUserService.clearUserStateCache();
+    return redirectToLogin();
+  };
+
   const redirectToAccountCreated = () => router.createUrlTree([`/${PAGES_ROUTING_PATHS.children.accountCreated}`]);
   const redirectToInternalServerError = () =>
     router.createUrlTree([`/${PAGES_ROUTING_PATHS.children.internalServerError}`]);
+
+  const redirectToSessionMismatch = () => {
+    opalUserService.clearUserStateCache();
+
+    return authService.logout().pipe(
+      map(() => redirectToLogin()),
+      catchError(() => of(redirectToInternalServerError())),
+    );
+  };
 
   return authService.checkAuthenticated().pipe(
     switchMap((authenticated) => {
@@ -70,7 +82,7 @@ export const authenticatedAccountGuard: CanActivateFn = () => {
         }),
         catchError((error: unknown) => {
           if (hasHttpStatus(error, 401)) {
-            return of(redirectToUnauthenticated());
+            return redirectToSessionMismatch();
           }
 
           return of(redirectToInternalServerError());

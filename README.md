@@ -108,6 +108,10 @@ The combined guard redirects an unauthenticated user (an authentication result o
 SSO login or sign-in page. It allows active accounts, redirects a non-active account state to `/account-created`, and
 redirects unexpected authentication or user-state failures to `/internal-server-error`.
 
+If the user-state request returns `401` after authentication succeeds, the guard ends the mismatched session before
+redirecting to the configured SSO login or sign-in page. This prevents the sign-in guard from redirecting the user back
+to a protected route with the stale session.
+
 ### Nested-route integration
 
 `canActivateChild` can be evaluated more than once for a nested navigation. When integrating this guard, measure the

@@ -1,8 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router, type Routes } from '@angular/router';
+import { of, throwError } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { of } from 'rxjs';
 import { REDIRECT_TO_SSO } from '@hmcts/opal-frontend-common/guards/auth';
 import { signedInGuard } from '@hmcts/opal-frontend-common/guards/signed-in';
 import { AuthService } from '@hmcts/opal-frontend-common/services/auth-service';
@@ -33,17 +34,19 @@ describe('authenticated account routing', () => {
   let router: Router;
   let checkAuthenticatedMock: ReturnType<typeof vi.fn>;
   let getLoggedInUserStateMock: ReturnType<typeof vi.fn>;
+  let logoutMock: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     checkAuthenticatedMock = vi.fn().mockReturnValue(of(false));
     getLoggedInUserStateMock = vi.fn();
+    logoutMock = vi.fn().mockReturnValue(of(undefined));
 
     TestBed.configureTestingModule({
       providers: [
         provideRouter(routes),
         {
           provide: AuthService,
-          useValue: { checkAuthenticated: checkAuthenticatedMock },
+          useValue: { checkAuthenticated: checkAuthenticatedMock, logout: logoutMock },
         },
         {
           provide: OpalUserService,
@@ -66,5 +69,17 @@ describe('authenticated account routing', () => {
     expect(router.url).toBe('/sign-in');
     expect(checkAuthenticatedMock).toHaveBeenCalledTimes(2);
     expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
+  });
+
+  it('ends a mismatched session before redirecting to sign-in', async () => {
+    checkAuthenticatedMock.mockReturnValueOnce(of(true)).mockReturnValueOnce(of(false));
+    getLoggedInUserStateMock.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 401 })));
+
+    await expect(router.navigateByUrl('/access-denied')).resolves.toBe(true);
+
+    expect(router.url).toBe('/sign-in');
+    expect(logoutMock).toHaveBeenCalledTimes(1);
+    expect(checkAuthenticatedMock).toHaveBeenCalledTimes(2);
+    expect(getLoggedInUserStateMock).toHaveBeenCalledTimes(1);
   });
 });

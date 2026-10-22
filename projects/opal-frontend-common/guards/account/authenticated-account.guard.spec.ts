@@ -16,6 +16,7 @@ describe('authenticatedAccountGuard', () => {
   let checkAuthenticatedMock: ReturnType<typeof vi.fn>;
   let getLoggedInUserStateMock: ReturnType<typeof vi.fn>;
   let clearUserStateCacheMock: ReturnType<typeof vi.fn>;
+  let logoutMock: ReturnType<typeof vi.fn>;
   let createUrlTreeMock: ReturnType<typeof vi.fn>;
   let redirectToSsoLoginMock: ReturnType<typeof vi.fn>;
   let globalStore: GlobalStoreType;
@@ -37,6 +38,7 @@ describe('authenticatedAccountGuard', () => {
     checkAuthenticatedMock = vi.fn();
     getLoggedInUserStateMock = vi.fn();
     clearUserStateCacheMock = vi.fn();
+    logoutMock = vi.fn().mockReturnValue(of(undefined));
     createUrlTreeMock = vi.fn(() => new UrlTree());
     redirectToSsoLoginMock = vi.fn();
 
@@ -44,7 +46,7 @@ describe('authenticatedAccountGuard', () => {
       providers: [
         {
           provide: AuthService,
-          useValue: { checkAuthenticated: checkAuthenticatedMock },
+          useValue: { checkAuthenticated: checkAuthenticatedMock, logout: logoutMock },
         },
         {
           provide: OpalUserService,
@@ -154,14 +156,27 @@ describe('authenticatedAccountGuard', () => {
     expect(createUrlTreeMock).toHaveBeenCalledWith([`/${PAGES_ROUTING_PATHS.children.accountCreated}`]);
   });
 
-  it('reauthenticates when the session expires between the authentication and user-state checks', async () => {
+  it('ends the session when user state rejects an authenticated session', async () => {
     checkAuthenticatedMock.mockReturnValue(of(true));
     getLoggedInUserStateMock.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 401 })));
 
     await expect(runGuard()).resolves.toBeInstanceOf(UrlTree);
 
     expect(clearUserStateCacheMock).toHaveBeenCalledTimes(1);
+    expect(logoutMock).toHaveBeenCalledTimes(1);
     expect(createUrlTreeMock).toHaveBeenCalledWith([PAGES_ROUTING_PATHS.children.signIn]);
+  });
+
+  it('redirects to the internal-server-error page when ending a mismatched session fails', async () => {
+    checkAuthenticatedMock.mockReturnValue(of(true));
+    getLoggedInUserStateMock.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 401 })));
+    logoutMock.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 503 })));
+
+    await runGuard();
+
+    expect(clearUserStateCacheMock).toHaveBeenCalledTimes(1);
+    expect(logoutMock).toHaveBeenCalledTimes(1);
+    expect(createUrlTreeMock).toHaveBeenCalledWith([`/${PAGES_ROUTING_PATHS.children.internalServerError}`]);
   });
 
   it('redirects a user-state service failure to the internal-server-error page', async () => {
