@@ -63,4 +63,31 @@ describe('AuthService', () => {
 
     req.flush('401 error', { status: 401, statusText: 'Not Authenticated' });
   });
+
+  it('should end the session and clear the authenticated state on logout', () => {
+    globalStore.setAuthenticated(true);
+
+    service.logout().subscribe(() => {
+      expect(globalStore.authenticated()).toEqual(false);
+    });
+
+    const req = httpMock.expectOne(`${SSO_ENDPOINTS.logout}`);
+    expect(req.request.method).toBe('GET');
+    expect(req.request.responseType).toBe('text');
+
+    req.flush('');
+  });
+
+  it('should clear the authenticated state when logout fails', () => {
+    globalStore.setAuthenticated(true);
+
+    service.logout().subscribe({
+      error: () => {
+        expect(globalStore.authenticated()).toEqual(false);
+      },
+    });
+
+    const req = httpMock.expectOne(`${SSO_ENDPOINTS.logout}`);
+    req.flush('Service unavailable', { status: 503, statusText: 'Service Unavailable' });
+  });
 });

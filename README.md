@@ -13,6 +13,7 @@ This is an [Angular Library](https://angular.dev/tools/libraries).
 - [Development server](#development-server)
 - [Build](#build)
 - [Using This Library](#using-this-library-in-an-angular-application-eg-opal-frontend)
+- [Authenticated account guard](#authenticated-account-guard)
 - [Switching Between Local and Published Versions](#switching-between-local-and-published-versions)
 - [Running unit tests](#running-unit-tests)
 - [Angular code scaffolding](#angular-code-scaffolding)
@@ -77,6 +78,49 @@ Import global styles through the exported style entrypoint:
 ```
 
 Do not deep-import from `dist/`, `fesm2022/`, `types/`, or internal source folders.
+
+## Authenticated account guard
+
+Use `authenticatedAccountGuard` for a protected route that needs both an authenticated session and the logged-in
+user's account state. It checks authentication before requesting user state, avoiding an unnecessary
+`/api/user-state` request for unauthenticated users.
+
+```ts
+import { type Routes } from '@angular/router';
+import { authenticatedAccountGuard } from '@hmcts/opal-frontend-common/guards/account';
+
+export const routes: Routes = [
+  {
+    path: 'fines',
+    canActivateChild: [authenticatedAccountGuard],
+    children: [
+      // Protected child routes.
+    ],
+  },
+];
+```
+
+Do not use `authGuard` and `accountGuard` together in the same route guard array where the account check depends on
+authentication. Angular can subscribe to asynchronous guards in the array concurrently, so that arrangement does not
+guarantee the account request waits for authentication.
+
+The combined guard redirects an unauthenticated user (an authentication result of `false` or a `401`) to the configured
+SSO login or sign-in page. It allows active accounts, redirects a non-active account state to `/account-created`, and
+redirects unexpected authentication or user-state failures to `/internal-server-error`.
+
+If the user-state request returns `401` after authentication succeeds, the guard ends the mismatched session before
+redirecting to the configured SSO login or sign-in page. In an SSO environment it uses a top-level browser navigation
+to `/sso/logout`, allowing the redirect to Azure to complete. This prevents the sign-in guard from redirecting the user
+back to a protected route with the stale session.
+
+### Nested-route integration
+
+`canActivateChild` can be evaluated more than once for a nested navigation. When integrating this guard, measure the
+authentication request count for a direct nested deep link and for child-to-child navigation; do not assume one
+authentication request per navigation. Also verify that an unauthenticated deep link makes no user-state request.
+
+For source-level integration and testing guidance, see the
+[authenticated account guard guide](https://github.com/hmcts/opal-frontend-common-ui-lib/blob/main/projects/opal-frontend-common/guards/account/README.md).
 
 ## Switching Between Local and Published Versions
 
