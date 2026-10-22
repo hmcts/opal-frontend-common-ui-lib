@@ -65,6 +65,7 @@ export class CustomFileInterfaceViewerFiltersComponent extends AbstractFormBaseC
    */
   @Input({ required: true }) public set businessUnits(value: IAlphagovAccessibleAutocompleteItem[]) {
     this.businessUnitOptions.set(value);
+    this.clearUnavailableSelection(this.filtersForm.controls.businessUnit, value);
   }
   /**
    * Updates the available source choices used by the filter.
@@ -72,6 +73,7 @@ export class CustomFileInterfaceViewerFiltersComponent extends AbstractFormBaseC
    */
   @Input({ required: true }) public set source(value: IAlphagovAccessibleAutocompleteItem[]) {
     this.sourceOptions.set(value);
+    this.clearUnavailableSelection(this.filtersForm.controls.source, value);
   }
   /**
    * Updates the available file-type choices used by the filter.
@@ -79,6 +81,7 @@ export class CustomFileInterfaceViewerFiltersComponent extends AbstractFormBaseC
    */
   @Input({ required: true }) public set sourceList(value: IAlphagovAccessibleAutocompleteItem[]) {
     this.typeOptions.set(value);
+    this.clearUnavailableSelection(this.filtersForm.controls.fileType, value);
   }
 
   public readonly businessUnitFilterOptions = computed(() => [
@@ -109,6 +112,21 @@ export class CustomFileInterfaceViewerFiltersComponent extends AbstractFormBaseC
   });
 
   public override form: CustomFileInterfaceViewerFilterForm = this.filtersForm;
+
+  /**
+   * Clears removed choices without changing valid selections or the control's interaction state.
+   * @param control - The selection associated with the updated options.
+   * @param options - Available choices, excluding the always-valid All option.
+   */
+  private clearUnavailableSelection(
+    control: FormControl<string | null>,
+    options: IAlphagovAccessibleAutocompleteItem[],
+  ): void {
+    const selectedValue = control.value;
+    if (selectedValue !== null && selectedValue !== '' && !options.some((option) => option.value === selectedValue)) {
+      control.setValue(null);
+    }
+  }
 
   /**
    * Moves focus to the filter error summary after validation messages are rendered.

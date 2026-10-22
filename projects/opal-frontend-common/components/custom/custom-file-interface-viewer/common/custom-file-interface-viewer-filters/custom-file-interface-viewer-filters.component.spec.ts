@@ -415,6 +415,100 @@ describe('CustomFileInterfaceViewerFiltersComponent', () => {
     },
   );
 
+  it.each(
+    (
+      [
+        {
+          inputName: 'businessUnits',
+          controlName: 'businessUnit',
+          inputId: 'custom-file-interface-viewer-business-unit-autocomplete',
+        },
+        {
+          inputName: 'sourceList',
+          controlName: 'fileType',
+          inputId: 'custom-file-interface-viewer-type-autocomplete',
+        },
+        {
+          inputName: 'source',
+          controlName: 'source',
+          inputId: 'custom-file-interface-viewer-source-autocomplete',
+        },
+      ] as const
+    ).flatMap((filter) => [
+      {
+        ...filter,
+        optionState: 'replaced',
+        replacement: [{ value: 'REPLACEMENT', name: 'Replacement option' }],
+        wasEdited: true,
+      },
+      { ...filter, optionState: 'emptied', replacement: [], wasEdited: false },
+    ]),
+  )(
+    'clears a removed $controlName when its options are $optionState and submits the remaining filters',
+    async ({ inputName, controlName, inputId, replacement, wasEdited }) => {
+      component.filtersForm.patchValue({ businessUnit: '77', fileType: 'SOURCE', source: 'ALLPAY' });
+      const control = component.filtersForm.controls[controlName];
+      const expectedFormData = { ...component.filtersForm.getRawValue(), [controlName]: null };
+      if (wasEdited) {
+        control.markAsDirty();
+        control.markAsTouched();
+      }
+      const submit = vi.spyOn(component['formSubmit'], 'emit');
+      fixture.detectChanges();
+      await fixture.whenStable();
+      await vi.dynamicImportSettled();
+      expect((fixture.nativeElement.querySelector(`#${inputId}`) as HTMLInputElement).value).not.toBe('');
+
+      fixture.componentRef.setInput(inputName, replacement);
+      fixture.detectChanges();
+      await fixture.whenStable();
+      await vi.dynamicImportSettled();
+
+      expect(control.value).toBeNull();
+      expect(control.dirty).toBe(wasEdited);
+      expect(control.touched).toBe(wasEdited);
+      expect((fixture.nativeElement.querySelector(`#${inputId}`) as HTMLInputElement).value).toBe('');
+      expect(fixture.nativeElement.querySelectorAll('.autocomplete__input')).toHaveLength(3);
+      expect(component.filtersForm.getRawValue()).toEqual(expectedFormData);
+      expect(submit).not.toHaveBeenCalled();
+
+      (fixture.nativeElement.querySelector('#refresh-reports-button') as HTMLButtonElement).click();
+
+      expect(submit).toHaveBeenCalledExactlyOnceWith({ formData: expectedFormData, nestedFlow: false });
+    },
+  );
+
+  it.each([null, ''] as const)(
+    'preserves an empty selection of %s when all supplied options disappear',
+    async (value) => {
+      component.filtersForm.patchValue({ businessUnit: value, fileType: value, source: value });
+      fixture.detectChanges();
+      await fixture.whenStable();
+      await vi.dynamicImportSettled();
+      const valueChanged = vi.fn();
+      const subscription = component.filtersForm.valueChanges.subscribe(valueChanged);
+
+      fixture.componentRef.setInput('businessUnits', []);
+      fixture.componentRef.setInput('sourceList', []);
+      fixture.componentRef.setInput('source', []);
+      fixture.detectChanges();
+      await fixture.whenStable();
+      await vi.dynamicImportSettled();
+
+      expect(component.filtersForm.value).toMatchObject({ businessUnit: value, fileType: value, source: value });
+      expect(component.filtersForm.pristine).toBe(true);
+      expect(component.filtersForm.untouched).toBe(true);
+      expect(valueChanged).not.toHaveBeenCalled();
+      const inputs = Array.from(
+        fixture.nativeElement.querySelectorAll('.autocomplete__input') as NodeListOf<HTMLInputElement>,
+      );
+      expect(inputs.map((input) => input.value)).toEqual(
+        value === null ? ['', '', ''] : ['All business units', 'All types', 'All sources'],
+      );
+      subscription.unsubscribe();
+    },
+  );
+
   it('shows only the business-unit dropdown for outbound files', () => {
     fixture.componentRef.setInput('isInbound', false);
     fixture.detectChanges();
