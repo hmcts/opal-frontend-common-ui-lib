@@ -1,8 +1,8 @@
 # Custom Inbound File Viewer Component
 
 This standalone Angular component renders the Inbound interface files heading, common filters, visible section
-separator, sortable results table, empty state and file download actions. It accepts display-ready data from a frontend
-wrapper and delegates saving to `FileService`.
+separator, sortable results table, empty state and caller-supplied row actions. It accepts display-ready data and an
+optional action template from the consuming application.
 
 ## Table of Contents
 
@@ -11,8 +11,8 @@ wrapper and delegates saving to `FileService`.
 - [Inputs](#inputs)
 - [Outputs](#outputs)
 - [Table Data](#table-data)
-- [Frontend Wrapper Example](#frontend-wrapper-example)
-- [Methods and Download Behaviour](#methods-and-download-behaviour)
+- [Action Template Contract](#action-template-contract)
+- [Migration](#migration)
 - [Accessibility](#accessibility)
 - [Testing](#testing)
 - [Contributing](#contributing)
@@ -26,8 +26,8 @@ import {
 } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer';
 ```
 
-Add `CustomInboundFileViewerComponent` to the consuming standalone component's `imports` array. The application must
-already provide `HttpClient`, its normal interceptors and the common library styles.
+Add `CustomInboundFileViewerComponent` to the consuming standalone component's `imports` array and include the common
+library styles. The consuming application's API and download handlers use its existing HTTP providers and interceptors.
 
 ## Usage
 
@@ -37,10 +37,13 @@ already provide `HttpClient`, its normal interceptors and the common library sty
   [source]="source"
   [sourceList]="sourceList"
   [tableData]="tableData()"
-  [refreshFailed]="refreshFailed()"
+  [actionTemplate]="fileAction"
   (formSubmit)="onFormSubmit($event)"
 ></opal-lib-custom-inbound-file-viewer>
 ```
+
+The `fileAction` template belongs to the consuming application; see the [action contract](#action-template-contract).
+Omit `actionTemplate` to leave Action cells empty.
 
 The [viewer overview](../readme.md) explains frontend routes, reference data, permissions, request scope and mappings.
 The common [filters](../common/custom-file-interface-viewer-filters/readme.md) and
@@ -48,18 +51,17 @@ The common [filters](../common/custom-file-interface-viewer-filters/readme.md) a
 
 ## Inputs
 
-| Input           | Type                                                               | Required | Default | Description                                                                           |
-| --------------- | ------------------------------------------------------------------ | -------- | ------- | ------------------------------------------------------------------------------------- |
-| `businessUnits` | `IAlphagovAccessibleAutocompleteItem[]`                            | Yes      | `[]`    | Permitted filter choices: business-unit names as `name`, string API codes as `value`. |
-| `source`        | `IAlphagovAccessibleAutocompleteItem[]`                            | Yes      | `[]`    | Source choices, for example `{ name: 'Allpay', value: 'ALLPAY' }`.                    |
-| `sourceList`    | `IAlphagovAccessibleAutocompleteItem[]`                            | Yes      | `[]`    | File-type choices, for example RAW/SOURCE and TRANSFORMED/TRANSFORMED_JSON.           |
-| `tableData`     | `ICustomFileInterfaceViewerInboundTableWrapperTableData[] \| null` | No       | `null`  | Prepared rows. `null` leaves results unset; `[]` shows the completed empty state.     |
-| `refreshFailed` | `boolean` | No | `false` | Enables Refresh after a failed list request, including when the filters are pristine. |
+| Input            | Type                                                                                      | Required | Default | Description                                                                           |
+| ---------------- | ----------------------------------------------------------------------------------------- | -------- | ------- | ------------------------------------------------------------------------------------- |
+| `businessUnits`  | `IAlphagovAccessibleAutocompleteItem[]`                                                   | Yes      | `[]`    | Permitted filter choices: business-unit names as `name`, string API codes as `value`. |
+| `source`         | `IAlphagovAccessibleAutocompleteItem[]`                                                   | Yes      | `[]`    | Source choices, for example `{ name: 'Allpay', value: 'ALLPAY' }`.                    |
+| `sourceList`     | `IAlphagovAccessibleAutocompleteItem[]`                                                   | Yes      | `[]`    | File-type choices, for example RAW/SOURCE and TRANSFORMED/TRANSFORMED_JSON.           |
+| `tableData`      | `ICustomFileInterfaceViewerInboundTableWrapperTableData[] \| null`                        | No       | `null`  | Prepared rows. `null` leaves results unset; `[]` shows the completed empty state.     |
+| `actionTemplate` | `TemplateRef<ICustomFileInterfaceViewerInboundTableWrapperActionTemplateContext> \| null` | No       | `null`  | Passed unchanged to the table for each Action cell. A null value leaves cells empty.  |
 
-A required input must still be bound when its value is an empty array. The component has no `domain`, `isInbound`,
-raw API-response, custom download-URL or MIME-type input. Its internal filter always uses inbound mode; its built-in
-download action targets the File Handling Service. Use the standalone FileService directly when a different download
-endpoint or response format is needed.
+A required input must still be bound when its value is an empty array. The internal filter always uses inbound mode.
+The application supplies any download URLs and behaviour through `actionTemplate`; the viewer has no built-in download
+action or status-eligibility rule.
 
 ## Outputs
 
@@ -71,6 +73,9 @@ The frontend handles this event, builds API parameters, requests data and maps t
 filter the input rows itself or issue list API calls. Sorting and pagination operate on the rows already supplied.
 
 No initial `formSubmit` event is emitted. The frontend must start the initial request when the page is entered.
+Refresh is always enabled, including for pristine filters, and validates on submission. Invalid forms show validation
+errors without emitting `formSubmit`; valid forms can resubmit unchanged criteria. Handle request errors in the
+application and retain the last successful rows as appropriate.
 See the [filter form contract](../common/custom-file-interface-viewer-filters/readme.md) for fields and defaults.
 
 ## Table Data
@@ -79,14 +84,14 @@ Import the row interface from the inbound viewer entrypoint shown above. Each ro
 
 | Property          | Type             | Description                                                                                                         |
 | ----------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `'File ID'`       | `number \| null` | Backend identifier used in download URLs and row tracking. Use unique IDs; a null ID suppresses the download link.  |
+| `'File ID'`       | `number \| null` | Identifier available to the consuming action template; the viewer applies no eligibility check.                     |
 | `'Date and time'` | `number \| null` | Epoch milliseconds for chronological sorting.                                                                       |
 | `dateTimeDisplay` | `string \| null` | Already formatted local date/time text shown in the cell.                                                           |
-| `Title`           | `string \| null` | Original filename and download fallback filename.                                                                   |
+| `Title`           | `string \| null` | Display title, available to the consuming action template.                                                          |
 | `Type`            | `string \| null` | Display label such as RAW or TRANSFORMED.                                                                           |
 | `'Business unit'` | `string \| null` | Resolved business-unit name or joined names.                                                                        |
 | `Source`          | `string \| null` | Source display label.                                                                                               |
-| `Status`          | `string \| null` | Display label used for the status cell and download eligibility.                                                    |
+| `Status`          | `string \| null` | Display label for the status cell; any action eligibility belongs to the consumer.                                  |
 | `Actions`         | `string \| null` | Row-contract field. The action cell is rendered from an action template, not this value; Finance sets it to `null`. |
 
 For example:
@@ -109,170 +114,82 @@ The display timestamp above represents UTC `2026-10-20T12:00:00Z` in Europe/Lond
 using the user's local zone; it must not hard-code this example's offset.
 
 The viewer supplies the table's descending date/time sort state. Rows are paginated in groups of 25. Supplying a new
-row array reapplies sorting and resets the current page; an individual download leaves the array and current page intact.
+row array reapplies sorting and resets the current page. Row actions do not change the array unless the consumer does so.
 
-## Frontend Wrapper Example
+## Action Template Contract
 
-The following is the existing Finance wrapper pattern. It belongs in `opal-frontend`, under
-`src/app/flows/fines/fines-finance/fines-finance-inbound-files`. The relative payload-service, interface and constant imports
-are frontend-owned files, not exports from the common library.
-
-The route supplies `snapshot.data.businessUnits` using `fetchBusinessUnitsResolver`. The payload service derives permitted
-filter choices from the current user and keeps a separate lookup of all resolved business-unit names for displayed rows.
+The exported context type is:
 
 ```typescript
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Subscription } from 'rxjs';
-import { IAbstractFormBaseForm } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-base/interfaces';
-import { IAlphagovAccessibleAutocompleteItem } from '@hmcts/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete/interfaces';
-import { ActivatedRoute } from '@angular/router';
-import { IOpalFinesBusinessUnitRefData } from '../../services/opal-fines-service/interfaces/opal-fines-business-unit-ref-data.interface';
-import { CustomInboundFileViewerComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer';
-import { FinesFinancePayloadService } from '../services/fines-finance-payload.service';
-import { IFinesFinanceInboundFilesForm } from '../services/interfaces/fines-finance-inbound-files-form.interface';
-import { OpalFileHandlingService } from '@hmcts/opal-frontend-common/services/opal-file-handling-service';
-import { IOpalFileHandlingInterfaceFilesRefData } from '@hmcts/opal-frontend-common/services/opal-file-handling-service/interfaces';
-import { FINES_FINANCE_INBOUND_FILES_SOURCE_OPTIONS } from '../constants/fines-finance-inbound-files-source-options.constant';
-import { FINES_FINANCE_INBOUND_FILES_TYPE_OPTIONS } from '../constants/fines-finance-inbound-files-type-options.constant';
-import { FINES_FINANCE_INBOUND_FILES_INITIAL_FILTER_STATE } from '../constants/fines-finance-inbound-files-initial-filter-state.constant';
-
-@Component({
-  selector: 'app-fines-ext-finance-inbound-files',
-  imports: [CustomInboundFileViewerComponent],
-  templateUrl: './fines-finance-inbound-files.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class FinesFinanceInboundFilesComponent implements OnInit {
-  private readonly activatedRoute = inject(ActivatedRoute);
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly payloadService = inject(FinesFinancePayloadService);
-  private readonly opalFileHandlingService = inject(OpalFileHandlingService);
-  private readonly businessUnitRefData =
-    (this.activatedRoute.snapshot.data['businessUnits'] as IOpalFinesBusinessUnitRefData | null)?.refData ?? [];
-  private readonly businessUnitDisplayOptions = this.payloadService.mapBusinessUnitsToOptions(this.businessUnitRefData);
-  private interfaceFilesRequest?: Subscription;
-  private readonly interfaceFilesRefData = signal<IOpalFileHandlingInterfaceFilesRefData | null>(null);
-
-  public readonly source: IAlphagovAccessibleAutocompleteItem[] = FINES_FINANCE_INBOUND_FILES_SOURCE_OPTIONS;
-  public readonly sourceList: IAlphagovAccessibleAutocompleteItem[] = FINES_FINANCE_INBOUND_FILES_TYPE_OPTIONS;
-  public readonly businessUnits: IAlphagovAccessibleAutocompleteItem[] =
-    this.payloadService.getPermittedBusinessUnitOptions(this.businessUnitRefData);
-  public readonly refreshFailed = signal(false);
-  public readonly tableData = computed(() => {
-    const response = this.interfaceFilesRefData();
-    return response === null
-      ? null
-      : this.payloadService.mapInboundFilesToTableData(response.interface_files, this.businessUnitDisplayOptions);
-  });
-
-  /**
-   * Requests files for the submitted filters, cancelling any previous pending search.
-   *
-   * @param form - Submitted inbound-file filter data and form metadata.
-   */
-  public onFormSubmit(form: IAbstractFormBaseForm<unknown>): void {
-    const searchParams = this.payloadService.buildInboundFilesSearchParams(
-      form.formData as IFinesFinanceInboundFilesForm,
-    );
-
-    this.interfaceFilesRequest?.unsubscribe();
-    this.refreshFailed.set(false);
-    this.interfaceFilesRequest = this.opalFileHandlingService
-      .getInterfaceFilesRefData(searchParams)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response) => this.interfaceFilesRefData.set(response),
-        error: () => this.refreshFailed.set(true),
-      });
-  }
-
-  /**
-   * Loads inbound files on page entry using Last 7 days and empty optional filters.
-   */
-  public ngOnInit(): void {
-    this.onFormSubmit({
-      formData: { ...FINES_FINANCE_INBOUND_FILES_INITIAL_FILTER_STATE },
-      nestedFlow: false,
-    });
-  }
+interface ICustomFileInterfaceViewerInboundTableWrapperActionTemplateContext {
+  $implicit: ICustomFileInterfaceViewerInboundTableWrapperTableData;
 }
 ```
 
-The corresponding frontend template is:
+Import this type from the same inbound viewer entrypoint when declaring a typed `TemplateRef`. In an Angular template,
+`let-row` receives the full current row. The viewer passes `actionTemplate` unchanged to its table and supplies no default
+contents for the Action cell. The row's `Actions` string is not rendered as an action.
+
+For example, define this template in the consuming component and bind `[actionTemplate]="fileAction"` as shown above:
 
 ```html
-<opal-lib-custom-inbound-file-viewer
-  [sourceList]="sourceList"
-  [source]="source"
-  [businessUnits]="businessUnits"
-  [tableData]="tableData()"
-  [refreshFailed]="refreshFailed()"
-  (formSubmit)="onFormSubmit($event)"
-></opal-lib-custom-inbound-file-viewer>
+<ng-template #fileAction let-row>
+  @if (canDownload(row)) {
+  <a
+    class="govuk-link"
+    [id]="'interface-file-download-' + row['File ID']"
+    [href]="getDownloadHref(row)"
+    [attr.aria-label]="'Download ' + (row.Title || 'interface file ' + row['File ID'])"
+    (click)="onDownloadFile(row, $event)"
+  >
+    Download
+  </a>
+  }
+</ng-template>
 ```
 
-The payload service and constants used above are described in the [viewer overview](../readme.md#frontend-integration).
-The initial call uses a copy of the initial filter state, leaving the filter component itself pristine.
-The frontend clears `refreshFailed` before each request and sets it to `true` when that list request fails. The viewer
-passes the flag to the filters so users can retry the same criteria without editing. A failed request leaves the last
-successful rows intact; only a successful response replaces them.
+`canDownload`, `getDownloadHref` and `onDownloadFile` are application-owned methods that the consuming component must
+provide; they are not viewer methods. The application chooses eligible IDs/statuses and endpoints, handles the click and
+request, and supplies any filename, headers and response options. It can use the standalone
+[FileService](../../../../services/file-service/readme.md) with its own save anchor. Backend availability and permissions
+must still be enforced by the backend.
 
-## Methods and Download Behaviour
+The consumer also owns request cancellation, error state and rendering, and focus after an error or selection from an
+error summary. The viewer does not inject a download service, create a save anchor, handle action errors or issue API
+requests. Keep initial fetching, filter-to-request mapping and prepared row construction in the consuming wrapper and
+payload service, as described in the [viewer overview](../readme.md#frontend-integration).
 
-| Method or property              | Description                                                                                                                                               |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `canDownload(row)`              | True only for a row with a non-null ID and a display status of exactly `Ready` or `File failed`.                                                          |
-| `getDownloadHref(fileId)`       | Builds `/opal-file-handling-service/interface-files/{id}/content` using the shared file-ID path helper.                                                   |
-| `onDownloadFile(fileId, event)` | Rechecks the current rows, clears the previous local error, and asks FileService to download using the viewer-owned save anchor and original click event. |
-| `onDownloadErrorClick(fieldId)` | Focuses the failed download link, or the results container if that link is no longer present.                                                             |
-| `downloadErrors()`              | Current error-summary entries; initially empty.                                                                                                           |
+## Migration
 
-The viewer requests a full Blob response with `Accept: application/octet-stream`. It supplies the row Title as the
-fallback filename, or `interface-file-{id}` if Title is empty. FileService resolves any response filename/MIME preferences,
-saves the original bytes and cleans up the object URL. See the [FileService README](../../../../services/file-service/readme.md)
-for the exact precedence and supported transport formats.
+Before upgrading a consuming application, remove `[refreshFailed]` bindings from the inbound viewer and common filters.
+Refresh is always enabled and validates on submission, so no request-failure input is needed to retry unchanged filters.
 
-The viewer uses the normal application HTTP interceptors and does not set an error-handling bypass. Errors forwarded to
-its subscription produce `The file could not be downloaded. Try again.` in a GOV.UK error summary. The global interceptor's
-existing banner/navigation/error-suppression policy still applies. The current frontend integration tests verify retained
-rows for binary download failures with HTTP 404, 422 and 500.
-
-The backend checks file existence, processing status and content availability. A visible link for `File failed`
-does not guarantee the API will return content: the current content endpoint accepts only `SUCCESS` files.
-Rows absent from the current table or no longer eligible for the action do not start requests; server-side availability
-changes can still cause an API failure. Requests in flight are unsubscribed when the viewer is destroyed.
-See the [service integration notes](../../../../services/opal-file-handling-service/readme.md#application-integration)
-for the current backend permission limitation.
-
-The component does not emit a download event to its parent, create an audit record, transform file contents or render
-a preview. To customize a backend URL, filename, MIME label, request headers or response transport, use the
-standalone FileService in a consumer-owned component or action template.
+Supply `[actionTemplate]` to retain row actions. Move download eligibility, URL construction, requests, save-anchor setup,
+errors and focus handling into the consuming application. The former built-in Download action and download methods/error
+state have been removed; omitting the template leaves Action cells empty. Update the consumer's tests with this migration.
 
 ## Accessibility
 
 - The page has an Inbound interface files heading and the standard visible separator after filters.
-- Visible download links contain text and use a row-specific `aria-label` based on Title or File ID.
-- The viewer owns a separate hidden save anchor with text content. FileService temporarily configures that anchor;
-  consumers of the inbound page do not need to create or pass one.
-- Download error summaries receive focus after rendering. Selecting their link returns focus to the affected row action
-  or the results container.
 - The common filter and table components retain their shared form labels, validation and sort/pagination behaviour.
+- Keep supplied action links keyboard accessible and give repeated actions a row-specific accessible name.
+- The consumer owns download error summaries and their focus management. The results container has
+  `id="inbound-interface-files-results"` and `tabindex="-1"` if the consumer needs a fallback focus target.
 
 ## Testing
 
 From the common library repository root:
 
 ```bash
-yarn test --include='**/custom-inbound-file-viewer.component.spec.ts' --include='**/custom-inbound-file-viewer-download.utils.spec.ts'
+yarn test --include='**/custom-inbound-file-viewer.component.spec.ts'
 ```
 
-The specs cover input/output wiring, unset/empty results, prepared row rendering, eligible actions, filename fallback,
-download errors/focus, retained pagination and request cleanup. In `opal-frontend`, the Finance wrapper spec additionally
-covers initial fetching, filter-to-request mapping and original binary bytes through the existing interceptors.
+The specs cover input/output wiring, unset/empty results, prepared row rendering and caller-supplied action templates.
+Table sorting and pagination have colocated wrapper specs. Consumer integration tests should cover initial fetching,
+filter-to-request mapping and any application-owned eligibility, downloads, errors and focus.
 
 ## Contributing
 
-Keep API criteria and display mappings in the frontend payload service. Keep the viewer's input contract limited to
-filter choices and prepared rows. Reuse FileService for file handling and the existing common filter/table components
-for form and results behaviour. Update this README and the relevant specs when a public input or download contract changes.
+Keep API criteria, display mappings and action behaviour in the consuming application. Reuse FileService for file
+handling where appropriate and the existing common filter/table components for form and results behaviour. Update this
+README and the relevant specs when a public input or action-template contract changes.

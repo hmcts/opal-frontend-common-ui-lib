@@ -31,7 +31,7 @@ The component uses Angular Reactive Forms internally. The consuming application 
 ## Usage
 
 ```typescript
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import type { IAbstractFormBaseForm } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-base/interfaces';
 import type { IAlphagovAccessibleAutocompleteItem } from '@hmcts/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete/interfaces';
 import { CustomFileInterfaceViewerFiltersComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters';
@@ -45,7 +45,6 @@ import { CustomFileInterfaceViewerFiltersComponent } from '@hmcts/opal-frontend-
       [businessUnits]="businessUnits"
       [source]="sources"
       [sourceList]="fileTypes"
-      [refreshFailed]="refreshFailed()"
       (formSubmit)="onFormSubmit($event)"
     ></opal-lib-custom-file-interface-viewer-filters>
   `,
@@ -60,7 +59,6 @@ export class InterfaceFileFiltersExampleComponent {
     { name: 'RAW', value: 'SOURCE' },
     { name: 'TRANSFORMED', value: 'TRANSFORMED_JSON' },
   ];
-  public readonly refreshFailed = signal(false);
   public appliedFilters: IAbstractFormBaseForm<unknown> | null = null;
 
   /**
@@ -68,7 +66,6 @@ export class InterfaceFileFiltersExampleComponent {
    * @param form - Raw filter values and submission metadata.
    */
   public onFormSubmit(form: IAbstractFormBaseForm<unknown>): void {
-    this.refreshFailed.set(false);
     this.appliedFilters = form;
   }
 }
@@ -90,7 +87,7 @@ The consuming page owns permission-based business-unit selection, API parameters
 
 ## Inputs
 
-The four filter-configuration inputs are required, including those with implementation defaults. `refreshFailed` is optional.
+The four filter-configuration inputs are required, including those with implementation defaults.
 
 | Input           | Type                                    | Default | Description                                                                                                                               |
 | --------------- | --------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
@@ -98,7 +95,6 @@ The four filter-configuration inputs are required, including those with implemen
 | `businessUnits` | `IAlphagovAccessibleAutocompleteItem[]` | `[]`    | Permitted business-unit choices for **Filter by business unit**. Use display names and API codes; preserve leading zeros in string codes. |
 | `source`        | `IAlphagovAccessibleAutocompleteItem[]` | `[]`    | Originating-interface choices for **Filter by source**, such as Allpay.                                                                   |
 | `sourceList`    | `IAlphagovAccessibleAutocompleteItem[]` | `[]`    | File-type choices for **Filter by type**, such as RAW and TRANSFORMED. Despite its name, this input supplies types.                       |
-| `refreshFailed` | `boolean` | `false` | Enables Refresh after a failed list request, even when the form is pristine. Optional; the consuming page controls this flag. |
 
 Each option has a `name: string` and `value: string | number`. Supply string API values to match the filter form's string-valued controls. Domain restrictions belong to the consuming page's query; the filter has no `domain` input.
 
@@ -153,7 +149,7 @@ The component does not calculate a Last 7 days or Custom days timestamp range. T
 
 ### Last 7 days
 
-No additional date entry is needed. The default form is valid even though the Refresh button starts disabled while pristine.
+No additional date entry is needed. The default form is valid and can be submitted using Refresh immediately.
 
 ### Custom days
 
@@ -181,19 +177,23 @@ At least one boundary must be entered. Each supplied value must be a real calend
 
 The `from/to` entries above represent the matching field name, not a combined message. Missing-boundary and reversed-range errors are attached to Date from and included in the summary. Domain-specific minimum or switchover dates are not enforced by this component.
 
-All validation messages and priorities are defined in `CUSTOM_FILE_INTERFACE_VIEWER_FILTER_FIELD_ERRORS`, using the standard `IAbstractFormBaseFieldErrors` structure. Missing boundaries set the `required` error on `dateFrom`; reversed ranges set `dateFromAfterDateTo` on that control. Both make the form invalid and are collected by inherited `handleErrorMessages()` alongside the existing field validators. Correcting the range removes the previous cross-field error on the next submit.
+All validation messages and priorities are defined in `CUSTOM_FILE_INTERFACE_VIEWER_FILTER_FIELD_ERRORS`, using the standard `IAbstractFormBaseFieldErrors` structure.
+
+Date from priorities run from 1 to 5 in this order: required, format, real date, future date and range. Date to uses priorities 1 to 3 for format, real date and future date.
+
+Missing boundaries set the `required` error on `dateFrom`; reversed ranges set `dateFromAfterDateTo` on that control. Both make the form invalid and are collected by inherited `handleErrorMessages()` alongside the existing field validators. Correcting the range removes the previous cross-field error on the next submit.
 
 The local [filter utilities](./utils/custom-file-interface-viewer-filters.utils.ts) apply the existing required, pattern, non-zero, optional-date and future-date validators. Range ordering uses `DateService.calculateDaysBetweenDates`; there is no separate date parser or new validator entry point. The component only coordinates validation, form-base messages, focus and submission.
 
 ## Refresh behaviour
 
-Refresh is disabled only while `filtersForm.pristine` is `true` and `refreshFailed` is `false`. Editing a control enables it; setting `refreshFailed` to `true` also enables it, so a failed search can be retried with unchanged criteria. Submitting validates the active fields and any date-range relationship.
+Refresh stays enabled for the initial pristine form and after each submission. Users can refresh the latest list or retry a failed request with unchanged criteria. Submitting prevents the native form action and validates the active fields and any date-range relationship.
 
-A valid submit emits `formSubmit` and marks the form pristine immediately. The consuming page must clear `refreshFailed` before starting each list request and set it to `true` if that request fails. Keep the previous table rows on failure; replace them only after a successful response. The filter itself does not execute or observe HTTP requests.
+A valid submit emits `formSubmit` and marks the form pristine immediately. The consuming page handles each submission, including repeated criteria. Keep the previous table rows on failure; replace them only after a successful response. The filter itself does not execute or observe HTTP requests.
 
 An invalid submit preserves the edited state, shows validation messages and moves focus to the error summary after it renders.
 
-Programmatic control updates do not automatically mark Angular forms dirty. A caller changing `filtersForm` directly must manage dirty state if it expects the Refresh button to become enabled.
+Programmatic control updates do not automatically mark Angular forms dirty. Refresh remains enabled regardless of the form's dirty state.
 
 ## Methods
 

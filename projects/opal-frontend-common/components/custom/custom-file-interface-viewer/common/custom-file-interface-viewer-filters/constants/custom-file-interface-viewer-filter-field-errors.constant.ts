@@ -20,21 +20,21 @@ export const CUSTOM_FILE_INTERFACE_VIEWER_FILTER_FIELD_ERRORS: IAbstractFormBase
       message: 'You must enter at least 1 of date from or date to',
       priority: 1,
     },
-    dateFromAfterDateTo: {
-      message: 'The Date from cannot be after the Date to',
-      priority: 4,
-    },
     invalidDateFormat: {
       message: 'Date from must be in the format DD/MM/YYYY',
-      priority: 1,
+      priority: 2,
     },
     invalidDate: {
       message: 'Date from must be a real date',
-      priority: 2,
+      priority: 3,
     },
     invalidFutureDate: {
       message: 'Date from must be in the past',
-      priority: 3,
+      priority: 4,
+    },
+    dateFromAfterDateTo: {
+      message: 'The Date from cannot be after the Date to',
+      priority: 5,
     },
   },
   dateTo: {

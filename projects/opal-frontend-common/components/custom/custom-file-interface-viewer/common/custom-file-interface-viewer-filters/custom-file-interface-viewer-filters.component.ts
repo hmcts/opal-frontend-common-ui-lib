@@ -59,7 +59,6 @@ export class CustomFileInterfaceViewerFiltersComponent extends AbstractFormBaseC
   );
 
   @Input({ required: true }) public isInbound: boolean = false;
-  @Input() public refreshFailed: boolean = false;
   /**
    * Updates the permitted business-unit choices used by the filter.
    * @param value - Business-unit names and API codes, excluding the All option.
@@ -163,7 +162,7 @@ export class CustomFileInterfaceViewerFiltersComponent extends AbstractFormBaseC
    * @param event - Native form submission event.
    */
   public override handleFormSubmit(event: SubmitEvent): void {
-    void event;
+    event.preventDefault();
     validateCustomFileInterfaceViewerDateRange(this.filtersForm.controls, this.dateService);
     this.handleErrorMessages();
     this.dateFilterErrors = getCustomFileInterfaceViewerDateFilterErrors(this.formControlErrorMessages);

@@ -64,7 +64,7 @@ describe('CustomFileInterfaceViewerFiltersComponent', () => {
     expect(inputs).toHaveLength(3);
     expect(Array.from(inputs, (input) => input.value)).toEqual(['', '', '']);
     expect(fixture.nativeElement.querySelector('input[type="radio"][value="last7Days"]').checked).toBe(true);
-    expect(fixture.nativeElement.querySelector('#refresh-reports-button').disabled).toBe(true);
+    expect(fixture.nativeElement.querySelector('#refresh-reports-button').disabled).toBe(false);
   });
 
   it('passes its existing date controls and field errors to the shared date filter', () => {
@@ -89,10 +89,14 @@ describe('CustomFileInterfaceViewerFiltersComponent', () => {
     });
   });
 
-  it('submits successfully with blank optional filters and the default date selection', () => {
+  it('refreshes pristine default criteria through the enabled Refresh button', () => {
     const submit = vi.spyOn(component['formSubmit'], 'emit');
     fixture.detectChanges();
-    fixture.nativeElement.querySelector('form').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+    const refresh = fixture.nativeElement.querySelector('#refresh-reports-button') as HTMLButtonElement;
+
+    expect(component.filtersForm.pristine).toBe(true);
+    expect(refresh.disabled).toBe(false);
+    refresh.click();
 
     expect(submit).toHaveBeenCalledExactlyOnceWith({
       formData: {
@@ -109,30 +113,49 @@ describe('CustomFileInterfaceViewerFiltersComponent', () => {
     expect(component.formErrorSummaryMessage).toEqual([]);
   });
 
-  it('enables Refresh for an edited filter and disables it after applying the selection', () => {
+  it('refreshes unchanged criteria again after applying the selection', () => {
     const submit = vi.spyOn(component['formSubmit'], 'emit');
-    fixture.detectChanges();
     component.filtersForm.controls.source.setValue('ALLPAY');
     component.filtersForm.controls.source.markAsDirty();
     fixture.detectChanges();
     const refresh = fixture.nativeElement.querySelector('#refresh-reports-button') as HTMLButtonElement;
+
+    refresh.click();
+    fixture.detectChanges();
+
+    const submission = {
+      formData: expect.objectContaining({ businessUnit: null, source: 'ALLPAY', fileType: null }),
+      nestedFlow: false,
+    };
+    expect(submit).toHaveBeenCalledExactlyOnceWith(submission);
+    expect(component.filtersForm.pristine).toBe(true);
     expect(refresh.disabled).toBe(false);
 
     refresh.click();
     fixture.detectChanges();
 
-    expect(submit).toHaveBeenCalledExactlyOnceWith({
-      formData: expect.objectContaining({ businessUnit: null, source: 'ALLPAY', fileType: null }),
-      nestedFlow: false,
-    });
-    expect(refresh.disabled).toBe(true);
+    expect(submit).toHaveBeenCalledTimes(2);
+    expect(submit).toHaveBeenLastCalledWith(submission);
+    expect(component.filtersForm.pristine).toBe(true);
+    expect(refresh.disabled).toBe(false);
+  });
+
+  it('prevents native form submission while emitting the validated filters', () => {
+    const submit = vi.spyOn(component['formSubmit'], 'emit');
+    const event = new SubmitEvent('submit', { bubbles: true, cancelable: true });
+    fixture.detectChanges();
+
+    component.handleFormSubmit(event);
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(submit).toHaveBeenCalledOnce();
   });
 
   it.each([
     { controlName: 'dateFrom', inputId: 'custom-file-interface-viewer-date-from' },
     { controlName: 'dateTo', inputId: 'custom-file-interface-viewer-date-to' },
   ] as const)(
-    'enables Refresh after changing an applied $controlName using the calendar',
+    'refreshes the date range after changing applied $controlName using the calendar',
     async ({ controlName, inputId }) => {
       const submit = vi.spyOn(component['formSubmit'], 'emit');
       fixture.detectChanges();
@@ -161,7 +184,7 @@ describe('CustomFileInterfaceViewerFiltersComponent', () => {
       });
       expect(component.filtersForm.pristine).toBe(true);
       expect(component.filtersForm.controls[controlName].pristine).toBe(true);
-      expect(refresh.disabled).toBe(true);
+      expect(refresh.disabled).toBe(false);
 
       const input = fixture.nativeElement.querySelector(`#${inputId}`) as HTMLInputElement;
       const picker = input.closest('opal-lib-moj-date-picker')!;
@@ -190,29 +213,9 @@ describe('CustomFileInterfaceViewerFiltersComponent', () => {
         nestedFlow: false,
       });
       expect(component.filtersForm.pristine).toBe(true);
-      expect(refresh.disabled).toBe(true);
+      expect(refresh.disabled).toBe(false);
     },
   );
-
-  it('enables retrying pristine criteria after failure and disables Refresh when the failure is cleared', () => {
-    fixture.componentRef.setInput('refreshFailed', true);
-    const submit = vi.spyOn(component['formSubmit'], 'emit');
-    fixture.detectChanges();
-    const refresh = fixture.nativeElement.querySelector('#refresh-reports-button') as HTMLButtonElement;
-
-    expect(component.filtersForm.pristine).toBe(true);
-    expect(refresh.disabled).toBe(false);
-    refresh.click();
-    expect(submit).toHaveBeenCalledExactlyOnceWith({
-      formData: component.filtersForm.getRawValue(),
-      nestedFlow: false,
-    });
-    expect(component.filtersForm.pristine).toBe(true);
-
-    fixture.componentRef.setInput('refreshFailed', false);
-    fixture.detectChanges();
-    expect(refresh.disabled).toBe(true);
-  });
 
   it('submits shared custom days with the selected business unit, source and type through Refresh', async () => {
     const submit = vi.spyOn(component['formSubmit'], 'emit');
@@ -262,7 +265,7 @@ describe('CustomFileInterfaceViewerFiltersComponent', () => {
       nestedFlow: false,
     });
     expect(component.formErrorSummaryMessage).toEqual([]);
-    expect(refresh.disabled).toBe(true);
+    expect(refresh.disabled).toBe(false);
   });
 
   it('keeps each autocomplete host out of the native input tab order', () => {
@@ -496,7 +499,13 @@ describe('CustomFileInterfaceViewerFiltersComponent', () => {
 
   it.each([
     { controlName: 'dateFrom', value: '2020-01-01', message: 'Date from must be in the format DD/MM/YYYY' },
+    { controlName: 'dateTo', value: '2020-01-01', message: 'Date to must be in the format DD/MM/YYYY' },
+    { controlName: 'dateFrom', value: '1/01/2999', message: 'Date from must be in the format DD/MM/YYYY' },
+    { controlName: 'dateTo', value: '1/01/2999', message: 'Date to must be in the format DD/MM/YYYY' },
+    { controlName: 'dateFrom', value: '31/02/2020', message: 'Date from must be a real date' },
     { controlName: 'dateTo', value: '31/02/2020', message: 'Date to must be a real date' },
+    { controlName: 'dateFrom', value: '31/02/2999', message: 'Date from must be a real date' },
+    { controlName: 'dateTo', value: '31/02/2999', message: 'Date to must be a real date' },
     { controlName: 'dateFrom', value: '01/01/2999', message: 'Date from must be in the past' },
     { controlName: 'dateTo', value: '01/01/2999', message: 'Date to must be in the past' },
   ] as const)('rejects $controlName "$value"', ({ controlName, value, message }) => {

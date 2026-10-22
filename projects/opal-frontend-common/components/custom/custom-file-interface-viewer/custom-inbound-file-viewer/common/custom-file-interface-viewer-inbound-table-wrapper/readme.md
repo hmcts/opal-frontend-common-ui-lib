@@ -34,7 +34,7 @@ Add `CustomFileInterfaceViewerInboundTableWrapperComponent` to the consuming sta
 
 The implementation and colocated spec live in this directory beneath the inbound viewer.
 
-For the complete inbound page with filters and download links, use
+For the complete inbound page with filters and caller-supplied actions, use
 [CustomInboundFileViewerComponent](../../readme.md).
 
 ## Usage
@@ -84,7 +84,8 @@ export class InterfaceFileTableExampleComponent {
 
 The `/files/{id}` link above is an illustrative consumer route, not a route provided by this component or the File Handling
 Service. The table renders the supplied template unchanged. For a backend download, the consuming template and handler
-must supply the URL, click event and saving behaviour; the inbound viewer already does this using FileService.
+must supply the URL, click event and saving behaviour. This remains the consumer's responsibility when using the inbound
+viewer, which passes its optional `actionTemplate` input unchanged to this table.
 
 ## Inputs
 
@@ -127,9 +128,8 @@ interface ICustomFileInterfaceViewerInboundTableWrapperActionTemplateContext {
 ```
 
 Consequently `let-row` receives the current row. The `Actions` string field is not inserted into the Action cell.
-The inbound viewer's template displays Download only for a non-null file ID with `Ready` or `File failed` status.
-
-Rows are tracked by `'File ID'`; provide unique IDs to keep rendered rows stable.
+Neither this table nor the inbound viewer supplies a default Download action or checks IDs/statuses for eligibility.
+The consuming template and handler own those rules, backend URLs, requests, errors and focus management.
 
 ## Methods and Pagination
 

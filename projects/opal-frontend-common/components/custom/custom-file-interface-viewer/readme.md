@@ -1,8 +1,8 @@
 # Custom File Interface Viewer
 
 The file interface viewer contains the inbound files page and the filter and table components used by that page.
-The frontend supplies filter choices and display-ready rows. The viewer renders the page and uses the standalone
-`FileService` to download a selected file from the File Handling Service.
+The frontend supplies filter choices, display-ready rows and an optional action template. The viewer renders the page;
+the consuming application owns API requests, download eligibility, URLs, saving and error handling.
 
 ## Table of Contents
 
@@ -12,6 +12,7 @@ The frontend supplies filter choices and display-ready rows. The viewer renders 
 - [Frontend Integration](#frontend-integration)
 - [Inbound Request and Display Mapping](#inbound-request-and-display-mapping)
 - [Downloads and Errors](#downloads-and-errors)
+- [Migration](#migration)
 - [Testing](#testing)
 - [Contributing](#contributing)
 
@@ -23,11 +24,9 @@ Import the inbound component into the consuming standalone component:
 import { CustomInboundFileViewerComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer';
 ```
 
-Add `CustomInboundFileViewerComponent` to the consuming component's `imports` array. Use the application's existing
-`HttpClient` provider and HTTP interceptors. The services are provided in root; they do not need component-level providers.
-
-The application also needs the common library's styles, its normal router setup, and access to the existing
-`/opal-file-handling-service` API proxy. The current `opal-frontend` application already provides that infrastructure.
+Add `CustomInboundFileViewerComponent` to the consuming component's `imports` array and include the common library's
+styles. For API requests and downloads, use the application's existing `HttpClient` provider, HTTP interceptors and API
+proxy. `OpalFileHandlingService` and `FileService` are provided in root when the consuming application uses them.
 
 ## Usage
 
@@ -37,28 +36,28 @@ The application also needs the common library's styles, its normal router setup,
   [source]="source"
   [sourceList]="sourceList"
   [tableData]="tableData()"
-  [refreshFailed]="refreshFailed()"
+  [actionTemplate]="fileAction"
   (formSubmit)="onFormSubmit($event)"
 ></opal-lib-custom-inbound-file-viewer>
 ```
 
-The variables and handler above belong to the frontend wrapper. See the
-[inbound component README](./custom-inbound-file-viewer/readme.md) for their types, the row contract and a complete
-frontend wrapper example.
+The variables, handler and `fileAction` template above belong to the frontend wrapper. See the
+[inbound component README](./custom-inbound-file-viewer/readme.md) for their types, the row contract and an action-template
+example. The optional action template defaults to `null`, leaving Action cells empty.
 
 `source` contains source choices such as Allpay. Despite its name, `sourceList` contains file **type** choices such as
 RAW and TRANSFORMED. `businessUnits` contains business-unit names and API codes.
 
 ## Components and Services
 
-| Component or service                                    | Responsibility                                                                                      | Documentation                                                                         |
-| ------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `CustomInboundFileViewerComponent`                      | Page heading, filters, separator, results/empty state, eligible download links and download errors. | [Inbound viewer](./custom-inbound-file-viewer/readme.md)                              |
-| `CustomFileInterfaceViewerFiltersComponent`             | Filter controls, validation, Refresh state and submission of raw form values.                       | [Common filters](./common/custom-file-interface-viewer-filters/readme.md)             |
-| `CustomFileInterfaceViewerInboundTableWrapperComponent` | Rendering, sorting, 25-row pagination and caller-supplied action templates.                         | [Common table](./custom-inbound-file-viewer/common/custom-file-interface-viewer-inbound-table-wrapper/readme.md) |
-| `OpalFileHandlingService`                               | HTTP calls for the file list, one file's metadata and one file's original content.                  | [API service](../../../services/opal-file-handling-service/readme.md)                 |
-| `FileService`                                           | Generic file content handling and saving through a caller-owned anchor.                             | [File service](../../../services/file-service/readme.md)                              |
-| Frontend payload service                                | Permission-based filter choices, API criteria, reference labels and row/date/status mapping.        | [Frontend integration](#frontend-integration)                                         |
+| Component or service                                    | Responsibility                                                                               | Documentation                                                                                                    |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `CustomInboundFileViewerComponent`                      | Page heading, filters, separator, results/empty state and supplied row actions.              | [Inbound viewer](./custom-inbound-file-viewer/readme.md)                                                         |
+| `CustomFileInterfaceViewerFiltersComponent`             | Filter controls, validation and submission of raw form values.                               | [Common filters](./common/custom-file-interface-viewer-filters/readme.md)                                        |
+| `CustomFileInterfaceViewerInboundTableWrapperComponent` | Rendering, sorting, 25-row pagination and caller-supplied action templates.                  | [Common table](./custom-inbound-file-viewer/common/custom-file-interface-viewer-inbound-table-wrapper/readme.md) |
+| `OpalFileHandlingService`                               | HTTP calls for the file list, one file's metadata and one file's original content.           | [API service](../../../services/opal-file-handling-service/readme.md)                                            |
+| `FileService`                                           | Generic file content handling and saving through a caller-owned anchor.                      | [File service](../../../services/file-service/readme.md)                                                         |
+| Frontend payload service                                | Permission-based filter choices, API criteria, reference labels and row/date/status mapping. | [Frontend integration](#frontend-integration)                                                                    |
 
 There is no parent component selector named `opal-lib-custom-file-interface-viewer`. Use the inbound component selector
 shown above, or import the common filter/table separately when building another screen.
@@ -89,11 +88,12 @@ The frontend integration needs the following data and behaviour:
 3. Supply canonical source and file-type options. The filter adds the three All choices itself, so do not duplicate
    those options in the supplied arrays.
 4. Build API criteria in the frontend payload service. The filter output contains UI field names and is not an API payload.
-5. Fetch the list on page entry. The viewer does not emit an initial search automatically; its Refresh button starts
-   disabled while the form is pristine. The frontend's `ngOnInit` initiates the initial Last 7 days request.
+5. Fetch the list on page entry. The viewer does not emit an initial search automatically. The frontend's `ngOnInit`
+   initiates the initial Last 7 days request. Refresh remains enabled, including when filters are pristine; submitting
+   runs validation and forwards valid form values.
 6. Map successful API results to table rows and replace the supplied row array. Keep `tableData=null` before the first
-   response and use `[]` for a completed empty response. Clear `refreshFailed` before each list request and set it to
-   `true` on failure so pristine filters can retry unchanged criteria. Retain the last successful rows when a request fails.
+   response and use `[]` for a completed empty response. Handle request failures in the consuming application and retain
+   the last successful rows when a request fails. Unchanged criteria can be resubmitted without a failure input.
 7. Cancel superseded or destroyed requests. The existing Finance wrapper cancels the preceding subscription and uses
    `takeUntilDestroyed` to prevent an older search from replacing newer results.
 8. Keep authentication, permissions and release-flag checks in the normal frontend routes and services. Passing filter
@@ -115,15 +115,15 @@ const inboundScope = {
 These are API restrictions, not default selections in the dropdowns. Only Last 7 days is selected initially.
 `SOURCE_JSON` is excluded by the allowed type list.
 
-| UI value                              | API criterion                                                              |
-| ------------------------------------- | -------------------------------------------------------------------------- |
-| Selected business-unit code           | `business_unit_code`                                                       |
-| Selected source code                  | `source`                                                                   |
-| RAW                                   | `type: ['SOURCE']`                                                         |
-| TRANSFORMED                           | `type: ['TRANSFORMED_JSON']`                                               |
-| Last 7 days or custom days            | Inclusive date criteria calculated using the existing report/date helpers. |
+| UI value                              | API criterion                                                                          |
+| ------------------------------------- | -------------------------------------------------------------------------------------- |
+| Selected business-unit code           | `business_unit_code`                                                                   |
+| Selected source code                  | `source`                                                                               |
+| RAW                                   | `type: ['SOURCE']`                                                                     |
+| TRANSFORMED                           | `type: ['TRANSFORMED_JSON']`                                                           |
+| Last 7 days or custom days            | Inclusive date criteria calculated using the existing report/date helpers.             |
 | From and/or To date                   | Inclusive local calendar boundaries converted to UTC for `from_date` and/or `to_date`. |
-| Blank or explicit All dropdown choice | Omit that optional selection; retain the fixed inbound scope above.        |
+| Blank or explicit All dropdown choice | Omit that optional selection; retain the fixed inbound scope above.                    |
 
 The frontend uses `DateService` to parse the selected local calendar dates, takes `startOf('day')` for `from_date`
 and `endOf('day')` for `to_date`, then converts each boundary to UTC. It formats UTC timestamps as
@@ -150,42 +150,50 @@ Map API metadata before passing it to the viewer:
   and `SUPERSEDED` become `Ready`; `FAILED` and `FAILED_SUPERSEDED` become `File failed`; `INGESTED` becomes `In-Progress`.
   Unknown values are retained. `FAILED_SUPERSEDED` is excluded by the standard inbound request.
 
-Do not pass raw API records or raw status codes to `tableData`. Download visibility uses the prepared row's display status.
+Pass prepared display rows to `tableData`, rather than raw API records. The viewer renders the supplied status text;
+the consuming action template decides whether any action is available for that row.
 
 ## Downloads and Errors
 
-The inbound viewer creates a Download link for a row with a non-null file ID and a status of exactly `Ready` or
-`File failed`. An `In-Progress` row has no download link. This is UI eligibility; the backend decides whether the
-requested file actually exists and is currently available.
+Supply `[actionTemplate]` to render row actions. The inbound viewer passes the template unchanged to the table, where
+`let-row` receives the current row. There is no default Download link or status-based eligibility rule.
 
-Selecting a link requests `GET /opal-file-handling-service/interface-files/{id}/content` with
-`Accept: application/octet-stream` and a Blob response. The viewer passes the URL, click event and its own native save
-anchor to `FileService`. The file's Title is the fallback filename; if it is absent, the fallback is `interface-file-{id}`.
-Response filename headers and content bytes are handled by `FileService`.
+The consuming application decides which rows can be downloaded, constructs URLs and handles clicks, requests, filenames,
+errors and focus. It can reuse [FileService](../../../services/file-service/readme.md) with its own save anchor, click event
+and download options. For File Handling Service endpoints and response formats, see the
+[API service documentation](../../../services/opal-file-handling-service/readme.md).
 
-The existing application interceptors remain in use. The viewer shows a GOV.UK error summary for download errors
-forwarded to its subscription, focuses the summary, and lets its link return focus to the affected row or results
-container. Global HTTP error handling can also show its normal banner or apply its existing navigation policy.
-The viewer does not override that policy.
+Keep application HTTP interceptors in use. Any local download error summary, its focus after rendering and focus restoration
+to the affected action belong to the consumer. The viewer does not subscribe to downloads or modify rows when an action
+is selected; any changes follow the consuming application's handler.
 
-Downloading does not replace the table rows, reset pagination or mark a row as busy. The component does not create
-download audit records, preview file content or convert file formats.
+## Migration
+
+Before adopting this version in a consuming application:
+
+1. Remove `[refreshFailed]` bindings from inbound viewers and common filters. The input has been removed; Refresh is
+   always enabled and validates on submission.
+2. Supply `[actionTemplate]` when row actions are required. Move the former download eligibility, URL construction,
+   requests, save anchor, errors and focus handling into the application. Without a template, Action cells remain empty.
+
+Update consumer integration tests alongside the package upgrade. The former built-in download methods and error state
+are no longer part of the inbound viewer.
 
 ## Testing
 
-The component and utility specs are beside their implementations. From the library repository root:
+The component specs are beside their implementations. From the library repository root:
 
 ```bash
 yarn test --include='**/custom-file-interface-viewer/**/*.spec.ts'
 yarn test:coverage --include='**/custom-file-interface-viewer/**/*.spec.ts' --coverage-include='projects/opal-frontend-common/components/custom/custom-file-interface-viewer/**/*.ts'
 ```
 
-In `opal-frontend`, the inbound wrapper spec covers initial fetching, real filter-widget submissions, payload mapping,
-binary downloads through the existing interceptors and retained rows after download failures. Route and dashboard
-specs cover release-flag wiring, permissions and navigation links.
+Consumer integration tests should cover initial fetching, real filter-widget submissions, payload mapping and any
+application-owned downloads, errors and focus. Update existing disabled-Refresh assertions and download tests when
+migrating. Route and dashboard specs cover release-flag wiring, permissions and navigation links.
 
 ## Contributing
 
 Keep domain-specific request and row mappings in the consuming frontend's payload service and utilities. Reuse the
-existing date, form and table abstractions. Document public input or download-contract changes in the component and
+existing date, form and table abstractions. Document public input or action-template changes in the component and
 service READMEs, and update the relevant colocated specs.
