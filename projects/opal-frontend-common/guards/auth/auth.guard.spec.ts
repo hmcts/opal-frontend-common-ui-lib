@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 import { PLATFORM_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { CanActivateFn, Router, UrlSegment, UrlSegmentGroup, UrlTree } from '@angular/router';
-import { authGuard, REDIRECT_TO_SSO } from './auth.guard';
+import { authGuard, REDIRECT_TO_SSO, REDIRECT_TO_SSO_LOGOUT } from './auth.guard';
 import { of, throwError } from 'rxjs';
 import { AuthService } from '@hmcts/opal-frontend-common/services/auth-service';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
@@ -133,6 +133,51 @@ describe('authGuard', () => {
 
       try {
         expect(() => redirectToSso()).not.toThrow();
+      } finally {
+        vi.unstubAllGlobals();
+      }
+
+      expect(document.location.href).toBe('');
+    });
+  });
+
+  describe('REDIRECT_TO_SSO_LOGOUT', () => {
+    const setupDefaultRedirectToSsoLogout = ({
+      platformId,
+      document,
+    }: {
+      platformId: 'browser' | 'server';
+      document: { location: { href: string } };
+    }) => {
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        providers: [
+          { provide: PLATFORM_ID, useValue: platformId },
+          { provide: DOCUMENT, useValue: document },
+        ],
+      });
+
+      return TestBed.inject(REDIRECT_TO_SSO_LOGOUT);
+    };
+
+    it('should set the injected document location href to the SSO logout endpoint on the browser platform', () => {
+      const document = { location: { href: '' } };
+
+      const redirectToSsoLogout = setupDefaultRedirectToSsoLogout({ platformId: 'browser', document });
+
+      redirectToSsoLogout();
+
+      expect(document.location.href).toBe(SSO_ENDPOINTS.logout);
+    });
+
+    it('should not throw or set the injected document location href on the server platform', () => {
+      const document = { location: { href: '' } };
+      vi.stubGlobal('location', undefined);
+
+      const redirectToSsoLogout = setupDefaultRedirectToSsoLogout({ platformId: 'server', document });
+
+      try {
+        expect(() => redirectToSsoLogout()).not.toThrow();
       } finally {
         vi.unstubAllGlobals();
       }

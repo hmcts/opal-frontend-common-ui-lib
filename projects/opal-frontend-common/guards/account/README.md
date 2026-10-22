@@ -37,7 +37,7 @@ route has an additional, distinct authentication requirement.
 | --- | --- |
 | Authentication returns `true` and user state is `active` | Navigation continues. |
 | Authentication returns `false` or authentication returns `401` | The cached user state is cleared and the user is sent to the configured SSO login or `/sign-in`. |
-| User-state request returns `401` after authentication succeeds | The cached user state is cleared, the mismatched session is ended, and the user is sent to the configured SSO login or `/sign-in`. |
+| User-state request returns `401` after authentication succeeds | The cached user state is cleared and the mismatched session is ended. In SSO mode, the browser navigates to `/sso/logout` so its Azure redirect can complete; otherwise the user is sent to `/sign-in`. |
 | User state is not `active` | The user is sent to `/account-created`. |
 | Authentication or user-state request fails for another reason | The user is sent to `/internal-server-error`. |
 

@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { catchError, map, of, switchMap } from 'rxjs';
-import { REDIRECT_TO_SSO } from '@hmcts/opal-frontend-common/guards/auth';
+import { REDIRECT_TO_SSO, REDIRECT_TO_SSO_LOGOUT } from '@hmcts/opal-frontend-common/guards/auth';
 import { PAGES_ROUTING_PATHS } from '@hmcts/opal-frontend-common/pages/routing/constants';
 import { AuthService } from '@hmcts/opal-frontend-common/services/auth-service';
 import { OpalUserService } from '@hmcts/opal-frontend-common/services/opal-user-service';
@@ -38,6 +38,7 @@ export const authenticatedAccountGuard: CanActivateFn = () => {
   const globalStore: GlobalStoreType = inject(GlobalStore);
   const router = inject(Router);
   const redirectToSsoLogin = inject(REDIRECT_TO_SSO);
+  const redirectToSsoLogout = inject(REDIRECT_TO_SSO_LOGOUT);
 
   const redirectToLogin = () => {
     if (globalStore.ssoEnabled()) {
@@ -59,6 +60,11 @@ export const authenticatedAccountGuard: CanActivateFn = () => {
 
   const redirectToSessionMismatch = () => {
     opalUserService.clearUserStateCache();
+
+    if (globalStore.ssoEnabled()) {
+      redirectToSsoLogout();
+      return of(false);
+    }
 
     return authService.logout().pipe(
       map(() => redirectToLogin()),

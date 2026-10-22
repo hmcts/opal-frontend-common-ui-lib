@@ -109,8 +109,9 @@ SSO login or sign-in page. It allows active accounts, redirects a non-active acc
 redirects unexpected authentication or user-state failures to `/internal-server-error`.
 
 If the user-state request returns `401` after authentication succeeds, the guard ends the mismatched session before
-redirecting to the configured SSO login or sign-in page. This prevents the sign-in guard from redirecting the user back
-to a protected route with the stale session.
+redirecting to the configured SSO login or sign-in page. In an SSO environment it uses a top-level browser navigation
+to `/sso/logout`, allowing the redirect to Azure to complete. This prevents the sign-in guard from redirecting the user
+back to a protected route with the stale session.
 
 ### Nested-route integration
 

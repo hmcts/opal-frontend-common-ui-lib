@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router, type Routes } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { REDIRECT_TO_SSO } from '@hmcts/opal-frontend-common/guards/auth';
+import { REDIRECT_TO_SSO, REDIRECT_TO_SSO_LOGOUT } from '@hmcts/opal-frontend-common/guards/auth';
 import { signedInGuard } from '@hmcts/opal-frontend-common/guards/signed-in';
 import { AuthService } from '@hmcts/opal-frontend-common/services/auth-service';
 import { OpalUserService } from '@hmcts/opal-frontend-common/services/opal-user-service';
@@ -35,11 +35,13 @@ describe('authenticated account routing', () => {
   let checkAuthenticatedMock: ReturnType<typeof vi.fn>;
   let getLoggedInUserStateMock: ReturnType<typeof vi.fn>;
   let logoutMock: ReturnType<typeof vi.fn>;
+  let redirectToSsoLogoutMock: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     checkAuthenticatedMock = vi.fn().mockReturnValue(of(false));
     getLoggedInUserStateMock = vi.fn();
     logoutMock = vi.fn().mockReturnValue(of(undefined));
+    redirectToSsoLogoutMock = vi.fn();
 
     TestBed.configureTestingModule({
       providers: [
@@ -56,6 +58,7 @@ describe('authenticated account routing', () => {
           },
         },
         { provide: REDIRECT_TO_SSO, useValue: vi.fn() },
+        { provide: REDIRECT_TO_SSO_LOGOUT, useValue: redirectToSsoLogoutMock },
       ],
     });
 
@@ -81,5 +84,17 @@ describe('authenticated account routing', () => {
     expect(logoutMock).toHaveBeenCalledTimes(1);
     expect(checkAuthenticatedMock).toHaveBeenCalledTimes(2);
     expect(getLoggedInUserStateMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('navigates the browser to SSO logout when the user-state request rejects an authenticated session', async () => {
+    TestBed.inject(GlobalStore).setSsoEnabled(true);
+    checkAuthenticatedMock.mockReturnValue(of(true));
+    getLoggedInUserStateMock.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 401 })));
+
+    await expect(router.navigateByUrl('/access-denied')).resolves.toBe(false);
+
+    expect(redirectToSsoLogoutMock).toHaveBeenCalledTimes(1);
+    expect(logoutMock).not.toHaveBeenCalled();
+    expect(checkAuthenticatedMock).toHaveBeenCalledTimes(1);
   });
 });

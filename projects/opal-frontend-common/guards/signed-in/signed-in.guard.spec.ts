@@ -71,5 +71,4 @@ describe('signedInGuard', () => {
     const authenticated = await runAuthGuardWithContext(getGuardWithDummyUrl(signedInGuard, urlPath));
     expect(authenticated).toBeTruthy();
   });
-
 });

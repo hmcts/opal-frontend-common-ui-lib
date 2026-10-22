@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlSegment, UrlTree } from '@angular/router';
 import { firstValueFrom, Observable, of, Subject, throwError } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { REDIRECT_TO_SSO } from '@hmcts/opal-frontend-common/guards/auth';
+import { REDIRECT_TO_SSO, REDIRECT_TO_SSO_LOGOUT } from '@hmcts/opal-frontend-common/guards/auth';
 import { PAGES_ROUTING_PATHS } from '@hmcts/opal-frontend-common/pages/routing/constants';
 import { AuthService } from '@hmcts/opal-frontend-common/services/auth-service';
 import { OPAL_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/services/opal-user-service/mocks';
@@ -19,6 +19,7 @@ describe('authenticatedAccountGuard', () => {
   let logoutMock: ReturnType<typeof vi.fn>;
   let createUrlTreeMock: ReturnType<typeof vi.fn>;
   let redirectToSsoLoginMock: ReturnType<typeof vi.fn>;
+  let redirectToSsoLogoutMock: ReturnType<typeof vi.fn>;
   let globalStore: GlobalStoreType;
 
   const route = new ActivatedRouteSnapshot();
@@ -41,6 +42,7 @@ describe('authenticatedAccountGuard', () => {
     logoutMock = vi.fn().mockReturnValue(of(undefined));
     createUrlTreeMock = vi.fn(() => new UrlTree());
     redirectToSsoLoginMock = vi.fn();
+    redirectToSsoLogoutMock = vi.fn();
 
     TestBed.configureTestingModule({
       providers: [
@@ -62,6 +64,7 @@ describe('authenticatedAccountGuard', () => {
           },
         },
         { provide: REDIRECT_TO_SSO, useValue: redirectToSsoLoginMock },
+        { provide: REDIRECT_TO_SSO_LOGOUT, useValue: redirectToSsoLogoutMock },
       ],
     });
 
@@ -165,6 +168,20 @@ describe('authenticatedAccountGuard', () => {
     expect(clearUserStateCacheMock).toHaveBeenCalledTimes(1);
     expect(logoutMock).toHaveBeenCalledTimes(1);
     expect(createUrlTreeMock).toHaveBeenCalledWith([PAGES_ROUTING_PATHS.children.signIn]);
+  });
+
+  it('navigates the browser to SSO logout when user state rejects an authenticated SSO session', async () => {
+    globalStore.setSsoEnabled(true);
+    checkAuthenticatedMock.mockReturnValue(of(true));
+    getLoggedInUserStateMock.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 401 })));
+
+    await expect(runGuard()).resolves.toBe(false);
+
+    expect(clearUserStateCacheMock).toHaveBeenCalledTimes(1);
+    expect(redirectToSsoLogoutMock).toHaveBeenCalledTimes(1);
+    expect(logoutMock).not.toHaveBeenCalled();
+    expect(redirectToSsoLoginMock).not.toHaveBeenCalled();
+    expect(createUrlTreeMock).not.toHaveBeenCalled();
   });
 
   it('redirects to the internal-server-error page when ending a mismatched session fails', async () => {
