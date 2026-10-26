@@ -1,0 +1,1 @@
+export const CUSTOM_FILE_INTERFACE_VIEWER_ALL_FILE_SOURCES = 'All sources';

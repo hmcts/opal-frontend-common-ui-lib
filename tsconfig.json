@@ -154,6 +154,15 @@
       "@hmcts/opal-frontend-common/components/custom/custom-date-filter/utils": [
         "./dist/opal-frontend-common/components/custom/custom-date-filter/utils"
       ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/constants": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/constants"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer"
+      ],
       "@hmcts/opal-frontend-common/components/custom/custom-page-header": [
         "./dist/opal-frontend-common/components/custom/custom-page-header"
       ],
@@ -544,6 +553,9 @@
       "@hmcts/opal-frontend-common/services/transformation-service/interfaces": [
         "./dist/opal-frontend-common/services/transformation-service/interfaces"
       ],
+      "@hmcts/opal-frontend-common/services/file-service": [
+        "./dist/opal-frontend-common/services/file-service"
+      ],
       "@hmcts/opal-frontend-common/services/utils-service": [
         "./dist/opal-frontend-common/services/utils-service"
       ],
@@ -555,6 +567,15 @@
       ],
       "@hmcts/opal-frontend-common/services/opal-user-service/mocks": [
         "./dist/opal-frontend-common/services/opal-user-service/mocks"
+      ],
+      "@hmcts/opal-frontend-common/services/opal-file-handling-service": [
+        "./dist/opal-frontend-common/services/opal-file-handling-service"
+      ],
+      "@hmcts/opal-frontend-common/services/opal-file-handling-service/interfaces": [
+        "./dist/opal-frontend-common/services/opal-file-handling-service/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/services/opal-file-handling-service/constants": [
+        "./dist/opal-frontend-common/services/opal-file-handling-service/constants"
       ],
       "@hmcts/opal-frontend-common/stores/global": [
         "./dist/opal-frontend-common/stores/global"
