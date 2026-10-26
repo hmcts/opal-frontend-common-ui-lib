@@ -1,0 +1,33 @@
+<div class="govuk-grid-column-full">
+  <opal-lib-custom-page-header>
+    <ng-container pageHeaderHeading>
+      <h1 class="govuk-heading-l">Inbound interface files</h1>
+    </ng-container>
+  </opal-lib-custom-page-header>
+
+  <opal-lib-custom-file-interface-viewer-filters
+    [isInbound]="true"
+    [businessUnits]="businessUnits"
+    [source]="source"
+    [sourceList]="sourceList"
+    (formSubmit)="formSubmit.emit($event)"
+  >
+  </opal-lib-custom-file-interface-viewer-filters>
+
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+
+  <div id="inbound-interface-files-results" tabindex="-1">
+    @if (tableData !== null) {
+      @if (tableData.length > 0) {
+        <opal-lib-custom-file-interface-viewer-inbound-table-wrapper
+          [existingSortState]="inboundTableSort"
+          [tableData]="tableData"
+          [actionTemplate]="actionTemplate"
+        >
+        </opal-lib-custom-file-interface-viewer-inbound-table-wrapper>
+      } @else {
+        <p class="govuk-body">There are no inbound interface files to display.</p>
+      }
+    }
+  </div>
+</div>

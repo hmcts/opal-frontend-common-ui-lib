@@ -102,7 +102,7 @@ describe('CustomDateFilterComponent', () => {
     expect(fixture.nativeElement.querySelector('#search-date-range')).toBeNull();
   });
 
-  it('preserves restored dates and stores normalized picker events in the matching controls', () => {
+  it('keeps restored dates pristine and marks picker edits dirty in the matching controls', () => {
     controls.dateFilter.setValue('dateRange');
     controls.dateFrom.setValue('01/06/2026');
     controls.dateTo.setValue('08/06/2026');
@@ -111,10 +111,17 @@ describe('CustomDateFilterComponent', () => {
     const pickers = fixture.debugElement.queryAll(By.directive(MojDatePickerComponent));
     expect(pickers[0].componentInstance.getControl.value).toBe('01/06/2026');
     expect(pickers[1].componentInstance.getControl.value).toBe('08/06/2026');
+    expect(controls.dateFrom.pristine).toBe(true);
+    expect(controls.dateTo.pristine).toBe(true);
+
     pickers[0].componentInstance.dateChange.emit('02/06/2026');
-    pickers[1].componentInstance.dateChange.emit('07/06/2026');
     expect(controls.dateFrom.value).toBe('02/06/2026');
+    expect(controls.dateFrom.dirty).toBe(true);
+    expect(controls.dateTo.pristine).toBe(true);
+
+    pickers[1].componentInstance.dateChange.emit('07/06/2026');
     expect(controls.dateTo.value).toBe('07/06/2026');
+    expect(controls.dateTo.dirty).toBe(true);
   });
 
   it('connects the custom days error to its input', () => {

@@ -56,8 +56,10 @@ export class CustomDateFilterComponent implements OnChanges, OnDestroy {
     this.dateFilterSubscription?.unsubscribe();
   }
 
-  /** Stores the normalized value emitted by either date picker. */
+  /** Stores normalized picker edits and marks the parent form dirty. */
   public onDateChange(field: 'dateFrom' | 'dateTo', value: string): void {
-    this.controls[field].setValue(value);
+    const control = this.controls[field];
+    control.markAsDirty();
+    control.setValue(value);
   }
 }
