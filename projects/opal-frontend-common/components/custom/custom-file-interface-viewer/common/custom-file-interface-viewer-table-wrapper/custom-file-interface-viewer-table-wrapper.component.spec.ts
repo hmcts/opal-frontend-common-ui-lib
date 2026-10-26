@@ -230,6 +230,47 @@ describe.each([
       expect(sort).toHaveBeenLastCalledWith(expect.objectContaining({ [columnKey]: 'descending' }));
     });
 
+    it.each(columns.filter((column) => column !== 'Title'))(
+      'sorts omitted %s in both directions after a partial custom sort',
+      (column) => {
+        const columnKey = column === 'Action' ? 'Actions' : column;
+        const rows = createRows(2)
+          .map((file, index) => ({
+            ...file,
+            [columnKey]: columnKey === 'Date and time' ? index + 1 : ['Alpha', 'Zulu'][index],
+          }))
+          .reverse();
+        fixture.componentRef.setInput('existingSortState', Object.freeze({ Title: 'ascending' }));
+        fixture.componentRef.setInput('tableData', rows);
+        fixture.detectChanges();
+        const titles = () =>
+          Array.from(fixture.nativeElement.querySelectorAll('td[id^="title-"]'), (cell) =>
+            (cell as HTMLElement).textContent?.trim(),
+          );
+        const headers = Array.from(fixture.nativeElement.querySelectorAll('thead th')) as HTMLTableCellElement[];
+        const header = headers.find((item) => item.textContent?.trim() === column)!;
+        const button = header.querySelector('button')!;
+        const status = fixture.nativeElement.querySelector('output[aria-live="polite"]') as HTMLOutputElement;
+        expect(titles()).toEqual(['file-01.dat', 'file-02.dat']);
+        expect(header.getAttribute('aria-sort')).toBe('none');
+        expect(status.textContent?.trim()).toBe('Sorted by Title (ascending)');
+
+        button.click();
+        fixture.detectChanges();
+
+        expect(titles()).toEqual(['file-01.dat', 'file-02.dat']);
+        expect(header.getAttribute('aria-sort')).toBe('ascending');
+        expect(status.textContent?.trim()).toBe(`Sorted by ${columnKey} (ascending)`);
+
+        button.click();
+        fixture.detectChanges();
+
+        expect(titles()).toEqual(['file-02.dat', 'file-01.dat']);
+        expect(header.getAttribute('aria-sort')).toBe('descending');
+        expect(status.textContent?.trim()).toBe(`Sorted by ${columnKey} (descending)`);
+      },
+    );
+
     it('sorts supplied action labels and blank cells in both directions', () => {
       fixture.componentRef.setInput(
         'tableData',

@@ -11,6 +11,10 @@ is rendered exclusively by `actionTemplate`. Supply an empty string for an unava
 move between the start and end as direction changes. Nullable labels retain the shared sort service's null handling.
 The table paginates 25 rows and resets pagination when a new result array is supplied.
 
+A partial `existingSortState`, such as `{ Title: 'ascending' }`, leaves omitted sortable columns at `none`
+so every heading can still toggle in both directions. Supplied entries are retained without changing the caller's
+object. Passing `null` preserves input order until a heading is selected.
+
 The shared viewer entrypoint exports this component. The inbound entrypoint also retains the legacy
 `CustomFileInterfaceViewerInboundTableWrapperComponent` export as an alias, and the table retains the original inbound
 selector. Its direction defaults to inbound for that compatibility selector; the shared viewer binds the direction
@@ -20,7 +24,7 @@ explicitly.
 
 | Method or accessor | Responsibility |
 | ------------------ | -------------- |
-| `existingSortState` setter | Passes the supplied configuration, including `null`, to the inherited sort-state input. |
+| `existingSortState` setter | Fills omitted sortable keys with `none`, retains supplied entries and forwards `null` unchanged. |
 | `onSortChange(event)` | Inherited handler that applies the selected column/direction and resets the page. |
 | `onPageChange(page)` | Inherited handler that updates the current page and focuses the first rendered row. |
 | `tableData` setter | Inherited input that replaces the prepared rows, reapplies sorting and resets pagination. |

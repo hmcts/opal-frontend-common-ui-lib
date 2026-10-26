@@ -141,13 +141,15 @@ describe('CustomFileInterfaceViewerComponent', () => {
       [isInbound]="isInbound"
       [businessUnits]="[]"
       [tableData]="rows"
+      [tableSort]="tableSort"
       [actionTemplate]="action"
     ></opal-lib-custom-file-interface-viewer>
   `,
 })
 class ViewerActionHostComponent {
   public isInbound = false;
-  public readonly rows = [row({ Status: 'Consumer status' })];
+  public rows = [row({ Status: 'Consumer status' })];
+  public readonly tableSort = { Title: 'ascending' } as const;
   public readonly onAction = vi.fn();
 }
 
@@ -169,4 +171,46 @@ describe('CustomFileInterfaceViewerComponent consumer actions', () => {
       event,
     );
   });
+
+  it.each([true, false])(
+    'keeps custom action templates sortable with a partial sort for isInbound=%s',
+    async (isInbound) => {
+      await TestBed.configureTestingModule({
+        imports: [ViewerActionHostComponent],
+        providers: [provideRouter([])],
+      }).compileComponents();
+      const fixture = TestBed.createComponent(ViewerActionHostComponent);
+      const files = [
+        row({ 'File ID': 1, Title: 'zulu.dat', Actions: 'Collect', Status: 'Consumer status' }),
+        row({ 'File ID': 2, Title: 'alpha.dat', Actions: 'Retrieve', Status: 'Consumer status' }),
+      ];
+      fixture.componentInstance.isInbound = isInbound;
+      fixture.componentInstance.rows = files;
+      fixture.detectChanges();
+      const actions = () =>
+        Array.from(fixture.nativeElement.querySelectorAll('td[id^="actions-"] button'), (button) =>
+          (button as HTMLButtonElement).textContent?.trim(),
+        );
+      const header = fixture.nativeElement.querySelector('thead th:last-child') as HTMLTableCellElement;
+      const button = header.querySelector('button')!;
+      expect(actions()).toEqual(['Retrieve alpha.dat', 'Retrieve zulu.dat']);
+
+      button.click();
+      fixture.detectChanges();
+
+      expect(actions()).toEqual(['Retrieve zulu.dat', 'Retrieve alpha.dat']);
+      expect(header.getAttribute('aria-sort')).toBe('ascending');
+      const action = fixture.nativeElement.querySelector('td#actions-0 button') as HTMLButtonElement;
+      const event = new MouseEvent('click', { bubbles: true });
+      action.dispatchEvent(event);
+      expect(fixture.componentInstance.onAction).toHaveBeenCalledExactlyOnceWith(files[0], event);
+      expect(fixture.componentInstance.onAction.mock.calls[0][0]).toBe(files[0]);
+
+      button.click();
+      fixture.detectChanges();
+
+      expect(actions()).toEqual(['Retrieve alpha.dat', 'Retrieve zulu.dat']);
+      expect(header.getAttribute('aria-sort')).toBe('descending');
+    },
+  );
 });
