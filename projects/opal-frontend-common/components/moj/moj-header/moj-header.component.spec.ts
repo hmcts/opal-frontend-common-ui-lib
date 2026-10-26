@@ -64,19 +64,23 @@ describe('MojHeaderComponent', () => {
     expect(element.textContent?.trim()).toBe('Test Link');
   });
 
-  it('should use non-link elements for organisation and service names when there is no service link', () => {
-    const noServiceLinkFixture = TestBed.createComponent(TestHostComponent);
-    noServiceLinkFixture.componentInstance.headerLinks = { ...MOJ_HEADER_LINKS_MOCK, serviceLink: '' };
-    noServiceLinkFixture.detectChanges();
+  it('should use non-link elements for organisation and service names when there are no links', () => {
+    const noLinksFixture = TestBed.createComponent(TestHostComponent);
+    noLinksFixture.componentInstance.headerLinks = {
+      ...MOJ_HEADER_LINKS_MOCK,
+      organisationLink: '',
+      serviceLink: '',
+    };
+    noLinksFixture.detectChanges();
 
-    const organisationName = noServiceLinkFixture.nativeElement.querySelector('.moj-header__link--organisation-name');
-    const serviceName = noServiceLinkFixture.nativeElement.querySelector('.moj-header__link--service-name');
+    const organisationName = noLinksFixture.nativeElement.querySelector('.moj-header__link--organisation-name');
+    const serviceName = noLinksFixture.nativeElement.querySelector('.moj-header__link--service-name');
 
     expect(organisationName.tagName).toBe('SPAN');
     expect(serviceName.tagName).toBe('SPAN');
-    expect(noServiceLinkFixture.nativeElement.querySelector('.moj-header__link--organisation-name[href]')).toBeNull();
-    expect(noServiceLinkFixture.nativeElement.querySelector('.moj-header__link--service-name[href]')).toBeNull();
+    expect(noLinksFixture.nativeElement.querySelector('.moj-header__link--organisation-name[href]')).toBeNull();
+    expect(noLinksFixture.nativeElement.querySelector('.moj-header__link--service-name[href]')).toBeNull();
 
-    noServiceLinkFixture.destroy();
+    noLinksFixture.destroy();
   });
 });
