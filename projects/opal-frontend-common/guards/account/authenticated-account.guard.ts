@@ -59,9 +59,8 @@ export const authenticatedAccountGuard: CanActivateFn = () => {
     router.createUrlTree([`/${PAGES_ROUTING_PATHS.children.internalServerError}`]);
 
   const redirectToSessionMismatch = () => {
-    opalUserService.clearUserStateCache();
-
     if (globalStore.ssoEnabled()) {
+      opalUserService.clearUserStateCache();
       redirectToSsoLogout();
       return of(false);
     }

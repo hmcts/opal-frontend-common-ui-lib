@@ -165,7 +165,6 @@ describe('authenticatedAccountGuard', () => {
 
     await expect(runGuard()).resolves.toBeInstanceOf(UrlTree);
 
-    expect(clearUserStateCacheMock).toHaveBeenCalledTimes(1);
     expect(logoutMock).toHaveBeenCalledTimes(1);
     expect(createUrlTreeMock).toHaveBeenCalledWith([PAGES_ROUTING_PATHS.children.signIn]);
   });
@@ -191,7 +190,6 @@ describe('authenticatedAccountGuard', () => {
 
     await runGuard();
 
-    expect(clearUserStateCacheMock).toHaveBeenCalledTimes(1);
     expect(logoutMock).toHaveBeenCalledTimes(1);
     expect(createUrlTreeMock).toHaveBeenCalledWith([`/${PAGES_ROUTING_PATHS.children.internalServerError}`]);
   });
