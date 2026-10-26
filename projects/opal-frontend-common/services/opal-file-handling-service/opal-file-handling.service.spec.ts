@@ -65,7 +65,6 @@ describe('OpalFileHandlingService', () => {
         type: ['SOURCE', '', 'TRANSFORMED_JSON'],
         target: 'OPAL',
         not_status: ['FAILED', '', 'INGESTED'],
-        source: null,
         status: undefined,
         business_unit_code: '',
         not_target: 'NATWEST',

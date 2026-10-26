@@ -57,7 +57,7 @@ It returns the bytes and response headers without saving, parsing or converting 
 
 `IOpalFileHandlingInterfaceFileParams` contains these optional filters:
 
-| Parameter            | Type, excluding optional `null` | Purpose                                                                |
+| Parameter            | Type                            | Purpose                                                                |
 | -------------------- | ------------------------------- | ---------------------------------------------------------------------- |
 | `source`             | `string`                        | One interface source code, for example `ALLPAY`.                       |
 | `target`             | `string`                        | One target code, for example `OPAL`.                                   |
