@@ -17,7 +17,7 @@ describe('buildInterfaceFilesParams', () => {
       domain: 'FINES',
       target: 'OPAL',
       business_unit_code: '0046',
-      source: null,
+      source: undefined,
       status: '',
       not_target: undefined,
     });
