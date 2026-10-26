@@ -46,7 +46,7 @@ export class AccountSearchComponent {
 You can use the custom date filter component in your template as follows:
 
 ```html
-<form [formGroup]="filtersForm" autocomplete="off">
+<form [formGroup]="filtersForm">
   <opal-lib-custom-date-filter
     idPrefix="account-search"
     [controls]="filtersForm.controls"
@@ -113,16 +113,7 @@ There are no custom outputs for this component. User input updates the supplied 
 
 ## Methods
 
-The template handles date-picker events; consumers normally interact through the supplied controls.
-
-| Method | Responsibility |
-| ------ | -------------- |
-| `ngOnChanges()` | Replaces the date-mode subscription when inputs change. Subsequent mode changes clear inactive fields and update conditional content. |
-| `onDateChange(field, value)` | Writes normalized picker text to `dateFrom` or `dateTo` and marks that parent-owned control dirty. |
-| `ngOnDestroy()` | Unsubscribes from the parent's date-mode control. |
-
-Date changes therefore mark the owning form dirty, including edits made through the calendar picker. Validation,
-error messages and submission still belong to the parent; these methods do not calculate an API date range.
+This component has no consumer-facing methods. Date picker events are handled internally.
 
 The `clearInactiveCustomDateFilterFields` utility is available for consumers that need the same clearing behaviour
 outside the component. It preserves fields for the selected option and clears inactive fields without emitting
@@ -136,13 +127,11 @@ clearInactiveCustomDateFilterFields(this.filtersForm.controls, this.filtersForm.
 
 ## Testing
 
-Colocated component and utility specs cover conditional fields, inactive-value clearing, parent-control changes,
-subscription cleanup and dirty-state propagation from actual calendar-picker selections.
-
-Run the targeted tests from the library repository root:
+Unit tests can be found in `custom-date-filter.component.spec.ts` and `utils/custom-date-filter.utils.spec.ts`.
+To run the tests, use:
 
 ```bash
-corepack yarn test --include='**/custom-date-filter/**/*.spec.ts'
+yarn test
 ```
 
 ## Contributing

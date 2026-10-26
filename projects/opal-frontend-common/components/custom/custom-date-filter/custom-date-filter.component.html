@@ -13,7 +13,7 @@
     inputId="custom-days"
     inputName="{{ idPrefix }}-date-filter"
     [inputValue]="dateFilterCustomDays"
-    [ariaControls]="controls.dateFilter.value === dateFilterCustomDays ? idPrefix + '-custom-days' : ''"
+    ariaControls="{{ idPrefix }}-custom-days"
     [control]="controls.dateFilter"
   ></div>
   @if (controls.dateFilter.value === dateFilterCustomDays) {
@@ -44,7 +44,7 @@
     inputId="date-range"
     inputName="{{ idPrefix }}-date-filter"
     [inputValue]="dateFilterDateRange"
-    [ariaControls]="controls.dateFilter.value === dateFilterDateRange ? idPrefix + '-date-range' : ''"
+    ariaControls="{{ idPrefix }}-date-range"
     [control]="controls.dateFilter"
   ></div>
   @if (controls.dateFilter.value === dateFilterDateRange) {

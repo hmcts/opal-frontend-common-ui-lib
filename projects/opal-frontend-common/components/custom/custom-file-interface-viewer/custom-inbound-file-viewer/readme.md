@@ -13,7 +13,6 @@ optional action template from the consuming application.
 - [Table Data](#table-data)
 - [Action Template Contract](#action-template-contract)
 - [Migration](#migration)
-- [Component behavior](#component-behavior)
 - [Accessibility](#accessibility)
 - [Testing](#testing)
 - [Contributing](#contributing)
@@ -48,7 +47,7 @@ Omit `actionTemplate` to leave Action cells empty.
 
 The [viewer overview](../readme.md) explains frontend routes, reference data, permissions, request scope and mappings.
 The common [filters](../common/custom-file-interface-viewer-filters/readme.md) and
-[table](../common/custom-file-interface-viewer-table-wrapper/readme.md) have separate API documentation.
+[table](./common/custom-file-interface-viewer-inbound-table-wrapper/readme.md) have separate API documentation.
 
 ## Inputs
 
@@ -74,8 +73,7 @@ The frontend handles this event, builds API parameters, requests data and maps t
 filter the input rows itself or issue list API calls. Sorting and pagination operate on the rows already supplied.
 
 No initial `formSubmit` event is emitted. The frontend must start the initial request when the page is entered.
-Refresh is always enabled, including for pristine filters, and validates on submission. Replacing the business-unit,
-source or type options clears a removed selection to `null` while preserving valid selections, All and interaction state. Invalid forms show validation
+Refresh is always enabled, including for pristine filters, and validates on submission. Invalid forms show validation
 errors without emitting `formSubmit`; valid forms can resubmit unchanged criteria. Handle request errors in the
 application and retain the last successful rows as appropriate.
 See the [filter form contract](../common/custom-file-interface-viewer-filters/readme.md) for fields and defaults.
@@ -94,7 +92,7 @@ Import the row interface from the inbound viewer entrypoint shown above. Each ro
 | `'Business unit'` | `string \| null` | Resolved business-unit name or joined names.                                                                        |
 | `Source`          | `string \| null` | Source display label.                                                                                               |
 | `Status`          | `string \| null` | Display label for the status cell; any action eligibility belongs to the consumer.                                  |
-| `Actions`         | `string \| null` | Sort label for the Action column; the action template renders the cell. Finance supplies `Download` or an empty string. |
+| `Actions`         | `string \| null` | Row-contract field. The action cell is rendered from an action template, not this value; Finance sets it to `null`. |
 
 For example:
 
@@ -108,16 +106,14 @@ const row: ICustomFileInterfaceViewerInboundTableWrapperTableData = {
   'Business unit': 'Camberwell Green',
   Source: 'Allpay',
   Status: 'Ready',
-  Actions: 'Download',
+  Actions: null,
 };
 ```
 
 The display timestamp above represents UTC `2026-10-20T12:00:00Z` in Europe/London. The frontend derives display text
 using the user's local zone; it must not hard-code this example's offset.
 
-The viewer supplies the table's descending date/time sort state. Every displayed column is sortable, including Type,
-Source and the final Action column. Action sorting uses the caller-supplied `Actions` string; the consumer controls
-eligibility and visible actions. Rows are paginated in groups of 25. Supplying a new
+The viewer supplies the table's descending date/time sort state. Rows are paginated in groups of 25. Supplying a new
 row array reapplies sorting and resets the current page. Row actions do not change the array unless the consumer does so.
 
 ## Action Template Contract
@@ -172,13 +168,6 @@ Supply `[actionTemplate]` to retain row actions. Move download eligibility, URL 
 errors and focus handling into the consuming application. The former built-in Download action and download methods/error
 state have been removed; omitting the template leaves Action cells empty. Update the consumer's tests with this migration.
 
-## Component behavior
-
-This wrapper declares no methods or lifecycle hooks. It inherits presentational inputs and `formSubmit` from
-`CustomFileInterfaceViewerBase`, sets inbound mode and its compatible default sort, and forwards those bindings to the
-shared viewer. Validation and submission are owned by the [filter component](../common/custom-file-interface-viewer-filters/readme.md#methods);
-sorting and pagination are inherited by the [common table](../common/custom-file-interface-viewer-table-wrapper/readme.md#methods).
-
 ## Accessibility
 
 - The page has an Inbound interface files heading and the standard visible separator after filters.
@@ -204,7 +193,3 @@ filter-to-request mapping and any application-owned eligibility, downloads, erro
 Keep API criteria, display mappings and action behaviour in the consuming application. Reuse FileService for file
 handling where appropriate and the existing common filter/table components for form and results behaviour. Update this
 README and the relevant specs when a public input or action-template contract changes.
-
-## Shared implementation
-
-The thin inbound wrapper forwards its required source/type choices, business units, rows, form submissions and optional action template through the shared viewer. The common base holds presentational inputs and outputs only. The common table retains the inbound selector and exported class alias, numeric date sorting, unique cell IDs and 25-row pagination. Existing inbound row and action-context type names remain exported.

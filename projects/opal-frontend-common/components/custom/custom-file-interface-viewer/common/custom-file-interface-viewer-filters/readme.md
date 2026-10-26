@@ -87,7 +87,7 @@ The consuming page owns permission-based business-unit selection, API parameters
 
 ## Inputs
 
-`isInbound` and `businessUnits` are required; source and type choices are optional so outbound consumers can omit them.
+The four filter-configuration inputs are required, including those with implementation defaults.
 
 | Input           | Type                                    | Default | Description                                                                                                                               |
 | --------------- | --------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
@@ -95,11 +95,6 @@ The consuming page owns permission-based business-unit selection, API parameters
 | `businessUnits` | `IAlphagovAccessibleAutocompleteItem[]` | `[]`    | Permitted business-unit choices for **Filter by business unit**. Use display names and API codes; preserve leading zeros in string codes. |
 | `source`        | `IAlphagovAccessibleAutocompleteItem[]` | `[]`    | Originating-interface choices for **Filter by source**, such as Allpay.                                                                   |
 | `sourceList`    | `IAlphagovAccessibleAutocompleteItem[]` | `[]`    | File-type choices for **Filter by type**, such as RAW and TRANSFORMED. Despite its name, this input supplies types.                       |
-
-Replacing `businessUnits`, `source` or `sourceList` clears a removed selection to `null`. Valid choices,
-the explicit All value `''` and an already empty `null` remain unchanged, as do dirty/pristine and touched/untouched
-state. For example, replacing business-unit options containing the selected `0046` with only `0042` clears the
-control, so the next Refresh cannot submit the hidden code. Supply a new array when updating choices.
 
 Each option has a `name: string` and `value: string | number`. Supply string API values to match the filter form's string-valued controls. Domain restrictions belong to the consuming page's query; the filter has no `domain` input.
 
@@ -204,15 +199,9 @@ Programmatic control updates do not automatically mark Angular forms dirty. Refr
 
 Normal consumers bind `formSubmit` and allow the template to handle these methods.
 
-| Method or accessor | Responsibility |
-| ------------------ | -------------- |
-| `businessUnits`, `source`, `sourceList` setters | Replace the supplied option arrays and clear selections absent from the updated choices. |
-| `businessUnits`, `source`, `sourceList` getters | Return the supplied choices without the synthetic All option. |
-| `clearUnavailableSelection(control, options)` | Clears a removed non-empty selection to `null` without changing interaction state. Private implementation detail. |
-| `setupDateFilterValidation()` | Clears initially inactive fields, applies active validators and subscribes to mode changes until destruction. Private implementation detail. |
-| `focusFilterErrorSummary()` | Focuses the summary after validation messages have rendered. Private implementation detail. |
-| `handleFormSubmit(event: SubmitEvent)` | Prevents native submission, validates active fields and range ordering, then emits valid values and marks the form pristine; invalid forms receive summary focus. |
-| `ngOnInit()` | Configures date validation before starting the inherited form behavior. |
+| Method                                 | Description                                                             |
+| -------------------------------------- | ----------------------------------------------------------------------- |
+| `handleFormSubmit(event: SubmitEvent)` | Validates and emits the current form, then marks a valid form pristine. |
 
 Date-picker events are handled by the shared component and update the parent-owned `dateFrom` and `dateTo` controls directly.
 The parent passes form-base validation messages through `dateFilterErrors`, keyed by the shared component's generated field IDs.
@@ -228,10 +217,7 @@ The template uses fixed field IDs. Render one instance per page to avoid duplica
 
 ## Testing
 
-The colocated `custom-file-interface-viewer-filters.component.spec.ts` and utility spec cover initial values, option
-composition and updates, removed/retained selections and interaction state, inbound/outbound visibility, always-enabled
-Refresh, date validation and clearing, shared date-component composition, date-picker events, summary-link focus and
-subscription cleanup.
+The colocated `custom-file-interface-viewer-filters.component.spec.ts` and utility spec cover initial values, option composition and updates, inbound/outbound visibility, Refresh state, date validation and clearing, shared date-component composition, date-picker events, summary-link focus, subscription cleanup and Refresh behaviour.
 
 Run its tests from the library repository root:
 

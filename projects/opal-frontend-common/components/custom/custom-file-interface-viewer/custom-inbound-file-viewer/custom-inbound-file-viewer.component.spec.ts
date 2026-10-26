@@ -4,8 +4,8 @@ import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { CustomFileInterfaceViewerFiltersComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters';
-import { CustomFileInterfaceViewerTableWrapperComponent as CustomFileInterfaceViewerInboundTableWrapperComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common';
-import { ICustomFileInterfaceViewerInboundTableWrapperTableData } from './interfaces/custom-file-interface-viewer-inbound-table-wrapper-table-data.interface';
+import { CustomFileInterfaceViewerInboundTableWrapperComponent } from './common/custom-file-interface-viewer-inbound-table-wrapper/custom-file-interface-viewer-inbound-table-wrapper.component';
+import { ICustomFileInterfaceViewerInboundTableWrapperTableData } from './common/custom-file-interface-viewer-inbound-table-wrapper/interfaces/custom-file-interface-viewer-inbound-table-wrapper-table-data.interface';
 import { CustomInboundFileViewerComponent } from './custom-inbound-file-viewer.component';
 
 function row(

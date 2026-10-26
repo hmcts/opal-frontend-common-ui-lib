@@ -1,7 +1,7 @@
 <opal-lib-custom-horizontal-scroll-pane>
   <opal-lib-moj-sortable-table tableClasses="govuk-!-margin-bottom-3">
     <ng-container caption>
-      <span class="govuk-visually-hidden">{{ isInbound ? 'Inbound' : 'Outbound' }} interface files</span>
+      <span class="govuk-visually-hidden">Inbound interface files</span>
     </ng-container>
     <ng-container head>
       <th
@@ -23,36 +23,34 @@
         Title
       </th>
 
-      @if (isInbound) {
-        <th
-          opal-lib-moj-sortable-table-header
-          columnKey="Type"
-          [sortDirection]="sortStateSignal()['Type']"
-          (sortChange)="onSortChange($event)"
-          [dataIndex]="2"
-        >
-          Type
-        </th>
-      }
+      <th
+        opal-lib-moj-sortable-table-header
+        columnKey="Type"
+        [sortDirection]="sortStateSignal()['Type']"
+        (sortChange)="onSortChange($event)"
+        [dataIndex]="2"
+      >
+        Type
+      </th>
 
       <th
         opal-lib-moj-sortable-table-header
         columnKey="Business unit"
         [sortDirection]="sortStateSignal()['Business unit']"
         (sortChange)="onSortChange($event)"
-        [dataIndex]="isInbound ? 3 : 2"
+        [dataIndex]="3"
       >
         Business unit
       </th>
 
       <th
         opal-lib-moj-sortable-table-header
-        [columnKey]="isInbound ? 'Source' : 'Target'"
-        [sortDirection]="sortStateSignal()[isInbound ? 'Source' : 'Target']"
+        columnKey="Source"
+        [sortDirection]="sortStateSignal()['Source']"
         (sortChange)="onSortChange($event)"
-        [dataIndex]="isInbound ? 4 : 3"
+        [dataIndex]="4"
       >
-        {{ isInbound ? 'Source' : 'Target' }}
+        Source
       </th>
 
       <th
@@ -60,20 +58,12 @@
         columnKey="Status"
         [sortDirection]="sortStateSignal()['Status']"
         (sortChange)="onSortChange($event)"
-        [dataIndex]="isInbound ? 5 : 4"
+        [dataIndex]="5"
       >
         Status
       </th>
 
-      <th
-        opal-lib-moj-sortable-table-header
-        columnKey="Actions"
-        [sortDirection]="sortStateSignal()['Actions']"
-        (sortChange)="onSortChange($event)"
-        [dataIndex]="isInbound ? 6 : 5"
-      >
-        Action
-      </th>
+      <th scope="col" class="govuk-table__header">Action</th>
     </ng-container>
 
     <ng-container row>
@@ -81,13 +71,9 @@
         <tr opal-lib-moj-sortable-table-row #paginationFocusTarget>
           <td opal-lib-moj-sortable-table-row-data [id]="'date-and-time-' + rowIndex">{{ row.dateTimeDisplay }}</td>
           <td opal-lib-moj-sortable-table-row-data [id]="'title-' + rowIndex">{{ row['Title'] }}</td>
-          @if (isInbound) {
-            <td opal-lib-moj-sortable-table-row-data [id]="'type-' + rowIndex">{{ row['Type'] }}</td>
-          }
+          <td opal-lib-moj-sortable-table-row-data [id]="'type-' + rowIndex">{{ row['Type'] }}</td>
           <td opal-lib-moj-sortable-table-row-data [id]="'business-unit-' + rowIndex">{{ row['Business unit'] }}</td>
-          <td opal-lib-moj-sortable-table-row-data [id]="(isInbound ? 'source-' : 'target-') + rowIndex">
-            {{ row[isInbound ? 'Source' : 'Target'] }}
-          </td>
+          <td opal-lib-moj-sortable-table-row-data [id]="'source-' + rowIndex">{{ row['Source'] }}</td>
           <td opal-lib-moj-sortable-table-row-data [id]="'status-' + rowIndex">{{ row['Status'] }}</td>
           <td opal-lib-moj-sortable-table-row-data [id]="'actions-' + rowIndex">
             <ng-container
@@ -110,7 +96,7 @@
 
 @if (sortedTableDataSignal().length > itemsPerPageSignal()) {
   <opal-lib-moj-pagination
-    [id]="isInbound ? 'inbound-file-viewer-pagination' : 'outbound-file-viewer-pagination'"
+    id="inbound-file-viewer-pagination"
     [currentPage]="currentPageSignal()"
     [total]="sortedTableDataSignal().length"
     [limit]="itemsPerPageSignal()"
