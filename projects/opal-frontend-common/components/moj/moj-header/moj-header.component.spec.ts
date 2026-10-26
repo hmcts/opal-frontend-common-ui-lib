@@ -44,6 +44,14 @@ describe('MojHeaderComponent', () => {
     expect(element.textContent?.trim()).toBe('Test Organisation');
   });
 
+  it('should link the organisation name to the HMCTS organisation page', () => {
+    const element = fixture.nativeElement.querySelector('.moj-header__link--organisation-name');
+    expect(element.getAttribute('href')).toBe(MOJ_HEADER_LINKS_MOCK.organisationLink);
+    expect(MOJ_HEADER_LINKS_MOCK.organisationLink).toBe(
+      'https://www.gov.uk/government/organisations/hm-courts-and-tribunals-service',
+    );
+  });
+
   it('should render into serviceName ng-content', () => {
     const element = fixture.nativeElement.querySelector('.moj-header__link--service-name');
     expect(element.textContent?.trim()).toBe('Test Service');
