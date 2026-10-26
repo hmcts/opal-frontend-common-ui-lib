@@ -67,9 +67,9 @@ custom-file-interface-viewer/
 ```
 
 Every component owns its matching `.component.ts`, `.component.html` and `.component.spec.ts` files. The base directive
-owns its `.directive.ts` and `.directive.spec.ts` files under `common/directives/`. The shared package entrypoint is
-`common/public-api.ts`; the viewer, table, base directive and row/action contracts are imported from that entrypoint.
-The filter keeps its existing dedicated entrypoint, and each direction retains its public wrapper entrypoint.
+owns its `.directive.ts` and `.directive.spec.ts` files under `common/directives/`. The shared component entrypoint is
+`common/public-api.ts`. The table, base directive, interfaces and constants each have dedicated entrypoints; see
+[Public import paths](#public-import-paths). The filter and each direction retain their own component entrypoints.
 
 ## Components and Services
 
@@ -250,3 +250,15 @@ migrating. Route and dashboard specs cover release-flag wiring, permissions and 
 Keep domain-specific request and row mappings in the consuming frontend's page utilities. Reuse the
 existing date, form and table abstractions. Document public input or action-template changes in the component and
 service READMEs, and update the relevant colocated specs.
+
+## Public import paths
+
+Component entrypoints export their components only. Import row and action-context types from the corresponding
+`/interfaces` paths, inbound sort types from `/custom-inbound-file-viewer/types`, and inbound defaults from
+`/custom-inbound-file-viewer/constants`. The shared default sort is under `/common/constants`.
+The common base directive is under `/common/directives/custom-file-interface-viewer-base`, and the shared table
+has its own `/common/custom-file-interface-viewer-table-wrapper` entrypoint. The legacy inbound table alias is
+available under `/custom-inbound-file-viewer/common/custom-file-interface-viewer-inbound-table-wrapper`.
+
+Update imports from the former combined entrypoints when upgrading. Supplied action templates and their row contexts
+retain the same behavior.

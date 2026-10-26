@@ -1,6 +1,6 @@
 import { IAbstractSortState } from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/interfaces';
 import { SortDirectionType } from '@hmcts/opal-frontend-common/components/abstract/abstract-sortable-table/types';
-import { ICustomFileInterfaceViewerInboundTableWrapperTableData } from '../interfaces/custom-file-interface-viewer-inbound-table-wrapper-table-data.interface';
+import type { ICustomFileInterfaceViewerInboundTableWrapperTableData } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/interfaces';
 
 export type ICustomFileInterfaceViewerInboundTableWrapperTableSort = IAbstractSortState & {
   [

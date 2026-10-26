@@ -5,7 +5,7 @@ import { provideRouter } from '@angular/router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { CustomFileInterfaceViewerFiltersComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters';
 import { CustomOutboundFileViewerComponent } from './custom-outbound-file-viewer.component';
-import { ICustomFileInterfaceViewerOutboundTableWrapperTableData } from './interfaces/custom-file-interface-viewer-outbound-table-wrapper-table-data.interface';
+import type { ICustomFileInterfaceViewerOutboundTableWrapperTableData } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-outbound-file-viewer/interfaces';
 
 function row(
   overrides: Partial<ICustomFileInterfaceViewerOutboundTableWrapperTableData> = {},

@@ -1,9 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import {
-  CustomFileInterfaceViewerBase,
-  CustomFileInterfaceViewerComponent,
-} from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common';
-import { ICustomFileInterfaceViewerOutboundTableWrapperTableData } from './interfaces/custom-file-interface-viewer-outbound-table-wrapper-table-data.interface';
+import { CustomFileInterfaceViewerBase } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/directives/custom-file-interface-viewer-base';
+import { CustomFileInterfaceViewerComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common';
+import type { ICustomFileInterfaceViewerOutboundTableWrapperTableData } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-outbound-file-viewer/interfaces';
 
 /**
  * Configures the shared presentational viewer for outbound filters and the Target column.

@@ -2,7 +2,8 @@
 
 `CustomFileInterfaceViewerTableWrapperComponent` renders inbound and outbound prepared rows using the existing
 sortable-table and pagination abstractions. Its component, template and spec are colocated in this directory;
-`constants/` owns its default sort state and page size, and `interfaces/` owns the action-template context.
+the shared `../constants/` owns the default sort state; local `constants/` owns the page size, and `interfaces/` owns the
+action-template context.
 
 Inputs are `tableData`, `existingSortState`, `isInbound` and an optional `actionTemplate`. Inbound columns are Date and
 time, Title, Type, Business unit, Source, Status and Action. Outbound columns replace Type/Source with Target.
@@ -13,10 +14,12 @@ The table paginates 25 rows and resets pagination when a new result array is sup
 
 A partial `existingSortState`, such as `{ Title: 'ascending' }`, leaves omitted sortable columns at `none`
 so every heading can still toggle in both directions. Supplied entries are retained without changing the caller's
-object. Passing `null` preserves input order until a heading is selected.
+object. Passing `null` starts every sortable column at `none` and preserves input order until a heading is selected,
+even when the table starts empty and rows arrive later.
 
-The shared viewer entrypoint exports this component. The inbound entrypoint also retains the legacy
-`CustomFileInterfaceViewerInboundTableWrapperComponent` export as an alias, and the table retains the original inbound
+Import the table from the shared viewer `/common/custom-file-interface-viewer-table-wrapper` entrypoint.
+The inbound `/custom-inbound-file-viewer/common/custom-file-interface-viewer-inbound-table-wrapper` entrypoint
+exports `CustomFileInterfaceViewerInboundTableWrapperComponent` as an alias, and the table retains the original inbound
 selector. Its direction defaults to inbound for that compatibility selector; the shared viewer binds the direction
 explicitly.
 
@@ -24,7 +27,7 @@ explicitly.
 
 | Method or accessor | Responsibility |
 | ------------------ | -------------- |
-| `existingSortState` setter | Fills omitted sortable keys with `none`, retains supplied entries and forwards `null` unchanged. |
+| `existingSortState` setter | Initializes all sortable keys to `none`, then applies supplied entries; `null` leaves every column unsorted. |
 | `onSortChange(event)` | Inherited handler that applies the selected column/direction and resets the page. |
 | `onPageChange(page)` | Inherited handler that updates the current page and focuses the first rendered row. |
 | `tableData` setter | Inherited input that replaces the prepared rows, reapplies sorting and resets pagination. |
@@ -36,5 +39,5 @@ Its page-size signal defaults to 25. Numeric `'Date and time'` values drive chro
 ## Testing
 
 The colocated spec covers both column sets, chronological sorting, every sortable column including Action,
-caller-supplied action labels, pagination, new-result resetting and projected actions. The table does not fetch files or
-handle downloads itself.
+caller-supplied action labels, sorting rows received after an initially empty result, pagination, new-result resetting
+and projected actions. The table does not fetch files or handle downloads itself.

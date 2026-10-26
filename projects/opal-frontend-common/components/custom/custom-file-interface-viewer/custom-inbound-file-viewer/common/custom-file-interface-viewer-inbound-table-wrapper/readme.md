@@ -18,21 +18,19 @@ tables. It does not fetch records or download files.
 
 ## Installation
 
-Use the existing inbound viewer entrypoint:
+Use the dedicated inbound table, constants, interfaces and types entrypoints:
 
 ```typescript
-import {
-  CustomFileInterfaceViewerInboundTableWrapperComponent,
-  CUSTOM_FILE_INTERFACE_VIEWER_INBOUND_TABLE_WRAPPER_SORT_DEFAULT,
-  ICustomFileInterfaceViewerInboundTableWrapperTableData,
-  ICustomFileInterfaceViewerInboundTableWrapperActionTemplateContext,
-  ICustomFileInterfaceViewerInboundTableWrapperTableSort,
-} from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer';
+import { CustomFileInterfaceViewerInboundTableWrapperComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/common/custom-file-interface-viewer-inbound-table-wrapper';
+import { CUSTOM_FILE_INTERFACE_VIEWER_INBOUND_TABLE_WRAPPER_SORT_DEFAULT } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/constants';
+import type { ICustomFileInterfaceViewerInboundTableWrapperTableData, ICustomFileInterfaceViewerInboundTableWrapperActionTemplateContext } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/interfaces';
+import type { ICustomFileInterfaceViewerInboundTableWrapperTableSort } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/types';
 ```
 
 Add `CustomFileInterfaceViewerInboundTableWrapperComponent` to the consuming standalone component's `imports` array.
 
-The implementation and colocated spec live in this directory beneath the inbound viewer.
+This entrypoint aliases the shared table implementation. Its component and spec live under
+`common/custom-file-interface-viewer-table-wrapper`.
 
 For the complete inbound page with filters and caller-supplied actions, use
 [CustomInboundFileViewerComponent](../../readme.md).
@@ -43,11 +41,9 @@ A minimal standalone host can supply a row and its own action:
 
 ```typescript
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import {
-  CustomFileInterfaceViewerInboundTableWrapperComponent,
-  CUSTOM_FILE_INTERFACE_VIEWER_INBOUND_TABLE_WRAPPER_SORT_DEFAULT,
-  ICustomFileInterfaceViewerInboundTableWrapperTableData,
-} from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer';
+import { CustomFileInterfaceViewerInboundTableWrapperComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/common/custom-file-interface-viewer-inbound-table-wrapper';
+import { CUSTOM_FILE_INTERFACE_VIEWER_INBOUND_TABLE_WRAPPER_SORT_DEFAULT } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/constants';
+import type { ICustomFileInterfaceViewerInboundTableWrapperTableData } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/interfaces';
 
 @Component({
   selector: 'app-interface-file-table-example',
@@ -97,8 +93,8 @@ viewer, which passes its optional `actionTemplate` input unchanged to this table
 | `paginationPageTitle` | `string`                                                                                  | No       | `''`                                          | Inherited context for the page-change announcement signal. The current table template does not render that signal as its own live region. |
 
 `CUSTOM_FILE_INTERFACE_VIEWER_INBOUND_TABLE_WRAPPER_SORT_DEFAULT` sorts `'Date and time'` descending, with all other
-directions set to `'none'`. Six displayed data columns are sortable: Date and time, Title, Type, Business unit, Source
-and Status. The Action header is not sortable.
+directions set to `'none'`. Every displayed column is sortable: Date and time, Title, Type, Business unit, Source,
+Status and Action. Action sorting uses each row's supplied `Actions` value.
 
 ## Outputs
 
@@ -159,10 +155,11 @@ labels, click prevention or error handling to a supplied action template.
 
 ## Testing
 
-The implementation and spec are colocated beneath `custom-inbound-file-viewer/common`. From the library repository root:
+The public alias uses the shared implementation and spec under `common/custom-file-interface-viewer-table-wrapper`.
+From the library repository root:
 
 ```bash
-yarn test --include='**/custom-file-interface-viewer-inbound-table-wrapper.component.spec.ts'
+yarn test --include='**/custom-file-interface-viewer-table-wrapper.component.spec.ts'
 ```
 
 The spec covers input replacement, default/date and column sorting, 25-row page boundaries, page reset/focus and

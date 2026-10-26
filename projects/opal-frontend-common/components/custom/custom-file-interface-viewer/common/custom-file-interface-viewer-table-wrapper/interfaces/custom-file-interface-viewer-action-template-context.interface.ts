@@ -1,4 +1,4 @@
-import { ICustomFileInterfaceViewerTableData } from '../../interfaces/custom-file-interface-viewer-table-data.interface';
+import type { ICustomFileInterfaceViewerTableData } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/interfaces';
 
 export interface ICustomFileInterfaceViewerActionTemplateContext<
   TFile extends ICustomFileInterfaceViewerTableData = ICustomFileInterfaceViewerTableData,

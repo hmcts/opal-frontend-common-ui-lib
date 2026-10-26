@@ -3,7 +3,8 @@
 `CustomOutboundFileViewerComponent` renders the outbound page using the common presentational viewer, filters and table. The consuming application supplies prepared rows, chooses whether to fetch initially or only after Refresh, and handles requests.
 
 ```ts
-import { CustomOutboundFileViewerComponent, ICustomFileInterfaceViewerOutboundTableWrapperTableData } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-outbound-file-viewer';
+import { CustomOutboundFileViewerComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-outbound-file-viewer';
+import type { ICustomFileInterfaceViewerOutboundTableWrapperTableData } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-outbound-file-viewer/interfaces';
 ```
 
 ```html

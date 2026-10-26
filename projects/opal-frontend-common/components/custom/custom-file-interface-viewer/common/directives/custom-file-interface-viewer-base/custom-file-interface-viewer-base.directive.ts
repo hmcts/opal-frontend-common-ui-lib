@@ -1,9 +1,9 @@
 import { Directive, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { IAlphagovAccessibleAutocompleteItem } from '@hmcts/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete/interfaces';
 import { IAbstractFormBaseForm } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-base/interfaces';
-import { CUSTOM_FILE_INTERFACE_VIEWER_TABLE_SORT_DEFAULT } from '../../custom-file-interface-viewer-table-wrapper/constants/custom-file-interface-viewer-table-sort-default.constant';
-import { ICustomFileInterfaceViewerActionTemplateContext } from '../../custom-file-interface-viewer-table-wrapper/interfaces/custom-file-interface-viewer-action-template-context.interface';
-import { ICustomFileInterfaceViewerTableData } from '../../interfaces/custom-file-interface-viewer-table-data.interface';
+import { CUSTOM_FILE_INTERFACE_VIEWER_TABLE_SORT_DEFAULT } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/constants';
+import type { ICustomFileInterfaceViewerActionTemplateContext } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-table-wrapper/interfaces';
+import type { ICustomFileInterfaceViewerTableData } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/interfaces';
 
 /**
  * Shares prepared rows, caller-owned actions and valid filter submissions between viewer wrappers.

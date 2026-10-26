@@ -193,11 +193,41 @@
     "./components/custom/custom-file-interface-viewer/common": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-common.mjs"
     },
+    "./components/custom/custom-file-interface-viewer/common/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-common-interfaces.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/common/constants": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-common-constants.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/common/directives/custom-file-interface-viewer-base": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-common-directives-custom-file-interface-viewer-base.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-table-wrapper": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-common-custom-file-interface-viewer-table-wrapper.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-table-wrapper/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-common-custom-file-interface-viewer-table-wrapper-interfaces.mjs"
+    },
     "./components/custom/custom-file-interface-viewer/custom-outbound-file-viewer": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-custom-outbound-file-viewer.mjs"
     },
+    "./components/custom/custom-file-interface-viewer/custom-outbound-file-viewer/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-custom-outbound-file-viewer-interfaces.mjs"
+    },
     "./components/custom/custom-file-interface-viewer/custom-inbound-file-viewer": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-custom-inbound-file-viewer.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-custom-inbound-file-viewer-interfaces.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/types": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-custom-inbound-file-viewer-types.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/constants": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-custom-inbound-file-viewer-constants.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/common/custom-file-interface-viewer-inbound-table-wrapper": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-custom-inbound-file-viewer-common-custom-file-interface-viewer-inbound-table-wrapper.mjs"
     },
     "./components/custom/custom-page-header": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-page-header.mjs"

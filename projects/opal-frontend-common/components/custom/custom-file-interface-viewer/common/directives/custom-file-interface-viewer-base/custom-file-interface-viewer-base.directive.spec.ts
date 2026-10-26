@@ -3,8 +3,8 @@ import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { describe, expect, it, vi } from 'vitest';
-import { CustomFileInterfaceViewerComponent } from '../../custom-file-interface-viewer/custom-file-interface-viewer.component';
-import { ICustomFileInterfaceViewerTableData } from '../../interfaces/custom-file-interface-viewer-table-data.interface';
+import { CustomFileInterfaceViewerComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common';
+import type { ICustomFileInterfaceViewerTableData } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/interfaces';
 import { CustomFileInterfaceViewerBase } from './custom-file-interface-viewer-base.directive';
 
 @Component({

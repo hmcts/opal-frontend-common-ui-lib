@@ -21,10 +21,8 @@ optional action template from the consuming application.
 ## Installation
 
 ```typescript
-import {
-  CustomInboundFileViewerComponent,
-  ICustomFileInterfaceViewerInboundTableWrapperTableData,
-} from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer';
+import { CustomInboundFileViewerComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer';
+import type { ICustomFileInterfaceViewerInboundTableWrapperTableData } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/interfaces';
 ```
 
 Add `CustomInboundFileViewerComponent` to the consuming standalone component's `imports` array and include the common
@@ -82,7 +80,7 @@ See the [filter form contract](../common/custom-file-interface-viewer-filters/re
 
 ## Table Data
 
-Import the row interface from the inbound viewer entrypoint shown above. Each row contains:
+Import the row interface from the inbound viewer `/interfaces` entrypoint shown above. Each row contains:
 
 | Property          | Type             | Description                                                                                                         |
 | ----------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------- |
@@ -130,7 +128,7 @@ interface ICustomFileInterfaceViewerInboundTableWrapperActionTemplateContext {
 }
 ```
 
-Import this type from the same inbound viewer entrypoint when declaring a typed `TemplateRef`. In an Angular template,
+Import this type from the inbound viewer `/interfaces` entrypoint when declaring a typed `TemplateRef`. In an Angular template,
 `let-row` receives the full current row. The viewer passes `actionTemplate` unchanged to its table and supplies no default
 contents for the Action cell. The row's `Actions` string is not rendered as an action.
 

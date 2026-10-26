@@ -4,8 +4,8 @@ import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { CustomFileInterfaceViewerFiltersComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters';
-import { CustomFileInterfaceViewerTableWrapperComponent } from '../custom-file-interface-viewer-table-wrapper/custom-file-interface-viewer-table-wrapper.component';
-import { ICustomFileInterfaceViewerTableData } from '../interfaces/custom-file-interface-viewer-table-data.interface';
+import { CustomFileInterfaceViewerTableWrapperComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-table-wrapper';
+import type { ICustomFileInterfaceViewerTableData } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/interfaces';
 import { CustomFileInterfaceViewerComponent } from './custom-file-interface-viewer.component';
 
 function row(overrides: Partial<ICustomFileInterfaceViewerTableData> = {}): ICustomFileInterfaceViewerTableData {

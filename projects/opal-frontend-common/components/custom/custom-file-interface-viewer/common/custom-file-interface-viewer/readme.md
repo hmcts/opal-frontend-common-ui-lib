@@ -1,6 +1,6 @@
 # Shared interface-file viewer component
 
-`CustomFileInterfaceViewerComponent` renders the heading, filters, results and optional consumer actions for either direction. Import it and `ICustomFileInterfaceViewerActionTemplateContext` from `@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common`.
+`CustomFileInterfaceViewerComponent` renders the heading, filters, results and optional consumer actions for either direction. Import the component from `@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common`. Import `ICustomFileInterfaceViewerActionTemplateContext` separately from `@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-table-wrapper/interfaces`.
 
 Inputs are `isInbound`, required `businessUnits`, optional `source` and `sourceList`, `tableData`, `tableSort` and optional `actionTemplate`. A null result leaves the table unset; an empty array renders the direction-specific empty message. `formSubmit` forwards valid raw filter values, including repeated submissions. The component makes no initial request.
 

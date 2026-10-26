@@ -1,4 +1,4 @@
-import { ICustomFileInterfaceViewerTableData } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common';
+import type { ICustomFileInterfaceViewerTableData } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/interfaces';
 
 export interface ICustomFileInterfaceViewerInboundTableWrapperTableData extends ICustomFileInterfaceViewerTableData {
   Type: string | null;

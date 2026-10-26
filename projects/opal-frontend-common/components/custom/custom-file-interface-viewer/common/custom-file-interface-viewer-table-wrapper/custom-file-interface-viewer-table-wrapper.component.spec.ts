@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { CUSTOM_FILE_INTERFACE_VIEWER_INBOUND_TABLE_WRAPPER_SORT_DEFAULT } from '../../custom-inbound-file-viewer/constants/custom-file-interface-viewer-inbound-table-wrapper-sort-default.constant';
-import { ICustomFileInterfaceViewerTableData } from '../interfaces/custom-file-interface-viewer-table-data.interface';
-import { CUSTOM_FILE_INTERFACE_VIEWER_TABLE_SORT_DEFAULT } from './constants/custom-file-interface-viewer-table-sort-default.constant';
+import { CUSTOM_FILE_INTERFACE_VIEWER_INBOUND_TABLE_WRAPPER_SORT_DEFAULT } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/constants';
+import { ICustomFileInterfaceViewerTableData } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/interfaces';
+import { CUSTOM_FILE_INTERFACE_VIEWER_TABLE_SORT_DEFAULT } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/constants';
 import { CustomFileInterfaceViewerTableWrapperComponent } from './custom-file-interface-viewer-table-wrapper.component';
 
 const row: ICustomFileInterfaceViewerTableData = {
@@ -143,6 +143,46 @@ describe.each([
       fixture.detectChanges();
       expect(fixture.componentInstance.paginatedTableDataComputed()).toEqual(rows);
       expect(fixture.nativeElement.textContent).toContain('Showing 2 results');
+    });
+
+    it.each(columns)('sorts %s in both directions when rows arrive after empty unsorted results', (column) => {
+      fixture.componentRef.setInput('existingSortState', null);
+      fixture.componentRef.setInput('tableData', []);
+      fixture.detectChanges();
+      expect(fixture.nativeElement.querySelectorAll('tbody tr')).toHaveLength(0);
+
+      const columnKey = column === 'Action' ? 'Actions' : column;
+      const rows = createRows(3).map((file, index) => ({
+        ...file,
+        [columnKey]:
+          columnKey === 'Date and time' || columnKey === 'Title' ? file[columnKey] : ['Alpha', 'Bravo', 'Zulu'][index],
+      }));
+      fixture.componentRef.setInput('tableData', [rows[1], rows[2], rows[0]]);
+      fixture.detectChanges();
+      const titles = () =>
+        Array.from(fixture.nativeElement.querySelectorAll('td[id^="title-"]'), (cell) =>
+          (cell as HTMLElement).textContent?.trim(),
+        );
+      const headers = Array.from(fixture.nativeElement.querySelectorAll('thead th')) as HTMLTableCellElement[];
+      const header = headers.find((item) => item.textContent?.trim() === column)!;
+      const button = header.querySelector('button')!;
+      const status = fixture.nativeElement.querySelector('output[aria-live="polite"]') as HTMLOutputElement;
+      expect(titles()).toEqual(['file-02.dat', 'file-03.dat', 'file-01.dat']);
+      expect(header.getAttribute('aria-sort')).toBe('none');
+
+      button.click();
+      fixture.detectChanges();
+
+      expect(titles()).toEqual(['file-01.dat', 'file-02.dat', 'file-03.dat']);
+      expect(header.getAttribute('aria-sort')).toBe('ascending');
+      expect(status.textContent?.trim()).toBe(`Sorted by ${columnKey} (ascending)`);
+
+      button.click();
+      fixture.detectChanges();
+
+      expect(titles()).toEqual(['file-03.dat', 'file-02.dat', 'file-01.dat']);
+      expect(header.getAttribute('aria-sort')).toBe('descending');
+      expect(status.textContent?.trim()).toBe(`Sorted by ${columnKey} (descending)`);
     });
 
     it('keeps distinct row views for files without IDs when sorting and replacing results', () => {

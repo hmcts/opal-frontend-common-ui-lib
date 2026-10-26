@@ -4,10 +4,10 @@ import { IAbstractSortState } from '@hmcts/opal-frontend-common/components/abstr
 import { IAlphagovAccessibleAutocompleteItem } from '@hmcts/opal-frontend-common/components/alphagov/alphagov-accessible-autocomplete/interfaces';
 import { CustomPageHeaderComponent } from '@hmcts/opal-frontend-common/components/custom/custom-page-header';
 import { CustomFileInterfaceViewerFiltersComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters';
-import { CustomFileInterfaceViewerTableWrapperComponent } from '../custom-file-interface-viewer-table-wrapper/custom-file-interface-viewer-table-wrapper.component';
-import { CUSTOM_FILE_INTERFACE_VIEWER_TABLE_SORT_DEFAULT } from '../custom-file-interface-viewer-table-wrapper/constants/custom-file-interface-viewer-table-sort-default.constant';
-import { ICustomFileInterfaceViewerTableData } from '../interfaces/custom-file-interface-viewer-table-data.interface';
-import { ICustomFileInterfaceViewerActionTemplateContext } from '../custom-file-interface-viewer-table-wrapper/interfaces/custom-file-interface-viewer-action-template-context.interface';
+import { CustomFileInterfaceViewerTableWrapperComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-table-wrapper';
+import { CUSTOM_FILE_INTERFACE_VIEWER_TABLE_SORT_DEFAULT } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/constants';
+import type { ICustomFileInterfaceViewerTableData } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/interfaces';
+import type { ICustomFileInterfaceViewerActionTemplateContext } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-table-wrapper/interfaces';
 
 /**
  * Composes direction-specific headings, shared filters and prepared result rows.
