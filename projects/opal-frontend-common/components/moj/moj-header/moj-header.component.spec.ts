@@ -44,12 +44,14 @@ describe('MojHeaderComponent', () => {
     expect(element.textContent?.trim()).toBe('Test Organisation');
   });
 
-  it('should link the organisation name to the HMCTS organisation page', () => {
+  it('should link the organisation name to the configured organisation page', () => {
     const element = fixture.nativeElement.querySelector('.moj-header__link--organisation-name');
     expect(element.getAttribute('href')).toBe(MOJ_HEADER_LINKS_MOCK.organisationLink);
-    expect(MOJ_HEADER_LINKS_MOCK.organisationLink).toBe(
-      'https://www.gov.uk/government/organisations/hm-courts-and-tribunals-service',
-    );
+  });
+
+  it('should link the GOV.UK logo to the configured GOV.UK page', () => {
+    const element = fixture.nativeElement.querySelector('.govuk-header__link');
+    expect(element.getAttribute('href')).toBe(MOJ_HEADER_LINKS_MOCK.govukLink);
   });
 
   it('should render into serviceName ng-content', () => {
@@ -60,5 +62,21 @@ describe('MojHeaderComponent', () => {
   it('should render into linkText ng-content', () => {
     const element = fixture.nativeElement.querySelector('opal-lib-moj-header-navigation-item');
     expect(element.textContent?.trim()).toBe('Test Link');
+  });
+
+  it('should use non-link elements for organisation and service names when there is no service link', () => {
+    const noServiceLinkFixture = TestBed.createComponent(TestHostComponent);
+    noServiceLinkFixture.componentInstance.headerLinks = { ...MOJ_HEADER_LINKS_MOCK, serviceLink: '' };
+    noServiceLinkFixture.detectChanges();
+
+    const organisationName = noServiceLinkFixture.nativeElement.querySelector('.moj-header__link--organisation-name');
+    const serviceName = noServiceLinkFixture.nativeElement.querySelector('.moj-header__link--service-name');
+
+    expect(organisationName.tagName).toBe('SPAN');
+    expect(serviceName.tagName).toBe('SPAN');
+    expect(noServiceLinkFixture.nativeElement.querySelector('.moj-header__link--organisation-name[href]')).toBeNull();
+    expect(noServiceLinkFixture.nativeElement.querySelector('.moj-header__link--service-name[href]')).toBeNull();
+
+    noServiceLinkFixture.destroy();
   });
 });
