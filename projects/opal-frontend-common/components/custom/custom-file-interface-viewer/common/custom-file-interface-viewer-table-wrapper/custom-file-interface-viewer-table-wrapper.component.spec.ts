@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { CUSTOM_FILE_INTERFACE_VIEWER_INBOUND_TABLE_WRAPPER_SORT_DEFAULT } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/constants';
 import { ICustomFileInterfaceViewerTableData } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/interfaces';
 import { CUSTOM_FILE_INTERFACE_VIEWER_TABLE_SORT_DEFAULT } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/constants';
+import type { ICustomFileInterfaceViewerActionTemplateContext } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-table-wrapper/interfaces';
+import type { ICustomFileInterfaceViewerInboundTableWrapperTableData } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/interfaces';
 import { CustomFileInterfaceViewerTableWrapperComponent } from './custom-file-interface-viewer-table-wrapper.component';
 
 const row: ICustomFileInterfaceViewerTableData = {
@@ -17,6 +18,12 @@ const row: ICustomFileInterfaceViewerTableData = {
   Target: 'ANT CSV',
   Status: 'Ready',
   Actions: null,
+};
+
+const inboundRow: ICustomFileInterfaceViewerInboundTableWrapperTableData = {
+  ...row,
+  Type: 'RAW',
+  Source: 'Allpay',
 };
 
 /**
@@ -40,17 +47,23 @@ function createRows(count: number): ICustomFileInterfaceViewerTableData[] {
   template: `
     <ng-template #action let-file>
       <a [href]="'/example-files/' + file['File ID']" (click)="onAction(file, $event)">Open {{ file.Title }}</a>
+      <span>{{ file.Type }} from {{ file.Source }}</span>
     </ng-template>
-    <opal-lib-custom-file-interface-viewer-inbound-table-wrapper
+    <opal-lib-custom-file-interface-viewer-table-wrapper
       [existingSortState]="sortState"
       [tableData]="files"
-      [actionTemplate]="action"
-    ></opal-lib-custom-file-interface-viewer-inbound-table-wrapper>
+      [actionTemplate]="actionTemplate"
+    ></opal-lib-custom-file-interface-viewer-table-wrapper>
   `,
 })
 class TableActionHostComponent {
-  public readonly files = [row];
-  public readonly sortState = CUSTOM_FILE_INTERFACE_VIEWER_INBOUND_TABLE_WRAPPER_SORT_DEFAULT;
+  @ViewChild('action', { static: true })
+  public actionTemplate!: TemplateRef<
+    ICustomFileInterfaceViewerActionTemplateContext<ICustomFileInterfaceViewerInboundTableWrapperTableData>
+  >;
+
+  public readonly files = [inboundRow];
+  public readonly sortState = CUSTOM_FILE_INTERFACE_VIEWER_TABLE_SORT_DEFAULT;
   public readonly action = vi.fn();
 
   /**
@@ -58,7 +71,7 @@ class TableActionHostComponent {
    * @param file - File represented by the clicked action.
    * @param event - Native anchor click event.
    */
-  public onAction(file: ICustomFileInterfaceViewerTableData, event: Event): void {
+  public onAction(file: ICustomFileInterfaceViewerInboundTableWrapperTableData, event: Event): void {
     event.preventDefault();
     this.action(file, event);
   }
@@ -88,12 +101,7 @@ describe.each([
       }).compileComponents();
       fixture = TestBed.createComponent(CustomFileInterfaceViewerTableWrapperComponent);
       fixture.componentRef.setInput('isInbound', isInbound);
-      fixture.componentRef.setInput(
-        'existingSortState',
-        isInbound
-          ? CUSTOM_FILE_INTERFACE_VIEWER_INBOUND_TABLE_WRAPPER_SORT_DEFAULT
-          : CUSTOM_FILE_INTERFACE_VIEWER_TABLE_SORT_DEFAULT,
-      );
+      fixture.componentRef.setInput('existingSortState', CUSTOM_FILE_INTERFACE_VIEWER_TABLE_SORT_DEFAULT);
       fixture.componentRef.setInput('tableData', [row]);
     });
 
@@ -409,7 +417,7 @@ describe.each([
 );
 
 describe('CustomFileInterfaceViewerTableWrapperComponent action templates', () => {
-  it('retains the inbound selector alias and delivers caller-owned action clicks to the template owner', async () => {
+  it('renders a typed inbound action template and delivers its clicks to the owner through the shared selector', async () => {
     await TestBed.configureTestingModule({ imports: [TableActionHostComponent] }).compileComponents();
     const fixture = TestBed.createComponent(TableActionHostComponent);
     fixture.detectChanges();
@@ -417,11 +425,12 @@ describe('CustomFileInterfaceViewerTableWrapperComponent action templates', () =
     expect(link.textContent?.trim()).toBe('Open mock.dat');
     expect(link.getAttribute('href')).toBe('/example-files/1001');
     expect(fixture.nativeElement.querySelector('td#source-0').textContent.trim()).toBe('Allpay');
+    expect(fixture.nativeElement.querySelector('td#actions-0 span').textContent).toBe('RAW from Allpay');
     const click = new MouseEvent('click', { bubbles: true, cancelable: true });
 
     link.dispatchEvent(click);
 
     expect(click.defaultPrevented).toBe(true);
-    expect(fixture.componentInstance.action).toHaveBeenCalledExactlyOnceWith(row, click);
+    expect(fixture.componentInstance.action).toHaveBeenCalledExactlyOnceWith(inboundRow, click);
   });
 });

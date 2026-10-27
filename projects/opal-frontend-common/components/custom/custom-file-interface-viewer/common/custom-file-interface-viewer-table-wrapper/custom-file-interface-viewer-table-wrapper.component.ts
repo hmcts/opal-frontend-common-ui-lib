@@ -21,8 +21,7 @@ import { IAbstractSortState } from '@hmcts/opal-frontend-common/components/abstr
  * Optional consumer templates own row actions; the table does not fetch or download files.
  */
 @Component({
-  selector:
-    'opal-lib-custom-file-interface-viewer-table-wrapper, opal-lib-custom-file-interface-viewer-inbound-table-wrapper',
+  selector: 'opal-lib-custom-file-interface-viewer-table-wrapper',
   imports: [
     NgTemplateOutlet,
     MojPaginationComponent,
@@ -36,11 +35,13 @@ import { IAbstractSortState } from '@hmcts/opal-frontend-common/components/abstr
   templateUrl: './custom-file-interface-viewer-table-wrapper.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomFileInterfaceViewerTableWrapperComponent extends AbstractReportInstancesTableBaseComponent<ICustomFileInterfaceViewerTableData> {
+export class CustomFileInterfaceViewerTableWrapperComponent<
+  TFile extends ICustomFileInterfaceViewerTableData = ICustomFileInterfaceViewerTableData,
+> extends AbstractReportInstancesTableBaseComponent<TFile> {
   @Input() public isInbound: boolean = true;
 
   @Input()
-  public actionTemplate: TemplateRef<ICustomFileInterfaceViewerActionTemplateContext> | null = null;
+  public actionTemplate: TemplateRef<ICustomFileInterfaceViewerActionTemplateContext<TFile>> | null = null;
 
   /**
    * Fills omitted sortable columns with no sort before applying the supplied configuration.

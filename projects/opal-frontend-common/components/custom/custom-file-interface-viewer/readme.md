@@ -254,11 +254,11 @@ service READMEs, and update the relevant colocated specs.
 ## Public import paths
 
 Component entrypoints export their components only. Import row and action-context types from the corresponding
-`/interfaces` paths, inbound sort types from `/custom-inbound-file-viewer/types`, and inbound defaults from
-`/custom-inbound-file-viewer/constants`. The shared default sort is under `/common/constants`.
+`/interfaces` paths. Both directions use the shared default sort under `/common/constants` and `IAbstractSortState`
+from the abstract sortable-table `/interfaces` entrypoint.
 The common base directive is under `/common/directives/custom-file-interface-viewer-base`, and the shared table
-has its own `/common/custom-file-interface-viewer-table-wrapper` entrypoint. The legacy inbound table alias is
-available under `/custom-inbound-file-viewer/common/custom-file-interface-viewer-inbound-table-wrapper`.
+has its own `/common/custom-file-interface-viewer-table-wrapper` entrypoint. Use that table with `[isInbound]="true"`
+or `[isInbound]="false"` for standalone inbound or outbound results.
 
 Update imports from the former combined entrypoints when upgrading. Supplied action templates and their row contexts
 retain the same behavior.

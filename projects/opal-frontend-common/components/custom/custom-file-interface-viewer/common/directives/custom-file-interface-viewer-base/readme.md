@@ -1,6 +1,6 @@
 # Interface-file viewer base directive
 
-`CustomFileInterfaceViewerBase<TFile>` shares the inbound/outbound wrappers' presentational contract: required `businessUnits`, prepared `tableData`, optional `actionTemplate`, `formSubmit`, direction and default sort state. The generic action context retains the concrete row type. Inbound adds required source/type choices and its compatible sort constant.
+`CustomFileInterfaceViewerBase<TFile>` shares the inbound/outbound wrappers' presentational contract: required `businessUnits`, prepared `tableData`, optional `actionTemplate`, `formSubmit`, direction and default sort state. The generic action context retains the concrete row type. Inbound adds required source/type choices; both directions inherit the common default sort.
 
 The base declares no methods or lifecycle hooks. It provides shared input/output metadata, an abstract `isInbound`
 direction and the default table sort. The shared default contains every column key for either direction, including

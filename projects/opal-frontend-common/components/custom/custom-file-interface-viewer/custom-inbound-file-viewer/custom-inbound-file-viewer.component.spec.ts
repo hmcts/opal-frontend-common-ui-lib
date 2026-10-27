@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { CustomFileInterfaceViewerFiltersComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters';
-import { CustomFileInterfaceViewerInboundTableWrapperComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/common/custom-file-interface-viewer-inbound-table-wrapper';
+import { CustomFileInterfaceViewerTableWrapperComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-table-wrapper';
 import type { ICustomFileInterfaceViewerInboundTableWrapperTableData } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/interfaces';
 import { CustomInboundFileViewerComponent } from './custom-inbound-file-viewer.component';
 
@@ -90,11 +90,11 @@ describe('CustomInboundFileViewerComponent', () => {
     expect(fixture.nativeElement.textContent).not.toContain('There are no inbound interface files to display.');
     fixture.componentRef.setInput('tableData', []);
     fixture.detectChanges();
-    expect(fixture.debugElement.query(By.directive(CustomFileInterfaceViewerInboundTableWrapperComponent))).toBeNull();
+    expect(fixture.debugElement.query(By.directive(CustomFileInterfaceViewerTableWrapperComponent))).toBeNull();
     expect(fixture.nativeElement.textContent).toContain('There are no inbound interface files to display.');
   });
 
-  it('renders prepared row labels and sorts by the supplied numeric date', () => {
+  it('renders prepared row labels with the shared newest-first numeric date sort', () => {
     fixture.componentRef.setInput('tableData', [
       row({ 'File ID': 1002, Title: 'older.xml', 'Date and time': 0 }),
       row(),
@@ -108,6 +108,7 @@ describe('CustomInboundFileViewerComponent', () => {
     expect(fixture.nativeElement.querySelector('td#business-unit-0').textContent).toBe('Camberwell Green');
     expect(fixture.nativeElement.querySelector('td#date-and-time-0').textContent).toBe('20 Oct 2026 at 13:00');
     expect(fixture.nativeElement.querySelector('td#type-0').textContent).toBe('RAW');
+    expect(fixture.nativeElement.querySelector('thead th:first-child').getAttribute('aria-sort')).toBe('descending');
   });
 
   it('leaves action cells empty when no consumer template is supplied', () => {
@@ -139,8 +140,8 @@ describe('CustomInboundFileViewerComponent', () => {
     host.rows = Array.from({ length: 26 }, (_, index) => row({ 'File ID': index + 1 }));
     host.downloadableIds.add(26);
     hostFixture.detectChanges();
-    const table = hostFixture.debugElement.query(By.directive(CustomFileInterfaceViewerInboundTableWrapperComponent))
-      .componentInstance as CustomFileInterfaceViewerInboundTableWrapperComponent;
+    const table = hostFixture.debugElement.query(By.directive(CustomFileInterfaceViewerTableWrapperComponent))
+      .componentInstance as CustomFileInterfaceViewerTableWrapperComponent;
     table.onPageChange(2);
     hostFixture.detectChanges();
     hostFixture.nativeElement.querySelector('#consumer-action-26').click();

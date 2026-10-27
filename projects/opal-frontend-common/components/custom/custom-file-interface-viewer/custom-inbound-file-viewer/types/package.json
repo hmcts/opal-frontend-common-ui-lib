@@ -1,5 +1,0 @@
-{
-  "sideEffects": false,
-  "module": "../../../../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-custom-inbound-file-viewer-types.mjs",
-  "typings": "../../../../../../../dist/opal-frontend-common/types/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-custom-inbound-file-viewer-types.d.ts"
-}

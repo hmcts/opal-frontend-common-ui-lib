@@ -18,10 +18,11 @@ object. Passing `null` starts every sortable column at `none` and preserves inpu
 even when the table starts empty and rows arrive later.
 
 Import the table from the shared viewer `/common/custom-file-interface-viewer-table-wrapper` entrypoint.
-The inbound `/custom-inbound-file-viewer/common/custom-file-interface-viewer-inbound-table-wrapper` entrypoint
-exports `CustomFileInterfaceViewerInboundTableWrapperComponent` as an alias, and the table retains the original inbound
-selector. Its direction defaults to inbound for that compatibility selector; the shared viewer binds the direction
-explicitly.
+Its selector is `opal-lib-custom-file-interface-viewer-table-wrapper`; the shared viewer binds the direction explicitly.
+Sorting, pagination and table markup for both directions are maintained here. The component's optional row-type
+parameter preserves specialised action-template contexts, including the inbound `Type` and `Source` fields.
+Use `CUSTOM_FILE_INTERFACE_VIEWER_TABLE_SORT_DEFAULT` from `/common/constants` for the shared descending date/time
+default, or supply an `IAbstractSortState` from the abstract sortable-table `/interfaces` entrypoint.
 
 ## Methods
 

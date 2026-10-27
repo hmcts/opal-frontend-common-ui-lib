@@ -170,10 +170,16 @@ Supply `[actionTemplate]` to retain row actions. Move download eligibility, URL 
 errors and focus handling into the consuming application. The former built-in Download action and download methods/error
 state have been removed; omitting the template leaves Action cells empty. Update the consumer's tests with this migration.
 
+For a standalone table, import `CustomFileInterfaceViewerTableWrapperComponent` from
+`/common/custom-file-interface-viewer-table-wrapper`, use `opal-lib-custom-file-interface-viewer-table-wrapper`, and bind
+`[isInbound]="true"`. The separate inbound table entrypoint has been removed. Its sort default and mapped sort type
+have also been removed: use `CUSTOM_FILE_INTERFACE_VIEWER_TABLE_SORT_DEFAULT` from `/common/constants` and
+`IAbstractSortState` from the abstract sortable-table `/interfaces` entrypoint.
+
 ## Component behavior
 
 This wrapper declares no methods or lifecycle hooks. It inherits presentational inputs and `formSubmit` from
-`CustomFileInterfaceViewerBase`, sets inbound mode and its compatible default sort, and forwards those bindings to the
+`CustomFileInterfaceViewerBase`, sets inbound mode, inherits the common default sort, and forwards those bindings to the
 shared viewer. Validation and submission are owned by the [filter component](../common/custom-file-interface-viewer-filters/readme.md#methods);
 sorting and pagination are inherited by the [common table](../common/custom-file-interface-viewer-table-wrapper/readme.md#methods).
 
@@ -194,7 +200,7 @@ yarn test --include='**/custom-inbound-file-viewer.component.spec.ts'
 ```
 
 The specs cover input/output wiring, unset/empty results, prepared row rendering and caller-supplied action templates.
-Table sorting and pagination have colocated wrapper specs. Consumer integration tests should cover initial fetching,
+Table sorting and pagination are covered by the shared table's colocated spec. Consumer integration tests should cover initial fetching,
 filter-to-request mapping and any application-owned eligibility, downloads, errors and focus.
 
 ## Contributing
@@ -205,4 +211,4 @@ README and the relevant specs when a public input or action-template contract ch
 
 ## Shared implementation
 
-The thin inbound wrapper forwards its required source/type choices, business units, rows, form submissions and optional action template through the shared viewer. The common base holds presentational inputs and outputs only. The common table retains the inbound selector and exported class alias, numeric date sorting, unique cell IDs and 25-row pagination. Existing inbound row and action-context type names remain exported.
+The thin inbound viewer forwards its required source/type choices, business units, rows, form submissions and optional action template through the shared viewer. The common base holds presentational inputs and outputs and the shared default sort. The common table provides numeric date sorting, unique cell IDs and 25-row pagination for both directions. Inbound row and action-context interfaces remain exported for consuming pages.

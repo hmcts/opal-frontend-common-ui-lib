@@ -190,15 +190,6 @@
       "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/interfaces": [
         "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/interfaces"
       ],
-      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/types": [
-        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/types"
-      ],
-      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/constants": [
-        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/constants"
-      ],
-      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/common/custom-file-interface-viewer-inbound-table-wrapper": [
-        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/common/custom-file-interface-viewer-inbound-table-wrapper"
-      ],
       "@hmcts/opal-frontend-common/components/custom/custom-page-header": [
         "./dist/opal-frontend-common/components/custom/custom-page-header"
       ],
