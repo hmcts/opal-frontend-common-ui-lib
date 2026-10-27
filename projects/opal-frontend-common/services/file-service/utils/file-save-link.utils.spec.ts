@@ -70,4 +70,33 @@ describe('saveFileToLink', () => {
     vi.runOnlyPendingTimers();
     expect(revokeObjectURL).toHaveBeenCalledExactlyOnceWith('blob:mock-download');
   });
+
+  it('preserves empty attributes instead of removing them after the download', () => {
+    link.setAttribute('href', '');
+    link.setAttribute('download', '');
+    vi.spyOn(link, 'click').mockImplementation(() => undefined);
+
+    saveFileToLink(new Blob(['mock']), link, 'saved.csv');
+
+    expect(link.getAttribute('href')).toBe('');
+    expect(link.getAttribute('download')).toBe('');
+  });
+
+  it('leaves the caller link untouched when the browser cannot create an object URL', () => {
+    link.setAttribute('href', '/original');
+    link.setAttribute('download', 'original.csv');
+    const error = new Error('Object URL unavailable');
+    createObjectURL.mockImplementationOnce(() => {
+      throw error;
+    });
+    const click = vi.spyOn(link, 'click');
+
+    expect(() => saveFileToLink(new Blob(['mock']), link, 'saved.csv')).toThrow(error);
+
+    expect(link.getAttribute('href')).toBe('/original');
+    expect(link.getAttribute('download')).toBe('original.csv');
+    expect(click).not.toHaveBeenCalled();
+    vi.runOnlyPendingTimers();
+    expect(revokeObjectURL).not.toHaveBeenCalled();
+  });
 });
