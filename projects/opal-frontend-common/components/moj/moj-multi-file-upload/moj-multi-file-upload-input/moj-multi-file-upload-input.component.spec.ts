@@ -373,9 +373,22 @@ describe('MojMultiFileUploadInputComponent', () => {
   it('describes only the dropzone when there is no optional hint or error', () => {
     fixture.detectChanges();
 
+    expect(component.hintText).toBeNull();
     expect(input().getAttribute('aria-describedby')).toBe('supporting-documents-dropzone-hint');
     expect(input().getAttribute('aria-invalid')).not.toBe('true');
     expect(fixture.nativeElement.querySelector('.govuk-error-message')).toBeNull();
     expect(fixture.nativeElement.querySelector('.govuk-hint')).toBeNull();
+  });
+
+  it.each([null, ''])('omits the optional hint and its aria reference when hintText is %s', (hintText) => {
+    component.hintText = hintText;
+    component.errors = ['The selected file is invalid'];
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('#supporting-documents-hint')).toBeNull();
+    expect(input().getAttribute('aria-describedby')).toBe(
+      'supporting-documents-dropzone-hint supporting-documents-error',
+    );
+    expect(input().getAttribute('aria-invalid')).toBe('true');
   });
 });

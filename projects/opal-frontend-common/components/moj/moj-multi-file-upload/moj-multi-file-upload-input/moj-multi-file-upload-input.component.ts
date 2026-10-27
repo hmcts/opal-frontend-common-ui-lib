@@ -20,7 +20,7 @@ export class MojMultiFileUploadInputComponent {
   @Input({ required: true }) labelText!: string;
   @Input() labelClasses = 'govuk-label--m';
   @Input() inputClasses = '';
-  @Input() hintText = '';
+  @Input() hintText: string | null = null;
   @Input() dropzoneHintText = 'Drag and drop files here or';
   @Input() buttonText = 'Choose files';
   @Input() uploadButtonText = 'Upload file';

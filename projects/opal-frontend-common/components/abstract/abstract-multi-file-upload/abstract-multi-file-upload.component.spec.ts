@@ -10,7 +10,7 @@ import type { IAbstractMultiFileUploadItem } from './interfaces/abstract-multi-f
 
 const fieldErrors = {
   required: { message: 'Select a file', priority: 1 },
-  fileUpload: { message: 'Remove files with errors', priority: 2 },
+  fileUpload: { message: 'Check files with errors', priority: 2 },
   uploadPending: { message: 'Wait for uploads', priority: 3 },
 };
 
@@ -171,7 +171,7 @@ describe('AbstractMultiFileUploadComponent', () => {
     component.handleFormSubmit(new SubmitEvent('submit'));
 
     expect(component.formErrorSummaryMessage).toEqual([
-      { fieldId: 'files', message: 'Remove files with errors' },
+      { fieldId: 'files', message: 'Check files with errors' },
       { fieldId: 'notes', message: 'Enter a note' },
     ]);
     expect(component.formErrorSummaryMessage).toContainEqual({ fieldId: 'notes', message: 'Enter a note' });
@@ -181,7 +181,7 @@ describe('AbstractMultiFileUploadComponent', () => {
     component.files = [stored, item(rejected.file), failed, pending];
 
     expect(component.formErrorSummaryMessage.filter((error) => error.fieldId === 'files')).toEqual([
-      { fieldId: 'files', message: 'Remove files with errors' },
+      { fieldId: 'files', message: 'Check files with errors' },
     ]);
     expect(component.formErrorSummaryMessage).toContainEqual({ fieldId: 'notes', message: 'Enter a note' });
 
@@ -205,7 +205,7 @@ describe('AbstractMultiFileUploadComponent', () => {
 
     named.handleFormSubmit(new SubmitEvent('submit'));
 
-    expect(named.formErrorSummaryMessage).toEqual([{ fieldId: 'documents', message: 'Remove files with errors' }]);
+    expect(named.formErrorSummaryMessage).toEqual([{ fieldId: 'documents', message: 'Check files with errors' }]);
     expect(named.fileInputErrors).toEqual(['document.csv: The document was rejected']);
   });
 
@@ -226,7 +226,7 @@ describe('AbstractMultiFileUploadComponent', () => {
 
     expect(component.formErrorSummaryMessage).toContainEqual({
       fieldId: 'files',
-      message: 'Remove files with errors',
+      message: 'Check files with errors',
     });
     expect(component.formErrorSummaryMessage).toContainEqual({ fieldId: 'notes', message: 'Enter a note' });
   });
@@ -245,58 +245,33 @@ describe('AbstractMultiFileUploadComponent', () => {
     expect(component.form.controls.files.value).toEqual([retained.file]);
   });
 
-  it('emits a removal request while the parent retains ownership of the row and model', () => {
-    const retained = item(file('retained.csv'));
-    const removed = vi.fn();
-    component.files = [retained];
-    component.fileRemoved.subscribe(removed);
-
-    component.removeFile(retained.id);
-
-    expect(removed).toHaveBeenCalledExactlyOnceWith(retained.id);
-    expect(component.fileUploads()).toEqual([retained]);
-    expect(component.form.controls.files.value).toEqual([retained.file]);
-
-    component.files = [];
-
-    expect(component.form.controls.files.value).toEqual([]);
-    expect(component.form.controls.files.hasError('required')).toBe(true);
-  });
-
-  it('ignores empty selection and missing removal identifiers', () => {
+  it('ignores an empty selection', () => {
     const selected = vi.fn();
-    const removed = vi.fn();
     component.filesSelected.subscribe(selected);
-    component.fileRemoved.subscribe(removed);
 
     component.onFilesSelected([]);
-    component.removeFile('missing');
 
     expect(selected).not.toHaveBeenCalled();
-    expect(removed).not.toHaveBeenCalled();
   });
 
-  it('guards the upload control when other form fields remain enabled', () => {
+  it('guards file selection when the upload control is disabled while other form fields remain enabled', () => {
     const retained = item(file('retained.csv'));
     const selected = vi.fn();
-    const removed = vi.fn();
+    const nextSelection = [file('selected.csv')];
     component.files = [retained];
     component.filesSelected.subscribe(selected);
-    component.fileRemoved.subscribe(removed);
     component.form.controls.files.disable();
 
-    component.onFilesSelected([file('ignored.csv')]);
-    component.removeFile(retained.id);
+    component.onFilesSelected(nextSelection);
 
     expect(component.form.enabled).toBe(true);
     expect(component.form.controls.notes.enabled).toBe(true);
     expect(selected).not.toHaveBeenCalled();
-    expect(removed).not.toHaveBeenCalled();
     expect(component.fileUploads()).toEqual([retained]);
 
     component.form.controls.files.enable();
-    component.removeFile(retained.id);
-    expect(removed).toHaveBeenCalledExactlyOnceWith(retained.id);
+    component.onFilesSelected(nextSelection);
+    expect(selected).toHaveBeenCalledExactlyOnceWith(nextSelection);
   });
 
   it('treats a different file instance or reordered model as pending', () => {
@@ -329,7 +304,7 @@ describe('AbstractMultiFileUploadComponent', () => {
     expect(unsaved).toHaveBeenCalledExactlyOnceWith(false);
   });
 
-  it('marks an added or removed parent-owned file as a new edit after submission', () => {
+  it('marks an added parent-owned file as a new edit after submission', () => {
     const first = item(file('first.csv'));
     const second = item(file('second.csv'));
     component.files = [first];
@@ -339,10 +314,9 @@ describe('AbstractMultiFileUploadComponent', () => {
     component['unsavedChanges'].subscribe(unsaved);
 
     component.files = [first, second];
-    component.files = [first];
 
     expect(component['formSubmitted']).toBe(false);
-    expect(unsaved.mock.calls).toEqual([[true], [true]]);
+    expect(unsaved).toHaveBeenCalledExactlyOnceWith(true);
   });
 
   it('reports the first optional file selection as unsaved after submitting an empty form', () => {

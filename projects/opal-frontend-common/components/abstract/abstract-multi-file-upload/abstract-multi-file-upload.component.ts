@@ -23,7 +23,6 @@ export abstract class AbstractMultiFileUploadComponent extends AbstractFormBaseC
   @Input() public announcement = '';
 
   @Output() public filesSelected = new EventEmitter<readonly File[]>();
-  @Output() public fileRemoved = new EventEmitter<string>();
   @Output() public filesCleared = new EventEmitter<void>();
 
   public readonly fileUploads = this.uploadItems.asReadonly();
@@ -87,13 +86,6 @@ export abstract class AbstractMultiFileUploadComponent extends AbstractFormBaseC
   public onFilesSelected(files: readonly File[]): void {
     if (!this.uploadControl.disabled && files.length) {
       this.filesSelected.emit(files);
-    }
-  }
-
-  /** Requests removal of an existing row; the parent owns row updates and request cancellation. */
-  public removeFile(id: string): void {
-    if (!this.uploadControl.disabled && this.fileUploads().some((item) => item.id === id)) {
-      this.fileRemoved.emit(id);
     }
   }
 

@@ -3,11 +3,11 @@
 Three presentation components compose the [MoJ multi-file upload pattern](https://design-patterns.service.justice.gov.uk/components/multi-file-upload/).
 The parent owns validation rules, the upload API, progress, responses, sequencing and cancellation. A child form can
 extend [AbstractMultiFileUploadComponent](../../abstract/abstract-multi-file-upload/readme.md) to receive those rows,
-emit selection/removal intents and synchronise reactive-form values and validity.
+emit selection intents and synchronise reactive-form values and validity.
 
 For the complete parent/child wiring and the real frontend POC source paths, use the
-[abstract upload guide](../../abstract/abstract-multi-file-upload/readme.md#parent-data-flow). The POC's request is
-currently mocked by its parent; the library performs no upload API call.
+[abstract upload guide](../../abstract/abstract-multi-file-upload/readme.md#parent-data-flow). The presentation
+components make no upload API calls; the parent uses the file-handling service for requests.
 
 ## Import and compose
 
@@ -52,21 +52,15 @@ import { MOJ_MULTI_FILE_UPLOAD_STATUS_LABELS } from '@hmcts/opal-frontend-common
 ```
 
 The wrapper projects its contents. The input updates the supplied file control and emits the latest raw user selection.
-The files component renders supplied rows and emits remove intentions. The wrapper and files display component do not
+The files component renders supplied rows without per-file actions. The wrapper and files display component do not
 require form controls. The consuming template supplies the persistent live region beside the wrapper.
 
 ```html
 <opal-lib-govuk-error-summary [errors]="formErrorSummaryMessage" (errorClick)="scrollTo($event)" />
 <form [formGroup]="form" method="post" enctype="multipart/form-data" (submit)="handleFormSubmit($event)">
   <opal-lib-moj-multi-file-upload>
-    <opal-lib-moj-multi-file-upload-files
-      heading="Documents added"
-      [files]="fileUploads()"
-      [disabled]="form.controls.files.disabled"
-      (removeFile)="removeFile($event); uploadInput.focus()"
-    />
+    <opal-lib-moj-multi-file-upload-files heading="Documents added" [files]="fileUploads()" />
     <opal-lib-moj-multi-file-upload-input
-      #uploadInput
       inputId="files"
       inputName="files"
       labelText="Upload documents"
@@ -81,10 +75,8 @@ require form controls. The consuming template supplies the persistent live regio
 </form>
 ```
 
-Projection lets the page choose the order and add its own content. The feedback heading and rows are hidden while
-the supplied list is empty; the empty feedback container remains in the DOM with MoJ's `moj-hidden` class. A remove intent
-contains the row's `id`; the parent decides whether to remove it, cancel its request and restore focus with the input's
-public `focus()` method. The base forwards that intent to the parent and includes supplied upload state in form validity.
+Projection lets the page choose the order and add its own content. The heading and file rows appear only when the
+parent supplies files. The consuming frontend owns empty-state wording and separators outside the shared component. The base includes supplied upload state in form validity.
 Continue stays enabled: inherited `handleFormSubmit` displays and focuses the summary on an invalid submission and
 emits `formSubmit` only when valid. The example's 1 MB/MOV guidance is frontend policy; other consumers supply their own
 hints and rules.
@@ -92,7 +84,8 @@ hints and rules.
 The markup follows MoJ's base form structure and enhanced appearance. The wrapper applies
 `moj-multi-file-upload--enhanced` and the `data-module="moj-multi-file-upload"` marker. The input includes the medium
 label and base **Upload file** submit button; standard MoJ styles hide that button in enhanced mode while Angular
-renders the drop zone and Choose files label. The components use the shared MoJ styles without custom upload SCSS.
+renders the drop zone and Choose files label. The components use the shared MoJ/GOV.UK classes and styles without
+a custom upload stylesheet.
 
 Angular renders the enhanced controls directly. The library does not initialise MoJ's vendor `MultiFileUpload`
 JavaScript, which replaces the native input and performs its own XHR uploads. Uploading remains owned by the consuming
@@ -114,7 +107,7 @@ Projects consumer content with the standard MoJ upload wrapper classes. It has n
 | `labelText`        | Required                        | Accessible upload-control label.                                                                         |
 | `labelClasses`     | `'govuk-label--m'`              | Classes added to the label.                                                                              |
 | `inputClasses`     | `''`                            | Classes added to the native file input.                                                                  |
-| `hintText`         | `''`                            | Guidance associated with the control; describe the page's type, size and count rules here.               |
+| `hintText`         | `null`                          | Optional string guidance. Null or empty text renders no hint and creates no hint aria reference.         |
 | `dropzoneHintText` | `'Drag and drop files here or'` | Drag-and-drop instruction.                                                                               |
 | `buttonText`       | `'Choose files'`                | Text of the native picker label, displayed as a button.                                                  |
 | `uploadButtonText` | `'Upload file'`                 | Text of the base submit button, hidden by standard MoJ styles in enhanced mode.                          |
@@ -143,9 +136,6 @@ Use `form.controls.files.disable()` and `.enable()` to control the picker, drop 
 separate disabled input. Resetting the control clears the native picker without emitting `filesSelected`. Setting
 `File[]` programmatically updates the model without attempting to repopulate the browser's native file selection.
 
-The file control can be disabled independently of the rest of the form. Bind the files display's `disabled` input to
-that same control, as shown above, so its remove actions follow the selection control's state.
-
 For an accumulating journey, the parent keeps the cumulative row list and passes it to the child through `[files]`.
 The [abstract upload base](../../abstract/abstract-multi-file-upload/readme.md) synchronises that list's original files
 into the child control and revalidates supplied row errors/statuses. The child does not need manual `setValue` calls.
@@ -158,16 +148,13 @@ it does not cancel parent requests or clear parent state.
 
 ### Files: `opal-lib-moj-multi-file-upload-files`
 
-| Input              | Default                 | Purpose                                                                                                             |
-| ------------------ | ----------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `files`            | `[]`                    | Readonly display rows owned by the parent.                                                                          |
-| `heading`          | `'Files added'`         | Feedback heading.                                                                                                   |
-| `statusLabels`     | Built-in English labels | Partial `IMojMultiFileUploadStatusLabels` overrides for `pending`, `uploading`, `success`, `rejected` and `failed`. |
-| `removeButtonText` | `'Remove'`              | Text of each remove action.                                                                                         |
-| `showRemoveButton` | `true`                  | Whether remove actions are displayed.                                                                               |
-| `disabled`         | `false`                 | Disables remove actions.                                                                                            |
+| Input          | Default                 | Purpose                                                                            |
+| -------------- | ----------------------- | ---------------------------------------------------------------------------------- |
+| `files`        | `[]`                    | Readonly display rows owned by the parent. Empty lists render no feedback content. |
+| `heading`      | `'Files added'`         | Feedback heading shown when rows exist.                                            |
+| `statusLabels` | Built-in English labels | Partial overrides for accessible status labels and error-state descriptions.       |
 
-`removeFile` emits the row's string `id`. It does not mutate the supplied rows or cancel requests.
+The component presents parent-owned state and has no per-file actions or outputs.
 
 ```ts
 interface IMojMultiFileUploadItem {
@@ -180,9 +167,12 @@ interface IMojMultiFileUploadItem {
 ```
 
 Supply a real percentage for uploading rows, or omit `progress`/set it to `null` when the transport total is unknown.
-The component displays 100% as uploading until the parent supplies `status: 'success'`. Success uses a tick and green
-styling. Rejection and failure use warning icons, explanatory messages and red styling. Keep original `File` objects,
-responses and other journey data in your parent model; they are not part of the display interface.
+The component displays the upload percentage to the right of the filename. It retains uploading at 100% until the
+parent supplies `status: 'success'`. Success shows a green tick to the left of the regular black filename, without a
+visible status suffix. Failed/rejected rows show a separate red warning icon to the left of the filename. The SVGs
+have accessible status labels. Supplied errors appear in red above the filename.
+An explicit failed/rejected state without detailed errors uses its status label as the error description. Keep
+original `File` objects, responses and other journey data in the parent model; they are not part of the display interface.
 
 ## File Service helpers
 
@@ -253,12 +243,12 @@ form control name. Without the abstract base, the consuming page supplies its ow
 
 Pass those messages to the input's `errors` and update the consuming template's persistent live region for meaningful
 status changes. The abstract base accepts an `announcement` text input for that region. The consuming template also
-controls focus after removing rows or responding to errors.
+controls focus when responding to errors.
 
 ## Verification
 
 Colocated unit tests cover wrapper projection and consumer interactions, picker/drop selection events, input accessibility
-and supplied errors, file statuses and progress display, mixed display states and remove intentions. File Service
+and supplied errors, file statuses and progress display, and mixed display states. File Service
 unit tests cover its upload metadata methods.
 
 ```sh

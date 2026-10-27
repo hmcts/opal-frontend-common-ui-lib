@@ -31,7 +31,7 @@ export class DocumentsUploadFormComponent extends AbstractMultiFileUploadCompone
   protected override fieldErrors = {
     files: {
       required: { message: 'Select a document', priority: 1 },
-      fileUpload: { message: 'Remove documents with errors before continuing', priority: 2 },
+      fileUpload: { message: 'Check documents with errors before continuing', priority: 2 },
       uploadPending: { message: 'Wait for all documents to finish uploading', priority: 3 },
     },
   };
@@ -64,13 +64,8 @@ the form control, error map and native input ID.
 <opal-lib-govuk-error-summary [errors]="formErrorSummaryMessage" (errorClick)="scrollTo($event)" />
 <form [formGroup]="form" method="post" enctype="multipart/form-data" (submit)="handleFormSubmit($event)">
   <opal-lib-moj-multi-file-upload>
-    <opal-lib-moj-multi-file-upload-files
-      [files]="fileUploads()"
-      [disabled]="form.controls.files.disabled"
-      (removeFile)="removeFile($event); uploadInput.focus()"
-    />
+    <opal-lib-moj-multi-file-upload-files [files]="fileUploads()" />
     <opal-lib-moj-multi-file-upload-input
-      #uploadInput
       [control]="form.controls.files"
       inputId="files"
       inputName="files"
@@ -99,7 +94,7 @@ control's ID. The standard `GovukErrorSummaryComponent` is used unchanged. If yo
 and pending-upload errors still use the configured field-error messages.
 
 The input's internal file value accessor preserves the public `[control]` integration. Disable that control to disable
-selection, and bind the files display's `disabled` input to the same control. The wrapper remains plain projection;
+selection. The wrapper remains plain projection;
 the child template supplies the live region.
 
 ## Parent data flow
@@ -111,7 +106,6 @@ Bind parent state into the child and handle its user intents:
   [files]="fileUploads()"
   [announcement]="announcement()"
   (filesSelected)="selectFiles($event)"
-  (fileRemoved)="removeFile($event)"
   (filesCleared)="clearFiles()"
   (formSubmit)="complete()"
 />
@@ -130,7 +124,7 @@ The frontend reference is in [opal-frontend](https://github.com/hmcts/opal-front
 | File                                                                   | What the frontend supplies                                                                        |
 | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | `fines-file-upload-poc.component.ts`                                   | Validation, row/response state, sequential upload queue, progress/error mapping and cancellation. |
-| `fines-file-upload-poc.component.html`                                 | Parent-to-child inputs and selection/removal/clear/form outputs.                                  |
+| `fines-file-upload-poc.component.html`                                 | Parent-to-child inputs and selection/clear/form outputs.                                          |
 | `fines-file-upload-poc-form/fines-file-upload-poc-form.component.ts`   | The child `FormGroup`, required rule, field-error map and filename-specific summary formatting.   |
 | `fines-file-upload-poc-form/fines-file-upload-poc-form.component.html` | MoJ composition, error summary, live region and Continue action.                                  |
 | `interfaces/fines-file-upload-poc-item.interface.ts`                   | Local row extension with its API response.                                                        |
@@ -139,7 +133,7 @@ The current POC validates a 1 MB limit and rejects MOV files using `FileService.
 `hasFileExtension`. Its parent validates each batch, appends pending/rejected rows, and submits only valid rows to an
 RxJS `concatMap` queue. Progress uses `getFileUploadProgress`; upload errors use `getFileUploadErrorMessage`. It waits
 for `HttpEventType.Response` before setting success and handles empty responses/failures per file without stopping
-the queue. Removal and clear signals cancel active work and skip removed queued rows. Destruction cancels the queue.
+the queue. Clear signals cancel active and queued work. Destruction cancels the queue.
 
 Those limits, messages and sequencing are consumer policy, not defaults of this base. The POC currently returns
 **mock HTTP events** from its parent `uploadFile` method; it does not call a live upload API.
@@ -150,7 +144,7 @@ Save the child above as `documents-upload-form.component.ts` and its template as
 `documents-upload-form.component.html`. This separate parent starts valid files in parallel; the actual POC uses a
 sequential queue. Both choices belong to the consuming application. This example permits up to five CSV files of
 5 MB each and applies a filename rule. Rejected rows do not use a file-count slot; accepted rows, including failed
-uploads, retain their slot until removed.
+uploads, retain their slot until the journey is reset.
 
 Save this request adapter as `upload-document.ts`:
 
@@ -198,7 +192,6 @@ interface IDocumentUpload extends IAbstractMultiFileUploadItem {
       [files]="fileUploads()"
       [announcement]="announcement()"
       (filesSelected)="selectFiles($event)"
-      (fileRemoved)="removeFile($event)"
       (filesCleared)="clearFiles()"
       (formSubmit)="complete()"
     />
@@ -297,13 +290,6 @@ export class DocumentsUploadComponent {
     added.filter((item) => item.status === 'pending').forEach((item) => this.startUpload(item));
   }
 
-  public removeFile(id: string): void {
-    this.uploads.get(id)?.unsubscribe();
-    this.uploads.delete(id);
-    this.fileUploads.update((items) => items.filter((item) => item.id !== id));
-    this.announcement.set('Document removed.');
-  }
-
   public clearFiles(): void {
     this.cancelUploads();
     this.fileUploads.set([]);
@@ -322,7 +308,7 @@ Angular version, `provideHttpClient()` uses the XHR backend; `withFetch()` does 
 request adapter's URL, multipart field name and response type must match your backend contract. Server-side
 validation is still required; the browser's extension and filename checks only improve selection feedback.
 
-The parent owns every subscription. Removal, clearing and destruction unsubscribe from outstanding HTTP requests;
+The parent owns every subscription. Clearing and destruction unsubscribe from outstanding HTTP requests;
 a failed upload leaves other files running. No retries are automatic. A stream that completes without a final
 response becomes a failed row with the fallback message.
 
@@ -339,13 +325,12 @@ backend response.
 | `files` input          | Required readonly `IAbstractMultiFileUploadItem[]` from the parent; updates `fileUploads()` and cumulative file-control values/validity. |
 | `announcement` input   | Parent-supplied text for the child template's live region; defaults to an empty string.                                                  |
 | `filesSelected` output | Latest raw user-selected `readonly File[]`; the parent validates and updates rows.                                                       |
-| `fileRemoved` output   | Row ID requested for removal; the parent removes it and cancels its work.                                                                |
 | `filesCleared` output  | Request to clear the journey; emitted by `handleClearForm()`.                                                                            |
 | `fileErrors()`         | Filename-prefixed row errors available for inline messages and consumer-owned summary formatting.                                        |
 | `fileInputErrors`      | Row messages from `fileErrors()`, falling back to the child form's current control error.                                                |
 | `fileUploadValidator`  | Checks supplied row errors and pending/mismatched upload state.                                                                          |
 
-`onFilesSelected` and `removeFile` emit intentions. `handleClearForm` resets the child form and emits `filesCleared`.
+`onFilesSelected` emits the selected files. `handleClearForm` resets the child form and emits `filesCleared`.
 These methods do not start/cancel requests or mutate the parent's row collection. On a clear request, the parent
 cancels active and queued work, clears rows and resets its announcement. Pass the resulting empty `files` back into
 the child.

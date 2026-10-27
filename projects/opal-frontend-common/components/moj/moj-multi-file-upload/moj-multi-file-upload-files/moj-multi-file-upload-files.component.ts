@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import type {
   IMojMultiFileUploadItem,
   IMojMultiFileUploadStatusLabels,
@@ -14,10 +14,6 @@ export class MojMultiFileUploadFilesComponent {
   @Input() files: readonly IMojMultiFileUploadItem[] = [];
   @Input() heading = 'Files added';
   @Input() statusLabels: Partial<IMojMultiFileUploadStatusLabels> = {};
-  @Input() removeButtonText = 'Remove';
-  @Input() showRemoveButton = true;
-  @Input() disabled = false;
-  @Output() removeFile = new EventEmitter<string>();
 
   /** Formats the supplied status and known upload percentage without changing state. */
   public statusText(item: IMojMultiFileUploadItem): string {

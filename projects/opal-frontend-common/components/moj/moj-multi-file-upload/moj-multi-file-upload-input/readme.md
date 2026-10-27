@@ -5,6 +5,10 @@ The required `control` input accepts an `AbstractControl` containing `readonly F
 GOV.UK text-input pattern. Use `inputId`, `inputName` and `labelText` to configure the control; `labelClasses` defaults to
 `govuk-label--m` and `inputClasses` defaults to an empty string.
 
+`hintText` is an optional `string | null` and defaults to `null`. A null or empty hint renders no hint element and
+does not add a hint ID to the native input's `aria-describedby`. Dropzone instructions and errors remain associated
+with the input independently.
+
 With the default `updateOn: 'change'`, user selection updates the control with the latest raw file batch and marks it
 dirty. The accessor notifies Angular on blur and after a drop; `updateOn: 'blur'` commits pending changes at that point.
 With `updateOn: 'submit'`, Angular defers value/dirty/touched changes until submission. `filesSelected` emits the latest

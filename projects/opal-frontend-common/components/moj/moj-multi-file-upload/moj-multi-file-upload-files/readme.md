@@ -1,50 +1,45 @@
 # MoJ multi-file upload files
 
-A presentation component for a parent-owned list of selected files. It displays filenames, statuses, actual progress
-and supplied errors. The parent validates files, performs uploads, updates the list and supplies announcement text.
-The consuming template renders the live region beside the plain `MojMultiFileUploadComponent` wrapper.
+A presentation component for a parent-owned list of selected files. The parent validates files, performs uploads,
+updates row state and supplies announcement text to a live region beside the upload wrapper.
 
 ```ts
 import { MojMultiFileUploadFilesComponent } from '@hmcts/opal-frontend-common/components/moj/moj-multi-file-upload/moj-multi-file-upload-files';
 import type { IMojMultiFileUploadItem } from '@hmcts/opal-frontend-common/components/moj/moj-multi-file-upload/interfaces';
-import { MOJ_MULTI_FILE_UPLOAD_STATUS_LABELS } from '@hmcts/opal-frontend-common/components/moj/moj-multi-file-upload/moj-multi-file-upload-files/constants';
 ```
 
 ```html
-<opal-lib-moj-multi-file-upload-files
-  [files]="files()"
-  heading="Documents added"
-  (removeFile)="removeDocument($event)"
-/>
+<opal-lib-moj-multi-file-upload-files [files]="files()" heading="Documents added" />
 ```
 
-| Input              | Default                 | Purpose                                                                                  |
-| ------------------ | ----------------------- | ---------------------------------------------------------------------------------------- |
-| `files`            | `[]`                    | Readonly display records owned by the parent. Empty lists hide the feedback area.        |
-| `heading`          | `'Files added'`         | Heading above the file rows.                                                             |
-| `statusLabels`     | Built-in English labels | Partial overrides for `pending`, `uploading`, `success`, `rejected` and `failed`.        |
-| `removeButtonText` | `'Remove'`              | Visible text for the per-file action; the filename is included for assistive technology. |
-| `showRemoveButton` | `true`                  | Whether to display per-file removal actions.                                             |
-| `disabled`         | `false`                 | Whether removal buttons are disabled.                                                    |
+| Input          | Default                 | Purpose                                                                     |
+| -------------- | ----------------------- | --------------------------------------------------------------------------- |
+| `files`        | `[]`                    | Readonly display records. An empty list renders no feedback content.        |
+| `heading`      | `'Files added'`         | Heading shown above nonempty file rows.                                     |
+| `statusLabels` | Built-in English labels | Partial overrides for accessible statuses and failed/rejected descriptions. |
 
-`removeFile` emits the record's string `id` as a removal intent. The component never changes the supplied list or
-cancels an upload. The parent handles the action, updates its state and manages focus after removing a row.
+The component has no outputs or per-file actions. It does not change records or perform requests.
+With an empty list, it renders no heading, rows, wording or separator. The consuming frontend supplies its own
+empty-state content and separators outside this component.
 
-The `/interfaces` entrypoint also exports `IMojMultiFileUploadStatusLabels`; `/types` exports `MojMultiFileUploadStatus`.
-The default `MOJ_MULTI_FILE_UPLOAD_STATUS_LABELS` object is exported from the files component's `/constants`
-entrypoint, as shown above. The component entrypoint exports only `MojMultiFileUploadFilesComponent`. See the
-[composition guide](../readme.md) for the other public import paths.
+Each filename uses regular black GOV.UK body text. A successful row has a separate green tick to the left of its
+filename and no visible success suffix. A failed or rejected row has a separate red warning icon to the left of its
+filename. Each SVG has an accessible label for its status. Parent-supplied errors appear in red above the filename.
+A failed/rejected row without detailed errors displays its status label there instead.
+Pending status text is available to assistive technology without adding a visible filename suffix.
 
-The explicit `status` controls success/error styling and icons. Uploading at 100% remains uploading until the parent
-supplies `status: 'success'` after the upload response. Unknown progress (`null` or omitted) has no percentage or
-`aria-valuenow`. Errors are displayed exactly as supplied by the parent; no validation or fallback errors are generated.
-The feedback uses the standard MoJ single-message file rows, native status icons and removal-button classes.
-Include the library's global GOV.UK/MoJ styles in the application; this component adds no local styles.
+Uploading rows show a percentage to the right of the filename, with a named `progressbar`, minimum/maximum/current
+values and accessible status text. Unknown progress (`null` or omitted) displays the uploading label and omits
+`aria-valuenow`. Uploading at 100% remains uploading until the parent confirms `status: 'success'`.
 
-The component does not require a form control. In the frontend form composition, bind `disabled` to the upload
-control's disabled state and forward removal to the parent. See the
-[abstract upload guide](../../../abstract/abstract-multi-file-upload/readme.md) for the complete data flow.
+Include the library's global GOV.UK/MoJ styles. File rows use the standard summary-list layout, status icon and
+GOV.UK typography classes; the component has no custom stylesheet.
 
-The consuming frontend form owns the page's error summary and Continue action. Keep Continue enabled and display
-and focus the summary when the submitted form is invalid. The frontend example combines filename-specific errors into one
-summary entry for the upload control; each file row retains its own messages.
+The `/interfaces` entrypoint exports `IMojMultiFileUploadStatusLabels`; `/types` exports `MojMultiFileUploadStatus`.
+Default labels are exported as `MOJ_MULTI_FILE_UPLOAD_STATUS_LABELS` from the files component's `/constants`
+entrypoint. The component entrypoint exports only `MojMultiFileUploadFilesComponent`. See the
+[composition guide](../readme.md) for other public import paths.
+
+The component needs no form control. The consuming form owns the page's error summary and submission action. Keep
+that action enabled and focus the summary when submitted data is invalid. See the
+[abstract upload guide](../../../abstract/abstract-multi-file-upload/readme.md) for the complete parent/child flow.
