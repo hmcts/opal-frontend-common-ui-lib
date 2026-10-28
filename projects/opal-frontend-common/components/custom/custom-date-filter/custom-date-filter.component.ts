@@ -23,6 +23,10 @@ import {
 } from '@hmcts/opal-frontend-common/components/custom/custom-date-filter/constants';
 import { clearInactiveCustomDateFilterFields } from '@hmcts/opal-frontend-common/components/custom/custom-date-filter/utils';
 
+/**
+ * Renders date-mode controls owned by the parent form and clears inactive conditional fields.
+ * Validation, date-range calculation and submission remain the parent's responsibility.
+ */
 @Component({
   selector: 'opal-lib-custom-date-filter',
   imports: [ReactiveFormsModule, GovukRadioComponent, GovukRadiosItemComponent, MojDatePickerComponent],
@@ -44,6 +48,10 @@ export class CustomDateFilterComponent implements OnChanges, OnDestroy {
   @Input() dateHintText: string = CUSTOM_DATE_FILTER_DEFAULTS.dateHintText;
   @Input() errors: Readonly<Record<string, string>> = {};
 
+  /**
+   * Rebinds the date-mode subscription to the current parent controls after input changes.
+   * Mode changes clear inactive fields and refresh the conditional sections under OnPush.
+   */
   public ngOnChanges(): void {
     this.dateFilterSubscription?.unsubscribe();
     this.dateFilterSubscription = this.controls.dateFilter.valueChanges.subscribe((dateFilter) => {
@@ -52,11 +60,18 @@ export class CustomDateFilterComponent implements OnChanges, OnDestroy {
     });
   }
 
+  /**
+   * Releases the parent-control subscription when the date filter is destroyed.
+   */
   public ngOnDestroy(): void {
     this.dateFilterSubscription?.unsubscribe();
   }
 
-  /** Stores normalized picker edits and marks the parent form dirty. */
+  /**
+   * Stores a normalized date-picker edit and marks the owning form control dirty.
+   * @param field - The parent-owned boundary control to update.
+   * @param value - The normalized date text emitted by the picker.
+   */
   public onDateChange(field: 'dateFrom' | 'dateTo', value: string): void {
     const control = this.controls[field];
     control.markAsDirty();

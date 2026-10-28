@@ -160,8 +160,35 @@
       "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters": [
         "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters"
       ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/common"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/interfaces": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/common/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/constants": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/common/constants"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/directives/custom-file-interface-viewer-base": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/common/directives/custom-file-interface-viewer-base"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-table-wrapper": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-table-wrapper"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-table-wrapper/interfaces": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-table-wrapper/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-outbound-file-viewer": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-outbound-file-viewer"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-outbound-file-viewer/interfaces": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-outbound-file-viewer/interfaces"
+      ],
       "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer": [
         "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/interfaces": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/interfaces"
       ],
       "@hmcts/opal-frontend-common/components/custom/custom-page-header": [
         "./dist/opal-frontend-common/components/custom/custom-page-header"
