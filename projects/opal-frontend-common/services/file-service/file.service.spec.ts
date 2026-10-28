@@ -121,6 +121,30 @@ describe('FileService', () => {
 
   it.each([
     {
+      label: 'prefers standard HTTP problem detail to other messages',
+      error: new HttpErrorResponse({
+        error: { detail: '  Invalid banking file  ', description: 'Description', message: 'Message', title: 'Problem' },
+        status: 400,
+      }),
+      expected: 'Invalid banking file',
+    },
+    {
+      label: 'uses a backend message before a generic title',
+      error: new HttpErrorResponse({
+        error: { detail: ' ', description: null, message: '  File already uploaded  ', title: 'Problem' },
+        status: 400,
+      }),
+      expected: 'File already uploaded',
+    },
+    {
+      label: 'ignores non-string backend messages when a title is available',
+      error: new HttpErrorResponse({
+        error: { detail: [], message: { nested: 'ignored' }, title: 'Try later' },
+        status: 503,
+      }),
+      expected: 'Try later',
+    },
+    {
       label: 'prefers an HTTP problem description to its title',
       error: new HttpErrorResponse({ error: { description: '  Upload rejected  ', title: 'Problem' }, status: 422 }),
       expected: 'Upload rejected',

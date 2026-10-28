@@ -1,4 +1,4 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OPAL_FILE_HANDLING_PATHS } from './constants/opal-file-handling-paths.constant';
@@ -6,11 +6,32 @@ import { OPAL_FILE_HANDLING_INTERFACE_FILE_CONTENT_ACCEPT } from './constants/op
 import { IOpalFileHandlingInterfaceFile } from './interfaces/opal-file-handling-interface-file.interface';
 import { IOpalFileHandlingInterfaceFilesRefData } from './interfaces/opal-file-handling-interface-files-ref-data.interface';
 import { IOpalFileHandlingInterfaceFileParams } from './interfaces/opal-file-handling-interface-file.params.interface';
+import { IOpalFileHandlingUploadMetadata } from './interfaces/opal-file-handling-upload-metadata.interface';
 import { buildInterfaceFilesParams, getPathWithFileId } from './utils/opal-file-handling-service.utils';
 
 @Injectable({ providedIn: 'root' })
 export class OpalFileHandlingService {
   private readonly http = inject(HttpClient);
+
+  /**
+   * Uploads one file with JSON metadata using the consuming application's HTTP client.
+   * @param file - Original file bytes, sent as a multipart binary part.
+   * @param metadata - Metadata stored alongside the file.
+   * @returns HTTP events, including upload progress when supported by the configured backend.
+   */
+  public uploadInterfaceFile(
+    file: File,
+    metadata: IOpalFileHandlingUploadMetadata,
+  ): Observable<HttpEvent<IOpalFileHandlingInterfaceFile>> {
+    const body = new FormData();
+    body.append('file', file, file.name);
+    body.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }), 'metadata.json');
+
+    return this.http.post<IOpalFileHandlingInterfaceFile>(OPAL_FILE_HANDLING_PATHS.interfaceFilesRefData, body, {
+      observe: 'events',
+      reportProgress: true,
+    });
+  }
 
   /**
    * Requests interface-file metadata matching the supplied filters.

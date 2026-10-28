@@ -303,10 +303,13 @@ export class DocumentsUploadComponent {
 }
 ```
 
-Provide Angular's `HttpClient` in the application and keep its authentication/interceptor configuration. In this
-Angular version, `provideHttpClient()` uses the XHR backend; `withFetch()` does not support upload progress. The
-request adapter's URL, multipart field name and response type must match your backend contract. Server-side
-validation is still required; the browser's extension and filename checks only improve selection feedback.
+Configure an upload route's scoped HTTP client using the
+[upload progress backend helper](../../../interceptors/helpers/readme.md). The helper selects XHR for browser requests
+that enable progress and keeps Fetch for other requests without changing the root HTTP configuration. Choose the
+route's interceptor chain for its error presentation policy; a file list that displays failures locally omits the global
+error presenter while retaining authentication and other required interceptors. The request adapter's URL, multipart
+field name and response type must match your backend contract. Server-side validation is still required; the browser's
+extension and filename checks only improve selection feedback.
 
 The parent owns every subscription. Clearing and destruction unsubscribe from outstanding HTTP requests;
 a failed upload leaves other files running. No retries are automatic. A stream that completes without a final

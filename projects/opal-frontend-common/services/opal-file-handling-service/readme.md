@@ -1,6 +1,6 @@
 # Opal File Handling Service
 
-`OpalFileHandlingService` provides the three read APIs for interface-file metadata and original file content.
+`OpalFileHandlingService` provides interface-file upload, metadata search and original file content APIs.
 It is an HTTP wrapper: the consuming application builds search criteria, maps display values and decides when to save a file.
 
 ## Table of Contents
@@ -40,11 +40,24 @@ import {
 
 The shared base URI is `/opal-file-handling-service/`. The frontend's existing proxy forwards this prefix to the File Handling Service.
 
-| Method                              | HTTP request                                                   | Return type                                          |
-| ----------------------------------- | -------------------------------------------------------------- | ---------------------------------------------------- |
-| `getInterfaceFilesRefData(params?)` | `GET /opal-file-handling-service/interface-files`              | `Observable<IOpalFileHandlingInterfaceFilesRefData>` |
-| `getInterfaceFile(fileId)`          | `GET /opal-file-handling-service/interface-files/{id}`         | `Observable<IOpalFileHandlingInterfaceFile>`         |
-| `getInterfaceFileContent(fileId)`   | `GET /opal-file-handling-service/interface-files/{id}/content` | `Observable<HttpResponse<Blob>>`                     |
+| Method                                | HTTP request                                                   | Return type                                             |
+| ------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------- |
+| `uploadInterfaceFile(file, metadata)` | `POST /opal-file-handling-service/interface-files`             | `Observable<HttpEvent<IOpalFileHandlingInterfaceFile>>` |
+| `getInterfaceFilesRefData(params?)`   | `GET /opal-file-handling-service/interface-files`              | `Observable<IOpalFileHandlingInterfaceFilesRefData>`    |
+| `getInterfaceFile(fileId)`            | `GET /opal-file-handling-service/interface-files/{id}`         | `Observable<IOpalFileHandlingInterfaceFile>`            |
+| `getInterfaceFileContent(fileId)`     | `GET /opal-file-handling-service/interface-files/{id}/content` | `Observable<HttpResponse<Blob>>`                        |
+
+`uploadInterfaceFile()` sends the original `File` as the `file` multipart part and an `application/json` Blob as the
+`metadata` part. The browser sets the multipart boundary; callers must not set a global request `Content-Type`.
+`IOpalFileHandlingUploadMetadata` requires `source`, `target`, `type`, `domain` and `file_name`.
+It also accepts optional `should_pre_process_file`, `related_interface_file_id`, `payment_type` and `business_unit_code`.
+The upload returns HTTP events with `reportProgress: true`; use an XHR-backed `HttpClient` when upload byte progress is required.
+Angular's fetch backend does not emit upload progress.
+
+The consuming application's HTTP client controls error presentation for uploads. Configure the upload flow's client
+to handle failures locally while retaining its authentication, XSRF and required transport interceptors. The service
+forwards HTTP events and errors without choosing global or local error handling. Callers inspect the returned metadata's
+`status` and JSON-encoded `errors`: a created response can describe a rejected or duplicate file.
 
 Each method returns a cold Observable: a request starts on subscription. All three GET requests have no request body.
 Use the numeric metadata field `interface_file_id` for `fileId`. The `{id}` placeholder is replaced with the URL-encoded identifier.
@@ -57,18 +70,18 @@ It returns the bytes and response headers without saving, parsing or converting 
 
 `IOpalFileHandlingInterfaceFileParams` contains these optional filters:
 
-| Parameter            | Type                            | Purpose                                                                |
-| -------------------- | ------------------------------- | ---------------------------------------------------------------------- |
-| `source`             | `string`                        | One interface source code, for example `ALLPAY`.                       |
-| `target`             | `string`                        | One target code, for example `OPAL`.                                   |
-| `not_target`         | `string`                        | One target code to exclude.                                            |
-| `type`               | `string[]`                      | Included file-type codes: `SOURCE`, `SOURCE_JSON`, `TRANSFORMED_JSON`. |
-| `domain`             | `string`                        | One domain code, for example `FINES`.                                  |
-| `status`             | `string`                        | One status code to include.                                            |
-| `not_status`         | `string[]`                      | Status codes to exclude.                                               |
-| `business_unit_code` | `string`                        | A business-unit code, retaining leading zeros, for example `0046`.     |
-| `from_date`          | `string`                        | Inclusive creation-date lower boundary.                                |
-| `to_date`            | `string`                        | Inclusive creation-date upper boundary.                                |
+| Parameter            | Type       | Purpose                                                                |
+| -------------------- | ---------- | ---------------------------------------------------------------------- |
+| `source`             | `string`   | One interface source code, for example `ALLPAY`.                       |
+| `target`             | `string`   | One target code, for example `OPAL`.                                   |
+| `not_target`         | `string`   | One target code to exclude.                                            |
+| `type`               | `string[]` | Included file-type codes: `SOURCE`, `SOURCE_JSON`, `TRANSFORMED_JSON`. |
+| `domain`             | `string`   | One domain code, for example `FINES`.                                  |
+| `status`             | `string`   | One status code to include.                                            |
+| `not_status`         | `string[]` | Status codes to exclude.                                               |
+| `business_unit_code` | `string`   | A business-unit code, retaining leading zeros, for example `0046`.     |
+| `from_date`          | `string`   | Inclusive creation-date lower boundary.                                |
+| `to_date`            | `string`   | Inclusive creation-date upper boundary.                                |
 
 Array filters are serialized as one comma-separated query value, matching the backend's `explode: false` contract.
 `target` and `not_target` remain scalar values. `null`, `undefined`, empty strings and empty arrays are omitted; empty array entries are removed before joining.

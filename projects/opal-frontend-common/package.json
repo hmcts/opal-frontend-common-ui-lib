@@ -487,6 +487,9 @@
     "./interceptors/content-digest": {
       "import": "./fesm2022/hmcts-opal-frontend-common-interceptors-content-digest.mjs"
     },
+    "./interceptors/helpers": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-interceptors-helpers.mjs"
+    },
     "./interceptors/http-error": {
       "import": "./fesm2022/hmcts-opal-frontend-common-interceptors-http-error.mjs"
     },

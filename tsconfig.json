@@ -457,6 +457,9 @@
       "@hmcts/opal-frontend-common/interceptors/content-digest": [
         "./dist/opal-frontend-common/interceptors/content-digest"
       ],
+      "@hmcts/opal-frontend-common/interceptors/helpers": [
+        "./dist/opal-frontend-common/interceptors/helpers"
+      ],
       "@hmcts/opal-frontend-common/interceptors/http-error": [
         "./dist/opal-frontend-common/interceptors/http-error"
       ],

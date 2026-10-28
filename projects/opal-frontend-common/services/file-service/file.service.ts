@@ -96,6 +96,8 @@ export class FileService {
 
   /**
    * Converts transferred bytes to a rounded percentage between 0 and 100.
+   * @param loaded - Number of bytes transferred by the HTTP transport.
+   * @param total - Optional total transfer size; omitted or unknown totals produce no percentage.
    * @returns null when progress cannot be calculated; 100 does not confirm an upload response.
    */
   public getFileUploadProgress(loaded: number, total?: number | null): number | null {
@@ -108,6 +110,8 @@ export class FileService {
 
   /**
    * Checks an inclusive byte limit without reading file content.
+   * @param file - File metadata containing its size in bytes.
+   * @param maxBytes - Inclusive maximum permitted file size in bytes.
    * @returns false when the size or limit is negative or not finite.
    */
   public isFileWithinSizeLimit(file: Pick<File, 'size'>, maxBytes: number): boolean {
@@ -122,6 +126,8 @@ export class FileService {
 
   /**
    * Matches a case-insensitive extension, with or without its leading dot.
+   * @param filename - Original filename to check without modifying it.
+   * @param extension - Required suffix, with or without the leading dot.
    * @returns false for an empty extension; MIME types and other filename rules remain caller-owned.
    */
   public hasFileExtension(filename: string, extension: string): boolean {
@@ -134,16 +140,20 @@ export class FileService {
   }
 
   /**
-   * Resolves an HTTP problem description/title or Error message for an upload failure.
+   * Resolves HTTP problem detail, description, message or title for an upload failure.
+   * @param error - HTTP problem response, ordinary Error, or unrecognised failure.
+   * @param fallbackMessage - Caller-owned message used when no supported error text is available.
    * @returns The trimmed message or the caller's fallback when no supported message is available.
    */
   public getFileUploadErrorMessage(error: unknown, fallbackMessage: string): string {
     if (error instanceof HttpErrorResponse) {
       const body: unknown = error.error;
       if (body && typeof body === 'object') {
+        const detail = 'detail' in body ? body.detail : undefined;
         const description = 'description' in body ? body.description : undefined;
+        const message = 'message' in body ? body.message : undefined;
         const title = 'title' in body ? body.title : undefined;
-        for (const value of [description, title]) {
+        for (const value of [detail, description, message, title]) {
           if (typeof value === 'string' && value.trim()) {
             return value.trim();
           }
