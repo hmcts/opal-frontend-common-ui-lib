@@ -10,7 +10,6 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 import { Subject } from 'rxjs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { FileService as PackagedFileService } from '@hmcts/opal-frontend-common/services/file-service';
 import { FileService } from './file.service';
 import { IFileDownloadOptions } from './interfaces/file-download-options.interface';
 import { IFileSaveOptions } from './interfaces/file-save-options.interface';
@@ -71,6 +70,122 @@ describe('FileService', () => {
     vi.restoreAllMocks();
   });
 
+  it('calculates bounded real byte progress without requiring a known transport total', () => {
+    expect(service.getFileUploadProgress(1, 3)).toBe(33);
+    expect(service.getFileUploadProgress(2, 3)).toBe(67);
+    expect(service.getFileUploadProgress(0, 100)).toBe(0);
+    expect(service.getFileUploadProgress(100, 100)).toBe(100);
+    expect(service.getFileUploadProgress(200, 100)).toBe(100);
+    expect(service.getFileUploadProgress(-10, 100)).toBe(0);
+    expect(service.getFileUploadProgress(25)).toBeNull();
+    expect(service.getFileUploadProgress(25, null)).toBeNull();
+    expect(service.getFileUploadProgress(25, 0)).toBeNull();
+    expect(service.getFileUploadProgress(25, -1)).toBeNull();
+    expect(service.getFileUploadProgress(25, NaN)).toBeNull();
+    expect(service.getFileUploadProgress(NaN, 100)).toBeNull();
+    expect(service.getFileUploadProgress(Infinity, 100)).toBeNull();
+    expect(service.getFileUploadProgress(-Infinity, 100)).toBeNull();
+    expect(service.getFileUploadProgress(25, Infinity)).toBeNull();
+    expect(httpMock.match(() => true)).toEqual([]);
+  });
+
+  it('calculates large finite byte ratios without overflowing the intermediate percentage', () => {
+    expect(service.getFileUploadProgress(Number.MAX_VALUE / 2, Number.MAX_VALUE)).toBe(50);
+    expect(service.getFileUploadProgress(Number.MAX_VALUE, Number.MAX_VALUE)).toBe(100);
+  });
+
+  it('checks inclusive size limits without reading the file or accepting invalid size configuration', () => {
+    expect(service.isFileWithinSizeLimit({ size: 10 }, 10)).toBe(true);
+    expect(service.isFileWithinSizeLimit({ size: 9 }, 10)).toBe(true);
+    expect(service.isFileWithinSizeLimit({ size: 11 }, 10)).toBe(false);
+    expect(service.isFileWithinSizeLimit({ size: 0 }, 0)).toBe(true);
+    expect(service.isFileWithinSizeLimit({ size: 1 }, 0)).toBe(false);
+    expect(service.isFileWithinSizeLimit({ size: -1 }, 10)).toBe(false);
+    expect(service.isFileWithinSizeLimit({ size: NaN }, 10)).toBe(false);
+    expect(service.isFileWithinSizeLimit({ size: Infinity }, 10)).toBe(false);
+    expect(service.isFileWithinSizeLimit({ size: 1 }, NaN)).toBe(false);
+    expect(service.isFileWithinSizeLimit({ size: 1 }, -1)).toBe(false);
+    expect(service.isFileWithinSizeLimit({ size: 1 }, Infinity)).toBe(false);
+  });
+
+  it('matches caller-supplied extensions case-insensitively and rejects suffix lookalikes', () => {
+    expect(service.hasFileExtension('statement.CSV', '.csv')).toBe(true);
+    expect(service.hasFileExtension('statement.csv', 'CSV')).toBe(true);
+    expect(service.hasFileExtension('archive.tar.GZ', 'TAR.GZ')).toBe(true);
+    expect(service.hasFileExtension('statement.csv.backup', 'csv')).toBe(false);
+    expect(service.hasFileExtension('statement.notcsv', 'csv')).toBe(false);
+    expect(service.hasFileExtension('statementcsv', 'csv')).toBe(false);
+    expect(service.hasFileExtension('statement.', '.')).toBe(false);
+    expect(service.hasFileExtension('statement.csv', '')).toBe(false);
+  });
+
+  it.each([
+    {
+      label: 'prefers standard HTTP problem detail to other messages',
+      error: new HttpErrorResponse({
+        error: { detail: '  Invalid banking file  ', description: 'Description', message: 'Message', title: 'Problem' },
+        status: 400,
+      }),
+      expected: 'Invalid banking file',
+    },
+    {
+      label: 'uses a backend message before a generic title',
+      error: new HttpErrorResponse({
+        error: { detail: ' ', description: null, message: '  File already uploaded  ', title: 'Problem' },
+        status: 400,
+      }),
+      expected: 'File already uploaded',
+    },
+    {
+      label: 'ignores non-string backend messages when a title is available',
+      error: new HttpErrorResponse({
+        error: { detail: [], message: { nested: 'ignored' }, title: 'Try later' },
+        status: 503,
+      }),
+      expected: 'Try later',
+    },
+    {
+      label: 'prefers an HTTP problem description to its title',
+      error: new HttpErrorResponse({ error: { description: '  Upload rejected  ', title: 'Problem' }, status: 422 }),
+      expected: 'Upload rejected',
+    },
+    {
+      label: 'uses the HTTP problem title when its description is blank',
+      error: new HttpErrorResponse({ error: { description: ' ', title: '  Upload unavailable  ' }, status: 503 }),
+      expected: 'Upload unavailable',
+    },
+    {
+      label: 'ignores non-string descriptions when a title is available',
+      error: new HttpErrorResponse({ error: { description: 123, title: 'Try later' }, status: 503 }),
+      expected: 'Try later',
+    },
+    {
+      label: 'uses a non-empty Error message',
+      error: new Error('  The file could not be read  '),
+      expected: 'The file could not be read',
+    },
+  ])('$label', ({ error, expected }) => {
+    expect(service.getFileUploadErrorMessage(error, 'Please try again')).toBe(expected);
+  });
+
+  it.each([
+    { label: 'network failures', error: new HttpErrorResponse({ error: new ProgressEvent('error'), status: 0 }) },
+    { label: 'HTTP responses without a problem body', error: new HttpErrorResponse({ status: 500 }) },
+    {
+      label: 'HTTP bodies without usable problem messages',
+      error: new HttpErrorResponse({ error: { description: ' ', title: false }, status: 500 }),
+    },
+    { label: 'plain HTTP response text', error: new HttpErrorResponse({ error: 'Internal diagnostic', status: 500 }) },
+    { label: 'blank Error messages', error: new Error('  ') },
+    { label: 'unrecognised objects', error: { message: 'Internal diagnostic' } },
+    { label: 'null values', error: null },
+    { label: 'undefined values', error: undefined },
+  ])('retains the caller fallback for $label', ({ error }) => {
+    expect(service.getFileUploadErrorMessage(error, 'Upload unavailable. Try again')).toBe(
+      'Upload unavailable. Try again',
+    );
+  });
+
   it.each([
     { filename: 'original.xml', type: 'application/xml', bytes: new TextEncoder().encode('<root />') },
     {
@@ -97,11 +212,9 @@ describe('FileService', () => {
     [{}, 'download'],
     [{ fallbackFilename: 'fallback.csv' }, 'fallback.csv'],
     [{ filename: 'explicit.csv', fallbackFilename: 'fallback.csv' }, 'explicit.csv'],
-  ])('saves a Blob with filename options %j through both service entrypoints', (values, expectedFilename) => {
-    for (const fileService of [service, TestBed.inject(PackagedFileService)]) {
-      fileService.saveFile(new Blob(['mock']), options(values));
-    }
-    expect(savedFiles.map((file) => file.filename)).toEqual([expectedFilename, expectedFilename]);
+  ])('saves a Blob with filename options %j', (values, expectedFilename) => {
+    service.saveFile(new Blob(['mock']), options(values));
+    expect(savedFiles.map((file) => file.filename)).toEqual([expectedFilename]);
   });
 
   it.each<[Omit<IFileSaveOptions, 'link'>, string | null, string]>([
@@ -217,12 +330,10 @@ describe('FileService', () => {
     expect(blob.type).toBe('');
   });
 
-  it('rejects a missing response body through both service entrypoints before changing the caller anchor', () => {
-    for (const fileService of [service, TestBed.inject(PackagedFileService)]) {
-      expect(() => fileService.saveResponse(new HttpResponse<Blob>({ body: null }), options())).toThrow(
-        'File content is unavailable.',
-      );
-    }
+  it('rejects a missing response body before changing the caller anchor', () => {
+    expect(() => service.saveResponse(new HttpResponse<Blob>({ body: null }), options())).toThrow(
+      'File content is unavailable.',
+    );
     expect(createObjectURL).not.toHaveBeenCalled();
     expect(savedFiles).toEqual([]);
     expect(link.getAttribute('href')).toBeNull();
@@ -434,11 +545,10 @@ describe('FileService', () => {
     expect(createObjectURL).toHaveBeenCalledExactlyOnceWith(blob);
   });
 
-  it('downloads original binary bytes and uses the metadata filename through the public service entrypoint', () => {
-    const packagedService = TestBed.inject(PackagedFileService);
-    packagedService
+  it('downloads original binary bytes using the metadata fallback filename', () => {
+    service
       .downloadFile(
-        '/downloads/public-api',
+        '/downloads/original',
         options({
           headers: { Accept: 'application/octet-stream' },
           fallbackFilename: 'original.xml',
@@ -446,7 +556,7 @@ describe('FileService', () => {
       )
       .subscribe();
 
-    const request = httpMock.expectOne('/downloads/public-api');
+    const request = httpMock.expectOne('/downloads/original');
     expect(request.request.method).toBe('GET');
     expect(request.request.body).toBeNull();
     expect(request.request.responseType).toBe('blob');
