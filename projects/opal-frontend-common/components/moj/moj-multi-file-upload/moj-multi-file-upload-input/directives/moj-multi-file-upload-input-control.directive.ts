@@ -31,9 +31,8 @@ export class MojMultiFileUploadInputControlDirective implements ControlValueAcce
   private touched: () => void = () => undefined;
 
   /** Clears native selection without writing a filename or emitting a change. */
-  public writeValue(value: readonly File[] | null): void {
+  public writeValue(): void {
     // Browsers only permit clearing a file input programmatically, regardless of the model value.
-    void value;
     this.elementRef.nativeElement.value = '';
   }
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, type Type } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { provideRouter } from '@angular/router';
@@ -441,5 +441,40 @@ describe('AbstractMultiFileUploadComponent', () => {
     nullable.files = [item(document)];
     expect(nullable.form.controls.files.value).toEqual([document]);
     expect(nullable.form.valid).toBe(true);
+  });
+});
+
+describe('AbstractMultiFileUploadComponent Angular metadata', () => {
+  it('initialises a caller-configured upload form through the default component factory', async () => {
+    await TestBed.configureTestingModule({
+      imports: [AbstractMultiFileUploadComponent],
+      providers: [provideRouter([])],
+    }).compileComponents();
+    // Subclass fixtures exercise the inherited factory target; this checks the base metadata directly.
+    const fixture = TestBed.createComponent(
+      AbstractMultiFileUploadComponent as unknown as Type<AbstractMultiFileUploadComponent>,
+    );
+    try {
+      const component = fixture.componentInstance;
+      const control = new FormControl<readonly File[]>([], {
+        nonNullable: true,
+        validators: [Validators.required, component['fileUploadValidator']],
+      });
+      component.form = new FormGroup({ files: control });
+      component['fieldErrors'] = { files: fieldErrors };
+      fixture.componentRef.setInput('files', []);
+      fixture.detectChanges();
+
+      expect(component.fileUploads()).toEqual([]);
+      expect(component.fileInputErrors).toEqual([]);
+      expect(control.hasError('required')).toBe(true);
+
+      component.handleFormSubmit(new SubmitEvent('submit'));
+
+      expect(component.formErrorSummaryMessage).toEqual([{ fieldId: 'files', message: 'Select a file' }]);
+      expect(component.fileInputErrors).toEqual(['Select a file']);
+    } finally {
+      fixture.destroy();
+    }
   });
 });

@@ -78,8 +78,12 @@ export abstract class AbstractMultiFileUploadComponent extends AbstractFormBaseC
   /** Returns filename-prefixed row errors, falling back to the form's current control error. */
   public get fileInputErrors(): readonly string[] {
     const errors = this.fileErrors();
+    if (errors.length) {
+      return errors;
+    }
+
     const controlError = this.formControlErrorMessages?.[this.uploadControlName];
-    return errors.length ? errors : controlError ? [controlError] : [];
+    return controlError ? [controlError] : [];
   }
 
   /** Emits a non-empty selection for the parent to validate and upload when the file control is enabled. */

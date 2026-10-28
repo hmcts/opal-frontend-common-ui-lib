@@ -46,14 +46,16 @@
             }
             <span class="govuk-body govuk-!-margin-bottom-0 moj-multi-file-upload__filename">{{ item.name }}</span>
             @if (item.status === 'uploading') {
+              <progress
+                class="govuk-visually-hidden"
+                [attr.aria-label]="item.name"
+                max="100"
+                [attr.value]="item.progress"
+                [attr.aria-valuetext]="statusText(item)"
+              ></progress>
               <span
                 class="govuk-body govuk-!-margin-bottom-0 govuk-!-margin-left-2 moj-multi-file-upload__progress"
-                role="progressbar"
-                [attr.aria-label]="item.name"
-                aria-valuemin="0"
-                aria-valuemax="100"
-                [attr.aria-valuenow]="item.progress"
-                [attr.aria-valuetext]="statusText(item)"
+                aria-hidden="true"
               >
                 {{ item.progress === undefined || item.progress === null ? statusText(item) : item.progress + '%' }}
               </span>
