@@ -96,7 +96,7 @@ Finance uses `DateService` to take each selected calendar date's local start or 
 formats the boundary as `yyyy-MM-dd'T'HH:mm:ss` without an offset suffix. It appends `.999999` to `to_date` to include
 the final database microsecond. The example above covers 14–20 October 2026 in Europe/London: local midnight on
 14 October is `2026-10-13T23:00:00` UTC, and the end of 20 October is `2026-10-20T22:59:59.999999` UTC.
-These calculations belong to the frontend payload service; this API wrapper sends the supplied strings unchanged.
+These calculations belong to the frontend query/date helpers; this API wrapper sends the supplied strings unchanged.
 
 ## Response interfaces
 
@@ -239,8 +239,11 @@ In the current `opal-file-handler-service` implementation, list and content perm
 the metadata-by-ID endpoint retains its access check. Frontend route checks do not replace backend authorization.
 Review this integration note when the backend permission work is completed.
 
-`FinesFinancePayloadService` owns Finance-specific query scope, permitted business-unit filter choices, code-to-name labels, status labels and local date presentation.
-The [interface-file viewer](../../components/custom/custom-file-interface-viewer/readme.md) receives mapped table rows and filter choices.
+`FinesFinanceInterfaceFilesPayloadService` under `fines-finance/services` supplies permitted business-unit filter choices and code-to-name labels. Each file page owns its direction-specific constants and pure query/row-mapping helpers; outbound also owns business-unit response selection. These helpers reuse shared date-filter, business-unit and row-mapping utilities under `fines-finance/services/utils`.
+The inbound and outbound components are separate Finance routes. Both extend `FinesFinanceInterfaceFilesBaseDirective`
+under `fines-finance/directives`, which shares search cancellation, result state, downloads and error focus. Each page
+template supplies the [interface-file viewer](../../components/custom/custom-file-interface-viewer/readme.md) with mapped
+rows, filter choices and a download action template, and owns its error summary and hidden save anchor.
 Use the existing application setup; these services do not require new proxy or application configuration.
 
 ## Testing
