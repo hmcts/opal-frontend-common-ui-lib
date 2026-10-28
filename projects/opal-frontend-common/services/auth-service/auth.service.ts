@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { catchError, tap, throwError } from 'rxjs';
+import { catchError, map, tap, throwError } from 'rxjs';
 import { SSO_ENDPOINTS } from '@hmcts/opal-frontend-common/services/auth-service/constants';
+import { OpalUserService } from '@hmcts/opal-frontend-common/services/opal-user-service';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 
 @Injectable({
@@ -10,6 +11,7 @@ import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly globalStore = inject(GlobalStore);
+  private readonly opalUserService = inject(OpalUserService);
 
   public checkAuthenticated() {
     return this.http
@@ -31,5 +33,26 @@ export class AuthService {
           return throwError(() => error);
         }),
       );
+  }
+
+  /**
+   * Ends the current server-side session and clears local authentication and user-state data.
+   *
+   * The logout endpoint can redirect to an HTML page, so the response is read as text
+   * rather than the default JSON response type.
+   */
+  public logout() {
+    this.opalUserService.clearUserStateCache();
+
+    return this.http.get(SSO_ENDPOINTS.logout, { responseType: 'text' }).pipe(
+      tap(() => {
+        this.globalStore.setAuthenticated(false);
+      }),
+      map(() => undefined),
+      catchError((error) => {
+        this.globalStore.setAuthenticated(false);
+        return throwError(() => error);
+      }),
+    );
   }
 }

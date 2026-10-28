@@ -22,6 +22,20 @@ export const REDIRECT_TO_SSO = new InjectionToken<() => void>('redirectToSsoLogi
   },
 });
 
+export const REDIRECT_TO_SSO_LOGOUT = new InjectionToken<() => void>('redirectToSsoLogout', {
+  providedIn: 'root',
+  factory: () => {
+    const document = inject(DOCUMENT);
+    const platformId = inject(PLATFORM_ID);
+
+    return () => {
+      if (isPlatformBrowser(platformId)) {
+        document.location.href = SSO_ENDPOINTS.logout;
+      }
+    };
+  },
+});
+
 export const authGuard: CanActivateFn = () => {
   const authService: AuthService = inject(AuthService);
   const globalStore: GlobalStoreType = inject(GlobalStore);
