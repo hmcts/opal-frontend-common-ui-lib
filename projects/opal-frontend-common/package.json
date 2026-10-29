@@ -82,6 +82,12 @@
     "./components/abstract/abstract-nested-form-base": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-nested-form-base.mjs"
     },
+    "./components/abstract/abstract-multi-file-upload": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-multi-file-upload.mjs"
+    },
+    "./components/abstract/abstract-multi-file-upload/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-multi-file-upload-interfaces.mjs"
+    },
     "./components/abstract/abstract-sortable-table": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-abstract-abstract-sortable-table.mjs"
     },
@@ -409,6 +415,24 @@
     "./components/moj/moj-inset-text": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-inset-text.mjs"
     },
+    "./components/moj/moj-multi-file-upload": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-multi-file-upload.mjs"
+    },
+    "./components/moj/moj-multi-file-upload/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-multi-file-upload-interfaces.mjs"
+    },
+    "./components/moj/moj-multi-file-upload/types": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-multi-file-upload-types.mjs"
+    },
+    "./components/moj/moj-multi-file-upload/moj-multi-file-upload-files": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-multi-file-upload-moj-multi-file-upload-files.mjs"
+    },
+    "./components/moj/moj-multi-file-upload/moj-multi-file-upload-files/constants": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-multi-file-upload-moj-multi-file-upload-files-constants.mjs"
+    },
+    "./components/moj/moj-multi-file-upload/moj-multi-file-upload-input": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-multi-file-upload-moj-multi-file-upload-input.mjs"
+    },
     "./components/moj/moj-notification-badge": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-moj-moj-notification-badge.mjs"
     },
@@ -612,6 +636,15 @@
     },
     "./services/file-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-file-service.mjs"
+    },
+    "./services/file-service/constants": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-file-service-constants.mjs"
+    },
+    "./services/file-service/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-file-service-interfaces.mjs"
+    },
+    "./services/file-service/types": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-services-file-service-types.mjs"
     },
     "./services/utils-service": {
       "import": "./fesm2022/hmcts-opal-frontend-common-services-utils-service.mjs"

@@ -1,15 +1,17 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { IFileDownloadOptions } from './interfaces/file-download-options.interface';
-import { IFileSaveOptions } from './interfaces/file-save-options.interface';
-import { FILE_CONTENT_UNAVAILABLE_ERROR } from './constants/file-content-unavailable-error.constant';
-import { FILE_DOWNLOAD_DEFAULT_FILENAME } from './constants/file-download-default-filename.constant';
-import { FileDownloadSourceType } from './types/file-download-source.type';
+import { IFileDownloadOptions, IFileSaveOptions } from '@hmcts/opal-frontend-common/services/file-service/interfaces';
+import {
+  FILE_CONTENT_UNAVAILABLE_ERROR,
+  FILE_DOWNLOAD_DEFAULT_FILENAME,
+} from '@hmcts/opal-frontend-common/services/file-service/constants';
+import { FileDownloadSourceType } from '@hmcts/opal-frontend-common/services/file-service/types';
 import { getFileBlob } from './utils/file-blob.utils';
 import { getFileResponseOptions } from './utils/file-response-options.utils';
 import { saveFileToLink } from './utils/file-save-link.utils';
 
+/** File download operations and stateless helpers for application-owned uploads. */
 @Injectable({ providedIn: 'root' })
 export class FileService {
   private readonly http = inject(HttpClient);
@@ -36,6 +38,23 @@ export class FileService {
       default:
         return this.http.get(url, { ...requestOptions, responseType: 'blob' });
     }
+  }
+
+  /** Returns the first non-blank problem description or title from an HTTP response body. */
+  private getFileUploadProblemMessage(body: unknown): string | null {
+    if (!body || typeof body !== 'object') {
+      return null;
+    }
+
+    const description = 'description' in body ? body.description : undefined;
+    const title = 'title' in body ? body.title : undefined;
+    for (const value of [description, title]) {
+      if (typeof value === 'string' && value.trim()) {
+        return value.trim();
+      }
+    }
+
+    return null;
   }
 
   /**
@@ -90,5 +109,59 @@ export class FileService {
     event?.preventDefault();
     const response$ = typeof source === 'string' ? this.getResponse(source, saveOptions) : source;
     return response$.pipe(map((response) => this.saveResponse(response, saveOptions)));
+  }
+
+  /**
+   * Converts transferred bytes to a rounded percentage between 0 and 100.
+   * @returns null when progress cannot be calculated; 100 does not confirm an upload response.
+   */
+  public getFileUploadProgress(loaded: number, total?: number | null): number | null {
+    if (!Number.isFinite(loaded) || total == null || !Number.isFinite(total) || total <= 0) {
+      return null;
+    }
+
+    return Math.max(0, Math.min(100, Math.round((loaded / total) * 100)));
+  }
+
+  /**
+   * Checks an inclusive byte limit without reading file content.
+   * @returns false when the size or limit is negative or not finite.
+   */
+  public isFileWithinSizeLimit(file: Pick<File, 'size'>, maxBytes: number): boolean {
+    return (
+      Number.isFinite(file.size) &&
+      file.size >= 0 &&
+      Number.isFinite(maxBytes) &&
+      maxBytes >= 0 &&
+      file.size <= maxBytes
+    );
+  }
+
+  /**
+   * Matches a case-insensitive extension, with or without its leading dot.
+   * @returns false for an empty extension; MIME types and other filename rules remain caller-owned.
+   */
+  public hasFileExtension(filename: string, extension: string): boolean {
+    if (!extension || extension === '.') {
+      return false;
+    }
+
+    const suffix = extension.startsWith('.') ? extension : `.${extension}`;
+    return filename.toLowerCase().endsWith(suffix.toLowerCase());
+  }
+
+  /**
+   * Resolves an HTTP problem description/title or Error message for an upload failure.
+   * @returns The trimmed message or the caller's fallback when no supported message is available.
+   */
+  public getFileUploadErrorMessage(error: unknown, fallbackMessage: string): string {
+    if (error instanceof HttpErrorResponse) {
+      return this.getFileUploadProblemMessage(error.error) ?? fallbackMessage;
+    }
+    if (error instanceof Error) {
+      return error.message.trim() || fallbackMessage;
+    }
+
+    return fallbackMessage;
   }
 }

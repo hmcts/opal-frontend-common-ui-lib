@@ -41,4 +41,12 @@ describe('getFileBlob', () => {
     expect(result.type).toBe('application/octet-stream');
     expect(await readBytes(result)).toEqual([0, 255]);
   });
+
+  it('keeps empty content valid while applying the requested MIME label', async () => {
+    const result = getFileBlob('', 'text/csv');
+
+    expect(result.type).toBe('text/csv');
+    expect(result.size).toBe(0);
+    expect(await readBytes(result)).toEqual([]);
+  });
 });
