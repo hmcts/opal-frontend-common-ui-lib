@@ -2649,11 +2649,11 @@ __metadata:
   linkType: soft
 
 "@hono/node-server@npm:^1.19.9 || ^2.0.5":
-  version: 2.1.0
-  resolution: "@hono/node-server@npm:2.1.0"
+  version: 2.1.5
+  resolution: "@hono/node-server@npm:2.1.5"
   peerDependencies:
-    hono: ^4
-  checksum: 10/a8fbbfe017c60cc625e13cf37da5604340968037e748dab6dbe0c225880a56eac6eefd02089e3fcebe11a9ecbdc7c50bac7827ef99a654148b7f64b1c66b3ecb
+    hono: ^4 || ^5.0.0-0
+  checksum: 10/4b6f21fe37f956a61856b6f517f91543962f32466a88477d362e8cff77272e541ea6388b8026275e1a2a1976d098c9bf4c3e1d8f8087505e8eac777f0f872901
   languageName: node
   linkType: hard
 
