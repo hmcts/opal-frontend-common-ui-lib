@@ -3,7 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router, type Routes } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { firstValueFrom, of, throwError } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { REDIRECT_TO_SSO, REDIRECT_TO_SSO_LOGOUT } from '@hmcts/opal-frontend-common/guards/auth';
 import { signedInGuard } from '@hmcts/opal-frontend-common/guards/signed-in';
@@ -14,6 +14,8 @@ import { OpalUserService } from '@hmcts/opal-frontend-common/services/opal-user-
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { authenticatedAccountGuard } from './authenticated-account.guard';
 import { OPAL_USER_PATHS } from '../../services/opal-user-service/constants/opal-user-paths.constant';
+import { USER_STATE_DOMAIN_MOCK } from '../../services/opal-user-service/mocks/user-state-domain.mock';
+import { USER_STATE_MOCK } from '../../services/opal-user-service/mocks/opal-user-state-response.mock';
 
 @Component({
   template: '',
@@ -160,7 +162,7 @@ describe('authenticated account routing HTTP sequencing', () => {
   it('does not request user state while authentication is pending or unauthenticated for a nested deep link', async () => {
     const navigation = router.navigateByUrl('/fines/accounts/1/overview');
 
-    await Promise.resolve();
+    await new Promise((resolve) => setTimeout(resolve));
 
     const authenticationRequest = httpMock.expectOne(SSO_ENDPOINTS.authenticated);
 
@@ -173,6 +175,33 @@ describe('authenticated account routing HTTP sequencing', () => {
     expect(router.url).toBe('/sign-in');
     httpMock.expectNone(SSO_ENDPOINTS.authenticated);
     httpMock.expectNone(OPAL_USER_PATHS.loggedInUserState);
+    httpMock.verify();
+  });
+
+  it('makes one authentication request for a nested deep link when user state is cached', async () => {
+    const globalStore = TestBed.inject(GlobalStore);
+    const opalUserService = TestBed.inject(OpalUserService);
+    globalStore.setUserStateDomain(USER_STATE_DOMAIN_MOCK);
+
+    const cachedUserState = firstValueFrom(opalUserService.getLoggedInUserState());
+    const userStateRequest = httpMock.expectOne(OPAL_USER_PATHS.loggedInUserState);
+    userStateRequest.flush(USER_STATE_MOCK);
+
+    await expect(cachedUserState).resolves.toMatchObject({ status: 'active' });
+
+    const navigation = router.navigateByUrl('/fines/accounts/1/overview');
+
+    await new Promise((resolve) => setTimeout(resolve));
+
+    const authenticationRequest = httpMock.expectOne(SSO_ENDPOINTS.authenticated);
+    authenticationRequest.flush(true);
+
+    await new Promise((resolve) => setTimeout(resolve));
+
+    httpMock.expectNone(SSO_ENDPOINTS.authenticated);
+    httpMock.expectNone(OPAL_USER_PATHS.loggedInUserState);
+    await expect(navigation).resolves.toBe(true);
+    expect(router.url).toBe('/fines/accounts/1/overview');
     httpMock.verify();
   });
 });

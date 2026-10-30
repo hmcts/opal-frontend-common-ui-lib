@@ -1,20 +1,34 @@
 import { PLATFORM_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { NavigationCancel, NavigationEnd, NavigationError, Router, RouterEvent } from '@angular/router';
-import { firstValueFrom, of, Subject } from 'rxjs';
+import { firstValueFrom, Observable, Subject } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AuthService } from '@hmcts/opal-frontend-common/services/auth-service';
 import { NavigationAuthenticationService } from './navigation-authentication.service';
 
 describe('NavigationAuthenticationService', () => {
   let checkAuthenticatedMock: ReturnType<typeof vi.fn>;
+  let authenticationSubscriptions: number;
+  let authenticationUnsubscriptions: number;
   let currentNavigationId: number;
   let routerEvents: Subject<RouterEvent>;
   let service: NavigationAuthenticationService;
 
-  const configureService = (platformId: 'browser' | 'server') => {
+  const configureService = (platformId: 'browser' | 'server' = 'browser') => {
     currentNavigationId = 1;
-    checkAuthenticatedMock = vi.fn().mockReturnValue(of(true));
+    authenticationSubscriptions = 0;
+    authenticationUnsubscriptions = 0;
+    checkAuthenticatedMock = vi.fn().mockImplementation(
+      () =>
+        new Observable((subscriber) => {
+          authenticationSubscriptions += 1;
+          subscriber.next(true);
+
+          return () => {
+            authenticationUnsubscriptions += 1;
+          };
+        }),
+    );
     routerEvents = new Subject<RouterEvent>();
 
     TestBed.configureTestingModule({
@@ -38,17 +52,18 @@ describe('NavigationAuthenticationService', () => {
   };
 
   beforeEach(() => {
-    configureService('browser');
+    configureService();
   });
 
-  it('shares authentication checks within one client-side navigation', async () => {
+  it('retains authentication after a guard unsubscribes within one navigation', async () => {
     await expect(firstValueFrom(service.checkAuthenticated())).resolves.toBe(true);
     await expect(firstValueFrom(service.checkAuthenticated())).resolves.toBe(true);
 
     expect(checkAuthenticatedMock).toHaveBeenCalledTimes(1);
+    expect(authenticationSubscriptions).toBe(1);
   });
 
-  it('rechecks authentication for a later client-side navigation', async () => {
+  it('rechecks authentication for a later navigation', async () => {
     await expect(firstValueFrom(service.checkAuthenticated())).resolves.toBe(true);
 
     currentNavigationId = 2;
@@ -56,6 +71,8 @@ describe('NavigationAuthenticationService', () => {
     await expect(firstValueFrom(service.checkAuthenticated())).resolves.toBe(true);
 
     expect(checkAuthenticatedMock).toHaveBeenCalledTimes(2);
+    expect(authenticationSubscriptions).toBe(2);
+    expect(authenticationUnsubscriptions).toBe(1);
   });
 
   it.each([
@@ -70,15 +87,46 @@ describe('NavigationAuthenticationService', () => {
     await expect(firstValueFrom(service.checkAuthenticated())).resolves.toBe(true);
 
     expect(checkAuthenticatedMock).toHaveBeenCalledTimes(2);
+    expect(authenticationSubscriptions).toBe(2);
+    expect(authenticationUnsubscriptions).toBe(1);
   });
 
-  it('does not share authentication checks during server-side rendering', async () => {
+  it('cancels a pending authentication check when navigation is cancelled', () => {
+    service.checkAuthenticated().subscribe();
+
+    routerEvents.next(new NavigationCancel(1, '/fines', 'Navigation cancelled'));
+
+    expect(authenticationUnsubscriptions).toBe(1);
+  });
+
+  it('shares authentication checks within one server-rendered navigation', async () => {
     TestBed.resetTestingModule();
     configureService('server');
 
     await expect(firstValueFrom(service.checkAuthenticated())).resolves.toBe(true);
     await expect(firstValueFrom(service.checkAuthenticated())).resolves.toBe(true);
 
-    expect(checkAuthenticatedMock).toHaveBeenCalledTimes(2);
+    expect(checkAuthenticatedMock).toHaveBeenCalledTimes(1);
+    expect(authenticationSubscriptions).toBe(1);
+  });
+
+  it('does not share authentication between server-rendered application requests', async () => {
+    TestBed.resetTestingModule();
+    configureService('server');
+
+    await expect(firstValueFrom(service.checkAuthenticated())).resolves.toBe(true);
+
+    const firstRequestCheckAuthenticatedMock = checkAuthenticatedMock;
+    const firstRequestAuthenticationSubscriptions = authenticationSubscriptions;
+
+    TestBed.resetTestingModule();
+    configureService('server');
+
+    await expect(firstValueFrom(service.checkAuthenticated())).resolves.toBe(true);
+
+    expect(firstRequestCheckAuthenticatedMock).toHaveBeenCalledTimes(1);
+    expect(firstRequestAuthenticationSubscriptions).toBe(1);
+    expect(checkAuthenticatedMock).toHaveBeenCalledTimes(1);
+    expect(authenticationSubscriptions).toBe(1);
   });
 });

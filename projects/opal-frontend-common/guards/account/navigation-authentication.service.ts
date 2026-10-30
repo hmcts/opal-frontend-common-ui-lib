@@ -1,69 +1,90 @@
-import { isPlatformBrowser } from '@angular/common';
-import { DestroyRef, Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationCancel, NavigationEnd, NavigationError, Router } from '@angular/router';
-import { filter, Observable, shareReplay } from 'rxjs';
+import { filter, Observable, shareReplay, Subject, takeUntil } from 'rxjs';
 import { AuthService } from '@hmcts/opal-frontend-common/services/auth-service';
 
+interface NavigationAuthentication {
+  authentication$: Observable<boolean>;
+  cancellation$: Subject<void>;
+  id: number;
+}
+
 /**
- * Shares authentication checks between guards evaluated during one client-side navigation.
+ * Shares authentication checks between guards evaluated during one navigation.
  *
- * Server-side rendering bypasses the cache so authentication results cannot be shared between
- * separate server requests.
+ * A server-rendered application has its own root injector for each request, so this service's
+ * navigation cache is isolated between SSR requests while still sharing checks within one request.
  */
 @Injectable({ providedIn: 'root' })
 export class NavigationAuthenticationService {
   private readonly authService = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly platformId = inject(PLATFORM_ID);
   private readonly router = inject(Router);
-  private authenticatedForNavigation$?: Observable<boolean>;
-  private navigationId?: number;
+  private navigationAuthentication?: NavigationAuthentication;
 
   constructor() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.router.events
-        .pipe(
-          filter(
-            (event): event is NavigationCancel | NavigationEnd | NavigationError =>
-              event instanceof NavigationCancel || event instanceof NavigationEnd || event instanceof NavigationError,
-          ),
-          takeUntilDestroyed(this.destroyRef),
-        )
-        .subscribe((event) => {
-          if (event.id === this.navigationId) {
-            this.authenticatedForNavigation$ = undefined;
-            this.navigationId = undefined;
-          }
-        });
+    this.router.events
+      .pipe(
+        filter(
+          (event): event is NavigationCancel | NavigationEnd | NavigationError =>
+            event instanceof NavigationCancel || event instanceof NavigationEnd || event instanceof NavigationError,
+        ),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((event) => this.clearNavigationAuthentication(event.id));
+  }
+
+  /**
+   * Cancels an in-flight authentication check and discards its cached result after a navigation ends.
+   *
+   * @param navigationId - The router navigation that reached a terminal state.
+   */
+  private clearNavigationAuthentication(navigationId: number): void {
+    if (this.navigationAuthentication?.id !== navigationId) {
+      return;
     }
+
+    this.navigationAuthentication.cancellation$.next();
+    this.navigationAuthentication.cancellation$.complete();
+    this.navigationAuthentication = undefined;
   }
 
   /**
    * Gets the authenticated state for the current navigation.
    *
-   * @returns The shared authentication result for the current client-side navigation, or a fresh result on the server.
+   * @returns The shared authentication result for the current navigation, or a fresh result when no navigation is active.
    */
   public checkAuthenticated(): Observable<boolean> {
-    if (!isPlatformBrowser(this.platformId)) {
-      return this.authService.checkAuthenticated();
-    }
-
     const currentNavigation = this.router.currentNavigation();
 
     if (!currentNavigation) {
       return this.authService.checkAuthenticated();
     }
 
-    if (this.navigationId === currentNavigation.id && this.authenticatedForNavigation$) {
-      return this.authenticatedForNavigation$;
+    if (this.navigationAuthentication?.id === currentNavigation.id) {
+      return this.navigationAuthentication.authentication$;
     }
 
-    const authenticated$ = this.authService.checkAuthenticated().pipe(shareReplay({ bufferSize: 1, refCount: true }));
+    if (this.navigationAuthentication) {
+      this.clearNavigationAuthentication(this.navigationAuthentication.id);
+    }
 
-    this.navigationId = currentNavigation.id;
-    this.authenticatedForNavigation$ = authenticated$;
+    const cancellation$ = new Subject<void>();
+    const authentication$ = this.authService
+      .checkAuthenticated()
+      .pipe(
+        takeUntil(cancellation$),
+        takeUntilDestroyed(this.destroyRef),
+        shareReplay({ bufferSize: 1, refCount: false }),
+      );
 
-    return authenticated$;
+    this.navigationAuthentication = {
+      authentication$,
+      cancellation$,
+      id: currentNavigation.id,
+    };
+
+    return authentication$;
   }
 }
