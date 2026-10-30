@@ -8,6 +8,13 @@ import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
 import { SSO_ENDPOINTS } from '@hmcts/opal-frontend-common/services/auth-service/constants';
 
+/**
+ * Transient router information used when a protected route has already established that the session is unauthenticated.
+ *
+ * This prevents the sign-in guard from repeating the same authentication request during the redirect navigation.
+ */
+export const UNAUTHENTICATED_SIGN_IN_REDIRECT_INFO = 'opal-frontend-common:unauthenticated-sign-in-redirect';
+
 export const REDIRECT_TO_SSO = new InjectionToken<() => void>('redirectToSsoLogin', {
   providedIn: 'root',
   factory: () => {

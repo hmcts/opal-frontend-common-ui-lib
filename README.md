@@ -115,9 +115,11 @@ back to a protected route with the stale session.
 
 ### Nested-route integration
 
-`canActivateChild` can be evaluated more than once for a nested navigation. When integrating this guard, measure the
-authentication request count for a direct nested deep link and for child-to-child navigation; do not assume one
-authentication request per navigation. Also verify that an unauthenticated deep link makes no user-state request.
+`canActivateChild` can be evaluated more than once for a nested navigation. The guard shares authentication within one
+client-side navigation, so a direct nested deep link makes one authentication request even when the guard is evaluated
+for multiple descendants. It rechecks authentication for later navigations and does not share results during server-side
+rendering. Verify this for direct nested deep links and child-to-child navigation, and verify that an unauthenticated
+deep link makes no user-state request.
 
 For source-level integration and testing guidance, see the
 [authenticated account guard guide](https://github.com/hmcts/opal-frontend-common-ui-lib/blob/main/projects/opal-frontend-common/guards/account/README.md).

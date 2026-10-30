@@ -1,6 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlSegment, UrlTree } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  RedirectCommand,
+  Router,
+  RouterStateSnapshot,
+  UrlSegment,
+  UrlTree,
+} from '@angular/router';
 import { firstValueFrom, Observable, of, Subject, throwError } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { REDIRECT_TO_SSO, REDIRECT_TO_SSO_LOGOUT } from '@hmcts/opal-frontend-common/guards/auth';
@@ -11,6 +18,7 @@ import { OpalUserService } from '@hmcts/opal-frontend-common/services/opal-user-
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
 import { authenticatedAccountGuard } from './authenticated-account.guard';
+import { NavigationAuthenticationService } from './navigation-authentication.service';
 
 describe('authenticatedAccountGuard', () => {
   let checkAuthenticatedMock: ReturnType<typeof vi.fn>;
@@ -32,7 +40,7 @@ describe('authenticatedAccountGuard', () => {
   const runGuard = () => {
     const result = TestBed.runInInjectionContext(() => authenticatedAccountGuard(route, state));
 
-    return firstValueFrom(result as Observable<boolean | UrlTree>);
+    return firstValueFrom(result as Observable<boolean | RedirectCommand | UrlTree>);
   };
 
   beforeEach(() => {
@@ -49,6 +57,10 @@ describe('authenticatedAccountGuard', () => {
         {
           provide: AuthService,
           useValue: { checkAuthenticated: checkAuthenticatedMock, logout: logoutMock },
+        },
+        {
+          provide: NavigationAuthenticationService,
+          useValue: { checkAuthenticated: checkAuthenticatedMock },
         },
         {
           provide: OpalUserService,
@@ -100,7 +112,7 @@ describe('authenticatedAccountGuard', () => {
   it('redirects an unauthenticated user without requesting user state', async () => {
     checkAuthenticatedMock.mockReturnValue(of(false));
 
-    await expect(runGuard()).resolves.toBeInstanceOf(UrlTree);
+    await expect(runGuard()).resolves.toBeInstanceOf(RedirectCommand);
 
     expect(createUrlTreeMock).toHaveBeenCalledWith([PAGES_ROUTING_PATHS.children.signIn]);
     expect(clearUserStateCacheMock).toHaveBeenCalledTimes(1);
@@ -122,7 +134,7 @@ describe('authenticatedAccountGuard', () => {
   it('redirects a legacy authentication 401 without requesting user state', async () => {
     checkAuthenticatedMock.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 401 })));
 
-    await expect(runGuard()).resolves.toBeInstanceOf(UrlTree);
+    await expect(runGuard()).resolves.toBeInstanceOf(RedirectCommand);
 
     expect(createUrlTreeMock).toHaveBeenCalledWith([PAGES_ROUTING_PATHS.children.signIn]);
     expect(clearUserStateCacheMock).toHaveBeenCalledTimes(1);
@@ -133,7 +145,7 @@ describe('authenticatedAccountGuard', () => {
     checkAuthenticatedMock.mockReturnValueOnce(of(false)).mockReturnValueOnce(of(true));
     getLoggedInUserStateMock.mockReturnValue(of(OPAL_USER_STATE_MOCK));
 
-    await expect(runGuard()).resolves.toBeInstanceOf(UrlTree);
+    await expect(runGuard()).resolves.toBeInstanceOf(RedirectCommand);
     await expect(runGuard()).resolves.toBe(true);
 
     expect(clearUserStateCacheMock).toHaveBeenCalledTimes(1);
@@ -163,7 +175,7 @@ describe('authenticatedAccountGuard', () => {
     checkAuthenticatedMock.mockReturnValue(of(true));
     getLoggedInUserStateMock.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 401 })));
 
-    await expect(runGuard()).resolves.toBeInstanceOf(UrlTree);
+    await expect(runGuard()).resolves.toBeInstanceOf(RedirectCommand);
 
     expect(logoutMock).toHaveBeenCalledTimes(1);
     expect(createUrlTreeMock).toHaveBeenCalledWith([PAGES_ROUTING_PATHS.children.signIn]);

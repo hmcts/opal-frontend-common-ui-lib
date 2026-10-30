@@ -1,4 +1,5 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router, type Routes } from '@angular/router';
@@ -7,9 +8,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { REDIRECT_TO_SSO, REDIRECT_TO_SSO_LOGOUT } from '@hmcts/opal-frontend-common/guards/auth';
 import { signedInGuard } from '@hmcts/opal-frontend-common/guards/signed-in';
 import { AuthService } from '@hmcts/opal-frontend-common/services/auth-service';
+import { SSO_ENDPOINTS } from '@hmcts/opal-frontend-common/services/auth-service/constants';
+import { OPAL_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/services/opal-user-service/mocks';
 import { OpalUserService } from '@hmcts/opal-frontend-common/services/opal-user-service';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { authenticatedAccountGuard } from './authenticated-account.guard';
+import { OPAL_USER_PATHS } from '../../services/opal-user-service/constants/opal-user-paths.constant';
 
 @Component({
   template: '',
@@ -27,6 +31,21 @@ const routes: Routes = [
     path: 'sign-in',
     component: TestRouteComponent,
     canActivate: [signedInGuard],
+  },
+  {
+    path: 'fines',
+    component: TestRouteComponent,
+    canActivateChild: [authenticatedAccountGuard],
+    children: [
+      {
+        path: 'accounts/:accountId',
+        component: TestRouteComponent,
+        children: [
+          { path: 'overview', component: TestRouteComponent },
+          { path: 'history', component: TestRouteComponent },
+        ],
+      },
+    ],
   },
 ];
 
@@ -70,7 +89,7 @@ describe('authenticated account routing', () => {
     await expect(router.navigateByUrl('/access-denied')).resolves.toBe(true);
 
     expect(router.url).toBe('/sign-in');
-    expect(checkAuthenticatedMock).toHaveBeenCalledTimes(2);
+    expect(checkAuthenticatedMock).toHaveBeenCalledTimes(1);
     expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
   });
 
@@ -82,7 +101,7 @@ describe('authenticated account routing', () => {
 
     expect(router.url).toBe('/sign-in');
     expect(logoutMock).toHaveBeenCalledTimes(1);
-    expect(checkAuthenticatedMock).toHaveBeenCalledTimes(2);
+    expect(checkAuthenticatedMock).toHaveBeenCalledTimes(1);
     expect(getLoggedInUserStateMock).toHaveBeenCalledTimes(1);
   });
 
@@ -96,5 +115,64 @@ describe('authenticated account routing', () => {
     expect(redirectToSsoLogoutMock).toHaveBeenCalledTimes(1);
     expect(logoutMock).not.toHaveBeenCalled();
     expect(checkAuthenticatedMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('shares authentication for a nested deep link', async () => {
+    checkAuthenticatedMock.mockReturnValue(of(true));
+    getLoggedInUserStateMock.mockReturnValue(of(OPAL_USER_STATE_MOCK));
+
+    await expect(router.navigateByUrl('/fines/accounts/1/overview')).resolves.toBe(true);
+
+    expect(checkAuthenticatedMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('rechecks authentication on a later child navigation', async () => {
+    checkAuthenticatedMock.mockReturnValue(of(true));
+    getLoggedInUserStateMock.mockReturnValue(of(OPAL_USER_STATE_MOCK));
+
+    await expect(router.navigateByUrl('/fines/accounts/1/overview')).resolves.toBe(true);
+    await expect(router.navigateByUrl('/fines/accounts/1/history')).resolves.toBe(true);
+
+    expect(checkAuthenticatedMock).toHaveBeenCalledTimes(2);
+  });
+});
+
+describe('authenticated account routing HTTP sequencing', () => {
+  let httpMock: HttpTestingController;
+  let router: Router;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideRouter(routes),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: REDIRECT_TO_SSO, useValue: vi.fn() },
+        { provide: REDIRECT_TO_SSO_LOGOUT, useValue: vi.fn() },
+      ],
+    });
+
+    TestBed.inject(GlobalStore).setSsoEnabled(false);
+    httpMock = TestBed.inject(HttpTestingController);
+    router = TestBed.inject(Router);
+  });
+
+  it('does not request user state while authentication is pending or unauthenticated for a nested deep link', async () => {
+    const navigation = router.navigateByUrl('/fines/accounts/1/overview');
+
+    await Promise.resolve();
+
+    const authenticationRequest = httpMock.expectOne(SSO_ENDPOINTS.authenticated);
+
+    httpMock.expectNone(OPAL_USER_PATHS.loggedInUserState);
+
+    authenticationRequest.flush(false);
+
+    await expect(navigation).resolves.toBe(true);
+
+    expect(router.url).toBe('/sign-in');
+    httpMock.expectNone(SSO_ENDPOINTS.authenticated);
+    httpMock.expectNone(OPAL_USER_PATHS.loggedInUserState);
+    httpMock.verify();
   });
 });

@@ -7,11 +7,11 @@ import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types
 import { SSO_ENDPOINTS } from '@hmcts/opal-frontend-common/services/auth-service/constants';
 import { OpalUserService } from '@hmcts/opal-frontend-common/services/opal-user-service';
 import { IOpalUserState } from '@hmcts/opal-frontend-common/services/opal-user-service/interfaces';
-import { OPAL_USER_PATHS } from '@hmcts/opal-frontend-common/services/opal-user-service/constants';
 import { OPAL_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/services/opal-user-service/mocks';
-import { USER_STATE_MOCK } from '@hmcts/opal-frontend-common/services/opal-user-service/mocks/opal-user-state-response.mock';
-import { USER_STATE_DOMAIN_MOCK } from '@hmcts/opal-frontend-common/services/opal-user-service/mocks/user-state-domain.mock';
 import { describe, beforeEach, it, expect } from 'vitest';
+import { OPAL_USER_PATHS } from '../opal-user-service/constants/opal-user-paths.constant';
+import { USER_STATE_MOCK } from '../opal-user-service/mocks/opal-user-state-response.mock';
+import { USER_STATE_DOMAIN_MOCK } from '../opal-user-service/mocks/user-state-domain.mock';
 
 describe('AuthService', () => {
   let service: AuthService;

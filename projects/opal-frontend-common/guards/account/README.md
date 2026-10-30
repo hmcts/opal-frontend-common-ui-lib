@@ -44,12 +44,12 @@ route has an additional, distinct authentication requirement.
 ## Nested routes and request counts
 
 When this guard is used with `canActivateChild`, Angular can evaluate it more than once during a nested navigation.
-Each evaluation starts an authentication request, so consumers must check request counts in their own route integration
-tests and deployed telemetry. Cover at least:
+The guard shares one authentication request between those evaluations on the browser. It rechecks authentication for a
+later navigation and does not share state during server-side rendering. Cover at least:
 
 - A direct deep link to a nested protected route.
 - Child-to-child navigation under the protected parent.
 - An unauthenticated deep link, which must not call the user-state endpoint.
 
-Do not introduce a process-wide cached authentication result merely to reduce these calls: authentication state is
+Do not introduce a process-wide authentication cache beyond this navigation-scoped sharing: authentication state is
 user-specific and must remain safe across sign-out, a different user signing in, and server-side rendering or hydration.

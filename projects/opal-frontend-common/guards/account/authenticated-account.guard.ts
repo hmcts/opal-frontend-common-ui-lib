@@ -1,12 +1,17 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { CanActivateFn, RedirectCommand, Router } from '@angular/router';
 import { catchError, map, of, switchMap } from 'rxjs';
-import { REDIRECT_TO_SSO, REDIRECT_TO_SSO_LOGOUT } from '@hmcts/opal-frontend-common/guards/auth';
+import {
+  REDIRECT_TO_SSO,
+  REDIRECT_TO_SSO_LOGOUT,
+  UNAUTHENTICATED_SIGN_IN_REDIRECT_INFO,
+} from '@hmcts/opal-frontend-common/guards/auth';
 import { PAGES_ROUTING_PATHS } from '@hmcts/opal-frontend-common/pages/routing/constants';
 import { AuthService } from '@hmcts/opal-frontend-common/services/auth-service';
 import { OpalUserService } from '@hmcts/opal-frontend-common/services/opal-user-service';
 import { GlobalStore } from '@hmcts/opal-frontend-common/stores/global';
 import { GlobalStoreType } from '@hmcts/opal-frontend-common/stores/global/types';
+import { NavigationAuthenticationService } from './navigation-authentication.service';
 
 /**
  * Determines whether an unknown HTTP error has the specified response status.
@@ -34,6 +39,7 @@ function hasHttpStatus(error: unknown, expectedStatus: number): boolean {
  */
 export const authenticatedAccountGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
+  const navigationAuthenticationService = inject(NavigationAuthenticationService);
   const opalUserService = inject(OpalUserService);
   const globalStore: GlobalStoreType = inject(GlobalStore);
   const router = inject(Router);
@@ -46,7 +52,9 @@ export const authenticatedAccountGuard: CanActivateFn = () => {
       return false;
     }
 
-    return router.createUrlTree([PAGES_ROUTING_PATHS.children.signIn]);
+    return new RedirectCommand(router.createUrlTree([PAGES_ROUTING_PATHS.children.signIn]), {
+      info: UNAUTHENTICATED_SIGN_IN_REDIRECT_INFO,
+    });
   };
 
   const redirectToUnauthenticated = () => {
@@ -71,7 +79,7 @@ export const authenticatedAccountGuard: CanActivateFn = () => {
     );
   };
 
-  return authService.checkAuthenticated().pipe(
+  return navigationAuthenticationService.checkAuthenticated().pipe(
     switchMap((authenticated) => {
       if (!authenticated) {
         return of(redirectToUnauthenticated());
