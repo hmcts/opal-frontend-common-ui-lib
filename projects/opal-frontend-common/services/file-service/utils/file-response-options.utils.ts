@@ -1,6 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
-import { FILE_DOWNLOAD_DEFAULT_FILENAME } from '../constants/file-download-default-filename.constant';
-import { IFileSaveOptions } from '../interfaces/file-save-options.interface';
+import { FILE_DOWNLOAD_DEFAULT_FILENAME } from '@hmcts/opal-frontend-common/services/file-service/constants';
+import { IFileSaveOptions } from '@hmcts/opal-frontend-common/services/file-service/interfaces';
 import { getFileDownloadFilename } from './file-download-filename.utils';
 
 /**

@@ -1,7 +1,9 @@
 import { HttpContext } from '@angular/common/http';
-import { FileDownloadResponseType } from '../types/file-download-response.type';
-import { FileDownloadHeadersType } from '../types/file-download-headers.type';
-import { FileDownloadParamsType } from '../types/file-download-params.type';
+import {
+  FileDownloadResponseType,
+  FileDownloadHeadersType,
+  FileDownloadParamsType,
+} from '@hmcts/opal-frontend-common/services/file-service/types';
 import { IFileSaveOptions } from './file-save-options.interface';
 
 export interface IFileDownloadOptions extends IFileSaveOptions {
