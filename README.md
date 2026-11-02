@@ -106,7 +106,7 @@ guarantee the account request waits for authentication.
 
 The combined guard redirects an unauthenticated user (an authentication result of `false` or a `401`) to the configured
 SSO login or sign-in page. It allows active accounts, redirects a non-active account state to `/account-created`, and
-redirects unexpected authentication or user-state failures to `/internal-server-error`.
+redirects unexpected authentication or user-state failures to `/error/internal-server`.
 
 If the user-state request returns `401` after authentication succeeds, the guard ends the mismatched session before
 redirecting to the configured SSO login or sign-in page. In an SSO environment it uses a top-level browser navigation

@@ -5,7 +5,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router, type Routes } from '@angular/router';
 import { firstValueFrom, of, throwError } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { REDIRECT_TO_SSO, REDIRECT_TO_SSO_LOGOUT } from '@hmcts/opal-frontend-common/guards/auth';
+import { authGuard, REDIRECT_TO_SSO, REDIRECT_TO_SSO_LOGOUT } from '@hmcts/opal-frontend-common/guards/auth';
 import { signedInGuard } from '@hmcts/opal-frontend-common/guards/signed-in';
 import { AuthService } from '@hmcts/opal-frontend-common/services/auth-service';
 import { SSO_ENDPOINTS } from '@hmcts/opal-frontend-common/services/auth-service/constants';
@@ -28,6 +28,11 @@ const routes: Routes = [
     path: 'access-denied',
     component: TestRouteComponent,
     canActivate: [authenticatedAccountGuard],
+  },
+  {
+    path: 'account-created',
+    component: TestRouteComponent,
+    canActivate: [authGuard],
   },
   {
     path: 'sign-in',
@@ -93,6 +98,13 @@ describe('authenticated account routing', () => {
     expect(router.url).toBe('/sign-in');
     expect(checkAuthenticatedMock).toHaveBeenCalledTimes(1);
     expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
+  });
+
+  it('redirects 200 false from the standalone auth guard to sign-in without rechecking authentication', async () => {
+    await expect(router.navigateByUrl('/account-created')).resolves.toBe(true);
+
+    expect(router.url).toBe('/sign-in');
+    expect(checkAuthenticatedMock).toHaveBeenCalledTimes(1);
   });
 
   it('ends a mismatched session before redirecting to sign-in', async () => {
