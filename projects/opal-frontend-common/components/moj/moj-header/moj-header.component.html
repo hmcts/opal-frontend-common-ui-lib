@@ -19,21 +19,23 @@
         </svg>
       </a>
 
-      @if (headerLinks.serviceLink) {
-        <a [routerLink]="headerLinks.serviceLink" class="moj-header__link moj-header__link--organisation-name">
-          <ng-content select="[organisationName]"></ng-content>
-        </a>
-
-        <a [routerLink]="headerLinks.serviceLink" class="moj-header__link moj-header__link--service-name">
-          <ng-content select="[serviceName]"></ng-content>
+      @if (headerLinks.organisationLink) {
+        <a [href]="headerLinks.organisationLink" class="moj-header__link moj-header__link--organisation-name">
+          <ng-container [ngTemplateOutlet]="organisationNameContent"></ng-container>
         </a>
       } @else {
-        <span class="moj-header__link--organisation-name">
-          <ng-content select="[organisationName]"></ng-content>
+        <span class="moj-header__link moj-header__link--organisation-name">
+          <ng-container [ngTemplateOutlet]="organisationNameContent"></ng-container>
         </span>
+      }
 
-        <span class="moj-header__link--service-name">
-          <ng-content select="[serviceName]"></ng-content>
+      @if (headerLinks.serviceLink) {
+        <a [routerLink]="headerLinks.serviceLink" class="moj-header__link moj-header__link--service-name">
+          <ng-container [ngTemplateOutlet]="serviceNameContent"></ng-container>
+        </a>
+      } @else {
+        <span class="moj-header__link moj-header__link--service-name">
+          <ng-container [ngTemplateOutlet]="serviceNameContent"></ng-container>
         </span>
       }
     </div>
@@ -49,3 +51,6 @@
     </div>
   </div>
 </header>
+
+<ng-template #organisationNameContent><ng-content select="[organisationName]"></ng-content></ng-template>
+<ng-template #serviceNameContent><ng-content select="[serviceName]"></ng-content></ng-template>

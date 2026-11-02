@@ -1,0 +1,70 @@
+<div #errorSummary>
+  <opal-lib-govuk-error-summary
+    [errors]="formErrorSummaryMessage"
+    (errorClick)="scrollTo(dateFilterFieldIds[$event])"
+  ></opal-lib-govuk-error-summary>
+</div>
+
+<form [formGroup]="filtersForm" (ngSubmit)="handleFormSubmit($event)" autocomplete="off">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+      <!-- Recreate each autocomplete when its options change because it reads them only on initialization. -->
+      @for (filter of [{ options: businessUnitFilterOptions() }]; track filter.options) {
+        <opal-lib-alphagov-accessible-autocomplete
+          [control]="filtersForm.controls.businessUnit"
+          labelText="Filter by business unit"
+          labelClasses="govuk-label--s"
+          inputId="custom-file-interface-viewer-business-unit"
+          inputName="custom-file-interface-viewer-business-unit"
+          [autoCompleteItems]="filter.options"
+          [showAllValues]="true"
+        >
+        </opal-lib-alphagov-accessible-autocomplete>
+      }
+
+      <opal-lib-custom-date-filter
+        idPrefix="custom-file-interface-viewer"
+        [controls]="filtersForm.controls"
+        [errors]="dateFilterErrors"
+      ></opal-lib-custom-date-filter>
+
+      @if (isInbound) {
+        @for (filter of [{ options: typeFilterOptions() }]; track filter.options) {
+          <opal-lib-alphagov-accessible-autocomplete
+            [control]="filtersForm.controls.fileType"
+            labelText="Filter by type"
+            labelClasses="govuk-label--s"
+            inputId="custom-file-interface-viewer-type"
+            inputName="custom-file-interface-viewer-type"
+            [autoCompleteItems]="filter.options"
+            [showAllValues]="true"
+          >
+          </opal-lib-alphagov-accessible-autocomplete>
+        }
+
+        @for (filter of [{ options: sourceFilterOptions() }]; track filter.options) {
+          <opal-lib-alphagov-accessible-autocomplete
+            [control]="filtersForm.controls.source"
+            labelText="Filter by source"
+            labelClasses="govuk-label--s"
+            inputId="custom-file-interface-viewer-source"
+            inputName="custom-file-interface-viewer-source"
+            [autoCompleteItems]="filter.options"
+            [showAllValues]="true"
+          >
+          </opal-lib-alphagov-accessible-autocomplete>
+        }
+      }
+
+      <button
+        class="govuk-button govuk-button--secondary reports-summary-list-refresh-button"
+        id="refresh-reports-button"
+        type="submit"
+        aria-label="Apply filters and refresh"
+        data-module="govuk-button"
+      >
+        Refresh
+      </button>
+    </div>
+  </div>
+</form>

@@ -139,6 +139,57 @@
       "@hmcts/opal-frontend-common/components/custom/custom-deferred-live-region-announcement": [
         "./dist/opal-frontend-common/components/custom/custom-deferred-live-region-announcement"
       ],
+      "@hmcts/opal-frontend-common/components/custom/custom-date-filter": [
+        "./dist/opal-frontend-common/components/custom/custom-date-filter"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-date-filter/constants": [
+        "./dist/opal-frontend-common/components/custom/custom-date-filter/constants"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-date-filter/interfaces": [
+        "./dist/opal-frontend-common/components/custom/custom-date-filter/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-date-filter/types": [
+        "./dist/opal-frontend-common/components/custom/custom-date-filter/types"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-date-filter/utils": [
+        "./dist/opal-frontend-common/components/custom/custom-date-filter/utils"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/constants": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/constants"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/common"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/interfaces": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/common/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/constants": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/common/constants"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/directives/custom-file-interface-viewer-base": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/common/directives/custom-file-interface-viewer-base"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-table-wrapper": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-table-wrapper"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-table-wrapper/interfaces": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-table-wrapper/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-outbound-file-viewer": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-outbound-file-viewer"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-outbound-file-viewer/interfaces": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-outbound-file-viewer/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer"
+      ],
+      "@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/interfaces": [
+        "./dist/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/interfaces"
+      ],
       "@hmcts/opal-frontend-common/components/custom/custom-page-header": [
         "./dist/opal-frontend-common/components/custom/custom-page-header"
       ],
@@ -529,6 +580,9 @@
       "@hmcts/opal-frontend-common/services/transformation-service/interfaces": [
         "./dist/opal-frontend-common/services/transformation-service/interfaces"
       ],
+      "@hmcts/opal-frontend-common/services/file-service": [
+        "./dist/opal-frontend-common/services/file-service"
+      ],
       "@hmcts/opal-frontend-common/services/utils-service": [
         "./dist/opal-frontend-common/services/utils-service"
       ],
@@ -540,6 +594,15 @@
       ],
       "@hmcts/opal-frontend-common/services/opal-user-service/mocks": [
         "./dist/opal-frontend-common/services/opal-user-service/mocks"
+      ],
+      "@hmcts/opal-frontend-common/services/opal-file-handling-service": [
+        "./dist/opal-frontend-common/services/opal-file-handling-service"
+      ],
+      "@hmcts/opal-frontend-common/services/opal-file-handling-service/interfaces": [
+        "./dist/opal-frontend-common/services/opal-file-handling-service/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/services/opal-file-handling-service/constants": [
+        "./dist/opal-frontend-common/services/opal-file-handling-service/constants"
       ],
       "@hmcts/opal-frontend-common/stores/global": [
         "./dist/opal-frontend-common/stores/global"

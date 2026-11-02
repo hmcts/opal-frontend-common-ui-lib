@@ -10,6 +10,7 @@
 @use '@ministryofjustice/frontend/moj/all' as moj;
 @use './custom/_custom-section_break.scss';
 @use './custom/custom-scrollable-panes';
+@use './custom/custom-header_span';
 
 /* Keep @import until home-office-kit migrates to Sass modules. */
 @import 'accessible-autocomplete/dist/accessible-autocomplete.min.css';

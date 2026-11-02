@@ -1,8 +1,6 @@
----
-
 # MOJ Header Component
 
-This Angular component provides a Ministry of Justice (MOJ)-styled header, typically used for the main header of a page, containing navigation, logos, and service names.
+This Angular component provides a Ministry of Justice (MOJ)-styled page header. It displays the GOV.UK logo, organisation and service names, and projected account navigation items.
 
 ## Table of Contents
 
@@ -22,49 +20,33 @@ import { MojHeaderComponent } from '@components/moj/moj-header/moj-header.compon
 
 ## Usage
 
-You can use the header component in your template as follows:
+Pass the header URLs through `headerLinks`. The organisation name, service name, and navigation items are supplied through content projection. This example follows the usage in Fines:
 
 ```html
-<opal-lib-moj-header
-  [logoUrl]="'/assets/logo.png'"
-  [serviceName]="'MOJ Service'"
-  [navigationItems]="navItems"
-></opal-lib-moj-header>
+<opal-lib-moj-header [headerLinks]="headerLinks">
+  <ng-container organisationName>HMCTS</ng-container>
+  <ng-container serviceName>Opal</ng-container>
+  <opal-lib-moj-header-navigation-item (actionClick)="handleAuthentication()">
+    @if (!globalStore.authenticated()) {
+      <ng-container linkText>Sign in</ng-container>
+    } @else {
+      <ng-container linkText>Sign out</ng-container>
+    }
+  </opal-lib-moj-header-navigation-item>
+</opal-lib-moj-header>
 ```
 
-### Example in HTML:
-
-```html
-<header class="moj-header">
-  <div class="moj-header__logo">
-    <a href="/">
-      <img src="{{ logoUrl }}" alt="Logo" />
-    </a>
-  </div>
-  <div class="moj-header__service">
-    <a href="/" class="moj-header__link">{{ serviceName }}</a>
-  </div>
-  <nav class="moj-header__navigation">
-    <ul>
-      <li *ngFor="let item of navigationItems">
-        <a href="{{ item.link }}">{{ item.label }}</a>
-      </li>
-    </ul>
-  </nav>
-</header>
-```
+`headerLinks` has the shape `{ govukLink, organisationLink, serviceLink }`. When `organisationLink` or `serviceLink` is empty, the corresponding name is rendered as non-link text. The navigation item emits `actionClick` when selected; its label is projected through `linkText`.
 
 ## Inputs
 
-| Input             | Type     | Description                                        |
-| ----------------- | -------- | -------------------------------------------------- |
-| `logoUrl`         | `string` | The URL of the logo image displayed in the header. |
-| `serviceName`     | `string` | The name of the service displayed in the header.   |
-| `navigationItems` | `Array`  | Array of navigation items for the header links.    |
+| Input        | Type              | Description                                                     |
+| ------------ | ----------------- | --------------------------------------------------------------- |
+| `headerLinks` | `IMojHeaderLinks` | URLs for the GOV.UK logo, organisation name, and service name.  |
 
 ## Outputs
 
-There are no custom outputs for this component.
+The header component has no outputs. Each `opal-lib-moj-header-navigation-item` provides an `actionClick` output.
 
 ## Methods
 
@@ -84,4 +66,4 @@ Feel free to submit issues or pull requests to improve this component.
 
 ---
 
-This `README.md` provides an overview of how to use and configure the `moj-header` component to display a page header with logos, service names, and navigation links.
+This README describes the `moj-header` component API and projected content.
