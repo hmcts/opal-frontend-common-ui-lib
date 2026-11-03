@@ -1,11 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { HttpErrorResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
-import { CanActivateFn, Router, UrlSegment, UrlSegmentGroup, UrlTree } from '@angular/router';
+import { CanActivateFn, Router, UrlTree } from '@angular/router';
 import { signedInGuard } from './signed-in.guard';
 import { throwError, of } from 'rxjs';
 import { getGuardWithDummyUrl } from '../helpers/get-guard-with-dummy-url';
 import { runAuthGuardWithContext } from '../helpers/run-auth-guard-with-context';
 import { AuthService } from '@hmcts/opal-frontend-common/services/auth-service';
+import { PAGES_ROUTING_PATHS } from '@hmcts/opal-frontend-common/pages/routing/constants';
+import { UNAUTHENTICATED_SIGN_IN_REDIRECT_INFO } from '@hmcts/opal-frontend-common/guards/auth';
 
 describe('signedInGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) =>
@@ -15,9 +18,8 @@ describe('signedInGuard', () => {
   let mockRouter: Router;
 
   let checkAuthenticatedMock: ReturnType<typeof vi.fn>;
-  let navigateMock: ReturnType<typeof vi.fn>;
   let createUrlTreeMock: ReturnType<typeof vi.fn>;
-  let parseUrlMock: ReturnType<typeof vi.fn>;
+  let currentNavigationMock: ReturnType<typeof vi.fn>;
 
   const urlPath = '/sign-in';
   const expectedUrl = '/';
@@ -26,21 +28,12 @@ describe('signedInGuard', () => {
     checkAuthenticatedMock = vi.fn();
     mockAuthService = { checkAuthenticated: checkAuthenticatedMock } as unknown as AuthService;
 
-    navigateMock = vi.fn();
-    createUrlTreeMock = vi.fn();
-    parseUrlMock = vi.fn();
+    createUrlTreeMock = vi.fn(() => new UrlTree());
+    currentNavigationMock = vi.fn(() => null);
     mockRouter = {
-      navigate: navigateMock,
       createUrlTree: createUrlTreeMock,
-      parseUrl: parseUrlMock,
+      currentNavigation: currentNavigationMock,
     } as unknown as Router;
-
-    parseUrlMock.mockImplementation((url: string) => {
-      const urlTree = new UrlTree();
-      const urlSegment = new UrlSegment(url, {});
-      urlTree.root = new UrlSegmentGroup([urlSegment], {});
-      return urlTree;
-    });
 
     TestBed.configureTestingModule({
       providers: [
@@ -60,21 +53,50 @@ describe('signedInGuard', () => {
     expect(executeGuard).toBeTruthy();
   });
 
-  it('should return false if the user is logged in and redirect to the default route', async () => {
-    mockIsLoggedInFalse();
+  it('redirects a signed-in user to the default route', async () => {
+    checkAuthenticatedMock.mockReturnValue(of(true));
+
     const authenticated = await runAuthGuardWithContext(getGuardWithDummyUrl(signedInGuard, urlPath));
+
     expect(createUrlTreeMock).toHaveBeenCalledTimes(1);
     expect(createUrlTreeMock).toHaveBeenCalledWith([expectedUrl]);
-    expect(authenticated).toBeFalsy();
+    expect(authenticated).toBeInstanceOf(UrlTree);
   });
 
-  it('should allow access to login if catches an error ', async () => {
-    checkAuthenticatedMock.mockReturnValue(throwError(() => 'Authentication error'));
-    const authenticated = await runAuthGuardWithContext(getGuardWithDummyUrl(signedInGuard, urlPath));
-    expect(authenticated).toBeTruthy();
-  });
-
-  const mockIsLoggedInFalse = () => {
+  it('allows an unauthenticated user to access sign-in', async () => {
     checkAuthenticatedMock.mockReturnValue(of(false));
-  };
+
+    const authenticated = await runAuthGuardWithContext(getGuardWithDummyUrl(signedInGuard, urlPath));
+
+    expect(authenticated).toBe(true);
+    expect(createUrlTreeMock).not.toHaveBeenCalled();
+  });
+
+  it('allows a redirect after a protected route has already checked authentication', async () => {
+    currentNavigationMock.mockReturnValue({ extras: { info: UNAUTHENTICATED_SIGN_IN_REDIRECT_INFO } });
+
+    const authenticated = await runAuthGuardWithContext(getGuardWithDummyUrl(signedInGuard, urlPath));
+
+    expect(authenticated).toBe(true);
+    expect(checkAuthenticatedMock).not.toHaveBeenCalled();
+    expect(createUrlTreeMock).not.toHaveBeenCalled();
+  });
+
+  it('allows access to sign-in when the legacy authentication endpoint returns 401', async () => {
+    checkAuthenticatedMock.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 401 })));
+
+    const authenticated = await runAuthGuardWithContext(getGuardWithDummyUrl(signedInGuard, urlPath));
+
+    expect(authenticated).toBe(true);
+    expect(createUrlTreeMock).not.toHaveBeenCalled();
+  });
+
+  it('redirects authentication service failures to the internal-server-error page', async () => {
+    checkAuthenticatedMock.mockReturnValue(throwError(() => new HttpErrorResponse({ status: 503 })));
+
+    const authenticated = await runAuthGuardWithContext(getGuardWithDummyUrl(signedInGuard, urlPath));
+
+    expect(authenticated).toBeInstanceOf(UrlTree);
+    expect(createUrlTreeMock).toHaveBeenCalledWith([`/${PAGES_ROUTING_PATHS.children.internalServerError}`]);
+  });
 });
