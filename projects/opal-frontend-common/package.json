@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@microsoft/applicationinsights-web": "^3.3.6",
-    "@ministryofjustice/frontend": "^11.0.0",
+    "@ministryofjustice/frontend": "^12.0.0",
     "accessible-autocomplete": "^3.0.1",
     "fast-sort": "^3.4.1",
     "govuk-frontend": "^6.0.0",
@@ -196,8 +196,35 @@
     "./components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-filters": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-common-custom-file-interface-viewer-filters.mjs"
     },
+    "./components/custom/custom-file-interface-viewer/common": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-common.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/common/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-common-interfaces.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/common/constants": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-common-constants.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/common/directives/custom-file-interface-viewer-base": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-common-directives-custom-file-interface-viewer-base.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-table-wrapper": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-common-custom-file-interface-viewer-table-wrapper.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/common/custom-file-interface-viewer-table-wrapper/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-common-custom-file-interface-viewer-table-wrapper-interfaces.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/custom-outbound-file-viewer": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-custom-outbound-file-viewer.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/custom-outbound-file-viewer/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-custom-outbound-file-viewer-interfaces.mjs"
+    },
     "./components/custom/custom-file-interface-viewer/custom-inbound-file-viewer": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-custom-inbound-file-viewer.mjs"
+    },
+    "./components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/interfaces": {
+      "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-file-interface-viewer-custom-inbound-file-viewer-interfaces.mjs"
     },
     "./components/custom/custom-page-header": {
       "import": "./fesm2022/hmcts-opal-frontend-common-components-custom-custom-page-header.mjs"

@@ -71,6 +71,26 @@ describe('CustomDateFilterComponent', () => {
     expect(controls.days.value).toBe('14');
   });
 
+  it('keeps radio aria-controls references valid as conditional fields appear and disappear', () => {
+    fixture.detectChanges();
+
+    for (const selected of ['last7Days', 'customDays', 'dateRange', 'last7Days'] as const) {
+      controls.dateFilter.setValue(selected);
+      fixture.detectChanges();
+
+      const radios = fixture.nativeElement.querySelectorAll('input[type="radio"]') as NodeListOf<HTMLInputElement>;
+      for (const radio of radios) {
+        const targetId = radio.getAttribute('aria-controls');
+        if (radio.value === selected && selected !== 'last7Days') {
+          expect(targetId).toBe(`search-${selected === 'customDays' ? 'custom-days' : 'date-range'}`);
+          expect(fixture.nativeElement.querySelector(`#${targetId}`)).not.toBeNull();
+        } else {
+          expect(targetId).toBeNull();
+        }
+      }
+    }
+  });
+
   it('updates conditional fields when the parent changes the date option', () => {
     fixture.detectChanges();
 

@@ -5,7 +5,7 @@
  * @returns The decoded UTF-8 filename, plain filename or caller-supplied fallback, in that order.
  */
 export function getFileDownloadFilename(contentDisposition: string | null, fallbackFilename: string): string {
-  const encoded = contentDisposition?.match(/filename\*\s*=\s*UTF-8''([^;]+)/i)?.[1];
+  const encoded = contentDisposition?.match(/filename\*\s*=\s*UTF-8'[^';]*'([^;]+)/i)?.[1];
   if (encoded) {
     try {
       return decodeURIComponent(encoded.trim());

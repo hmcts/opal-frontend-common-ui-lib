@@ -13,6 +13,7 @@ optional action template from the consuming application.
 - [Table Data](#table-data)
 - [Action Template Contract](#action-template-contract)
 - [Migration](#migration)
+- [Component behavior](#component-behavior)
 - [Accessibility](#accessibility)
 - [Testing](#testing)
 - [Contributing](#contributing)
@@ -20,10 +21,8 @@ optional action template from the consuming application.
 ## Installation
 
 ```typescript
-import {
-  CustomInboundFileViewerComponent,
-  ICustomFileInterfaceViewerInboundTableWrapperTableData,
-} from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer';
+import { CustomInboundFileViewerComponent } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer';
+import type { ICustomFileInterfaceViewerInboundTableWrapperTableData } from '@hmcts/opal-frontend-common/components/custom/custom-file-interface-viewer/custom-inbound-file-viewer/interfaces';
 ```
 
 Add `CustomInboundFileViewerComponent` to the consuming standalone component's `imports` array and include the common
@@ -47,7 +46,7 @@ Omit `actionTemplate` to leave Action cells empty.
 
 The [viewer overview](../readme.md) explains frontend routes, reference data, permissions, request scope and mappings.
 The common [filters](../common/custom-file-interface-viewer-filters/readme.md) and
-[table](./common/custom-file-interface-viewer-inbound-table-wrapper/readme.md) have separate API documentation.
+[table](../common/custom-file-interface-viewer-table-wrapper/readme.md) have separate API documentation.
 
 ## Inputs
 
@@ -73,14 +72,15 @@ The frontend handles this event, builds API parameters, requests data and maps t
 filter the input rows itself or issue list API calls. Sorting and pagination operate on the rows already supplied.
 
 No initial `formSubmit` event is emitted. The frontend must start the initial request when the page is entered.
-Refresh is always enabled, including for pristine filters, and validates on submission. Invalid forms show validation
+Refresh is always enabled, including for pristine filters, and validates on submission. Replacing the business-unit,
+source or type options clears a removed selection to `null` while preserving valid selections, All and interaction state. Invalid forms show validation
 errors without emitting `formSubmit`; valid forms can resubmit unchanged criteria. Handle request errors in the
 application and retain the last successful rows as appropriate.
 See the [filter form contract](../common/custom-file-interface-viewer-filters/readme.md) for fields and defaults.
 
 ## Table Data
 
-Import the row interface from the inbound viewer entrypoint shown above. Each row contains:
+Import the row interface from the inbound viewer `/interfaces` entrypoint shown above. Each row contains:
 
 | Property          | Type             | Description                                                                                                         |
 | ----------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------- |
@@ -92,7 +92,7 @@ Import the row interface from the inbound viewer entrypoint shown above. Each ro
 | `'Business unit'` | `string \| null` | Resolved business-unit name or joined names.                                                                        |
 | `Source`          | `string \| null` | Source display label.                                                                                               |
 | `Status`          | `string \| null` | Display label for the status cell; any action eligibility belongs to the consumer.                                  |
-| `Actions`         | `string \| null` | Row-contract field. The action cell is rendered from an action template, not this value; Finance sets it to `null`. |
+| `Actions`         | `string \| null` | Sort label for the Action column; the action template renders the cell. Finance supplies `Download` or an empty string. |
 
 For example:
 
@@ -106,14 +106,16 @@ const row: ICustomFileInterfaceViewerInboundTableWrapperTableData = {
   'Business unit': 'Camberwell Green',
   Source: 'Allpay',
   Status: 'Ready',
-  Actions: null,
+  Actions: 'Download',
 };
 ```
 
 The display timestamp above represents UTC `2026-10-20T12:00:00Z` in Europe/London. The frontend derives display text
 using the user's local zone; it must not hard-code this example's offset.
 
-The viewer supplies the table's descending date/time sort state. Rows are paginated in groups of 25. Supplying a new
+The viewer supplies the table's descending date/time sort state. Every displayed column is sortable, including Type,
+Source and the final Action column. Action sorting uses the caller-supplied `Actions` string; the consumer controls
+eligibility and visible actions. Rows are paginated in groups of 25. Supplying a new
 row array reapplies sorting and resets the current page. Row actions do not change the array unless the consumer does so.
 
 ## Action Template Contract
@@ -126,7 +128,7 @@ interface ICustomFileInterfaceViewerInboundTableWrapperActionTemplateContext {
 }
 ```
 
-Import this type from the same inbound viewer entrypoint when declaring a typed `TemplateRef`. In an Angular template,
+Import this type from the inbound viewer `/interfaces` entrypoint when declaring a typed `TemplateRef`. In an Angular template,
 `let-row` receives the full current row. The viewer passes `actionTemplate` unchanged to its table and supplies no default
 contents for the Action cell. The row's `Actions` string is not rendered as an action.
 
@@ -168,6 +170,19 @@ Supply `[actionTemplate]` to retain row actions. Move download eligibility, URL 
 errors and focus handling into the consuming application. The former built-in Download action and download methods/error
 state have been removed; omitting the template leaves Action cells empty. Update the consumer's tests with this migration.
 
+For a standalone table, import `CustomFileInterfaceViewerTableWrapperComponent` from
+`/common/custom-file-interface-viewer-table-wrapper`, use `opal-lib-custom-file-interface-viewer-table-wrapper`, and bind
+`[isInbound]="true"`. The separate inbound table entrypoint has been removed. Its sort default and mapped sort type
+have also been removed: use `CUSTOM_FILE_INTERFACE_VIEWER_TABLE_SORT_DEFAULT` from `/common/constants` and
+`IAbstractSortState` from the abstract sortable-table `/interfaces` entrypoint.
+
+## Component behavior
+
+This wrapper declares no methods or lifecycle hooks. It inherits presentational inputs and `formSubmit` from
+`CustomFileInterfaceViewerBase`, sets inbound mode, inherits the common default sort, and forwards those bindings to the
+shared viewer. Validation and submission are owned by the [filter component](../common/custom-file-interface-viewer-filters/readme.md#methods);
+sorting and pagination are inherited by the [common table](../common/custom-file-interface-viewer-table-wrapper/readme.md#methods).
+
 ## Accessibility
 
 - The page has an Inbound interface files heading and the standard visible separator after filters.
@@ -185,7 +200,7 @@ yarn test --include='**/custom-inbound-file-viewer.component.spec.ts'
 ```
 
 The specs cover input/output wiring, unset/empty results, prepared row rendering and caller-supplied action templates.
-Table sorting and pagination have colocated wrapper specs. Consumer integration tests should cover initial fetching,
+Table sorting and pagination are covered by the shared table's colocated spec. Consumer integration tests should cover initial fetching,
 filter-to-request mapping and any application-owned eligibility, downloads, errors and focus.
 
 ## Contributing
@@ -193,3 +208,7 @@ filter-to-request mapping and any application-owned eligibility, downloads, erro
 Keep API criteria, display mappings and action behaviour in the consuming application. Reuse FileService for file
 handling where appropriate and the existing common filter/table components for form and results behaviour. Update this
 README and the relevant specs when a public input or action-template contract changes.
+
+## Shared implementation
+
+The thin inbound viewer forwards its required source/type choices, business units, rows, form submissions and optional action template through the shared viewer. The common base holds presentational inputs and outputs and the shared default sort. The common table provides numeric date sorting, unique cell IDs and 25-row pagination for both directions. Inbound row and action-context interfaces remain exported for consuming pages.

@@ -34,6 +34,10 @@ import {
   validateCustomFileInterfaceViewerDateRange,
 } from './utils/custom-file-interface-viewer-filters.utils';
 
+/**
+ * Collects interface-file criteria, validates active date fields and emits valid raw form values.
+ * The consumer supplies permitted choices and owns request construction and execution.
+ */
 @Component({
   selector: 'opal-lib-custom-file-interface-viewer-filters',
   imports: [
@@ -60,7 +64,7 @@ export class CustomFileInterfaceViewerFiltersComponent extends AbstractFormBaseC
 
   @Input({ required: true }) public isInbound: boolean = false;
   /**
-   * Updates the permitted business-unit choices used by the filter.
+   * Updates permitted business-unit choices and clears a selected code removed from the list.
    * @param value - Business-unit names and API codes, excluding the All option.
    */
   @Input({ required: true }) public set businessUnits(value: IAlphagovAccessibleAutocompleteItem[]) {
@@ -68,18 +72,18 @@ export class CustomFileInterfaceViewerFiltersComponent extends AbstractFormBaseC
     this.clearUnavailableSelection(this.filtersForm.controls.businessUnit, value);
   }
   /**
-   * Updates the available source choices used by the filter.
+   * Updates source choices and clears a selected value removed from the list.
    * @param value - Source names and API values, excluding the All option.
    */
-  @Input({ required: true }) public set source(value: IAlphagovAccessibleAutocompleteItem[]) {
+  @Input() public set source(value: IAlphagovAccessibleAutocompleteItem[]) {
     this.sourceOptions.set(value);
     this.clearUnavailableSelection(this.filtersForm.controls.source, value);
   }
   /**
-   * Updates the available file-type choices used by the filter.
+   * Updates file-type choices and clears a selected value removed from the list.
    * @param value - File-type names and API values, excluding the All option.
    */
-  @Input({ required: true }) public set sourceList(value: IAlphagovAccessibleAutocompleteItem[]) {
+  @Input() public set sourceList(value: IAlphagovAccessibleAutocompleteItem[]) {
     this.typeOptions.set(value);
     this.clearUnavailableSelection(this.filtersForm.controls.fileType, value);
   }
