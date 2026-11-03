@@ -1,1 +1,1 @@
-export * from './abstract-multi-file-upload.component';
+export { AbstractMultiFileUploadComponent } from './abstract-multi-file-upload.component';
