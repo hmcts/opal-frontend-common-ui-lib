@@ -56,6 +56,9 @@ export class DocumentsUploadFormComponent extends AbstractMultiFileUploadCompone
 ```
 
 The inherited validator reports supplied row errors and files whose upload status has not reached confirmed success.
+Failed or rejected rows with no supplied errors use the default file-row labels, `Upload failed` or `File rejected`.
+These messages produce a `fileUpload` error and appear with the filename in `fileErrors()` and `fileInputErrors`.
+Only pending uploads or mismatches between the form's files and supplied rows produce `uploadPending`.
 It does not inspect file content or choose validation rules. Omit `Validators.required` when files are optional.
 The protected `uploadControlName` defaults to `files`; initialise an override before constructing the form and align
 the form control, error map and native input ID.

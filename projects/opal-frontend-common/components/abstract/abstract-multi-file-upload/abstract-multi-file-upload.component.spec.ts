@@ -121,7 +121,7 @@ describe('AbstractMultiFileUploadComponent', () => {
     expect(component.form.valid).toBe(true);
   });
 
-  it.each(['pending', 'uploading', 'rejected', 'failed'] as const)(
+  it.each(['pending', 'uploading'] as const)(
     'keeps a supplied %s row invalid until the parent supplies success',
     (status) => {
       const document = file('pending.csv');
@@ -134,6 +134,64 @@ describe('AbstractMultiFileUploadComponent', () => {
       expect(component.form.valid).toBe(true);
     },
   );
+
+  it.each([
+    ['failed', 'Upload failed'],
+    ['rejected', 'File rejected'],
+  ] as const)('reports %s rows without detailed errors as failures on submission', (status, message) => {
+    const document = file('document.csv');
+    const rows = Object.freeze([Object.freeze(item(document, { status, errors: Object.freeze([]) }))]);
+    const submitted = vi.fn();
+    component.files = rows;
+    component['formSubmit'].subscribe(submitted);
+    fixture.detectChanges();
+
+    component.handleFormSubmit(new SubmitEvent('submit'));
+
+    expect(component.form.controls.files.errors).toEqual({ fileUpload: [message] });
+    expect(component.formErrorSummaryMessage).toEqual([{ fieldId: 'files', message: 'Check files with errors' }]);
+    expect(component.fileErrors()).toEqual([`document.csv: ${message}`]);
+    expect(component.fileInputErrors).toEqual([`document.csv: ${message}`]);
+    expect(submitted).not.toHaveBeenCalled();
+    expect(component.fileUploads()).toBe(rows);
+    expect(rows[0].errors).toEqual([]);
+
+    component.files = [item(document)];
+
+    expect(component.form.valid).toBe(true);
+    expect(component.formErrorSummaryMessage).toEqual([]);
+    expect(component.fileInputErrors).toEqual([]);
+
+    component.handleFormSubmit(new SubmitEvent('submit'));
+
+    expect(submitted).toHaveBeenCalledOnce();
+  });
+
+  it('prioritises failures over pending uploads and refreshes the summary when a failed upload is retried', () => {
+    const failed = file('failed.csv');
+    const pending = file('pending.csv');
+    component.files = [item(failed, { status: 'failed' }), item(pending, { status: 'uploading', progress: 50 })];
+    fixture.detectChanges();
+
+    component.handleFormSubmit(new SubmitEvent('submit'));
+
+    expect(component.form.controls.files.errors).toEqual({ fileUpload: ['Upload failed'] });
+    expect(component.formErrorSummaryMessage).toEqual([{ fieldId: 'files', message: 'Check files with errors' }]);
+    expect(component.fileInputErrors).toEqual(['failed.csv: Upload failed']);
+
+    component.files = [item(failed, { status: 'uploading', progress: 0 }), item(pending)];
+
+    expect(component.form.controls.files.errors).toEqual({ uploadPending: true });
+    expect(component.formErrorSummaryMessage).toEqual([{ fieldId: 'files', message: 'Wait for uploads' }]);
+    expect(component.fileErrors()).toEqual([]);
+    expect(component.fileInputErrors).toEqual(['Wait for uploads']);
+
+    component.files = [item(failed), item(pending)];
+
+    expect(component.form.valid).toBe(true);
+    expect(component.formErrorSummaryMessage).toEqual([]);
+    expect(component.fileInputErrors).toEqual([]);
+  });
 
   it('aggregates every supplied row error and prefixes display errors with its filename', () => {
     const document = file('repeated.csv');

@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, computed, signal } from
 import { AbstractControl, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { AbstractFormBaseComponent } from '@hmcts/opal-frontend-common/components/abstract/abstract-form-base';
 import type { IAbstractMultiFileUploadItem } from '@hmcts/opal-frontend-common/components/abstract/abstract-multi-file-upload/interfaces';
+import { MOJ_MULTI_FILE_UPLOAD_STATUS_LABELS } from '@hmcts/opal-frontend-common/components/moj/moj-multi-file-upload/moj-multi-file-upload-files/constants';
 
 /** Adapts parent-owned upload rows to a form and emits file interaction events. */
 @Component({ template: '' })
@@ -27,7 +28,7 @@ export abstract class AbstractMultiFileUploadComponent extends AbstractFormBaseC
 
   public readonly fileUploads = this.uploadItems.asReadonly();
   public readonly fileErrors = computed(() =>
-    this.fileUploads().flatMap((item) => item.errors.map((error) => `${item.name}: ${error}`)),
+    this.fileUploads().flatMap((item) => this.getItemErrors(item).map((error) => `${item.name}: ${error}`)),
   );
 
   /** Resolves the consuming form's file control using its configured name. */
@@ -35,15 +36,26 @@ export abstract class AbstractMultiFileUploadComponent extends AbstractFormBaseC
     return this.form.get(this.uploadControlName) as FormControl<readonly File[]>;
   }
 
+  /** Uses supplied row errors, falling back to the file-row status label for terminal failures. */
+  private getItemErrors(item: IAbstractMultiFileUploadItem): readonly string[] {
+    if (item.errors.length) {
+      return item.errors;
+    }
+    if (item.status === 'failed' || item.status === 'rejected') {
+      return [MOJ_MULTI_FILE_UPLOAD_STATUS_LABELS[item.status]];
+    }
+    return [];
+  }
+
   /**
-   * Reflects parent-supplied row errors and confirmed upload statuses in form validity.
+   * Reflects row errors, terminal failures and confirmed upload statuses in form validity.
    * The consumer supplies file validation rules and any required-field validator.
    * @returns Row errors, an upload-pending error for incomplete/mismatched state, or null.
    */
   private validateFilesControl(control: AbstractControl<readonly File[] | null>): ValidationErrors | null {
     const files = control.value ?? [];
     const items = this.fileUploads();
-    const errors = items.flatMap((item) => item.errors);
+    const errors = items.flatMap((item) => this.getItemErrors(item));
     if (errors.length) {
       return { fileUpload: errors };
     }
