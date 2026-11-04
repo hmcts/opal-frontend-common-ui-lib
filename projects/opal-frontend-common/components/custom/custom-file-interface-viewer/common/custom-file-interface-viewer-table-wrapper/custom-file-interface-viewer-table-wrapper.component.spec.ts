@@ -105,6 +105,41 @@ describe.each([
       fixture.componentRef.setInput('tableData', [row]);
     });
 
+    it('renders multiple business units as separate GOV.UK list items in the same cell', () => {
+      fixture.componentRef.setInput('tableData', [
+        { ...row, 'Business unit': 'Camberwell Green\nNorth, East\nUNKNOWN\nCamberwell Green' },
+      ]);
+      fixture.detectChanges();
+
+      const cell = fixture.nativeElement.querySelector('td#business-unit-0') as HTMLTableCellElement;
+      expect(cell.classList).toContain('govuk-table__cell');
+      expect(cell.querySelectorAll('ul.govuk-list')).toHaveLength(1);
+      expect(Array.from(cell.querySelectorAll('li'), (item) => item.textContent)).toEqual([
+        'Camberwell Green',
+        'North, East',
+        'UNKNOWN',
+        'Camberwell Green',
+      ]);
+    });
+
+    it('renders business-unit names as text without interpreting HTML', () => {
+      fixture.componentRef.setInput('tableData', [{ ...row, 'Business unit': 'Unit <em>name</em>' }]);
+      fixture.detectChanges();
+
+      const cell = fixture.nativeElement.querySelector('td#business-unit-0') as HTMLTableCellElement;
+      expect(cell.querySelector('li')?.textContent).toBe('Unit <em>name</em>');
+      expect(cell.querySelector('em')).toBeNull();
+    });
+
+    it.each([null, ''])('leaves the business-unit cell empty for %s', (businessUnits) => {
+      fixture.componentRef.setInput('tableData', [{ ...row, 'Business unit': businessUnits }]);
+      fixture.detectChanges();
+
+      const cell = fixture.nativeElement.querySelector('td#business-unit-0') as HTMLTableCellElement;
+      expect(cell.textContent?.trim()).toBe('');
+      expect(cell.querySelector('ul')).toBeNull();
+    });
+
     it('renders the direction-specific columns, display values and singular result count', () => {
       fixture.detectChanges();
       const headings = Array.from(fixture.nativeElement.querySelectorAll('thead th'), (cell) =>

@@ -6,6 +6,7 @@ export interface ICustomFileInterfaceViewerTableData extends IAbstractTableData<
   'Date and time': number | null;
   dateTimeDisplay: string | null;
   Title: string | null;
+  /** Newline-separated names, displayed as a GOV.UK list while retaining a sortable text value. */
   'Business unit': string | null;
   Status: string | null;
   Actions: string | null;
