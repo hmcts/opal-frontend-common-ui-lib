@@ -86,7 +86,7 @@ describe('CustomOutboundFileViewerComponent', () => {
     const headings = Array.from(fixture.nativeElement.querySelectorAll('thead th'), (cell) =>
       (cell as HTMLElement).textContent?.trim(),
     );
-    expect(headings).toEqual(['Date and time', 'Title', 'Business unit', 'Target', 'Status', 'Action']);
+    expect(headings).toEqual(['Date and time', 'Title', 'Business unit', 'Target', 'Status', 'Actions']);
     const targets = Array.from(fixture.nativeElement.querySelectorAll('td[id^="target-"]'), (cell) =>
       (cell as HTMLElement).textContent?.trim(),
     );
