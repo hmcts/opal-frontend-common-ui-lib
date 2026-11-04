@@ -43,6 +43,12 @@
       "@hmcts/opal-frontend-common/components/abstract/abstract-nested-form-base": [
         "./dist/opal-frontend-common/components/abstract/abstract-nested-form-base"
       ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-multi-file-upload": [
+        "./dist/opal-frontend-common/components/abstract/abstract-multi-file-upload"
+      ],
+      "@hmcts/opal-frontend-common/components/abstract/abstract-multi-file-upload/interfaces": [
+        "./dist/opal-frontend-common/components/abstract/abstract-multi-file-upload/interfaces"
+      ],
       "@hmcts/opal-frontend-common/components/abstract/abstract-form-array-removal-base": [
         "./dist/opal-frontend-common/components/abstract/abstract-form-array-removal-base"
       ],
@@ -379,6 +385,24 @@
       "@hmcts/opal-frontend-common/components/moj/moj-inset-text": [
         "./dist/opal-frontend-common/components/moj/moj-inset-text"
       ],
+      "@hmcts/opal-frontend-common/components/moj/moj-multi-file-upload": [
+        "./dist/opal-frontend-common/components/moj/moj-multi-file-upload"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-multi-file-upload/interfaces": [
+        "./dist/opal-frontend-common/components/moj/moj-multi-file-upload/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-multi-file-upload/types": [
+        "./dist/opal-frontend-common/components/moj/moj-multi-file-upload/types"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-multi-file-upload/moj-multi-file-upload-files": [
+        "./dist/opal-frontend-common/components/moj/moj-multi-file-upload/moj-multi-file-upload-files"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-multi-file-upload/moj-multi-file-upload-files/constants": [
+        "./dist/opal-frontend-common/components/moj/moj-multi-file-upload/moj-multi-file-upload-files/constants"
+      ],
+      "@hmcts/opal-frontend-common/components/moj/moj-multi-file-upload/moj-multi-file-upload-input": [
+        "./dist/opal-frontend-common/components/moj/moj-multi-file-upload/moj-multi-file-upload-input"
+      ],
       "@hmcts/opal-frontend-common/components/moj/moj-notification-badge": [
         "./dist/opal-frontend-common/components/moj/moj-notification-badge"
       ],
@@ -582,6 +606,15 @@
       ],
       "@hmcts/opal-frontend-common/services/file-service": [
         "./dist/opal-frontend-common/services/file-service"
+      ],
+      "@hmcts/opal-frontend-common/services/file-service/constants": [
+        "./dist/opal-frontend-common/services/file-service/constants"
+      ],
+      "@hmcts/opal-frontend-common/services/file-service/interfaces": [
+        "./dist/opal-frontend-common/services/file-service/interfaces"
+      ],
+      "@hmcts/opal-frontend-common/services/file-service/types": [
+        "./dist/opal-frontend-common/services/file-service/types"
       ],
       "@hmcts/opal-frontend-common/services/utils-service": [
         "./dist/opal-frontend-common/services/utils-service"

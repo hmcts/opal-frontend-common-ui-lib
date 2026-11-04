@@ -1,0 +1,59 @@
+<div class="moj-multi-file-upload__upload">
+  <div class="govuk-form-group" [class.govuk-form-group--error]="errors.length > 0">
+    <label class="govuk-label {{ labelClasses }}" [for]="inputId">{{ labelText }}</label>
+    @if (hintText) {
+      <div class="govuk-hint" [id]="inputId + '-hint'">{{ hintText }}</div>
+    }
+    @if (errors.length > 0) {
+      <div class="govuk-error-message" [id]="inputId + '-error'">
+        <span class="govuk-visually-hidden">Error:</span>
+        @for (error of errors; track $index) {
+          <p class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">{{ error }}</p>
+        }
+      </div>
+    }
+    <div
+      class="moj-multi-file-upload__dropzone"
+      [class.moj-multi-file-upload--dragover]="draggingOver"
+      [attr.aria-disabled]="disabled"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+    >
+      <input
+        #fileInput
+        opalLibMojMultiFileUploadInputControl
+        type="file"
+        class="govuk-file-upload moj-multi-file-upload__input {{ inputClasses }}"
+        [id]="inputId"
+        [name]="inputName"
+        [formControl]="getControl"
+        [multiple]="multiple"
+        [accept]="acceptedTypes.join(',')"
+        [attr.aria-describedby]="describedBy"
+        [attr.aria-invalid]="errors.length > 0 ? 'true' : null"
+        (filesSelected)="onFilesSelected($event)"
+        (focus)="focused = true"
+        (blur)="focused = false"
+      />
+      <p class="govuk-body" [id]="inputId + '-dropzone-hint'">{{ dropzoneHintText }}</p>
+      <label
+        class="govuk-button govuk-button--secondary"
+        [for]="inputId"
+        [class.moj-multi-file-upload--focused]="focused"
+        [class.govuk-button--disabled]="disabled"
+        [attr.aria-disabled]="disabled"
+      >
+        {{ buttonText }}
+      </label>
+    </div>
+  </div>
+  <button
+    type="submit"
+    class="govuk-button govuk-button--secondary moj-multi-file-upload__button"
+    data-module="govuk-button"
+    [disabled]="disabled"
+  >
+    {{ uploadButtonText }}
+  </button>
+</div>
