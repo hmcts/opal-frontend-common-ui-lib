@@ -1,0 +1,5 @@
+{
+  "sideEffects": false,
+  "module": "../../../../../../dist/opal-frontend-common/fesm2022/hmcts-opal-frontend-common-components-moj-moj-multi-file-upload-moj-multi-file-upload-files.mjs",
+  "typings": "../../../../../../dist/opal-frontend-common/components/moj/moj-multi-file-upload/moj-multi-file-upload-files/index.d.ts"
+}

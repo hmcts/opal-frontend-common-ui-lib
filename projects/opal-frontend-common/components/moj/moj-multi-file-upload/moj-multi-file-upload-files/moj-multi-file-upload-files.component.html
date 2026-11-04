@@ -1,0 +1,68 @@
+@if (files.length) {
+  <div class="moj-multi-file__uploaded-files">
+    <h2 class="govuk-heading-m">{{ heading }}</h2>
+    <div class="govuk-summary-list moj-multi-file-upload__list">
+      @for (item of files; track item.id) {
+        <div class="govuk-summary-list__row moj-multi-file-upload__row">
+          <div class="govuk-summary-list__value moj-multi-file-upload__message">
+            @for (error of item.errors ?? []; track $index) {
+              <p class="govuk-error-message govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+                <span class="govuk-visually-hidden">Error:</span> {{ error }}
+              </p>
+            }
+            @if ((item.status === 'rejected' || item.status === 'failed') && !item.errors?.length) {
+              <p class="govuk-error-message govuk-!-margin-top-0 govuk-!-margin-bottom-2">
+                <span class="govuk-visually-hidden">Error:</span> {{ statusText(item) }}
+              </p>
+            }
+            @if (item.status === 'success') {
+              <svg
+                class="moj-banner__icon moj-multi-file-upload__success"
+                fill="currentColor"
+                role="img"
+                [attr.aria-label]="statusText(item)"
+                focusable="false"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 25 25"
+                height="25"
+                width="25"
+              >
+                <path d="M25,6.2L8.7,23.2L0,14.1l4-4.2l4.7,4.9L21,2L25,6.2z" />
+              </svg>
+            } @else if (item.status === 'rejected' || item.status === 'failed') {
+              <svg
+                class="moj-banner__icon moj-multi-file-upload__error"
+                fill="currentColor"
+                role="img"
+                [attr.aria-label]="statusText(item)"
+                focusable="false"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 25 25"
+                height="25"
+                width="25"
+              >
+                <path d="M13.6,15.4h-2.3v-4.5h2.3V15.4z M13.6,19.8h-2.3v-2.2h2.3V19.8z M0,23.2h25L12.5,2L0,23.2z" />
+              </svg>
+            }
+            <span class="govuk-body govuk-!-margin-bottom-0 moj-multi-file-upload__filename">{{ item.name }}</span>
+            @if (item.status === 'uploading') {
+              <span
+                class="govuk-body govuk-!-margin-bottom-0 govuk-!-margin-left-2 moj-multi-file-upload__progress"
+                role="progressbar"
+                [attr.aria-label]="item.name"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                [attr.aria-valuenow]="item.progress"
+                [attr.aria-valuetext]="statusText(item)"
+              >
+                {{ item.progress === undefined || item.progress === null ? statusText(item) : item.progress + '%' }}
+              </span>
+            } @else if (item.status === 'pending') {
+              <span class="govuk-visually-hidden">{{ statusText(item) }}</span>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+}
