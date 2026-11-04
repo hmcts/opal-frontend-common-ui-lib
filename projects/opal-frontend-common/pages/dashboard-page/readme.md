@@ -31,7 +31,7 @@ export class ReportsDashboardContainerComponent {
         text: 'View all your reports',
         routerLink: ['/reports', '0', 'summary-list'],
         fragment: null,
-        permissionIds: [101],
+        permissionCodes: ['ACCOUNT_ENQUIRY'],
         newTab: false,
         style: 'guidance-panel-blue',
       },
@@ -46,7 +46,7 @@ export class ReportsDashboardContainerComponent {
             text: 'Operational reports (by enforcement)',
             routerLink: ['/reports', '1', 'summary-list'],
             fragment: null,
-            permissionIds: [102],
+            permissionCodes: ['ACCOUNT_MAINTENANCE'],
             newTab: false,
             style: null,
           },
@@ -59,9 +59,9 @@ export class ReportsDashboardContainerComponent {
 
 ## Input
 
-| Input | Type | Required | Description |
-| --- | --- | --- | --- |
-| `dashboardConfig` | `IDashboardPageConfiguration` | Yes | Configuration object defining title, highlights, and grouped links. |
+| Input             | Type                          | Required | Description                                                         |
+| ----------------- | ----------------------------- | -------- | ------------------------------------------------------------------- |
+| `dashboardConfig` | `IDashboardPageConfiguration` | Yes      | Configuration object defining title, highlights, and grouped links. |
 
 ## Configuration Shape
 
@@ -71,7 +71,7 @@ Each highlight/link supports:
 - `text`: Link text.
 - `routerLink`: Angular router link commands.
 - `fragment`: Optional URL fragment.
-- `permissionIds`: Array of numeric permission ids used for visibility filtering (any matching id grants visibility; empty array means unrestricted).
+- `permissionCodes`: Array of permission codes used for visibility filtering (any matching code grants visibility; empty array means unrestricted).
 - `newTab`: Opens link in a new tab when `true`.
 - `style`: Optional class string for styled highlights (`null` for no style).
 
@@ -84,7 +84,7 @@ Each group supports:
 ## Behaviour
 
 - Highlights and grouped links are filtered by user permissions.
-- Permission ids are read using `PermissionsService` and `GlobalStore`.
+- Permission codes are read using `PermissionsService` and `GlobalStore`.
 - If a highlight has a non-empty `style`, it is wrapped in `opal-lib-moj-inset-text`.
 - Links with `newTab: true` render with `_blank` target and `noopener noreferrer`.
 

@@ -34,7 +34,7 @@ Subclasses must provide:
 - `defaultActiveTab: string`
 - `transformItemsConfig: ITransformItem[]`
 - `latestBannerMessage: string`
-- `permissions: Record<string, number>`
+- `permissions: Record<string, string>`
 - `payloadTransformer`
 - `accountStore`
 - `getAccountIdFromRoute(): number`

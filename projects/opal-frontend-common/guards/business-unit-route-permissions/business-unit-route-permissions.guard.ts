@@ -28,20 +28,22 @@ const resolveMaybeAsync = async <T>(value: MaybeAsync<T>): Promise<T> =>
   isObservable(value) ? firstValueFrom(value) : Promise.resolve(value);
 
 /**
- * Reads and normalizes the permission ids declared on route data.
+ * Reads and normalizes the permission codes declared on route data.
  *
  * @param route - The route whose permission metadata should be inspected.
- * @returns A filtered array of numeric permission ids.
+ * @returns A filtered array of permission codes.
  */
-const getRoutePermissionIds = (route: ActivatedRouteSnapshot): number[] => {
-  const routePermissionIds = route.data?.['routePermissionId'];
+const getRoutePermissionCodes = (route: ActivatedRouteSnapshot): string[] => {
+  const routePermissionCodes = route.data?.['routePermissionCodes'];
 
-  if (Array.isArray(routePermissionIds)) {
-    return routePermissionIds.filter((permissionId): permissionId is number => typeof permissionId === 'number');
+  if (Array.isArray(routePermissionCodes)) {
+    return routePermissionCodes.filter(
+      (permissionCode): permissionCode is string => typeof permissionCode === 'string',
+    );
   }
 
-  if (typeof routePermissionIds === 'number') {
-    return [routePermissionIds];
+  if (typeof routePermissionCodes === 'string') {
+    return [routePermissionCodes];
   }
 
   return [];
@@ -71,7 +73,7 @@ const toAccessDeniedUrlTree = (route: ActivatedRouteSnapshot, router: Router, ac
  * Guard that checks route permissions against the business unit resolved for the
  * current route instead of against the user's global permission set.
  *
- * If the route does not declare any permission ids, the guard allows access.
+ * If the route does not declare any permission codes, the guard allows access.
  * Otherwise it loads the logged-in user state, resolves the route business unit,
  * and confirms that at least one declared permission exists within that business unit.
  *
@@ -79,9 +81,9 @@ const toAccessDeniedUrlTree = (route: ActivatedRouteSnapshot, router: Router, ac
  * @returns `true` when access is allowed, otherwise a redirect to access denied.
  */
 export const businessUnitRoutePermissionsGuard: CanActivateFn = async (route: ActivatedRouteSnapshot) => {
-  const routePermissionIds = getRoutePermissionIds(route);
+  const routePermissionCodes = getRoutePermissionCodes(route);
 
-  if (!routePermissionIds.length) {
+  if (!routePermissionCodes.length) {
     return true;
   }
 
@@ -105,8 +107,8 @@ export const businessUnitRoutePermissionsGuard: CanActivateFn = async (route: Ac
       return toAccessDeniedUrlTree(route, router, `${accessDeniedPath}`);
     }
 
-    const hasAccess = routePermissionIds.some((permissionId) =>
-      permissionService.hasBusinessUnitPermissionAccess(permissionId, businessUnitId, businessUnitUsers),
+    const hasAccess = routePermissionCodes.some((permissionCode) =>
+      permissionService.hasBusinessUnitPermissionAccess(permissionCode, businessUnitId, businessUnitUsers),
     );
 
     return hasAccess ? true : toAccessDeniedUrlTree(route, router, `${accessDeniedPath}`);
