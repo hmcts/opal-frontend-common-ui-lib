@@ -6,7 +6,7 @@ export interface IOpalFileHandlingInterfaceFileParams {
   domain?: string;
   status?: string;
   not_status?: string[];
-  business_unit_code?: string;
+  business_unit_id?: number;
   from_date?: string;
   to_date?: string;
 }
