@@ -140,12 +140,43 @@ describe('routePermissionsGuard', () => {
     expect(guard).toBeFalsy();
   });
 
-  it('should allow access when routePermissionCodes is undefined and fallback to empty array', async () => {
+  it.each([
+    { routePermissionId: [77] },
+    { routePermissionId: 77 },
+    { routePermissionId: [] },
+    { routePermissionId: null },
+    { routePermissionId: undefined },
+    { routePermissionId: [77], routePermissionCodes: [] },
+  ])('should deny access for legacy permission metadata %j when the user has no permissions', async (data) => {
+    getUniquePermissionsMock.mockReturnValue([]);
+    const route = new ActivatedRouteSnapshot();
+    route.data = data;
+
+    const result = TestBed.runInInjectionContext(() => routePermissionsGuard(route, {} as RouterStateSnapshot));
+    const authenticated = result instanceof Observable ? await handleObservableResult(result) : result;
+
+    expect(authenticated).toBe(false);
+    expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
+  });
+
+  it('should deny legacy metadata even when the user has a matching new permission code', async () => {
+    getUniquePermissionsMock.mockReturnValue([ROUTE_PERMISSIONS_MOCK['test-route']]);
+    const route = new ActivatedRouteSnapshot();
+    route.data = { routePermissionId: [77], routePermissionCodes: [ROUTE_PERMISSIONS_MOCK['test-route']] };
+
+    const result = TestBed.runInInjectionContext(() => routePermissionsGuard(route, {} as RouterStateSnapshot));
+    const authenticated = result instanceof Observable ? await handleObservableResult(result) : result;
+
+    expect(authenticated).toBe(false);
+    expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
+  });
+
+  it.each([{}, { routePermissionCodes: [] }])('should allow unrestricted permission metadata %j', async (data) => {
     getUniquePermissionsMock.mockReturnValue(['OTHER_PERMISSION']);
 
     const dummyRoute = new ActivatedRouteSnapshot();
     dummyRoute.url = [new UrlSegment(urlPath, {})];
-    dummyRoute.data = {}; // No routePermissionCodes defined
+    dummyRoute.data = data;
 
     const dummyState: RouterStateSnapshot = {
       url: urlPath,

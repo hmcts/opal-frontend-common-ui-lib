@@ -73,7 +73,8 @@ const toAccessDeniedUrlTree = (route: ActivatedRouteSnapshot, router: Router, ac
  * Guard that checks route permissions against the business unit resolved for the
  * current route instead of against the user's global permission set.
  *
- * If the route does not declare any permission codes, the guard allows access.
+ * Legacy permission metadata is rejected. If the route does not declare any
+ * permission requirements, the guard allows access.
  * Otherwise it loads the logged-in user state, resolves the route business unit,
  * and confirms that at least one declared permission exists within that business unit.
  *
@@ -81,6 +82,11 @@ const toAccessDeniedUrlTree = (route: ActivatedRouteSnapshot, router: Router, ac
  * @returns `true` when access is allowed, otherwise a redirect to access denied.
  */
 export const businessUnitRoutePermissionsGuard: CanActivateFn = async (route: ActivatedRouteSnapshot) => {
+  // Legacy metadata must not make an unmigrated protected route unrestricted.
+  if ('routePermissionId' in (route.data ?? {})) {
+    return false;
+  }
+
   const routePermissionCodes = getRoutePermissionCodes(route);
 
   if (!routePermissionCodes.length) {

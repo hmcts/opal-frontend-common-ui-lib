@@ -115,12 +115,47 @@ describe('businessUnitRoutePermissionsGuard', () => {
     router = TestBed.inject(Router);
   });
 
-  it('should allow access when the route does not require any permissions', async () => {
-    const route = createRoute();
+  it.each([undefined, []])('should allow access when route permission requirements are %j', async (permissions) => {
+    const route = createRoute(permissions);
 
     const result = await runGuard(route);
 
     expect(result).toBe(true);
+    expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
+    expect(resolveBusinessUnitIdMock).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    { routePermissionId: [77] },
+    { routePermissionId: 77 },
+    { routePermissionId: [] },
+    { routePermissionId: null },
+    { routePermissionId: undefined },
+    { routePermissionId: [77], routePermissionCodes: [] },
+  ])('should deny access for legacy permission metadata %j when the user has no permissions', async (data) => {
+    getLoggedInUserStateMock.mockReturnValue(
+      of({
+        business_unit_users: [{ ...userState.business_unit_users[0], permissions: [] }],
+      }),
+    );
+    hasBusinessUnitPermissionAccessMock.mockReturnValue(false);
+    const route = createRoute();
+    route.data = data;
+
+    const result = await runGuard(route);
+
+    expect(result).toBe(false);
+    expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
+    expect(resolveBusinessUnitIdMock).not.toHaveBeenCalled();
+  });
+
+  it('should deny legacy metadata even when the user has a matching new permission code', async () => {
+    const route = createRoute('ACCOUNT_MAINTENANCE');
+    route.data['routePermissionId'] = [77];
+
+    const result = await runGuard(route);
+
+    expect(result).toBe(false);
     expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
     expect(resolveBusinessUnitIdMock).not.toHaveBeenCalled();
   });

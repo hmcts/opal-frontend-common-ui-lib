@@ -6,6 +6,11 @@ import { PAGES_ROUTING_PATHS } from '@hmcts/opal-frontend-common/pages/routing/c
 import { OpalUserService } from '@hmcts/opal-frontend-common/services/opal-user-service';
 
 export const routePermissionsGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
+  // Legacy metadata must not make an unmigrated protected route unrestricted.
+  if ('routePermissionId' in (route.data ?? {})) {
+    return false;
+  }
+
   const permissionService = inject(PermissionsService);
   const opalUserService = inject(OpalUserService);
   const router = inject(Router);

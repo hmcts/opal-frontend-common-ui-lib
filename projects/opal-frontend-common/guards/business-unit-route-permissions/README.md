@@ -90,6 +90,12 @@ In an account flow, use a relative `accessDeniedPath` so the redirect keeps the 
 
 `routePermissionCodes` can be either a string or an array of strings. Access is allowed when the user has at least one declared permission in the resolved business unit.
 
+Both permission guards deny navigation when route data still declares the legacy
+`routePermissionId` key, including when it is empty or accompanied by
+`routePermissionCodes`. Remove the legacy key and migrate its requirements to
+permission codes. Routes with no permission metadata or an empty
+`routePermissionCodes` array remain unrestricted.
+
 If no `accessDeniedPath` is supplied, the guard redirects to the common `/access-denied` page.
 
 ## Guard Ordering
