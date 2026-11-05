@@ -84,15 +84,7 @@
           @if (isInbound) {
             <td opal-lib-moj-sortable-table-row-data [id]="'type-' + rowIndex">{{ row['Type'] }}</td>
           }
-          <td opal-lib-moj-sortable-table-row-data [id]="'business-unit-' + rowIndex">
-            @if (row['Business unit']; as businessUnits) {
-              <ul class="govuk-list govuk-!-margin-bottom-0">
-                @for (businessUnit of businessUnits.split('\n'); track $index) {
-                  <li>{{ businessUnit }}</li>
-                }
-              </ul>
-            }
-          </td>
+          <td opal-lib-moj-sortable-table-row-data [id]="'business-unit-' + rowIndex">{{ row['Business unit'] }}</td>
           <td opal-lib-moj-sortable-table-row-data [id]="(isInbound ? 'source-' : 'target-') + rowIndex">
             {{ row[isInbound ? 'Source' : 'Target'] }}
           </td>

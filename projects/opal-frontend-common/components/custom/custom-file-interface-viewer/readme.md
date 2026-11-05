@@ -184,14 +184,14 @@ Map API metadata before passing it to the viewer:
   The current format is `dd MMM yyyy 'at' HH:mm`. The Finance mapper treats timestamps without an offset as UTC and uses
   the existing `DateService` for parsing and formatting.
 - `file_name` becomes `Title`.
-- `business_unit_codes` become resolved names joined with `\n` in each row's `'Business unit'` string.
+- `business_unit_codes` become resolved names joined with `, ` in each row's `'Business unit'` string.
 - API source/type codes become the labels from the canonical choices.
 - Status codes become display labels. In the current Finance mapping, `SUCCESS`, `SUCCESS_NO_TRANSACTIONS`, `DUPLICATE`
   and `SUPERSEDED` become `Ready`; `FAILED` and `FAILED_SUPERSEDED` become `File failed`; `INGESTED` becomes `In-Progress`.
   Unknown values are retained. `FAILED_SUPERSEDED` is excluded by the standard inbound request.
 
-For both inbound and outbound rows, the table splits the `'Business unit'` string on `\n` and renders each name as a
-separate GOV.UK list item. The `[businessUnits]` filter input remains an array of autocomplete options.
+For both inbound and outbound rows, the table renders the `'Business unit'` string as supplied, including multiple
+names joined with `, `. The `[businessUnits]` filter input remains an array of autocomplete options.
 
 Pass prepared display rows to `tableData`, rather than raw API records. The viewer renders the supplied status text;
 the consuming action template decides whether any action is available for that row. Every displayed column is sortable,

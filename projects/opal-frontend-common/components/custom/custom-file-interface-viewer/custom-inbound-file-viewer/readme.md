@@ -89,7 +89,7 @@ Import the row interface from the inbound viewer `/interfaces` entrypoint shown 
 | `dateTimeDisplay` | `string \| null` | Already formatted local date/time text shown in the cell.                                                           |
 | `Title`           | `string \| null` | Display title, available to the consuming action template.                                                          |
 | `Type`            | `string \| null` | Display label such as RAW or TRANSFORMED.                                                                           |
-| `'Business unit'` | `string \| null` | Resolved business-unit names joined with `\n`; each name renders as a separate GOV.UK list item.                      |
+| `'Business unit'` | `string \| null` | Resolved business-unit name or names joined with `, `, rendered as plain text.                                       |
 | `Source`          | `string \| null` | Source display label.                                                                                               |
 | `Status`          | `string \| null` | Display label for the status cell; any action eligibility belongs to the consumer.                                  |
 | `Actions`         | `string \| null` | Sort label for the Actions column; the action template renders the cell. Finance supplies `Download` or an empty string. |
@@ -104,7 +104,7 @@ const row: ICustomFileInterfaceViewerInboundTableWrapperTableData = {
   dateTimeDisplay: '20 Oct 2026 at 13:00',
   Title: 'allpay_1001.xml',
   Type: 'RAW',
-  'Business unit': ['Camberwell Green', 'Example business unit'].join('\n'),
+  'Business unit': ['Camberwell Green', 'Example business unit'].join(', '),
   Source: 'Allpay',
   Status: 'Ready',
   Actions: 'Download',

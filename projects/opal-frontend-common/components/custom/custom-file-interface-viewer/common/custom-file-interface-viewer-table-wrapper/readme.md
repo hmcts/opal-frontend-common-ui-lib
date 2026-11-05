@@ -12,8 +12,8 @@ is rendered exclusively by `actionTemplate`. Supply an empty string for an unava
 move between the start and end as direction changes. Nullable labels retain the shared sort service's null handling.
 The table paginates 25 rows and resets pagination when a new result array is supplied.
 
-For both inbound and outbound rows, `'Business unit'` is a single string of resolved names joined with `\n`.
-The table splits the string on `\n` and renders each name as a separate `<li>` in a GOV.UK list (`govuk-list`).
+For both inbound and outbound rows, `'Business unit'` is a single string of resolved names joined with `, `.
+The table renders the string directly as plain text.
 The viewers' `[businessUnits]` filter input remains an array of autocomplete options.
 
 A partial `existingSortState`, such as `{ Title: 'ascending' }`, leaves omitted sortable columns at `none`
