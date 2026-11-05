@@ -31,22 +31,22 @@ const resolveMaybeAsync = async <T>(value: MaybeAsync<T>): Promise<T> =>
  * Reads and normalizes the permission codes declared on route data.
  *
  * @param route - The route whose permission metadata should be inspected.
- * @returns A filtered array of permission codes.
+ * @returns Normalized permission codes, an empty array for unrestricted routes,
+ * or null when declared requirements are invalid.
  */
-const getRoutePermissionCodes = (route: ActivatedRouteSnapshot): string[] => {
-  const routePermissionCodes = route.data?.['routePermissionCodes'];
-
-  if (Array.isArray(routePermissionCodes)) {
-    return routePermissionCodes.filter(
-      (permissionCode): permissionCode is string => typeof permissionCode === 'string',
-    );
+const getRoutePermissionCodes = (route: ActivatedRouteSnapshot): string[] | null => {
+  if (!('routePermissionCodes' in (route.data ?? {}))) {
+    return [];
   }
 
-  if (typeof routePermissionCodes === 'string') {
-    return [routePermissionCodes];
+  const permissionMetadata: unknown = route.data['routePermissionCodes'];
+  const permissionCodes: unknown[] = Array.isArray(permissionMetadata) ? permissionMetadata : [permissionMetadata];
+
+  if (permissionCodes.every((code): code is string => typeof code === 'string' && code.trim().length > 0)) {
+    return permissionCodes;
   }
 
-  return [];
+  return null;
 };
 
 /**
@@ -73,13 +73,14 @@ const toAccessDeniedUrlTree = (route: ActivatedRouteSnapshot, router: Router, ac
  * Guard that checks route permissions against the business unit resolved for the
  * current route instead of against the user's global permission set.
  *
- * Legacy permission metadata is rejected. If the route does not declare any
+ * Legacy or invalid permission metadata is rejected. If the route does not declare any
  * permission requirements, the guard allows access.
  * Otherwise it loads the logged-in user state, resolves the route business unit,
  * and confirms that at least one declared permission exists within that business unit.
  *
  * @param route - The route being activated.
- * @returns `true` when access is allowed, otherwise a redirect to access denied.
+ * @returns `true` when access is allowed, `false` for invalid metadata,
+ * otherwise a redirect to access denied.
  */
 export const businessUnitRoutePermissionsGuard: CanActivateFn = async (route: ActivatedRouteSnapshot) => {
   // Legacy metadata must not make an unmigrated protected route unrestricted.
@@ -88,6 +89,10 @@ export const businessUnitRoutePermissionsGuard: CanActivateFn = async (route: Ac
   }
 
   const routePermissionCodes = getRoutePermissionCodes(route);
+
+  if (routePermissionCodes === null) {
+    return false;
+  }
 
   if (!routePermissionCodes.length) {
     return true;

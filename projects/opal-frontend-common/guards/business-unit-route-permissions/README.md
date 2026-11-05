@@ -100,6 +100,12 @@ Both permission guards deny navigation when route data still declares the legacy
 permission codes. Routes with no permission metadata or an empty
 `routePermissionCodes` array remain unrestricted.
 
+The business-unit guard rejects declared requirements containing numeric IDs,
+non-string values, or blank codes, including mixed valid/invalid arrays. An explicitly
+declared `null` or `undefined` value is also invalid. Invalid requirements deny
+navigation before loading user state or resolving the business unit; they never
+become an unrestricted route. Permission codes are compared exactly, without trimming.
+
 If no `accessDeniedPath` is supplied, the guard redirects to the common `/access-denied` page.
 
 ## Guard Ordering
