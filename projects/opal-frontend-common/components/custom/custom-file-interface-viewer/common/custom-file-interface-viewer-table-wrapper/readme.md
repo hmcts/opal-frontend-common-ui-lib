@@ -6,11 +6,15 @@ the shared `../constants/` owns the default sort state; local `constants/` owns 
 action-template context.
 
 Inputs are `tableData`, `existingSortState`, `isInbound` and an optional `actionTemplate`. Inbound columns are Date and
-time, Title, Type, Business unit, Source, Status and Action. Outbound columns replace Type/Source with Target.
-Action is the final, sortable column in both directions and sorts by the supplied `Actions` label; the cell itself
+time, Title, Type, Business unit, Source, Status and Actions. Outbound columns replace Type/Source with Target.
+Actions is the final, sortable column in both directions and sorts by the supplied `Actions` label; the cell itself
 is rendered exclusively by `actionTemplate`. Supply an empty string for an unavailable action when blank cells should
 move between the start and end as direction changes. Nullable labels retain the shared sort service's null handling.
 The table paginates 25 rows and resets pagination when a new result array is supplied.
+
+For both inbound and outbound rows, `'Business unit'` is a single string of resolved names joined with `\n`.
+The table splits the string on `\n` and renders each name as a separate `<li>` in a GOV.UK list (`govuk-list`).
+The viewers' `[businessUnits]` filter input remains an array of autocomplete options.
 
 A partial `existingSortState`, such as `{ Title: 'ascending' }`, leaves omitted sortable columns at `none`
 so every heading can still toggle in both directions. Supplied entries are retained without changing the caller's
@@ -39,6 +43,6 @@ Its page-size signal defaults to 25. Numeric `'Date and time'` values drive chro
 
 ## Testing
 
-The colocated spec covers both column sets, chronological sorting, every sortable column including Action,
+The colocated spec covers both column sets, chronological sorting, every sortable column including Actions,
 caller-supplied action labels, sorting rows received after an initially empty result, pagination, new-result resetting
 and projected actions. The table does not fetch files or handle downloads itself.
