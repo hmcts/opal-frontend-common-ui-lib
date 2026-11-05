@@ -15,7 +15,7 @@ function row(
     'Date and time': 1792497600000,
     dateTimeDisplay: '20 Oct 2026 at 13:00',
     Title: 'outbound.csv',
-    'Business unit': 'Test business unit',
+    'Business unit': ['Test business unit'],
     Target: 'ANT CSV',
     Status: 'Ready',
     Actions: null,

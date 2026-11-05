@@ -4,6 +4,9 @@
 
 Inputs are `isInbound`, required `businessUnits`, optional `source` and `sourceList`, `tableData`, `tableSort` and optional `actionTemplate`. A null result leaves the table unset; an empty array renders the direction-specific empty message. `formSubmit` forwards valid raw filter values, including repeated submissions. The component makes no initial request.
 
+Each row's `'Business unit'` field accepts `string[] | null`; names render as separate GOV.UK list items in their supplied
+order. The `[businessUnits]` filter input accepts an array of autocomplete options with `name` and `value` properties.
+
 `isInbound` selects Type/Source columns and their filters or the outbound Target column. All displayed columns are
 sortable, including the final Actions column. The shared default sort state includes inbound Type and Source even when
 `tableSort` is omitted. The table sorts numeric timestamps, displays caller-supplied date labels and paginates 25 rows.

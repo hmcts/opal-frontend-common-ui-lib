@@ -17,7 +17,7 @@ function row(
     dateTimeDisplay: '20 Oct 2026 at 13:00',
     Title: 'original.dat',
     Type: 'RAW',
-    'Business unit': 'Camberwell Green',
+    'Business unit': ['Camberwell Green'],
     Source: 'Allpay',
     Status: 'Ready',
     Actions: null,

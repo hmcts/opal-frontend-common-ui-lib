@@ -30,9 +30,10 @@ supplies `Actions` as the sort label (for example, `Download` or an empty string
 supplies the visible cell. The library does not infer download eligibility. It has no Type/Source columns. Its IDs are
 `outbound-interface-files-results` and `outbound-file-viewer-pagination`.
 
-As with inbound rows, each row's `'Business unit'` field is a single string of resolved names joined with `, `.
-The table renders the string as plain text. The `[businessUnits]` filter input remains an array of
-autocomplete options. For example:
+As with inbound rows, each row's `'Business unit'` field is a `string[]` of resolved names. The table renders each name
+as a separate GOV.UK list item in the supplied order; `[]` or `null` leaves the cell empty. Pass the array directly
+without joining it into a string. The `[businessUnits]` filter input accepts autocomplete options with `name` and `value`
+properties. For example:
 
 ```typescript
 const row: ICustomFileInterfaceViewerOutboundTableWrapperTableData = {
@@ -40,7 +41,7 @@ const row: ICustomFileInterfaceViewerOutboundTableWrapperTableData = {
   'Date and time': 1792497600000,
   dateTimeDisplay: '20 Oct 2026 at 13:00',
   Title: 'outbound.csv',
-  'Business unit': ['Camberwell Green', 'Example business unit'].join(', '),
+  'Business unit': ['Camberwell Green', 'Example business unit'],
   Target: 'ANT CSV',
   Status: 'Ready',
   Actions: 'Download',

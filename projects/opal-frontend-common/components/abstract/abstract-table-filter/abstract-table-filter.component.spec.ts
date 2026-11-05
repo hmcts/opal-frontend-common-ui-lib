@@ -66,6 +66,32 @@ describe('AbstractTableFilterComponent', () => {
     expect(result[0]['name']).toBe('Alice');
   });
 
+  it.each([
+    { selection: 'Camberwell Green', expectedIds: [1, 2] },
+    { selection: 'Example business unit', expectedIds: [1, 3] },
+  ])('matches scalar and array-valued cells containing $selection', ({ selection, expectedIds }) => {
+    const data: IAbstractTableData<SortableValuesType>[] = [
+      { id: 1, businessUnits: ['Camberwell Green', 'Example business unit'] },
+      { id: 2, businessUnits: 'Camberwell Green' },
+      { id: 3, businessUnits: ['Example business unit'] },
+      { id: 4, businessUnits: [] },
+      { id: 5, businessUnits: null },
+      { id: 6, businessUnits: ['Other unit'] },
+    ];
+    component.setTableData(data);
+    component.filterTags.set([
+      { categoryName: 'businessUnits', options: [{ label: selection, value: selection, selected: true }] },
+    ]);
+
+    component.onApplyFilters();
+
+    expect(component.filteredTableDataSignal().map((item) => item['id'])).toEqual(expectedIds);
+    expect(component.filteredTableDataSignal()[0]['businessUnits']).toEqual([
+      'Camberwell Green',
+      'Example business unit',
+    ]);
+  });
+
   it('should clear all filters', () => {
     const data: IAbstractTableData<SortableValuesType>[] = [
       { id: 1, name: 'One' },

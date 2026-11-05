@@ -89,13 +89,13 @@ Import the row interface from the inbound viewer `/interfaces` entrypoint shown 
 | `dateTimeDisplay` | `string \| null` | Already formatted local date/time text shown in the cell.                                                           |
 | `Title`           | `string \| null` | Display title, available to the consuming action template.                                                          |
 | `Type`            | `string \| null` | Display label such as RAW or TRANSFORMED.                                                                           |
-| `'Business unit'` | `string \| null` | Resolved business-unit name or names joined with `, `, rendered as plain text.                                       |
+| `'Business unit'` | `string[] \| null` | Resolved business-unit names; each entry renders as a separate GOV.UK list item in the supplied order.               |
 | `Source`          | `string \| null` | Source display label.                                                                                               |
 | `Status`          | `string \| null` | Display label for the status cell; any action eligibility belongs to the consumer.                                  |
 | `Actions`         | `string \| null` | Sort label for the Actions column; the action template renders the cell. Finance supplies `Download` or an empty string. |
 
-Each row's `'Business unit'` field is a single string. The `[businessUnits]` filter input remains an array of
-autocomplete options. For example:
+Each row's `'Business unit'` field is an array of name strings; `[]` or `null` leaves the cell empty. The
+`[businessUnits]` filter input accepts an array of autocomplete options with `name` and `value` properties. For example:
 
 ```typescript
 const row: ICustomFileInterfaceViewerInboundTableWrapperTableData = {
@@ -104,7 +104,7 @@ const row: ICustomFileInterfaceViewerInboundTableWrapperTableData = {
   dateTimeDisplay: '20 Oct 2026 at 13:00',
   Title: 'allpay_1001.xml',
   Type: 'RAW',
-  'Business unit': ['Camberwell Green', 'Example business unit'].join(', '),
+  'Business unit': ['Camberwell Green', 'Example business unit'],
   Source: 'Allpay',
   Status: 'Ready',
   Actions: 'Download',
@@ -163,6 +163,9 @@ requests. Keep initial fetching, filter-to-request mapping and prepared row cons
 payload service, as described in the [viewer overview](../readme.md#frontend-integration).
 
 ## Migration
+
+Supply each row's `'Business unit'` as a `string[]` of resolved names. Remove `.join(', ')` from row mappings;
+the table loops over the array directly and renders one list item per name.
 
 Before upgrading a consuming application, remove `[refreshFailed]` bindings from the inbound viewer and common filters.
 Refresh is always enabled and validates on submission, so no request-failure input is needed to retry unchanged filters.

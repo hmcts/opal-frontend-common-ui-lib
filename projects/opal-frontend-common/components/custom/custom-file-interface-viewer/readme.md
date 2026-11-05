@@ -184,14 +184,16 @@ Map API metadata before passing it to the viewer:
   The current format is `dd MMM yyyy 'at' HH:mm`. The Finance mapper treats timestamps without an offset as UTC and uses
   the existing `DateService` for parsing and formatting.
 - `file_name` becomes `Title`.
-- `business_unit_codes` become resolved names joined with `, ` in each row's `'Business unit'` string.
+- `business_unit_codes` become an array of resolved names in each row's `'Business unit'` field.
 - API source/type codes become the labels from the canonical choices.
 - Status codes become display labels. In the current Finance mapping, `SUCCESS`, `SUCCESS_NO_TRANSACTIONS`, `DUPLICATE`
   and `SUPERSEDED` become `Ready`; `FAILED` and `FAILED_SUPERSEDED` become `File failed`; `INGESTED` becomes `In-Progress`.
   Unknown values are retained. `FAILED_SUPERSEDED` is excluded by the standard inbound request.
 
-For both inbound and outbound rows, the table renders the `'Business unit'` string as supplied, including multiple
-names joined with `, `. The `[businessUnits]` filter input remains an array of autocomplete options.
+For both inbound and outbound rows, supply `'Business unit'` as a `string[]`, for example
+`'Business unit': ['Camberwell Green', 'Example business unit']`. The table renders each name as a separate GOV.UK list
+item in the supplied order. Use `[]` or `null` for an empty cell. The `[businessUnits]` filter input accepts autocomplete
+options with `name` and `value` properties.
 
 Pass prepared display rows to `tableData`, rather than raw API records. The viewer renders the supplied status text;
 the consuming action template decides whether any action is available for that row. Every displayed column is sortable,
@@ -232,6 +234,8 @@ Before adopting this version in a consuming application:
    always enabled and validates on submission.
 2. Supply `[actionTemplate]` when row actions are required. Move the former download eligibility, URL construction,
    requests, save anchor, errors and focus handling into the application. Without a template, action cells remain empty.
+3. Supply each row's `'Business unit'` as an array of resolved names. Remove `.join(', ')` from inbound and outbound row
+   mappings; use `[]` or `null` when no names are available.
 
 Update consumer integration tests alongside the package upgrade. The former built-in download methods and error state
 are no longer part of the inbound viewer.

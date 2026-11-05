@@ -13,7 +13,7 @@ const row: ICustomFileInterfaceViewerTableData = {
   dateTimeDisplay: '20 Oct 2026 at 13:05',
   Title: 'mock.dat',
   Type: 'RAW',
-  'Business unit': 'Test business unit',
+  'Business unit': ['Test business unit'],
   Source: 'Allpay',
   Target: 'ANT CSV',
   Status: 'Ready',
@@ -124,6 +124,26 @@ describe.each([
       expect(fixture.nativeElement.textContent).not.toContain('Showing 1 results');
     });
 
+    it('renders business-unit arrays as separate GOV.UK list items in their supplied order', () => {
+      const businessUnits = ['Camberwell Green', 'North, East', 'UNKNOWN', 'Camberwell Green', 'Unit <em>name</em>'];
+      fixture.componentRef.setInput('tableData', [{ ...row, 'Business unit': businessUnits }]);
+      fixture.detectChanges();
+
+      const cell = fixture.nativeElement.querySelector('td#business-unit-0') as HTMLTableCellElement;
+      expect(cell.querySelectorAll('ul.govuk-list')).toHaveLength(1);
+      expect(Array.from(cell.querySelectorAll('li'), (item) => item.textContent)).toEqual(businessUnits);
+      expect(cell.querySelector('em')).toBeNull();
+    });
+
+    it.each([null, []])('leaves the business-unit cell empty for %j', (businessUnits) => {
+      fixture.componentRef.setInput('tableData', [{ ...row, 'Business unit': businessUnits }]);
+      fixture.detectChanges();
+
+      const cell = fixture.nativeElement.querySelector('td#business-unit-0') as HTMLTableCellElement;
+      expect(cell.textContent?.trim()).toBe('');
+      expect(cell.querySelector('ul')).toBeNull();
+    });
+
     it('sorts by numeric timestamps while retaining the supplied display text', () => {
       fixture.componentRef.setInput('tableData', [
         { ...row, 'File ID': 1, 'Date and time': 20, dateTimeDisplay: 'A later display label' },
@@ -161,7 +181,12 @@ describe.each([
 
       const rows = createRows(3).map((file, index) => ({
         ...file,
-        [column]: column === 'Date and time' || column === 'Title' ? file[column] : ['Alpha', 'Bravo', 'Zulu'][index],
+        [column]:
+          column === 'Date and time' || column === 'Title'
+            ? file[column]
+            : column === 'Business unit'
+              ? [['Alpha'], ['Bravo'], ['Zulu']][index]
+              : ['Alpha', 'Bravo', 'Zulu'][index],
       }));
       fixture.componentRef.setInput('tableData', [rows[1], rows[2], rows[0]]);
       fixture.detectChanges();
@@ -281,7 +306,12 @@ describe.each([
         const rows = createRows(2)
           .map((file, index) => ({
             ...file,
-            [column]: column === 'Date and time' ? index + 1 : ['Alpha', 'Zulu'][index],
+            [column]:
+              column === 'Date and time'
+                ? index + 1
+                : column === 'Business unit'
+                  ? [['Alpha'], ['Zulu']][index]
+                  : ['Alpha', 'Zulu'][index],
           }))
           .reverse();
         fixture.componentRef.setInput('existingSortState', Object.freeze({ Title: 'ascending' }));
