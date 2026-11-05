@@ -42,7 +42,7 @@ library styles. The consuming application's API and download handlers use its ex
 ```
 
 The `fileAction` template belongs to the consuming application; see the [action contract](#action-template-contract).
-Omit `actionTemplate` to leave Action cells empty.
+Omit `actionTemplate` to leave action cells empty.
 
 The [viewer overview](../readme.md) explains frontend routes, reference data, permissions, request scope and mappings.
 The common [filters](../common/custom-file-interface-viewer-filters/readme.md) and
@@ -56,7 +56,7 @@ The common [filters](../common/custom-file-interface-viewer-filters/readme.md) a
 | `source`         | `IAlphagovAccessibleAutocompleteItem[]`                                                   | Yes      | `[]`    | Source choices, for example `{ name: 'Allpay', value: 'ALLPAY' }`.                    |
 | `sourceList`     | `IAlphagovAccessibleAutocompleteItem[]`                                                   | Yes      | `[]`    | File-type choices, for example RAW/SOURCE and TRANSFORMED/TRANSFORMED_JSON.           |
 | `tableData`      | `ICustomFileInterfaceViewerInboundTableWrapperTableData[] \| null`                        | No       | `null`  | Prepared rows. `null` leaves results unset; `[]` shows the completed empty state.     |
-| `actionTemplate` | `TemplateRef<ICustomFileInterfaceViewerInboundTableWrapperActionTemplateContext> \| null` | No       | `null`  | Passed unchanged to the table for each Action cell. A null value leaves cells empty.  |
+| `actionTemplate` | `TemplateRef<ICustomFileInterfaceViewerInboundTableWrapperActionTemplateContext> \| null` | No       | `null`  | Passed unchanged to the table for each action cell. A null value leaves cells empty.  |
 
 A required input must still be bound when its value is an empty array. The internal filter always uses inbound mode.
 The application supplies any download URLs and behaviour through `actionTemplate`; the viewer has no built-in download
@@ -89,12 +89,13 @@ Import the row interface from the inbound viewer `/interfaces` entrypoint shown 
 | `dateTimeDisplay` | `string \| null` | Already formatted local date/time text shown in the cell.                                                           |
 | `Title`           | `string \| null` | Display title, available to the consuming action template.                                                          |
 | `Type`            | `string \| null` | Display label such as RAW or TRANSFORMED.                                                                           |
-| `'Business unit'` | `string \| null` | Resolved business-unit name or joined names.                                                                        |
+| `'Business unit'` | `string[] \| null` | Resolved business-unit names; each entry renders as a separate GOV.UK list item in the supplied order.               |
 | `Source`          | `string \| null` | Source display label.                                                                                               |
 | `Status`          | `string \| null` | Display label for the status cell; any action eligibility belongs to the consumer.                                  |
-| `Actions`         | `string \| null` | Sort label for the Action column; the action template renders the cell. Finance supplies `Download` or an empty string. |
+| `Actions`         | `string \| null` | Sort label for the Actions column; the action template renders the cell. Finance supplies `Download` or an empty string. |
 
-For example:
+Each row's `'Business unit'` field is an array of name strings; `[]` or `null` leaves the cell empty. The
+`[businessUnits]` filter input accepts an array of autocomplete options with `name` and `value` properties. For example:
 
 ```typescript
 const row: ICustomFileInterfaceViewerInboundTableWrapperTableData = {
@@ -103,7 +104,7 @@ const row: ICustomFileInterfaceViewerInboundTableWrapperTableData = {
   dateTimeDisplay: '20 Oct 2026 at 13:00',
   Title: 'allpay_1001.xml',
   Type: 'RAW',
-  'Business unit': 'Camberwell Green',
+  'Business unit': ['Camberwell Green', 'Example business unit'],
   Source: 'Allpay',
   Status: 'Ready',
   Actions: 'Download',
@@ -114,7 +115,7 @@ The display timestamp above represents UTC `2026-10-20T12:00:00Z` in Europe/Lond
 using the user's local zone; it must not hard-code this example's offset.
 
 The viewer supplies the table's descending date/time sort state. Every displayed column is sortable, including Type,
-Source and the final Action column. Action sorting uses the caller-supplied `Actions` string; the consumer controls
+Source and the final Actions column. Sorting that column uses the caller-supplied `Actions` string; the consumer controls
 eligibility and visible actions. Rows are paginated in groups of 25. Supplying a new
 row array reapplies sorting and resets the current page. Row actions do not change the array unless the consumer does so.
 
@@ -130,7 +131,7 @@ interface ICustomFileInterfaceViewerInboundTableWrapperActionTemplateContext {
 
 Import this type from the inbound viewer `/interfaces` entrypoint when declaring a typed `TemplateRef`. In an Angular template,
 `let-row` receives the full current row. The viewer passes `actionTemplate` unchanged to its table and supplies no default
-contents for the Action cell. The row's `Actions` string is not rendered as an action.
+contents for the action cell. The row's `Actions` string is not rendered as an action.
 
 For example, define this template in the consuming component and bind `[actionTemplate]="fileAction"` as shown above:
 
@@ -163,12 +164,15 @@ payload service, as described in the [viewer overview](../readme.md#frontend-int
 
 ## Migration
 
+Supply each row's `'Business unit'` as a `string[]` of resolved names. Remove `.join(', ')` from row mappings;
+the table loops over the array directly and renders one list item per name.
+
 Before upgrading a consuming application, remove `[refreshFailed]` bindings from the inbound viewer and common filters.
 Refresh is always enabled and validates on submission, so no request-failure input is needed to retry unchanged filters.
 
 Supply `[actionTemplate]` to retain row actions. Move download eligibility, URL construction, requests, save-anchor setup,
 errors and focus handling into the consuming application. The former built-in Download action and download methods/error
-state have been removed; omitting the template leaves Action cells empty. Update the consumer's tests with this migration.
+state have been removed; omitting the template leaves action cells empty. Update the consumer's tests with this migration.
 
 For a standalone table, import `CustomFileInterfaceViewerTableWrapperComponent` from
 `/common/custom-file-interface-viewer-table-wrapper`, use `opal-lib-custom-file-interface-viewer-table-wrapper`, and bind

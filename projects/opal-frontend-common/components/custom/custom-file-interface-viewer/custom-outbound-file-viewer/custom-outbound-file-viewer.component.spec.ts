@@ -15,7 +15,7 @@ function row(
     'Date and time': 1792497600000,
     dateTimeDisplay: '20 Oct 2026 at 13:00',
     Title: 'outbound.csv',
-    'Business unit': 'Test business unit',
+    'Business unit': ['Test business unit'],
     Target: 'ANT CSV',
     Status: 'Ready',
     Actions: null,
@@ -86,7 +86,7 @@ describe('CustomOutboundFileViewerComponent', () => {
     const headings = Array.from(fixture.nativeElement.querySelectorAll('thead th'), (cell) =>
       (cell as HTMLElement).textContent?.trim(),
     );
-    expect(headings).toEqual(['Date and time', 'Title', 'Business unit', 'Target', 'Status', 'Action']);
+    expect(headings).toEqual(['Date and time', 'Title', 'Business unit', 'Target', 'Status', 'Actions']);
     const targets = Array.from(fixture.nativeElement.querySelectorAll('td[id^="target-"]'), (cell) =>
       (cell as HTMLElement).textContent?.trim(),
     );

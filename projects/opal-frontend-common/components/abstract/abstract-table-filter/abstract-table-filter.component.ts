@@ -28,6 +28,7 @@ export abstract class AbstractTableFilterComponent {
 
   /**
    * Determines whether a given item matches a specific filter option within a category.
+   * Array-valued cells match when they contain the selected option value.
    * @param item The data item to test.
    * @param categoryName The category name to check within the item.
    * @param option The filter option to match against.
@@ -38,7 +39,8 @@ export abstract class AbstractTableFilterComponent {
     categoryName: string,
     option: IAbstractTableFilterOption,
   ): boolean {
-    return item?.[categoryName] === option.value;
+    const value = item?.[categoryName];
+    return Array.isArray(value) ? value.includes(option.value) : value === option.value;
   }
 
   /**
