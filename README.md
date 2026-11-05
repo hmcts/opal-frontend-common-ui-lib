@@ -20,16 +20,6 @@ This is an [Angular Library](https://angular.dev/tools/libraries).
 - [Commonly Used Commands](#commonly-used-commands)
 - [Publishing the Library](#publishing-the-library)
 
-## Interface-file business units
-
-The File Handler service uses numeric business-unit IDs. Pass `business_unit_id: 77`
-when filtering metadata, and resolve the returned `business_unit_ids: [77, 65]`
-against business-unit reference data. The former `business_unit_code` filter and
-`business_unit_codes` response fields are no longer part of this contract.
-
-Interface-file table rows accept the resolved names as a `string[]` in the
-`Business unit` column, preserving the supplied order in a GOV.UK list.
-
 ## Getting Started
 
 ### Prerequisites
