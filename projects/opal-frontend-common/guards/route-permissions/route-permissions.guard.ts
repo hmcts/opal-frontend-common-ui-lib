@@ -17,14 +17,21 @@ export const routePermissionsGuard: CanActivateFn = (route: ActivatedRouteSnapsh
 
   return opalUserService.getLoggedInUserState().pipe(
     map((resp) => {
-      const routePermissionCodes: string[] = route.data['routePermissionCodes'] ?? []; // Ensure it's an array
+      const permissionMetadata: unknown = route.data['routePermissionCodes'] ?? [];
+      // Array membership compares complete codes; string.includes would match substrings.
+      const routePermissionCodes: unknown[] = Array.isArray(permissionMetadata)
+        ? permissionMetadata
+        : [permissionMetadata];
       const accessDeniedPath = route.data['accessDeniedPath'] ?? `/${PAGES_ROUTING_PATHS.children.accessDenied}`; // Default to the provided path
 
       // Get the unique permission codes for the user
       const uniquePermissionCodes = permissionService.getUniquePermissions(resp);
 
       // If no permissions are required for the route, or the user has at least one matching permission, allow access
-      if (routePermissionCodes.length === 0 || uniquePermissionCodes.some((id) => routePermissionCodes.includes(id))) {
+      if (
+        routePermissionCodes.length === 0 ||
+        routePermissionCodes.some((code) => typeof code === 'string' && uniquePermissionCodes.includes(code))
+      ) {
         return true;
       }
 

@@ -103,6 +103,33 @@ describe('routePermissionsGuard', () => {
     expect(guard).toBeTruthy();
   });
 
+  it.each([
+    { required: 'ACCOUNT_ENQUIRY_NOTES', granted: 'ACCOUNT_ENQUIRY', allowed: false },
+    { required: 'ACCOUNT_ENQUIRY_NOTES', granted: 'NOTES', allowed: false },
+    { required: 'ACCOUNT_ENQUIRY_NOTES', granted: 'ACCOUNT_ENQUIRY_NOTES', allowed: true },
+    { required: ['ACCOUNT_ENQUIRY_NOTES'], granted: 'ACCOUNT_ENQUIRY', allowed: false },
+    { required: ['ACCOUNT_ENQUIRY_NOTES'], granted: 'ACCOUNT_ENQUIRY_NOTES', allowed: true },
+    { required: ['ACCOUNT_ENQUIRY_NOTES', 'ACCOUNT_ENQUIRY'], granted: 'ACCOUNT_ENQUIRY', allowed: true },
+    { required: 'ACCOUNT_ENQUIRY_NOTES', granted: '', allowed: false },
+    { required: 77, granted: 'ACCOUNT_ENQUIRY', allowed: false },
+    { required: [77], granted: 'ACCOUNT_ENQUIRY', allowed: false },
+  ])(
+    'should allow $allowed for requirement $required and granted code "$granted"',
+    async ({ required, granted, allowed }) => {
+      getUniquePermissionsMock.mockReturnValue([granted]);
+      const denied = new UrlTree();
+      createUrlTreeMock.mockReturnValue(denied);
+      const route = new ActivatedRouteSnapshot();
+      route.data = { routePermissionCodes: required };
+
+      const result = TestBed.runInInjectionContext(() => routePermissionsGuard(route, {} as RouterStateSnapshot));
+      const authenticated = result instanceof Observable ? await handleObservableResult(result) : result;
+
+      expect(authenticated).toBe(allowed ? true : denied);
+      expect(createUrlTreeMock).toHaveBeenCalledTimes(allowed ? 0 : 1);
+    },
+  );
+
   it('should re-route if no access', async () => {
     getUniquePermissionsMock.mockReturnValue(['OTHER_PERMISSION']);
     await runRoutePermissionGuard(routePermissionsGuard, ROUTE_PERMISSIONS_MOCK['test-route'], urlPath);
