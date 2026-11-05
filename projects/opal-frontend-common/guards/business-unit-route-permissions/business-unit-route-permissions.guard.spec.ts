@@ -126,6 +126,18 @@ describe('businessUnitRoutePermissionsGuard', () => {
     expect(resolveBusinessUnitIdMock).not.toHaveBeenCalled();
   });
 
+  it.each([null, undefined])('should allow an unrestricted route when its data is %s', async (data) => {
+    const route = new ActivatedRouteSnapshot();
+    Object.assign(route, { data });
+
+    const result = await runGuard(route);
+
+    expect(result).toBe(true);
+    expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
+    expect(resolveBusinessUnitIdMock).not.toHaveBeenCalled();
+    expect(hasBusinessUnitPermissionAccessMock).not.toHaveBeenCalled();
+  });
+
   it.each(
     [77, [77], null, undefined, false, {}, '', '   ', [null], [undefined], [''], ['   ']].map((requirements) => ({
       requirements,

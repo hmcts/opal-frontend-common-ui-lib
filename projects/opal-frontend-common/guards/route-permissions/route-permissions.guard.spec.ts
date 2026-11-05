@@ -214,4 +214,17 @@ describe('routePermissionsGuard', () => {
     const authenticated = result instanceof Observable ? await handleObservableResult(result) : result;
     expect(authenticated).toBe(true);
   });
+
+  it.each([null, undefined])('should deny access safely when the route data is %s', async (data) => {
+    const route = new ActivatedRouteSnapshot();
+    Object.assign(route, { data });
+
+    const result = TestBed.runInInjectionContext(() => routePermissionsGuard(route, {} as RouterStateSnapshot));
+    const authenticated = result instanceof Observable ? await handleObservableResult(result) : result;
+
+    expect(authenticated).toBe(false);
+    expect(getLoggedInUserStateMock).toHaveBeenCalledTimes(1);
+    expect(getUniquePermissionsMock).not.toHaveBeenCalled();
+    expect(createUrlTreeMock).not.toHaveBeenCalled();
+  });
 });
