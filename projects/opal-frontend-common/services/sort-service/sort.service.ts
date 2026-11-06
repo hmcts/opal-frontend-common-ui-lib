@@ -12,6 +12,15 @@ import { SortableValuesType } from '@hmcts/opal-frontend-common/components/abstr
 })
 export class SortService {
   /**
+   * Converts a list of names to comparable text while retaining its supplied order.
+   * @param value - Scalar cell value or array of names.
+   * @returns Scalar value used for sorting.
+   */
+  private getSortValue(value: SortableValuesType): Exclude<SortableValuesType, string[]> {
+    return Array.isArray(value) ? value.join(', ') : value;
+  }
+
+  /**
    * Sorts an array of objects based on a specified key and sort type.
    *
    * @param array - The array of objects to be sorted. Each object should implement the `ISortServiceValues` interface.
@@ -48,9 +57,9 @@ export class SortService {
     const { key, sortType } = config;
 
     if (sortType === 'ascending') {
-      return sort(array).asc((obj) => obj[key]);
+      return sort(array).asc((obj) => this.getSortValue(obj[key]));
     } else {
-      return sort(array).desc((obj) => obj[key]);
+      return sort(array).desc((obj) => this.getSortValue(obj[key]));
     }
   }
 
@@ -89,7 +98,7 @@ export class SortService {
    * @returns The sorted array in ascending order.
    */
   public arraySortAsc(array: ISortServiceArrayValues): ISortServiceArrayValues {
-    return sort(array).asc();
+    return sort(array).asc((value) => this.getSortValue(value));
   }
 
   /**
@@ -99,6 +108,6 @@ export class SortService {
    * @returns The sorted array in descending order.
    */
   public arraySortDesc(array: ISortServiceArrayValues): ISortServiceArrayValues {
-    return sort(array).desc();
+    return sort(array).desc((value) => this.getSortValue(value));
   }
 }

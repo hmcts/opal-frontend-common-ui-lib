@@ -17,6 +17,45 @@ describe('SortService', () => {
     expect(service).toBeTruthy();
   });
 
+  it.each(['ascending', 'descending'] as const)(
+    'sorts object properties containing strings and string arrays in %s order without changing the names',
+    (direction) => {
+      const input = [
+        { id: 1, names: ['Zulu', 'Alpha'] },
+        { id: 2, names: 'Alpha, Yankee' },
+        { id: 3, names: ['Alpha', 'Zulu'] },
+        { id: 4, names: [] },
+        { id: 5, names: null },
+      ];
+      const original = structuredClone(input);
+
+      const result =
+        direction === 'ascending'
+          ? service.sortObjectArrayAsc(input, 'names')
+          : service.sortObjectArrayDesc(input, 'names');
+
+      expect(result?.map((item) => item['id'])).toEqual(direction === 'ascending' ? [4, 2, 3, 1, 5] : [1, 3, 2, 4, 5]);
+      expect(input).toEqual(original);
+    },
+  );
+
+  it.each(['ascending', 'descending'] as const)(
+    'sorts mixed scalar and string-array values in %s order without changing the names',
+    (direction) => {
+      const input: SortableValuesType[] = [['Zulu', 'Alpha'], 'Alpha, Yankee', ['Alpha', 'Zulu'], [], null];
+      const original = structuredClone(input);
+
+      const result = direction === 'ascending' ? service.arraySortAsc(input) : service.arraySortDesc(input);
+
+      expect(result).toEqual(
+        direction === 'ascending'
+          ? [[], 'Alpha, Yankee', ['Alpha', 'Zulu'], ['Zulu', 'Alpha'], null]
+          : [['Zulu', 'Alpha'], ['Alpha', 'Zulu'], 'Alpha, Yankee', [], null],
+      );
+      expect(input).toEqual(original);
+    },
+  );
+
   it('should sort an array of numbers in ascending order', () => {
     const input = [5, 3, 8, 1];
     const result = service.arraySortAsc(input);

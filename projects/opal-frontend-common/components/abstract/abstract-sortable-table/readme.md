@@ -81,6 +81,10 @@ export class SortableTableComponent extends AbstractSortableTableComponent {
 
 ## Inputs
 
+Sortable cells accept `string`, `string[]`, `number`, `boolean` or `null` through `SortableValuesType`. String arrays
+pass through the inherited filtering, sorting and pagination as arrays. Sorting compares their names joined with `, `
+without changing their order. A selected filter option matches an array-valued cell when the array contains its value.
+
 `AbstractSortableTableComponent` provides key inputs to manage table data and sorting states.
 
 | Input                       | Type                           | Description                                                                                                               |

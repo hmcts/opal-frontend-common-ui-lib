@@ -45,10 +45,11 @@ proxy. `OpalFileHandlingService` and `FileService` are provided in root when the
 
 The variables, handler and `fileAction` template above belong to the frontend wrapper. See the
 [inbound component README](./custom-inbound-file-viewer/readme.md) for their types, the row contract and an action-template
-example. The optional action template defaults to `null`, leaving Action cells empty.
+example. The optional action template defaults to `null`, leaving action cells empty.
 
 `source` contains source choices such as Allpay. Despite its name, `sourceList` contains file **type** choices such as
-RAW and TRANSFORMED. `businessUnits` contains business-unit names and API codes.
+RAW and TRANSFORMED. The `[businessUnits]` filter input is an array of autocomplete options with business-unit names as
+`name` and string API codes as `value`.
 
 ## Structure
 
@@ -183,15 +184,20 @@ Map API metadata before passing it to the viewer:
   The current format is `dd MMM yyyy 'at' HH:mm`. The Finance mapper treats timestamps without an offset as UTC and uses
   the existing `DateService` for parsing and formatting.
 - `file_name` becomes `Title`.
-- `business_unit_codes` become names joined with `, `, using resolved reference data.
+- `business_unit_codes` become an array of resolved names in each row's `'Business unit'` field.
 - API source/type codes become the labels from the canonical choices.
 - Status codes become display labels. In the current Finance mapping, `SUCCESS`, `SUCCESS_NO_TRANSACTIONS`, `DUPLICATE`
   and `SUPERSEDED` become `Ready`; `FAILED` and `FAILED_SUPERSEDED` become `File failed`; `INGESTED` becomes `In-Progress`.
   Unknown values are retained. `FAILED_SUPERSEDED` is excluded by the standard inbound request.
 
+For both inbound and outbound rows, supply `'Business unit'` as a `string[]`, for example
+`'Business unit': ['Camberwell Green', 'Example business unit']`. The table renders each name as a separate GOV.UK list
+item in the supplied order. Use `[]` or `null` for an empty cell. The `[businessUnits]` filter input accepts autocomplete
+options with `name` and `value` properties.
+
 Pass prepared display rows to `tableData`, rather than raw API records. The viewer renders the supplied status text;
 the consuming action template decides whether any action is available for that row. Every displayed column is sortable,
-including the final Action column in both directions. The caller supplies its `Actions` sort label separately from
+including the final Actions column in both directions. The caller supplies its `Actions` sort label separately from
 the template; Finance supplies `Download` for an eligible row and an empty string otherwise. The library applies no
 status-based eligibility rules.
 
@@ -227,7 +233,9 @@ Before adopting this version in a consuming application:
 1. Remove `[refreshFailed]` bindings from inbound viewers and common filters. The input has been removed; Refresh is
    always enabled and validates on submission.
 2. Supply `[actionTemplate]` when row actions are required. Move the former download eligibility, URL construction,
-   requests, save anchor, errors and focus handling into the application. Without a template, Action cells remain empty.
+   requests, save anchor, errors and focus handling into the application. Without a template, action cells remain empty.
+3. Supply each row's `'Business unit'` as an array of resolved names. Remove `.join(', ')` from inbound and outbound row
+   mappings; use `[]` or `null` when no names are available.
 
 Update consumer integration tests alongside the package upgrade. The former built-in download methods and error state
 are no longer part of the inbound viewer.

@@ -72,7 +72,7 @@
         (sortChange)="onSortChange($event)"
         [dataIndex]="isInbound ? 6 : 5"
       >
-        Action
+        Actions
       </th>
     </ng-container>
 
@@ -84,7 +84,15 @@
           @if (isInbound) {
             <td opal-lib-moj-sortable-table-row-data [id]="'type-' + rowIndex">{{ row['Type'] }}</td>
           }
-          <td opal-lib-moj-sortable-table-row-data [id]="'business-unit-' + rowIndex">{{ row['Business unit'] }}</td>
+          <td opal-lib-moj-sortable-table-row-data [id]="'business-unit-' + rowIndex">
+            @if (row['Business unit']?.length) {
+              <ul class="govuk-list govuk-!-margin-bottom-0">
+                @for (businessUnit of row['Business unit']; track $index) {
+                  <li>{{ businessUnit }}</li>
+                }
+              </ul>
+            }
+          </td>
           <td opal-lib-moj-sortable-table-row-data [id]="(isInbound ? 'source-' : 'target-') + rowIndex">
             {{ row[isInbound ? 'Source' : 'Target'] }}
           </td>

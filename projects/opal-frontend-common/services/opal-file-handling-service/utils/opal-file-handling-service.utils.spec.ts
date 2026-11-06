@@ -12,17 +12,17 @@ describe('buildInterfaceFilesParams', () => {
     expect(buildInterfaceFilesParams().keys()).toEqual([]);
   });
 
-  it('retains exact business-unit codes and scalar values while omitting empty optional filters', () => {
+  it('serializes numeric business-unit IDs and scalar values while omitting empty optional filters', () => {
     const params = buildInterfaceFilesParams({
       domain: 'FINES',
       target: 'OPAL',
-      business_unit_code: '0046',
+      business_unit_id: 77,
       source: undefined,
       status: '',
       not_target: undefined,
     });
-    expect(params.keys()).toEqual(['domain', 'target', 'business_unit_code']);
-    expect(params.get('business_unit_code')).toBe('0046');
+    expect(params.keys()).toEqual(['domain', 'target', 'business_unit_id']);
+    expect(params.get('business_unit_id')).toBe('77');
     expect(params.get('domain')).toBe('FINES');
     expect(params.get('target')).toBe('OPAL');
   });

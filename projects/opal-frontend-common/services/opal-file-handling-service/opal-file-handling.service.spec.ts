@@ -19,7 +19,7 @@ describe('OpalFileHandlingService', () => {
     type: 'SOURCE',
     domain: 'FINES',
     status: 'SUCCESS',
-    business_unit_codes: ['001', '002'],
+    business_unit_ids: [77, 65],
     filestore_uuid: '00000000-0000-4000-8000-000000000123',
     checksum: 'checksum',
     created_datetime: '2026-09-23T10:00:00Z',
@@ -58,6 +58,21 @@ describe('OpalFileHandlingService', () => {
     req.flush(interfaceFilesRefData);
   });
 
+  it('sends a numeric business-unit ID and retains the returned ID array', () => {
+    const response = {
+      ...interfaceFilesRefData,
+      interface_files: [{ ...interfaceFile, business_unit_ids: [77, 65, 999] }],
+    };
+    service.getInterfaceFilesRefData({ business_unit_id: 77 }).subscribe((result) => {
+      expect(result.interface_files?.[0].business_unit_ids).toEqual([77, 65, 999]);
+    });
+
+    const req = httpMock.expectOne((request) => request.url === OPAL_FILE_HANDLING_PATHS.interfaceFilesRefData);
+    expect(req.request.params.get('business_unit_id')).toBe('77');
+    expect(req.request.params.has('business_unit_code')).toBe(false);
+    req.flush(response);
+  });
+
   it('serializes CSV lists and scalar targets, omitting empty filters from the list request', () => {
     service
       .getInterfaceFilesRefData({
@@ -66,7 +81,7 @@ describe('OpalFileHandlingService', () => {
         target: 'OPAL',
         not_status: ['FAILED', '', 'INGESTED'],
         status: undefined,
-        business_unit_code: '',
+        business_unit_id: undefined,
         not_target: 'NATWEST',
       })
       .subscribe();

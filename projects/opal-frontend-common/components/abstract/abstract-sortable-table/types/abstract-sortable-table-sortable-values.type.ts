@@ -1,1 +1,1 @@
-export type SortableValuesType = string | number | boolean | null;
+export type SortableValuesType = string | string[] | number | boolean | null;
