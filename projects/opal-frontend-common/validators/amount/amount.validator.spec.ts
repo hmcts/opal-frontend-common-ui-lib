@@ -24,6 +24,13 @@ describe('amountValidator', () => {
     expect(validator(control)).toEqual({ invalidAmount: true }); // Should be invalid
   });
 
+  it('should invalidate a 19-digit number without a decimal place', () => {
+    const control = new FormControl('1234567890123456789');
+    const validator = amountValidator(18, 2);
+
+    expect(validator(control)).toEqual({ invalidAmount: true });
+  });
+
   it('should invalidate a number with more than 2 decimal places', () => {
     const control = new FormControl('123456789012345678.123');
     const validator = amountValidator(18, 2);
