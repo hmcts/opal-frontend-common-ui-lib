@@ -77,11 +77,11 @@ Inject `FileService` with `inject(FileService)` or constructor injection. An add
 
 The service also provides generic checks and error formatting for a caller-owned upload journey:
 
-| Method                                                               | Returns          | Behaviour                                                                                                                       |
-| -------------------------------------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `getFileUploadProgress(loaded: number, total?: number \| null)`      | `number \| null` | Rounded percentage between 0 and 100, or `null` when progress cannot be measured.                                               |
-| `isFileWithinSizeLimit(file: Pick<File, 'size'>, maxBytes: number)`  | `boolean`        | Checks a finite, non-negative file size against the caller's inclusive byte limit.                                              |
-| `hasFileExtension(filename: string, extension: string)`              | `boolean`        | Case-insensitive suffix check; accepts an extension with or without its leading dot.                                            |
+| Method                                                               | Returns          | Behaviour                                                                                                                                          |
+| -------------------------------------------------------------------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `getFileUploadProgress(loaded: number, total?: number \| null)`      | `number \| null` | Rounded percentage between 0 and 100, or `null` when progress cannot be measured.                                                                  |
+| `isFileWithinSizeLimit(file: Pick<File, 'size'>, maxBytes: number)`  | `boolean`        | Checks a finite, non-negative file size against the caller's inclusive byte limit.                                                                 |
+| `hasFileExtension(filename: string, extension: string)`              | `boolean`        | Case-insensitive suffix check; accepts an extension with or without its leading dot.                                                               |
 | `getFileUploadErrorMessage(error: unknown, fallbackMessage: string)` | `string`         | Uses non-blank HTTP problem `detail`, `description`, `message`, then `title`, or a plain `Error.message`; otherwise returns the caller's fallback. |
 
 ```typescript

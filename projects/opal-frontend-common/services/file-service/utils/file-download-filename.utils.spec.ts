@@ -15,6 +15,8 @@ describe('getFileDownloadFilename', () => {
     ["attachment; FILENAME* = utf-8''encoded%20file.csv", 'encoded file.csv'],
     ["attachment; filename*=UTF-8'en'caf%C3%A9.xml", 'café.xml'],
     ["attachment; filename*=UTF-8'en-GB'caf%C3%A9.xml; filename=plain.xml", 'café.xml'],
+    ["attachment; filename*=UTF-8'en'%invalid; filename=plain.xml", 'plain.xml'],
+    ["attachment; filename*=UTF-8'en'%invalid", 'fallback.xml'],
     ["attachment; filename*=UTF-8''%invalid; filename=plain.xml", 'plain.xml'],
     ["attachment; filename*=UTF-8''%invalid", 'fallback.xml'],
   ])('uses the filename %s supplies or the fallback', (contentDisposition, expected) => {

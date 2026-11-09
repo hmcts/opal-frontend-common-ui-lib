@@ -40,6 +40,25 @@ export class FileService {
     }
   }
 
+  /** Returns the first non-blank HTTP problem detail, description, message or title. */
+  private getFileUploadProblemMessage(body: unknown): string | null {
+    if (!body || typeof body !== 'object') {
+      return null;
+    }
+
+    const detail = 'detail' in body ? body.detail : undefined;
+    const description = 'description' in body ? body.description : undefined;
+    const message = 'message' in body ? body.message : undefined;
+    const title = 'title' in body ? body.title : undefined;
+    for (const value of [detail, description, message, title]) {
+      if (typeof value === 'string' && value.trim()) {
+        return value.trim();
+      }
+    }
+
+    return null;
+  }
+
   /**
    * Wraps file content in a Blob, optionally relabelling its MIME type without converting the file format.
    * @param content - Existing Blob, text or binary content to save.
@@ -147,20 +166,10 @@ export class FileService {
    */
   public getFileUploadErrorMessage(error: unknown, fallbackMessage: string): string {
     if (error instanceof HttpErrorResponse) {
-      const body: unknown = error.error;
-      if (body && typeof body === 'object') {
-        const detail = 'detail' in body ? body.detail : undefined;
-        const description = 'description' in body ? body.description : undefined;
-        const message = 'message' in body ? body.message : undefined;
-        const title = 'title' in body ? body.title : undefined;
-        for (const value of [detail, description, message, title]) {
-          if (typeof value === 'string' && value.trim()) {
-            return value.trim();
-          }
-        }
-      }
-    } else if (error instanceof Error && error.message.trim()) {
-      return error.message.trim();
+      return this.getFileUploadProblemMessage(error.error) ?? fallbackMessage;
+    }
+    if (error instanceof Error) {
+      return error.message.trim() || fallbackMessage;
     }
 
     return fallbackMessage;

@@ -1,2 +1,2 @@
-export * from './file-download-options.interface';
-export * from './file-save-options.interface';
+export type { IFileDownloadOptions } from './file-download-options.interface';
+export type { IFileSaveOptions } from './file-save-options.interface';

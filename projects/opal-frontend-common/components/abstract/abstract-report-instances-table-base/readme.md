@@ -84,6 +84,9 @@ Consumers should use the inherited API for sorting, filtering, and page changes.
 
 The generic row type must satisfy the inherited sortable table data contract:
 
+Cell values can include `string[]` through `SortableValuesType`. The inherited filtering, sorting and pagination retain
+the arrays for the consuming template to render directly.
+
 1. **Table Data Contracts**:
    - `TTableData extends IAbstractTableData<SortableValuesType>`: concrete report row shape
    - `IAbstractTableData<SortableValuesType>`: base sortable table row contract

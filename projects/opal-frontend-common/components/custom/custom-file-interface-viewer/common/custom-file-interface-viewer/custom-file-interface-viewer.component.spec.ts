@@ -15,7 +15,7 @@ function row(overrides: Partial<ICustomFileInterfaceViewerTableData> = {}): ICus
     dateTimeDisplay: '20 Oct 2026 at 13:00',
     Title: 'interface.dat',
     Type: 'RAW',
-    'Business unit': 'Test business unit',
+    'Business unit': ['Test business unit'],
     Source: 'Allpay',
     Target: 'ANT CSV',
     Status: 'Ready',

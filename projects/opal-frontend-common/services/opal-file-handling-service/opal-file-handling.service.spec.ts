@@ -26,7 +26,7 @@ describe('OpalFileHandlingService', () => {
     type: 'SOURCE',
     domain: 'FINES',
     status: 'SUCCESS',
-    business_unit_codes: ['001', '002'],
+    business_unit_ids: [77, 65],
     filestore_uuid: '00000000-0000-4000-8000-000000000123',
     checksum: 'checksum',
     created_datetime: '2026-09-23T10:00:00Z',
@@ -37,6 +37,14 @@ describe('OpalFileHandlingService', () => {
     number_of_results: 1,
     interface_files: [interfaceFile],
   };
+
+  const readPart = (part: Blob): Promise<ArrayBuffer> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as ArrayBuffer);
+      reader.onerror = () => reject(reader.error);
+      reader.readAsArrayBuffer(part);
+    });
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -84,38 +92,61 @@ describe('OpalFileHandlingService', () => {
     expect(metadataPart.type).toBe('application/json');
     req.flush(interfaceFile, { status: 201, statusText: 'Created' });
 
-    const readPart = (part: Blob): Promise<ArrayBuffer> =>
-      new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result as ArrayBuffer);
-        reader.onerror = () => reject(reader.error);
-        reader.readAsArrayBuffer(part);
-      });
     const [fileContent, metadataContent] = await Promise.all([readPart(filePart), readPart(metadataPart)]);
     expect(new Uint8Array(fileContent)).toEqual(new Uint8Array([0x00, 0xff, 0x0d, 0x0a]));
-    expect(JSON.parse(new TextDecoder().decode(metadataContent))).toEqual(metadata);
+    const uploadedMetadata = JSON.parse(new TextDecoder().decode(metadataContent));
+    expect(uploadedMetadata).toEqual(metadata);
+    expect(uploadedMetadata).not.toHaveProperty('business_unit_id');
   });
 
-  it('passes upload progress and the created metadata response to the caller', () => {
-    const next = vi.fn();
-    const file = new File(['contents'], 'banking.dat');
-    service
-      .uploadInterfaceFile(file, {
+  it.each([77, null])(
+    'preserves optional TRANSFORMED_JSON metadata with business-unit ID %s',
+    async (businessUnitId) => {
+      const file = new File(['{}'], 'transformed.json', { type: 'application/json' });
+      const metadata: IOpalFileHandlingUploadMetadata = {
         source: 'VARIANT_BANKING',
         target: 'OPAL',
-        type: 'SOURCE',
+        type: 'TRANSFORMED_JSON',
         domain: 'FINES',
         file_name: file.name,
-      })
-      .subscribe(next);
-    const req = httpMock.expectOne(OPAL_FILE_HANDLING_PATHS.interfaceFilesRefData);
-    const progress: HttpUploadProgressEvent = { type: HttpEventType.UploadProgress, loaded: 4, total: 8 };
-    req.event(progress);
-    expect(next).toHaveBeenCalledWith(progress);
-    req.flush(interfaceFile, { status: 201, statusText: 'Created' });
-    expect(next).toHaveBeenLastCalledWith(expect.any(HttpResponse));
-    expect(next.mock.lastCall?.[0].body).toEqual(interfaceFile);
-  });
+        related_interface_file_id: 123,
+        payment_type: 'CASH',
+        business_unit_id: businessUnitId,
+      };
+      service.uploadInterfaceFile(file, metadata).subscribe();
+      const req = httpMock.expectOne(OPAL_FILE_HANDLING_PATHS.interfaceFilesRefData);
+      const body = req.request.body as FormData;
+      const metadataContent = await readPart(body.get('metadata') as Blob);
+
+      expect(JSON.parse(new TextDecoder().decode(metadataContent))).toEqual(metadata);
+      req.flush({ ...interfaceFile, type: 'TRANSFORMED_JSON' }, { status: 201, statusText: 'Created' });
+    },
+  );
+
+  it.each(['SUCCESS', 'SUCCESS_NO_TRANSACTIONS', 'DUPLICATE', 'FAILED'])(
+    'passes upload progress and a created %s metadata response to the caller',
+    (status) => {
+      const next = vi.fn();
+      const file = new File(['contents'], 'banking.dat');
+      service
+        .uploadInterfaceFile(file, {
+          source: 'VARIANT_BANKING',
+          target: 'OPAL',
+          type: 'SOURCE',
+          domain: 'FINES',
+          file_name: file.name,
+        })
+        .subscribe(next);
+      const req = httpMock.expectOne(OPAL_FILE_HANDLING_PATHS.interfaceFilesRefData);
+      const progress: HttpUploadProgressEvent = { type: HttpEventType.UploadProgress, loaded: 4, total: 8 };
+      req.event(progress);
+      expect(next).toHaveBeenCalledWith(progress);
+      const response = { ...interfaceFile, status };
+      req.flush(response, { status: 201, statusText: 'Created' });
+      expect(next).toHaveBeenLastCalledWith(expect.any(HttpResponse));
+      expect(next.mock.lastCall?.[0].body).toEqual(response);
+    },
+  );
 
   it.each([
     {
@@ -157,6 +188,21 @@ describe('OpalFileHandlingService', () => {
     req.flush(interfaceFilesRefData);
   });
 
+  it('sends a numeric business-unit ID and retains the returned ID array', () => {
+    const response = {
+      ...interfaceFilesRefData,
+      interface_files: [{ ...interfaceFile, business_unit_ids: [77, 65, 999] }],
+    };
+    service.getInterfaceFilesRefData({ business_unit_id: 77 }).subscribe((result) => {
+      expect(result.interface_files?.[0].business_unit_ids).toEqual([77, 65, 999]);
+    });
+
+    const req = httpMock.expectOne((request) => request.url === OPAL_FILE_HANDLING_PATHS.interfaceFilesRefData);
+    expect(req.request.params.get('business_unit_id')).toBe('77');
+    expect(req.request.params.has('business_unit_code')).toBe(false);
+    req.flush(response);
+  });
+
   it('serializes CSV lists and scalar targets, omitting empty filters from the list request', () => {
     service
       .getInterfaceFilesRefData({
@@ -165,7 +211,7 @@ describe('OpalFileHandlingService', () => {
         target: 'OPAL',
         not_status: ['FAILED', '', 'INGESTED'],
         status: undefined,
-        business_unit_code: '',
+        business_unit_id: undefined,
         not_target: 'NATWEST',
       })
       .subscribe();

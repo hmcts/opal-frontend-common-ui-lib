@@ -13,7 +13,7 @@ const row: ICustomFileInterfaceViewerTableData = {
   dateTimeDisplay: '20 Oct 2026 at 13:05',
   Title: 'mock.dat',
   Type: 'RAW',
-  'Business unit': 'Test business unit',
+  'Business unit': ['Test business unit'],
   Source: 'Allpay',
   Target: 'ANT CSV',
   Status: 'Ready',
@@ -81,13 +81,13 @@ describe.each([
   {
     direction: 'inbound',
     isInbound: true,
-    columns: ['Date and time', 'Title', 'Type', 'Business unit', 'Source', 'Status', 'Action'],
+    columns: ['Date and time', 'Title', 'Type', 'Business unit', 'Source', 'Status', 'Actions'],
     values: ['20 Oct 2026 at 13:05', 'mock.dat', 'RAW', 'Test business unit', 'Allpay', 'Ready', ''],
   },
   {
     direction: 'outbound',
     isInbound: false,
-    columns: ['Date and time', 'Title', 'Business unit', 'Target', 'Status', 'Action'],
+    columns: ['Date and time', 'Title', 'Business unit', 'Target', 'Status', 'Actions'],
     values: ['20 Oct 2026 at 13:05', 'mock.dat', 'Test business unit', 'ANT CSV', 'Ready', ''],
   },
 ])(
@@ -118,10 +118,30 @@ describe.each([
       expect(fixture.nativeElement.querySelector('caption').textContent.trim()).toBe(
         `${isInbound ? 'Inbound' : 'Outbound'} interface files`,
       );
-      expect(fixture.nativeElement.querySelector('th:last-child button').textContent.trim()).toBe('Action');
+      expect(fixture.nativeElement.querySelector('th:last-child button').textContent.trim()).toBe('Actions');
       expect(fixture.nativeElement.querySelector('td#actions-0 a')).toBeNull();
       expect(fixture.nativeElement.textContent).toContain('Showing 1 result');
       expect(fixture.nativeElement.textContent).not.toContain('Showing 1 results');
+    });
+
+    it('renders business-unit arrays as separate GOV.UK list items in their supplied order', () => {
+      const businessUnits = ['Camberwell Green', 'North, East', 'UNKNOWN', 'Camberwell Green', 'Unit <em>name</em>'];
+      fixture.componentRef.setInput('tableData', [{ ...row, 'Business unit': businessUnits }]);
+      fixture.detectChanges();
+
+      const cell = fixture.nativeElement.querySelector('td#business-unit-0') as HTMLTableCellElement;
+      expect(cell.querySelectorAll('ul.govuk-list')).toHaveLength(1);
+      expect(Array.from(cell.querySelectorAll('li'), (item) => item.textContent)).toEqual(businessUnits);
+      expect(cell.querySelector('em')).toBeNull();
+    });
+
+    it.each([null, []])('leaves the business-unit cell empty for %j', (businessUnits) => {
+      fixture.componentRef.setInput('tableData', [{ ...row, 'Business unit': businessUnits }]);
+      fixture.detectChanges();
+
+      const cell = fixture.nativeElement.querySelector('td#business-unit-0') as HTMLTableCellElement;
+      expect(cell.textContent?.trim()).toBe('');
+      expect(cell.querySelector('ul')).toBeNull();
     });
 
     it('sorts by numeric timestamps while retaining the supplied display text', () => {
@@ -159,11 +179,14 @@ describe.each([
       fixture.detectChanges();
       expect(fixture.nativeElement.querySelectorAll('tbody tr')).toHaveLength(0);
 
-      const columnKey = column === 'Action' ? 'Actions' : column;
       const rows = createRows(3).map((file, index) => ({
         ...file,
-        [columnKey]:
-          columnKey === 'Date and time' || columnKey === 'Title' ? file[columnKey] : ['Alpha', 'Bravo', 'Zulu'][index],
+        [column]:
+          column === 'Date and time' || column === 'Title'
+            ? file[column]
+            : column === 'Business unit'
+              ? [['Alpha'], ['Bravo'], ['Zulu']][index]
+              : ['Alpha', 'Bravo', 'Zulu'][index],
       }));
       fixture.componentRef.setInput('tableData', [rows[1], rows[2], rows[0]]);
       fixture.detectChanges();
@@ -183,14 +206,14 @@ describe.each([
 
       expect(titles()).toEqual(['file-01.dat', 'file-02.dat', 'file-03.dat']);
       expect(header.getAttribute('aria-sort')).toBe('ascending');
-      expect(status.textContent?.trim()).toBe(`Sorted by ${columnKey} (ascending)`);
+      expect(status.textContent?.trim()).toBe(`Sorted by ${column} (ascending)`);
 
       button.click();
       fixture.detectChanges();
 
       expect(titles()).toEqual(['file-03.dat', 'file-02.dat', 'file-01.dat']);
       expect(header.getAttribute('aria-sort')).toBe('descending');
-      expect(status.textContent?.trim()).toBe(`Sorted by ${columnKey} (descending)`);
+      expect(status.textContent?.trim()).toBe(`Sorted by ${column} (descending)`);
     });
 
     it('keeps distinct row views for files without IDs when sorting and replacing results', () => {
@@ -249,7 +272,6 @@ describe.each([
     });
 
     it.each(columns)('sorts %s through its accessible column button and resets the current page', (column) => {
-      const columnKey = column === 'Action' ? 'Actions' : column;
       fixture.componentRef.setInput('tableData', createRows(26));
       fixture.detectChanges();
       fixture.componentInstance.currentPageSignal.set(2);
@@ -264,8 +286,8 @@ describe.each([
 
       expect(fixture.componentInstance.currentPageSignal()).toBe(1);
       expect(header.getAttribute('aria-sort')).toBe('ascending');
-      expect(sort).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ [columnKey]: 'ascending' }));
-      expect(fixture.componentInstance.sortedColumnTitleSignal()).toBe(columnKey);
+      expect(sort).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ [column]: 'ascending' }));
+      expect(fixture.componentInstance.sortedColumnTitleSignal()).toBe(column);
       expect(fixture.componentInstance.paginatedTableDataComputed()).toHaveLength(25);
       if (column === 'Date and time' || column === 'Title') {
         expect(fixture.componentInstance.paginatedTableDataComputed()[0].Title).toBe('file-01.dat');
@@ -275,17 +297,21 @@ describe.each([
       fixture.detectChanges();
 
       expect(header.getAttribute('aria-sort')).toBe('descending');
-      expect(sort).toHaveBeenLastCalledWith(expect.objectContaining({ [columnKey]: 'descending' }));
+      expect(sort).toHaveBeenLastCalledWith(expect.objectContaining({ [column]: 'descending' }));
     });
 
     it.each(columns.filter((column) => column !== 'Title'))(
       'sorts omitted %s in both directions after a partial custom sort',
       (column) => {
-        const columnKey = column === 'Action' ? 'Actions' : column;
         const rows = createRows(2)
           .map((file, index) => ({
             ...file,
-            [columnKey]: columnKey === 'Date and time' ? index + 1 : ['Alpha', 'Zulu'][index],
+            [column]:
+              column === 'Date and time'
+                ? index + 1
+                : column === 'Business unit'
+                  ? [['Alpha'], ['Zulu']][index]
+                  : ['Alpha', 'Zulu'][index],
           }))
           .reverse();
         fixture.componentRef.setInput('existingSortState', Object.freeze({ Title: 'ascending' }));
@@ -308,14 +334,14 @@ describe.each([
 
         expect(titles()).toEqual(['file-01.dat', 'file-02.dat']);
         expect(header.getAttribute('aria-sort')).toBe('ascending');
-        expect(status.textContent?.trim()).toBe(`Sorted by ${columnKey} (ascending)`);
+        expect(status.textContent?.trim()).toBe(`Sorted by ${column} (ascending)`);
 
         button.click();
         fixture.detectChanges();
 
         expect(titles()).toEqual(['file-02.dat', 'file-01.dat']);
         expect(header.getAttribute('aria-sort')).toBe('descending');
-        expect(status.textContent?.trim()).toBe(`Sorted by ${columnKey} (descending)`);
+        expect(status.textContent?.trim()).toBe(`Sorted by ${column} (descending)`);
       },
     );
 

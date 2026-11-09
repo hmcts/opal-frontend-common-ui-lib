@@ -6,7 +6,8 @@ export interface ICustomFileInterfaceViewerTableData extends IAbstractTableData<
   'Date and time': number | null;
   dateTimeDisplay: string | null;
   Title: string | null;
-  'Business unit': string | null;
+  /** Resolved names, displayed in their supplied order as a GOV.UK list. */
+  'Business unit': string[] | null;
   Status: string | null;
   Actions: string | null;
 }

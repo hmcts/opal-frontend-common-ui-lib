@@ -1,1 +1,1 @@
-export * from './moj-multi-file-upload.component';
+export { MojMultiFileUploadComponent } from './moj-multi-file-upload.component';

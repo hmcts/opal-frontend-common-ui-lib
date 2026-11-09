@@ -11,9 +11,9 @@ import { MojMultiFileUploadInputControlDirective } from './directives/moj-multi-
 export class MojMultiFileUploadInputComponent {
   private _control!: FormControl<readonly File[] | null>;
 
-  @ViewChild('fileInput') private fileInput?: ElementRef<HTMLInputElement>;
+  @ViewChild('fileInput') private readonly fileInput?: ElementRef<HTMLInputElement>;
   @ViewChild(MojMultiFileUploadInputControlDirective)
-  private fileControl?: MojMultiFileUploadInputControlDirective;
+  private readonly fileControl?: MojMultiFileUploadInputControlDirective;
 
   @Input({ required: true }) inputId!: string;
   @Input({ required: true }) inputName!: string;
@@ -30,7 +30,7 @@ export class MojMultiFileUploadInputComponent {
   @Input({ required: true }) set control(abstractControl: AbstractControl | null) {
     this._control = abstractControl as FormControl<readonly File[] | null>;
   }
-  @Output() filesSelected = new EventEmitter<readonly File[]>();
+  @Output() readonly filesSelected = new EventEmitter<readonly File[]>();
 
   public draggingOver = false;
   public focused = false;

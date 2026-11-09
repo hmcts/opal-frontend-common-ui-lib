@@ -28,9 +28,10 @@ filename. Each SVG has an accessible label for its status. Parent-supplied error
 A failed/rejected row without detailed errors displays its status label there instead.
 Pending status text is available to assistive technology without adding a visible filename suffix.
 
-Uploading rows show a percentage to the right of the filename, with a named `progressbar`, minimum/maximum/current
-values and accessible status text. Unknown progress (`null` or omitted) displays the uploading label and omits
-`aria-valuenow`. Uploading at 100% remains uploading until the parent confirms `status: 'success'`.
+Uploading rows show a percentage to the right of the filename, with a visually hidden native `<progress>` element
+providing its accessible name, value and status text. Unknown progress (`null` or omitted) displays the uploading label
+and omits the native `value` attribute so progress remains indeterminate. Uploading at 100% remains uploading until the
+parent confirms `status: 'success'`.
 
 Include the library's global GOV.UK/MoJ styles. File rows use the standard summary-list layout, status icon and
 GOV.UK typography classes; the component has no custom stylesheet.

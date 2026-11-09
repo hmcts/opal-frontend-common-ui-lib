@@ -18,7 +18,9 @@ describe('MojMultiFileUploadFilesComponent', () => {
   };
   const text = (): string => fixture.nativeElement.textContent;
   const rows = (): HTMLElement[] => Array.from(fixture.nativeElement.querySelectorAll('.moj-multi-file-upload__row'));
-  const progressbar = (): HTMLElement | null => fixture.nativeElement.querySelector('[role="progressbar"]');
+  const progressbar = (): HTMLProgressElement | null => fixture.nativeElement.querySelector('progress');
+  const progressText = (): HTMLElement | null =>
+    fixture.nativeElement.querySelector('.moj-multi-file-upload__progress');
   const assertWarningIcon = (row: HTMLElement, label: string): void => {
     const filename: HTMLElement = row.querySelector('.moj-multi-file-upload__filename')!;
     const warning: SVGElement = row.querySelector('svg')!;
@@ -89,13 +91,15 @@ describe('MojMultiFileUploadFilesComponent', () => {
     renderFiles([file({ status: 'uploading', progress })]);
     const filename: HTMLElement = rows()[0].querySelector('.moj-multi-file-upload__filename')!;
 
-    expect(progressbar()?.textContent?.trim()).toBe(`${progress}%`);
+    expect(progressText()?.textContent?.trim()).toBe(`${progress}%`);
     expect(filename.nextElementSibling).toBe(progressbar());
-    expect(progressbar()?.classList.contains('moj-multi-file-upload__progress')).toBe(true);
+    expect(progressbar()?.nextElementSibling).toBe(progressText());
+    expect(progressText()?.getAttribute('aria-hidden')).toBe('true');
+    expect(progressbar()?.classList.contains('govuk-visually-hidden')).toBe(true);
     expect(progressbar()?.getAttribute('aria-label')).toBe('first.csv');
-    expect(progressbar()?.getAttribute('aria-valuemin')).toBe('0');
-    expect(progressbar()?.getAttribute('aria-valuemax')).toBe('100');
-    expect(progressbar()?.getAttribute('aria-valuenow')).toBe(String(progress));
+    expect(progressbar()?.max).toBe(100);
+    expect(progressbar()?.value).toBe(progress);
+    expect(progressbar()?.position).toBe(progress / 100);
     expect(progressbar()?.getAttribute('aria-valuetext')).toBe(`Uploading ${progress}%`);
     expect(rows()[0].querySelector('svg')).toBeNull();
   });
@@ -103,11 +107,37 @@ describe('MojMultiFileUploadFilesComponent', () => {
   it.each([undefined, null])('keeps unknown progress indeterminate when progress is %s', (progress) => {
     renderFiles([file({ status: 'uploading', progress })]);
 
-    expect(progressbar()?.textContent?.trim()).toBe('Uploading');
+    expect(progressText()?.textContent?.trim()).toBe('Uploading');
     expect(text()).not.toContain('%');
-    expect(progressbar()?.hasAttribute('aria-valuenow')).toBe(false);
+    expect(progressbar()?.hasAttribute('value')).toBe(false);
+    expect(progressbar()?.position).toBe(-1);
     expect(progressbar()?.getAttribute('aria-valuetext')).toBe('Uploading');
     expect(rows()[0].querySelector('svg')).toBeNull();
+  });
+
+  it('updates native progress between known and indeterminate values until success is confirmed', () => {
+    renderFiles([file({ status: 'uploading', progress: 37 })]);
+    const progress = progressbar()!;
+    expect(progress.position).toBe(0.37);
+
+    renderFiles([file({ status: 'uploading', progress: null })]);
+
+    expect(progressbar()).toBe(progress);
+    expect(progress.hasAttribute('value')).toBe(false);
+    expect(progress.position).toBe(-1);
+    expect(progressText()?.textContent?.trim()).toBe('Uploading');
+
+    renderFiles([file({ status: 'uploading', progress: 100 })]);
+
+    expect(progress.position).toBe(1);
+    expect(progressText()?.textContent?.trim()).toBe('100%');
+    expect(rows()[0].querySelector('svg')).toBeNull();
+
+    renderFiles([file({ status: 'success', progress: 100 })]);
+
+    expect(progressbar()).toBeNull();
+    expect(progressText()).toBeNull();
+    expect(rows()[0].querySelector('svg')?.getAttribute('aria-label')).toBe('Uploaded');
   });
 
   it('shows only a separate accessible green tick to the left of a successful filename', () => {
@@ -153,7 +183,7 @@ describe('MojMultiFileUploadFilesComponent', () => {
     expect(rows()[2].querySelector('.moj-multi-file-upload__filename')?.closest('.govuk-error-message')).toBeNull();
     assertWarningIcon(rows()[1], 'File rejected');
     assertWarningIcon(rows()[2], 'Upload failed');
-    expect(progressbar()?.textContent?.trim()).toBe('50%');
+    expect(progressText()?.textContent?.trim()).toBe('50%');
   });
 
   it('describes explicit failed or rejected states above their filenames when no detailed errors are supplied', () => {
@@ -187,7 +217,7 @@ describe('MojMultiFileUploadFilesComponent', () => {
     expect(rows()[0].querySelector('svg')?.getAttribute('aria-label')).toBe('Received');
     expect(rows()[0].textContent?.trim()).toBe('first.csv');
     expect(progressbar()?.getAttribute('aria-valuetext')).toBe('Sending 25%');
-    expect(progressbar()?.textContent?.trim()).toBe('25%');
+    expect(progressText()?.textContent?.trim()).toBe('25%');
     expect(rows()[2].querySelector('.govuk-error-message')?.textContent).toContain('Not received');
     expect(rows()[3].querySelector('.govuk-error-message')?.textContent).toContain('Not accepted');
     assertWarningIcon(rows()[2], 'Not received');
@@ -200,7 +230,7 @@ describe('MojMultiFileUploadFilesComponent', () => {
 
     expect(fixture.componentInstance.files).toBe(supplied);
     expect(supplied[0]).toEqual(file({ status: 'uploading', progress: 45 }));
-    expect(progressbar()?.textContent?.trim()).toBe('45%');
+    expect(progressText()?.textContent?.trim()).toBe('45%');
     expect(fixture.nativeElement.querySelector('button')).toBeNull();
   });
 });
