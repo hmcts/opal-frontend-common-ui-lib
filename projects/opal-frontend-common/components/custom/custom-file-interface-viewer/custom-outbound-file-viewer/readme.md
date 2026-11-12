@@ -19,7 +19,7 @@ import type { ICustomFileInterfaceViewerOutboundTableWrapperTableData } from '@h
 ></opal-lib-custom-outbound-file-viewer>
 ```
 
-`businessUnits` is a required array of autocomplete options (`IAlphagovAccessibleAutocompleteItem[]`) with names as `name` and string API codes as `value`; it excludes the synthetic All choice. `tableData` defaults to null, hiding results until supplied; an empty array shows the outbound empty message. `actionTemplate` is optional and receives the current prepared row as `$implicit`. Without it, action cells remain empty. The consumer decides which actions are available and owns URLs, downloads, errors and focus.
+`businessUnits` is a required array of autocomplete options (`IAlphagovAccessibleAutocompleteItem[]`) with names as `name` and string API codes as `value`; it excludes the synthetic All choice. `tableData` defaults to null, hiding results until supplied; an empty array shows the outbound empty message. `actionTemplate` is optional and receives the current prepared row as `$implicit`. Without it, action cells display `-`. The consumer decides which actions are available and owns URLs, downloads, errors and focus.
 
 `formSubmit` emits `IAbstractFormBaseForm<unknown>` with `formData` and `nestedFlow: false`. Only business-unit and date filters are visible; source and type controls remain at their defaults and should be ignored by the outbound mapper. Refresh always remains enabled so valid unchanged filters can be resubmitted.
 
@@ -31,7 +31,7 @@ supplies the visible cell. The library does not infer download eligibility. It h
 `outbound-interface-files-results` and `outbound-file-viewer-pagination`.
 
 As with inbound rows, each row's `'Business unit'` field is a `string[]` of resolved names. The table renders each name
-as a separate GOV.UK list item in the supplied order; `[]` or `null` leaves the cell empty. Pass the array directly
+as a separate GOV.UK list item in the supplied order; `[]` or `null` displays `-`. Pass the array directly
 without joining it into a string. The `[businessUnits]` filter input accepts autocomplete options with `name` and `value`
 properties. For example:
 

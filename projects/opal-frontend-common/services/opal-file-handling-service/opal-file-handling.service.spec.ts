@@ -1,7 +1,14 @@
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  HttpErrorResponse,
+  HttpEventType,
+  HttpResponse,
+  HttpUploadProgressEvent,
+  provideHttpClient,
+} from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { IOpalFileHandlingUploadMetadata } from './interfaces/opal-file-handling-upload-metadata.interface';
 import { OPAL_FILE_HANDLING_PATHS } from './constants/opal-file-handling-paths.constant';
 import { IOpalFileHandlingInterfaceFile } from './interfaces/opal-file-handling-interface-file.interface';
 import { IOpalFileHandlingInterfaceFilesRefData } from './interfaces/opal-file-handling-interface-files-ref-data.interface';
@@ -31,9 +38,17 @@ describe('OpalFileHandlingService', () => {
     interface_files: [interfaceFile],
   };
 
+  const readPart = (part: Blob): Promise<ArrayBuffer> =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as ArrayBuffer);
+      reader.onerror = () => reject(reader.error);
+      reader.readAsArrayBuffer(part);
+    });
+
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
     });
 
     service = TestBed.inject(OpalFileHandlingService);
@@ -46,6 +61,121 @@ describe('OpalFileHandlingService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
+  });
+
+  it('uploads original file bytes and JSON metadata as separate multipart parts', async () => {
+    const file = new File([new Uint8Array([0x00, 0xff, 0x0d, 0x0a])], 'banking.dat', {
+      type: 'application/octet-stream',
+    });
+    const metadata: IOpalFileHandlingUploadMetadata = {
+      source: 'VARIANT_BANKING',
+      target: 'OPAL',
+      type: 'SOURCE',
+      domain: 'FINES',
+      file_name: file.name,
+      should_pre_process_file: true,
+    };
+    service.uploadInterfaceFile(file, metadata).subscribe();
+
+    const req = httpMock.expectOne(OPAL_FILE_HANDLING_PATHS.interfaceFilesRefData);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.headers.has('Content-Type')).toBe(false);
+    expect(req.request.reportProgress).toBe(true);
+    expect(req.request.body).toBeInstanceOf(FormData);
+    const body = req.request.body as FormData;
+    expect([...body.keys()]).toEqual(['file', 'metadata']);
+    const filePart = body.get('file') as File;
+    expect(filePart.name).toBe(file.name);
+    expect(filePart.type).toBe(file.type);
+    const metadataPart = body.get('metadata') as File;
+    expect(metadataPart.name).toBe('metadata.json');
+    expect(metadataPart.type).toBe('application/json');
+    req.flush(interfaceFile, { status: 201, statusText: 'Created' });
+
+    const [fileContent, metadataContent] = await Promise.all([readPart(filePart), readPart(metadataPart)]);
+    expect(new Uint8Array(fileContent)).toEqual(new Uint8Array([0x00, 0xff, 0x0d, 0x0a]));
+    const uploadedMetadata = JSON.parse(new TextDecoder().decode(metadataContent));
+    expect(uploadedMetadata).toEqual(metadata);
+    expect(uploadedMetadata).not.toHaveProperty('business_unit_id');
+  });
+
+  it.each([77, null])(
+    'preserves optional TRANSFORMED_JSON metadata with business-unit ID %s',
+    async (businessUnitId) => {
+      const file = new File(['{}'], 'transformed.json', { type: 'application/json' });
+      const metadata: IOpalFileHandlingUploadMetadata = {
+        source: 'VARIANT_BANKING',
+        target: 'OPAL',
+        type: 'TRANSFORMED_JSON',
+        domain: 'FINES',
+        file_name: file.name,
+        related_interface_file_id: 123,
+        payment_type: 'CASH',
+        business_unit_id: businessUnitId,
+      };
+      service.uploadInterfaceFile(file, metadata).subscribe();
+      const req = httpMock.expectOne(OPAL_FILE_HANDLING_PATHS.interfaceFilesRefData);
+      const body = req.request.body as FormData;
+      const metadataContent = await readPart(body.get('metadata') as Blob);
+
+      expect(JSON.parse(new TextDecoder().decode(metadataContent))).toEqual(metadata);
+      req.flush({ ...interfaceFile, type: 'TRANSFORMED_JSON' }, { status: 201, statusText: 'Created' });
+    },
+  );
+
+  it.each(['SUCCESS', 'SUCCESS_NO_TRANSACTIONS', 'DUPLICATE', 'FAILED'])(
+    'passes upload progress and a created %s metadata response to the caller',
+    (status) => {
+      const next = vi.fn();
+      const file = new File(['contents'], 'banking.dat');
+      service
+        .uploadInterfaceFile(file, {
+          source: 'VARIANT_BANKING',
+          target: 'OPAL',
+          type: 'SOURCE',
+          domain: 'FINES',
+          file_name: file.name,
+        })
+        .subscribe(next);
+      const req = httpMock.expectOne(OPAL_FILE_HANDLING_PATHS.interfaceFilesRefData);
+      const progress: HttpUploadProgressEvent = { type: HttpEventType.UploadProgress, loaded: 4, total: 8 };
+      req.event(progress);
+      expect(next).toHaveBeenCalledWith(progress);
+      const response = { ...interfaceFile, status };
+      req.flush(response, { status: 201, statusText: 'Created' });
+      expect(next).toHaveBeenLastCalledWith(expect.any(HttpResponse));
+      expect(next.mock.lastCall?.[0].body).toEqual(response);
+    },
+  );
+
+  it.each([
+    {
+      status: 400,
+      statusText: 'Bad Request',
+      problem: { title: 'Invalid file', status: 400, detail: 'The file contents could not be processed.' },
+    },
+    {
+      status: 409,
+      statusText: 'Conflict',
+      problem: { title: 'Conflict', status: 409, message: 'This file was already uploaded.', retriable: true },
+    },
+  ])('forwards the original upload failure for HTTP $status to the caller', ({ status, statusText, problem }) => {
+    const error = vi.fn();
+    const file = new File(['contents'], 'banking.dat');
+    service
+      .uploadInterfaceFile(file, {
+        source: 'VARIANT_BANKING',
+        target: 'OPAL',
+        type: 'SOURCE',
+        domain: 'FINES',
+        file_name: file.name,
+      })
+      .subscribe({ error });
+    const req = httpMock.expectOne(OPAL_FILE_HANDLING_PATHS.interfaceFilesRefData);
+    req.flush(problem, { status, statusText });
+
+    expect(error).toHaveBeenCalledWith(expect.any(HttpErrorResponse));
+    expect(error).toHaveBeenCalledWith(expect.objectContaining({ status, error: problem }));
   });
 
   it('should get interface files reference data', () => {

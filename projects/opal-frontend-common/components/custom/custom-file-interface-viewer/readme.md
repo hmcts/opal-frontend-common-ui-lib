@@ -45,7 +45,7 @@ proxy. `OpalFileHandlingService` and `FileService` are provided in root when the
 
 The variables, handler and `fileAction` template above belong to the frontend wrapper. See the
 [inbound component README](./custom-inbound-file-viewer/readme.md) for their types, the row contract and an action-template
-example. The optional action template defaults to `null`, leaving action cells empty.
+example. The optional action template defaults to `null`, displaying `-` in action cells.
 
 `source` contains source choices such as Allpay. Despite its name, `sourceList` contains file **type** choices such as
 RAW and TRANSFORMED. The `[businessUnits]` filter input is an array of autocomplete options with business-unit names as
@@ -192,7 +192,7 @@ Map API metadata before passing it to the viewer:
 
 For both inbound and outbound rows, supply `'Business unit'` as a `string[]`, for example
 `'Business unit': ['Camberwell Green', 'Example business unit']`. The table renders each name as a separate GOV.UK list
-item in the supplied order. Use `[]` or `null` for an empty cell. The `[businessUnits]` filter input accepts autocomplete
+item in the supplied order. Use `[]` or `null` to display `-` for missing names. The `[businessUnits]` filter input accepts autocomplete
 options with `name` and `value` properties.
 
 Pass prepared display rows to `tableData`, rather than raw API records. The viewer renders the supplied status text;
@@ -233,7 +233,7 @@ Before adopting this version in a consuming application:
 1. Remove `[refreshFailed]` bindings from inbound viewers and common filters. The input has been removed; Refresh is
    always enabled and validates on submission.
 2. Supply `[actionTemplate]` when row actions are required. Move the former download eligibility, URL construction,
-   requests, save anchor, errors and focus handling into the application. Without a template, action cells remain empty.
+   requests, save anchor, errors and focus handling into the application. Without a template, action cells display `-`.
 3. Supply each row's `'Business unit'` as an array of resolved names. Remove `.join(', ')` from inbound and outbound row
    mappings; use `[]` or `null` when no names are available.
 

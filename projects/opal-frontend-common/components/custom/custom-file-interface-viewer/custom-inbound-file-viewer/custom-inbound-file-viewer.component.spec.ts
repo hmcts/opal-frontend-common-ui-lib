@@ -106,17 +106,17 @@ describe('CustomInboundFileViewerComponent', () => {
       ),
     ).toEqual(['original.dat', 'older.xml']);
     expect(fixture.nativeElement.querySelector('td#business-unit-0').textContent).toBe('Camberwell Green');
-    expect(fixture.nativeElement.querySelector('td#date-and-time-0').textContent).toBe('20 Oct 2026 at 13:00');
+    expect(fixture.nativeElement.querySelector('td#date-and-time-0').textContent.trim()).toBe('20 Oct 2026 at 13:00');
     expect(fixture.nativeElement.querySelector('td#type-0').textContent).toBe('RAW');
     expect(fixture.nativeElement.querySelector('thead th:first-child').getAttribute('aria-sort')).toBe('descending');
   });
 
-  it('leaves action cells empty when no consumer template is supplied', () => {
+  it('shows a dash when no consumer action template is supplied', () => {
     fixture.componentRef.setInput('tableData', [row(), row({ 'File ID': 1002, Status: 'File failed' })]);
     fixture.detectChanges();
     const cells = fixture.nativeElement.querySelectorAll('td[id^="actions-"]') as NodeListOf<HTMLElement>;
     expect(cells).toHaveLength(2);
-    expect(Array.from(cells).every((cell) => cell.textContent?.trim() === '')).toBe(true);
+    expect(Array.from(cells).every((cell) => cell.textContent?.trim() === '-')).toBe(true);
   });
 
   it('renders consumer actions with the row context and leaves eligibility to the consumer', () => {
