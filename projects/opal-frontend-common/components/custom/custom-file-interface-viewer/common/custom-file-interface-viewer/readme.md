@@ -15,7 +15,7 @@ A new result array resets pagination; action clicks do not replace rows or reset
 `actionTemplate` has context `ICustomFileInterfaceViewerActionTemplateContext<TFile>`, whose `$implicit` value is the
 current row. The generic defaults to `ICustomFileInterfaceViewerTableData`; direction-specific wrapper contracts retain
 their concrete row type. The supplied `Actions` string is the sort value for the Actions column; it does not render an
-action. Without a template, action cells remain empty. Consumers own eligibility rules, links, API requests, file
+action. Without a template, action cells display `-`. Consumers own eligibility rules, links, API requests, file
 saving, error state and focus management. The library does not inject a file service or require HTTP providers to render
 either viewer.
 

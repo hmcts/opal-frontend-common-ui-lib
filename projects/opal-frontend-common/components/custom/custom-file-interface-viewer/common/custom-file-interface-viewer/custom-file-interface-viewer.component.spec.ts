@@ -121,11 +121,11 @@ describe('CustomFileInterfaceViewerComponent', () => {
   });
 
   it.each(['Ready', 'File failed', 'Consumer status'])(
-    'leaves actions empty without a consumer template for %s',
+    'shows a dash without a consumer action template for %s',
     (Status) => {
       fixture.componentRef.setInput('tableData', [row({ Status })]);
       fixture.detectChanges();
-      expect(fixture.nativeElement.querySelector('td#actions-0').textContent.trim()).toBe('');
+      expect(fixture.nativeElement.querySelector('td#actions-0').textContent.trim()).toBe('-');
       expect(fixture.nativeElement.querySelector('a[hidden]')).toBeNull();
     },
   );

@@ -91,7 +91,9 @@ describe('CustomOutboundFileViewerComponent', () => {
       (cell as HTMLElement).textContent?.trim(),
     );
     expect(targets).toEqual(['ANT CSV', 'Allpay Out']);
-    expect(fixture.nativeElement.querySelector('td[id^="date-and-time-"]').textContent).toBe('20 Oct 2026 at 13:00');
+    expect(fixture.nativeElement.querySelector('td[id^="date-and-time-"]').textContent.trim()).toBe(
+      '20 Oct 2026 at 13:00',
+    );
     expect(fixture.nativeElement.querySelector('td[id^="title-"]').textContent).toBe('outbound.csv');
     expect(fixture.nativeElement.querySelector('td[id^="type-"]')).toBeNull();
     expect(fixture.nativeElement.querySelector('td[id^="source-"]')).toBeNull();
@@ -127,11 +129,11 @@ describe('CustomOutboundFileViewerComponent', () => {
   });
 
   it.each(['Ready', 'File failed', 'Consumer status'])(
-    'leaves actions empty without a consumer template for %s',
+    'shows a dash without a consumer action template for %s',
     (Status) => {
       setRows([row({ Status })]);
       fixture.detectChanges();
-      expect(fixture.nativeElement.querySelector('td#actions-0').textContent.trim()).toBe('');
+      expect(fixture.nativeElement.querySelector('td#actions-0').textContent.trim()).toBe('-');
     },
   );
 });
