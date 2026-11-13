@@ -9,21 +9,21 @@ import {
 })
 export class PermissionsService {
   /**
-   * Retrieves the unique permission IDs associated with the user.
-   * @returns An array of unique permission IDs.
+   * Retrieves the unique permission codes associated with the user.
+   * @returns An array of unique permission codes.
    */
-  public getUniquePermissions(userState: IOpalUserState | null): number[] {
+  public getUniquePermissions(userState: IOpalUserState | null): string[] {
     const roles = userState ? userState['business_unit_users'] : null;
 
     if (!roles) {
       return [];
     }
 
-    const permissionIds = roles.flatMap((role) => {
-      return role.permissions.map(({ permission_id: permissionId }) => permissionId);
+    const permissionCodes = roles.flatMap((role) => {
+      return role.permissions.map(({ permission_code: permissionCode }) => permissionCode);
     });
 
-    return [...new Set(permissionIds)];
+    return [...new Set(permissionCodes)];
   }
 
   /**
@@ -31,16 +31,16 @@ export class PermissionsService {
    *
    * This method short-circuits and returns as soon as a matching permission is found for efficiency.
    *
-   * @param permissionId - The ID of the permission to check for access.
+   * @param permissionCode - The code of the permission to check for access.
    * @param roles - An array of user roles, each containing a list of permissions.
    * @returns `true` if the user has the specified permission in any of their roles,
    *          or if no roles are provided; otherwise, returns `false`.
    */
-  public hasPermissionAccess(permissionId: number, roles: IOpalUserBusinessUnitUser[]): boolean {
+  public hasPermissionAccess(permissionCode: string, roles: IOpalUserBusinessUnitUser[]): boolean {
     if (roles?.length) {
-      return roles.some((role) => role.permissions.some((permission) => permission.permission_id === permissionId));
+      return roles.some((role) => role.permissions.some((permission) => permission.permission_code === permissionCode));
     }
-    // if we don't have any roles, we can't have any permissions
+    // Preserve the existing empty-role behavior; changing it is outside PO-5761.
     return true;
   }
 
@@ -49,13 +49,13 @@ export class PermissionsService {
    *
    * This method short-circuits and returns as soon as a matching permission is found for efficiency.
    *
-   * @param permissionId - The ID of the permission to check.
+   * @param permissionCode - The code of the permission to check.
    * @param businessUnitId - The ID of the business unit to check against.
    * @param roles - An array of user roles, each containing permissions and associated business unit IDs.
    * @returns `true` if the user has the specified permission for the business unit, or if no roles are provided; otherwise, `false`.
    */
   public hasBusinessUnitPermissionAccess(
-    permissionId: number,
+    permissionCode: string,
     businessUnitId: number,
     roles: IOpalUserBusinessUnitUser[],
   ): boolean {
@@ -63,10 +63,10 @@ export class PermissionsService {
       return roles.some(
         (role) =>
           role.business_unit_id === businessUnitId &&
-          role.permissions.some((permission) => permission.permission_id === permissionId),
+          role.permissions.some((permission) => permission.permission_code === permissionCode),
       );
     }
-    // if we don't have any roles, we can't have any permissions
+    // Preserve the existing empty-role behavior; changing it is outside PO-5761.
     return true;
   }
 }

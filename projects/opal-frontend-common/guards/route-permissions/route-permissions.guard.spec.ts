@@ -21,13 +21,13 @@ import { OPAL_USER_STATE_MOCK } from '@hmcts/opal-frontend-common/services/opal-
 
 async function runRoutePermissionGuard(
   guard: typeof routePermissionsGuard,
-  guardParameters: number | null,
+  guardParameters: string | null,
   urlPath: string,
 ) {
   const dummyRoute = new ActivatedRouteSnapshot();
   dummyRoute.url = [new UrlSegment(urlPath, {})];
 
-  dummyRoute.data = { routePermissionId: [guardParameters] };
+  dummyRoute.data = { routePermissionCodes: [guardParameters] };
 
   const dummyState: RouterStateSnapshot = {
     url: urlPath,
@@ -96,21 +96,48 @@ describe('routePermissionsGuard', () => {
     });
   });
 
-  it('should return true if user has permission id', async () => {
+  it('should return true if user has permission code', async () => {
     getUniquePermissionsMock.mockReturnValue([ROUTE_PERMISSIONS_MOCK['test-route']]);
 
     const guard = await runRoutePermissionGuard(routePermissionsGuard, ROUTE_PERMISSIONS_MOCK['test-route'], urlPath);
     expect(guard).toBeTruthy();
   });
 
+  it.each([
+    { required: 'ACCOUNT_ENQUIRY_NOTES', granted: 'ACCOUNT_ENQUIRY', allowed: false },
+    { required: 'ACCOUNT_ENQUIRY_NOTES', granted: 'NOTES', allowed: false },
+    { required: 'ACCOUNT_ENQUIRY_NOTES', granted: 'ACCOUNT_ENQUIRY_NOTES', allowed: true },
+    { required: ['ACCOUNT_ENQUIRY_NOTES'], granted: 'ACCOUNT_ENQUIRY', allowed: false },
+    { required: ['ACCOUNT_ENQUIRY_NOTES'], granted: 'ACCOUNT_ENQUIRY_NOTES', allowed: true },
+    { required: ['ACCOUNT_ENQUIRY_NOTES', 'ACCOUNT_ENQUIRY'], granted: 'ACCOUNT_ENQUIRY', allowed: true },
+    { required: 'ACCOUNT_ENQUIRY_NOTES', granted: '', allowed: false },
+    { required: 77, granted: 'ACCOUNT_ENQUIRY', allowed: false },
+    { required: [77], granted: 'ACCOUNT_ENQUIRY', allowed: false },
+  ])(
+    'should allow $allowed for requirement $required and granted code "$granted"',
+    async ({ required, granted, allowed }) => {
+      getUniquePermissionsMock.mockReturnValue([granted]);
+      const denied = new UrlTree();
+      createUrlTreeMock.mockReturnValue(denied);
+      const route = new ActivatedRouteSnapshot();
+      route.data = { routePermissionCodes: required };
+
+      const result = TestBed.runInInjectionContext(() => routePermissionsGuard(route, {} as RouterStateSnapshot));
+      const authenticated = result instanceof Observable ? await handleObservableResult(result) : result;
+
+      expect(authenticated).toBe(allowed ? true : denied);
+      expect(createUrlTreeMock).toHaveBeenCalledTimes(allowed ? 0 : 1);
+    },
+  );
+
   it('should re-route if no access', async () => {
-    getUniquePermissionsMock.mockReturnValue([999]);
+    getUniquePermissionsMock.mockReturnValue(['OTHER_PERMISSION']);
     await runRoutePermissionGuard(routePermissionsGuard, ROUTE_PERMISSIONS_MOCK['test-route'], urlPath);
     expect(createUrlTreeMock).toHaveBeenCalledTimes(1);
     expect(createUrlTreeMock).toHaveBeenCalledWith([`/${PAGES_ROUTING_PATHS.children.accessDenied}`]);
   });
 
-  it('should re-route no unique permission ids ', async () => {
+  it('should re-route no unique permission codes ', async () => {
     getUniquePermissionsMock.mockReturnValue([]);
 
     await runRoutePermissionGuard(routePermissionsGuard, ROUTE_PERMISSIONS_MOCK['test-route'], urlPath);
@@ -118,7 +145,7 @@ describe('routePermissionsGuard', () => {
     expect(createUrlTreeMock).toHaveBeenCalledWith([`/${PAGES_ROUTING_PATHS.children.accessDenied}`]);
   });
 
-  it('should re-route if no route permission ids ', async () => {
+  it('should re-route if no route permission codes ', async () => {
     getUniquePermissionsMock.mockReturnValue([]);
 
     await runRoutePermissionGuard(routePermissionsGuard, null, urlPath);
@@ -126,10 +153,10 @@ describe('routePermissionsGuard', () => {
     expect(createUrlTreeMock).toHaveBeenCalledWith([`/${PAGES_ROUTING_PATHS.children.accessDenied}`]);
   });
 
-  it('should re-route if route permission id does not exist', async () => {
+  it('should re-route if route permission code does not exist', async () => {
     getUniquePermissionsMock.mockReturnValue([]);
 
-    await runRoutePermissionGuard(routePermissionsGuard, 999999999, urlPath);
+    await runRoutePermissionGuard(routePermissionsGuard, 'OTHER_PERMISSION', urlPath);
     expect(createUrlTreeMock).toHaveBeenCalledTimes(1);
     expect(createUrlTreeMock).toHaveBeenCalledWith([`/${PAGES_ROUTING_PATHS.children.accessDenied}`]);
   });
@@ -140,12 +167,43 @@ describe('routePermissionsGuard', () => {
     expect(guard).toBeFalsy();
   });
 
-  it('should allow access when routePermissionId is undefined and fallback to empty array', async () => {
-    getUniquePermissionsMock.mockReturnValue([123]);
+  it.each([
+    { routePermissionId: [77] },
+    { routePermissionId: 77 },
+    { routePermissionId: [] },
+    { routePermissionId: null },
+    { routePermissionId: undefined },
+    { routePermissionId: [77], routePermissionCodes: [] },
+  ])('should deny access for legacy permission metadata %j when the user has no permissions', async (data) => {
+    getUniquePermissionsMock.mockReturnValue([]);
+    const route = new ActivatedRouteSnapshot();
+    route.data = data;
+
+    const result = TestBed.runInInjectionContext(() => routePermissionsGuard(route, {} as RouterStateSnapshot));
+    const authenticated = result instanceof Observable ? await handleObservableResult(result) : result;
+
+    expect(authenticated).toBe(false);
+    expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
+  });
+
+  it('should deny legacy metadata even when the user has a matching new permission code', async () => {
+    getUniquePermissionsMock.mockReturnValue([ROUTE_PERMISSIONS_MOCK['test-route']]);
+    const route = new ActivatedRouteSnapshot();
+    route.data = { routePermissionId: [77], routePermissionCodes: [ROUTE_PERMISSIONS_MOCK['test-route']] };
+
+    const result = TestBed.runInInjectionContext(() => routePermissionsGuard(route, {} as RouterStateSnapshot));
+    const authenticated = result instanceof Observable ? await handleObservableResult(result) : result;
+
+    expect(authenticated).toBe(false);
+    expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
+  });
+
+  it.each([{}, { routePermissionCodes: [] }])('should allow unrestricted permission metadata %j', async (data) => {
+    getUniquePermissionsMock.mockReturnValue(['OTHER_PERMISSION']);
 
     const dummyRoute = new ActivatedRouteSnapshot();
     dummyRoute.url = [new UrlSegment(urlPath, {})];
-    dummyRoute.data = {}; // No routePermissionId defined
+    dummyRoute.data = data;
 
     const dummyState: RouterStateSnapshot = {
       url: urlPath,
@@ -155,5 +213,18 @@ describe('routePermissionsGuard', () => {
     const result = TestBed.runInInjectionContext(() => routePermissionsGuard(dummyRoute, dummyState));
     const authenticated = result instanceof Observable ? await handleObservableResult(result) : result;
     expect(authenticated).toBe(true);
+  });
+
+  it.each([null, undefined])('should deny access safely when the route data is %s', async (data) => {
+    const route = new ActivatedRouteSnapshot();
+    Object.assign(route, { data });
+
+    const result = TestBed.runInInjectionContext(() => routePermissionsGuard(route, {} as RouterStateSnapshot));
+    const authenticated = result instanceof Observable ? await handleObservableResult(result) : result;
+
+    expect(authenticated).toBe(false);
+    expect(getLoggedInUserStateMock).toHaveBeenCalledTimes(1);
+    expect(getUniquePermissionsMock).not.toHaveBeenCalled();
+    expect(createUrlTreeMock).not.toHaveBeenCalled();
   });
 });

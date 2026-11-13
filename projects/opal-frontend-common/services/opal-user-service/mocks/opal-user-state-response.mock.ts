@@ -26,7 +26,7 @@ export const USER_STATE_MOCK: IOpalUserStateResponse = {
           business_unit_id: 17,
           permissions: [
             {
-              permission_id: 88,
+              permission_code: 'CONFISCATION_PERMISSION',
               permission_name: 'Confiscation Permission',
             },
           ],

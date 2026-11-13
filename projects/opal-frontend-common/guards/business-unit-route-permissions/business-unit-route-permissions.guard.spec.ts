@@ -20,10 +20,10 @@ import { OpalUserService } from '@hmcts/opal-frontend-common/services/opal-user-
 })
 class TestRouteComponent {}
 
-function createRoute(routePermissionId?: unknown, accessDeniedPath?: string): ActivatedRouteSnapshot {
+function createRoute(routePermissionCodes?: unknown, accessDeniedPath?: string): ActivatedRouteSnapshot {
   const route = new ActivatedRouteSnapshot();
   route.data = {
-    ...(routePermissionId === undefined ? {} : { routePermissionId }),
+    ...(routePermissionCodes === undefined ? {} : { routePermissionCodes }),
     ...(accessDeniedPath === undefined ? {} : { accessDeniedPath }),
   };
   return route;
@@ -40,7 +40,7 @@ describe('businessUnitRoutePermissionsGuard', () => {
       {
         business_unit_user_id: 'BU-123',
         business_unit_id: 123,
-        permissions: [{ permission_id: 77, permission_name: 'Account Maintenance' }],
+        permissions: [{ permission_code: 'ACCOUNT_MAINTENANCE', permission_name: 'Account Maintenance' }],
       },
     ],
   };
@@ -53,7 +53,7 @@ describe('businessUnitRoutePermissionsGuard', () => {
           path: 'payment-terms/amend',
           component: TestRouteComponent,
           data: {
-            routePermissionId: [77],
+            routePermissionCodes: ['ACCOUNT_MAINTENANCE'],
             accessDeniedPath: 'payment-terms/denied/permission',
           },
         },
@@ -115,8 +115,9 @@ describe('businessUnitRoutePermissionsGuard', () => {
     router = TestBed.inject(Router);
   });
 
-  it('should allow access when the route does not require any permissions', async () => {
+  it.each([{}, { routePermissionCodes: [] }])('should allow unrestricted route data %j', async (data) => {
     const route = createRoute();
+    route.data = data;
 
     const result = await runGuard(route);
 
@@ -125,60 +126,151 @@ describe('businessUnitRoutePermissionsGuard', () => {
     expect(resolveBusinessUnitIdMock).not.toHaveBeenCalled();
   });
 
+  it.each([null, undefined])('should allow an unrestricted route when its data is %s', async (data) => {
+    const route = new ActivatedRouteSnapshot();
+    Object.assign(route, { data });
+
+    const result = await runGuard(route);
+
+    expect(result).toBe(true);
+    expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
+    expect(resolveBusinessUnitIdMock).not.toHaveBeenCalled();
+    expect(hasBusinessUnitPermissionAccessMock).not.toHaveBeenCalled();
+  });
+
+  it.each(
+    [77, [77], null, undefined, false, {}, '', '   ', [null], [undefined], [''], ['   ']].map((requirements) => ({
+      requirements,
+    })),
+  )(
+    'should deny invalid permission requirements $requirements without loading user state',
+    async ({ requirements }) => {
+      getLoggedInUserStateMock.mockReturnValue(
+        of({ business_unit_users: [{ ...userState.business_unit_users[0], permissions: [] }] }),
+      );
+      hasBusinessUnitPermissionAccessMock.mockReturnValue(false);
+      const route = createRoute();
+      route.data = { routePermissionCodes: requirements };
+
+      const result = await runGuard(route);
+
+      expect(result).toBe(false);
+      expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
+      expect(resolveBusinessUnitIdMock).not.toHaveBeenCalled();
+      expect(hasBusinessUnitPermissionAccessMock).not.toHaveBeenCalled();
+    },
+  );
+
+  it.each([
+    { routePermissionId: [77] },
+    { routePermissionId: 77 },
+    { routePermissionId: [] },
+    { routePermissionId: null },
+    { routePermissionId: undefined },
+    { routePermissionId: [77], routePermissionCodes: [] },
+  ])('should deny access for legacy permission metadata %j when the user has no permissions', async (data) => {
+    getLoggedInUserStateMock.mockReturnValue(
+      of({
+        business_unit_users: [{ ...userState.business_unit_users[0], permissions: [] }],
+      }),
+    );
+    hasBusinessUnitPermissionAccessMock.mockReturnValue(false);
+    const route = createRoute();
+    route.data = data;
+
+    const result = await runGuard(route);
+
+    expect(result).toBe(false);
+    expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
+    expect(resolveBusinessUnitIdMock).not.toHaveBeenCalled();
+  });
+
+  it('should deny legacy metadata even when the user has a matching new permission code', async () => {
+    const route = createRoute('ACCOUNT_MAINTENANCE');
+    route.data['routePermissionId'] = [77];
+
+    const result = await runGuard(route);
+
+    expect(result).toBe(false);
+    expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
+    expect(resolveBusinessUnitIdMock).not.toHaveBeenCalled();
+  });
+
   it('should allow access when the user has the required permission in the resolved business unit', async () => {
-    const route = createRoute([77]);
+    const route = createRoute(['ACCOUNT_MAINTENANCE']);
 
     const result = await runGuard(route);
 
     expect(result).toBe(true);
     expect(getLoggedInUserStateMock).toHaveBeenCalledTimes(1);
     expect(resolveBusinessUnitIdMock).toHaveBeenCalledWith(route);
-    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledWith(77, 123, userState.business_unit_users);
+    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledWith(
+      'ACCOUNT_MAINTENANCE',
+      123,
+      userState.business_unit_users,
+    );
   });
 
-  it('should allow access when the route declares a single permission id', async () => {
-    const route = createRoute(77);
+  it('should allow access when the route declares a single permission code', async () => {
+    const route = createRoute('ACCOUNT_MAINTENANCE');
 
     const result = await runGuard(route);
 
     expect(result).toBe(true);
-    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledWith(77, 123, userState.business_unit_users);
+    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledWith(
+      'ACCOUNT_MAINTENANCE',
+      123,
+      userState.business_unit_users,
+    );
   });
 
-  it('should ignore invalid permission ids declared alongside valid route permissions', async () => {
-    const route = createRoute([77, 'invalid-permission-id', null]);
+  it('should deny mixed valid and invalid permission requirements even when the user holds the valid code', async () => {
+    const route = createRoute(['ACCOUNT_MAINTENANCE', 77, null]);
 
     const result = await runGuard(route);
 
-    expect(result).toBe(true);
-    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledTimes(1);
-    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledWith(77, 123, userState.business_unit_users);
+    expect(result).toBe(false);
+    expect(getLoggedInUserStateMock).not.toHaveBeenCalled();
+    expect(resolveBusinessUnitIdMock).not.toHaveBeenCalled();
+    expect(hasBusinessUnitPermissionAccessMock).not.toHaveBeenCalled();
   });
 
   it('should allow access when any declared route permission exists in the resolved business unit', async () => {
     hasBusinessUnitPermissionAccessMock.mockReturnValueOnce(false).mockReturnValueOnce(true);
-    const route = createRoute([55, 77]);
+    const route = createRoute(['ACCOUNT_ENQUIRY', 'ACCOUNT_MAINTENANCE']);
 
     const result = await runGuard(route);
 
     expect(result).toBe(true);
-    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledWith(55, 123, userState.business_unit_users);
-    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledWith(77, 123, userState.business_unit_users);
+    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledWith(
+      'ACCOUNT_ENQUIRY',
+      123,
+      userState.business_unit_users,
+    );
+    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledWith(
+      'ACCOUNT_MAINTENANCE',
+      123,
+      userState.business_unit_users,
+    );
   });
 
   it('should allow access when the business unit resolver returns an observable', async () => {
     resolveBusinessUnitIdMock.mockReturnValue(of(123));
-    const route = createRoute([77]);
+    const route = createRoute(['ACCOUNT_MAINTENANCE']);
 
     const result = await runGuard(route);
 
     expect(result).toBe(true);
-    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledWith(77, 123, userState.business_unit_users);
+    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledWith(
+      'ACCOUNT_MAINTENANCE',
+      123,
+      userState.business_unit_users,
+    );
   });
 
   it('should redirect to the configured access denied path when the user lacks the required permission', async () => {
     hasBusinessUnitPermissionAccessMock.mockReturnValue(false);
-    const route = createRoute([77], '/custom-denied');
+    const route = createRoute(['ACCOUNT_MAINTENANCE'], '/custom-denied');
 
     const result = await runGuard(route);
 
@@ -202,7 +294,7 @@ describe('businessUnitRoutePermissionsGuard', () => {
     hasBusinessUnitPermissionAccessMock.mockReturnValue(false);
     const route = router.routerState.snapshot.root;
     route.data = {
-      routePermissionId: [77],
+      routePermissionCodes: ['ACCOUNT_MAINTENANCE'],
       accessDeniedPath: 'custom-denied',
     };
 
@@ -214,7 +306,7 @@ describe('businessUnitRoutePermissionsGuard', () => {
 
   it('should redirect when the resolver cannot determine the business unit', async () => {
     resolveBusinessUnitIdMock.mockResolvedValueOnce(null);
-    const route = createRoute([77], '/custom-denied');
+    const route = createRoute(['ACCOUNT_MAINTENANCE'], '/custom-denied');
 
     const result = await runGuard(route);
 
@@ -225,7 +317,7 @@ describe('businessUnitRoutePermissionsGuard', () => {
 
   it('should redirect when the resolver returns an invalid business unit id', async () => {
     resolveBusinessUnitIdMock.mockResolvedValueOnce(0);
-    const route = createRoute([77], '/custom-denied');
+    const route = createRoute(['ACCOUNT_MAINTENANCE'], '/custom-denied');
 
     const result = await runGuard(route);
 
@@ -236,7 +328,7 @@ describe('businessUnitRoutePermissionsGuard', () => {
 
   it('should redirect when the resolver returns a non-finite business unit id', async () => {
     resolveBusinessUnitIdMock.mockResolvedValueOnce(Infinity);
-    const route = createRoute([77], '/custom-denied');
+    const route = createRoute(['ACCOUNT_MAINTENANCE'], '/custom-denied');
 
     const result = await runGuard(route);
 
@@ -247,7 +339,7 @@ describe('businessUnitRoutePermissionsGuard', () => {
 
   it('should redirect when the user has no business unit roles', async () => {
     getLoggedInUserStateMock.mockReturnValue(of({ business_unit_users: [] }));
-    const route = createRoute([77]);
+    const route = createRoute(['ACCOUNT_MAINTENANCE']);
 
     const result = await runGuard(route);
 
@@ -259,7 +351,7 @@ describe('businessUnitRoutePermissionsGuard', () => {
 
   it('should redirect when the user state has no business unit users', async () => {
     getLoggedInUserStateMock.mockReturnValue(of({}));
-    const route = createRoute([77]);
+    const route = createRoute(['ACCOUNT_MAINTENANCE']);
 
     const result = await runGuard(route);
 
@@ -273,7 +365,7 @@ describe('businessUnitRoutePermissionsGuard', () => {
     getLoggedInUserStateMock.mockImplementationOnce(() => {
       throw new Error('User state failed');
     });
-    const route = createRoute([77], '/custom-denied');
+    const route = createRoute(['ACCOUNT_MAINTENANCE'], '/custom-denied');
 
     const result = await runGuard(route);
 
@@ -285,7 +377,7 @@ describe('businessUnitRoutePermissionsGuard', () => {
 
   it('should redirect when the business unit resolver fails', async () => {
     resolveBusinessUnitIdMock.mockRejectedValueOnce(new Error('Resolver failed'));
-    const route = createRoute([77], '/custom-denied');
+    const route = createRoute(['ACCOUNT_MAINTENANCE'], '/custom-denied');
 
     const result = await runGuard(route);
 

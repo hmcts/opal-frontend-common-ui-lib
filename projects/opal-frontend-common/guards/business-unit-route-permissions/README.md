@@ -54,7 +54,7 @@ export const appConfig: ApplicationConfig = {
 
 ## Route Data
 
-Routes must declare the permission ids required for that route using `routePermissionId`.
+Routes must declare the permission codes required for that route using `routePermissionCodes`.
 
 Use `accessDeniedPath` when the route should redirect to a feature-specific denied page. Absolute paths are resolved from the app root. Relative paths are resolved from the current route's parent when one exists, or from the current route when there is no parent.
 
@@ -73,14 +73,13 @@ export const routes: Routes = [
         canActivate: [authGuard, businessUnitRoutePermissionsGuard, accountStateGuard],
         loadComponent: () => import('./payment-terms-amend.component').then((c) => c.PaymentTermsAmendComponent),
         data: {
-          routePermissionId: [77],
+          routePermissionCodes: ['ACCOUNT_MAINTENANCE'],
           accessDeniedPath: 'payment-terms/denied/permission',
         },
       },
       {
         path: 'payment-terms/denied/:type',
-        loadComponent: () =>
-          import('./payment-terms-denied.component').then((c) => c.PaymentTermsDeniedComponent),
+        loadComponent: () => import('./payment-terms-denied.component').then((c) => c.PaymentTermsDeniedComponent),
       },
     ],
   },
@@ -89,7 +88,23 @@ export const routes: Routes = [
 
 In an account flow, use a relative `accessDeniedPath` so the redirect keeps the current account route, including the account id. Use an absolute `accessDeniedPath`, starting with `/`, only when the denied page lives at the app root.
 
-`routePermissionId` can be either a number or an array of numbers. Access is allowed when the user has at least one declared permission in the resolved business unit.
+`routePermissionCodes` can be either a string or an array of strings. Access is allowed when the user has at least one declared permission in the resolved business unit.
+
+The global `routePermissionsGuard` also accepts a string or an array of strings.
+Both guards compare complete permission codes: `ACCOUNT_ENQUIRY` does not satisfy
+a requirement for `ACCOUNT_ENQUIRY_NOTES`.
+
+Both permission guards deny navigation when route data still declares the legacy
+`routePermissionId` key, including when it is empty or accompanied by
+`routePermissionCodes`. Remove the legacy key and migrate its requirements to
+permission codes. Routes with no permission metadata or an empty
+`routePermissionCodes` array remain unrestricted.
+
+The business-unit guard rejects declared requirements containing numeric IDs,
+non-string values, or blank codes, including mixed valid/invalid arrays. An explicitly
+declared `null` or `undefined` value is also invalid. Invalid requirements deny
+navigation before loading user state or resolving the business unit; they never
+become an unrestricted route. Permission codes are compared exactly, without trimming.
 
 If no `accessDeniedPath` is supplied, the guard redirects to the common `/access-denied` page.
 
