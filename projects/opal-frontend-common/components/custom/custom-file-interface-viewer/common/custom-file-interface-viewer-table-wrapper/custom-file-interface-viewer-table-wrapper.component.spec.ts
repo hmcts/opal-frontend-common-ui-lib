@@ -82,13 +82,13 @@ describe.each([
     direction: 'inbound',
     isInbound: true,
     columns: ['Date and time', 'Title', 'Type', 'Business unit', 'Source', 'Status', 'Actions'],
-    values: ['20 Oct 2026 at 13:05', 'mock.dat', 'RAW', 'Test business unit', 'Allpay', 'Ready', ''],
+    values: ['20 Oct 2026 at 13:05', 'mock.dat', 'RAW', 'Test business unit', 'Allpay', 'Ready', '-'],
   },
   {
     direction: 'outbound',
     isInbound: false,
     columns: ['Date and time', 'Title', 'Business unit', 'Target', 'Status', 'Actions'],
-    values: ['20 Oct 2026 at 13:05', 'mock.dat', 'Test business unit', 'ANT CSV', 'Ready', ''],
+    values: ['20 Oct 2026 at 13:05', 'mock.dat', 'Test business unit', 'ANT CSV', 'Ready', '-'],
   },
 ])(
   'CustomFileInterfaceViewerTableWrapperComponent ($direction)',
@@ -135,13 +135,38 @@ describe.each([
       expect(cell.querySelector('em')).toBeNull();
     });
 
-    it.each([null, []])('leaves the business-unit cell empty for %j', (businessUnits) => {
-      fixture.componentRef.setInput('tableData', [{ ...row, 'Business unit': businessUnits }]);
+    it.each([
+      { businessUnits: null },
+      { businessUnits: undefined },
+      { businessUnits: [] },
+      { businessUnits: [null, undefined, '', ' \t '] },
+    ])('shows a dash without a list for missing business-unit names ($businessUnits)', ({ businessUnits }) => {
+      const file = Object.freeze({ ...row, 'Business unit': businessUnits });
+      fixture.componentRef.setInput('tableData', [file]);
       fixture.detectChanges();
 
       const cell = fixture.nativeElement.querySelector('td#business-unit-0') as HTMLTableCellElement;
-      expect(cell.textContent?.trim()).toBe('');
+      expect(cell.textContent?.trim()).toBe('-');
       expect(cell.querySelector('ul')).toBeNull();
+      expect(fixture.componentInstance.paginatedTableDataComputed()[0]).toBe(file);
+    });
+
+    it('keeps supplied business-unit order and renders a dash for individual blank names', () => {
+      const businessUnits = Object.freeze(['Alpha', '', ' \t ', 'Beta']);
+      const file = Object.freeze({ ...row, 'Business unit': businessUnits });
+      fixture.componentRef.setInput('tableData', [file]);
+
+      fixture.detectChanges();
+
+      const cell = fixture.nativeElement.querySelector('td#business-unit-0') as HTMLTableCellElement;
+      expect(Array.from(cell.querySelectorAll('ul.govuk-list li'), (item) => item.textContent?.trim())).toEqual([
+        'Alpha',
+        '-',
+        '-',
+        'Beta',
+      ]);
+      expect(fixture.componentInstance.paginatedTableDataComputed()[0]).toBe(file);
+      expect(businessUnits).toEqual(['Alpha', '', ' \t ', 'Beta']);
     });
 
     it('sorts by numeric timestamps while retaining the supplied display text', () => {
@@ -154,6 +179,43 @@ describe.each([
         (cell as HTMLElement).textContent?.trim(),
       );
       expect(dates).toEqual(['A later display label', 'Z earlier display label']);
+    });
+
+    it.each([null, undefined, '', ' \t\n '])('shows a dash for every empty display cell (%j)', (value) => {
+      const file = Object.freeze({
+        ...row,
+        dateTimeDisplay: value,
+        Title: value,
+        Type: value,
+        'Business unit': value,
+        Source: value,
+        Target: value,
+        Status: value,
+      });
+      const original = { ...file };
+      fixture.componentRef.setInput('tableData', [file]);
+
+      fixture.detectChanges();
+
+      const cells = Array.from(fixture.nativeElement.querySelectorAll('tbody td'), (cell) =>
+        (cell as HTMLElement).textContent?.trim(),
+      );
+      expect(cells).toEqual(columns.map(() => '-'));
+      expect(file).toEqual(original);
+      expect(fixture.componentInstance.paginatedTableDataComputed()[0]).toBe(file);
+    });
+
+    it.each([0, false])('preserves the non-empty sortable value %j', (value) => {
+      fixture.componentRef.setInput('tableData', [{ ...row, Type: value, Source: value, Target: value }]);
+
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector(isInbound ? 'td#source-0' : 'td#target-0').textContent.trim()).toBe(
+        String(value),
+      );
+      if (isInbound) {
+        expect(fixture.nativeElement.querySelector('td#type-0').textContent.trim()).toBe(String(value));
+      }
     });
 
     it('renders a zero-result count without pagination', () => {
@@ -367,7 +429,7 @@ describe.each([
       expect(fixture.nativeElement.querySelector('output[aria-live="polite"]').textContent.trim()).toBe(
         'Sorted by Actions (ascending)',
       );
-      expect(fixture.nativeElement.querySelector('td#actions-0').textContent.trim()).toBe('');
+      expect(fixture.nativeElement.querySelector('td#actions-0').textContent.trim()).toBe('-');
       expect(fixture.nativeElement.querySelector('td#actions-0 a')).toBeNull();
 
       button.click();
@@ -452,6 +514,7 @@ describe('CustomFileInterfaceViewerTableWrapperComponent action templates', () =
     expect(link.getAttribute('href')).toBe('/example-files/1001');
     expect(fixture.nativeElement.querySelector('td#source-0').textContent.trim()).toBe('Allpay');
     expect(fixture.nativeElement.querySelector('td#actions-0 span').textContent).toBe('RAW from Allpay');
+    expect(fixture.nativeElement.querySelector('td#actions-0').textContent).not.toContain('-');
     const click = new MouseEvent('click', { bubbles: true, cancelable: true });
 
     link.dispatchEvent(click);

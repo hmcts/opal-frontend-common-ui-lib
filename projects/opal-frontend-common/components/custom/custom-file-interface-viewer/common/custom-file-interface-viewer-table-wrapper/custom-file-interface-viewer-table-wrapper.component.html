@@ -79,29 +79,37 @@
     <ng-container row>
       @for (row of paginatedTableDataComputed(); track row; let rowIndex = $index) {
         <tr opal-lib-moj-sortable-table-row #paginationFocusTarget>
-          <td opal-lib-moj-sortable-table-row-data [id]="'date-and-time-' + rowIndex">{{ row.dateTimeDisplay }}</td>
-          <td opal-lib-moj-sortable-table-row-data [id]="'title-' + rowIndex">{{ row['Title'] }}</td>
+          <td opal-lib-moj-sortable-table-row-data [id]="'date-and-time-' + rowIndex">
+            {{ getDisplayValue(row.dateTimeDisplay) }}
+          </td>
+          <td opal-lib-moj-sortable-table-row-data [id]="'title-' + rowIndex">{{ getDisplayValue(row['Title']) }}</td>
           @if (isInbound) {
-            <td opal-lib-moj-sortable-table-row-data [id]="'type-' + rowIndex">{{ row['Type'] }}</td>
+            <td opal-lib-moj-sortable-table-row-data [id]="'type-' + rowIndex">{{ getDisplayValue(row['Type']) }}</td>
           }
           <td opal-lib-moj-sortable-table-row-data [id]="'business-unit-' + rowIndex">
-            @if (row['Business unit']?.length) {
+            @if (hasDisplayValue(row['Business unit'])) {
               <ul class="govuk-list govuk-!-margin-bottom-0">
                 @for (businessUnit of row['Business unit']; track $index) {
-                  <li>{{ businessUnit }}</li>
+                  <li>{{ getDisplayValue(businessUnit) }}</li>
                 }
               </ul>
+            } @else {
+              -
             }
           </td>
           <td opal-lib-moj-sortable-table-row-data [id]="(isInbound ? 'source-' : 'target-') + rowIndex">
-            {{ row[isInbound ? 'Source' : 'Target'] }}
+            {{ getDisplayValue(row[isInbound ? 'Source' : 'Target']) }}
           </td>
-          <td opal-lib-moj-sortable-table-row-data [id]="'status-' + rowIndex">{{ row['Status'] }}</td>
+          <td opal-lib-moj-sortable-table-row-data [id]="'status-' + rowIndex">{{ getDisplayValue(row['Status']) }}</td>
           <td opal-lib-moj-sortable-table-row-data [id]="'actions-' + rowIndex">
-            <ng-container
-              [ngTemplateOutlet]="actionTemplate"
-              [ngTemplateOutletContext]="{ $implicit: row }"
-            ></ng-container>
+            @if (actionTemplate) {
+              <ng-container
+                [ngTemplateOutlet]="actionTemplate"
+                [ngTemplateOutletContext]="{ $implicit: row }"
+              ></ng-container>
+            } @else {
+              -
+            }
           </td>
         </tr>
       }

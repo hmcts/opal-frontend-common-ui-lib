@@ -57,4 +57,24 @@ export class CustomFileInterfaceViewerTableWrapperComponent<
     };
   }
   public override itemsPerPageSignal = signal(CUSTOM_FILE_INTERFACE_VIEWER_ITEMS_PER_PAGE);
+
+  /**
+   * Checks whether a prepared value or list contains visible content.
+   * @param value - Consumer-owned value used only for display.
+   * @returns Whether the value should render instead of the empty-cell placeholder.
+   */
+  public hasDisplayValue(value: unknown): boolean {
+    return Array.isArray(value)
+      ? value.some((item) => this.hasDisplayValue(item))
+      : value !== null && value !== undefined && (typeof value !== 'string' || value.trim() !== '');
+  }
+
+  /**
+   * Supplies the shared placeholder without changing sortable values or action metadata.
+   * @param value - Prepared cell value supplied by the consumer.
+   * @returns A dash for missing or blank values, otherwise the original display text.
+   */
+  public getDisplayValue(value: unknown): string {
+    return this.hasDisplayValue(value) ? String(value) : '-';
+  }
 }
