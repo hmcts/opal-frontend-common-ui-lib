@@ -2,7 +2,8 @@
 
 `AbstractMultiFileUploadComponent` extends `AbstractFormBaseComponent` to connect parent-owned file rows to a child form.
 The parent owns file validation, requests, progress, responses, sequencing and cancellation. The child supplies its
-`FormGroup`, required-field rule, error messages and MoJ template.
+`FormGroup`, required-field rule, error messages and MoJ template. The input rejects an entire picker/drop batch above
+its configured `maxFiles` limit (ten by default) before emitting files to the parent.
 
 ## Child form
 
@@ -28,11 +29,15 @@ import { MojMultiFileUploadFilesComponent } from '@hmcts/opal-frontend-common/co
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DocumentsUploadFormComponent extends AbstractMultiFileUploadComponent {
+  public readonly maxFiles = 5;
+  public readonly acceptedTypes: readonly string[] = ['.csv'];
+
   protected override fieldErrors = {
     files: {
-      required: { message: 'Select a document', priority: 1 },
-      fileUpload: { message: 'Check documents with errors before continuing', priority: 2 },
-      uploadPending: { message: 'Wait for all documents to finish uploading', priority: 3 },
+      maxFiles: { message: 'You can only select up to 5 files at the same time.', priority: 1 },
+      required: { message: 'Select a document', priority: 2 },
+      fileUpload: { message: 'Check documents with errors before continuing', priority: 3 },
+      uploadPending: { message: 'Wait for all documents to finish uploading', priority: 4 },
     },
   };
 
@@ -45,6 +50,7 @@ export class DocumentsUploadFormComponent extends AbstractMultiFileUploadCompone
 
   protected override handleErrorMessages(): void {
     super.handleErrorMessages();
+    if (this.form.controls.files.hasError('maxFiles')) return;
     const errors = this.fileErrors().join(' ');
     if (errors) {
       this.formErrorSummaryMessage = this.formErrorSummaryMessage.map((error) =>
@@ -74,7 +80,8 @@ the form control, error map and native input ID.
       inputName="files"
       labelText="Upload documents"
       hintText="Choose up to 5 CSV documents, each no larger than 5 MB"
-      [acceptedTypes]="['.csv']"
+      [maxFiles]="maxFiles"
+      [acceptedTypes]="acceptedTypes"
       [errors]="fileInputErrors"
       (filesSelected)="onFilesSelected($event)"
     />
@@ -87,6 +94,18 @@ the form control, error map and native input ID.
 Continue stays enabled. An invalid submission runs the inherited validation, displays and focuses the error summary,
 and does not emit `formSubmit`. A valid submission emits `formSubmit` to the parent.
 
+`maxFiles` limits each picker/drop batch, not the cumulative row list. A selection of six files with the example's
+limit of five retains the previous control value, sets `{ maxFiles: { maxFiles: 5, actualFiles: 6 } }`, displays the
+input's count error and emits no `filesSelected`. No rows or uploads are created for that batch. A valid new selection
+or an empty reset clears the error. Omitted or invalid limits fall back to ten. Programmatic cumulative values are
+not limited. The default `MOJ_MULTI_FILE_UPLOAD_DEFAULT_MAX_FILES` is exported from the upload `/constants` entrypoint.
+
+For Variant Banking's six-file selection limit, use a class property
+`public readonly maxFiles = 6;`, keep `[maxFiles]="maxFiles"`, and change
+the `maxFiles` field-error message and hint to six. DAT, size and filename checks remain in the parent. The
+[input guide](../../moj/moj-multi-file-upload/moj-multi-file-upload-input/readme.md#maximum-files-per-selection) includes
+that composition.
+
 The consuming child's `handleErrorMessages` override customises its upload summary entry; the shared upload base
 retains standard form-summary handling. This frontend override joins the filename-specific `fileErrors()` with spaces
 and updates only the existing `files` entry, preserving other errors and the inherited disabled-control handling.
@@ -94,7 +113,9 @@ Its text matches the messages passed inline through `fileInputErrors`. For examp
 `accounts.csv: The file must be 5 MB or smaller. notes.txt: Choose a CSV file.` and targets `files`, the native upload
 control's ID. The standard `GovukErrorSummaryComponent` is used unchanged. If you rename the control, align
 `uploadControlName`, the form control name, `inputId` and the consuming child's summary `fieldId` mapping. Required-field
-and pending-upload errors still use the configured field-error messages.
+and pending-upload errors still use the configured field-error messages. The `maxFiles` mapping has first priority,
+and the early return preserves its batch-level message instead of replacing it with previous row errors. If you set
+`maxFilesErrorMessage` on the input, use the same text in the field-error mapping.
 
 The input's internal file value accessor preserves the public `[control]` integration. Disable that control to disable
 selection. The wrapper remains plain projection;
@@ -145,9 +166,9 @@ Those limits, messages and sequencing are consumer policy, not defaults of this 
 
 Save the child above as `documents-upload-form.component.ts` and its template as
 `documents-upload-form.component.html`. This separate parent starts valid files in parallel; the actual POC uses a
-sequential queue. Both choices belong to the consuming application. This example permits up to five CSV files of
-5 MB each and applies a filename rule. Rejected rows do not use a file-count slot; accepted rows, including failed
-uploads, retain their slot until the journey is reset.
+sequential queue. Both choices belong to the consuming application. The child permits up to five files per picker/drop
+selection; the parent checks CSV files of 5 MB each and applies a filename rule. Later valid batches can accumulate.
+There is no cumulative file-count limit in this example.
 
 Save this request adapter as `upload-document.ts`:
 
@@ -219,12 +240,11 @@ export class DocumentsUploadComponent {
     this.destroyRef.onDestroy(() => this.cancelUploads());
   }
 
-  private validateFile(file: File, acceptedCount: number): readonly string[] {
+  private validateFile(file: File): readonly string[] {
     const errors: string[] = [];
     if (!this.fileService.hasFileExtension(file.name, '.csv')) errors.push('Choose a CSV file.');
     if (!this.fileService.isFileWithinSizeLimit(file, 5 * 1024 * 1024))
       errors.push('The file must be 5 MB or smaller.');
-    if (acceptedCount >= 5) errors.push('Choose no more than 5 files.');
     if (!/^[a-z0-9][a-z0-9._-]*$/i.test(file.name)) {
       errors.push('Use letters, numbers, dots, hyphens and underscores in filenames.');
     }
@@ -275,10 +295,13 @@ export class DocumentsUploadComponent {
   }
 
   public selectFiles(files: readonly File[]): void {
-    let acceptedCount = this.fileUploads().filter((item) => item.status !== 'rejected').length;
+    // The input normally enforces this; also guard direct calls before changing rows or starting any upload.
+    if (files.length > 5) {
+      this.announcement.set('You can only select up to 5 files at the same time.');
+      return;
+    }
     const added = files.map<IDocumentUpload>((file) => {
-      const errors = this.validateFile(file, acceptedCount);
-      if (!errors.length) acceptedCount++;
+      const errors = this.validateFile(file);
       return {
         id: `document-${this.nextId++}`,
         name: file.name,
@@ -314,6 +337,10 @@ error presenter while retaining authentication and other required interceptors. 
 field name and response type must match your backend contract. Server-side validation is still required; the browser's
 extension and filename checks only improve selection feedback.
 
+Keep the parent's defensive batch guard aligned with the child's `maxFiles`. The input supplies the inline
+count error and prevents the normal oversized selection event from reaching this method; the guard also rejects an
+oversized direct method call as a whole. Neither path starts uploads for a prefix of the rejected batch.
+
 The parent owns every subscription. Clearing and destruction unsubscribe from outstanding HTTP requests;
 a failed upload leaves other files running. No retries are automatic. A stream that completes without a final
 response becomes a failed row with the fallback message.
@@ -330,7 +357,7 @@ backend response.
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | `files` input          | Required readonly `IAbstractMultiFileUploadItem[]` from the parent; updates `fileUploads()` and cumulative file-control values/validity. |
 | `announcement` input   | Parent-supplied text for the child template's live region; defaults to an empty string.                                                  |
-| `filesSelected` output | Latest raw user-selected `readonly File[]`; the parent validates and updates rows.                                                       |
+| `filesSelected` output | Raw user-selected `readonly File[]` within the input's batch limit; the parent validates and updates rows.                               |
 | `filesCleared` output  | Request to clear the journey; emitted by `handleClearForm()`.                                                                            |
 | `fileErrors()`         | Filename-prefixed row errors available for inline messages and consumer-owned summary formatting.                                        |
 | `fileInputErrors`      | Row messages from `fileErrors()`, falling back to the child form's current control error.                                                |

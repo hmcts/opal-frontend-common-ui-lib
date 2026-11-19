@@ -1,12 +1,17 @@
 <div class="moj-multi-file-upload__upload">
-  <div class="govuk-form-group" [class.govuk-form-group--error]="errors.length > 0">
+  <div class="govuk-form-group" [class.govuk-form-group--error]="hasErrors">
     <label class="govuk-label {{ labelClasses }}" [for]="inputId">{{ labelText }}</label>
     @if (hintText) {
       <div class="govuk-hint" [id]="inputId + '-hint'">{{ hintText }}</div>
     }
-    @if (errors.length > 0) {
+    @if (hasErrors) {
       <div class="govuk-error-message" [id]="inputId + '-error'">
         <span class="govuk-visually-hidden">Error:</span>
+        @if (fileCountError; as message) {
+          @if (!errors.includes(message)) {
+            <p class="govuk-!-margin-top-0 govuk-!-margin-bottom-1" role="alert">{{ message }}</p>
+          }
+        }
         @for (error of errors; track $index) {
           <p class="govuk-!-margin-top-0 govuk-!-margin-bottom-1">{{ error }}</p>
         }
@@ -28,10 +33,11 @@
         [id]="inputId"
         [name]="inputName"
         [formControl]="getControl"
+        [maxFiles]="maxFiles"
         [multiple]="multiple"
         [accept]="acceptedTypes.join(',')"
         [attr.aria-describedby]="describedBy"
-        [attr.aria-invalid]="errors.length > 0 ? 'true' : null"
+        [attr.aria-invalid]="hasErrors ? 'true' : null"
         (filesSelected)="onFilesSelected($event)"
         (focus)="focused = true"
         (blur)="focused = false"
