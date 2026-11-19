@@ -21,7 +21,7 @@ count error.
 
 ## Maximum files per selection
 
-The input permits ten files per picker/drop event by default. Configure a stable property on the consuming child form;
+The input permits ten files per picker/drop event by default. Configure a stable property on the consuming child form.
 for example, Variant Banking permits six:
 
 ```ts
