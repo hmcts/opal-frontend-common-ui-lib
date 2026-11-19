@@ -1,5 +1,16 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MOJ_MULTI_FILE_UPLOAD_DEFAULT_MAX_FILES } from '@hmcts/opal-frontend-common/components/moj/moj-multi-file-upload/constants';
 import { MojMultiFileUploadInputControlDirective } from './directives/moj-multi-file-upload-input-control.directive';
 
 @Component({
@@ -8,7 +19,7 @@ import { MojMultiFileUploadInputControlDirective } from './directives/moj-multi-
   templateUrl: './moj-multi-file-upload-input.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MojMultiFileUploadInputComponent {
+export class MojMultiFileUploadInputComponent implements OnChanges {
   private _control!: FormControl<readonly File[] | null>;
 
   @ViewChild('fileInput') private readonly fileInput?: ElementRef<HTMLInputElement>;
@@ -26,8 +37,14 @@ export class MojMultiFileUploadInputComponent {
   @Input() uploadButtonText = 'Upload file';
   @Input() multiple = true;
   @Input() acceptedTypes: readonly string[] = [];
+  @Input() maxFiles = MOJ_MULTI_FILE_UPLOAD_DEFAULT_MAX_FILES;
+  @Input() maxFilesErrorMessage: string | null = null;
   @Input() errors: readonly string[] = [];
+  /** Starts a fresh selection state when the consumer binds a different form control. */
   @Input({ required: true }) set control(abstractControl: AbstractControl | null) {
+    if (this._control !== abstractControl) {
+      this.fileControl?.writeValue();
+    }
     this._control = abstractControl as FormControl<readonly File[] | null>;
   }
   @Output() readonly filesSelected = new EventEmitter<readonly File[]>();
@@ -45,12 +62,29 @@ export class MojMultiFileUploadInputComponent {
     return this.getControl.disabled;
   }
 
+  /** Includes selection-limit failures alongside consumer-supplied errors in the control's error presentation. */
+  public get hasErrors(): boolean {
+    return this.errors.length > 0 || this.getControl.hasError('maxFiles');
+  }
+
+  /** Uses consumer wording or a count-specific message for a rejected whole batch. */
+  public get fileCountError(): string | null {
+    if (!this.getControl.hasError('maxFiles')) {
+      return null;
+    }
+    const maximumFiles = this.fileControl?.maxFiles ?? MOJ_MULTI_FILE_UPLOAD_DEFAULT_MAX_FILES;
+    return (
+      this.maxFilesErrorMessage?.trim() ||
+      `You can only select up to ${maximumFiles} ${maximumFiles === 1 ? 'file' : 'files'} at the same time.`
+    );
+  }
+
   /** Associates the native input with its visible hint and supplied errors. */
   public get describedBy(): string {
     return [
       this.hintText ? `${this.inputId}-hint` : '',
       `${this.inputId}-dropzone-hint`,
-      this.errors.length ? `${this.inputId}-error` : '',
+      this.hasErrors ? `${this.inputId}-error` : '',
     ]
       .filter(Boolean)
       .join(' ');
@@ -73,19 +107,28 @@ export class MojMultiFileUploadInputComponent {
     this.draggingOver = false;
   }
 
-  /** Sends dropped files through the accessor and commits blur-based controls. */
+  /** Sends dropped files through the accessor and commits blur-based controls only for accepted batches. */
   public onDrop(event: DragEvent): void {
     event.preventDefault();
     this.draggingOver = false;
     const files = Array.from(event.dataTransfer?.files ?? []);
     if (!this.disabled && files.length > 0) {
-      this.fileControl?.selectFiles(files);
-      this.fileControl?.onBlur();
+      const fileControl = this.fileControl;
+      if (fileControl?.selectFiles(files)) {
+        fileControl.onBlur();
+      }
     }
   }
 
   /** Focuses the native file input once the view is available. */
   public focus(): void {
     this.fileInput?.nativeElement.focus();
+  }
+
+  /** Revalidates a changed selection limit before rendering the current form errors. */
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['maxFiles'] && this.fileControl) {
+      this.fileControl.maxFiles = this.maxFiles;
+    }
   }
 }

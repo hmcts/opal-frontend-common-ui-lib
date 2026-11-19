@@ -42,6 +42,8 @@ describe('MojMultiFileUploadInputComponent', () => {
     dropzone().dispatchEvent(event);
     return event;
   };
+  const createFiles = (count: number): File[] =>
+    Array.from({ length: count }, (_, index) => new File(['content'], `document-${index}.csv`));
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -255,7 +257,7 @@ describe('MojMultiFileUploadInputComponent', () => {
     expect(selections).toEqual([[document]]);
   });
 
-  it('leaves file types, filenames, file sizes and dropped file counts to the consumer', () => {
+  it('leaves file types, filenames, file sizes and single-file drop rules to the consumer', () => {
     component.acceptedTypes = ['.csv'];
     component.multiple = false;
     const unsupported = new File(['content'], 'invalid.name.pdf', { type: 'application/pdf' });
@@ -269,6 +271,269 @@ describe('MojMultiFileUploadInputComponent', () => {
     expect(selections).toEqual([[unsupported, large]]);
     expect(component.errors).toEqual([]);
     expect(fixture.nativeElement.querySelector('.govuk-error-message')).toBeNull();
+  });
+
+  it.each([
+    { selection: 'picker', limit: 10 },
+    { selection: 'drop', limit: 10 },
+    { selection: 'picker', limit: 6 },
+    { selection: 'drop', limit: 6 },
+  ])('rejects the whole $selection batch above the $limit-file limit', ({ selection, limit }) => {
+    if (limit === 6) {
+      component.maxFiles = limit;
+    }
+    const previousFiles = createFiles(1);
+    control.setValue(previousFiles);
+    fixture.detectChanges();
+    const clearNativeInput = vi.spyOn(input(), 'value', 'set');
+    const files = createFiles(limit + 1);
+
+    if (selection === 'picker') {
+      selectFiles(...files);
+    } else {
+      dropFiles(...files);
+    }
+    fixture.detectChanges();
+
+    const message = `You can only select up to ${limit} files at the same time.`;
+    expect(selections).toEqual([]);
+    expect(control.value).toEqual(previousFiles);
+    expect(control.getError('maxFiles')).toEqual({ maxFiles: limit, actualFiles: limit + 1 });
+    expect(control.invalid).toBe(true);
+    expect(clearNativeInput).toHaveBeenCalledWith('');
+    expect(input().getAttribute('aria-invalid')).toBe('true');
+    expect(input().getAttribute('aria-describedby')?.split(/\s+/)).toContain('supporting-documents-error');
+    expect(fixture.nativeElement.querySelector('#supporting-documents-error').textContent).toContain(message);
+    expect(fixture.nativeElement.querySelector('[role="alert"]').textContent).toContain(message);
+    expect(uploadButton().disabled).toBe(false);
+  });
+
+  it.each([
+    { selection: 'picker', limit: 10 },
+    { selection: 'drop', limit: 6 },
+  ])('accepts exactly $limit files from the $selection', ({ selection, limit }) => {
+    if (limit === 6) {
+      component.maxFiles = limit;
+    }
+    fixture.detectChanges();
+    const files = createFiles(limit);
+
+    if (selection === 'picker') {
+      selectFiles(...files);
+    } else {
+      dropFiles(...files);
+    }
+
+    expect(selections).toEqual([files]);
+    expect(control.value).toEqual(files);
+    expect(control.hasError('maxFiles')).toBe(false);
+  });
+
+  it('accepts separate selections without applying the limit to accumulated parent files', () => {
+    const firstBatch = createFiles(10);
+    const secondBatch = createFiles(10);
+    fixture.detectChanges();
+    selectFiles(...firstBatch);
+    selectFiles(...secondBatch);
+
+    control.setValue([...firstBatch, ...secondBatch]);
+    control.updateValueAndValidity();
+    fixture.detectChanges();
+
+    expect(selections).toEqual([firstBatch, secondBatch]);
+    expect(control.value).toHaveLength(20);
+    expect(control.valid).toBe(true);
+    expect(fixture.nativeElement.querySelector('.govuk-error-message')).toBeNull();
+  });
+
+  it('preserves the rejected-batch error during unrelated parent model and status updates', () => {
+    control.setValue(createFiles(1));
+    fixture.detectChanges();
+    dropFiles(...createFiles(11));
+
+    control.setValue(createFiles(2));
+    control.updateValueAndValidity();
+    fixture.detectChanges();
+
+    expect(control.getError('maxFiles')).toEqual({ maxFiles: 10, actualFiles: 11 });
+    expect(fixture.nativeElement.querySelector('#supporting-documents-error')).not.toBeNull();
+    expect(selections).toEqual([]);
+  });
+
+  it('clears a rejected batch when a different control replaces the existing control', () => {
+    fixture.detectChanges();
+    selectFiles(...createFiles(11));
+    expect(control.hasError('maxFiles')).toBe(true);
+
+    fixture.componentRef.setInput('control', control);
+    fixture.detectChanges();
+    expect(control.hasError('maxFiles')).toBe(true);
+
+    const replacementFiles = createFiles(3);
+    const replacement = new FormControl<readonly File[] | null>(replacementFiles);
+    fixture.componentRef.setInput('control', replacement);
+    fixture.detectChanges();
+
+    expect(replacement.value).toEqual(replacementFiles);
+    expect(replacement.valid).toBe(true);
+    expect(replacement.pristine).toBe(true);
+    expect(fixture.nativeElement.querySelector('.govuk-error-message')).toBeNull();
+    expect(selections).toEqual([]);
+  });
+
+  it.each(['picker', 'drop'])(
+    'does not commit an earlier pending blur selection when rejecting a %s batch',
+    (selection) => {
+      const previousFiles = createFiles(1);
+      control = new FormControl<readonly File[] | null>(previousFiles, { updateOn: 'blur' });
+      component.control = control;
+      fixture.detectChanges();
+      const pendingFiles = createFiles(2);
+      selectFiles(...pendingFiles);
+      expect(control.value).toEqual(previousFiles);
+
+      if (selection === 'picker') {
+        selectFiles(...createFiles(11));
+      } else {
+        dropFiles(...createFiles(11));
+      }
+      fixture.detectChanges();
+
+      expect(control.value).toEqual(previousFiles);
+      expect(control.pristine).toBe(true);
+      expect(control.hasError('maxFiles')).toBe(true);
+      expect(selections).toEqual([pendingFiles]);
+    },
+  );
+
+  it('clears the count error and forwards the next valid attempt', () => {
+    fixture.detectChanges();
+    const files = createFiles(10);
+    selectFiles(...files, new File(['content'], 'excess.csv'));
+    expect(control.hasError('maxFiles')).toBe(true);
+
+    selectFiles(...files);
+    fixture.detectChanges();
+
+    expect(selections).toEqual([files]);
+    expect(control.value).toEqual(files);
+    expect(control.valid).toBe(true);
+    expect(input().getAttribute('aria-invalid')).not.toBe('true');
+    expect(fixture.nativeElement.querySelector('.govuk-error-message')).toBeNull();
+  });
+
+  it.each([null, []])('clears a rejected selection when the parent resets to %s', (value) => {
+    fixture.detectChanges();
+    selectFiles(...createFiles(11));
+    expect(control.hasError('maxFiles')).toBe(true);
+
+    control.reset(value);
+    fixture.detectChanges();
+
+    expect(control.value).toEqual(value);
+    expect(control.valid).toBe(true);
+    expect(control.untouched).toBe(true);
+    expect(fixture.nativeElement.querySelector('.govuk-error-message')).toBeNull();
+    expect(selections).toEqual([]);
+  });
+
+  it('uses a singular default count message for a one-file limit', () => {
+    component.maxFiles = 1;
+    fixture.detectChanges();
+
+    dropFiles(...createFiles(2));
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('#supporting-documents-error').textContent).toContain(
+      'You can only select up to 1 file at the same time.',
+    );
+    expect(selections).toEqual([]);
+  });
+
+  it('describes a count error before the native input view is available', () => {
+    control.setErrors({ maxFiles: { maxFiles: 10, actualFiles: 11 } });
+
+    expect(component.fileCountError).toBe('You can only select up to 10 files at the same time.');
+    expect(component.describedBy).toContain('supporting-documents-error');
+  });
+
+  it.each(['', '   '])('uses the default count error when the override is "%s"', (message) => {
+    component.maxFilesErrorMessage = message;
+    fixture.detectChanges();
+
+    selectFiles(...createFiles(11));
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('#supporting-documents-error').textContent).toContain(
+      'You can only select up to 10 files at the same time.',
+    );
+    expect(selections).toEqual([]);
+  });
+
+  it('shows consumer count-error text once alongside other associated errors', () => {
+    const message = 'Choose six documents or fewer.';
+    component.maxFiles = 6;
+    component.maxFilesErrorMessage = message;
+    component.errors = [message, 'Check the supporting documents.'];
+    fixture.detectChanges();
+
+    selectFiles(...createFiles(7));
+    fixture.detectChanges();
+
+    const error: HTMLElement = fixture.nativeElement.querySelector('#supporting-documents-error');
+    const messages = Array.from(error.querySelectorAll('p'), (paragraph) => paragraph.textContent?.trim());
+    expect(messages.filter((text) => text === message)).toHaveLength(1);
+    expect(error.textContent).toContain('Check the supporting documents.');
+    expect(input().getAttribute('aria-describedby')).toContain(error.id);
+    expect(selections).toEqual([]);
+  });
+
+  it('revalidates a changed limit without emitting a previously rejected batch', () => {
+    component.maxFiles = 2;
+    fixture.detectChanges();
+    selectFiles(...createFiles(3));
+    expect(control.hasError('maxFiles')).toBe(true);
+
+    fixture.componentRef.setInput('maxFiles', 4);
+    fixture.detectChanges();
+
+    expect(control.hasError('maxFiles')).toBe(false);
+    expect(fixture.nativeElement.querySelector('.govuk-error-message')).toBeNull();
+    expect(selections).toEqual([]);
+
+    fixture.componentRef.setInput('maxFiles', 1);
+    fixture.detectChanges();
+    selectFiles(...createFiles(2));
+
+    expect(control.getError('maxFiles')).toEqual({ maxFiles: 1, actualFiles: 2 });
+    expect(selections).toEqual([]);
+  });
+
+  it.each([0, -1, 1.5, Number.NaN, Number.POSITIVE_INFINITY])(
+    'uses the ten-file default when the configured limit is %s',
+    (maxFiles) => {
+      component.maxFiles = maxFiles;
+      fixture.detectChanges();
+      const files = createFiles(10);
+
+      selectFiles(...files);
+      expect(selections).toEqual([files]);
+
+      selectFiles(...createFiles(11));
+
+      expect(control.getError('maxFiles')).toEqual({ maxFiles: 10, actualFiles: 11 });
+      expect(selections).toEqual([files]);
+    },
+  );
+
+  it('uses the ten-file default when maxFiles is omitted', () => {
+    expect(component.maxFiles).toBe(10);
+    fixture.detectChanges();
+
+    dropFiles(...createFiles(11));
+
+    expect(control.getError('maxFiles')).toEqual({ maxFiles: 10, actualFiles: 11 });
+    expect(selections).toEqual([]);
   });
 
   it('emits picker files unchanged even when their types do not match accept', () => {
