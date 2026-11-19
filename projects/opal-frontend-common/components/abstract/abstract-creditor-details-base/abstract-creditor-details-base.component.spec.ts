@@ -43,8 +43,8 @@ class TestAbstractCreditorDetailsBaseComponent extends AbstractCreditorDetailsBa
     },
   };
 
-  protected override readonly permissions: Record<string, number> = {
-    'account-maintenance': 101,
+  protected override readonly permissions: Record<string, string> = {
+    'account-maintenance': 'ACCOUNT_MAINTENANCE',
   };
 
   public override readonly accountStore = {
@@ -111,7 +111,7 @@ describe('AbstractCreditorDetailsBaseComponent', () => {
   let activatedRouteStub: Partial<ActivatedRoute>;
   let hasBusinessUnitPermissionAccessMock: ReturnType<typeof vi.fn>;
 
-  const businessUnitUsers = [{ business_unit_id: 77, permissions: [{ permission_id: 101 }] }];
+  const businessUnitUsers = [{ business_unit_id: 77, permissions: [{ permission_code: 'ACCOUNT_MAINTENANCE' }] }];
 
   beforeEach(async () => {
     hasBusinessUnitPermissionAccessMock = vi.fn();
@@ -258,7 +258,7 @@ describe('AbstractCreditorDetailsBaseComponent', () => {
     const result = component.hasBusinessUnitPermissionKey('account-maintenance');
 
     expect(result).toBe(true);
-    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledWith(101, 77, businessUnitUsers);
+    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledWith('ACCOUNT_MAINTENANCE', 77, businessUnitUsers);
   });
 
   it('should return false when a business unit permission key is unknown', () => {

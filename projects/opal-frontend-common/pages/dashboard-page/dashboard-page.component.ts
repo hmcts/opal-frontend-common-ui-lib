@@ -20,31 +20,31 @@ export class DashboardPage {
   @Input({ required: true }) public dashboardConfig!: IDashboardPageConfiguration;
 
   /**
-   * Computes the unique permission ids for the current user from the global store.
+   * Computes the unique permission codes for the current user from the global store.
    */
-  public readonly permissionIds = computed(() =>
+  public readonly permissionCodes = computed(() =>
     this.permissionService.getUniquePermissions(this.globalStore.userState()),
   );
 
   /**
    * Returns whether a dashboard link is visible for the current user.
    * Empty permission arrays are treated as unrestricted links.
-   * @param linkPermissionIds - Permission ids configured for the link.
+   * @param linkPermissionCodes - Permission codes configured for the link.
    */
-  private hasLinkPermission(linkPermissionIds: number[]): boolean {
-    if (linkPermissionIds.length === 0) {
+  private hasLinkPermission(linkPermissionCodes: string[]): boolean {
+    if (linkPermissionCodes.length === 0) {
       return true;
     }
 
-    const userPermissionIds = this.permissionIds();
-    return linkPermissionIds.some((permissionId) => userPermissionIds.includes(permissionId));
+    const userPermissionCodes = this.permissionCodes();
+    return linkPermissionCodes.some((permissionCode) => userPermissionCodes.includes(permissionCode));
   }
 
   /**
    * Returns highlights that the current user is permitted to view.
    */
   public get visibleHighlights(): IDashboardPageConfigurationLink[] {
-    return this.dashboardConfig.highlights.filter((highlight) => this.hasLinkPermission(highlight.permissionIds));
+    return this.dashboardConfig.highlights.filter((highlight) => this.hasLinkPermission(highlight.permissionCodes));
   }
 
   /**
@@ -54,7 +54,7 @@ export class DashboardPage {
     return this.dashboardConfig.groups
       .map((group) => ({
         ...group,
-        links: group.links.filter((link) => this.hasLinkPermission(link.permissionIds)),
+        links: group.links.filter((link) => this.hasLinkPermission(link.permissionCodes)),
       }))
       .filter((group) => group.links.length > 0);
   }

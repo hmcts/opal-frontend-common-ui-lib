@@ -71,7 +71,7 @@ describe('AbstractAccountSummaryBaseComponent', () => {
   let component: TestAbstractAccountSummaryBaseComponent | null;
   let fixture: ComponentFixture<TestAbstractAccountSummaryBaseComponent> | null;
 
-  const businessUnitUsers = [{ business_unit_id: 101, permissions: [{ permission_id: 55 }] }];
+  const businessUnitUsers = [{ business_unit_id: 101, permissions: [{ permission_code: 'ACCOUNT_ENQUIRY' }] }];
   const hasPermissionAccessMock = vi.fn();
   const hasBusinessUnitPermissionAccessMock = vi.fn();
 
@@ -142,10 +142,10 @@ describe('AbstractAccountSummaryBaseComponent', () => {
 
     hasPermissionAccessMock.mockReturnValueOnce(true);
 
-    const result = component.hasPermission(55);
+    const result = component.hasPermission('ACCOUNT_ENQUIRY');
 
     expect(result).toBe(true);
-    expect(hasPermissionAccessMock).toHaveBeenCalledWith(55, businessUnitUsers);
+    expect(hasPermissionAccessMock).toHaveBeenCalledWith('ACCOUNT_ENQUIRY', businessUnitUsers);
   });
 
   it('should delegate hasBusinessUnitPermission to PermissionsService with user business units', () => {
@@ -155,10 +155,10 @@ describe('AbstractAccountSummaryBaseComponent', () => {
 
     hasBusinessUnitPermissionAccessMock.mockReturnValueOnce(false);
 
-    const result = component.hasBusinessUnitPermission(55, 101);
+    const result = component.hasBusinessUnitPermission('ACCOUNT_ENQUIRY', 101);
 
     expect(result).toBe(false);
-    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledWith(55, 101, businessUnitUsers);
+    expect(hasBusinessUnitPermissionAccessMock).toHaveBeenCalledWith('ACCOUNT_ENQUIRY', 101, businessUnitUsers);
   });
 
   it('should transform tab data, compare versions, and suppress duplicate emissions', () => {
