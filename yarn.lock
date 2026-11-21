@@ -3482,12 +3482,12 @@ __metadata:
   linkType: hard
 
 "@ministryofjustice/frontend@npm:^12.0.0":
-  version: 12.0.0
-  resolution: "@ministryofjustice/frontend@npm:12.0.0"
+  version: 12.0.1
+  resolution: "@ministryofjustice/frontend@npm:12.0.1"
   peerDependencies:
     govuk-frontend: ^6.2.0
-    moment: ^2.30.1
-  checksum: 10/ae4cc8645aacd9b0003f988ceaae6a6e419dd3e766bb7b9dd77d54fd0290dc47fd0d4363b9ef609394f0ce75bed75a83f722e5297ae111948da13103f0f255ce
+    moment: ^2.31.0
+  checksum: 10/8035af5294858bb53bcb704c2332dbf9f283e1b4d38e1f659b0d036c6c65cbc859b00791605afc3793304ac8d4497fbe449e52dd1cff460f6125982c25273580
   languageName: node
   linkType: hard
 
