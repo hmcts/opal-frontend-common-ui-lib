@@ -388,6 +388,9 @@
       "@hmcts/opal-frontend-common/components/moj/moj-multi-file-upload": [
         "./dist/opal-frontend-common/components/moj/moj-multi-file-upload"
       ],
+      "@hmcts/opal-frontend-common/components/moj/moj-multi-file-upload/constants": [
+        "./dist/opal-frontend-common/components/moj/moj-multi-file-upload/constants"
+      ],
       "@hmcts/opal-frontend-common/components/moj/moj-multi-file-upload/interfaces": [
         "./dist/opal-frontend-common/components/moj/moj-multi-file-upload/interfaces"
       ],
