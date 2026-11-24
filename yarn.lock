@@ -2649,11 +2649,11 @@ __metadata:
   linkType: soft
 
 "@hono/node-server@npm:^1.19.9 || ^2.0.5":
-  version: 2.1.0
-  resolution: "@hono/node-server@npm:2.1.0"
+  version: 2.1.11
+  resolution: "@hono/node-server@npm:2.1.11"
   peerDependencies:
-    hono: ^4
-  checksum: 10/a8fbbfe017c60cc625e13cf37da5604340968037e748dab6dbe0c225880a56eac6eefd02089e3fcebe11a9ecbdc7c50bac7827ef99a654148b7f64b1c66b3ecb
+    hono: ^4 || ^5.0.0-0
+  checksum: 10/81894c0164de394f5b48b0aa88ab839cd87dd372c378685e3a52e716437b92b81ab385649ef3d3cabaf4f9f605e99d720f7c4c07dc9d7631ddc172a207c8f472
   languageName: node
   linkType: hard
 
@@ -7772,9 +7772,9 @@ __metadata:
   linkType: hard
 
 "hono@npm:^4.11.4":
-  version: 4.13.14
-  resolution: "hono@npm:4.13.14"
-  checksum: 10/1eb7c4d358d071d208b09f62d803ac7e1674d209f23e4f9d3c666cd7107da40937d5e9a78cc44f8abc4a23050e849ec531293c4b834696862d3673e1d4942172
+  version: 4.13.21
+  resolution: "hono@npm:4.13.21"
+  checksum: 10/bb14ae4feb17ad27599bf6e45539e607f76fa027f7088af5f88c34751bac601d28d757c3c7db0a3782a3b9a7743ab4e648e6eae26e851d9534a0c3d2331a2cf4
   languageName: node
   linkType: hard
 
@@ -10005,11 +10005,11 @@ __metadata:
   linkType: hard
 
 "prettier@npm:^3.5.3":
-  version: 3.10.0
-  resolution: "prettier@npm:3.10.0"
+  version: 3.10.1
+  resolution: "prettier@npm:3.10.1"
   bin:
     prettier: bin/prettier.cjs
-  checksum: 10/c87442be0b480bc968cbd44d5984fd2ccf1d0b2a94aa3f35ffccc8751cf25751360adce3884d08b0f52c403fa75bfdf64bacdd2802d9fc1e0efee7456cf4ef36
+  checksum: 10/ab4fc7bbee5823eb99200f89172e1dc360a8225facc19db336f30aa4e089bd8576f141ca8e129ce6ce850f1d7beb4d6e8b7630c2522b3b2fdc62330114f828b2
   languageName: node
   linkType: hard
 
@@ -11807,9 +11807,9 @@ __metadata:
   linkType: hard
 
 "undici@npm:^6.25.0":
-  version: 6.28.0
-  resolution: "undici@npm:6.28.0"
-  checksum: 10/672a7a53bd1f6c80edb73b357ab36e98ef9e474024c442aab2b8ea2bc32f1103cab05525c78661ae724f3e1340e23d03efb9730fba28e76218ab0ec52e15d75a
+  version: 6.29.1
+  resolution: "undici@npm:6.29.1"
+  checksum: 10/92acb64ec190fe3499dec69830fdfc48e28f6f19627bad7563cfd57c37b4e95379c12b8ac15a2e6a8739eaac358f17503a229c160d3dc8774141b1e270d8aa57
   languageName: node
   linkType: hard
 
