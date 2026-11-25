@@ -9,6 +9,18 @@ describe('nationalInsuranceNumberValidator', () => {
     expect(result).toEqual({ nationalInsuranceNumberPattern: { value: 'QQ 12 34 56 C' } });
   });
 
+  it('should return null for a valid NINO with spaces when stripSpaces is enabled', () => {
+    const control = new FormControl('QQ 12 34 56 C');
+    const result = nationalInsuranceNumberValidator(true)(control);
+    expect(result).toBeNull();
+  });
+
+  it('should return the original value in the error when stripSpaces is enabled for an invalid NINO', () => {
+    const control = new FormControl('QQ 12 34 56 Z');
+    const result = nationalInsuranceNumberValidator(true)(control);
+    expect(result).toEqual({ nationalInsuranceNumberPattern: { value: 'QQ 12 34 56 Z' } });
+  });
+
   it('should return null for a valid NINO without spaces', () => {
     const control = new FormControl('QQ123456C');
     const result = nationalInsuranceNumberValidator()(control);
