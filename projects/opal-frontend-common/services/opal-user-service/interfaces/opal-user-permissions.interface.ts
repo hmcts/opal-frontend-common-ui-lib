@@ -1,4 +1,4 @@
 export interface IOpalUserPermissions {
-  permission_id: number;
+  permission_code: string;
   permission_name: string;
 }

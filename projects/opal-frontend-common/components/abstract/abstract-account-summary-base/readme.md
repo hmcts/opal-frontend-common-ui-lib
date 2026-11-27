@@ -39,8 +39,8 @@ Default implementation is a no-op. Override it only when your screen needs tab-s
 
 ## Shared Methods
 
-- `hasPermission(permission: number): boolean`
-- `hasBusinessUnitPermission(permission: number, businessUnitId: number): boolean`
+- `hasPermission(permission: string): boolean`
+- `hasBusinessUnitPermission(permission: string, businessUnitId: number): boolean`
 - `refreshPage(accountId: number, onSuccess: (header: THeader) => void): void`
 - `fetchTabData(serviceCall: Observable<TTab>, compareVersion: (version: string | null) => void): Observable<TTab>`
 

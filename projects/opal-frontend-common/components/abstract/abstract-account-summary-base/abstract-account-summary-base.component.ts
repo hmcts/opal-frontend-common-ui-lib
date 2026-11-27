@@ -56,7 +56,7 @@ export abstract class AbstractAccountSummaryBaseComponent<THeader, TTab extends 
    * @param permission The permission to check.
    * @returns True if the user has the permission, false otherwise.
    */
-  public hasPermission(permission: number): boolean {
+  public hasPermission(permission: string): boolean {
     return this.permissionsService.hasPermissionAccess(permission, this.userState.business_unit_users);
   }
 
@@ -66,7 +66,7 @@ export abstract class AbstractAccountSummaryBaseComponent<THeader, TTab extends 
    * @param businessUnitId The ID of the business unit.
    * @returns True if the user has the permission for the business unit, false otherwise.
    */
-  public hasBusinessUnitPermission(permission: number, businessUnitId: number): boolean {
+  public hasBusinessUnitPermission(permission: string, businessUnitId: number): boolean {
     return this.permissionsService.hasBusinessUnitPermissionAccess(
       permission,
       businessUnitId,

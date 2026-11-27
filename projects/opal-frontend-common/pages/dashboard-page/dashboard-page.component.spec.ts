@@ -22,7 +22,7 @@ describe('DashboardPage', () => {
         text: 'Styled highlight',
         routerLink: ['/reports', '0', 'summary-list'],
         fragment: null,
-        permissionIds: [101],
+        permissionCodes: ['HIGHLIGHT_STYLED'],
         newTab: false,
         style: 'govuk-lighter-blue-background-colour',
       },
@@ -31,7 +31,7 @@ describe('DashboardPage', () => {
         text: 'Plain highlight',
         routerLink: ['/reports', '1', 'summary-list'],
         fragment: 'reports-fragment',
-        permissionIds: [102],
+        permissionCodes: ['HIGHLIGHT_PLAIN'],
         newTab: true,
         style: null,
       },
@@ -46,7 +46,7 @@ describe('DashboardPage', () => {
             text: 'Allowed link',
             routerLink: ['/reports', '2', 'summary-list'],
             fragment: null,
-            permissionIds: [201],
+            permissionCodes: ['LINK_ALLOWED'],
             newTab: false,
             style: null,
           },
@@ -55,7 +55,7 @@ describe('DashboardPage', () => {
             text: 'New tab link',
             routerLink: ['/reports', '3', 'summary-list'],
             fragment: 'payment',
-            permissionIds: [202],
+            permissionCodes: ['LINK_NEW_TAB'],
             newTab: true,
             style: null,
           },
@@ -64,8 +64,8 @@ describe('DashboardPage', () => {
     ],
   };
 
-  async function renderWithPermissions(permissionIds: number[]): Promise<void> {
-    getUniquePermissionsMock.mockReturnValue(permissionIds);
+  async function renderWithPermissions(permissionCodes: string[]): Promise<void> {
+    getUniquePermissionsMock.mockReturnValue(permissionCodes);
     fixture.componentRef.setInput('dashboardConfig', dashboardConfig);
     fixture.detectChanges();
     await fixture.whenStable();
@@ -104,21 +104,21 @@ describe('DashboardPage', () => {
   });
 
   it('should render the dashboard title', async () => {
-    await renderWithPermissions([101, 102, 201, 202]);
+    await renderWithPermissions(['HIGHLIGHT_STYLED', 'HIGHLIGHT_PLAIN', 'LINK_ALLOWED', 'LINK_NEW_TAB']);
 
     const title = fixture.nativeElement.querySelector('h1.govuk-heading-l');
     expect(title.textContent?.trim()).toBe('Dashboard');
   });
 
   it('should fetch permissions using the current user state', async () => {
-    await renderWithPermissions([101]);
+    await renderWithPermissions(['HIGHLIGHT_STYLED']);
 
     expect(getUniquePermissionsMock).toHaveBeenCalled();
     expect(getUniquePermissionsMock).toHaveBeenCalledWith(userState);
   });
 
   it('should filter highlights and links by permissions', async () => {
-    await renderWithPermissions([101, 201]);
+    await renderWithPermissions(['HIGHLIGHT_STYLED', 'LINK_ALLOWED']);
 
     expect(fixture.nativeElement.querySelector('#highlight-styled')).toBeTruthy();
     expect(fixture.nativeElement.querySelector('#link-allowed')).toBeTruthy();
@@ -126,13 +126,13 @@ describe('DashboardPage', () => {
     expect(fixture.nativeElement.querySelector('#link-new-tab')).toBeFalsy();
   });
 
-  it('should render links when any configured permission id matches', async () => {
+  it('should render links when any configured permission code matches', async () => {
     const multiPermissionDashboardConfig: IDashboardPageConfiguration = {
       ...dashboardConfig,
       highlights: [
         {
           ...dashboardConfig.highlights[0],
-          permissionIds: [999, 101],
+          permissionCodes: ['OTHER_HIGHLIGHT', 'HIGHLIGHT_STYLED'],
         },
       ],
       groups: [
@@ -141,14 +141,14 @@ describe('DashboardPage', () => {
           links: [
             {
               ...dashboardConfig.groups[0].links[0],
-              permissionIds: [888, 201],
+              permissionCodes: ['OTHER_LINK', 'LINK_ALLOWED'],
             },
           ],
         },
       ],
     };
 
-    getUniquePermissionsMock.mockReturnValue([101, 201]);
+    getUniquePermissionsMock.mockReturnValue(['HIGHLIGHT_STYLED', 'LINK_ALLOWED']);
     fixture.componentRef.setInput('dashboardConfig', multiPermissionDashboardConfig);
     fixture.detectChanges();
     await fixture.whenStable();
@@ -158,13 +158,13 @@ describe('DashboardPage', () => {
     expect(fixture.nativeElement.querySelector('#link-allowed')).toBeTruthy();
   });
 
-  it('should render unrestricted links when permissionIds is an empty array', async () => {
+  it('should render unrestricted links when permissionCodes is an empty array', async () => {
     const unrestrictedDashboardConfig: IDashboardPageConfiguration = {
       ...dashboardConfig,
       highlights: [
         {
           ...dashboardConfig.highlights[0],
-          permissionIds: [],
+          permissionCodes: [],
         },
       ],
       groups: [
@@ -173,7 +173,7 @@ describe('DashboardPage', () => {
           links: [
             {
               ...dashboardConfig.groups[0].links[0],
-              permissionIds: [],
+              permissionCodes: [],
             },
           ],
         },
@@ -191,7 +191,7 @@ describe('DashboardPage', () => {
   });
 
   it('should not render an empty highlights section when no highlight permissions are available', async () => {
-    await renderWithPermissions([201]);
+    await renderWithPermissions(['LINK_ALLOWED']);
 
     const dashboardLists = fixture.nativeElement.querySelectorAll('ul.govuk-list');
 
@@ -202,7 +202,7 @@ describe('DashboardPage', () => {
   });
 
   it('should not render an empty group section when no group links are permitted', async () => {
-    await renderWithPermissions([101]);
+    await renderWithPermissions(['HIGHLIGHT_STYLED']);
 
     const dashboardLists = fixture.nativeElement.querySelectorAll('ul.govuk-list');
 
@@ -212,7 +212,7 @@ describe('DashboardPage', () => {
   });
 
   it('should wrap styled highlights in inset text', async () => {
-    await renderWithPermissions([101]);
+    await renderWithPermissions(['HIGHLIGHT_STYLED']);
 
     const insetWrapper = fixture.nativeElement.querySelector('#highlight-styled_inset_text');
     const styledLink = fixture.nativeElement.querySelector('#highlight-styled');
@@ -222,7 +222,7 @@ describe('DashboardPage', () => {
   });
 
   it('should not wrap non-styled highlights in inset text', async () => {
-    await renderWithPermissions([102]);
+    await renderWithPermissions(['HIGHLIGHT_PLAIN']);
 
     const plainInsetWrapper = fixture.nativeElement.querySelector('#highlight-plain_inset_text');
     const plainLink = fixture.nativeElement.querySelector('#highlight-plain');
@@ -232,7 +232,7 @@ describe('DashboardPage', () => {
   });
 
   it('should apply new-tab attributes and fragment to highlight links', async () => {
-    await renderWithPermissions([102]);
+    await renderWithPermissions(['HIGHLIGHT_PLAIN']);
 
     const link = fixture.nativeElement.querySelector('#highlight-plain');
     expect(link.getAttribute('target')).toBe('_blank');
@@ -241,7 +241,7 @@ describe('DashboardPage', () => {
   });
 
   it('should apply new-tab attributes and fragment to group links', async () => {
-    await renderWithPermissions([202]);
+    await renderWithPermissions(['LINK_NEW_TAB']);
 
     const link = fixture.nativeElement.querySelector('#link-new-tab');
     expect(link.getAttribute('target')).toBe('_blank');
@@ -250,7 +250,7 @@ describe('DashboardPage', () => {
   });
 
   it('should use safe same-tab target and no rel attributes for non-new-tab links', async () => {
-    await renderWithPermissions([101, 201]);
+    await renderWithPermissions(['HIGHLIGHT_STYLED', 'LINK_ALLOWED']);
 
     const highlightLink = fixture.nativeElement.querySelector('#highlight-styled');
     const groupLink = fixture.nativeElement.querySelector('#link-allowed');
@@ -270,7 +270,7 @@ describe('DashboardPage', () => {
           text: 'Duplicate label',
           routerLink: ['/reports', '0', 'summary-list'],
           fragment: null,
-          permissionIds: [101],
+          permissionCodes: ['HIGHLIGHT_STYLED'],
           newTab: false,
           style: null,
         },
@@ -279,7 +279,7 @@ describe('DashboardPage', () => {
           text: 'Duplicate label',
           routerLink: ['/reports', '1', 'summary-list'],
           fragment: null,
-          permissionIds: [102],
+          permissionCodes: ['HIGHLIGHT_PLAIN'],
           newTab: false,
           style: null,
         },
@@ -294,7 +294,7 @@ describe('DashboardPage', () => {
               text: 'Duplicate link label',
               routerLink: ['/reports', '2', 'summary-list'],
               fragment: null,
-              permissionIds: [201],
+              permissionCodes: ['LINK_ALLOWED'],
               newTab: false,
               style: null,
             },
@@ -309,7 +309,7 @@ describe('DashboardPage', () => {
               text: 'Duplicate link label',
               routerLink: ['/reports', '3', 'summary-list'],
               fragment: null,
-              permissionIds: [202],
+              permissionCodes: ['LINK_NEW_TAB'],
               newTab: false,
               style: null,
             },
@@ -318,7 +318,7 @@ describe('DashboardPage', () => {
       ],
     };
 
-    getUniquePermissionsMock.mockReturnValue([101, 102, 201, 202]);
+    getUniquePermissionsMock.mockReturnValue(['HIGHLIGHT_STYLED', 'HIGHLIGHT_PLAIN', 'LINK_ALLOWED', 'LINK_NEW_TAB']);
     fixture.componentRef.setInput('dashboardConfig', duplicateTextDashboardConfig);
     fixture.detectChanges();
     await fixture.whenStable();

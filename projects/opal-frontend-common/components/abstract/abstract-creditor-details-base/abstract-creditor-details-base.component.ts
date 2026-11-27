@@ -29,7 +29,7 @@ export abstract class AbstractCreditorDetailsBaseComponent<THeader, TTab extends
   protected abstract readonly defaultActiveTab: string;
   protected abstract readonly transformItemsConfig: ITransformItem[];
   protected abstract readonly latestBannerMessage: string;
-  protected abstract readonly permissions: Record<string, number>;
+  protected abstract readonly permissions: Record<string, string>;
   protected abstract readonly payloadTransformer: CreditorDetailsPayloadTransformer;
 
   public abstract readonly accountStore: CreditorDetailsAccountStore;
@@ -104,14 +104,14 @@ export abstract class AbstractCreditorDetailsBaseComponent<THeader, TTab extends
 
   /**
    * Checks whether the current user has the requested permission for the active account business unit.
-   * @param permissionKey The key used to look up the permission ID.
+   * @param permissionKey The key used to look up the permission code.
    * @returns True when the user has the permission for the account business unit.
    */
   public hasBusinessUnitPermissionKey(permissionKey: string): boolean {
     const permission = this.permissions[permissionKey];
 
     return (
-      typeof permission === 'number' &&
+      typeof permission === 'string' &&
       super.hasBusinessUnitPermission(permission, Number(this.accountStore.business_unit_id()!))
     );
   }

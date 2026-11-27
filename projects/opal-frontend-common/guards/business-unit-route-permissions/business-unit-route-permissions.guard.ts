@@ -28,23 +28,25 @@ const resolveMaybeAsync = async <T>(value: MaybeAsync<T>): Promise<T> =>
   isObservable(value) ? firstValueFrom(value) : Promise.resolve(value);
 
 /**
- * Reads and normalizes the permission ids declared on route data.
+ * Reads and normalizes the permission codes declared on route data.
  *
  * @param route - The route whose permission metadata should be inspected.
- * @returns A filtered array of numeric permission ids.
+ * @returns Normalized permission codes, an empty array for unrestricted routes,
+ * or null when declared requirements are invalid.
  */
-const getRoutePermissionIds = (route: ActivatedRouteSnapshot): number[] => {
-  const routePermissionIds = route.data?.['routePermissionId'];
-
-  if (Array.isArray(routePermissionIds)) {
-    return routePermissionIds.filter((permissionId): permissionId is number => typeof permissionId === 'number');
+const getRoutePermissionCodes = (route: ActivatedRouteSnapshot): string[] | null => {
+  if (!('routePermissionCodes' in (route.data ?? {}))) {
+    return [];
   }
 
-  if (typeof routePermissionIds === 'number') {
-    return [routePermissionIds];
+  const permissionMetadata: unknown = route.data['routePermissionCodes'];
+  const permissionCodes: unknown[] = Array.isArray(permissionMetadata) ? permissionMetadata : [permissionMetadata];
+
+  if (permissionCodes.every((code): code is string => typeof code === 'string' && code.trim().length > 0)) {
+    return permissionCodes;
   }
 
-  return [];
+  return null;
 };
 
 /**
@@ -71,17 +73,28 @@ const toAccessDeniedUrlTree = (route: ActivatedRouteSnapshot, router: Router, ac
  * Guard that checks route permissions against the business unit resolved for the
  * current route instead of against the user's global permission set.
  *
- * If the route does not declare any permission ids, the guard allows access.
+ * Legacy or invalid permission metadata is rejected. If the route does not declare any
+ * permission requirements, the guard allows access.
  * Otherwise it loads the logged-in user state, resolves the route business unit,
  * and confirms that at least one declared permission exists within that business unit.
  *
  * @param route - The route being activated.
- * @returns `true` when access is allowed, otherwise a redirect to access denied.
+ * @returns `true` when access is allowed, `false` for invalid metadata,
+ * otherwise a redirect to access denied.
  */
 export const businessUnitRoutePermissionsGuard: CanActivateFn = async (route: ActivatedRouteSnapshot) => {
-  const routePermissionIds = getRoutePermissionIds(route);
+  // Legacy metadata must not make an unmigrated protected route unrestricted.
+  if ('routePermissionId' in (route.data ?? {})) {
+    return false;
+  }
 
-  if (!routePermissionIds.length) {
+  const routePermissionCodes = getRoutePermissionCodes(route);
+
+  if (routePermissionCodes === null) {
+    return false;
+  }
+
+  if (!routePermissionCodes.length) {
     return true;
   }
 
@@ -105,8 +118,8 @@ export const businessUnitRoutePermissionsGuard: CanActivateFn = async (route: Ac
       return toAccessDeniedUrlTree(route, router, `${accessDeniedPath}`);
     }
 
-    const hasAccess = routePermissionIds.some((permissionId) =>
-      permissionService.hasBusinessUnitPermissionAccess(permissionId, businessUnitId, businessUnitUsers),
+    const hasAccess = routePermissionCodes.some((permissionCode) =>
+      permissionService.hasBusinessUnitPermissionAccess(permissionCode, businessUnitId, businessUnitUsers),
     );
 
     return hasAccess ? true : toAccessDeniedUrlTree(route, router, `${accessDeniedPath}`);
