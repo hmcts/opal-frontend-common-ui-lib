@@ -13,10 +13,17 @@ export class CapitalisationDirective implements OnInit, OnDestroy {
   private readonly document = inject(DOCUMENT);
 
   @Input('opalLibCapitaliseAllCharacters') control!: AbstractControl;
+  @Input() opalLibCapitaliseAsciiOnly = false;
+
+  private capitalise(value: string): string {
+    return this.opalLibCapitaliseAsciiOnly
+      ? value.replace(/[a-z]/g, (letter) => letter.toUpperCase())
+      : this.utilsService.upperCaseAllLetters(value);
+  }
 
   /**
    * Captures the focused input or textarea selection before its value is uppercased.
-   * Maps offsets through uppercase prefixes to account for expanding characters, such as ß becoming SS.
+   * Applies the same casing to each prefix to account for expansions such as ß becoming SS in the default mode.
    * Defaults missing selection direction to 'none' for document implementations with incomplete selection support.
    *
    * @param value The current control value, which must match the focused input's value.
@@ -41,8 +48,8 @@ export class CapitalisationDirective implements OnInit, OnDestroy {
 
     return {
       input,
-      start: this.utilsService.upperCaseAllLetters(value.slice(0, selectionStart)).length,
-      end: this.utilsService.upperCaseAllLetters(value.slice(0, selectionEnd)).length,
+      start: this.capitalise(value.slice(0, selectionStart)).length,
+      end: this.capitalise(value.slice(0, selectionEnd)).length,
       direction: selectionDirection ?? 'none',
     };
   }
@@ -54,7 +61,7 @@ export class CapitalisationDirective implements OnInit, OnDestroy {
    */
   private capitaliseControlValue(value: unknown): void {
     if (typeof value === 'string' && value.length > 0) {
-      const upper = this.utilsService.upperCaseAllLetters(value);
+      const upper = this.capitalise(value);
       if (value !== upper) {
         const selection = this.captureSelection(value);
         this.control.setValue(upper, { emitEvent: false });

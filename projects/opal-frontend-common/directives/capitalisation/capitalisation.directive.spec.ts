@@ -2,7 +2,8 @@ import { Component, Type } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CapitalisationDirective } from './capitalisation.directive';
 import { UtilsService } from '@hmcts/opal-frontend-common/services/utils-service';
-import { ReactiveFormsModule, FormControl, AbstractControl } from '@angular/forms';
+import { ReactiveFormsModule, FormControl, AbstractControl, Validators } from '@angular/forms';
+import { ASCII_ALPHANUMERIC_PATTERN } from '@hmcts/opal-frontend-common/constants';
 import { GovukTextInputComponent } from '@hmcts/opal-frontend-common/components/govuk/govuk-text-input';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -54,6 +55,12 @@ describe('CapitalisationDirective', () => {
     testComponent.control.setValue('test');
     expect(upperCaseAllLetters).toHaveBeenCalled();
     expect(testComponent.control.value).toBe('TEST');
+  });
+
+  it('uppercases Unicode by default when the ASCII-only input is omitted', () => {
+    testComponent.control.setValue('abß12');
+
+    expect(testComponent.control.value).toBe('ABSS12');
   });
 
   it('should not capitalise if control value is empty', () => {
@@ -147,6 +154,81 @@ class TextareaTestComponent {
 class EmailTestComponent {
   control = new FormControl('');
 }
+
+@Component({
+  template: `
+    <opal-lib-govuk-text-input
+      [control]="control"
+      [opalLibCapitaliseAllCharacters]="control"
+      [opalLibCapitaliseAsciiOnly]="true"
+      inputId="ascii-reference"
+      inputName="ascii-reference"
+      labelText="Reference"
+    ></opal-lib-govuk-text-input>
+  `,
+  imports: [GovukTextInputComponent, CapitalisationDirective],
+})
+class AsciiOnlyTestComponent {
+  control = new FormControl('', Validators.pattern(ASCII_ALPHANUMERIC_PATTERN));
+}
+
+describe('CapitalisationDirective in ASCII-only mode', () => {
+  let fixture: ComponentFixture<AsciiOnlyTestComponent>;
+  let input: HTMLInputElement;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({ imports: [AsciiOnlyTestComponent] }).compileComponents();
+    fixture = TestBed.createComponent(AsciiOnlyTestComponent);
+    fixture.detectChanges();
+    input = fixture.nativeElement.querySelector('input');
+    input.focus();
+  });
+
+  it.each([
+    { entered: 'ab12', expected: 'AB12', valid: true },
+    { entered: 'ab-12', expected: 'AB-12', valid: false },
+    { entered: 'abß12', expected: 'ABß12', valid: false },
+  ])('formats $entered as $expected during typing and pasting', ({ entered, expected, valid }) => {
+    const control = fixture.componentInstance.control;
+    for (const character of entered) {
+      input.setRangeText(character, input.selectionStart!, input.selectionEnd!, 'end');
+      input.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertText', data: character }));
+    }
+
+    expect(input.value).toBe(expected);
+    expect(control.value).toBe(expected);
+    expect(control.valid).toBe(valid);
+
+    control.reset('');
+    input.setRangeText(entered, 0, 0, 'end');
+    input.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertFromPaste', data: entered }));
+
+    expect(input.value).toBe(expected);
+    expect(control.value).toBe(expected);
+    expect(control.valid).toBe(valid);
+  });
+
+  it('keeps the caret after pasted text containing preserved Unicode characters', () => {
+    fixture.componentInstance.control.setValue('ABCD');
+    input.setRangeText('ß🙂y', 2, 2, 'end');
+    input.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertFromPaste', data: 'ß🙂y' }));
+
+    expect(input.value).toBe('ABß🙂YCD');
+    expect(input.selectionStart).toBe(6);
+    expect(input.selectionEnd).toBe(6);
+  });
+
+  it('keeps the offsets and direction of a backward selection around preserved Unicode characters', () => {
+    input.value = 'aß🙂éz';
+    input.setSelectionRange(2, 5, 'backward');
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+
+    expect(input.value).toBe('Aß🙂éZ');
+    expect(input.selectionStart).toBe(2);
+    expect(input.selectionEnd).toBe(5);
+    expect(input.selectionDirection).toBe('backward');
+  });
+});
 
 describe('CapitalisationDirective editing', () => {
   const hosts: { name: string; component: Type<WrappedTestComponent> }[] = [

@@ -1,3 +1,4 @@
+export const ASCII_ALPHANUMERIC_PATTERN = /^[A-Za-z0-9]+$/;
 export const ALPHANUMERIC_WITH_SPACES_PATTERN = /^[a-zA-Z0-9 ]*$/;
 export const ADDRESS_LINE_PATTERN = /^[a-zA-Z0-9'*,()_ .-]*$/;
 export const ALPHANUMERIC_WITH_HYPHENS_SPACES_APOSTROPHES_DOT_PATTERN = /^[a-zA-Z0-9\s'.-]*$/;

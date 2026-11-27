@@ -65,6 +65,7 @@ The directive preserves the cursor position and selection when converting input 
 ## Inputs
 
 - `opalLibCapitaliseAllCharacters` – Accepts an `AbstractControl` (such as `FormControl`). The directive subscribes to its value changes and updates it to uppercase.
+- `opalLibCapitaliseAsciiOnly` – Set `[opalLibCapitaliseAsciiOnly]="true"` to uppercase only `a` to `z` when typing or pasting. The directive preserves every other character. Defaults to `false`.
 
 ## Outputs
 
